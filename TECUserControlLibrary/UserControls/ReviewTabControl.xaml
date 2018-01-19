@@ -25,6 +25,9 @@
             <TabItem Header="Electrical Materials">
                 <views:ElectricalMaterialSummaryView ViewModel="{Binding ElectricalMaterialSummaryVM}"/>
             </TabItem>-->
+            <TabItem Header="Parameters">
+                <views:BidParametersView ViewModel="{Binding ParametersVM}"/>
+            </TabItem>
             <TabItem Header="Itemized">
                 <summaryViews:ItemizedSummaryView ViewModel="{Binding ItemizedSummaryVM}"/>
             </TabItem>

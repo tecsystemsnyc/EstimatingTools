@@ -60,46 +60,14 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Combined Review" Grid.Row="0" FontWeight="Bold"/>
+            <TextBlock Text="Combined Review" FontSize="18"
+                       Grid.Row="0" Grid.ColumnSpan="2" FontWeight="Bold"/>
 
-            <Grid Grid.ColumnSpan="2"  Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="90"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Bid Name:"/>
-                <TextBox Text="{Binding Bid.Name}"
-                 Margin="2" Grid.Column="1" Grid.Row="1"/>
-            </Grid>
-            <Grid Grid.ColumnSpan="2"  Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="90"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Bid Number:"/>
-                <TextBox Text="{Binding Bid.BidNumber}"
-                 Grid.Column="1"
-                 Margin="2"/>
-            </Grid>
-
-            
-
-            <TextBlock Text="Estimator:" Grid.Row="1" 
-               Grid.Column="2" />
-            <TextBox Text="{Binding Bid.Estimator}"
-                 Grid.Row="1"
-                 Grid.Column="3"
-                 Margin="2"/>
-
-            <TextBlock Text="Salesperson:" Grid.Row="2" Grid.Column="2"/>
-            <TextBox Text="{Binding Bid.Salesperson}"
-                 Grid.Row="2"
-                 Grid.Column="3"
-                 Margin="2"/>
             <!--TEC-->
-            <Grid Grid.Row="4" Grid.ColumnSpan="2" Grid.RowSpan="10">
+            <Grid Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="12">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
+                    <RowDefinition Height="25"/>
                     <RowDefinition Height="25"/>
                     <RowDefinition Height="25"/>
                     <RowDefinition Height="25"/>
@@ -119,8 +87,20 @@
                 <TextBlock Text="{Binding Estimate.TECMaterialCost, StringFormat= {} {0:C}}" 
                Grid.Row="1" Grid.Column="1"
                TextAlignment="Right"/>
+                <Grid Grid.Row="2" Grid.ColumnSpan="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="1.1*" />
+                        <ColumnDefinition Width="1.9*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Tax Exempt:"/>
+                    <CheckBox IsChecked="{Binding Bid.Parameters.IsTaxExempt}"
+                  HorizontalAlignment="Right" VerticalAlignment="Center"
+                 Grid.Column="1" Margin="0,0,5,0"/>
 
-                <Grid  Grid.Row="2" >
+                </Grid>
+                <Grid  Grid.Row="3" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -132,10 +112,10 @@
                 </Grid>
                 
                 <TextBlock Text="{Binding Estimate.Tax, StringFormat= {} {0:C}}" 
-               Grid.Row="2" Grid.Column="1"
+               Grid.Row="3" Grid.Column="1"
                TextAlignment="Right" />
 
-                <Grid  Grid.Row="3">
+                <Grid  Grid.Row="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -146,9 +126,9 @@
                              HorizontalContentAlignment="Right"/>
                 </Grid>
                 <TextBlock Text="{Binding Estimate.TECShipping, StringFormat= {} {0:C}}"
-                   Grid.Row="3" Grid.Column="1"
+                   Grid.Row="4" Grid.Column="1"
                    TextAlignment="Right"/>
-                <Grid  Grid.Row="4">
+                <Grid  Grid.Row="5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -159,16 +139,15 @@
                              HorizontalContentAlignment="Right"/>
                 </Grid>
                 <TextBlock Text="{Binding Estimate.TECWarranty, StringFormat= {} {0:C}}"
-                   Grid.Row="4" Grid.Column="1"
+                   Grid.Row="5" Grid.Column="1"
                    TextAlignment="Right"/>
 
-                <TextBlock Text="Labor:" Grid.Row="5" />
+                <TextBlock Text="Labor:" Grid.Row="6" />
                 <TextBlock Text="{Binding Estimate.TECLaborCost, StringFormat= {} {0:C}}" 
-               Grid.Row="5" Grid.Column="1"
+               Grid.Row="6" Grid.Column="1"
                TextAlignment="Right" />
 
-
-                <Grid Grid.Row="6">
+                <Grid Grid.Row="7">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -180,11 +159,11 @@
                 </Grid>
                 
                 <TextBlock Text="{Binding Estimate.Escalation, StringFormat={}{0:C}}"
-                 Grid.Row="6"
+                 Grid.Row="7"
                  Grid.Column="1"
                  HorizontalAlignment="Right"/>
 
-                <Grid Grid.Row="7">
+                <Grid Grid.Row="8">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -196,11 +175,11 @@
                 </Grid>
                 
                 <TextBlock Text="{Binding Estimate.Overhead, StringFormat={}{0:C}}"
-                 Grid.Row="7"
+                 Grid.Row="8"
                  Grid.Column="1"
                  HorizontalAlignment="Right"/>
 
-                <Grid Grid.Row="8">
+                <Grid Grid.Row="9">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -212,36 +191,21 @@
                 </Grid>
 
                 <TextBlock Text="{Binding Estimate.Profit, StringFormat={}{0:C}}"
-                 Grid.Row="8"
+                 Grid.Row="9"
                  Grid.Column="1"
                  HorizontalAlignment="Right"/>
 
                 <TextBlock Text="Subtotal:" 
-               Grid.Row="9"  Grid.Column="0"/>
+               Grid.Row="10"  Grid.Column="0"/>
                 <TextBlock Text="{Binding Estimate.TECSubtotal, StringFormat= {} {0:C}}"
-                 Grid.Row="9"
+                 Grid.Row="10"
                  Grid.Column="1"
                TextAlignment="Right"/>
             </Grid>
             
+            
+
             <Grid  Grid.Column="4" Grid.Row="1" Grid.ColumnSpan="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="1.1*" />
-                    <ColumnDefinition Width="1.9*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Tax Exempt:"/>
-                <CheckBox IsChecked="{Binding Bid.Parameters.IsTaxExempt}"
-                  HorizontalAlignment="Right" VerticalAlignment="Center"
-                 Grid.Column="1" Margin="0,0,5,0"/>
-                <TextBlock Text="Duration:" Grid.Column="2"/>
-                <TextBox Text="{Binding Bid.Duration, StringFormat={}{0} Weeks}" Grid.Column="3"
-                         HorizontalContentAlignment="Right" Margin="2"/>
-
-            </Grid>
-
-            <Grid  Grid.Column="4" Grid.Row="2" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
@@ -259,7 +223,7 @@
             </Grid>
 
             <!--SubContractor-->
-            <Border BorderBrush="Gray" BorderThickness="1,0,0,0"  Grid.Row="4" Grid.RowSpan="8" Grid.Column="2" Grid.ColumnSpan="2"
+            <Border BorderBrush="Gray" BorderThickness="1,0,0,0"  Grid.Row="1" Grid.RowSpan="8" Grid.Column="2" Grid.ColumnSpan="2"
                     Margin="5,0,0,0">
             <Grid>
                 <Grid.RowDefinitions>
