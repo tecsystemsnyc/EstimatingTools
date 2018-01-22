@@ -226,15 +226,77 @@ namespace TECUserControlLibrary.ViewModels
         }
         public CostBatch RemoveValve(TECValve valve)
         {
-            throw new NotImplementedException();
+            bool containsItem = valveDictionary.ContainsKey(valve.Guid);
+            if (containsItem)
+            {
+                CostBatch deltas = new CostBatch();
+                HardwareSummaryItem item = valveDictionary[valve.Guid];
+                CostBatch delta = item.Decrement();
+                deltas += delta;
+                ValveCost += delta.GetCost(valve.Type);
+                ValveLabor += delta.GetLabor(valve.Type);
+
+                if (item.Quantity < 1)
+                {
+                    _valveItems.Remove(item);
+                    valveDictionary.Remove(valve.Guid);
+                }
+
+                deltas += RemoveActuator(valve.Actuator);
+                foreach(TECCost cost in valve.AssociatedCosts)
+                {
+                    deltas += RemoveCost(valve);
+                }
+                return deltas;
+            }
+            else
+            {
+                throw new NullReferenceException("Hardware item not present in dictionary.");
+            }
         }
 
         public CostBatch AddActuator(TECDevice actuator)
         {
-            throw new NotImplementedException();
+            CostBatch deltas = new CostBatch();
+            bool containsItem = actuatorDictionary.ContainsKey(actuator.Guid);
+            if (containsItem)
+            {
+                HardwareSummaryItem item = actuatorDictionary[actuator.Guid];
+                CostBatch delta = item.Increment();
+                ActuatorCost += delta.GetCost(actuator.Type);
+                ActuatorLabor += delta.GetLabor(actuator.Type);
+                deltas += delta;
+            }
+            else
+            {
+                HardwareSummaryItem item = new HardwareSummaryItem(actuator);
+                actuatorDictionary.Add(actuator.Guid, item);
+                _actuatorItems.Add(item);
+                ActuatorCost += item.TotalCost;
+                ActuatorLabor += item.TotalLabor;
+                deltas += new CostBatch(item.TotalLabor, item.TotalLabor, actuator.Type);
+            }
+
+            foreach(TECCost cost in actuator.AssociatedCosts)
+            {
+                deltas += AddCost(cost);
+            }
+            return deltas;
         }
         public CostBatch RemoveActuator(TECDevice actuator)
         {
+            bool containsItem = actuatorDictionary.ContainsKey(actuator.Guid);
+            if (containsItem)
+            {
+                CostBatch deltas = new CostBatch();
+                HardwareSummaryItem item = actuatorDictionary[actuator.Guid];
+                CostBatch delta = item.Decrement();
+                deltas += delta;
+                ActuatorCost += delta.GetCost(actuator.Type);
+                ActuatorLabor += delta.GetLabor(actuator.Type);
+                //Continue here
+            }
+
             throw new NotImplementedException();
         }
 
