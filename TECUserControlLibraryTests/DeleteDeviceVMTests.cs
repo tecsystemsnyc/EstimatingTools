@@ -141,8 +141,20 @@ namespace TECUserControlLibraryTests
 
             TECSubScope equipSS = new TECSubScope(false);
             sysEquip.SubScope.Add(equipSS);
-
             equipSS.Devices.Add(dev);
+
+            TECController sysController = new TECController(controllerType, false);
+            sys.AddController(sysController);
+
+            //Act
+            Mock<IUserConfirmable> mockMessageBox = new Mock<IUserConfirmable>();
+            mockMessageBox
+                .Setup(x => x.Show(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<MessageBoxButton>(), It.IsAny<MessageBoxImage>()))
+                .Returns(MessageBoxResult.Yes);
+
+            DeleteDeviceVM vm = new DeleteDeviceVM(dev, templates);
+            vm.messageBox = mockMessageBox.Object;
+            vm.DeleteCommand.Execute(null);
 
             //Device with no connection types
 
