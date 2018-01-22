@@ -23,8 +23,33 @@ namespace TECUserControlLibrary.ViewModels
                 _selectedTypical = value;
                 RaisePropertyChanged("SelectedTypical");
                 Selected?.Invoke(value);
+                if(value != null)
+                {
+                    setDeleteInstance(value);
+
+                }
             }
         }
+
+        private void setDeleteInstance(TECTypical value)
+        {
+            SystemHierarchyVM.SetDeleteCommand(
+                sys =>
+                {
+                    value.Instances.Remove(sys);
+                },
+                sys =>
+                {
+                    if (value.Instances.Contains(sys))
+                    {
+                        return true;
+                    } else
+                    {
+                        return false;
+                    }
+                });
+        }
+
         public ICommand AddInstanceCommand { get; private set; }
         
         public TypicalHierarchyVM(TECBid bid)
