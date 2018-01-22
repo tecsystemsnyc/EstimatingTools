@@ -298,8 +298,34 @@ namespace Tests
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
             TECValve valve = TestHelper.CreateTestValve(bid.Catalogs);
+            TestHelper.AssignSecondaryProperties(valve, bid.Catalogs);
 
-            throw new NotImplementedException();
+            Total totalTEC = CalculateTotal(valve, CostType.TEC);
+            Total totalElec = CalculateTotal(valve, CostType.Electrical);
+
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+
+            TECEquipment typEquip = new TECEquipment(true);
+            typical.Equipment.Add(typEquip);
+
+            TECSubScope typSS = new TECSubScope(true);
+            typEquip.SubScope.Add(typSS);
+
+            typical.AddInstance(bid);
+
+            MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
+
+            //Act
+            typSS.Devices.Add(valve);
+
+            //Assert
+            Assert.AreEqual(matVM.TotalTECCost, totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
+            Assert.AreEqual(matVM.TotalTECLabor, totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
+            Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update proplery.");
+            Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
+
+            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]

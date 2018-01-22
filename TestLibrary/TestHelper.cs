@@ -620,8 +620,9 @@ namespace Tests
         {
             TECValve valve = new TECValve(catalogs.Manufacturers[0], catalogs.Devices[0]);
             valve.Price = 52.62;
-
-            throw new NotImplementedException();
+            valve.AssociatedCosts.Add(catalogs.AssociatedCosts[0]);
+            valve.Tags.Add(catalogs.Tags[0]);
+            return valve;
         }
         public static TECSubScope CreateTestSubScope(bool isTypical, TECCatalogs catalogs)
         {
