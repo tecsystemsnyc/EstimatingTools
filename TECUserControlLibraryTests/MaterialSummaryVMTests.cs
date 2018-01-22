@@ -741,7 +741,47 @@ namespace Tests
         [TestMethod]
         public void RemoveValve()
         {
-            throw new NotImplementedException();
+            //Arrange
+            TECBid bid = TestHelper.CreateEmptyCatalogBid();
+            bid.Catalogs.Valves.Add(TestHelper.CreateTestValve(bid.Catalogs));
+            ChangeWatcher cw = new ChangeWatcher(bid);
+
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+
+            TECEquipment typEquip = new TECEquipment(true);
+            typical.Equipment.Add(typEquip);
+
+            TECSubScope typSS = new TECSubScope(true);
+            typEquip.SubScope.Add(typSS);
+
+            TECValve valve = bid.Catalogs.Valves[0];
+            TestHelper.AssignSecondaryProperties(valve, bid.Catalogs);
+            typSS.Devices.Add(valve);
+
+            typical.AddInstance(bid);
+
+            MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
+
+            double initialTecCost = matVM.TotalTECCost;
+            double initialTecLabor = matVM.TotalTECLabor;
+
+            double initialElecCost = matVM.TotalElecCost;
+            double initialElecLabor = matVM.TotalElecLabor;
+
+            Total totalTEC = CalculateTotal(valve, CostType.TEC);
+            Total totalElec = CalculateTotal(valve, CostType.Electrical);
+
+            //Act
+            typSS.Devices.Remove(valve);
+
+            //Assert
+            Assert.AreEqual(matVM.TotalTECCost, initialTecCost - totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
+            Assert.AreEqual(matVM.TotalTECLabor, initialTecLabor - totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
+            Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
+            Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
+
+            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
