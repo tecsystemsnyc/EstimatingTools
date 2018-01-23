@@ -11,28 +11,24 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class MaterialSummaryVM : ViewModelBase
     {
-        #region Fields
+        #region Fields and Properties
         private double _totalTECCost;
         private double _totalTECLabor;
         private double _totalElecCost;
         private double _totalElecLabor;
 
+        private HardwareSummaryVM _deviceSummaryVM;
+        private ValveSummaryVM _valveSummaryVM;
+        private HardwareSummaryVM _controllerSummaryVM;
+        private HardwareSummaryVM _panelSummaryVM;
+        private LengthSummaryVM _wireSummaryVM;
+        private LengthSummaryVM _conduitSummaryVM;
+        private MiscCostsSummaryVM _miscSummaryVM;
+
         private IComponentSummaryVM _currentVM;
         private MaterialSummaryIndex _selectedIndex;
         private string _currentType;
-        #endregion
 
-        //Constructor
-        public MaterialSummaryVM(TECBid bid, ChangeWatcher changeWatcher)
-        {
-            reinitializeTotals();
-            initializeVMs();
-            loadBid(bid);
-            resubscribe(changeWatcher);
-            SelectedIndex = MaterialSummaryIndex.Devices;
-        }
-
-        #region Properties
         public double TotalTECCost
         {
             get { return _totalTECCost; }
@@ -70,12 +66,90 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public HardwareSummaryVM DeviceSummaryVM { get; private set; }
-        public HardwareSummaryVM ControllerSummaryVM { get; private set; }
-        public HardwareSummaryVM PanelSummaryVM { get; private set; }
-        public LengthSummaryVM WireSummaryVM { get; private set; }
-        public LengthSummaryVM ConduitSummaryVM { get; private set; }
-        public MiscCostsSummaryVM MiscSummaryVM { get; private set; }
+        public HardwareSummaryVM DeviceSummaryVM
+        {
+            get { return _deviceSummaryVM; }
+            set
+            {
+                if (DeviceSummaryVM != value)
+                {
+                    _deviceSummaryVM = value;
+                    RaisePropertyChanged("DeviceSummaryVM");
+                }
+            }
+        }
+        public ValveSummaryVM ValveSummaryVM
+        {
+            get { return _valveSummaryVM; }
+            set
+            {
+                if (ValveSummaryVM != value)
+                {
+                    _valveSummaryVM = value;
+                    RaisePropertyChanged("ValveSummaryVM");
+                }
+            }
+        }
+        public HardwareSummaryVM ControllerSummaryVM
+        {
+            get { return _controllerSummaryVM; }
+            set
+            {
+                if (ControllerSummaryVM != value)
+                {
+                    _controllerSummaryVM = value;
+                    RaisePropertyChanged("ControllerSummaryVM");
+                }
+            }
+        }
+        public HardwareSummaryVM PanelSummaryVM
+        {
+            get { return _panelSummaryVM; }
+            set
+            {
+                if (PanelSummaryVM != value)
+                {
+                    _panelSummaryVM = value;
+                    RaisePropertyChanged("PanelSummaryVM");
+                }
+            }
+        }
+        public LengthSummaryVM WireSummaryVM
+        {
+            get { return _wireSummaryVM; }
+            set
+            {
+                if (WireSummaryVM != value)
+                {
+                    _wireSummaryVM = value;
+                    RaisePropertyChanged("WireSummaryVM");
+                }
+            }
+        }
+        public LengthSummaryVM ConduitSummaryVM
+        {
+            get { return _conduitSummaryVM; }
+            set
+            {
+                if (ConduitSummaryVM != value)
+                {
+                    _conduitSummaryVM = value;
+                    RaisePropertyChanged("ConduitSummaryVM");
+                }
+            }
+        }
+        public MiscCostsSummaryVM MiscSummaryVM
+        {
+            get { return _miscSummaryVM; }
+            set
+            {
+                if (MiscSummaryVM != value)
+                {
+                    _miscSummaryVM = value;
+                    RaisePropertyChanged("MiscSummaryVM");
+                }
+            }
+        }
 
         public IComponentSummaryVM CurrentVM
         {
@@ -98,6 +172,10 @@ namespace TECUserControlLibrary.ViewModels
                     case MaterialSummaryIndex.Devices:
                         CurrentVM = DeviceSummaryVM;
                         CurrentType = "Device";
+                        break;
+                    case MaterialSummaryIndex.Valves:
+                        CurrentVM = ValveSummaryVM;
+                        CurrentType = "Valve";
                         break;
                     case MaterialSummaryIndex.Controllers:
                         CurrentVM = ControllerSummaryVM;
@@ -141,11 +219,18 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
 
+        //Constructor
+        public MaterialSummaryVM(TECBid bid, ChangeWatcher changeWatcher)
+        {
+            Refresh(bid, changeWatcher);
+            SelectedIndex = MaterialSummaryIndex.Devices;
+        }
+
         #region Methods
         public void Refresh(TECBid bid, ChangeWatcher changeWatcher)
         {
             reinitializeTotals();
-            resetVMs();
+            initializeVMs();
             loadBid(bid);
             resubscribe(changeWatcher);
         }
@@ -191,21 +276,12 @@ namespace TECUserControlLibrary.ViewModels
         private void initializeVMs()
         {
             DeviceSummaryVM = new HardwareSummaryVM();
+            ValveSummaryVM = new ValveSummaryVM();
             ControllerSummaryVM = new HardwareSummaryVM();
             PanelSummaryVM = new HardwareSummaryVM();
             WireSummaryVM = new LengthSummaryVM();
             ConduitSummaryVM = new LengthSummaryVM();
             MiscSummaryVM = new MiscCostsSummaryVM();
-        }
-
-        private void resetVMs()
-        {
-            DeviceSummaryVM.Reset();
-            ControllerSummaryVM.Reset();
-            PanelSummaryVM.Reset();
-            WireSummaryVM.Reset();
-            ConduitSummaryVM.Reset();
-            MiscSummaryVM.Reset();
         }
         #endregion
 
@@ -251,9 +327,20 @@ namespace TECUserControlLibrary.ViewModels
         private CostBatch addSubScope(TECSubScope ss)
         {
             CostBatch deltas = new CostBatch();
-            foreach (TECHardware dev in ss.Devices.Where(item => item is TECHardware))
+            foreach (IEndDevice endDev in ss.Devices)
             {
-                deltas += (DeviceSummaryVM.AddHardware(dev));
+                if (endDev is TECDevice dev)
+                {
+                    deltas += (DeviceSummaryVM.AddHardware(dev));
+                }
+                else if (endDev is TECValve valve)
+                {
+                    deltas += (ValveSummaryVM.AddValve(valve));
+                }
+                else
+                {
+                    throw new DataMisalignedException("End device isn't recognized. Not valve or device.");
+                }
             }
             foreach(TECCost cost in ss.AssociatedCosts)
             {
@@ -361,9 +448,20 @@ namespace TECUserControlLibrary.ViewModels
         private CostBatch removeSubScope(TECSubScope ss)
         {
             CostBatch deltas = new CostBatch();
-            foreach (TECHardware dev in ss.Devices.Where(item => item is TECHardware))
+            foreach (IEndDevice endDev in ss.Devices)
             {
-                deltas += (DeviceSummaryVM.RemoveHardware(dev));
+                if (endDev is TECDevice dev)
+                {
+                    deltas += (DeviceSummaryVM.RemoveHardware(dev));
+                }
+                else if (endDev is TECValve valve)
+                {
+                    deltas += (ValveSummaryVM.RemoveValve(valve));
+                }
+                else
+                {
+                    throw new DataMisalignedException("End device isn't recognized. Not valve or device.");
+                }
             }
             foreach(TECCost cost in ss.AssociatedCosts)
             {
@@ -457,12 +555,24 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     updateTotals(addConnection(connection));
                 }
-                else if (args.Value is IEndDevice dev && args.Sender is TECSubScope sub)
+                else if (args.Value is IEndDevice endDev && args.Sender is TECSubScope sub)
                 {
-                    updateTotals(DeviceSummaryVM.AddHardware(dev as TECHardware));
+                    if (endDev is TECDevice dev)
+                    {
+                        updateTotals(DeviceSummaryVM.AddHardware(dev));
+                    }
+                    else if (endDev is TECValve valve)
+                    {
+                        updateTotals(ValveSummaryVM.AddValve(valve));
+                    }
+                    else
+                    {
+                        throw new DataMisalignedException("End device isn't recognized. Not valve or device.");
+                    }
+                    
                     if (sub.Connection != null)
                     {
-                        foreach(TECElectricalMaterial connectionType in dev.ConnectionTypes)
+                        foreach(TECElectricalMaterial connectionType in endDev.ConnectionTypes)
                         {
                             updateTotals(WireSummaryVM.AddRun(connectionType, sub.Connection.Length));
                         }
@@ -514,12 +624,24 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     updateTotals(removeConnection(connection));
                 }
-                else if (args.Value is IEndDevice dev && args.Sender is TECSubScope sub)
+                else if (args.Value is IEndDevice endDev && args.Sender is TECSubScope sub)
                 {
-                    updateTotals(DeviceSummaryVM.RemoveHardware(dev as TECHardware));
+                    if (endDev is TECDevice dev)
+                    {
+                        updateTotals(DeviceSummaryVM.RemoveHardware(dev));
+                    }
+                    else if (endDev is TECValve valve)
+                    {
+                        updateTotals(ValveSummaryVM.RemoveValve(valve));
+                    }
+                    else
+                    {
+                        throw new DataMisalignedException("End device isn't recognized. Not valve or device.");
+                    }
+                    
                     if (sub.Connection != null)
                     {
-                        foreach(TECElectricalMaterial connectionType in dev.ConnectionTypes)
+                        foreach(TECElectricalMaterial connectionType in endDev.ConnectionTypes)
                         {
                             updateTotals(WireSummaryVM.AddRun(connectionType, sub.Connection.Length));
                         }
@@ -533,7 +655,9 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (args.Sender is TECHardware || args.Sender is TECElectricalMaterial)
                     {
-                        throw new NotImplementedException();
+                        throw new NotImplementedException
+                            ("Associated cost change in Hardware or ElectricalMaterial " +
+                            "during the course of the bid is unexpected.");
                     }
                     else
                     {

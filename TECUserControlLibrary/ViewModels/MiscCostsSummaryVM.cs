@@ -13,12 +13,12 @@ namespace TECUserControlLibrary.ViewModels
     public class MiscCostsSummaryVM : ViewModelBase, IComponentSummaryVM
     {
         #region Fields
-        private Dictionary<Guid, CostSummaryItem> costDictionary;
+        private readonly Dictionary<Guid, CostSummaryItem> costDictionary;
 
-        private ObservableCollection<CostSummaryItem> _miscTECItems;
-        private ObservableCollection<CostSummaryItem> _miscElecItems;
-        private ObservableCollection<CostSummaryItem> _assocTECItems;
-        private ObservableCollection<CostSummaryItem> _assocElecItems;
+        private readonly ObservableCollection<CostSummaryItem> _miscTECItems;
+        private readonly ObservableCollection<CostSummaryItem> _miscElecItems;
+        private readonly ObservableCollection<CostSummaryItem> _assocTECItems;
+        private readonly ObservableCollection<CostSummaryItem> _assocElecItems;
 
         private double _miscTECCostTotal;
         private double _miscTECLaborTotal;
@@ -28,50 +28,22 @@ namespace TECUserControlLibrary.ViewModels
         private double _assocTECLaborTotal;
         private double _assocElecCostTotal;
         private double _assocElecLaborTotal;
-        #endregion
 
-        //Constructor
-        public MiscCostsSummaryVM()
+        public ReadOnlyObservableCollection<CostSummaryItem> MiscTECItems
         {
-            initialize();
+            get { return new ReadOnlyObservableCollection<CostSummaryItem>(_miscTECItems); }
         }
-        
-        #region Properties
-        public ObservableCollection<CostSummaryItem> MiscTECItems
+        public ReadOnlyObservableCollection<CostSummaryItem> MiscElecItems
         {
-            get { return _miscTECItems; }
-            private set
-            {
-                _miscTECItems = value;
-                RaisePropertyChanged("MiscTECItems");
-            }
+            get { return new ReadOnlyObservableCollection<CostSummaryItem>(_miscElecItems); }
         }
-        public ObservableCollection<CostSummaryItem> MiscElecItems
+        public ReadOnlyObservableCollection<CostSummaryItem> AssocTECItems
         {
-            get { return _miscElecItems; }
-            private set
-            {
-                _miscElecItems = value;
-                RaisePropertyChanged("MiscElecItems");
-            }
+            get { return new ReadOnlyObservableCollection<CostSummaryItem>(_assocTECItems); }
         }
-        public ObservableCollection<CostSummaryItem> AssocTECItems
+        public ReadOnlyObservableCollection<CostSummaryItem> AssocElecItems
         {
-            get { return _assocTECItems; }
-            private set
-            {
-                _assocTECItems = value;
-                RaisePropertyChanged("AssocTECItems");
-            }
-        }
-        public ObservableCollection<CostSummaryItem> AssocElecItems
-        {
-            get { return _assocElecItems; }
-            private set
-            {
-                _assocElecItems = value;
-                RaisePropertyChanged("AssocElecItems");
-            }
+            get { return new ReadOnlyObservableCollection<CostSummaryItem>(_assocElecItems); }
         }
 
         public double MiscTECCostTotal
@@ -184,13 +156,27 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         #endregion
-
-        #region Methods
-        public void Reset()
+        
+        public MiscCostsSummaryVM()
         {
-            initialize();
-        }
+            costDictionary = new Dictionary<Guid, CostSummaryItem>();
 
+            _miscTECItems = new ObservableCollection<CostSummaryItem>();
+            _miscElecItems = new ObservableCollection<CostSummaryItem>();
+            _assocTECItems = new ObservableCollection<CostSummaryItem>();
+            _assocElecItems = new ObservableCollection<CostSummaryItem>();
+
+            MiscTECCostTotal = 0;
+            MiscTECLaborTotal = 0;
+            MiscElecCostTotal = 0;
+            MiscElecLaborTotal = 0;
+            AssocTECCostTotal = 0;
+            AssocTECLaborTotal = 0;
+            AssocElecCostTotal = 0;
+            AssocElecLaborTotal = 0;
+        }
+        
+        #region Methods
         public CostBatch AddCost(TECCost cost)
         {
             bool containsItem = costDictionary.ContainsKey(cost.Guid);
@@ -236,13 +222,13 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (cost.Type == CostType.TEC)
                     {
-                        MiscTECItems.Add(item);
+                        _miscTECItems.Add(item);
                         MiscTECCostTotal += item.TotalCost;
                         MiscTECLaborTotal += item.TotalLabor;
                     }
                     else if (cost.Type == CostType.Electrical)
                     {
-                        MiscElecItems.Add(item);
+                        _miscElecItems.Add(item);
                         MiscElecCostTotal += item.TotalCost;
                         MiscElecLaborTotal += item.TotalLabor;
                     }
@@ -251,13 +237,13 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (cost.Type == CostType.TEC)
                     {
-                        AssocTECItems.Add(item);
+                        _assocTECItems.Add(item);
                         AssocTECCostTotal += item.TotalCost;
                         AssocTECLaborTotal += item.TotalLabor;
                     }
                     else if (cost.Type == CostType.Electrical)
                     {
-                        AssocElecItems.Add(item);
+                        _assocElecItems.Add(item);
                         AssocElecCostTotal += item.TotalCost;
                         AssocElecLaborTotal += item.TotalLabor;
                     }
@@ -307,22 +293,22 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         if (cost.Type == CostType.TEC)
                         {
-                            MiscTECItems.Remove(item);
+                            _miscTECItems.Remove(item);
                         }
                         else if (cost.Type == CostType.Electrical)
                         {
-                            MiscElecItems.Remove(item);
+                            _miscElecItems.Remove(item);
                         }
                     }
                     else
                     {
                         if (cost.Type == CostType.TEC)
                         {
-                            AssocTECItems.Remove(item);
+                            _assocTECItems.Remove(item);
                         }
                         else if (cost.Type == CostType.Electrical)
                         {
-                            AssocElecItems.Remove(item);
+                            _assocElecItems.Remove(item);
                         }
                     }
                 }
@@ -416,25 +402,6 @@ namespace TECUserControlLibrary.ViewModels
             {
                 throw new NullReferenceException("Cost item not present in dictionary.");
             }
-        }
-
-        private void initialize()
-        {
-            costDictionary = new Dictionary<Guid, CostSummaryItem>();
-
-            MiscTECItems = new ObservableCollection<CostSummaryItem>();
-            MiscElecItems = new ObservableCollection<CostSummaryItem>();
-            AssocTECItems = new ObservableCollection<CostSummaryItem>();
-            AssocElecItems = new ObservableCollection<CostSummaryItem>();
-
-            MiscTECCostTotal = 0;
-            MiscTECLaborTotal = 0;
-            MiscElecCostTotal = 0;
-            MiscElecLaborTotal = 0;
-            AssocTECCostTotal = 0;
-            AssocTECLaborTotal = 0;
-            AssocElecCostTotal = 0;
-            AssocElecLaborTotal = 0;
         }
         #endregion
     }

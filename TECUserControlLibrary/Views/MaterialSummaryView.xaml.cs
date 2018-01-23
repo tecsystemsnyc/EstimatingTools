@@ -13,9 +13,7 @@ namespace TECUserControlLibrary.Views
         {
             InitializeComponent();
         }
-
         
-
         public MaterialSummaryVM ViewModel
         {
             get { return (MaterialSummaryVM)GetValue(ViewModelProperty); }
