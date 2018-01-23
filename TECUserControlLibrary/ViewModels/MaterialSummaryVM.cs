@@ -173,6 +173,10 @@ namespace TECUserControlLibrary.ViewModels
                         CurrentVM = DeviceSummaryVM;
                         CurrentType = "Device";
                         break;
+                    case MaterialSummaryIndex.Valves:
+                        CurrentVM = ValveSummaryVM;
+                        CurrentType = "Valve";
+                        break;
                     case MaterialSummaryIndex.Controllers:
                         CurrentVM = ControllerSummaryVM;
                         CurrentType = "Controller";
