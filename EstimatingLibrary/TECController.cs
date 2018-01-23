@@ -22,10 +22,11 @@ namespace EstimatingLibrary
             get { return _parentConnection; }
             set
             {
-                var old = ParentConnection;
-                _parentConnection = value;
-                raisePropertyChanged("ParentConnection");
-                raisePropertyChanged("NetworkIO");
+                if (ParentConnection != value)
+                {
+                    _parentConnection = value;
+                    raisePropertyChanged("ParentConnection");
+                }
             }
         }
         public ObservableCollection<TECConnection> ChildrenConnections
