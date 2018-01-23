@@ -12,26 +12,15 @@ using TECUserControlLibrary.ViewModels.Interfaces;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class ValveSummaryVM : ViewModelBase, IComponentSummaryVM
+    public class ValveSummaryVM : HardwareSummaryVM, IComponentSummaryVM
     {
         #region Fields and Properties
-        private Dictionary<Guid, HardwareSummaryItem> valveDictionary;
-        private Dictionary<Guid, HardwareSummaryItem> actuatorDictionary;
-        private Dictionary<Guid, CostSummaryItem> assocCostDictionary;
+        private readonly Dictionary<Guid, HardwareSummaryItem> valveDictionary;
 
         private readonly ObservableCollection<HardwareSummaryItem> _valveItems;
-        private readonly ObservableCollection<HardwareSummaryItem> _actuatorItems;
-        private readonly ObservableCollection<CostSummaryItem> _assocTECItems;
-        private readonly ObservableCollection<CostSummaryItem> _assocElecItems;
 
         private double _valveCost;
         private double _valveLabor;
-        private double _actuatorCost;
-        private double _actuatorLabor;
-        private double _assocTECCostTotal;
-        private double _assocTECLaborTotal;
-        private double _assocElecCostTotal;
-        private double _assocElecLaborTotal;
 
         public ReadOnlyObservableCollection<HardwareSummaryItem> ValveItems
         {
@@ -39,15 +28,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         public ReadOnlyObservableCollection<HardwareSummaryItem> ActuatorItems
         {
-            get { return new ReadOnlyObservableCollection<HardwareSummaryItem>(_actuatorItems); }
-        }
-        public ReadOnlyObservableCollection<CostSummaryItem> AssocTECItems
-        {
-            get { return new ReadOnlyObservableCollection<CostSummaryItem>(_assocTECItems); }
-        }
-        public ReadOnlyObservableCollection<CostSummaryItem> AssocElecItems
-        {
-            get { return new ReadOnlyObservableCollection<CostSummaryItem>(_assocElecItems); }
+            get { return new ReadOnlyObservableCollection<HardwareSummaryItem>(_hardwareItems); }
         }
 
         public double ValveCost
@@ -78,12 +59,12 @@ namespace TECUserControlLibrary.ViewModels
         }
         public double ActuatorCost
         {
-            get { return _actuatorCost; }
+            get { return _hardwareCost; }
             set
             {
                 if (ActuatorCost != value)
                 {
-                    _actuatorCost = value;
+                    _hardwareCost = value;
                     RaisePropertyChanged("ActuatorCost");
                     RaisePropertyChanged("TotalTECCost");
                 }
@@ -91,84 +72,30 @@ namespace TECUserControlLibrary.ViewModels
         }
         public double ActuatorLabor
         {
-            get { return _actuatorLabor; }
+            get { return _hardwareLabor; }
             set
             {
                 if (ActuatorLabor != value)
                 {
-                    _actuatorLabor = value;
+                    _hardwareLabor = value;
                     RaisePropertyChanged("ActuatorLabor");
                     RaisePropertyChanged("TotalTECLabor");
                 }
             }
         }
-        public double AssocTECCostTotal
-        {
-            get { return _assocTECCostTotal; }
-            private set
-            {
-                _assocTECCostTotal = value;
-                RaisePropertyChanged("AssocTECCostTotal");
-                RaisePropertyChanged("TotalTECCost");
-            }
-        }
-        public double AssocTECLaborTotal
-        {
-            get { return _assocTECLaborTotal; }
-            private set
-            {
-                _assocTECLaborTotal = value;
-                RaisePropertyChanged("AssocTECLaborTotal");
-                RaisePropertyChanged("TotalTECLabor");
-            }
-        }
-        public double AssocElecCostTotal
-        {
-            get { return _assocElecCostTotal; }
-            private set
-            {
-                _assocElecCostTotal = value;
-                RaisePropertyChanged("AssocElecCostTotal");
-                RaisePropertyChanged("TotalElecCost");
-            }
-        }
-        public double AssocElecLaborTotal
-        {
-            get { return _assocElecLaborTotal; }
-            private set
-            {
-                _assocElecLaborTotal = value;
-                RaisePropertyChanged("AssocElecLaborTotal");
-                RaisePropertyChanged("TotalElecLabor");
-            }
-        }
 
-        public double TotalTECCost
+        public override double TotalTECCost
         {
             get
             {
                 return (ValveCost + ActuatorCost + AssocTECCostTotal);
             }
         }
-        public double TotalTECLabor
+        public override double TotalTECLabor
         {
             get
             {
                 return (ValveLabor + ActuatorLabor + AssocTECLaborTotal);
-            }
-        }
-        public double TotalElecCost
-        {
-            get
-            {
-                return (AssocElecCostTotal);
-            }
-        }
-        public double TotalElecLabor
-        {
-            get
-            {
-                return (AssocElecLaborTotal);
             }
         }
         #endregion
@@ -176,22 +103,11 @@ namespace TECUserControlLibrary.ViewModels
         public ValveSummaryVM()
         {
             valveDictionary = new Dictionary<Guid, HardwareSummaryItem>();
-            actuatorDictionary = new Dictionary<Guid, HardwareSummaryItem>();
-            assocCostDictionary = new Dictionary<Guid, CostSummaryItem>();
 
             _valveItems = new ObservableCollection<HardwareSummaryItem>();
-            _actuatorItems = new ObservableCollection<HardwareSummaryItem>();
-            _assocTECItems = new ObservableCollection<CostSummaryItem>();
-            _assocElecItems = new ObservableCollection<CostSummaryItem>();
 
             _valveCost = 0;
             _valveLabor = 0;
-            _actuatorCost = 0;
-            _actuatorLabor = 0;
-            _assocTECCostTotal = 0;
-            _assocTECLaborTotal = 0;
-            _assocElecCostTotal = 0;
-            _assocElecLaborTotal = 0;
         }
 
         #region Methods
@@ -257,56 +173,11 @@ namespace TECUserControlLibrary.ViewModels
 
         public CostBatch AddActuator(TECDevice actuator)
         {
-            CostBatch deltas = new CostBatch();
-            bool containsItem = actuatorDictionary.ContainsKey(actuator.Guid);
-            if (containsItem)
-            {
-                HardwareSummaryItem item = actuatorDictionary[actuator.Guid];
-                CostBatch delta = item.Increment();
-                ActuatorCost += delta.GetCost(actuator.Type);
-                ActuatorLabor += delta.GetLabor(actuator.Type);
-                deltas += delta;
-            }
-            else
-            {
-                HardwareSummaryItem item = new HardwareSummaryItem(actuator);
-                actuatorDictionary.Add(actuator.Guid, item);
-                _actuatorItems.Add(item);
-                ActuatorCost += item.TotalCost;
-                ActuatorLabor += item.TotalLabor;
-                deltas += new CostBatch(item.TotalLabor, item.TotalLabor, actuator.Type);
-            }
-
-            foreach(TECCost cost in actuator.AssociatedCosts)
-            {
-                deltas += AddCost(cost);
-            }
-            return deltas;
+            return AddHardware(actuator);
         }
         public CostBatch RemoveActuator(TECDevice actuator)
         {
-            bool containsItem = actuatorDictionary.ContainsKey(actuator.Guid);
-            if (containsItem)
-            {
-                CostBatch deltas = new CostBatch();
-                HardwareSummaryItem item = actuatorDictionary[actuator.Guid];
-                CostBatch delta = item.Decrement();
-                deltas += delta;
-                ActuatorCost += delta.GetCost(actuator.Type);
-                ActuatorLabor += delta.GetLabor(actuator.Type);
-                //Continue here
-            }
-
-            throw new NotImplementedException();
-        }
-
-        public CostBatch AddCost(TECCost cost)
-        {
-            throw new NotImplementedException();
-        }
-        public CostBatch RemoveCost(TECCost cost)
-        {
-            throw new NotImplementedException();
+            return RemoveHardware(actuator);
         }
         #endregion
     }

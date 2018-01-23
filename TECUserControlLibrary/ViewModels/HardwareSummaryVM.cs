@@ -101,28 +101,28 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public double TotalTECCost
+        public virtual double TotalTECCost
         {
             get
             {
                 return (HardwareCost + AssocTECCostTotal);
             }
         }
-        public double TotalTECLabor
+        public virtual double TotalTECLabor
         {
             get
             {
                 return (HardwareLabor + AssocTECLaborTotal);
             }
         }
-        public double TotalElecCost
+        public virtual double TotalElecCost
         {
             get
             {
                 return AssocElecCostTotal;
             }
         }
-        public double TotalElecLabor
+        public virtual double TotalElecLabor
         {
             get
             {
