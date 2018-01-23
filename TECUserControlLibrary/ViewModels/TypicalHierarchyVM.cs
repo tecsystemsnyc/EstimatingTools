@@ -25,6 +25,7 @@ namespace TECUserControlLibrary.ViewModels
                 Selected?.Invoke(value);
             }
         }
+
         public ICommand AddInstanceCommand { get; private set; }
         
         public TypicalHierarchyVM(TECBid bid)
@@ -32,6 +33,15 @@ namespace TECUserControlLibrary.ViewModels
             this.bid = bid;
             SystemHierarchyVM = new SystemHierarchyVM(bid, false);
             SystemHierarchyVM.Selected += systemHierarchyVM_Selected;
+            SystemHierarchyVM.SetDeleteCommand(
+                sys =>
+                {
+                    SelectedTypical.Instances.Remove(sys);
+                },
+                sys =>
+                {
+                    return SelectedTypical != null;
+                });
             TypicalSystems = new ReadOnlyObservableCollection<TECTypical>(bid.Systems);
             AddInstanceCommand = new RelayCommand(addInstanceExecute, canAddInstance);
 

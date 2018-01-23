@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              x:Name="globalConnectionView"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -16,7 +17,8 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid DataContext="{Binding ElementName=globalConnectionView, Path=ViewModel}" Background="{StaticResource SectionBackgroundBrush}">
+    <Grid DataContext="{Binding ElementName=globalConnectionView, Path=ViewModel}"
+          Background="{StaticResource SectionBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
@@ -31,12 +33,13 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
-                <TextBlock Text="Controllers"/>
+                <TextBlock Text="Controllers" Style="{StaticResource ListHeader}"/>
             </Border>
             <listControls:ControllerListControl Source="{Binding GlobalControllers}"
                                                 SelectedItem="{Binding SelectedController}"
                                                 DropHandler="{Binding ElementName=globalConnectionView, Path=DropHandler}"
-                                                Grid.Row="1"/>
+                                                Grid.Row="1"
+                                                x:Name="controllerList"/>
         </Grid>
         <Grid Grid.Row="1">
             
@@ -64,6 +67,15 @@
                                                         DisconnectCommand="{Binding DisconnectSubScopeCommand}"
                                                         ConduitTypes="{Binding ConduitTypes}"
                                                         Grid.Row="1"/>
+        </Grid>
+        <Grid Grid.Column="1" Grid.RowSpan="2" 
+              Visibility="{Binding ElementName=controllerList, Path=SelectedItem, 
+              Converter={utilities:NullToVisibilityConverter}}"
+              Background="{StaticResource SectionBackgroundBrush}">
+            <TextBlock Text="Select a controller to view connections."
+                       VerticalAlignment="Center"
+                       Foreground="Black"
+                       HorizontalAlignment="Center"/>
         </Grid>
     </Grid>
 </UserControl>

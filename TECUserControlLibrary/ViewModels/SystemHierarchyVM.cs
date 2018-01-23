@@ -244,6 +244,12 @@ namespace TECUserControlLibrary.ViewModels
 
         }
 
+        public void SetDeleteCommand(Action<TECSystem> deleteExecute, Func<TECSystem, bool> canDelete)
+        {
+            DeleteSystemCommand = new RelayCommand<TECSystem>(deleteExecute, canDelete);
+            RaisePropertyChanged("DeleteSystemCommand");
+        }
+
         private void addSystemExecute()
         {
             SelectedVM = new AddSystemVM(scopeManager);

@@ -314,8 +314,14 @@
                     <ContentPresenter Content="{Binding ElementName=componentComboBox, Path=SelectedItem}"  Name="componentGrid"
                                                       ContentTemplateSelector="{StaticResource ComponentSelector}"
                                                       Grid.Row="1"/>
-                    <TextBlock Text="Select a System to View Its Components" Grid.Row="1" HorizontalAlignment="Center" TextTrimming="WordEllipsis"
-                               Visibility="{Binding ElementName=systemList, Path=SelectedItem, Converter={utilities:NullToVisibilityConverter}}"/>
+                    <TextBlock Text="Select a system to view its components." 
+                               Grid.RowSpan="2" 
+                               HorizontalAlignment="Center" 
+                               VerticalAlignment="Center"
+                               TextTrimming="WordEllipsis"
+                               Background="{StaticResource SectionBackgroundBrush}"
+                               Visibility="{Binding ElementName=systemList, Path=SelectedItem, 
+                        Converter={utilities:NullToVisibilityConverter}}"/>
                 </Grid>
             </Grid>
         

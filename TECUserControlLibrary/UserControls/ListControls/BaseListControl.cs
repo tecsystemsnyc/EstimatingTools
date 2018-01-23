@@ -1,9 +1,11 @@
-﻿using GongSolutions.Wpf.DragDrop;
+﻿using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.UserControls.ListControls
 {
@@ -12,6 +14,8 @@ namespace TECUserControlLibrary.UserControls.ListControls
     /// </summary>
     public partial class BaseListControl<T> : UserControl where T: class
     {
+        private static RelayCommand<T> defaultDelete = new RelayCommand<T>(item => { }, item => false);
+        
         public IEnumerable<T> Source
         {
             get { return (IEnumerable<T>)GetValue(SourceProperty); }
@@ -104,10 +108,8 @@ namespace TECUserControlLibrary.UserControls.ListControls
 
         // Using a DependencyProperty as the backing store for DeleteCommand.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DeleteCommandProperty =
-            DependencyProperty.Register("DeleteCommand", typeof(ICommand), typeof(BaseListControl<T>));
-
-
-
+            DependencyProperty.Register("DeleteCommand", typeof(ICommand), typeof(BaseListControl<T>), new PropertyMetadata(defaultDelete));
+        
         public DataTemplate DragAdornerTemplate
         {
             get { return (DataTemplate)GetValue(DragAdornerTemplateProperty); }
@@ -117,9 +119,7 @@ namespace TECUserControlLibrary.UserControls.ListControls
         // Using a DependencyProperty as the backing store for DragAdornerTemplate.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DragAdornerTemplateProperty =
             DependencyProperty.Register("DragAdornerTemplate", typeof(DataTemplate), typeof(BaseListControl<T>));
-
-
-
+        
         protected void ListView_Selected(object sender, RoutedEventArgs e)
         {
             RaiseEvent(new RoutedEventArgs(SelectedEvent, this));
@@ -135,8 +135,14 @@ namespace TECUserControlLibrary.UserControls.ListControls
         protected void ItemControl_MouseUp(object sender, MouseButtonEventArgs e)
         {
             var item = this.SelectedItem;
-            this.SelectedItem = null;
-            this.SelectedItem = item;
+            ListView child = UIHelpers.FindVisualChild<ListView>(this);
+            if(child != null && child.SelectedItems.Count == 1)
+            {
+                this.SelectedItem = null;
+                this.SelectedItem = item;
+
+            }
+            
             //RaiseEvent(new RoutedEventArgs(SelectedEvent, this));
         }
         protected void ListView_MouseDoubleClicked(object sender, MouseButtonEventArgs e)
