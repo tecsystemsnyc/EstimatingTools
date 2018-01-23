@@ -31,7 +31,7 @@ namespace TECUserControlLibrary.Views
 
         // Using a DependencyProperty as the backing store for ViewModel.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(ValveSummaryVM), typeof(HardwareSummaryView));
+            DependencyProperty.Register("ViewModel", typeof(ValveSummaryVM), typeof(ValveSummaryView));
 
 
 
