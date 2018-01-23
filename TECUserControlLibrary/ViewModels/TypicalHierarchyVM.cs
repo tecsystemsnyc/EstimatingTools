@@ -23,31 +23,7 @@ namespace TECUserControlLibrary.ViewModels
                 _selectedTypical = value;
                 RaisePropertyChanged("SelectedTypical");
                 Selected?.Invoke(value);
-                if(value != null)
-                {
-                    setDeleteInstance(value);
-
-                }
             }
-        }
-
-        private void setDeleteInstance(TECTypical value)
-        {
-            SystemHierarchyVM.SetDeleteCommand(
-                sys =>
-                {
-                    value.Instances.Remove(sys);
-                },
-                sys =>
-                {
-                    if (value.Instances.Contains(sys))
-                    {
-                        return true;
-                    } else
-                    {
-                        return false;
-                    }
-                });
         }
 
         public ICommand AddInstanceCommand { get; private set; }
@@ -57,6 +33,15 @@ namespace TECUserControlLibrary.ViewModels
             this.bid = bid;
             SystemHierarchyVM = new SystemHierarchyVM(bid, false);
             SystemHierarchyVM.Selected += systemHierarchyVM_Selected;
+            SystemHierarchyVM.SetDeleteCommand(
+                sys =>
+                {
+                    SelectedTypical.Instances.Remove(sys);
+                },
+                sys =>
+                {
+                    return SelectedTypical != null;
+                });
             TypicalSystems = new ReadOnlyObservableCollection<TECTypical>(bid.Systems);
             AddInstanceCommand = new RelayCommand(addInstanceExecute, canAddInstance);
 

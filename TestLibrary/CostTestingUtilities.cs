@@ -61,6 +61,19 @@ namespace Tests
             return total;
         }
 
+        static public Total CalculateTotal(TECValve valve, CostType type)
+        {
+            Total total = new Total();
+            if (type == valve.Type)
+            {
+                total.Cost = valve.RawCost;
+                total.Labor = valve.RawLabor;
+            }
+            total += CalculateTotal(valve as TECScope, type);
+            total += CalculateTotal(valve.Actuator as TECHardware, type);
+            return total;
+        }
+
         static public Total CalculateTotal(TECCost cost, CostType type)
         {
             int qty = 1;

@@ -125,6 +125,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public ICommand UpdateCommand { get; private set; }
         public RelayCommand<TECNetworkConnection> RemoveConnectionCommand { get; private set; }
+        public RelayCommand<INetworkConnectable> RemoveChildCommand { get; private set; }
         #endregion
 
         private NetworkVM(
@@ -150,6 +151,12 @@ namespace TECUserControlLibrary.ViewModels
                 UpdateCommand = new RelayCommand(() => updateExecute(SelectedParentable), () => updateCanExecute(SelectedParentable));
             }
             RemoveConnectionCommand = new RelayCommand<TECNetworkConnection>(removeConnectionExecute);
+            RemoveChildCommand = new RelayCommand<INetworkConnectable>(removeChildExecute);
+        }
+
+        private void removeChildExecute(INetworkConnectable obj)
+        {
+            SelectedConnection.RemoveINetworkConnectable(obj);
         }
 
         public event Action<TECObject> Selected;

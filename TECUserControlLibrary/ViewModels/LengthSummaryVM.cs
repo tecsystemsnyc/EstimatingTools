@@ -12,16 +12,16 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class LengthSummaryVM : ViewModelBase, IComponentSummaryVM
     {
-        #region Fields
-        private Dictionary<Guid, LengthSummaryItem> lengthDictionary;
-        private Dictionary<Guid, CostSummaryItem> assocCostDictionary;
-        private Dictionary<Guid, RatedCostSummaryItem> ratedCostDictionary;
+        #region Fields and Properties
+        private readonly Dictionary<Guid, LengthSummaryItem> lengthDictionary;
+        private readonly Dictionary<Guid, CostSummaryItem> assocCostDictionary;
+        private readonly Dictionary<Guid, RatedCostSummaryItem> ratedCostDictionary;
 
-        private ObservableCollection<LengthSummaryItem> _lengthSummaryItems;
-        private ObservableCollection<CostSummaryItem> _assocTECItems;
-        private ObservableCollection<CostSummaryItem> _assocElecItems;
-        private ObservableCollection<RatedCostSummaryItem> _ratedTECItems;
-        private ObservableCollection<RatedCostSummaryItem> _ratedElecItems;
+        private readonly ObservableCollection<LengthSummaryItem> _lengthSummaryItems;
+        private readonly ObservableCollection<CostSummaryItem> _assocTECItems;
+        private readonly ObservableCollection<CostSummaryItem> _assocElecItems;
+        private readonly ObservableCollection<RatedCostSummaryItem> _ratedTECItems;
+        private readonly ObservableCollection<RatedCostSummaryItem> _ratedElecItems;
 
         private double _lengthCostTotal;
         private double _lengthLaborTotal;
@@ -33,59 +33,26 @@ namespace TECUserControlLibrary.ViewModels
         private double _ratedTECLaborTotal;
         private double _ratedElecCostTotal;
         private double _ratedElecLaborTotal;
-        #endregion
 
-        //Constructor
-        public LengthSummaryVM()
+        public ReadOnlyObservableCollection<LengthSummaryItem> LengthSummaryItems
         {
-            initialize();
+            get { return new ReadOnlyObservableCollection<LengthSummaryItem>(_lengthSummaryItems); }
         }
-
-        #region Properties
-        public ObservableCollection<LengthSummaryItem> LengthSummaryItems
+        public ReadOnlyObservableCollection<CostSummaryItem> AssocTECItems
         {
-            get { return _lengthSummaryItems; }
-            private set
-            {
-                _lengthSummaryItems = value;
-                RaisePropertyChanged("LengthSummaryItems");
-            }
+            get { return new ReadOnlyObservableCollection<CostSummaryItem>(_assocTECItems); }
         }
-        public ObservableCollection<CostSummaryItem> AssocTECItems
+        public ReadOnlyObservableCollection<CostSummaryItem> AssocElecItems
         {
-            get { return _assocTECItems; }
-            private set
-            {
-                _assocTECItems = value;
-                RaisePropertyChanged("AssocTECItems");
-            }
+            get { return new ReadOnlyObservableCollection<CostSummaryItem>(_assocElecItems); }
         }
-        public ObservableCollection<CostSummaryItem> AssocElecItems
+        public ReadOnlyObservableCollection<RatedCostSummaryItem> RatedTECItems
         {
-            get { return _assocElecItems; }
-            private set
-            {
-                _assocElecItems = value;
-                RaisePropertyChanged("AssocElecItems");
-            }
+            get { return new ReadOnlyObservableCollection<RatedCostSummaryItem>(_ratedTECItems); }
         }
-        public ObservableCollection<RatedCostSummaryItem> RatedTECItems
+        public ReadOnlyObservableCollection<RatedCostSummaryItem> RatedElecItems
         {
-            get { return _ratedTECItems; }
-            private set
-            {
-                _ratedTECItems = value;
-                RaisePropertyChanged("RatedTECItems");
-            }
-        }
-        public ObservableCollection<RatedCostSummaryItem> RatedElecItems
-        {
-            get { return _ratedElecItems; }
-            private set
-            {
-                _ratedElecItems = value;
-                RaisePropertyChanged("RatedElecItems");
-            }
+            get { return new ReadOnlyObservableCollection<RatedCostSummaryItem>(_ratedElecItems); }
         }
 
         public double LengthCostTotal
@@ -218,13 +185,32 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         #endregion
-
-        #region Methods
-        public void Reset()
+        
+        public LengthSummaryVM()
         {
-            initialize();
+            lengthDictionary = new Dictionary<Guid, LengthSummaryItem>();
+            assocCostDictionary = new Dictionary<Guid, CostSummaryItem>();
+            ratedCostDictionary = new Dictionary<Guid, RatedCostSummaryItem>();
+
+            _lengthSummaryItems = new ObservableCollection<LengthSummaryItem>();
+            _assocTECItems = new ObservableCollection<CostSummaryItem>();
+            _assocElecItems = new ObservableCollection<CostSummaryItem>();
+            _ratedTECItems = new ObservableCollection<RatedCostSummaryItem>();
+            _ratedElecItems = new ObservableCollection<RatedCostSummaryItem>();
+
+            LengthCostTotal = 0;
+            LengthLaborTotal = 0;
+            AssocTECCostTotal = 0;
+            AssocTECLaborTotal = 0;
+            AssocElecCostTotal = 0;
+            AssocElecLaborTotal = 0;
+            RatedTECCostTotal = 0;
+            RatedTECLaborTotal = 0;
+            RatedElecCostTotal = 0;
+            RatedElecLaborTotal = 0;
         }
 
+        #region Methods
         public CostBatch AddRun(TECElectricalMaterial material, double length)
         {
             CostBatch deltas = AddLength(material, length);
@@ -259,7 +245,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 LengthSummaryItem item = new LengthSummaryItem(material, length);
                 lengthDictionary.Add(material.Guid, item);
-                LengthSummaryItems.Add(item);
+                _lengthSummaryItems.Add(item);
                 LengthCostTotal += item.TotalCost;
                 LengthLaborTotal += item.TotalLabor;
                 deltas += new CostBatch(item.TotalCost, item.TotalLabor, CostType.Electrical);
@@ -286,7 +272,7 @@ namespace TECUserControlLibrary.ViewModels
 
                     if (item.Length <= 0)
                     {
-                        LengthSummaryItems.Remove(item);
+                        _lengthSummaryItems.Remove(item);
                         lengthDictionary.Remove(material.Guid);
                     }
                     foreach (TECCost cost in material.RatedCosts)
@@ -304,30 +290,6 @@ namespace TECUserControlLibrary.ViewModels
             {
                 return new CostBatch();
             }
-        }
-
-        private void initialize()
-        {
-            lengthDictionary = new Dictionary<Guid, LengthSummaryItem>();
-            assocCostDictionary = new Dictionary<Guid, CostSummaryItem>();
-            ratedCostDictionary = new Dictionary<Guid, RatedCostSummaryItem>();
-
-            LengthSummaryItems = new ObservableCollection<LengthSummaryItem>();
-            AssocTECItems = new ObservableCollection<CostSummaryItem>();
-            AssocElecItems = new ObservableCollection<CostSummaryItem>();
-            RatedTECItems = new ObservableCollection<RatedCostSummaryItem>();
-            RatedElecItems = new ObservableCollection<RatedCostSummaryItem>();
-
-            LengthCostTotal = 0;
-            LengthLaborTotal = 0;
-            AssocTECCostTotal = 0;
-            AssocTECLaborTotal = 0;
-            AssocElecCostTotal = 0;
-            AssocElecLaborTotal = 0;
-            RatedTECCostTotal = 0;
-            RatedTECLaborTotal = 0;
-            RatedElecCostTotal = 0;
-            RatedElecLaborTotal = 0;
         }
 
         private CostBatch addAssocCost(TECCost cost)
@@ -350,13 +312,13 @@ namespace TECUserControlLibrary.ViewModels
                 assocCostDictionary.Add(cost.Guid, item);
                 if (cost.Type == CostType.TEC)
                 {
-                    AssocTECItems.Add(item);
+                    _assocTECItems.Add(item);
                     AssocTECCostTotal += item.TotalCost;
                     AssocTECLaborTotal += item.TotalLabor;
                 }
                 else if (cost.Type == CostType.Electrical)
                 {
-                    AssocElecItems.Add(item);
+                    _assocElecItems.Add(item);
                     AssocElecCostTotal += item.TotalCost;
                     AssocElecLaborTotal += item.TotalLabor;
                 }
@@ -383,11 +345,11 @@ namespace TECUserControlLibrary.ViewModels
                     assocCostDictionary.Remove(cost.Guid);
                     if (cost.Type == CostType.TEC)
                     {
-                        AssocTECItems.Remove(item);
+                        _assocTECItems.Remove(item);
                     }
                     else if (cost.Type == CostType.Electrical)
                     {
-                        AssocElecItems.Remove(item);
+                        _assocElecItems.Remove(item);
                     }
                 }
                 return deltas;
@@ -422,13 +384,13 @@ namespace TECUserControlLibrary.ViewModels
                 ratedCostDictionary.Add(cost.Guid, item);
                 if (cost.Type == CostType.TEC)
                 {
-                    RatedTECItems.Add(item);
+                    _ratedTECItems.Add(item);
                     RatedTECCostTotal += item.TotalCost;
                     RatedTECLaborTotal += item.TotalLabor;
                 }
                 else if (cost.Type == CostType.Electrical)
                 {
-                    RatedElecItems.Add(item);
+                    _ratedElecItems.Add(item);
                     RatedElecCostTotal += item.TotalCost;
                     RatedElecLaborTotal += item.TotalLabor;
                 }
@@ -459,11 +421,11 @@ namespace TECUserControlLibrary.ViewModels
                         ratedCostDictionary.Remove(cost.Guid);
                         if (cost.Type == CostType.TEC)
                         {
-                            RatedTECItems.Remove(item);
+                            _ratedTECItems.Remove(item);
                         }
                         else if (cost.Type == CostType.Electrical)
                         {
-                            RatedElecItems.Remove(item);
+                            _ratedElecItems.Remove(item);
                         }
                     }
                     return delta;

@@ -594,7 +594,7 @@ namespace TECUserControlLibrary.Utilities
         IOModules
     }
     public enum TypicalInstanceEnum { Typical, Instance }
-    public enum MaterialSummaryIndex { Devices, Controllers, Panels, Wire, Conduit, Misc }
+    public enum MaterialSummaryIndex { Devices, Valves, Controllers, Panels, Wire, Conduit, Misc }
 
 
 
