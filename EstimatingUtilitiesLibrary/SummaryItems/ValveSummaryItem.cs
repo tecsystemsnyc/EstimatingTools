@@ -82,7 +82,7 @@ namespace EstimatingUtilitiesLibrary.SummaryItems
         private CostBatch updateTotals()
         {
             double newCost = (Valve.RawCost * Quantity);
-            double newLabor = (Valve.Labor * Quantity);
+            double newLabor = (Valve.RawLabor * Quantity);
 
             double deltaCost = newCost - TotalCost;
             double deltaLabor = newLabor - TotalLabor;
