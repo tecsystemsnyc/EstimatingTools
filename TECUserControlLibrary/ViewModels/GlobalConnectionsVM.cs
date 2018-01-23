@@ -339,7 +339,8 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         UnconnectedSubScope.Add(ssConnect.SubScope);
                     }
-                    if (ConnectedSubScope.Contains(subScopeConnectionDictionary[ssConnect]))
+                    if (subScopeConnectionDictionary.ContainsKey(ssConnect) &&
+                        ConnectedSubScope.Contains(subScopeConnectionDictionary[ssConnect]))
                     {
                         removeSubScopeConnectionItem(ssConnect);
                     }
