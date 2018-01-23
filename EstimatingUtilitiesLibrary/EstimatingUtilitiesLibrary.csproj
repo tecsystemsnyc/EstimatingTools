@@ -169,6 +169,7 @@
     <Compile Include="SummaryItems\HardwareSummaryItem.cs" />
     <Compile Include="SummaryItems\LengthSummaryItem.cs" />
     <Compile Include="SummaryItems\RatedCostSummaryItem.cs" />
+    <Compile Include="SummaryItems\ValveSummaryItem.cs" />
     <Compile Include="UtilitiesMethods.cs" />
   </ItemGroup>
   <ItemGroup>
