@@ -71,7 +71,7 @@
         </Border>
         
         <!--Actuator Items-->
-        <Border>
+        <Border Grid.Row="1">
             <Border.Resources>
                 <DataTemplate x:Key="actuatorItemGrid">
                     <DataGrid ItemsSource="{Binding Data.ActuatorItems, Source={StaticResource proxy}}"
@@ -103,6 +103,12 @@
                     </DataGrid>
                 </DataTemplate>
             </Border.Resources>
+            <userControls:SummaryDataGrid GridTemplate="{Binding Source={StaticResource actuatorItemGrid}}"
+                                          Title="Actuators (TEC)"
+                                          CostString="Cost Subtotal (TEC)"
+                                          CostValue="{Binding ViewModel.ActuatorCost}"
+                                          LaborString="Labor Subtotal (TEC)"
+                                          LaborValue="{Binding ViewModel.ActuatorLabor}"/>
         </Border>
 
         <!--Associated TEC Items-->
