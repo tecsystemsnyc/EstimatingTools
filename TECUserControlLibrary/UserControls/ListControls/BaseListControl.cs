@@ -1,4 +1,5 @@
-﻿using GongSolutions.Wpf.DragDrop;
+﻿using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,6 +14,8 @@ namespace TECUserControlLibrary.UserControls.ListControls
     /// </summary>
     public partial class BaseListControl<T> : UserControl where T: class
     {
+        private static RelayCommand<T> defaultDelete = new RelayCommand<T>(item => { }, item => false);
+        
         public IEnumerable<T> Source
         {
             get { return (IEnumerable<T>)GetValue(SourceProperty); }
@@ -105,7 +108,7 @@ namespace TECUserControlLibrary.UserControls.ListControls
 
         // Using a DependencyProperty as the backing store for DeleteCommand.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DeleteCommandProperty =
-            DependencyProperty.Register("DeleteCommand", typeof(ICommand), typeof(BaseListControl<T>));
+            DependencyProperty.Register("DeleteCommand", typeof(ICommand), typeof(BaseListControl<T>), new PropertyMetadata(defaultDelete));
         
         public DataTemplate DragAdornerTemplate
         {
