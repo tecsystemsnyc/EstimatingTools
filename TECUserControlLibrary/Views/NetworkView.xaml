@@ -182,6 +182,7 @@
                 </Border>
                 
                 <listControls:NetworkConnectableListControl Source="{Binding SelectedConnection.Children}"
+                                                            DeleteCommand="{Binding RemoveChildCommand}"
                                                             Grid.Row="1"/>
             </Grid>
         </Grid>

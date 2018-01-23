@@ -7,7 +7,7 @@
              xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              x:Name="unconnectedSubScopeView"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -101,16 +101,20 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="50"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="Systems" Grid.Column="1" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Systems" Grid.Column="1" HorizontalAlignment="Center"
+                               Style="{StaticResource ListHeader}"/>
                     <Button Content="->" x:Name="systemDetails" 
-                            Grid.Column="2" Margin="2"/>
+                            Grid.Column="2" Margin="2"
+                            Visibility="{Binding ElementName=systemList, Path=SelectedItem,
+                        Converter={utilities:NullToCollapsedConverter}}"/>
                 </Grid>
             </Border>
 
             <listControls:SystemListControl Grid.Row="1" 
                                             Source="{Binding SystemSource}"
                                             SelectedItem="{Binding SelectedSystem}"
-                                            DropHandler="{Binding DropHandler}"/>
+                                            DropHandler="{Binding DropHandler}"
+                                            x:Name="systemList"/>
         </Grid>
         <!--Equipment Grid-->
         <Grid Grid.Column="1">
@@ -133,14 +137,18 @@
                         </Button.Content>
                     </Button>
                     <TextBlock Text="{Binding SelectedSystem.Name, StringFormat=Equipment in {0}}"
-                               Grid.Column="1" HorizontalAlignment="Center"/>
-                    <Button Content="->" x:Name="equipmentDetails" Margin="2" Grid.Column="2"/>
+                               Grid.Column="1" Style="{StaticResource ListHeader}"/>
+                    <Button Content="->" x:Name="equipmentDetails" 
+                            Margin="2" Grid.Column="2"
+                            Visibility="{Binding ElementName=equipmentList, Path=SelectedItem,
+                        Converter={utilities:NullToCollapsedConverter}}"/>
                 </Grid>
             </Border>
             <listControls:EquipmentListControl Grid.Row="1"
                                                Source="{Binding EquipmentSource}"
                                             SelectedItem="{Binding SelectedEquipment}"
-                                            DropHandler="{Binding DropHandler}"/>
+                                            DropHandler="{Binding DropHandler}"
+                                               x:Name="equipmentList"/>
         </Grid>
         <!--SubScope Grid-->
         <Grid Grid.Column="2">
@@ -162,7 +170,9 @@
                             &lt;-
                         </Button.Content>
                     </Button>
-                    <TextBlock Text="{Binding SelectedEquipment.Name, StringFormat=Points in {0}}" Grid.Column="1" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding SelectedEquipment.Name, 
+                        StringFormat=Points in {0}}" Grid.Column="1" 
+                               Style="{StaticResource ListHeader}"/>
                 </Grid>
             </Border>
             <listControls:SubScopeListControl Grid.Row="1"
