@@ -5,6 +5,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:userControls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 
@@ -15,6 +17,122 @@
         </Style>
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=valveSummaryView}">
-        <Grid.
+        <Grid.Resources>
+            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=valveSummaryView, Path=ViewModel}"/>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <!--Valve Items-->
+        <Border>
+            <Border.Resources>
+                <DataTemplate x:Key="valveItemGrid">
+                    <DataGrid ItemsSource="{Binding Data.ValveItems, Source={StaticResource proxy}}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Type"
+                                                Binding="{Binding Valve.Name}"
+                                                Width="Auto"/>
+                            <DataGridTextColumn Header="Manufacturer"
+                                                Binding="{Binding Valve.Manufacturer.Label}"
+                                                Width="Auto"/>
+                            <DataGridTextColumn Header="Cost per Item"
+                                                Binding="{Binding Valve.RawCost, StringFormat={}{0:C}}"
+                                                Width="Auto"/>
+                            <DataGridTextColumn Header="Labor per Item"
+                                                Binding="{Binding Valve.Labor, StringFormat={}{0:C}}"
+                                                Width="Auto"/>
+                            <DataGridTextColumn Header="Quantity"
+                                                Binding="{Binding Quantity}"
+                                                Width="Auto"/>
+                            <DataGridTextColumn Header="Total Cost"
+                                                Binding="{Binding TotalCost, StringFormat={}{0:C}}"
+                                                Width="Auto"/>
+                            <DataGridTextColumn Header="Total Labor"
+                                                Binding="{Binding TotalLabor, StringFormat={}{0:C}}"
+                                                Width="Auto"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DataTemplate>
+            </Border.Resources>
+            <userControls:SummaryDataGrid GridTemplate="{Binding Source={StaticResource valveItemGrid}}"
+                                          Title="Valves (TEC)"
+                                          CostString="Cost Subtotal (TEC)"
+                                          CostValue="{Binding ViewModel.ValveCost}"
+                                          LaborString="Labor Subtotal (TEC)"
+                                          LaborValue="{Binding ViewModel.ValveLabor}"/>
+        </Border>
+        
+        <!--Actuator Items-->
+        <Border>
+            <Border.Resources>
+                <DataTemplate x:Key="actuatorItemGrid">
+                    <DataGrid ItemsSource="{Binding Data.ActuatorItems, Source={StaticResource proxy}}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Type" 
+                                            Binding="{Binding Hardware.Name}"
+                                            Width="Auto"/>
+                            <DataGridTextColumn Header="Manufacturer"
+                                            Binding="{Binding Hardware.Manufacturer.Label}"
+                                            Width="Auto"/>
+                            <DataGridTextColumn Header="Cost per Item"
+                                            Binding="{Binding Hardware.Cost, StringFormat={}{0:C}}"
+                                            Width="Auto"/>
+                            <DataGridTextColumn Header="Labor per Item"
+                                            Binding="{Binding Hardware.Labor, StringFormat={}{0:F2}}"
+                                            Width="Auto"/>
+                            <DataGridTextColumn Header="Quantity"
+                                            Binding="{Binding Quantity}"
+                                            Width="Auto"/>
+                            <DataGridTextColumn Header="Total Cost"
+                                            Binding="{Binding TotalCost, StringFormat={}{0:C}}"
+                                            Width="Auto"/>
+                            <DataGridTextColumn Header="Total Labor"
+                                            Binding="{Binding TotalLabor, StringFormat={}{0:F2}}"
+                                            Width="Auto"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DataTemplate>
+            </Border.Resources>
+        </Border>
+
+        <!--Associated TEC Items-->
+        <Border Grid.Column="1">
+            <Border.Resources>
+                <DataTemplate x:Key="assocTECItemGrid">
+                    <userControls:CostSummaryItemGridControl ItemsSource="{Binding Data.AssocTECItems, Source={StaticResource proxy}}"/>
+                </DataTemplate>
+            </Border.Resources>
+            <userControls:SummaryDataGrid GridTemplate="{Binding Source={StaticResource assocTECItemGrid}}"
+                                          Title="Associated TEC Cost and Labor Items"
+                                          CostString="Cost Subtotal"
+                                          CostValue="{Binding ViewModel.AssocTECCostTotal}"
+                                          LaborString="Labor Subtotal"
+                                          LaborValue="{Binding ViewModel.AssocTECLaborTotal}"/>
+        </Border>
+
+        <!--Associated Elec Items-->
+        <Border Grid.Column="1" Grid.Row="1">
+            <Border.Resources>
+                <DataTemplate x:Key="assocElecItemGrid">
+                    <userControls:CostSummaryItemGridControl ItemsSource="{Binding Data.AssocElecItems, Source={StaticResource proxy}}"/>
+                </DataTemplate>
+            </Border.Resources>
+            <userControls:SummaryDataGrid GridTemplate="{Binding Source={StaticResource assocElecItemGrid}}"
+                                          Title="Associated Electrical Cost and Labor Items"
+                                          CostString="Cost Subtotal"
+                                          CostValue="{Binding ViewModel.AssocElecCostTotal}"
+                                          LaborString="Labor Subtotal"
+                                          LaborValue="{Binding ViewModel.AssocElecLaborTotal}"/>
+        </Border>
     </Grid>
 </UserControl>

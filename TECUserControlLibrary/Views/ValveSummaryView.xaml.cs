@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.Views
 {
@@ -20,6 +21,20 @@ namespace TECUserControlLibrary.Views
     /// </summary>
     public partial class ValveSummaryView : UserControl
     {
+
+
+        public ValveSummaryVM ViewModel
+        {
+            get { return (ValveSummaryVM)GetValue(ViewModelProperty); }
+            set { SetValue(ViewModelProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ViewModel.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ViewModelProperty =
+            DependencyProperty.Register("ViewModel", typeof(ValveSummaryVM), typeof(HardwareSummaryView));
+
+
+
         public ValveSummaryView()
         {
             InitializeComponent();

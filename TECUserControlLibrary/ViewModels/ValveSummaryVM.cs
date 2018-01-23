@@ -15,16 +15,16 @@ namespace TECUserControlLibrary.ViewModels
     public class ValveSummaryVM : HardwareSummaryVM, IComponentSummaryVM
     {
         #region Fields and Properties
-        private readonly Dictionary<Guid, HardwareSummaryItem> valveDictionary;
+        private readonly Dictionary<Guid, ValveSummaryItem> valveDictionary;
 
-        private readonly ObservableCollection<HardwareSummaryItem> _valveItems;
+        private readonly ObservableCollection<ValveSummaryItem> _valveItems;
 
         private double _valveCost;
         private double _valveLabor;
 
-        public ReadOnlyObservableCollection<HardwareSummaryItem> ValveItems
+        public ReadOnlyObservableCollection<ValveSummaryItem> ValveItems
         {
-            get { return new ReadOnlyObservableCollection<HardwareSummaryItem>(_valveItems); }
+            get { return new ReadOnlyObservableCollection<ValveSummaryItem>(_valveItems); }
         }
         public ReadOnlyObservableCollection<HardwareSummaryItem> ActuatorItems
         {
@@ -102,9 +102,9 @@ namespace TECUserControlLibrary.ViewModels
 
         public ValveSummaryVM()
         {
-            valveDictionary = new Dictionary<Guid, HardwareSummaryItem>();
+            valveDictionary = new Dictionary<Guid, ValveSummaryItem>();
 
-            _valveItems = new ObservableCollection<HardwareSummaryItem>();
+            _valveItems = new ObservableCollection<ValveSummaryItem>();
 
             _valveCost = 0;
             _valveLabor = 0;
@@ -117,7 +117,7 @@ namespace TECUserControlLibrary.ViewModels
             bool containsItem = valveDictionary.ContainsKey(valve.Guid);
             if (containsItem)
             {
-                HardwareSummaryItem item = valveDictionary[valve.Guid];
+                ValveSummaryItem item = valveDictionary[valve.Guid];
                 CostBatch delta = item.Increment();
                 ValveCost += delta.GetCost(valve.Type);
                 ValveLabor += delta.GetLabor(valve.Type);
@@ -125,7 +125,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else
             {
-                HardwareSummaryItem item = new HardwareSummaryItem(valve);
+                ValveSummaryItem item = new ValveSummaryItem(valve);
                 valveDictionary.Add(valve.Guid, item);
                 _valveItems.Add(item);
                 ValveCost += item.TotalCost;
@@ -146,7 +146,7 @@ namespace TECUserControlLibrary.ViewModels
             if (containsItem)
             {
                 CostBatch deltas = new CostBatch();
-                HardwareSummaryItem item = valveDictionary[valve.Guid];
+                ValveSummaryItem item = valveDictionary[valve.Guid];
                 CostBatch delta = item.Decrement();
                 deltas += delta;
                 ValveCost += delta.GetCost(valve.Type);
