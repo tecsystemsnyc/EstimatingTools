@@ -200,13 +200,27 @@ namespace EstimatingLibrary
             return (AvailableNetworkIO.Contains(netConnect.IOType));
         }
 
-        public bool CanConnectSubScope(TECSubScope subScope)
+
+        private bool canTakeIO(IOCollection collection)
         {
             IOCollection availableIO = getAvailableIO();
             IOCollection potentialIO = getPotentialIO();
-            bool hasIO = availableIO.Contains(subScope.IO);
-            bool canHasIO = potentialIO.Contains(subScope.IO);
+            bool hasIO = availableIO.Contains(collection);
+            bool canHasIO = potentialIO.Contains(collection);
             return hasIO || canHasIO;
+        }
+        public bool CanConnectSubScope(TECSubScope subScope)
+        {
+            return canTakeIO(subScope.IO);
+        }
+        public bool CanConnectSubScope(IEnumerable<TECSubScope> subScope)
+        {
+            IOCollection collection = new IOCollection();
+            foreach(TECSubScope item in subScope)
+            {
+                collection += item.IO;
+            }
+            return canTakeIO(collection);
         }
         public TECSubScopeConnection AddSubScope(TECSubScope subScope)
         {
