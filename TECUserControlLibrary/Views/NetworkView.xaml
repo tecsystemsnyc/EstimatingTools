@@ -60,6 +60,12 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
+                <Grid.Resources>
+                    <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=networkView, Path=ViewModel}"/>
+                    <DataTemplate x:Key="cannotConnectAdorner">
+                        <Label Content="{Binding Data.CannotConnectMessage, Source={StaticResource proxy}}"/>
+                    </DataTemplate>
+                </Grid.Resources>
                 <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="10,0,10,0">
                     <TextBlock Text="Children" Style="{StaticResource ListHeader}"/>
                 </Border>
@@ -67,6 +73,7 @@
                                              VM="{Binding ConnectableFilterVM}"/>
                 <listControls:NetworkConnectableListControl Source="{Binding FilteredConnectables}"
                                                             SelectedItem="{Binding SelectedConnectable}"
+                                                            DragAdornerTemplate="{StaticResource cannotConnectAdorner}"
                                                             IsDragSource="True"
                                                             DropHandler="{Binding}"
                                                             Grid.Row="2"/>
@@ -178,6 +185,7 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
+                
                 <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="10,0,10,0">
                     <TextBlock Text="Connected to Selected Connection"
                            Style="{StaticResource ListHeader}"/>

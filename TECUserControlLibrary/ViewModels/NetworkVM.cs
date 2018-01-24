@@ -186,7 +186,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (item is INetworkConnectable connectable)
                     {
-                        SelectedConnection.AddINetworkConnectable(connectable);
+                        SelectedConnection.AddINetworkConnectable(connectable);                        
                     }
                     else
                     {
