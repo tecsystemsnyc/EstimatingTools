@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 using TECUserControlLibrary.Utilities;
 
@@ -18,6 +19,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private bool isTypical = false;
         private TECEquipment underlyingTemplate;
         private bool _displayReferenceProperty = false;
+        private ConnectOnAddVM _connectVM;
 
         public TECEquipment ToAdd
         {
@@ -35,8 +37,24 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             {
                 quantity = value;
                 RaisePropertyChanged("Quantity");
+                updateConnectVMFromQuantity(value);
             }
         }
+
+        private void updateConnectVMFromQuantity(int value)
+        {
+            if(ConnectVM == null)
+            {
+                return;
+            }
+            List<TECSubScope> toConnect = new List<TECSubScope>();
+            for(int x = 0; x < quantity; x++)
+            {
+                toConnect.AddRange(ToAdd.SubScope);
+            }
+            ConnectVM.Update(toConnect);
+        }
+
         public bool DisplayReferenceProperty {
             get { return _displayReferenceProperty; }
             private set
@@ -45,10 +63,6 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 RaisePropertyChanged("DisplayReferenceProperty");
             }
         }
-
-
-        private ConnectOnAddVM _connectVM;
-
         public ConnectOnAddVM ConnectVM
         {
             get { return _connectVM; }
