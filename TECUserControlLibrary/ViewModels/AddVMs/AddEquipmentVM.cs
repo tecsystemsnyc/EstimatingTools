@@ -46,6 +46,19 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             }
         }
 
+
+        private ConnectOnAddVM _connectVM;
+
+        public ConnectOnAddVM ConnectVM
+        {
+            get { return _connectVM; }
+            set
+            {
+                _connectVM = value;
+                RaisePropertyChanged("ConnectVM");
+            }
+        }
+
         public AddEquipmentVM(TECSystem parentSystem, TECScopeManager scopeManager) : base(scopeManager)
         {
             parent = parentSystem;
@@ -57,6 +70,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             };
             AddCommand = new RelayCommand(addExecute, addCanExecute);
             Quantity = 1;
+            ConnectVM = new ConnectOnAddVM(ToAdd.SubScope, parent, scopeManager.Catalogs.ConduitTypes);
         }
         public AddEquipmentVM(Action<TECEquipment> addMethod, TECScopeManager scopeManager) : base(scopeManager)
         {
@@ -97,6 +111,10 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 }
                 equipment.CopyPropertiesFromScope(ToAdd);
                 add(equipment);
+                if(ConnectVM != null)
+                {
+                    ConnectVM.ExecuteConnection(equipment.SubScope);
+                }
                 Added?.Invoke(equipment);
             }
         }
@@ -108,6 +126,11 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             if (IsTemplates)
             {
                 DisplayReferenceProperty = true;
+            }
+            if(ConnectVM != null)
+            {
+                ConnectVM.Update(ToAdd.SubScope);
+
             }
         }
         

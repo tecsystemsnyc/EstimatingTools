@@ -11,15 +11,17 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class ConnectOnAddVM : ViewModelBase
     {
-
         private List<TECSubScope> toConnect;
         private TECSystem parent;
+        private double _length;
+        private double _conduitLength;
+        private TECElectricalMaterial _conduitType;
+        private bool _isPlenum;
+        private bool _connect = false;
+        private TECController _selectedController;
 
         public List<TECController> ParentControllers { get; private set; }
         public List<TECElectricalMaterial> ConduitTypes { get; private set; }
-
-        private double _length;
-
         public double Length
         {
             get { return _length; }
@@ -29,9 +31,6 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("Length");
             }
         }
-
-        private double _conduitLength;
-
         public double ConduitLength
         {
             get { return _conduitLength; }
@@ -41,9 +40,6 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("ConduitLength");
             }
         }
-
-        private TECElectricalMaterial _conduitType;
-
         public TECElectricalMaterial ConduitType
         {
             get { return _conduitType; }
@@ -51,6 +47,33 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _conduitType = value;
                 RaisePropertyChanged("ConduitType");
+            }
+        }
+        public bool IsPlenum
+        {
+            get { return _isPlenum; }
+            set
+            {
+                _isPlenum = value;
+                RaisePropertyChanged("IsPlenum");
+            }
+        }
+        public bool Connect
+        {
+            get { return _connect; }
+            set
+            {
+                _connect = value;
+                RaisePropertyChanged("Connect");
+            }
+        }
+        public TECController SelectedController
+        {
+            get { return _selectedController; }
+            set
+            {
+                _selectedController = value;
+                RaisePropertyChanged("SelectedController");
             }
         }
         
@@ -80,6 +103,22 @@ namespace TECUserControlLibrary.ViewModels
             this.toConnect = new List<TECSubScope>(toConnect);
             ParentControllers = getCompatibleControllers(parent);
             RaisePropertyChanged("ParentControllers");
+        }
+
+        public void ExecuteConnection(IEnumerable<TECSubScope> finalToConnect)
+        {
+            if (Connect && SelectedController != null)
+            {
+                foreach (TECSubScope subScope in finalToConnect)
+                {
+                    var connection = SelectedController.AddSubScope(subScope);
+                    connection.ConduitLength = ConduitLength;
+                    connection.Length = Length;
+                    connection.ConduitType = ConduitType;
+                    connection.IsPlenum = IsPlenum;
+                }
+            }
+            
         }
     }
 }
