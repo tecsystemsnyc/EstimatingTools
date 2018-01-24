@@ -51,6 +51,7 @@
                                              VM="{Binding ParentableFilterVM}"/>
                 <listControls:NetworkParentableListControl Source="{Binding FilteredParentables}"
                                                            SelectedItem="{Binding SelectedParentable}"
+                                                           DropHandler="{Binding}"
                                                            Grid.Row="2"/>
             </Grid>
             <Grid Grid.Row="1">
@@ -67,6 +68,7 @@
                 <listControls:NetworkConnectableListControl Source="{Binding FilteredConnectables}"
                                                             SelectedItem="{Binding SelectedConnectable}"
                                                             IsDragSource="True"
+                                                            DropHandler="{Binding}"
                                                             Grid.Row="2"/>
             </Grid>
         </Grid>
@@ -183,6 +185,7 @@
                 
                 <listControls:NetworkConnectableListControl Source="{Binding SelectedConnection.Children}"
                                                             DeleteCommand="{Binding RemoveChildCommand}"
+                                                            DropHandler="{Binding}"
                                                             Grid.Row="1"/>
             </Grid>
         </Grid>

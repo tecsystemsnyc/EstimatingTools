@@ -157,8 +157,7 @@ namespace TECUserControlLibrary.Utilities
                         }
                     }
                 }
-                bool sourceMatchesTarget = targetType.IsInstanceOfType(sourceItem);
-                if (sourceNotNull && (allowDrop || sourceMatchesTarget))
+                if (sourceNotNull && allowDrop)
                 {
                     dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                     dropInfo.Effects = DragDropEffects.Copy;
