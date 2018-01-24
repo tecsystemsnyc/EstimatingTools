@@ -16,11 +16,49 @@ namespace TECUserControlLibrary.ViewModels
         private TECSystem parent;
 
         public List<TECController> ParentControllers { get; private set; }
+        public List<TECElectricalMaterial> ConduitTypes { get; private set; }
+
+        private double _length;
+
+        public double Length
+        {
+            get { return _length; }
+            set
+            {
+                _length = value;
+                RaisePropertyChanged("Length");
+            }
+        }
+
+        private double _conduitLength;
+
+        public double ConduitLength
+        {
+            get { return _conduitLength; }
+            set
+            {
+                _conduitLength = value;
+                RaisePropertyChanged("ConduitLength");
+            }
+        }
+
+        private TECElectricalMaterial _conduitType;
+
+        public TECElectricalMaterial ConduitType
+        {
+            get { return _conduitType; }
+            set
+            {
+                _conduitType = value;
+                RaisePropertyChanged("ConduitType");
+            }
+        }
         
-        public ConnectOnAddVM(IEnumerable<TECSubScope> toConnect, TECSystem parent)
+        public ConnectOnAddVM(IEnumerable<TECSubScope> toConnect, TECSystem parent, IEnumerable<TECElectricalMaterial> conduitTypes)
         {
             this.toConnect = new List<TECSubScope>(toConnect);
             this.parent = parent;
+            this.ConduitTypes =  new List<TECElectricalMaterial>(conduitTypes);
             ParentControllers = getCompatibleControllers(parent);
         }
 
