@@ -176,14 +176,11 @@ namespace TECUserControlLibrary.ViewModels
 
             bool checkCompatible(TECSubScope subScope)
             {
-                if (UnconnectedSubScope.Contains(subScope))
+                if (dropInfo.TargetCollection == ConnectedSubScope)
                 {
-                    if (dropInfo.TargetCollection == ConnectedSubScope)
+                    if (SelectedController.CanConnectSubScope(subScope))
                     {
-                        if (SelectedController.CanConnectSubScope(subScope))
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
                 return false;
@@ -211,18 +208,14 @@ namespace TECUserControlLibrary.ViewModels
                     connectSubScope(item);
                 }
             }
-
-
+            filterSystems(bid);
             void connectSubScope(TECSubScope subScope)
             {
-                if (UnconnectedSubScope.Contains(subScope))
+                if (dropInfo.TargetCollection == ConnectedSubScope)
                 {
-                    if (dropInfo.TargetCollection == ConnectedSubScope)
+                    if (SelectedController.CanConnectSubScope(subScope))
                     {
-                        if (SelectedController.CanConnectSubScope(subScope))
-                        {
-                            SelectedController.AddSubScope(subScope);
-                        }
+                        SelectedController.AddSubScope(subScope);
                     }
                 }
             }
