@@ -111,14 +111,18 @@ namespace TECUserControlLibrary.ViewModels
             {
                 foreach (TECSubScope subScope in finalToConnect)
                 {
-                    var connection = SelectedController.AddSubScope(subScope);
-                    connection.ConduitLength = ConduitLength;
-                    connection.Length = Length;
-                    connection.ConduitType = ConduitType;
-                    connection.IsPlenum = IsPlenum;
+                    ExecuteConnection(subScope);
                 }
             }
             
+        }
+        public void ExecuteConnection(TECSubScope finalToConnect)
+        {
+            var connection = SelectedController.AddSubScope(finalToConnect);
+            connection.ConduitLength = ConduitLength;
+            connection.Length = Length;
+            connection.ConduitType = ConduitType;
+            connection.IsPlenum = IsPlenum;
         }
     }
 }

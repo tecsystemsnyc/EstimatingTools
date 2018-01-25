@@ -12,11 +12,12 @@
         <Style TargetType="TextBlock">
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="2"/>
         </Style>
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=connectOnAddView, Path=ViewModel}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="25"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
@@ -32,9 +33,9 @@
         </Grid>
         <Grid Grid.Row="1" Visibility="{Binding Connect, Converter={utilities:BooleanToVisibilityConverter}}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">

@@ -271,6 +271,7 @@ namespace TECUserControlLibrary.ViewModels
         private void addSubScopeExecute(TECEquipment equipment)
         {
             SelectedVM = new AddSubScopeVM(equipment,scopeManager);
+            ((AddSubScopeVM)SelectedVM).SetParentSystem(SelectedSystem, scopeManager);
         }
         private bool canAddSubScope(TECEquipment equipment)
         {
@@ -443,6 +444,8 @@ namespace TECUserControlLibrary.ViewModels
             {
                 SelectedVM = new AddSubScopeVM(SelectedEquipment, scopeManager);
                 ((AddSubScopeVM)SelectedVM).SetTemplate(subScope);
+                ((AddSubScopeVM)SelectedVM).SetParentSystem(SelectedSystem, scopeManager);
+
             }
             else if (dropped is TECPoint point)
             {
@@ -465,8 +468,9 @@ namespace TECUserControlLibrary.ViewModels
             {
                 SelectedVM = new AddSystemVM(scopeManager);
                 ((AddSystemVM)SelectedVM).SetTemplate(system);
+
             }
-            
+
         }
 
         protected void NotifySelected(TECObject item)

@@ -26,6 +26,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private List<TECPoint> originalPoints = new List<TECPoint>();
         private List<IEndDevice> originalDevices = new List<IEndDevice>();
         private bool _displayReferenceProperty = false;
+        private ConnectOnAddVM _connectVM;
 
         public TECSubScope ToAdd
         {
@@ -43,6 +44,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             {
                 quantity = value;
                 RaisePropertyChanged("Quantity");
+                updateConnectVMWithQuantity(value);
             }
         }
         public string PointName
@@ -84,7 +86,16 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 RaisePropertyChanged("DisplayReferenceProperty");
             }
         }
-
+        public ConnectOnAddVM ConnectVM
+        {
+            get { return _connectVM; }
+            set
+            {
+                _connectVM = value;
+                RaisePropertyChanged("ConnectVM");
+            }
+        }
+        
         public AddSubScopeVM(TECEquipment parentEquipment, TECScopeManager scopeManager) : base(scopeManager)
         {
             parent = parentEquipment;
@@ -105,6 +116,13 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             setup();
             PropertiesVM.DisplayReferenceProperty = false;
         }
+
+        public void SetParentSystem(TECSystem system, TECScopeManager scopeManager)
+        {
+            ConnectVM = new ConnectOnAddVM(new List<TECSubScope>(),
+                system, scopeManager.Catalogs.ConduitTypes);
+        }
+
         private void setup()
         {
             Quantity = 1;
@@ -125,6 +143,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             newPoint.Label = PointName;
             ToAdd.Points.Add(newPoint);
             PointName = "";
+            updateConnectVMWithQuantity(Quantity);
         }
         private bool canAddPoint()
         {
@@ -140,6 +159,8 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private void deletePointExecute(TECPoint point)
         {
             toAdd.Points.Remove(point);
+            updateConnectVMWithQuantity(Quantity);
+
         }
 
         private void deleteDeviceExecute(IEndDevice device)
@@ -175,10 +196,27 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 }
                 
                 add(subScope);
+                if (ConnectVM != null)
+                {
+                    ConnectVM.ExecuteConnection(subScope);
+                }
                 Added?.Invoke(subScope);
             }
         }
-
+        private void updateConnectVMWithQuantity(int value)
+        {
+            if (ConnectVM == null)
+            {
+                return;
+            }
+            List<TECSubScope> toConnect = new List<TECSubScope>();
+            for (int x = 0; x < quantity; x++)
+            {
+                toConnect.Add(ToAdd);
+            }
+            ConnectVM.Update(toConnect);
+        }
+        
         internal void SetTemplate(TECSubScope subScope)
         {
             ToAdd = new TECSubScope(subScope, isTypical);
@@ -190,5 +228,6 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 DisplayReferenceProperty = true;
             }
         }
+        
     }
 }
