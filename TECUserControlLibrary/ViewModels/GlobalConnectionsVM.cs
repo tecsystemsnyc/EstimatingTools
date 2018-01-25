@@ -26,6 +26,11 @@ namespace TECUserControlLibrary.ViewModels
         private SubScopeConnectionItem _selectedConnectedSubScope;
         private TECSubScope _selectedUnconnectedSubScope;
 
+        private Double _defaultLength = 30;
+        private Double _defaultConduitLength = 20;
+        private bool _defaultPlenum = false;
+        private TECElectricalMaterial _defaultConduitType;
+
         public ObservableCollection<TECController> GlobalControllers { get; }
         public ObservableCollection<SubScopeConnectionItem> ConnectedSubScope { get; }
         public ObservableCollection<TECSystem> UnconnectedSystems { get; }
@@ -100,6 +105,43 @@ namespace TECUserControlLibrary.ViewModels
                 _selectedUnconnectedSubScope = value;
                 RaisePropertyChanged("SelectedUnconnectedSubScope");
                 Selected?.Invoke(SelectedUnconnectedSubScope);
+            }
+        }
+
+        public Double DefaultLength
+        {
+            get { return _defaultLength; }
+            set
+            {
+                _defaultLength = value;
+                RaisePropertyChanged("DefaultLength");
+            }
+        }
+        public Double DefaultConduitLength
+        {
+            get { return _defaultConduitLength; }
+            set
+            {
+                _defaultConduitLength = value;
+                RaisePropertyChanged("DefaultConduitLength");
+            }
+        }
+        public bool DefaultPlenum
+        {
+            get { return _defaultPlenum; }
+            set
+            {
+                _defaultPlenum = value;
+                RaisePropertyChanged("DefaultPlenum");
+            }
+        }
+        public TECElectricalMaterial DefaultConduitType
+        {
+            get { return _defaultConduitType; }
+            set
+            {
+                _defaultConduitType = value;
+                RaisePropertyChanged("DefaultConduitType");
             }
         }
 
@@ -215,7 +257,8 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (SelectedController.CanConnectSubScope(subScope))
                     {
-                        SelectedController.AddSubScope(subScope);
+                        var connection = SelectedController.AddSubScope(subScope);
+                        setConnectionDefaults(connection);
                     }
                 }
             }
@@ -421,5 +464,13 @@ namespace TECUserControlLibrary.ViewModels
             ConnectedSubScope.Clear();
             subScopeConnectionDictionary.Clear();
         }
+        private void setConnectionDefaults(TECConnection connection)
+        {
+            connection.Length = DefaultLength;
+            connection.ConduitType = DefaultConduitType;
+            connection.ConduitLength = DefaultConduitLength;
+            connection.IsPlenum = DefaultPlenum;
+        }
+
     }
 }
