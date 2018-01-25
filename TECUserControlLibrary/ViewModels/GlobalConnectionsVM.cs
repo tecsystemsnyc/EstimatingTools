@@ -137,33 +137,69 @@ namespace TECUserControlLibrary.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
+            bool allow = false;
             if (dropInfo.Data is TECSubScope ss)
             {
-                if (UnconnectedSubScope.Contains(ss))
+                allow = checkCompatible(ss);
+            }
+            else if (dropInfo.Data is TECEquipment equipment)
+            {
+                allow = true;
+                foreach(TECSubScope sub in equipment.SubScope.
+                    Where(item => item.Connection == null && item.ParentConnection == null)) {
+                    if (!checkCompatible(sub))
+                    {
+                        allow = false;
+                        break;
+                    }
+                }
+            }
+
+            if (allow)
+            {
+                dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+                dropInfo.Effects = DragDropEffects.Copy;           
+            }
+
+            bool checkCompatible(TECSubScope subScope)
+            {
+                if (UnconnectedSubScope.Contains(subScope))
                 {
-                    Console.WriteLine("Target Collection: " + dropInfo.TargetCollection);
                     if (dropInfo.TargetCollection == ConnectedSubScope)
                     {
-                        if (SelectedController.CanConnectSubScope(ss))
+                        if (SelectedController.CanConnectSubScope(subScope))
                         {
-                            dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                            dropInfo.Effects = DragDropEffects.Copy;
+                            return true;
                         }
                     }
                 }
+                return false;
             }
         }
         public void Drop(IDropInfo dropInfo)
         {
             if (dropInfo.Data is TECSubScope ss)
             {
-                if (UnconnectedSubScope.Contains(ss))
+                connectSubScope(ss);
+            }
+            else if(dropInfo.Data is TECEquipment equip)
+            {
+                foreach(TECSubScope item in equip.SubScope.
+                    Where(thing => thing.ParentConnection == null && thing.Connection == null))
+                {
+                    connectSubScope(item);
+                }
+            }
+
+            void connectSubScope(TECSubScope subScope)
+            {
+                if (UnconnectedSubScope.Contains(subScope))
                 {
                     if (dropInfo.TargetCollection == ConnectedSubScope)
                     {
-                        if (SelectedController.CanConnectSubScope(ss))
+                        if (SelectedController.CanConnectSubScope(subScope))
                         {
-                            SelectedController.AddSubScope(ss);
+                            SelectedController.AddSubScope(subScope);
                         }
                     }
                 }
