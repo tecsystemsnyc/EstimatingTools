@@ -199,8 +199,7 @@ namespace EstimatingLibrary
         {
             return (AvailableNetworkIO.Contains(netConnect.IOType));
         }
-
-
+        
         private bool canTakeIO(IOCollection collection)
         {
             IOCollection availableIO = getAvailableIO();
