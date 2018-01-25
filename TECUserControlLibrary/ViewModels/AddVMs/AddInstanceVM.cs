@@ -89,7 +89,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
     public class NameConatiner : ViewModelBase
     {
 
-        private String _name;
+        private String _name = "";
 
         public String Name
         {
