@@ -154,6 +154,19 @@ namespace TECUserControlLibrary.ViewModels
                     }
                 }
             }
+            else if (dropInfo.Data is TECSystem system)
+            {
+                allow = true;
+                foreach (TECSubScope sub in system.GetAllSubScope().
+                    Where(item => item.Connection == null && item.ParentConnection == null))
+                {
+                    if (!checkCompatible(sub))
+                    {
+                        allow = false;
+                        break;
+                    }
+                }
+            }
 
             if (allow)
             {
@@ -190,6 +203,15 @@ namespace TECUserControlLibrary.ViewModels
                     connectSubScope(item);
                 }
             }
+            else if (dropInfo.Data is TECSystem system)
+            {
+                foreach (TECSubScope item in system.GetAllSubScope().
+                    Where(thing => thing.ParentConnection == null && thing.Connection == null))
+                {
+                    connectSubScope(item);
+                }
+            }
+
 
             void connectSubScope(TECSubScope subScope)
             {

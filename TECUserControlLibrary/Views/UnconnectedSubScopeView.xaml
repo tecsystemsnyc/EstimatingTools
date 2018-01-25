@@ -114,6 +114,7 @@
                                             Source="{Binding SystemSource}"
                                             SelectedItem="{Binding SelectedSystem}"
                                             DropHandler="{Binding DropHandler}"
+                                            IsDragSource="True"
                                             x:Name="systemList"/>
         </Grid>
         <!--Equipment Grid-->
