@@ -299,8 +299,9 @@ namespace EstimatingLibrary
                 TECSubScopeConnection connection = new TECSubScopeConnection(isTypical);
                 connection.ParentController = this;
                 connection.SubScope = subScope;
-                addChildConnection(connection);
                 subScope.Connection = connection;
+                addChildConnection(connection);
+
                 return connection;
             }
         }
