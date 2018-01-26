@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using System;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using TECUserControlLibrary.Utilities;
 
@@ -12,18 +13,10 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
     {
         private TECTypical parent;
         private TECBid bid;
-        private int quantity;
         private TECSystem toAdd;
-
-        public int Quantity
-        {
-            get { return quantity; }
-            set
-            {
-                quantity = value;
-                RaisePropertyChanged("Quantity");
-            }
-        }
+        private ObservableCollection<NameConatiner> _names = new ObservableCollection<NameConatiner>();
+        private bool _labelInstances = true;
+        
         public TECSystem ToAdd
         {
             get { return toAdd; }
@@ -33,11 +26,30 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 RaisePropertyChanged("ToAdd");
             }
         }
+        
+        public ObservableCollection<NameConatiner> Names
+        {
+            get { return _names; }
+            set
+            {
+                _names = value;
+                RaisePropertyChanged("Names");
+            }
+        }
+        public bool LabelInstances
+        {
+            get { return _labelInstances; }
+            set
+            {
+                _labelInstances = value;
+                RaisePropertyChanged("LabelInstances");
+            }
+        }
+
 
         public AddInstanceVM(TECTypical typical, TECBid bid) : base(bid)
         {
-            toAdd = new TECSystem(false);
-            Quantity = 1;
+            toAdd = new TECSystem(typical, false, bid);
             parent = typical;
             this.bid = bid; 
             AddCommand = new RelayCommand(addExecute, canAdd);
@@ -45,21 +57,48 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
 
         private void addExecute()
         {
-            for(int x = 0; x < quantity; x++)
+            foreach(NameConatiner item in Names)
             {
                 TECSystem newSystem = parent.AddInstance(bid);
-                newSystem.Name = ToAdd.Name;
+                newSystem.Name = item.Name;
+                if (LabelInstances)
+                {
+                    foreach(TECController controller in newSystem.Controllers)
+                    {
+                        controller.Name += String.Format(" ({0})", item.Name);
+                    }
+                    foreach(TECPanel panel in newSystem.Panels)
+                    {
+                        panel.Name += String.Format(" ({0})", item.Name);
+                    }
+                }
             }
         }
 
         private bool canAdd()
         {
-            if(Quantity > 0)
+            if(Names.Count > 0)
             {
                 return true;
             }
             return false;
         }
         
+    }
+
+    public class NameConatiner : ViewModelBase
+    {
+
+        private String _name = "";
+
+        public String Name
+        {
+            get { return _name; }
+            set
+            {
+                _name = value;
+                RaisePropertyChanged("Name");
+            }
+        }
     }
 }
