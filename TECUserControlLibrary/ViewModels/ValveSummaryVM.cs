@@ -161,7 +161,7 @@ namespace TECUserControlLibrary.ViewModels
                 deltas += RemoveActuator(valve.Actuator);
                 foreach(TECCost cost in valve.AssociatedCosts)
                 {
-                    deltas += RemoveCost(valve);
+                    deltas += RemoveCost(cost);
                 }
                 return deltas;
             }
