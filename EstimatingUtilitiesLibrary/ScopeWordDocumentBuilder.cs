@@ -2,6 +2,7 @@
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using EstimatingLibrary;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using A = DocumentFormat.OpenXml.Drawing;
@@ -13270,23 +13271,48 @@ namespace EstimatingUtilitiesLibrary
 
         static private void addSystemList(ObservableCollection<TECTypical> systems, List<Paragraph> poposalScopeParagraphs, FontSize fontSize, int levelIndex)
         {
-            foreach(TECSystem scope in systems)
+            foreach(TECTypical typical in systems)
             {
-                addItemToList(scope, poposalScopeParagraphs, fontSize, levelIndex);
-                addScopeBranchList(scope.ScopeBranches, poposalScopeParagraphs, fontSize, levelIndex + 1);
-                if (scope.ProposeEquipment)
+                string text = typical.Name;
+                if(typical.Instances.Count > 1)
                 {
-                    foreach(TECEquipment equipment in scope.Equipment)
+                    text += ": (Qty. " + typical.Instances.Count + ")";
+                }
+                
+                addItemToList(text, poposalScopeParagraphs, fontSize, levelIndex);
+                if(typical.Instances.Count > 1)
+                {
+                    text = getInstanceText(typical);
+                    addItemToList(text, poposalScopeParagraphs, fontSize, levelIndex + 1);
+                }
+
+                addScopeBranchList(typical.ScopeBranches, poposalScopeParagraphs, fontSize, levelIndex + 1);
+                if (typical.ProposeEquipment)
+                {
+                    foreach(TECEquipment equipment in typical.Equipment)
                     {
-                        addItemToList(equipment, poposalScopeParagraphs, fontSize, levelIndex + 1);
+                        addItemToList(equipment.Name, poposalScopeParagraphs, fontSize, levelIndex + 1);
                     }
                 }
             }
         }
 
-        static private void addItemToList(TECScope scope, List<Paragraph> poposalScopeParagraphs, FontSize fontSize, int levelIndex)
+        private static string getInstanceText(TECTypical typical)
         {
-           
+            String outText = "";
+            for (int x = 0; x < typical.Instances.Count; x++)
+            {
+                outText += typical.Instances[x].Name;
+                if(x != (typical.Instances.Count - 1))
+                {
+                    outText += "; ";
+                }
+            }
+            return outText;
+        }
+
+        static private void addItemToList(String text, List<Paragraph> poposalScopeParagraphs, FontSize fontSize, int levelIndex)
+        {
             Paragraph paragraph35 = new Paragraph() { RsidParagraphAddition = "007461F6", RsidParagraphProperties = "001B6681", RsidRunAdditionDefault = "00A61B35" };
             poposalScopeParagraphs.Add(paragraph35);
             ParagraphProperties paragraphProperties35 = new ParagraphProperties();
@@ -13311,14 +13337,7 @@ namespace EstimatingUtilitiesLibrary
 
             runProperties51.Append((FontSize)fontSize.CloneNode(true));
             Text text34 = new Text();
-            text34.Text = scope.Name;
-            if(scope is TECTypical typical)
-            {
-                if(typical.Instances.Count > 1)
-                {
-                    text34.Text += ": (Qty. " + typical.Instances.Count + ")";
-                }
-            }
+            text34.Text = text;
 
             run51.Append(runProperties51);
             run51.Append(text34);
