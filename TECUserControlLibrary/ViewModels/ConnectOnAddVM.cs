@@ -11,8 +11,6 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class ConnectOnAddVM : ViewModelBase
     {
-        private readonly Dictionary<IOType, IOTypeConnection> ioDictionary;
-
         private List<TECSubScope> toConnect;
         private TECSystem parent;
         private double _length;
@@ -78,6 +76,8 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("SelectedController");
             }
         }
+
+        public List<IOTypeConnection> NewNetConnections { get; } 
         
         public ConnectOnAddVM(IEnumerable<TECSubScope> toConnect, TECSystem parent, IEnumerable<TECElectricalMaterial> conduitTypes)
         {
@@ -86,7 +86,7 @@ namespace TECUserControlLibrary.ViewModels
             this.ConduitTypes =  new List<TECElectricalMaterial>(conduitTypes);
             ParentControllers = getCompatibleControllers(parent);
 
-            ioDictionary = new Dictionary<IOType, IOTypeConnection>();
+            NewNetConnections = new List<IOTypeConnection>();
             parseNetworkIOTypes(toConnect);
         }
 
@@ -153,7 +153,7 @@ namespace TECUserControlLibrary.ViewModels
             foreach(KeyValuePair<IOType, int> incIO in includedIO)
             {
                 IOTypeConnection ioConnect = new IOTypeConnection(incIO.Key, incIO.Value);
-                ioDictionary.Add(incIO.Key, ioConnect);
+                NewNetConnections.Add(ioConnect);
             }
         }
 
