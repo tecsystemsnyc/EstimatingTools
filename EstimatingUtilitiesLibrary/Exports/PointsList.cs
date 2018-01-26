@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,7 +57,7 @@ namespace EstimatingUtilitiesLibrary.Exports
                             xlRow.Cell("C").Value = ss.Name;
 
                             string deviceString = "";
-                            foreach (TECDevice device in ss.Devices)
+                            foreach (IEndDevice device in ss.Devices)
                             {
                                 deviceString += " (";
                                 deviceString += device.Name;
