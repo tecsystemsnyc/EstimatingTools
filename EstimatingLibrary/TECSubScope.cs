@@ -119,7 +119,13 @@ namespace EstimatingLibrary
         {
             get { return isNetwork(); }
         }
-        
+        public bool IsConnected
+        {
+            get
+            {
+                return Connection != null;
+            }
+        }
         #endregion //Properties
 
         #region Constructors
