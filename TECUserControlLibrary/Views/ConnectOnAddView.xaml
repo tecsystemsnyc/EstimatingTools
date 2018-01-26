@@ -123,13 +123,20 @@
                                 </Grid>
                                 
                                 <!--Num Devices-->
-                                <Grid>
+                                <Grid Grid.Column="1">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="# of Devices:"/>
                                     <TextBlock Grid.Column="1" Text="{Binding NumDevices}"/>
+                                </Grid>
+                                
+                                <!--Connection Type-->
+                                <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                                    <Grid.ColumnDefinitions>
+                                        
+                                    </Grid.ColumnDefinitions>
                                 </Grid>
                             </Grid>
                         </DataTemplate>
