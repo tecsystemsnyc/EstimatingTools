@@ -11,6 +11,8 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class ConnectOnAddVM : ViewModelBase
     {
+        private readonly Dictionary<IOType, IOTypeConnection> ioDictionary;
+
         private List<TECSubScope> toConnect;
         private TECSystem parent;
         private double _length;
@@ -83,6 +85,9 @@ namespace TECUserControlLibrary.ViewModels
             this.parent = parent;
             this.ConduitTypes =  new List<TECElectricalMaterial>(conduitTypes);
             ParentControllers = getCompatibleControllers(parent);
+
+            ioDictionary = new Dictionary<IOType, IOTypeConnection>();
+            parseNetworkIOTypes(toConnect);
         }
 
         private List<TECController> getCompatibleControllers(TECSystem parent)
@@ -123,6 +128,47 @@ namespace TECUserControlLibrary.ViewModels
             connection.Length = Length;
             connection.ConduitType = ConduitType;
             connection.IsPlenum = IsPlenum;
+        }
+
+        private void parseNetworkIOTypes(IEnumerable<TECSubScope> subScope)
+        {
+            Dictionary<IOType, int> includedIO = new Dictionary<IOType, int>();
+            foreach(TECSubScope ss in subScope)
+            {
+                if (ss.IsNetwork)
+                {
+                    if (ss.IO.ListIO().Count() > 1) throw new DataMisalignedException("SubScope has more than one network IO type.");
+
+                    IOType ssType = ss.IO.ListIO()[0].Type;
+                    if (!includedIO.ContainsKey(ssType))
+                    {
+                        includedIO.Add(ssType, 1);
+                    }
+                    else
+                    {
+                        includedIO[ssType]++;
+                    }
+                }
+            }
+            foreach(KeyValuePair<IOType, int> incIO in includedIO)
+            {
+                IOTypeConnection ioConnect = new IOTypeConnection(incIO.Key, incIO.Value);
+                ioDictionary.Add(incIO.Key, ioConnect);
+            }
+        }
+
+        public class IOTypeConnection
+        {
+            IOType IOType { get; }
+            int NumDevices { get; }
+
+            TECConnectionType WireType { get; set; }
+
+            public IOTypeConnection(IOType type, int numDevices)
+            {
+                IOType = type;
+                NumDevices = numDevices;
+            }
         }
     }
 }
