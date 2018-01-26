@@ -266,7 +266,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void filterSystems(TECBid bid)
         {
-            UnconnectedSystems.Clear();
+            UnconnectedSystems.ObservablyClear();
             foreach (TECTypical typ in bid.Systems)
             {
                 foreach (TECSystem sys in typ.Instances)
@@ -295,8 +295,8 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void handleSelectedSystemChanged()
         {
-            UnconnectedEquipment.Clear();
-            UnconnectedSubScope.Clear();
+            UnconnectedEquipment.ObservablyClear();
+            UnconnectedSubScope.ObservablyClear();
             SelectedEquipment = null;
 
             if (SelectedSystem != null)
@@ -312,7 +312,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void handleSelectedEquipmentChanged()
         {
-            UnconnectedSubScope.Clear();
+            UnconnectedSubScope.ObservablyClear();
 
             if (SelectedEquipment != null)
             {
@@ -341,13 +341,18 @@ namespace TECUserControlLibrary.ViewModels
         {
             foreach (TECSubScope ss in equip.SubScope)
             {
-                if (ssIsUnconnected(ss)) { return true; }
+                if (ssIsUnconnected(ss))
+                {
+                    return true;
+                }
             }
             return false;
         }
         private bool ssIsUnconnected(TECSubScope ss)
         {
-            return (!ss.IsNetwork && ss.Connection == null);
+            //Only want unconnected non-network subscope.
+            bool ssUnconnected = (!ss.IsNetwork && ss.Connection == null);
+            return ssUnconnected;
         }
 
         private void handleInstanceChanged(TECChangedEventArgs args)
@@ -392,6 +397,7 @@ namespace TECUserControlLibrary.ViewModels
                     TECEquipment parent = ssConnect.SubScope.FindParentEquipment(bid);
                     addSubScopeConnectionItem(ssConnect, parent);
                 }
+                filterSystems(bid);
             }
             else if (change == Change.Remove)
             {
@@ -409,7 +415,6 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         SelectedSystem = null;
                     }
-                    UnconnectedSystems.Remove(sys);
                 }
                 else if (obj is TECEquipment equip && UnconnectedEquipment.Contains(equip))
                 {
@@ -417,7 +422,6 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         SelectedEquipment = null;
                     }
-                    UnconnectedEquipment.Remove(equip);
                 }
                 else if (obj is TECSubScope ss && UnconnectedSubScope.Contains(ss))
                 {
@@ -425,20 +429,16 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         SelectedUnconnectedSubScope = null;
                     }
-                    UnconnectedSubScope.Remove(ss);
                 }
                 else if (obj is TECSubScopeConnection ssConnect)
                 {
-                    if (SelectedEquipment != null && SelectedEquipment.SubScope.Contains(ssConnect.SubScope))
-                    {
-                        UnconnectedSubScope.Add(ssConnect.SubScope);
-                    }
                     if (subScopeConnectionDictionary.ContainsKey(ssConnect) &&
                         ConnectedSubScope.Contains(subScopeConnectionDictionary[ssConnect]))
                     {
                         removeSubScopeConnectionItem(ssConnect);
                     }
                 }
+                filterSystems(bid);
             }
         }
 
@@ -461,7 +461,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void clearConnectedSubScope()
         {
-            ConnectedSubScope.Clear();
+            ConnectedSubScope.ObservablyClear();
             subScopeConnectionDictionary.Clear();
         }
         private void setConnectionDefaults(TECConnection connection)
