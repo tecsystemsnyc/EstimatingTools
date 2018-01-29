@@ -76,13 +76,20 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("SelectedController");
             }
         }
+
+        public List<IOTypeConnection> NewNetConnections { get; }
+        public List<TECConnectionType> ConnectionTypes { get; }
         
-        public ConnectOnAddVM(IEnumerable<TECSubScope> toConnect, TECSystem parent, IEnumerable<TECElectricalMaterial> conduitTypes)
+        public ConnectOnAddVM(IEnumerable<TECSubScope> toConnect, TECSystem parent, IEnumerable<TECElectricalMaterial> conduitTypes, IEnumerable<TECConnectionType> connectionTypes)
         {
             this.toConnect = new List<TECSubScope>(toConnect);
             this.parent = parent;
             this.ConduitTypes =  new List<TECElectricalMaterial>(conduitTypes);
             ParentControllers = getCompatibleControllers(parent);
+
+            NewNetConnections = new List<IOTypeConnection>();
+            ConnectionTypes = new List<TECConnectionType>(connectionTypes);
+            parseNetworkIOTypes(toConnect);
         }
 
         private List<TECController> getCompatibleControllers(TECSystem parent)
@@ -102,6 +109,9 @@ namespace TECUserControlLibrary.ViewModels
         {
             this.toConnect = new List<TECSubScope>(toConnect);
             ParentControllers = getCompatibleControllers(parent);
+            NewNetConnections.Clear();
+            parseNetworkIOTypes(toConnect);
+            RaisePropertyChanged("NewNetworkConnections");
             RaisePropertyChanged("ParentControllers");
         }
 
@@ -123,6 +133,47 @@ namespace TECUserControlLibrary.ViewModels
             connection.Length = Length;
             connection.ConduitType = ConduitType;
             connection.IsPlenum = IsPlenum;
+        }
+
+        private void parseNetworkIOTypes(IEnumerable<TECSubScope> subScope)
+        {
+            Dictionary<IOType, int> includedIO = new Dictionary<IOType, int>();
+            foreach(TECSubScope ss in subScope)
+            {
+                if (ss.IsNetwork)
+                {
+                    if (ss.IO.ListIO().Count() > 1) throw new DataMisalignedException("SubScope has more than one network IO type.");
+
+                    IOType ssType = ss.IO.ListIO()[0].Type;
+                    if (!includedIO.ContainsKey(ssType))
+                    {
+                        includedIO.Add(ssType, 1);
+                    }
+                    else
+                    {
+                        includedIO[ssType]++;
+                    }
+                }
+            }
+            foreach(KeyValuePair<IOType, int> incIO in includedIO)
+            {
+                IOTypeConnection ioConnect = new IOTypeConnection(incIO.Key, incIO.Value);
+                NewNetConnections.Add(ioConnect);
+            }
+        }
+
+        public class IOTypeConnection
+        {
+            public IOType IOType { get; }
+            public int NumDevices { get; }
+
+            public TECConnectionType WireType { get; set; }
+
+            public IOTypeConnection(IOType type, int numDevices)
+            {
+                IOType = type;
+                NumDevices = numDevices;
+            }
         }
     }
 }
