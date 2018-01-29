@@ -14,6 +14,7 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="2"/>
         </Style>
+        <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=connectOnAddView, Path=ViewModel}"/>
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=connectOnAddView, Path=ViewModel}">
         <Grid.RowDefinitions>
@@ -115,7 +116,7 @@
                                 <!--IO Type-->
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="IO Type:"/>
@@ -125,7 +126,7 @@
                                 <!--Num Devices-->
                                 <Grid Grid.Column="1">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="# of Devices:"/>
@@ -135,8 +136,11 @@
                                 <!--Connection Type-->
                                 <Grid Grid.Row="1" Grid.ColumnSpan="2">
                                     <Grid.ColumnDefinitions>
-                                        
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Wire Type:"/>
+                                    <ComboBox ItemsSource="{Binding Data.ConnectionTypes, Source={StaticResource proxy}}" SelectedItem="{Binding WireType}"/>
                                 </Grid>
                             </Grid>
                         </DataTemplate>
