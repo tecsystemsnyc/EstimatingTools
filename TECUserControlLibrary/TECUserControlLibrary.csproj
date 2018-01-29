@@ -238,6 +238,7 @@
     <Compile Include="ViewModels\EquipmentHierarchyVM.cs" />
     <Compile Include="ViewModels\GlobalConnectionsVM.cs" />
     <Compile Include="ViewModels\NetworkVM.cs" />
+    <Compile Include="ViewModels\RiserVM.cs" />
     <Compile Include="ViewModels\ValveSummaryVM.cs" />
     <Compile Include="ViewModels\WorkBoxVM.cs" />
     <Compile Include="Views\ConnectableFilterView.xaml.cs">
@@ -410,6 +411,9 @@
     <Compile Include="Models\TECMenuItem.cs" />
     <Compile Include="UserControls\ScopeBranchAsNoteGridControl.xaml.cs">
       <DependentUpon>ScopeBranchAsNoteGridControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RiserView.xaml.cs">
+      <DependentUpon>RiserView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ScopeCollectionsTabView.xaml.cs">
       <DependentUpon>ScopeCollectionsTabView.xaml</DependentUpon>
@@ -842,6 +846,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ScopeBranchAsNoteGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RiserView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

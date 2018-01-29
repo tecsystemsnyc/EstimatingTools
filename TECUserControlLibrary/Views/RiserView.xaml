@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="TECUserControlLibrary.Views.RiserView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
+             mc:Ignorable="d" 
+             x:Name="riserView"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid DataContext="{Binding ElementName=riserView, Path=ViewModel}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Border BorderBrush="DarkGray"
+                    BorderThickness="0,0,0,1"
+                    Margin="20,0,20,0">
+                <TextBlock Text="Locations"
+                           HorizontalAlignment="Center"/>
+            </Border>
+            <controls:LabeledGridControl LabeledSource="{Binding Bid.Locations}"
+                                         LabelName="Name"
+                                         Grid.Row="1"/>
+        </Grid>
+        <Grid Grid.Column="1">
+            <ListView ItemsSource="{Binding Bid.Locations}">
+            </ListView>
+        </Grid>
+    </Grid>
+</UserControl>
