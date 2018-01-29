@@ -18,6 +18,7 @@ namespace TECUserControlLibrary.ViewModels
         private TECElectricalMaterial _conduitType;
         private bool _isPlenum;
         private bool _connect = false;
+        private bool _connectNetwork = false;
         private TECController _selectedController;
 
         public List<TECController> ParentControllers { get; private set; }
@@ -67,6 +68,20 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("Connect");
             }
         }
+        public bool ConnectNetwork
+        {
+            get { return _connectNetwork; }
+            set
+            {
+                if (ConnectNetwork != value)
+                {
+                    _connectNetwork = value;
+                    RaisePropertyChanged("ConnectNetwork");
+                    ParentControllers = getCompatibleControllers(parent);
+                    RaisePropertyChanged("ParentControllers");
+                }
+            }
+        }
         public TECController SelectedController
         {
             get { return _selectedController; }
@@ -97,7 +112,19 @@ namespace TECUserControlLibrary.ViewModels
             List<TECController> result = new List<TECController>();
             foreach(TECController controller in parent.Controllers)
             {
-                if (controller.CanConnectSubScope(toConnect))
+                bool containsIO = true;
+                if (ConnectNetwork)
+                {
+                    foreach(IOTypeConnection type in NewNetConnections)
+                    {
+                        if (!controller.AvailableNetworkIO.Contains(type.IOType))
+                        {
+                            containsIO = false;
+                            break;
+                        }
+                    }
+                }
+                if (controller.CanConnectSubScope(toConnect) && containsIO)
                 {
                     result.Add(controller);
                 }
@@ -133,6 +160,29 @@ namespace TECUserControlLibrary.ViewModels
             connection.Length = Length;
             connection.ConduitType = ConduitType;
             connection.IsPlenum = IsPlenum;
+        }
+        public bool CanConnect()
+        {
+            if (Connect)
+            {
+                bool connectionTypesChosen = true;
+                if (ConnectNetwork)
+                {
+                    foreach(IOTypeConnection type in NewNetConnections)
+                    {
+                        if (type.WireType == null)
+                        {
+                            connectionTypesChosen = false;
+                            break;
+                        }
+                    }
+                }
+                return (SelectedController != null && connectionTypesChosen);
+            }
+            else
+            {
+                return true;
+            }
         }
 
         private void parseNetworkIOTypes(IEnumerable<TECSubScope> subScope)

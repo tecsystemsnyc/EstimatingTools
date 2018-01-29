@@ -97,7 +97,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
 
         private bool addCanExecute()
         {
-            return true;
+            return ConnectVM.CanConnect();
         }
         private void addExecute()
         {
