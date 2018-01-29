@@ -77,9 +77,10 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public List<IOTypeConnection> NewNetConnections { get; } 
+        public List<IOTypeConnection> NewNetConnections { get; }
+        public List<TECConnectionType> ConnectionTypes { get; }
         
-        public ConnectOnAddVM(IEnumerable<TECSubScope> toConnect, TECSystem parent, IEnumerable<TECElectricalMaterial> conduitTypes)
+        public ConnectOnAddVM(IEnumerable<TECSubScope> toConnect, TECSystem parent, IEnumerable<TECElectricalMaterial> conduitTypes, IEnumerable<TECConnectionType> connectionTypes)
         {
             this.toConnect = new List<TECSubScope>(toConnect);
             this.parent = parent;
@@ -87,6 +88,7 @@ namespace TECUserControlLibrary.ViewModels
             ParentControllers = getCompatibleControllers(parent);
 
             NewNetConnections = new List<IOTypeConnection>();
+            ConnectionTypes = new List<TECConnectionType>(connectionTypes);
             parseNetworkIOTypes(toConnect);
         }
 
