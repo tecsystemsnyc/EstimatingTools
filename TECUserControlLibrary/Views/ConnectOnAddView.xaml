@@ -14,7 +14,6 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="2"/>
         </Style>
-        <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=connectOnAddView, Path=ViewModel}"/>
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=connectOnAddView, Path=ViewModel}">
         <Grid.RowDefinitions>
@@ -100,6 +99,9 @@
             </Grid>
             <!--Network Connections-->
             <Grid Grid.Row="4">
+                <Grid.Resources>
+                    <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=connectOnAddView, Path=ViewModel}"/>
+                </Grid.Resources>
                 <ListView ItemsSource="{Binding NewNetConnections}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
@@ -140,7 +142,9 @@
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="Wire Type:"/>
-                                    <ComboBox ItemsSource="{Binding Data.ConnectionTypes, Source={StaticResource proxy}}" SelectedItem="{Binding WireType}"/>
+                                    <ComboBox ItemsSource="{Binding Data.ConnectionTypes,
+                                        Source={StaticResource proxy}}" SelectedItem="{Binding WireType}"
+                                              DisplayMemberPath="Name"/>
                                 </Grid>
                             </Grid>
                         </DataTemplate>

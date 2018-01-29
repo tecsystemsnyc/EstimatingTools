@@ -109,6 +109,9 @@ namespace TECUserControlLibrary.ViewModels
         {
             this.toConnect = new List<TECSubScope>(toConnect);
             ParentControllers = getCompatibleControllers(parent);
+            NewNetConnections.Clear();
+            parseNetworkIOTypes(toConnect);
+            RaisePropertyChanged("NewNetworkConnections");
             RaisePropertyChanged("ParentControllers");
         }
 
@@ -161,10 +164,10 @@ namespace TECUserControlLibrary.ViewModels
 
         public class IOTypeConnection
         {
-            IOType IOType { get; }
-            int NumDevices { get; }
+            public IOType IOType { get; }
+            public int NumDevices { get; }
 
-            TECConnectionType WireType { get; set; }
+            public TECConnectionType WireType { get; set; }
 
             public IOTypeConnection(IOType type, int numDevices)
             {
