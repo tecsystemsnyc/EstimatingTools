@@ -146,9 +146,36 @@ namespace TECUserControlLibrary.ViewModels
         {
             if (Connect && SelectedController != null)
             {
+                List<TECNetworkConnection> netConnects = new List<TECNetworkConnection>();
+                foreach(IOTypeConnection type in NewNetConnections)
+                {
+                    List<TECConnectionType> wireType = new List<TECConnectionType>();
+                    wireType.Add(type.WireType);
+                    TECNetworkConnection newConnection = SelectedController.AddNetworkConnection(parent.IsTypical, wireType, type.IOType);
+                    newConnection.ConduitLength = ConduitLength;
+                    newConnection.Length = Length;
+                    newConnection.ConduitType = ConduitType;
+                    newConnection.IsPlenum = IsPlenum;
+                    netConnects.Add(newConnection);
+                }
+
                 foreach (TECSubScope subScope in finalToConnect)
                 {
-                    ExecuteConnection(subScope);
+                    if (subScope.IsNetwork)
+                    {
+                        foreach(TECNetworkConnection netConnect in netConnects)
+                        {
+                            if (netConnect.IOType == subScope.IO.ListIO().First().Type)
+                            {
+                                netConnect.AddINetworkConnectable(subScope);
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ExecuteConnection(subScope);
+                    }
                 }
             }
             
