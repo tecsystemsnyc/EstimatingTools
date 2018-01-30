@@ -23,13 +23,15 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="20"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="Auto" MaxHeight="20"/>
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
-            <TextBlock FontSize="14" Text="{Binding Name}" FontWeight="DemiBold"/>
-            <TextBlock Text="{Binding Description}" Grid.Row="1"/>
-            <TextBlock Text="{Binding Instances.Count, StringFormat=Instances: {0}}" Grid.Row="2"/>
+            <TextBlock FontSize="14" Text="{Binding Name}" FontWeight="DemiBold" Margin="2"/>
+            <TextBlock Text="{Binding Description}" Grid.Row="1" Height="20" Margin="2"
+                       Visibility="{Binding Description, Converter={utilities:EmptyStringToCollapsedConverter}}"/>
+            <TextBlock Text="{Binding Instances.Count, StringFormat=Instances: {0}}" Margin="2"
+                       Grid.Row="2"/>
         </Grid>
     </Border>
 </local:BaseItemControl>
