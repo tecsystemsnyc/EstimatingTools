@@ -27,6 +27,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private List<IEndDevice> originalDevices = new List<IEndDevice>();
         private bool _displayReferenceProperty = false;
         private ConnectOnAddVM _connectVM;
+        public List<IOType> PossibleTypes { get; private set; }
 
         public TECSubScope ToAdd
         {
@@ -133,8 +134,9 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             AddPointCommand = new RelayCommand(addPointExecute, canAddPoint);
             DeletePointCommand = new RelayCommand<TECPoint>(deletePointExecute);
             DeleteDeviceCommand = new RelayCommand<IEndDevice>(deleteDeviceExecute);
+            setTypes();
         }
-        
+
         private void addPointExecute()
         {
             TECPoint newPoint = new TECPoint(isTypical);
@@ -144,6 +146,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             ToAdd.Points.Add(newPoint);
             PointName = "";
             updateConnectVMWithQuantity(Quantity);
+            setTypes();
         }
         private bool canAddPoint()
         {
@@ -164,7 +167,13 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         
         private bool addCanExecute()
         {
-            return ConnectVM.CanConnect();
+            if(ConnectVM != null)
+            {
+                return ConnectVM.CanConnect();
+            } else
+            {
+                return true;
+            }
         }
         private void addExecute()
         {
@@ -210,6 +219,11 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             }
             ConnectVM.Update(toConnect);
         }
+        private void setTypes()
+        {
+            PossibleTypes = ToAdd.PossibleIOTypes();
+            RaisePropertyChanged("PossibleTypes");
+        }
         
         internal void SetTemplate(TECSubScope subScope)
         {
@@ -221,6 +235,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             {
                 DisplayReferenceProperty = true;
             }
+            setTypes();
         }
         
     }

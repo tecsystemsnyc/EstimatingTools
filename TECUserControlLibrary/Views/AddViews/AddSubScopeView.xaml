@@ -90,7 +90,7 @@
                     <TextBox Text="{Binding ElementName=addSubScopeView, Path=ViewModel.PointQuantity}" Grid.Column="1" Margin="2"/>
                     <TextBlock Text="Type: " Grid.Column="2"/>
                     <ComboBox SelectedItem="{Binding ElementName=addSubScopeView, Path=ViewModel.PointType}" Margin="2" Grid.Column="3"
-                                  ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type TECLib:IOType}}}"/>
+                                  ItemsSource="{Binding ElementName=addSubScopeView,Path=ViewModel.PossibleTypes}"/>
                 </Grid>
                 <Button Content="Add IO" Command="{Binding ElementName=addSubScopeView, Path=ViewModel.AddPointCommand}" Grid.Row="2" Grid.ColumnSpan="2" Margin="2"/>
 

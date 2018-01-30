@@ -226,6 +226,26 @@ namespace EstimatingLibrary
         #endregion
 
         #region Methods
+        public List<IOType> PossibleIOTypes()
+        {
+            List<IOType> resultList = new List<IOType>();
+            if (this.Points.Count == 0)
+            {
+                resultList.AddRange(TECIO.NetworkIO);
+                resultList.AddRange(TECIO.PointIO);
+            }
+            else if (this.IsNetwork)
+            {
+                IOType type = this.Points[0].Type;
+                resultList.Add(type);
+            }
+            else
+            {
+                resultList.AddRange(TECIO.PointIO);
+            }
+            return resultList;
+        }
+
         public object DragDropCopy(TECScopeManager scopeManager)
         {
             TECSubScope outScope = new TECSubScope(this, this.IsTypical);

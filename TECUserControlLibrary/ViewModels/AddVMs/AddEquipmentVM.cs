@@ -97,7 +97,14 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
 
         private bool addCanExecute()
         {
-            return ConnectVM.CanConnect();
+            if(ConnectVM != null)
+            {
+                return ConnectVM.CanConnect();
+            }
+            else
+            {
+                return true;
+            }
         }
         private void addExecute()
         {
