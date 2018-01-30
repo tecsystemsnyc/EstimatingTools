@@ -73,7 +73,7 @@ namespace EstimatingLibrary
             }
         }
         
-        public ObservableCollection<TECElectricalMaterial> ConnectionTypes
+        public ObservableCollection<TECConnectionType> ConnectionTypes
         {
             get { return getConnectionTypes(); }
         }
@@ -283,12 +283,12 @@ namespace EstimatingLibrary
             return (ioMatches && connectionTypesMatch);
         }
 
-        private ObservableCollection<TECElectricalMaterial> getConnectionTypes()
+        private ObservableCollection<TECConnectionType> getConnectionTypes()
         {
-            var outTypes = new ObservableCollection<TECElectricalMaterial>();
+            var outTypes = new ObservableCollection<TECConnectionType>();
             foreach (IEndDevice device in Devices)
             {
-                foreach(TECElectricalMaterial type in device.ConnectionTypes)
+                foreach(TECConnectionType type in device.ConnectionTypes)
                 {
                     outTypes.Add(type);
                 }
