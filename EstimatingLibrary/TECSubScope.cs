@@ -277,8 +277,7 @@ namespace EstimatingLibrary
             IOCollection netConnectIO = netConnect.IO;
             bool ioMatches = IOCollection.IOTypesMatch(thisIO, netConnectIO);
 
-            bool connectionTypesMatch = (this.ConnectionTypes.Except(netConnect.ConnectionTypes).Count() == 0) 
-                && (netConnect.ConnectionTypes.Except(this.ConnectionTypes).Count() == 0);
+            bool connectionTypesMatch = (this.ConnectionTypes.Matches(netConnect.ConnectionTypes));
 
             return (ioMatches && connectionTypesMatch);
         }
