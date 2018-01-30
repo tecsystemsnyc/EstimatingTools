@@ -5,9 +5,21 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d" 
              x:Name="riserView"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TECUserControlLibrary;component/TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=riserView, Path=ViewModel}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="120"/>
@@ -21,16 +33,81 @@
             <Border BorderBrush="DarkGray"
                     BorderThickness="0,0,0,1"
                     Margin="20,0,20,0">
-                <TextBlock Text="Locations"
+                <TextBlock Text="Not Located"
                            HorizontalAlignment="Center"/>
             </Border>
-            <controls:LabeledGridControl LabeledSource="{Binding Bid.Locations}"
-                                         LabelName="Name"
-                                         Grid.Row="1"/>
+            <ListView ItemsSource="{Binding Unlocated}" Grid.Row="1"                      
+                      dd:DragDrop.IsDragSource="True"
+                      dd:DragDrop.DropHandler="{Binding ElementName=riserView, Path=ViewModel}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="{Binding Name}"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </Grid>
         <Grid Grid.Column="1">
-            <ListView ItemsSource="{Binding Bid.Locations}">
-            </ListView>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Text="{Binding LocationText, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="2"/>
+                    <Button Content="Add Location" Command="{Binding AddLocationCommand}"
+                        Grid.Column="1" Margin="2"/>
+                </Grid>
+                <ListView ItemsSource="{Binding Locations}" Grid.Row="1"
+                          HorizontalContentAlignment="Stretch"
+                          dd:DragDrop.IsDropTarget="True"
+                          dd:DragDrop.DropHandler="{Binding ElementName=riserView, Path=ViewModel}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition MinHeight="60"/>
+                                    </Grid.RowDefinitions>
+                                    <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Width="120" HorizontalAlignment="Left">
+                                        <TextBlock Text="{Binding Location.Label}"
+                                           Foreground="Black"/>
+                                    </Border>
+                                    <ListView ItemsSource="{Binding Scope}"
+                                          Grid.Row="1"
+                                              dd:DragDrop.DropHandler="{Binding ElementName=riserView, Path=ViewModel}">
+                                        <ListView.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal"/>
+                                            </ItemsPanelTemplate>
+                                        </ListView.ItemsPanel>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="1" CornerRadius="2"
+                                                        Background="{StaticResource ItemBackgroundBrush}">
+                                                    <Grid>
+                                                        <TextBlock Text="{Binding Name}"/>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

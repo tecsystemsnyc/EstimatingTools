@@ -5,6 +5,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ namespace TECUserControlLibrary.ViewModels
         private TECObject _selected;
         private string _templateText;
         private bool _displayReferenceProperty = false;
+        private ObservableCollection<TECLabeled> _locations;
 
         public TECCatalogs Catalogs
         {
@@ -65,6 +67,15 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         public RelayCommand<TECConnectionType> DeleteConnectionTypeCommand { get; private set; }
+        public ObservableCollection<TECLabeled> Locations
+        {
+            get { return _locations; }
+            set
+            {
+                _locations = value;
+                RaisePropertyChanged("Locations");
+            }
+        }
 
         private string getTemplateText(TECObject item)
         {
@@ -146,6 +157,10 @@ namespace TECUserControlLibrary.ViewModels
         public void Refresh(TECCatalogs catalogs, TECScopeManager scopeManager)
         {
             Catalogs = catalogs;
+            if(scopeManager is TECBid bid)
+            {
+                Locations = bid.Locations; 
+            }
             this.scopeManager = scopeManager;
         }
 

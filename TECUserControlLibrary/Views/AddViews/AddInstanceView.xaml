@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views.AddViews"
              xmlns:views="clr-namespace:TECUserControlLibrary.Views"
-             mc:Ignorable="d" 
+                   xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+                   mc:Ignorable="d" 
              x:Name="addInstanceView"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -26,6 +27,9 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0" DataContext="{Binding ToAdd}">
+            <Grid.Resources>
+                <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=addInstanceView, Path=DataContext}"/>
+            </Grid.Resources>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -47,8 +51,11 @@
                       AutoGenerateColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Name}" 
-                                        Header="Name"
-                                        Width="*"/>
+                                        Header="Name" Width="70"/>
+                    <DataGridComboBoxColumn Header="Location"
+                                            ItemsSource="{Binding Data.Locations, Source={StaticResource proxy}}"
+                                            SelectedItemBinding="{Binding Location}"
+                                            DisplayMemberPath="Label"/>
                 </DataGrid.Columns>
             </DataGrid>
             <Grid Grid.Row="3" Grid.ColumnSpan="2">
