@@ -147,7 +147,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         }
         private bool canAddPoint()
         {
-            return (PointQuantity != 0 && ConnectVM.CanConnect());
+            return (PointQuantity != 0);
         }
 
         private void deletePointExecute(TECPoint point)
@@ -164,7 +164,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         
         private bool addCanExecute()
         {
-            return true;
+            return ConnectVM.CanConnect();
         }
         private void addExecute()
         {
