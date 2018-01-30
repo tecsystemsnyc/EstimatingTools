@@ -96,6 +96,7 @@
                                     </Border>
                                     <ListView ItemsSource="{Binding Scope}"
                                           Grid.Row="1"
+                                              dd:DragDrop.IsDragSource="True"
                                               dd:DragDrop.DropHandler="{Binding ElementName=riserView, Path=ViewModel}">
                                         <ListView.ItemsPanel>
                                             <ItemsPanelTemplate>
