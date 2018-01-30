@@ -153,6 +153,16 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         compatibleConnectionExists = true;
                         netConnect.AddINetworkConnectable(finalToConnect);
+                        netConnect.Length += Length;
+                        netConnect.ConduitLength += ConduitLength;
+                        if (netConnect.ConduitType == null)
+                        {
+                            netConnect.ConduitType = ConduitType;
+                        }
+                        if (!netConnect.IsPlenum)
+                        {
+                            netConnect.IsPlenum = IsPlenum;
+                        }
                         break;
                     }
                 }
