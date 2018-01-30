@@ -267,6 +267,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 SelectedVM = new AddSubScopeVM(SelectedEquipment, scopeManager);
                 ((AddSubScopeVM)SelectedVM).SetTemplate(subScope);
+                ((AddSubScopeVM)SelectedVM).SetParentSystem(SelectedSystem, scopeManager);
             }
             else if (dropped is TECPoint point)
             {
@@ -463,81 +464,6 @@ namespace TECUserControlLibrary.ViewModels
         private bool canDeleteController(TECController arg)
         {
             return true;
-        }
-        public void DragOver(IDropInfo dropInfo)
-        {
-            if(dropInfo.Data is TECSystem)
-            {
-                UIHelpers.SystemToTypicalDragOver(dropInfo);
-            }
-            else
-            {
-                UIHelpers.StandardDragOver(dropInfo,
-                type =>
-                {
-                    if (type == typeof(TECMisc) && dropInfo.Data is TECCost)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            );
-            }
-            
-        }
-        public void Drop(IDropInfo dropInfo)
-        {
-            object dropped = null;
-            if(!IsTemplates && dropInfo.Data is IDragDropable dropable)
-            {
-                dropped = dropable.DragDropCopy(scopeManager);
-            } else
-            {
-                dropped = dropInfo.Data;
-            }
-            if (dropped is TECEquipment equipment)
-            {
-                SelectedVM = new AddEquipmentVM(SelectedSystem, scopeManager);
-                ((AddEquipmentVM)SelectedVM).SetTemplate(equipment);
-            } else if (dropped is TECSubScope subScope)
-            {
-                SelectedVM = new AddSubScopeVM(SelectedEquipment, scopeManager);
-                ((AddSubScopeVM)SelectedVM).SetTemplate(subScope);
-                ((AddSubScopeVM)SelectedVM).SetParentSystem(SelectedSystem, scopeManager);
-
-            }
-            else if (dropped is TECPoint point)
-            {
-                SelectedVM = new AddPointVM(SelectedSubScope, scopeManager);
-                ((AddPointVM)SelectedVM).SetTemplate(point);
-            }
-            else if (dropped is IEndDevice)
-            {
-                UIHelpers.StandardDrop(dropInfo, scopeManager);
-            }
-            else if (dropped is TECMisc || dropped is TECCost)
-            {
-                TECMisc misc = dropped as TECMisc;
-                SelectedVM = new AddMiscVM(SelectedSystem, scopeManager);
-                TECMisc newMisc = misc != null ? new TECMisc(misc, SelectedSystem.IsTypical) :
-                    new TECMisc(dropped as TECCost, SelectedSystem.IsTypical);
-                ((AddMiscVM)SelectedVM).SetTemplate(misc);
-            }
-            else if (dropped is TECSystem system)
-            {
-                SelectedVM = new AddSystemVM(scopeManager);
-                ((AddSystemVM)SelectedVM).SetTemplate(system);
-
-            }
-
-        }
-
-        protected void NotifySelected(TECObject item)
-        {
-            Selected?.Invoke(item);
         }
     }
 }
