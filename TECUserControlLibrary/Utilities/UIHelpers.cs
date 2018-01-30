@@ -412,7 +412,6 @@ namespace TECUserControlLibrary.Utilities
             dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
             dropInfo.Effects = DragDropEffects.Copy;
         }
-
         #region Get Path Methods
         public static string GetSavePath(FileDialogParameters fileParams, string defaultFileName, string defaultDirectory,
             string initialDirectory = null)

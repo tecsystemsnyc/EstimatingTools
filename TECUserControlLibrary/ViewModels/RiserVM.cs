@@ -173,7 +173,8 @@ namespace TECUserControlLibrary.ViewModels
         public void DragOver(IDropInfo dropInfo)
         {
            if(Locations.Any(item => item.Scope == dropInfo.TargetCollection) &&
-                dropInfo.Data is TECLocated)
+                (dropInfo.Data is TECLocated ||
+                (dropInfo.Data is IList sourceList && sourceList.Count > 0 && sourceList[0] is TECLocated)))
             {
                 UIHelpers.SetDragAdorners(dropInfo);
             }
@@ -182,7 +183,18 @@ namespace TECUserControlLibrary.ViewModels
         public void Drop(IDropInfo dropInfo)
         {
             var container = Locations.First(item => item.Scope == dropInfo.TargetCollection);
-            ((TECLocated)dropInfo.Data).Location = container.Location;
+            if(dropInfo.Data is IList sourceList)
+            {
+                foreach(TECLocated item in sourceList)
+                {
+                    item.Location = container.Location;
+                }
+            }
+            else
+            {
+                ((TECLocated)dropInfo.Data).Location = container.Location;
+            }
+
         }
     }
 
