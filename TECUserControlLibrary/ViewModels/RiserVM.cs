@@ -77,6 +77,7 @@ namespace TECUserControlLibrary.ViewModels
             TECLabeled newLocation = new TECLabeled();
             newLocation.Label = LocationText;
             bid.Locations.Add(newLocation);
+            LocationText = "";
         }
         private bool canAddLocation()
         {
