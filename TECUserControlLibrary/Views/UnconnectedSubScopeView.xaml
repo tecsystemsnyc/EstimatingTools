@@ -114,6 +114,7 @@
                                             Source="{Binding SystemSource}"
                                             SelectedItem="{Binding SelectedSystem}"
                                             DropHandler="{Binding DropHandler}"
+                                            IsDragSource="True"
                                             x:Name="systemList"/>
         </Grid>
         <!--Equipment Grid-->
@@ -148,6 +149,7 @@
                                                Source="{Binding EquipmentSource}"
                                             SelectedItem="{Binding SelectedEquipment}"
                                             DropHandler="{Binding DropHandler}"
+                                               IsDragSource="True"
                                                x:Name="equipmentList"/>
         </Grid>
         <!--SubScope Grid-->

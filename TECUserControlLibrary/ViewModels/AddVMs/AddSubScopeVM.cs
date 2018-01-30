@@ -26,6 +26,8 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private List<TECPoint> originalPoints = new List<TECPoint>();
         private List<IEndDevice> originalDevices = new List<IEndDevice>();
         private bool _displayReferenceProperty = false;
+        private ConnectOnAddVM _connectVM;
+        public List<IOType> PossibleTypes { get; private set; }
 
         public TECSubScope ToAdd
         {
@@ -43,6 +45,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             {
                 quantity = value;
                 RaisePropertyChanged("Quantity");
+                updateConnectVMWithQuantity(value);
             }
         }
         public string PointName
@@ -84,7 +87,16 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 RaisePropertyChanged("DisplayReferenceProperty");
             }
         }
-
+        public ConnectOnAddVM ConnectVM
+        {
+            get { return _connectVM; }
+            set
+            {
+                _connectVM = value;
+                RaisePropertyChanged("ConnectVM");
+            }
+        }
+        
         public AddSubScopeVM(TECEquipment parentEquipment, TECScopeManager scopeManager) : base(scopeManager)
         {
             parent = parentEquipment;
@@ -105,6 +117,13 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             setup();
             PropertiesVM.DisplayReferenceProperty = false;
         }
+
+        public void SetParentSystem(TECSystem system, TECScopeManager scopeManager)
+        {
+            ConnectVM = new ConnectOnAddVM(new List<TECSubScope>(),
+                system, scopeManager.Catalogs.ConduitTypes, scopeManager.Catalogs.ConnectionTypes);
+        }
+
         private void setup()
         {
             Quantity = 1;
@@ -115,8 +134,9 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             AddPointCommand = new RelayCommand(addPointExecute, canAddPoint);
             DeletePointCommand = new RelayCommand<TECPoint>(deletePointExecute);
             DeleteDeviceCommand = new RelayCommand<IEndDevice>(deleteDeviceExecute);
+            setTypes();
         }
-        
+
         private void addPointExecute()
         {
             TECPoint newPoint = new TECPoint(isTypical);
@@ -125,21 +145,19 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             newPoint.Label = PointName;
             ToAdd.Points.Add(newPoint);
             PointName = "";
+            updateConnectVMWithQuantity(Quantity);
+            setTypes();
         }
         private bool canAddPoint()
         {
-            if(PointQuantity != 0)
-            {
-                return true;
-            } else
-            {
-                return false;
-            }
+            return (PointQuantity != 0);
         }
 
         private void deletePointExecute(TECPoint point)
         {
             toAdd.Points.Remove(point);
+            updateConnectVMWithQuantity(Quantity);
+
         }
 
         private void deleteDeviceExecute(IEndDevice device)
@@ -149,7 +167,13 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         
         private bool addCanExecute()
         {
-            return true;
+            if(ConnectVM != null)
+            {
+                return ConnectVM.CanConnect();
+            } else
+            {
+                return true;
+            }
         }
         private void addExecute()
         {
@@ -175,10 +199,32 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 }
                 
                 add(subScope);
+                if (ConnectVM != null)
+                {
+                    ConnectVM.ExecuteConnection(subScope);
+                }
                 Added?.Invoke(subScope);
             }
         }
-
+        private void updateConnectVMWithQuantity(int value)
+        {
+            if (ConnectVM == null)
+            {
+                return;
+            }
+            List<TECSubScope> toConnect = new List<TECSubScope>();
+            for (int x = 0; x < quantity; x++)
+            {
+                toConnect.Add(ToAdd);
+            }
+            ConnectVM.Update(toConnect);
+        }
+        private void setTypes()
+        {
+            PossibleTypes = ToAdd.PossibleIOTypes();
+            RaisePropertyChanged("PossibleTypes");
+        }
+        
         internal void SetTemplate(TECSubScope subScope)
         {
             ToAdd = new TECSubScope(subScope, isTypical);
@@ -189,6 +235,8 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             {
                 DisplayReferenceProperty = true;
             }
+            setTypes();
         }
+        
     }
 }

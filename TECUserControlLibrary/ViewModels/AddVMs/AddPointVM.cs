@@ -32,7 +32,11 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             isTypical = parentSubScope.IsTypical;
             toAdd = new TECPoint(parentSubScope.IsTypical);
             ToAdd.Quantity = 1;
-            PossibleTypes = possibleTypes(parentSubScope);
+            PossibleTypes = parentSubScope.PossibleIOTypes();
+            if(PossibleTypes.Count > 0)
+            {
+                ToAdd.Type = PossibleTypes[0];
+            }
             AddCommand = new RelayCommand(addExecute, addCanExecute);
         }
 
@@ -59,26 +63,6 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             Added?.Invoke(newPoint);
         }
         
-        private List<IOType> possibleTypes(TECSubScope subScope)
-        {
-            List<IOType> resultList = new List<IOType>();
-            if (subScope.Points.Count == 0)
-            {
-                resultList.AddRange(TECIO.NetworkIO);
-                resultList.AddRange(TECIO.PointIO);
-            }
-            else if (subScope.IsNetwork)
-            {
-                IOType type = subScope.Points[0].Type;
-                ToAdd.Type = type;
-                resultList.Add(type);
-            }
-            else
-            {
-                resultList.AddRange(TECIO.PointIO);
-            }
-            return resultList;
-        }
 
         internal void SetTemplate(TECPoint point)
         {
