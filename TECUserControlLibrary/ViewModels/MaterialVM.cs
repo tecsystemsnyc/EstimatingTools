@@ -420,17 +420,6 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         public ICommand DeleteDeviceCommand { get; private set; }
-
-        private DeleteEndDeviceVM _deleteDeviceVM;
-        public DeleteEndDeviceVM DeleteDeviceVM
-        {
-            get { return _deleteDeviceVM; }
-            set
-            {
-                _deleteDeviceVM = value;
-                RaisePropertyChanged("DeleteDeviceVM");
-            }
-        }
         #endregion
         #region Valve
         private string _valveName;
@@ -538,20 +527,6 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         public ICommand DeleteValveCommand { get; private set; }
-
-        private DeleteEndDeviceVM _deleteValveVM;
-        public DeleteEndDeviceVM DeleteValveVM
-        {
-            get { return _deleteValveVM; }
-            set
-            {
-                if (DeleteValveVM != value)
-                {
-                    _deleteValveVM = value;
-                    RaisePropertyChanged("DeleteValveVM");
-                }
-            }
-        }
         #endregion
         #region Controller Types
         private string _controllerTypeName;
@@ -729,10 +704,24 @@ namespace TECUserControlLibrary.ViewModels
 
         #region ViewModels
         public MiscCostsVM MiscVM { get; private set; }
+
+        private DeleteEndDeviceVM _deleteEndDeviceVM;
+        public DeleteEndDeviceVM DeleteEndDeviceVM
+        {
+            get { return _deleteEndDeviceVM; }
+            set
+            {
+                if (DeleteEndDeviceVM != value)
+                {
+                    _deleteEndDeviceVM = value;
+                    RaisePropertyChanged("DeleteEndDeviceVM");
+                }
+            }
+        }
         #endregion
 
         #endregion
-        
+
         public MaterialVM(TECTemplates templates)
         {
             ReferenceDropHandler = new ReferenceDropper(templates);
@@ -1023,7 +1012,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void deleteDeviceExecute()
         {
-            DeleteDeviceVM = new DeleteEndDeviceVM(SelectedDevice, Templates);
+            DeleteEndDeviceVM = new DeleteEndDeviceVM(SelectedDevice, Templates);
         }
         private bool canDeleteDevice()
         {
@@ -1032,7 +1021,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void deleteValveExecute()
         {
-            DeleteValveVM = new DeleteEndDeviceVM(SelectedValve, Templates);
+            DeleteEndDeviceVM = new DeleteEndDeviceVM(SelectedValve, Templates);
         }
         private bool canDeleteValve()
         {
