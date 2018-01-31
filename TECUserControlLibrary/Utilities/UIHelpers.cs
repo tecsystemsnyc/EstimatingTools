@@ -567,6 +567,27 @@ namespace TECUserControlLibrary.Utilities
             return null;
         }
 
+        public static T FindVisualParent<T>(DependencyObject element) where T : DependencyObject
+        {
+            var parent = VisualTreeHelper.GetParent(element);
+            if(parent == null)
+            {
+                return null;
+            }
+            else
+            {
+                if(parent is T)
+                {
+                    return parent as T;
+                }
+                else
+                {
+                    return FindVisualParent<T>(parent as FrameworkElement);
+                }
+            }
+        }
+
+
     }
 
     public enum EditIndex { System, Equipment, SubScope, Device, Point, Controller, Panel, PanelType, Nothing };

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.Utilities;
 using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.Views
@@ -36,6 +37,17 @@ namespace TECUserControlLibrary.Views
         public RiserView()
         {
             InitializeComponent();
+        }
+
+        protected void ItemControl_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            ListView parent = UIHelpers.FindVisualParent<ListView>(sender as FrameworkElement);
+            var item = parent.SelectedItem;
+            if (parent.SelectedItems.Count == 1)
+            {
+                parent.SelectedItem = null;
+                parent.SelectedItem = item;
+            }
         }
     }
 }
