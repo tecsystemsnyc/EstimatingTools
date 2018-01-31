@@ -36,6 +36,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 RaisePropertyChanged("Names");
             }
         }
+        public ObservableCollection<TECLabeled> Locations { get; }
         public bool LabelInstances
         {
             get { return _labelInstances; }
@@ -45,13 +46,13 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 RaisePropertyChanged("LabelInstances");
             }
         }
-
-
+        
         public AddInstanceVM(TECTypical typical, TECBid bid) : base(bid)
         {
             toAdd = new TECSystem(typical, false, bid);
             parent = typical;
-            this.bid = bid; 
+            this.bid = bid;
+            Locations = this.bid.Locations;
             AddCommand = new RelayCommand(addExecute, canAdd);
         }
 
@@ -61,6 +62,10 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             {
                 TECSystem newSystem = parent.AddInstance(bid);
                 newSystem.Name = item.Name;
+                if(item.Location != null)
+                {
+                    newSystem.Location = item.Location;
+                }
                 if (LabelInstances)
                 {
                     foreach(TECController controller in newSystem.Controllers)
@@ -90,6 +95,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
     {
 
         private String _name = "";
+        private TECLabeled _location = null;
 
         public String Name
         {
@@ -98,6 +104,15 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             {
                 _name = value;
                 RaisePropertyChanged("Name");
+            }
+        }
+        public TECLabeled Location
+        {
+            get { return _location; }
+            set
+            {
+                _location = value;
+                RaisePropertyChanged("Location");
             }
         }
     }

@@ -56,7 +56,8 @@
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding Typical.Name, Mode=OneWay}"/>
                                 <TextBlock Text="{Binding Typical.Instances.Count, StringFormat=Qty. {0}, Mode=OneWay}" Grid.Column="1"/>
-                                <TextBlock Text="Unit: " Grid.Column="2" HorizontalAlignment="Right"/>
+                                <TextBlock Text="Unit: " Grid.Column="2" HorizontalAlignment="Right"
+                                           Margin="0"/>
                                 <TextBlock Text="{Binding UnitPrice, StringFormat={}{0:C}, Mode=OneWay}" Grid.Column="3"
                                        HorizontalAlignment="Right"/>
                                 <TextBlock Text="Total: " Grid.Column="4" HorizontalAlignment="Right"/>

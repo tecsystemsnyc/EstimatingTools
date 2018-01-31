@@ -28,6 +28,9 @@
             <TabItem Header="Itemized">
                 <summaryViews:ItemizedSummaryView ViewModel="{Binding ItemizedSummaryVM}"/>
             </TabItem>
+            <TabItem Header="Riser">
+                <views:RiserView ViewModel="{Binding RiserVM}"/>
+            </TabItem>
             <TabItem Header="Labor">
                 <views:LaborView
                         ViewModel="{Binding LaborVM}"/>
