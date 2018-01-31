@@ -152,6 +152,7 @@
                                 <RowDefinition Height="30"/>
                                 <RowDefinition Height="30"/>
                                 <RowDefinition Height="*"/>
+                                <RowDefinition Height="30"/>
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
                                 <Grid.ColumnDefinitions>
@@ -226,6 +227,10 @@
                                                      DropHandler="{Binding ElementName=materialView, Path=ViewModel}"
                                                          Selected="{Binding SelectedValve}"
                                                      Grid.Row="4"/>
+                            <Button Grid.Row="5"
+                                    Content="Delete"
+                                    Command="{Binding ElementName=materialView, Path=ViewModel.DeleteValveCommand}"
+                                    Click="Remove_Clicked"/>
                         </Grid>
                     </DataTemplate>
                     <DataTemplate x:Key="ConnectionTypeTemplate">
@@ -778,7 +783,7 @@
                 </Border.BitmapEffect>
                 <ContentPresenter Content="{Binding ElementName=materialView, Path=ViewModel.DeleteDeviceVM}">
                     <ContentPresenter.Resources>
-                        <DataTemplate DataType="{x:Type vms:DeleteDeviceVM}">
+                        <DataTemplate DataType="{x:Type vms:DeleteEndDeviceVM}">
                             <views:DeleteDeviceView ViewModel="{Binding}"/>
                         </DataTemplate>
                     </ContentPresenter.Resources>

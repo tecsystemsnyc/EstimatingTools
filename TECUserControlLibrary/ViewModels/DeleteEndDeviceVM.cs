@@ -15,16 +15,16 @@ using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class DeleteDeviceVM : ViewModelBase
+    public class DeleteEndDeviceVM : ViewModelBase
     {
         private readonly TECTemplates templates;
         internal IUserConfirmable messageBox;
 
-        public TECDevice Device { get; }
-        public List<TECDevice> PotentialReplacements { get; }
+        public IEndDevice EndDevice { get; }
+        public List<IEndDevice> PotentialReplacements { get; }
 
-        private TECDevice _selectedReplacement;
-        public TECDevice SelectedReplacement
+        private IEndDevice _selectedReplacement;
+        public IEndDevice SelectedReplacement
         {
             get { return _selectedReplacement; }
             set
@@ -37,12 +37,12 @@ namespace TECUserControlLibrary.ViewModels
         public ICommand DeleteCommand { get; private set; }
         public ICommand DeleteAndReplaceCommand { get; private set; }
 
-        public DeleteDeviceVM(TECDevice device, TECTemplates templates)
+        public DeleteEndDeviceVM(IEndDevice endDevice, TECTemplates templates)
         {
             messageBox = new MessageBoxService();
             this.templates = templates;
-            Device = device;
-            PotentialReplacements = new List<TECDevice>();
+            this.EndDevice = endDevice;
+            PotentialReplacements = new List<IEndDevice>();
             populatePotentialReplacements();
 
             DeleteCommand = new RelayCommand(deleteExecute);
@@ -59,9 +59,9 @@ namespace TECUserControlLibrary.ViewModels
             {
                 foreach (TECSubScope ss in templates.SubScopeTemplates)
                 {
-                    while (ss.Devices.Contains(Device))
+                    while (ss.Devices.Contains(EndDevice))
                     {
-                        ss.Devices.Remove(Device);
+                        ss.Devices.Remove(EndDevice);
                     }
                 }
 
@@ -69,9 +69,9 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     foreach (TECSubScope ss in equip.SubScope)
                     {
-                        while (ss.Devices.Contains(Device))
+                        while (ss.Devices.Contains(EndDevice))
                         {
-                            ss.Devices.Remove(Device);
+                            ss.Devices.Remove(EndDevice);
                         }
                     }
                 }
@@ -82,24 +82,32 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         foreach (TECSubScope ss in equip.SubScope)
                         {
-                            while (ss.Devices.Contains(Device))
+                            while (ss.Devices.Contains(EndDevice))
                             {
-                                ss.Devices.Remove(Device);
+                                ss.Devices.Remove(EndDevice);
                             }
                         }
                     }
                 }
 
-                templates.Catalogs.Devices.Remove(Device);
+                if (EndDevice is TECDevice dev)
+                {
+                    templates.Catalogs.Devices.Remove(dev);
+                }
+                else if (EndDevice is TECValve valve)
+                {
+                    templates.Catalogs.Valves.Remove(valve);
+                }
+                else throw new InvalidCastException("End device is not TECDevice or TECValve");
             }
         }
         private void deleteAndReplaceExecute()
         {
             foreach (TECSubScope ss in templates.SubScopeTemplates)
             {
-                while (ss.Devices.Contains(Device))
+                while (ss.Devices.Contains(EndDevice))
                 {
-                    ss.Devices.Remove(Device);
+                    ss.Devices.Remove(EndDevice);
                     ss.Devices.Add(SelectedReplacement);
                 }
             }
@@ -108,9 +116,9 @@ namespace TECUserControlLibrary.ViewModels
             {
                 foreach (TECSubScope ss in equip.SubScope)
                 {
-                    while (ss.Devices.Contains(Device))
+                    while (ss.Devices.Contains(EndDevice))
                     {
-                        ss.Devices.Remove(Device);
+                        ss.Devices.Remove(EndDevice);
                         ss.Devices.Add(SelectedReplacement);
                     }
                 }
@@ -122,16 +130,24 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     foreach (TECSubScope ss in equip.SubScope)
                     {
-                        while (ss.Devices.Contains(Device))
+                        while (ss.Devices.Contains(EndDevice))
                         {
-                            ss.Devices.Remove(Device);
+                            ss.Devices.Remove(EndDevice);
                             ss.Devices.Add(SelectedReplacement);
                         }
                     }
                 }
             }
 
-            templates.Catalogs.Devices.Remove(Device);
+            if (EndDevice is TECDevice dev)
+            {
+                templates.Catalogs.Devices.Remove(dev);
+            }
+            else if (EndDevice is TECValve valve)
+            {
+                templates.Catalogs.Valves.Remove(valve);
+            }
+            else throw new InvalidCastException("End device is not TECDevice or TECValve");
         }
         private bool deleteAndReplaceCanExecute()
         {
@@ -158,11 +174,13 @@ namespace TECUserControlLibrary.ViewModels
                 if (hasNetworkConnection) break;
             }
 
-            foreach (TECDevice dev in templates.Catalogs.Devices)
+            List<IEndDevice> endDevices = new List<IEndDevice>(templates.Catalogs.Devices);
+            endDevices.AddRange(templates.Catalogs.Valves);
+            foreach (IEndDevice dev in endDevices)
             {
                 if (hasNetworkConnection)
                 {
-                    if (connectionTypesAreSame(Device, dev))
+                    if (connectionTypesAreSame(EndDevice, dev))
                     {
                         PotentialReplacements.Add(dev);
                     }
@@ -172,10 +190,11 @@ namespace TECUserControlLibrary.ViewModels
                     PotentialReplacements.Add(dev);
                 }
             }
-            PotentialReplacements.Remove(Device);
+            PotentialReplacements.Remove(EndDevice);
+            
         }
 
-        private bool connectionTypesAreSame(TECDevice dev1, TECDevice dev2)
+        private bool connectionTypesAreSame(IEndDevice dev1, IEndDevice dev2)
         {
             bool oneContainsTwo = true;
             foreach (TECConnectionType type in dev2.ConnectionTypes)

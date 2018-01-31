@@ -31,15 +31,15 @@ namespace TECUserControlLibrary.Views
             remove { RemoveHandler(DoneEvent, value); }
         }
 
-        public DeleteDeviceVM ViewModel
+        public DeleteEndDeviceVM ViewModel
         {
-            get { return (DeleteDeviceVM)GetValue(ViewModelProperty); }
+            get { return (DeleteEndDeviceVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for ViewModel.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(DeleteDeviceVM), typeof(DeleteDeviceView));
+            DependencyProperty.Register("ViewModel", typeof(DeleteEndDeviceVM), typeof(DeleteDeviceView));
 
 
         public DeleteDeviceView()

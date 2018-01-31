@@ -421,8 +421,8 @@ namespace TECUserControlLibrary.ViewModels
         }
         public ICommand DeleteDeviceCommand { get; private set; }
 
-        private DeleteDeviceVM _deleteDeviceVM;
-        public DeleteDeviceVM DeleteDeviceVM
+        private DeleteEndDeviceVM _deleteDeviceVM;
+        public DeleteEndDeviceVM DeleteDeviceVM
         {
             get { return _deleteDeviceVM; }
             set
@@ -534,6 +534,22 @@ namespace TECUserControlLibrary.ViewModels
                 _selectedValve = value;
                 RaisePropertyChanged("SelectedValve");
                 Selected = value;
+            }
+        }
+
+        public ICommand DeleteValveCommand { get; private set; }
+
+        private DeleteEndDeviceVM _deleteValveVM;
+        public DeleteEndDeviceVM DeleteValveVM
+        {
+            get { return _deleteValveVM; }
+            set
+            {
+                if (DeleteValveVM != value)
+                {
+                    _deleteValveVM = value;
+                    RaisePropertyChanged("DeleteValveVM");
+                }
             }
         }
         #endregion
@@ -750,6 +766,7 @@ namespace TECUserControlLibrary.ViewModels
             AddIOToModuleCommand = new RelayCommand(addIOToModuleExecute, canAddIOToModule);
 
             DeleteDeviceCommand = new RelayCommand(deleteDeviceExecute, canDeleteDevice);
+            DeleteValveCommand = new RelayCommand(deleteValveExecute, canDeleteValve);
         }
 
         private void addIOToControllerTypeExecute()
@@ -1006,11 +1023,20 @@ namespace TECUserControlLibrary.ViewModels
 
         private void deleteDeviceExecute()
         {
-            DeleteDeviceVM = new DeleteDeviceVM(SelectedDevice, Templates);
+            DeleteDeviceVM = new DeleteEndDeviceVM(SelectedDevice, Templates);
         }
         private bool canDeleteDevice()
         {
             return SelectedDevice != null;
+        }
+
+        private void deleteValveExecute()
+        {
+            DeleteValveVM = new DeleteEndDeviceVM(SelectedValve, Templates);
+        }
+        private bool canDeleteValve()
+        {
+            return SelectedValve != null;
         }
 
         private bool canAddManufacturer()
