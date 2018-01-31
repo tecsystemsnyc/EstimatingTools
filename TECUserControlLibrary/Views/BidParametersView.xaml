@@ -13,11 +13,13 @@
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="TextBlock">
-            <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid DataContext="{Binding ElementName=bidParametersView, Path=ViewModel}">
+    <Grid DataContext="{Binding ElementName=bidParametersView, Path=ViewModel}"
+          Background="{StaticResource SectionBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition/>
