@@ -19,20 +19,20 @@ namespace TECUserControlLibrary.Views
     /// <summary>
     /// Interaction logic for BidParametersView.xaml
     /// </summary>
-    public partial class BidParametersView : UserControl
+    public partial class BidPropertiesView : UserControl
     {
 
-        public BidParametersVM ViewModel
+        public BidPropertiesVM ViewModel
         {
-            get { return (BidParametersVM)GetValue(ViewModelProperty); }
+            get { return (BidPropertiesVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for ViewModel.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(BidParametersVM), typeof(BidParametersView));
+            DependencyProperty.Register("ViewModel", typeof(BidPropertiesVM), typeof(BidPropertiesView));
         
-        public BidParametersView()
+        public BidPropertiesView()
         {
             InitializeComponent();
         }

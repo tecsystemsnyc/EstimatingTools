@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class BidParametersVM : ViewModelBase
+    public class BidPropertiesVM : ViewModelBase
     {
 
         private TECBid _bid;
@@ -23,7 +23,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public BidParametersVM(TECBid bid)
+        public BidPropertiesVM(TECBid bid)
         {
             Bid = bid;
         }

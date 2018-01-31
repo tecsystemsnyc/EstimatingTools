@@ -22,7 +22,8 @@
         
     </UserControl.Resources>
 
-    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
+    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}"
+          Background="{StaticResource SectionBackgroundBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="*"/>
