@@ -53,8 +53,24 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        private TECLocated _selected;   
+
+        public TECLocated Selected
+        {
+            get { return _selected; }
+            set
+            {
+                _selected = value;
+                RaisePropertyChanged("Selected");
+                PropertiesVM.Selected = value;
+            }
+        }
+
+
         public ICommand AddLocationCommand { get; private set; }
         
+        public PropertiesVM PropertiesVM { get; set; }
+
         public RiserVM(TECBid bid, ChangeWatcher watcher)
         {
             this.bid = bid;
@@ -62,6 +78,7 @@ namespace TECUserControlLibrary.ViewModels
             this.watcher.Changed += changed;
             populateBidLocations(bid);
             AddLocationCommand = new RelayCommand(addLocationExecute, canAddLocation);
+            PropertiesVM = new PropertiesVM(bid.Catalogs, bid);
         }
         public void Refresh(TECBid bid, ChangeWatcher watcher)
         {
@@ -70,6 +87,7 @@ namespace TECUserControlLibrary.ViewModels
             this.watcher = watcher;
             this.watcher.Changed += changed;
             populateBidLocations(bid);
+            PropertiesVM.Refresh(bid.Catalogs, bid);
         }
 
         private void addLocationExecute()

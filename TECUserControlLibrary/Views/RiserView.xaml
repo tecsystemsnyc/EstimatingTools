@@ -5,10 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
+                          xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:dd="urn:gong-wpf-dragdrop"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              mc:Ignorable="d" 
              x:Name="riserView"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="640" d:DesignWidth="960">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -24,6 +26,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="120"/>
             <ColumnDefinition/>
+            <ColumnDefinition Width="240"/>
         </Grid.ColumnDefinitions>
         <Grid>
             <Grid.RowDefinitions>
@@ -39,7 +42,8 @@
             <ListView ItemsSource="{Binding Unlocated}" Grid.Row="1"                      
                       dd:DragDrop.IsDragSource="True"
                       dd:DragDrop.DropHandler="{Binding ElementName=riserView, Path=ViewModel}"
-                      HorizontalContentAlignment="Stretch">
+                      HorizontalContentAlignment="Stretch"
+                      SelectedItem="{Binding ElementName=riserView, Path=ViewModel.Selected}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Border BorderBrush="{StaticResource ItemBorderBrush}"
@@ -80,8 +84,15 @@
                 </Grid>
                 <ListView ItemsSource="{Binding Locations}" Grid.Row="1"
                           HorizontalContentAlignment="Stretch"
+                          VirtualizingPanel.ScrollUnit="Pixel"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                           dd:DragDrop.IsDropTarget="True"
                           dd:DragDrop.DropHandler="{Binding ElementName=riserView, Path=ViewModel}">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Focusable" Value="false"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1">
@@ -95,9 +106,14 @@
                                            Foreground="Black"/>
                                     </Border>
                                     <ListView ItemsSource="{Binding Scope}"
-                                          Grid.Row="1"
+                                              Grid.Row="1"
+                                              ScrollViewer.CanContentScroll="False"
                                               dd:DragDrop.IsDragSource="True"
-                                              dd:DragDrop.DropHandler="{Binding ElementName=riserView, Path=ViewModel}">
+                                              dd:DragDrop.DropHandler="{Binding ElementName=riserView, Path=ViewModel}"
+                                              SelectedItem="{Binding ElementName=riserView, Path=ViewModel.Selected}">
+                                        <i:Interaction.Behaviors>
+                                            <utilities:BubbleScrollEvent/>
+                                        </i:Interaction.Behaviors>
                                         <ListView.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Horizontal"/>
@@ -121,5 +137,9 @@
                 </ListView>
             </Grid>
         </Grid>
+        <local:PropertiesView Selected="{Binding Selected}"
+                              Grid.Column="5" Grid.Row="0" Grid.RowSpan="2"
+                              ViewModel="{Binding PropertiesVM}"
+                              DropHandler="{Binding PropertiesVM}"/>
     </Grid>
 </UserControl>
