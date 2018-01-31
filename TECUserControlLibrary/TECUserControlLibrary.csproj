@@ -247,8 +247,8 @@
     <Compile Include="Views\ConnectOnAddView.xaml.cs">
       <DependentUpon>ConnectOnAddView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\DeleteDeviceView.xaml.cs">
-      <DependentUpon>DeleteDeviceView.xaml</DependentUpon>
+    <Compile Include="Views\DeleteEndDeviceView.xaml.cs">
+      <DependentUpon>DeleteEndDeviceView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EquipmentHierarchyView.xaml.cs">
       <DependentUpon>EquipmentHierarchyView.xaml</DependentUpon>
@@ -665,7 +665,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\DeleteDeviceView.xaml">
+    <Page Include="Views\DeleteEndDeviceView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

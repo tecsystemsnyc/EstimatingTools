@@ -60,6 +60,7 @@
             </Grid.RowDefinitions>
             <Grid.Resources>
                 <ResourceDictionary>
+                    <!--Devices-->
                     <DataTemplate x:Key="DevicesTemplate">
                         <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
                             <Grid.Resources>
@@ -141,6 +142,7 @@
                             </Grid>
                         </Grid>
                     </DataTemplate>
+                    <!--Valves-->
                     <DataTemplate x:Key="ValveTemplate">
                         <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
                             <Grid.Resources>
