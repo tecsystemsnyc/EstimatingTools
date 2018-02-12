@@ -152,6 +152,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             {
                 NameConatiner newItem = new NameConatiner();
                 newItem.Name = String.Format("{0}-{1}", PatternName, x);
+                newItem.Location = PatternLocation;
                 Names.Add(newItem);
             }
         }
