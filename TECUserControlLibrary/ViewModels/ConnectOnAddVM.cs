@@ -131,59 +131,59 @@ namespace TECUserControlLibrary.ViewModels
 
         public void ExecuteConnection(IEnumerable<TECSubScope> finalToConnect)
         {
-            if (Connect && SelectedController != null)
+            foreach (TECSubScope subScope in finalToConnect)
             {
-                foreach (TECSubScope subScope in finalToConnect)
-                {
-                    ExecuteConnection(subScope);
-                }
+                ExecuteConnection(subScope);
             }
-            
         }
         public void ExecuteConnection(TECSubScope finalToConnect)
         {
-            if (finalToConnect.IsNetwork)
-            {
-                IOType ioType = finalToConnect.IO.ListIO()[0].Type;
 
-                bool compatibleConnectionExists = false;
-                foreach(TECNetworkConnection netConnect in SelectedController.ChildNetworkConnections)
+            if (Connect && SelectedController != null)
+            {
+                if (finalToConnect.IsNetwork)
                 {
-                    if (netConnect.CanAddINetworkConnectable(finalToConnect))
+                    IOType ioType = finalToConnect.IO.ListIO()[0].Type;
+
+                    bool compatibleConnectionExists = false;
+                    foreach (TECNetworkConnection netConnect in SelectedController.ChildNetworkConnections)
                     {
-                        compatibleConnectionExists = true;
-                        netConnect.AddINetworkConnectable(finalToConnect);
-                        netConnect.Length += Length;
-                        netConnect.ConduitLength += ConduitLength;
-                        if (netConnect.ConduitType == null)
+                        if (netConnect.CanAddINetworkConnectable(finalToConnect))
                         {
-                            netConnect.ConduitType = ConduitType;
+                            compatibleConnectionExists = true;
+                            netConnect.AddINetworkConnectable(finalToConnect);
+                            netConnect.Length += Length;
+                            netConnect.ConduitLength += ConduitLength;
+                            if (netConnect.ConduitType == null)
+                            {
+                                netConnect.ConduitType = ConduitType;
+                            }
+                            if (!netConnect.IsPlenum)
+                            {
+                                netConnect.IsPlenum = IsPlenum;
+                            }
+                            break;
                         }
-                        if (!netConnect.IsPlenum)
-                        {
-                            netConnect.IsPlenum = IsPlenum;
-                        }
-                        break;
+                    }
+
+                    if (!compatibleConnectionExists)
+                    {
+                        TECNetworkConnection newConnection = SelectedController.AddNetworkConnection(parent.IsTypical, finalToConnect.ConnectionTypes, ioType);
+                        newConnection.AddINetworkConnectable(finalToConnect);
+                        newConnection.ConduitLength = ConduitLength;
+                        newConnection.Length = Length;
+                        newConnection.ConduitType = ConduitType;
+                        newConnection.IsPlenum = IsPlenum;
                     }
                 }
-
-                if (!compatibleConnectionExists)
+                else
                 {
-                    TECNetworkConnection newConnection = SelectedController.AddNetworkConnection(parent.IsTypical, finalToConnect.ConnectionTypes, ioType);
-                    newConnection.AddINetworkConnectable(finalToConnect);
-                    newConnection.ConduitLength = ConduitLength;
-                    newConnection.Length = Length;
-                    newConnection.ConduitType = ConduitType;
-                    newConnection.IsPlenum = IsPlenum;
+                    TECSubScopeConnection connection = SelectedController.AddSubScope(finalToConnect);
+                    connection.ConduitLength = ConduitLength;
+                    connection.Length = Length;
+                    connection.ConduitType = ConduitType;
+                    connection.IsPlenum = IsPlenum;
                 }
-            }
-            else
-            {
-                TECSubScopeConnection connection = SelectedController.AddSubScope(finalToConnect);
-                connection.ConduitLength = ConduitLength;
-                connection.Length = Length;
-                connection.ConduitType = ConduitType;
-                connection.IsPlenum = IsPlenum;
             }
         }
         public bool CanConnect()
