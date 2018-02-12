@@ -261,7 +261,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             locations.CollectionChanged += (sender, e) =>
             {
-                CollectionChanged.Invoke(sender, e);
+                CollectionChanged?.Invoke(sender, e);
             };
         }
         
