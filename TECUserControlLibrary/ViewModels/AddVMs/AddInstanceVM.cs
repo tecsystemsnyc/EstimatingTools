@@ -139,7 +139,10 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         }
         private bool canAddPattern()
         {
-            throw new NotImplementedException();
+            bool start = PatternStart >= 0;
+            bool end = PatternEnd > PatternStart;
+            bool name = (PatternName != null && PatternName != "");
+            return (start && end && name);
         }
     }
 
