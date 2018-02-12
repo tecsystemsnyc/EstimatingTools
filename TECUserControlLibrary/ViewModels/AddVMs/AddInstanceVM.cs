@@ -20,6 +20,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private string _patternName = "";
         private int _patternStart = 1;
         private int _patternEnd = 1;
+        private TECLabeled _patternLocation = null;
         
         public TECSystem ToAdd
         {
@@ -87,6 +88,18 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 }
             }
         }
+        public TECLabeled PatternLocation
+        {
+            get { return _patternLocation; }
+            set
+            {
+                if (PatternLocation != value)
+                {
+                    _patternLocation = value;
+                    RaisePropertyChanged("PatternLocation");
+                }
+            }
+        }
 
         public ICommand AddPatternCommand { get; }
         
@@ -144,7 +157,10 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         }
         private bool canAddPattern()
         {
-            throw new NotImplementedException();
+            bool start = PatternStart >= 0;
+            bool end = PatternEnd > PatternStart;
+            bool name = (PatternName != null && PatternName != "");
+            return (start && end && name);
         }
     }
 
