@@ -16,6 +16,10 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private TECSystem toAdd;
         private ObservableCollection<NameConatiner> _names = new ObservableCollection<NameConatiner>();
         private bool _labelInstances = true;
+
+        private string _patternName = "";
+        private int _patternStart = 1;
+        private int _patternEnd = 1;
         
         public TECSystem ToAdd
         {
@@ -46,6 +50,45 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 RaisePropertyChanged("LabelInstances");
             }
         }
+
+        public string PatternName
+        {
+            get { return _patternName; }
+            set
+            {
+                if (_patternName != value)
+                {
+                    _patternName = value;
+                    RaisePropertyChanged("PatternName");
+                }
+            }
+        }
+        public int PatternStart
+        {
+            get { return _patternStart; }
+            set
+            {
+                if (_patternStart != value)
+                {
+                    _patternStart = value;
+                    RaisePropertyChanged("PatternStart");
+                }
+            }
+        }
+        public int PatternEnd
+        {
+            get { return _patternEnd; }
+            set
+            {
+                if (_patternEnd != value)
+                {
+                    _patternEnd = value;
+                    RaisePropertyChanged("PatternEnd");
+                }
+            }
+        }
+
+        public ICommand AddPatternCommand { get; }
         
         public AddInstanceVM(TECTypical typical, TECBid bid) : base(bid)
         {
@@ -54,6 +97,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             this.bid = bid;
             Locations = this.bid.Locations;
             AddCommand = new RelayCommand(addExecute, canAdd);
+            AddPatternCommand = new RelayCommand(addPatternExecute, canAddPattern);
         }
 
         private void addExecute()
@@ -88,7 +132,15 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             }
             return false;
         }
-        
+
+        private void addPatternExecute()
+        {
+            throw new NotImplementedException();
+        }
+        private bool canAddPattern()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class NameConatiner : ViewModelBase
