@@ -20,6 +20,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private string _patternName = "";
         private int _patternStart = 1;
         private int _patternEnd = 1;
+        private TECLabeled _patternLocation = null;
         
         public TECSystem ToAdd
         {
@@ -84,6 +85,18 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 {
                     _patternEnd = value;
                     RaisePropertyChanged("PatternEnd");
+                }
+            }
+        }
+        public TECLabeled PatternLocation
+        {
+            get { return _patternLocation; }
+            set
+            {
+                if (PatternLocation != value)
+                {
+                    _patternLocation = value;
+                    RaisePropertyChanged("PatternLocation");
                 }
             }
         }
