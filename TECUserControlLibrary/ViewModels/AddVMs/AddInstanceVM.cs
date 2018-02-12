@@ -135,7 +135,12 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
 
         private void addPatternExecute()
         {
-            throw new NotImplementedException();
+            for(int x = PatternStart; x <= PatternEnd; x++)
+            {
+                NameConatiner newItem = new NameConatiner();
+                newItem.Name = String.Format("{0}-{1}", PatternName, x);
+                Names.Add(newItem);
+            }
         }
         private bool canAddPattern()
         {
