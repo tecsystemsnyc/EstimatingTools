@@ -65,6 +65,7 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Grid>
@@ -82,7 +83,15 @@
                     <Button Content="Add Location" Command="{Binding AddLocationCommand}"
                         Grid.Column="1" Margin="2"/>
                 </Grid>
-                <ListView ItemsSource="{Binding Locations}" Grid.Row="1"
+                <Grid Grid.Row="1">
+                    <TextBlock Text="Common Name: "/>
+                    <TextBox Text="{Binding PatternName}"/>
+                    <TextBlock Text="Start"/>
+                    <TextBox Text="{Binding PatternStart}"/>
+                    <TextBlock Text="End"/>
+                    <TextBox Text="{Binding PatternEnd}"/>
+                </Grid>
+                <ListView ItemsSource="{Binding Locations}" Grid.Row="2"
                           HorizontalContentAlignment="Stretch"
                           VirtualizingPanel.ScrollUnit="Pixel"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
