@@ -110,14 +110,8 @@ namespace TECUserControlLibrary.ViewModels
                 case AllSearchableObjects.Devices:
                     ResultCollection = getResultCollection(catalogs.Devices, SearchString);
                     break;
-                case AllSearchableObjects.Controllers:
-                    ResultCollection = getResultCollection(Templates.ControllerTemplates, SearchString);
-                    break;
                 case AllSearchableObjects.AssociatedCosts:
                     ResultCollection = getResultCollection(catalogs.AssociatedCosts, SearchString);
-                    break;
-                case AllSearchableObjects.Panels:
-                    ResultCollection = getResultCollection(Templates.PanelTemplates, SearchString);
                     break;
                 case AllSearchableObjects.MiscCosts:
                     ResultCollection = getResultCollection(Templates.MiscCostTemplates.Where(x => x.Type == CostType.TEC), SearchString);

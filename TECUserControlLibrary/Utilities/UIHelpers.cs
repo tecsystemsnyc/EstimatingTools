@@ -497,8 +497,6 @@ namespace TECUserControlLibrary.Utilities
             new Tuple<string, AllSearchableObjects>("Equipment", AllSearchableObjects.Equipment),
             new Tuple<string, AllSearchableObjects>("Points", AllSearchableObjects.SubScope),
             new Tuple<string, AllSearchableObjects>("Devices", AllSearchableObjects.Devices),
-            new Tuple<string, AllSearchableObjects>("Controllers", AllSearchableObjects.Controllers),
-            new Tuple<string, AllSearchableObjects>("Panels", AllSearchableObjects.Panels),
             new Tuple<string, AllSearchableObjects>("Valves", AllSearchableObjects.Valves),
             new Tuple<string, AllSearchableObjects>("Wire Types", AllSearchableObjects.Wires),
             new Tuple<string, AllSearchableObjects>("Conduit Types", AllSearchableObjects.Conduits),
@@ -531,7 +529,6 @@ namespace TECUserControlLibrary.Utilities
             new Tuple<string, ScopeTemplateIndex>("Systems", ScopeTemplateIndex.System),
             new Tuple<string, ScopeTemplateIndex>("Equipment", ScopeTemplateIndex.Equipment),
             new Tuple<string, ScopeTemplateIndex>("Points", ScopeTemplateIndex.SubScope),
-            new Tuple<string, ScopeTemplateIndex>("Controllers and Panels", ScopeTemplateIndex.Controller),
             new Tuple<string, ScopeTemplateIndex>("Miscellaneous", ScopeTemplateIndex.Misc)
         };
 
@@ -601,7 +598,7 @@ namespace TECUserControlLibrary.Utilities
     public enum SystemComponentIndex { Equipment, Controllers, Electrical, Network, Misc, Proposal };
     public enum ProposalIndex { Scope, Systems, Notes }
     public enum SystemsSubIndex { Typical, Instance, Location}
-    public enum ScopeTemplateIndex { System, Equipment, SubScope, Controller, Misc }
+    public enum ScopeTemplateIndex { System, Equipment, SubScope, Misc }
     public enum AllSearchableObjects
     {
         System,

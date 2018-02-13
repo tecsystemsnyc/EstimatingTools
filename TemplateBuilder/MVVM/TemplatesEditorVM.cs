@@ -17,7 +17,6 @@ namespace TemplateBuilder.MVVM
 
         public ScopeCollectionsTabVM ScopeCollection { get; }
         public MaterialVM MaterialsTab { get; }
-        public ControllersPanelsVM ControllersPanelsVM { get; }
         public SystemHierarchyVM SystemHierarchyVM { get; }
         public EquipmentHierarchyVM EquipmentHierarchyVM { get; }
         public SubScopeHierarchyVM SubScopeHierarchyVM { get; }
@@ -54,8 +53,6 @@ namespace TemplateBuilder.MVVM
             MaterialsTab.SelectionChanged += obj => {
                 Selected = obj;
             };
-            ControllersPanelsVM = new ControllersPanelsVM(templates);
-            ControllersPanelsVM.SelectionChanged += obj => { Selected = obj; };
             SystemHierarchyVM = new SystemHierarchyVM(templates, true);
             SystemHierarchyVM.Selected += obj => { Selected = obj; };
             EquipmentHierarchyVM = new EquipmentHierarchyVM(templates);
@@ -79,7 +76,6 @@ namespace TemplateBuilder.MVVM
             Templates = templates;
             ScopeCollection.Refresh(templates, templates.Catalogs);
             MaterialsTab.Refresh(templates);
-            ControllersPanelsVM.Refresh(templates);
             SystemHierarchyVM.Refresh(templates);
             EquipmentHierarchyVM.Refresh(templates);
             SubScopeHierarchyVM.Refresh(templates);
