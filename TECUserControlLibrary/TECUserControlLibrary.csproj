@@ -240,6 +240,7 @@
     <Compile Include="ViewModels\GlobalConnectionsVM.cs" />
     <Compile Include="ViewModels\NetworkVM.cs" />
     <Compile Include="ViewModels\ReplaceActuatorVM.cs" />
+    <Compile Include="ViewModels\RiserVM.cs" />
     <Compile Include="ViewModels\ValveSummaryVM.cs" />
     <Compile Include="ViewModels\WorkBoxVM.cs" />
     <Compile Include="Views\ConnectableFilterView.xaml.cs">
@@ -418,6 +419,8 @@
     </Compile>
     <Compile Include="Views\ReplaceActuatorView.xaml.cs">
       <DependentUpon>ReplaceActuatorView.xaml</DependentUpon>
+    <Compile Include="Views\RiserView.xaml.cs">
+      <DependentUpon>RiserView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ScopeCollectionsTabView.xaml.cs">
       <DependentUpon>ScopeCollectionsTabView.xaml</DependentUpon>
@@ -858,6 +861,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ReplaceActuatorView.xaml">
+    <Page Include="Views\RiserView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -110,11 +110,6 @@
                                                                      ViewModel="{Binding ElementName=templatesTab, Path=DataContext.SubScopeHierarchyVM}"/>
                                         </Grid>
                                     </DataTemplate>
-                                    <DataTemplate x:Key="ControllerPanelTemplate">
-                                        <Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
-                                            <views:ControllersPanelsView ViewModel="{Binding ControllersPanelsVM}"/>
-                                        </Grid>
-                                    </DataTemplate>
                                     <DataTemplate x:Key="MiscTemplate">
                                         <Grid DataContext="{Binding ElementName=templatesTab, Path=DataContext}">
 
@@ -125,7 +120,6 @@
                                              SystemTemplate="{StaticResource SystemTemplate}"
                                              EquipmentTemplate="{StaticResource EquipmentTemplate}"
                                              SubScopeTemplate="{StaticResource SubScopeTemplate}"
-                                             ControllerTemplate="{StaticResource ControllerPanelTemplate}"
                                              MiscTemplate="{StaticResource MiscTemplate}"/>
                                 </TabItem.Resources>
                                 <Grid>

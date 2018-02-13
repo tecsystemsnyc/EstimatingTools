@@ -35,9 +35,9 @@ namespace EstimatingLibrary
             set
             {
                 var old = ChildrenConnections;
-                ChildrenConnections.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "ChildrenConnections");
+                ChildrenConnections.CollectionChanged -= handleChildrenChanged;
                 _childrenConnections = value;
-                ChildrenConnections.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ChildrenConnections");
+                ChildrenConnections.CollectionChanged += handleChildrenChanged;
                 notifyCombinedChanged(Change.Edit, "ChildrenConnections", this, value, old);
                 raisePropertyChanged("ChildNetworkConnections");
             }
@@ -69,9 +69,9 @@ namespace EstimatingLibrary
             set
             {
                 var old = IOModules;
-                IOModules.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "IOModules");
+                IOModules.CollectionChanged -= handleModulesChanged;
                 _ioModules = value;
-                IOModules.CollectionChanged += (sender, args) => collectionChanged(sender, args, "IOModules");
+                IOModules.CollectionChanged += handleModulesChanged;
                 notifyCombinedChanged(Change.Edit, "IOModules", this, value, old);
             }
         }
@@ -123,8 +123,8 @@ namespace EstimatingLibrary
             _type = type;
             _childrenConnections = new ObservableCollection<TECConnection>();
             _ioModules = new ObservableCollection<TECIOModule>();
-            ChildrenConnections.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ChildrenConnections");
-            IOModules.CollectionChanged += (sender, args) => collectionChanged(sender, args, "IOModules");
+            ChildrenConnections.CollectionChanged += handleChildrenChanged;
+            IOModules.CollectionChanged += handleModulesChanged;
         }
 
         public TECController(TECControllerType type, bool isTypical) : this(Guid.NewGuid(), type, isTypical) { }
@@ -535,6 +535,15 @@ namespace EstimatingLibrary
             {
                 notifyCostChanged(connection.CostBatch * -1);
             }
+        }
+
+        private void handleChildrenChanged(Object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            collectionChanged(sender, e, "ChildrenConnections");
+        }
+        private void handleModulesChanged(Object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            collectionChanged(sender, e, "IOModules");
         }
 
         private IOCollection getTotalIO()

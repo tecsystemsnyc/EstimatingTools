@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using TECUserControlLibrary.Models;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -179,48 +180,47 @@ namespace TECUserControlLibrary.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
-            bool allow = false;
-            if (dropInfo.Data is TECSubScope ss)
+            UIHelpers.DragOver(dropInfo, (data, sourceType, targetType) =>
             {
-                allow = checkCompatible(ss);
-            }
-            else if (dropInfo.Data is TECEquipment equipment)
-            {
-                allow = true;
-                foreach(TECSubScope sub in equipment.SubScope.
-                    Where(item => item.Connection == null && item.ParentConnection == null)) {
-                    if (!checkCompatible(sub))
-                    {
-                        allow = false;
-                        break;
-                    }
-                }
-            }
-            else if (dropInfo.Data is TECSystem system)
-            {
-                allow = true;
-                foreach (TECSubScope sub in system.GetAllSubScope().
-                    Where(item => item.Connection == null && item.ParentConnection == null))
+                bool allow = false;
+                if (data is TECSubScope ss)
                 {
-                    if (!checkCompatible(sub))
+                    allow = checkCompatible(ss);
+                }
+                else if (data is TECEquipment equipment)
+                {
+                    allow = true;
+                    foreach (TECSubScope sub in equipment.SubScope.
+                        Where(item => item.Connection == null && item.ParentConnection == null))
                     {
-                        allow = false;
-                        break;
+                        if (!checkCompatible(sub))
+                        {
+                            allow = false;
+                            break;
+                        }
                     }
                 }
-            }
-
-            if (allow)
-            {
-                dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                dropInfo.Effects = DragDropEffects.Copy;           
-            }
+                else if (data is TECSystem system)
+                {
+                    allow = true;
+                    foreach (TECSubScope sub in system.GetAllSubScope().
+                        Where(item => item.Connection == null && item.ParentConnection == null))
+                    {
+                        if (!checkCompatible(sub))
+                        {
+                            allow = false;
+                            break;
+                        }
+                    }
+                }
+                return allow;
+            },()=> { });
 
             bool checkCompatible(TECSubScope subScope)
             {
                 if (dropInfo.TargetCollection == ConnectedSubScope)
                 {
-                    if (SelectedController.CanConnectSubScope(subScope))
+                    if (subScope.IsNetwork || SelectedController.CanConnectSubScope(subScope))
                     {
                         return true;
                     }
@@ -230,26 +230,31 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void Drop(IDropInfo dropInfo)
         {
-            if (dropInfo.Data is TECSubScope ss)
-            {
-                connectSubScope(ss);
-            }
-            else if(dropInfo.Data is TECEquipment equip)
-            {
-                foreach(TECSubScope item in equip.SubScope.
-                    Where(thing => thing.ParentConnection == null && thing.Connection == null))
+
+            UIHelpers.Drop(dropInfo, data => {
+                if (data is TECSubScope ss && !ss.IsNetwork)
                 {
-                    connectSubScope(item);
+                    connectSubScope(ss);
                 }
-            }
-            else if (dropInfo.Data is TECSystem system)
-            {
-                foreach (TECSubScope item in system.GetAllSubScope().
-                    Where(thing => thing.ParentConnection == null && thing.Connection == null))
+                else if (data is TECEquipment equip)
                 {
-                    connectSubScope(item);
+                    foreach (TECSubScope item in equip.SubScope.
+                        Where(thing => thing.ParentConnection == null && thing.Connection == null && !thing.IsNetwork))
+                    {
+                        connectSubScope(item);
+                    }
                 }
-            }
+                else if (data is TECSystem system)
+                {
+                    foreach (TECSubScope item in system.GetAllSubScope().
+                        Where(thing => thing.ParentConnection == null && thing.Connection == null && !thing.IsNetwork))
+                    {
+                        connectSubScope(item);
+                    }
+                }
+                return null;
+            }, false);
+            
             filterSystems(bid);
             void connectSubScope(TECSubScope subScope)
             {
@@ -266,6 +271,9 @@ namespace TECUserControlLibrary.ViewModels
 
         private void filterSystems(TECBid bid)
         {
+            var previousSystem = SelectedSystem;
+            var previousEquipment = SelectedEquipment;
+
             UnconnectedSystems.ObservablyClear();
             foreach (TECTypical typ in bid.Systems)
             {
@@ -277,6 +285,8 @@ namespace TECUserControlLibrary.ViewModels
                     }
                 }
             }
+            SelectedSystem = previousSystem;
+            SelectedEquipment = previousEquipment;
         }
         
         private void handleSelectedControllerChanged()
@@ -450,8 +460,12 @@ namespace TECUserControlLibrary.ViewModels
         private void addSubScopeConnectionItem(TECSubScopeConnection ssConnect, TECEquipment parent)
         {
             SubScopeConnectionItem newItem = new SubScopeConnectionItem(ssConnect.SubScope, noneConduit, parent: parent);
-            subScopeConnectionDictionary.Add(ssConnect, newItem);
-            ConnectedSubScope.Add(newItem);
+            if(!subScopeConnectionDictionary.ContainsKey(ssConnect))
+            {
+                subScopeConnectionDictionary.Add(ssConnect, newItem);
+                ConnectedSubScope.Add(newItem);
+            }
+
         }
         private void removeSubScopeConnectionItem(TECSubScopeConnection ssConnect)
         {

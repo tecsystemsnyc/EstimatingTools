@@ -47,7 +47,8 @@
                     <pControls:HardwarePropertiesControl Selected="{Binding}"/>
                 </DataTemplate>
                 <DataTemplate x:Key="located">
-                    <pControls:LocatedPropertiesControl Selected="{Binding}"/>
+                    <pControls:LocatedPropertiesControl Selected="{Binding}"
+                                                        LocationSource="{Binding ElementName=propertiesView, Path=ViewModel.Locations}"/>
                 </DataTemplate>
                 <DataTemplate x:Key="labeled">
                     <pControls:LabeledPropertiesControl Selected="{Binding}"/>

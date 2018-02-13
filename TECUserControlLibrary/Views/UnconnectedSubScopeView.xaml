@@ -93,7 +93,8 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Background="{StaticResource SectionBackgroundBrush}">
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" 
+                    Background="{StaticResource SectionBackgroundBrush}">
 
                 <Grid>
                     <Grid.ColumnDefinitions>

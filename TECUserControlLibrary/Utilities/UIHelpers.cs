@@ -126,7 +126,9 @@ namespace TECUserControlLibrary.Utilities
         /// <param name="failAction">
         /// An Action invoked when the drop is determined to be illegal.
         /// </param>
-        public static void DragOver(IDropInfo dropInfo, Func<object, Type, Type, bool> dropCondition, Action failAction)
+        public static void DragOver(IDropInfo dropInfo,
+            Func<object, Type, Type, bool> dropCondition,
+            Action failAction)
         {
             if (dropInfo.TargetCollection == dropInfo.DragInfo.SourceCollection)
             {
@@ -140,6 +142,7 @@ namespace TECUserControlLibrary.Utilities
             { sourceType = sourceItem.GetType(); }
 
             var targetCollection = dropInfo.TargetCollection;
+            var args = targetCollection.GetType().GetTypeInfo();
             if (targetCollection.GetType().GetTypeInfo().GenericTypeArguments.Length > 0)
             {
                 Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
@@ -404,6 +407,11 @@ namespace TECUserControlLibrary.Utilities
             }
         }
 
+        public static void SetDragAdorners(IDropInfo dropInfo)
+        {
+            dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+            dropInfo.Effects = DragDropEffects.Copy;
+        }
         #region Get Path Methods
         public static string GetSavePath(FileDialogParameters fileParams, string defaultFileName, string defaultDirectory,
             string initialDirectory = null)
@@ -489,8 +497,6 @@ namespace TECUserControlLibrary.Utilities
             new Tuple<string, AllSearchableObjects>("Equipment", AllSearchableObjects.Equipment),
             new Tuple<string, AllSearchableObjects>("Points", AllSearchableObjects.SubScope),
             new Tuple<string, AllSearchableObjects>("Devices", AllSearchableObjects.Devices),
-            new Tuple<string, AllSearchableObjects>("Controllers", AllSearchableObjects.Controllers),
-            new Tuple<string, AllSearchableObjects>("Panels", AllSearchableObjects.Panels),
             new Tuple<string, AllSearchableObjects>("Valves", AllSearchableObjects.Valves),
             new Tuple<string, AllSearchableObjects>("Wire Types", AllSearchableObjects.Wires),
             new Tuple<string, AllSearchableObjects>("Conduit Types", AllSearchableObjects.Conduits),
@@ -523,7 +529,6 @@ namespace TECUserControlLibrary.Utilities
             new Tuple<string, ScopeTemplateIndex>("Systems", ScopeTemplateIndex.System),
             new Tuple<string, ScopeTemplateIndex>("Equipment", ScopeTemplateIndex.Equipment),
             new Tuple<string, ScopeTemplateIndex>("Points", ScopeTemplateIndex.SubScope),
-            new Tuple<string, ScopeTemplateIndex>("Controllers and Panels", ScopeTemplateIndex.Controller),
             new Tuple<string, ScopeTemplateIndex>("Miscellaneous", ScopeTemplateIndex.Misc)
         };
 
@@ -559,6 +564,27 @@ namespace TECUserControlLibrary.Utilities
             return null;
         }
 
+        public static T FindVisualParent<T>(DependencyObject element) where T : DependencyObject
+        {
+            var parent = VisualTreeHelper.GetParent(element);
+            if(parent == null)
+            {
+                return null;
+            }
+            else
+            {
+                if(parent is T)
+                {
+                    return parent as T;
+                }
+                else
+                {
+                    return FindVisualParent<T>(parent as FrameworkElement);
+                }
+            }
+        }
+
+
     }
 
     public enum EditIndex { System, Equipment, SubScope, Device, Point, Controller, Panel, PanelType, Nothing };
@@ -572,7 +598,7 @@ namespace TECUserControlLibrary.Utilities
     public enum SystemComponentIndex { Equipment, Controllers, Electrical, Network, Misc, Proposal };
     public enum ProposalIndex { Scope, Systems, Notes }
     public enum SystemsSubIndex { Typical, Instance, Location}
-    public enum ScopeTemplateIndex { System, Equipment, SubScope, Controller, Misc }
+    public enum ScopeTemplateIndex { System, Equipment, SubScope, Misc }
     public enum AllSearchableObjects
     {
         System,
