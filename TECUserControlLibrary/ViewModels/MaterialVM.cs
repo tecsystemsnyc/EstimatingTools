@@ -527,6 +527,7 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         public ICommand DeleteValveCommand { get; private set; }
+        public ICommand ReplaceActuatorCommand { get; private set; }
         #endregion
         #region Controller Types
         private string _controllerTypeName;
