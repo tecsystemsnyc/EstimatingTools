@@ -65,8 +65,46 @@ namespace TECUserControlLibrary.ViewModels
         }
         public PropertiesVM PropertiesVM { get; set; }
 
+
+        private String _patternName = "";
+
+        public String PatternName
+        {
+            get { return _patternName; }
+            set
+            {
+                _patternName = value;
+                RaisePropertyChanged("PatternName");
+            }
+        }
+
+        private int _patternStart = 0;
+
+        public int PatternStart
+        {
+            get { return _patternStart; }
+            set
+            {
+                _patternStart = value;
+                RaisePropertyChanged("PatternStart");
+            }
+        }
+
+        private int _patternEnd = 0;
+
+        public int PatternEnd
+        {
+            get { return _patternEnd; }
+            set
+            {
+                _patternEnd = value;
+                RaisePropertyChanged("PatternEnd");
+            }
+        }
+        
         public ICommand AddLocationCommand { get; private set; }
-               
+        public ICommand AddPatternCommand { get; private set; }
+        
         public RiserVM(TECBid bid, ChangeWatcher watcher)
         {
             this.bid = bid;
@@ -74,8 +112,25 @@ namespace TECUserControlLibrary.ViewModels
             this.watcher.Changed += changed;
             populateBidLocations(bid);
             AddLocationCommand = new RelayCommand(addLocationExecute, canAddLocation);
+            AddPatternCommand = new RelayCommand(addPatternExecute, canAdPattern);
             PropertiesVM = new PropertiesVM(bid.Catalogs, bid);
         }
+
+        private void addPatternExecute()
+        {
+            for(int x = PatternStart; x <= PatternEnd; x++)
+            {
+                TECLabeled newLocation = new TECLabeled();
+                newLocation.Label = String.Format("{0} {1}", PatternName, x);
+                bid.Locations.Add(newLocation);
+            }
+        }
+
+        private bool canAdPattern()
+        {
+            return PatternEnd > PatternStart;
+        }
+
         public void Refresh(TECBid bid, ChangeWatcher watcher)
         {
             this.bid = bid;

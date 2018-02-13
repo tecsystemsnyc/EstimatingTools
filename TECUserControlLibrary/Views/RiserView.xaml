@@ -22,7 +22,7 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid DataContext="{Binding ElementName=riserView, Path=ViewModel}">
+    <Grid DataContext="{Binding ElementName=riserView, Path=ViewModel}" Background="{StaticResource SectionBackgroundBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="120"/>
             <ColumnDefinition/>
@@ -70,26 +70,51 @@
                 </Grid.RowDefinitions>
                 <Grid>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
                         <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
                     </Grid.ColumnDefinitions>
+                    <TextBlock Text="Name: "/>
                     <TextBox Text="{Binding LocationText, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="2">
+                             Margin="2"
+                             Grid.Column="1">
                         <TextBox.InputBindings>
                             <KeyBinding Key="Return" 
                     Command="{Binding AddLocationCommand}"/>
                         </TextBox.InputBindings>
                     </TextBox>
                     <Button Content="Add Location" Command="{Binding AddLocationCommand}"
-                        Grid.Column="1" Margin="2"/>
+                        Grid.Column="2" Margin="2"/>
                 </Grid>
                 <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
+
+                    </Grid.ColumnDefinitions>
                     <TextBlock Text="Common Name: "/>
-                    <TextBox Text="{Binding PatternName}"/>
-                    <TextBlock Text="Start"/>
-                    <TextBox Text="{Binding PatternStart}"/>
-                    <TextBlock Text="End"/>
-                    <TextBox Text="{Binding PatternEnd}"/>
+                    <TextBox Text="{Binding PatternName, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Column="1"
+                             Margin="2"/>
+                    <TextBlock Text="Start"
+                               Grid.Column="2"/>
+                    <TextBox Text="{Binding PatternStart, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Column="3"
+                             Margin="2"/>
+                    <TextBlock Text="End"
+                               Grid.Column="4"/>
+                    <TextBox Text="{Binding PatternEnd, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Column="5"
+                             Margin="2"/>
+                    <Button Content="Add Pattern"
+                            Command="{Binding AddPatternCommand}"
+                            Margin="2"
+                            Grid.Column="6"/>
                 </Grid>
                 <ListView ItemsSource="{Binding Locations}" Grid.Row="2"
                           HorizontalContentAlignment="Stretch"
