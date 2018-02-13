@@ -21,7 +21,15 @@ namespace TECUserControlLibrary.Views
     /// </summary>
     public partial class ReplaceActuatorView : UserControl
     {
+        public static readonly RoutedEvent DoneEvent =
+        EventManager.RegisterRoutedEvent("Done", RoutingStrategy.Bubble,
+        typeof(RoutedEventHandler), typeof(ReplaceActuatorView));
 
+        public event RoutedEventHandler Done
+        {
+            add { AddHandler(DoneEvent, value); }
+            remove { RemoveHandler(DoneEvent, value); }
+        }
 
         public ReplaceActuatorVM VM
         {
@@ -42,7 +50,7 @@ namespace TECUserControlLibrary.Views
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            RaiseEvent(new RoutedEventArgs(DoneEvent, this));
         }
     }
 }
