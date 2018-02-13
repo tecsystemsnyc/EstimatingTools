@@ -706,16 +706,16 @@ namespace TECUserControlLibrary.ViewModels
         #region ViewModels
         public MiscCostsVM MiscVM { get; private set; }
 
-        private DeleteEndDeviceVM _deleteEndDeviceVM;
-        public DeleteEndDeviceVM DeleteEndDeviceVM
+        private ViewModelBase _modalVM;
+        public ViewModelBase ModalVM
         {
-            get { return _deleteEndDeviceVM; }
+            get { return _modalVM; }
             set
             {
-                if (DeleteEndDeviceVM != value)
+                if (_modalVM != value)
                 {
-                    _deleteEndDeviceVM = value;
-                    RaisePropertyChanged("DeleteEndDeviceVM");
+                    _modalVM = value;
+                    RaisePropertyChanged("ModalVM");
                 }
             }
         }
@@ -757,6 +757,7 @@ namespace TECUserControlLibrary.ViewModels
 
             DeleteDeviceCommand = new RelayCommand(deleteDeviceExecute, canDeleteDevice);
             DeleteValveCommand = new RelayCommand(deleteValveExecute, canDeleteValve);
+            ReplaceActuatorCommand = new RelayCommand(replaceActuatorExecute, canReplaceActuator);
         }
 
         private void addIOToControllerTypeExecute()
@@ -1013,7 +1014,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void deleteDeviceExecute()
         {
-            DeleteEndDeviceVM = new DeleteEndDeviceVM(SelectedDevice, Templates);
+            ModalVM = new DeleteEndDeviceVM(SelectedDevice, Templates);
         }
         private bool canDeleteDevice()
         {
@@ -1022,9 +1023,18 @@ namespace TECUserControlLibrary.ViewModels
 
         private void deleteValveExecute()
         {
-            DeleteEndDeviceVM = new DeleteEndDeviceVM(SelectedValve, Templates);
+            ModalVM = new DeleteEndDeviceVM(SelectedValve, Templates);
         }
         private bool canDeleteValve()
+        {
+            return SelectedValve != null;
+        }
+
+        private void replaceActuatorExecute()
+        {
+            ModalVM = new ReplaceActuatorVM(SelectedValve, Templates.Catalogs.Devices);
+        }
+        private bool canReplaceActuator()
         {
             return SelectedValve != null;
         }
