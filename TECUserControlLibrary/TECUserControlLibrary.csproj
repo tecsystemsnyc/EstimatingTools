@@ -419,6 +419,7 @@
     </Compile>
     <Compile Include="Views\ReplaceActuatorView.xaml.cs">
       <DependentUpon>ReplaceActuatorView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\RiserView.xaml.cs">
       <DependentUpon>RiserView.xaml</DependentUpon>
     </Compile>
@@ -861,6 +862,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ReplaceActuatorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\RiserView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
