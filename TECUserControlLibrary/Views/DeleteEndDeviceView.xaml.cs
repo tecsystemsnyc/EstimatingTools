@@ -19,11 +19,11 @@ namespace TECUserControlLibrary.Views
     /// <summary>
     /// Interaction logic for DeleteDeviceView.xaml
     /// </summary>
-    public partial class DeleteDeviceView : UserControl
+    public partial class DeleteEndDeviceView : UserControl
     {
         public static readonly RoutedEvent DoneEvent =
         EventManager.RegisterRoutedEvent("Done", RoutingStrategy.Bubble,
-        typeof(RoutedEventHandler), typeof(DeleteDeviceView));
+        typeof(RoutedEventHandler), typeof(DeleteEndDeviceView));
 
         public event RoutedEventHandler Done
         {
@@ -31,18 +31,18 @@ namespace TECUserControlLibrary.Views
             remove { RemoveHandler(DoneEvent, value); }
         }
 
-        public DeleteDeviceVM ViewModel
+        public DeleteEndDeviceVM ViewModel
         {
-            get { return (DeleteDeviceVM)GetValue(ViewModelProperty); }
+            get { return (DeleteEndDeviceVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for ViewModel.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(DeleteDeviceVM), typeof(DeleteDeviceView));
+            DependencyProperty.Register("ViewModel", typeof(DeleteEndDeviceVM), typeof(DeleteEndDeviceView));
 
 
-        public DeleteDeviceView()
+        public DeleteEndDeviceView()
         {
             InitializeComponent();
         }
