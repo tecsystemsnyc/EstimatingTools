@@ -220,7 +220,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (dropInfo.TargetCollection == ConnectedSubScope)
                 {
-                    if (SelectedController.CanConnectSubScope(subScope))
+                    if (subScope.IsNetwork || SelectedController.CanConnectSubScope(subScope))
                     {
                         return true;
                     }
@@ -230,14 +230,14 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void Drop(IDropInfo dropInfo)
         {
-            if (dropInfo.Data is TECSubScope ss)
+            if (dropInfo.Data is TECSubScope ss && !ss.IsNetwork)
             {
                 connectSubScope(ss);
             }
             else if(dropInfo.Data is TECEquipment equip)
             {
                 foreach(TECSubScope item in equip.SubScope.
-                    Where(thing => thing.ParentConnection == null && thing.Connection == null))
+                    Where(thing => thing.ParentConnection == null && thing.Connection == null && !thing.IsNetwork))
                 {
                     connectSubScope(item);
                 }
@@ -245,7 +245,7 @@ namespace TECUserControlLibrary.ViewModels
             else if (dropInfo.Data is TECSystem system)
             {
                 foreach (TECSubScope item in system.GetAllSubScope().
-                    Where(thing => thing.ParentConnection == null && thing.Connection == null))
+                    Where(thing => thing.ParentConnection == null && thing.Connection == null && !thing.IsNetwork))
                 {
                     connectSubScope(item);
                 }
