@@ -8,7 +8,7 @@
 
              mc:Ignorable="d" 
              x:Name="controllerItemControl"
-             d:DesignHeight="60" d:DesignWidth="300">
+             d:DesignHeight="65" d:DesignWidth="300">
     <local:BaseItemControl.Resources>
         <ResourceDictionary>
             <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=controllerItemControl}"/>
@@ -30,12 +30,15 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"/>
-                <RowDefinition Height="20"/>
+                <RowDefinition MaxHeight="20" Height="Auto"/>
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
-            <TextBlock FontSize="14" Text="{Binding Name}" FontWeight="DemiBold" Background="Transparent"/>
-            <TextBlock Text="{Binding Description}" Grid.Row="1"  Background="Transparent"/>
-            <TextBlock Text="{Binding Type.Name, StringFormat=Type: {0}}" Grid.Row="2" Background="Transparent"/>
+            <TextBlock FontSize="14" Text="{Binding Name}" FontWeight="DemiBold" Background="Transparent"
+                       VerticalAlignment="Center" />
+            <TextBlock Text="{Binding Description}" Grid.Row="1"  Background="Transparent" VerticalAlignment="Center" 
+                       Visibility="{Binding Description, Converter={utilities:EmptyStringToCollapsedConverter}}"/>
+            <TextBlock Text="{Binding Type.Name, StringFormat=Type: {0}}" Grid.Row="2" Background="Transparent"
+                       VerticalAlignment="Center" />
         </Grid>
     </Border>
 </local:BaseItemControl>

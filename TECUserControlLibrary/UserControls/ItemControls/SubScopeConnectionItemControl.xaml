@@ -25,7 +25,8 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Border BorderBrush="{StaticResource ItemBorderBrush}" CornerRadius="5">
+    <Border BorderBrush="{StaticResource ItemBorderBrush}" CornerRadius="5"
+            BorderThickness="1">
         <Border.Background>
             <MultiBinding Converter="{converters:BooleanChoiceConverter}">
                 <Binding ElementName="subScopeConnectionItemControl" Path="SubScopeConnectionItem.NeedsUpdate"/>
