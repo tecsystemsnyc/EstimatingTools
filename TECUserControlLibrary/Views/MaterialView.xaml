@@ -804,7 +804,7 @@
                             <views:DeleteEndDeviceView ViewModel="{Binding}"/>
                         </DataTemplate>
                         <DataTemplate DataType="{x:Type vms:ReplaceActuatorVM}">
-                            <views:ReplaceActuatorView ViewModel="{Binding}"/>
+                            <views:ReplaceActuatorView VM="{Binding}"/>
                         </DataTemplate>
                     </ContentPresenter.Resources>
                 </ContentPresenter>
