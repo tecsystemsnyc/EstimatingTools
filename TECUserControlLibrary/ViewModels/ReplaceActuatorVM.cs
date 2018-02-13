@@ -22,6 +22,7 @@ namespace TECUserControlLibrary.ViewModels
         public ReplaceActuatorVM(TECValve valve, IEnumerable<TECDevice> devices)
         {
             this.Valve = valve;
+            SelectedReplacement = null;
             ViableReplacements = new List<TECDevice>();
             foreach(TECDevice dev in devices)
             {

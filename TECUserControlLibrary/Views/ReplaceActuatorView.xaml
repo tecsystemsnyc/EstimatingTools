@@ -21,23 +21,25 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.ColumnSpan="2"
-                   HorizontalAlignment="Center">
+                   HorizontalAlignment="Center"
+                   Foreground="Black">
             <TextBlock.Text>
                 <MultiBinding StringFormat="Replacing '{0}' in '{1}'">
-                    <Binding Path="Valve.Actuator"/>
-                    <Binding Path="Valve"/>
+                    <Binding Path="Valve.Actuator.Name"/>
+                    <Binding Path="Valve.Name"/>
                 </MultiBinding>
             </TextBlock.Text>
         </TextBlock>
         <TextBlock Grid.Row="1" Text="Viable Replacements:"
-                   HorizontalAlignment="Left"/>
+                   HorizontalAlignment="Left"
+                   Foreground="Black"/>
         <listControls:EndDeviceListControl Source="{Binding ViableReplacements}"
                                            SelectedItem="{Binding SelectedReplacement}"
                                            Grid.Row="2"
                                            Grid.ColumnSpan="2"/>
         <Button Content="Replace"
                 Grid.Row="3"
-                Command="{Binding ReplaceActuatorCommand}"
+                Command="{Binding ReplaceCommand}"
                 Click="Button_Click"/>
         <Button Content="Cancel"
                 Grid.Row="4"
