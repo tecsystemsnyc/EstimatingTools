@@ -138,7 +138,6 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void ExecuteConnection(TECSubScope finalToConnect)
         {
-
             if (Connect && SelectedController != null)
             {
                 if (finalToConnect.IsNetwork)
