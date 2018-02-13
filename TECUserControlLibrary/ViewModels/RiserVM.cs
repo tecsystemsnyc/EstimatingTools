@@ -24,6 +24,7 @@ namespace TECUserControlLibrary.ViewModels
         private LocationList _locations;
         private ObservableCollection<TECLocated> _unlocated;
         private String _locationText = "";
+        private TECLocated _selected;   
         
         public LocationList Locations
         {
@@ -52,9 +53,6 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("LocationText");
             }
         }
-
-        private TECLocated _selected;   
-
         public TECLocated Selected
         {
             get { return _selected; }
@@ -65,12 +63,10 @@ namespace TECUserControlLibrary.ViewModels
                 PropertiesVM.Selected = value;
             }
         }
-
-
-        public ICommand AddLocationCommand { get; private set; }
-        
         public PropertiesVM PropertiesVM { get; set; }
 
+        public ICommand AddLocationCommand { get; private set; }
+               
         public RiserVM(TECBid bid, ChangeWatcher watcher)
         {
             this.bid = bid;
@@ -203,7 +199,6 @@ namespace TECUserControlLibrary.ViewModels
                 UIHelpers.SetDragAdorners(dropInfo);
             }
         }
-
         public void Drop(IDropInfo dropInfo)
         {
             if(dropInfo.TargetCollection == Unlocated)
@@ -277,7 +272,16 @@ namespace TECUserControlLibrary.ViewModels
 
         public void Add(TECLocated located)
         {
-            locations.Add(new LocationContainer(located.Location, new List<TECLocated> { located }));
+            LocationContainer container = locations.First(item => item.Location == located.Location);
+            
+            if(container != null)
+            {
+                container.Scope.Add(located);
+            }
+            else
+            {
+                locations.Add(new LocationContainer(located.Location, new List<TECLocated> { located }));
+            }
         }
 
         public void Add(TECLabeled location)
