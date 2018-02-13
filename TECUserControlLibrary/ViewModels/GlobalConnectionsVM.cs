@@ -266,6 +266,9 @@ namespace TECUserControlLibrary.ViewModels
 
         private void filterSystems(TECBid bid)
         {
+            var previousSystem = SelectedSystem;
+            var previousEquipment = SelectedEquipment;
+
             UnconnectedSystems.ObservablyClear();
             foreach (TECTypical typ in bid.Systems)
             {
@@ -277,6 +280,8 @@ namespace TECUserControlLibrary.ViewModels
                     }
                 }
             }
+            SelectedSystem = previousSystem;
+            SelectedEquipment = previousEquipment;
         }
         
         private void handleSelectedControllerChanged()
