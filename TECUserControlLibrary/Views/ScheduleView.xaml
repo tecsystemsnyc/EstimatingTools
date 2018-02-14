@@ -46,12 +46,13 @@
                                   Grid.Row="1"
                                   CanUserAddRows="True"
                                   AutoGenerateColumns="False">
-                            <DataGridTextColumn Binding="{Binding Tag}" Header="Tag" Width="Auto" MinWidth="40"/>
-                            <DataGridTextColumn Binding="{Binding Service}" Header="Service" Width="Auto" MinWidth="40"/>
-                            <DataGridTextColumn Binding="{Binding Location}" Header="Location" Width="Auto" MinWidth="40"/>
-                            <!--<DataGridTextColumn Binding="{Binding Scope.Name}" Header="Scope" Width="Auto" MinWidth="40"
-                                                IsReadOnly="True"/>-->
-
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Tag}" Header="Tag" Width="Auto" MinWidth="40"/>
+                                <DataGridTextColumn Binding="{Binding Service}" Header="Service" Width="Auto" MinWidth="40"/>
+                                <DataGridTextColumn Binding="{Binding Location}" Header="Location" Width="Auto" MinWidth="40"/>
+                                <DataGridTextColumn Binding="{Binding Scope.Name}" Header="Scope" Width="Auto" MinWidth="40"
+                                                IsReadOnly="True"/>
+                            </DataGrid.Columns>
                         </DataGrid>
                     </Grid>
                 </DataTemplate>
