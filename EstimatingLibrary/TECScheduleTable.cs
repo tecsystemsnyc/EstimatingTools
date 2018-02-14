@@ -11,7 +11,7 @@ namespace EstimatingLibrary
     public class TECScheduleTable : TECObject, IRelatable
     {
         private ObservableCollection<TECScheduleItem> _items;
-        protected string _name;
+        protected string _name = "";
 
         public ObservableCollection<TECScheduleItem> Items
         {

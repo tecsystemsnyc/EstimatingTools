@@ -9,10 +9,10 @@ namespace EstimatingLibrary
 {
     public class TECScheduleItem : TECObject, IRelatable
     {
-        private String _tag;
-        private String _location;
-        private String _service;
-        private TECScope _scope;
+        private String _tag = "";
+        private String _location = "";
+        private String _service = "";
+        private TECScope _scope = null;
 
         public String Tag
         {
@@ -77,6 +77,7 @@ namespace EstimatingLibrary
         }
 
         public TECScheduleItem(Guid guid) : base(guid) { }
+        public TECScheduleItem() : this(Guid.NewGuid()) { }
 
         private SaveableMap propertyObjects()
         {
