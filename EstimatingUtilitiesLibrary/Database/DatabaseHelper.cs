@@ -338,17 +338,8 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             else if (field.Property.Name == "Index")
             {
-                var childCollection = item.GetType().GetProperty(field.HelperContext).GetValue(item) as IEnumerable;
-                int x = 0;
-                foreach (object thing in childCollection)
-                {
-                    if (thing == item)
-                    {
-                        return x;
-                    }
-                    x++;
-                }
-                return 0;
+                var childCollection = item.GetType().GetProperty(field.HelperContext).GetValue(item) as IList;
+                return childCollection.Contains(child) ? childCollection.IndexOf(child) : 0;
             }
             else
             {
