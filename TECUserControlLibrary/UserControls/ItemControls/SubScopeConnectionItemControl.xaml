@@ -63,8 +63,8 @@
             
             
             <TextBlock Grid.Row="1" Text="{Binding SubScopeConnectionItem.SubScope.Connection.ParentController.Name, StringFormat=Controller: {0}}"/>
-            <TextBlock Grid.Row="2" Text="{Binding SubScopeConnectionItem.EquipmentName, StringFormat=Equipment: {0}}"/>
-            <TextBlock Grid.Row="3" Text="{Binding SubScopeConnectionItem.SystemName, StringFormat=System: {0}}"/>
+            <TextBlock Grid.Row="2" Text="{Binding SubScopeConnectionItem.SystemName, StringFormat=System: {0}}"/>
+            <TextBlock Grid.Row="3" Text="{Binding SubScopeConnectionItem.EquipmentName, StringFormat=Equipment: {0}}"/>
 
             <Grid Grid.Row="4">
                 <Grid.ColumnDefinitions>
