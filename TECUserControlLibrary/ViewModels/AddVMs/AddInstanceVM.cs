@@ -155,6 +155,11 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 newItem.Location = PatternLocation;
                 Names.Add(newItem);
             }
+            int currentIndex = Locations.IndexOf(PatternLocation);
+            if (currentIndex <= Locations.Count)
+            {
+                PatternLocation = Locations[currentIndex + 1];
+            }
         }
         private bool canAddPattern()
         {

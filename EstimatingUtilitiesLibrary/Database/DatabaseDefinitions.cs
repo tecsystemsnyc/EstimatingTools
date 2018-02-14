@@ -1182,6 +1182,9 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField BidID = new TableField("BidID", "TEXT", BidType.GetProperty("Guid"));
         public static TableField MiscID = new TableField("MiscID", "TEXT", CostType.GetProperty("Guid"));
 
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "MiscCosts", "0");
+
         private List<TableField> primaryKeys = new List<TableField>()
         {
             BidID,
@@ -1196,7 +1199,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             BidID,
-            MiscID
+            MiscID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -1428,6 +1432,9 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField ParentID = new TableField("ParentID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField ChildID = new TableField("ChildID", "TEXT", ReferenceType.GetProperty("Guid"));
 
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "Branches", "0");
+
         private List<TableField> primaryKeys = new List<TableField>() {
             ParentID,
             ChildID
@@ -1440,7 +1447,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             ParentID,
-            ChildID
+            ChildID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -1464,7 +1472,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
         public static TableField BidID = new TableField("BidID", "TEXT", BidType.GetProperty("Guid"));
         public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
-        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "Systems");
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "Systems", "0");
 
         private List<TableField> primaryKeys = new List<TableField>()
         {
@@ -1503,7 +1511,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
         public static TableField SystemID = new TableField("SystemID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField EquipmentID = new TableField("EquipmentID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"), "Equipment");
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"), "Equipment", "0");
 
         private List<TableField> primaryKeys = new List<TableField>() {
             SystemID,
@@ -1518,7 +1526,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             SystemID,
             EquipmentID,
-            ScopeIndex
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -1542,7 +1550,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
         public static TableField EquipmentID = new TableField("EquipmentID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField SubScopeID = new TableField("SubScopeID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"), "SubScope");
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"), "SubScope", "0");
 
         private List<TableField> primaryKeys = new List<TableField>() {
             EquipmentID,
@@ -1557,7 +1565,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             EquipmentID,
             SubScopeID,
-            ScopeIndex
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -1582,7 +1590,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField SubScopeID = new TableField("SubScopeID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField DeviceID = new TableField("DeviceID", "TEXT", ReferenceType.GetProperty("Guid"));
         public static TableField Quantity = new TableField("Quantity", "INTEGER", HelperType.GetProperty("Quantity"), "Devices");
-        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"), "Devices");
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"), "Devices", "0");
 
         private List<TableField> primaryKeys = new List<TableField>() {
             SubScopeID,
@@ -1598,7 +1606,7 @@ namespace EstimatingUtilitiesLibrary.Database
             SubScopeID,
             DeviceID,
             Quantity,
-            ScopeIndex
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -1621,6 +1629,9 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField SubScopeID = new TableField("SubScopeID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField PointID = new TableField("PointID", "TEXT", ReferenceType.GetProperty("Guid"));
 
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "Points", "0");
+
         private List<TableField> primaryKeys = new List<TableField>() {
             SubScopeID,
             PointID
@@ -1633,7 +1644,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             SubScopeID,
-            PointID
+            PointID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -1944,7 +1956,10 @@ namespace EstimatingUtilitiesLibrary.Database
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ConnectionType.GetProperty("Guid"));
         public static TableField ChildID = new TableField("ChildID", "TEXT", ChildType.GetProperty("Guid"));
-       
+
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "Children", "0");
+
         private List<TableField> primaryKeys = new List<TableField>() {
             ConnectionID,
             ChildID
@@ -1957,7 +1972,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             ConnectionID,
-            ChildID
+            ChildID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -2082,6 +2098,9 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
         public static TableField ControllerID = new TableField("ControllerID", "TEXT", ControllerType.GetProperty("Guid"));
 
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "Controllers", "0");
+
         private List<TableField> primaryKeys = new List<TableField>() {
             SystemID,
             ControllerID
@@ -2094,7 +2113,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             SystemID,
-            ControllerID
+            ControllerID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -2116,6 +2136,9 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
         public static TableField PanelID = new TableField("PanelID", "TEXT", PanelType.GetProperty("Guid"));
 
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "Panels", "0");
+
         private List<TableField> primaryKeys = new List<TableField>() {
             SystemID,
             PanelID
@@ -2128,7 +2151,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             SystemID,
-            PanelID
+            PanelID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -2151,6 +2175,9 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
         public static TableField BranchID = new TableField("BranchID", "TEXT", ScopeBranchType.GetProperty("Guid"));
 
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "ScopeBranches", "0");
+
         private List<TableField> primaryKeys = new List<TableField>() {
             SystemID,
             BranchID
@@ -2163,7 +2190,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             SystemID,
-            BranchID
+            BranchID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -2184,6 +2212,9 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField ParentID = new TableField("ParentID", "TEXT", SystemType.GetProperty("Guid"));
         public static TableField ChildID = new TableField("ChildID", "TEXT", SystemType.GetProperty("Guid"));
 
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "Instances", "0");
+
         private List<TableField> primaryKeys = new List<TableField>() {
             ParentID,
             ChildID
@@ -2196,7 +2227,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             ParentID,
-            ChildID
+            ChildID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -2217,7 +2249,10 @@ namespace EstimatingUtilitiesLibrary.Database
 
         public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
         public static TableField MiscID = new TableField("MiscID", "TEXT", MiscType.GetProperty("Guid"));
-        
+
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "MiscCosts", "0");
+
         private List<TableField> primaryKeys = new List<TableField>() {
             SystemID,
             MiscID
@@ -2230,7 +2265,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             SystemID,
-            MiscID
+            MiscID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
