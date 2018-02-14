@@ -299,7 +299,7 @@ namespace TECUserControlLibrary.ViewModels
                 (connection) => connection is TECSubScopeConnection))
                 {
                     TECEquipment parent = ssConnect.SubScope.FindParentEquipment(bid);
-                    addSubScopeConnectionItem(ssConnect, parent);
+                    addSubScopeConnectionItem(ssConnect);
                 }
             }
         }
@@ -405,7 +405,7 @@ namespace TECUserControlLibrary.ViewModels
                         UnconnectedSubScope.Remove(ssConnect.SubScope);
                     }
                     TECEquipment parent = ssConnect.SubScope.FindParentEquipment(bid);
-                    addSubScopeConnectionItem(ssConnect, parent);
+                    addSubScopeConnectionItem(ssConnect);
                 }
                 filterSystems(bid);
             }
@@ -457,9 +457,11 @@ namespace TECUserControlLibrary.ViewModels
             ssConnect.SubScope.Connection.ParentController.RemoveSubScope(ssConnect.SubScope);
         }
 
-        private void addSubScopeConnectionItem(TECSubScopeConnection ssConnect, TECEquipment parent)
+        private void addSubScopeConnectionItem(TECSubScopeConnection ssConnect)
         {
-            SubScopeConnectionItem newItem = new SubScopeConnectionItem(ssConnect.SubScope, noneConduit, parent: parent);
+            SubScopeConnectionItem newItem = new SubScopeConnectionItem(ssConnect.SubScope, noneConduit, 
+                ssConnect.SubScope.FindParentEquipment(bid).FindParentSystem(bid), 
+                ssConnect.SubScope.FindParentEquipment(bid));
             if(!subScopeConnectionDictionary.ContainsKey(ssConnect))
             {
                 subScopeConnectionDictionary.Add(ssConnect, newItem);

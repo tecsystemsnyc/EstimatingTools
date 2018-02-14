@@ -515,7 +515,8 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addNewConnectedSubScope(TECSubScope ss, bool needsUpdate = false)
         {
-            SubScopeConnectionItem ssConnectItem = new SubScopeConnectionItem(ss, noneConduitType, ss.FindParentEquipment(system), needsUpdate);
+            SubScopeConnectionItem ssConnectItem = new SubScopeConnectionItem(ss, noneConduitType, system,
+                ss.FindParentEquipment(system), needsUpdate);
             ssConnectItem.PropagationPropertyChanged += handlePropagationPropertyChanged;
             ConnectedSubScope.Add(ssConnectItem);
         }

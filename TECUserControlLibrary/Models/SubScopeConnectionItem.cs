@@ -24,6 +24,7 @@ namespace TECUserControlLibrary.Models
                 RaisePropertyChanged("NeedsUpdate");
             }
         }
+        public string SystemName { get; }
         public string EquipmentName { get; }
 
         public TECElectricalMaterial SelectedConduitType
@@ -55,10 +56,11 @@ namespace TECUserControlLibrary.Models
 
         public event Action<ISubScopeConnectionItem> PropagationPropertyChanged;
 
-        public SubScopeConnectionItem(TECSubScope subScope, TECElectricalMaterial noneConduit, TECEquipment parent, bool needsUpdate = false)
+        public SubScopeConnectionItem(TECSubScope subScope, TECElectricalMaterial noneConduit, TECSystem parentSystem, TECEquipment parentEquip, bool needsUpdate = false)
         {
             SubScope = subScope;
-            EquipmentName = parent.Name;
+            SystemName = parentSystem.Name;
+            EquipmentName = parentEquip.Name;
             NeedsUpdate = needsUpdate;
             if (subScope.IsTypical)
             {
