@@ -248,7 +248,7 @@ namespace EstimatingUtilitiesLibrary.Database
         static private ObservableCollection<TECPanel> getPanelsInSystem(Guid guid, bool isTypical)
         {
             ObservableCollection<TECPanel> panels = new ObservableCollection<TECPanel>();
-            DataTable dt = getChildObjects(new SystemPanelTable(), new PanelTable(), guid);
+            DataTable dt = getChildObjects(new SystemPanelTable(), new PanelTable(), guid, SystemPanelTable.Index.Name);
             foreach (DataRow row in dt.Rows)
             { panels.Add(getPanelFromRow(row, isTypical)); }
 
@@ -258,7 +258,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             ObservableCollection<TECEquipment> equipment = new ObservableCollection<TECEquipment>();
             DataTable equipmentDT = getChildObjects(new SystemEquipmentTable(), new EquipmentTable(),
-                systemID, SystemEquipmentTable.ScopeIndex.Name);
+                systemID, SystemEquipmentTable.Index.Name);
             foreach (DataRow row in equipmentDT.Rows)
             { equipment.Add(getEquipmentFromRow(row, isTypical)); }
             return equipment;
@@ -266,7 +266,7 @@ namespace EstimatingUtilitiesLibrary.Database
         static private ObservableCollection<TECSystem> getChildrenSystems(Guid parentID)
         {
             ObservableCollection<TECSystem> children = new ObservableCollection<TECSystem>();
-            DataTable childDT = getChildObjects(new SystemHierarchyTable(), new SystemTable(), parentID);
+            DataTable childDT = getChildObjects(new SystemHierarchyTable(), new SystemTable(), parentID, SystemHierarchyTable.Index.Name);
             foreach (DataRow row in childDT.Rows)
             {
                 children.Add(getSystemFromRow(row));
@@ -277,7 +277,7 @@ namespace EstimatingUtilitiesLibrary.Database
         static private ObservableCollection<TECController> getControllersInSystem(Guid guid, bool isTypical)
         {
             ObservableCollection<TECController> controllers = new ObservableCollection<TECController>();
-            DataTable controllerDT = getChildObjects(new SystemControllerTable(), new ControllerTable(), guid);
+            DataTable controllerDT = getChildObjects(new SystemControllerTable(), new ControllerTable(), guid, SystemControllerTable.Index.Name);
             foreach (DataRow row in controllerDT.Rows)
             {
                 controllers.Add(getControllerFromRow(row, isTypical));
@@ -308,7 +308,7 @@ namespace EstimatingUtilitiesLibrary.Database
         static private ObservableCollection<TECMisc> getMiscInSystem(Guid guid, bool isTypical)
         {
             ObservableCollection<TECMisc> misc = new ObservableCollection<TECMisc>();
-            DataTable miscDT = getChildObjects(new SystemMiscTable(), new MiscTable(), guid);
+            DataTable miscDT = getChildObjects(new SystemMiscTable(), new MiscTable(), guid, SystemMiscTable.Index.Name);
             foreach (DataRow row in miscDT.Rows)
             {
                 misc.Add(getMiscFromRow(row, isTypical));
@@ -425,7 +425,7 @@ namespace EstimatingUtilitiesLibrary.Database
         static private ObservableCollection<TECScopeBranch> getChildBranchesInBranch(Guid parentID, bool isTypical)
         {
             ObservableCollection<TECScopeBranch> childBranches = new ObservableCollection<TECScopeBranch>();
-            DataTable childBranchDT = getChildObjects(new ScopeBranchHierarchyTable(), new ScopeBranchTable(), parentID);
+            DataTable childBranchDT = getChildObjects(new ScopeBranchHierarchyTable(), new ScopeBranchTable(), parentID, ScopeBranchHierarchyTable.Index.Name);
             foreach (DataRow row in childBranchDT.Rows)
             {
                 childBranches.Add(getScopeBranchFromRow(row, isTypical));
@@ -487,7 +487,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             ObservableCollection<TECSubScope> subScope = new ObservableCollection<TECSubScope>();
             DataTable subScopeDT = getChildObjects(new EquipmentSubScopeTable(), new SubScopeTable(),
-                equipmentID, EquipmentSubScopeTable.ScopeIndex.Name);
+                equipmentID, EquipmentSubScopeTable.Index.Name);
             foreach (DataRow row in subScopeDT.Rows)
             { subScope.Add(getSubScopeFromRow(row, isTypical)); }
             return subScope;
@@ -513,7 +513,7 @@ namespace EstimatingUtilitiesLibrary.Database
         static private ObservableCollection<TECPoint> getPointsInSubScope(Guid subScopeID, bool isTypical)
         {
             ObservableCollection<TECPoint> points = new ObservableCollection<TECPoint>();
-            DataTable pointsDT = getChildObjects(new SubScopePointTable(), new PointTable(), subScopeID);
+            DataTable pointsDT = getChildObjects(new SubScopePointTable(), new PointTable(), subScopeID, SubScopePointTable.Index.Name);
             foreach (DataRow row in pointsDT.Rows)
             { points.Add(getPointFromRow(row, isTypical)); }
 
@@ -668,11 +668,11 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             var outScope = new ObservableCollection<INetworkConnectable>();
 
-            DataTable dt = getChildObjects(new NetworkConnectionChildrenTable(), new ControllerTable(), connectionID);
+            DataTable dt = getChildObjects(new NetworkConnectionChildrenTable(), new ControllerTable(), connectionID, NetworkConnectionChildrenTable.Index.Name);
             foreach (DataRow row in dt.Rows)
             { outScope.Add(getControllerPlaceholderFromRow(row, isTypical)); }
 
-            dt = getChildObjects(new NetworkConnectionChildrenTable(), new SubScopeTable(), connectionID);
+            dt = getChildObjects(new NetworkConnectionChildrenTable(), new SubScopeTable(), connectionID, NetworkConnectionChildrenTable.Index.Name);
             foreach (DataRow row in dt.Rows)
             { outScope.Add(getPlaceholderSubScopeFromRow(row, isTypical)); }
 
@@ -852,7 +852,7 @@ namespace EstimatingUtilitiesLibrary.Database
         static private ObservableCollection<TECMisc> getMiscInBid(Guid guid)
         {
             ObservableCollection<TECMisc> misc = new ObservableCollection<TECMisc>();
-            DataTable miscDT = getChildObjects(new BidMiscTable(), new MiscTable(), guid);
+            DataTable miscDT = getChildObjects(new BidMiscTable(), new MiscTable(), guid, BidMiscTable.Index.Name);
             foreach (DataRow row in miscDT.Rows)
             {
                 misc.Add(getMiscFromRow(row, false));
