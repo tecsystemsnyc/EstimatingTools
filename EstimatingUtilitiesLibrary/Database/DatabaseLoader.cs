@@ -339,7 +339,7 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             return associatedCosts;
         }
-        static private TECLabeled getLocationInLocated(Guid ScopeID)
+        static private TECLocation getLocationInLocated(Guid ScopeID)
         {
             var tables = DatabaseHelper.TableNames(SQLiteDB);
             if (tables.Contains(LocationTable.TableName))
@@ -467,9 +467,9 @@ namespace EstimatingUtilitiesLibrary.Database
             { subScope.Add(getSubScopeFromRow(row, false)); }
             return subScope;
         }
-        static private ObservableCollection<TECLabeled> getAllLocations()
+        static private ObservableCollection<TECLocation> getAllLocations()
         {
-            ObservableCollection<TECLabeled> locations = new ObservableCollection<TECLabeled>();
+            ObservableCollection<TECLocation> locations = new ObservableCollection<TECLocation>();
             DataTable locationsDT = SQLiteDB.GetDataFromTable(LocationTable.TableName);
             foreach (DataRow row in locationsDT.Rows)
             { locations.Add(getLocationFromRow(row)); }
@@ -1132,10 +1132,10 @@ namespace EstimatingUtilitiesLibrary.Database
             assignValuePropertiesFromTable(manufacturer, new ManufacturerTable(), row);
             return manufacturer;
         }
-        private static TECLabeled getLocationFromRow(DataRow row)
+        private static TECLocation getLocationFromRow(DataRow row)
         {
             Guid locationID = new Guid(row[LocationTable.ID.Name].ToString());
-            var location = new TECLabeled(locationID);
+            TECLocation location = new TECLocation(locationID);
             assignValuePropertiesFromTable(location, new LocationTable(), row);
             return location;
         }
@@ -1345,10 +1345,10 @@ namespace EstimatingUtilitiesLibrary.Database
             TECCost associatedCost = new TECCost(guid, CostType.TEC);
             return associatedCost;
         }
-        private static TECLabeled getPlaceholderLocationFromRow(DataRow row)
+        private static TECLocation getPlaceholderLocationFromRow(DataRow row)
         {
             Guid guid = new Guid(row[LocatedLocationTable.LocationID.Name].ToString());
-            TECLabeled location = new TECLabeled(guid);
+            TECLocation location = new TECLocation(guid);
             return location;
         }
         private static TECDevice getPlaceholderSubScopeDeviceFromRow(DataRow row)

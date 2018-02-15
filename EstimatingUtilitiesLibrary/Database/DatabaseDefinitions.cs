@@ -616,7 +616,8 @@ namespace EstimatingUtilitiesLibrary.Database
         public static Type ObjectType = typeof(TECLabeled);
 
         public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField Name = new TableField("Label", "TEXT", ObjectType.GetProperty("Label"));
+        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name")); 
+        public static TableField Label = new TableField("Label", "TEXT", ObjectType.GetProperty("Label"));
 
         private List<TableField> primaryKeys = new List<TableField>() {
             ID
@@ -628,7 +629,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             ID,
-            Name
+            Name,
+            Label
         };
         private List<string> propertyNames = new List<string>()
         {
