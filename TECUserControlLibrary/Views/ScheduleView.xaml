@@ -42,7 +42,14 @@
                     Margin="2"/>
         </Grid>
         <ListView ItemsSource="{Binding Schedule.Tables}"
-                  Grid.Row="1">
+                  Grid.Row="1"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  VerticalContentAlignment="Top">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
