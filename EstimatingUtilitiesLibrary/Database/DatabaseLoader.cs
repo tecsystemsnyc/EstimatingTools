@@ -1532,10 +1532,14 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 throw new Exception("Child object table must haveone primary key");
             }
-            string command = string.Format("select {0} from {1} where {2} in (select {3} from {4} where {5} = '{6}'{7})",
-                DatabaseHelper.AllFieldsInTableString(childTable), childTable.NameString, childTable.PrimaryKeys[0].Name,
-                relationTable.PrimaryKeys[1].Name, relationTable.NameString,
-                relationTable.PrimaryKeys[0].Name, parentID.ToString(),
+            string command = string.Format("select {0} from {1} join {2} on {3} = {4} AND {5} = '{6}' {7}",
+                DatabaseHelper.AllFieldsInTableString(childTable),
+                childTable.NameString,
+                relationTable.NameString,
+                childTable.PrimaryKeys[0].Name,
+                relationTable.PrimaryKeys[1].Name,
+                relationTable.PrimaryKeys[0].Name,
+                parentID.ToString(),
                 orderString);
             return SQLiteDB.GetDataFromCommand(command);
         }

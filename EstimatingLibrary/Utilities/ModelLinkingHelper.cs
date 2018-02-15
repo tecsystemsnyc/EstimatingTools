@@ -92,34 +92,7 @@ namespace EstimatingLibrary.Utilities
 
             return needsSave;
         }
-
-        private static void linkSchedule(TECBid bid)
-        {
-            foreach(TECScheduleTable table in bid.Schedule.Tables)
-            {
-                foreach(TECScheduleItem item in table.Items)
-                {
-                    if (item.Scope == null)
-                        break;
-                    foreach(TECTypical typical in bid.Systems)
-                    {
-                        bool found = false;
-                        foreach (TECScope obj in typical.PropertyObjects.Objects.Where(thing => thing is TECScope))
-                        {
-                            if(obj.Guid == item.Scope.Guid)
-                            {
-                                item.Scope = obj;
-                                found = true;
-                                break;
-                            }
-                        }
-                        if (found)
-                            break;
-                    }
-                }
-            }
-        }
-
+        
         public static bool LinkTemplates(TECTemplates templates, Dictionary<Guid, List<Guid>> templateReferences)
         {
             bool needsSave = false;
@@ -684,7 +657,34 @@ namespace EstimatingLibrary.Utilities
             }
             subScope.Devices = replacements;
         }
-        
+
+        private static void linkSchedule(TECBid bid)
+        {
+            foreach (TECScheduleTable table in bid.Schedule.Tables)
+            {
+                foreach (TECScheduleItem item in table.Items)
+                {
+                    if (item.Scope == null)
+                        break;
+                    foreach (TECTypical typical in bid.Systems)
+                    {
+                        bool found = false;
+                        foreach (TECScope obj in typical.PropertyObjects.Objects.Where(thing => thing is TECScope))
+                        {
+                            if (obj.Guid == item.Scope.Guid)
+                            {
+                                item.Scope = obj;
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (found)
+                            break;
+                    }
+                }
+            }
+        }
+
         private static void linkTemplateReferences(TECTemplates templates, Dictionary<Guid, List<Guid>> templateReferences)
         {
             List<TECSubScope> allSubScope = new List<TECSubScope>();

@@ -48,7 +48,7 @@
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="25"/>
-                            <RowDefinition Height="Auto" MinHeight="100"/>
+                            <RowDefinition Height="Auto" MinHeight="80"/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="{Binding Name}"
                                    Foreground="Black"/>
