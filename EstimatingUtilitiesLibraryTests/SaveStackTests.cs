@@ -422,7 +422,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SystemEquipmentTable.SystemID.Name] = system.Guid.ToString();
             data[SystemEquipmentTable.EquipmentID.Name] = equip.Guid.ToString();
-            data[SystemEquipmentTable.ScopeIndex.Name] = "0";
+            data[SystemEquipmentTable.Index.Name] = "0";
 
             expectedItems.Add(new UpdateItem(Change.Add, SystemEquipmentTable.TableName, data));
 
@@ -464,7 +464,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SystemEquipmentTable.SystemID.Name] = instance.Guid.ToString();
             data[SystemEquipmentTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
-            data[SystemEquipmentTable.ScopeIndex.Name] = "0";
+            data[SystemEquipmentTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemEquipmentTable.TableName, data));
             data = new Dictionary<string, string>();
             data[EquipmentTable.ID.Name] = equip.Guid.ToString();
@@ -474,7 +474,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SystemEquipmentTable.SystemID.Name] = typical.Guid.ToString();
             data[SystemEquipmentTable.EquipmentID.Name] = equip.Guid.ToString();
-            data[SystemEquipmentTable.ScopeIndex.Name] = "0";
+            data[SystemEquipmentTable.Index.Name] = "0";
 
             expectedItems.Add(new UpdateItem(Change.Add, SystemEquipmentTable.TableName, data));
             
@@ -522,7 +522,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SystemEquipmentTable.SystemID.Name] = instance.Guid.ToString();
             data[SystemEquipmentTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
-            data[SystemEquipmentTable.ScopeIndex.Name] = "0";
+            data[SystemEquipmentTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemEquipmentTable.TableName, data));
             
             data = new Dictionary<string, string>();
@@ -564,7 +564,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[EquipmentSubScopeTable.EquipmentID.Name] = equipment.Guid.ToString();
             data[EquipmentSubScopeTable.SubScopeID.Name] = subScope.Guid.ToString();
-            data[EquipmentSubScopeTable.ScopeIndex.Name] = "0";
+            data[EquipmentSubScopeTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, EquipmentSubScopeTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
@@ -603,7 +603,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[EquipmentSubScopeTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
             data[EquipmentSubScopeTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
-            data[EquipmentSubScopeTable.ScopeIndex.Name] = "0";
+            data[EquipmentSubScopeTable.Index.Name] = "0";
 
             expectedItems.Add(new UpdateItem(Change.Add, EquipmentSubScopeTable.TableName, data));
             data = new Dictionary<string, string>();
@@ -614,7 +614,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[EquipmentSubScopeTable.EquipmentID.Name] = system.Equipment[0].Guid.ToString();
             data[EquipmentSubScopeTable.SubScopeID.Name] = subScope.Guid.ToString();
-            data[EquipmentSubScopeTable.ScopeIndex.Name] = "0";
+            data[EquipmentSubScopeTable.Index.Name] = "0";
 
             expectedItems.Add(new UpdateItem(Change.Add, EquipmentSubScopeTable.TableName, data));
 
@@ -669,13 +669,13 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[EquipmentSubScopeTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
             data[EquipmentSubScopeTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
-            data[EquipmentSubScopeTable.ScopeIndex.Name] = "0";
+            data[EquipmentSubScopeTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, EquipmentSubScopeTable.TableName, data));
             
             data = new Dictionary<string, string>();
             data[SystemEquipmentTable.SystemID.Name] = instance.Guid.ToString();
             data[SystemEquipmentTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
-            data[SystemEquipmentTable.ScopeIndex.Name] = "0";
+            data[SystemEquipmentTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemEquipmentTable.TableName, data));
             
             data = new Dictionary<string, string>();
@@ -854,13 +854,13 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[EquipmentSubScopeTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
             data[EquipmentSubScopeTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
-            data[EquipmentSubScopeTable.ScopeIndex.Name] = "0";
+            data[EquipmentSubScopeTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, EquipmentSubScopeTable.TableName, data));
             
             data = new Dictionary<string, string>();
             data[SystemEquipmentTable.SystemID.Name] = instance.Guid.ToString();
             data[SystemEquipmentTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
-            data[SystemEquipmentTable.ScopeIndex.Name] = "0";
+            data[SystemEquipmentTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemEquipmentTable.TableName, data));
             
             data = new Dictionary<string, string>();
@@ -897,7 +897,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopeDeviceTable.SubScopeID.Name] = subScope.Guid.ToString();
             data[SubScopeDeviceTable.DeviceID.Name] = device.Guid.ToString();
             data[SubScopeDeviceTable.Quantity.Name] = "1";
-            data[SubScopeDeviceTable.ScopeIndex.Name] = "0";
+            data[SubScopeDeviceTable.Index.Name] = "0";
             UpdateItem expectedItem = new UpdateItem(Change.Add, SubScopeDeviceTable.TableName, data);
             int expectedCount = 1;
 
@@ -930,13 +930,13 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopeDeviceTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
             data[SubScopeDeviceTable.DeviceID.Name] = device.Guid.ToString();
             data[SubScopeDeviceTable.Quantity.Name] = "1";
-            data[SubScopeDeviceTable.ScopeIndex.Name] = "0";
+            data[SubScopeDeviceTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeDeviceTable.TableName, data));
             data = new Dictionary<string, string>();
             data[SubScopeDeviceTable.SubScopeID.Name] = system.Equipment[0].SubScope[0].Guid.ToString();
             data[SubScopeDeviceTable.DeviceID.Name] = device.Guid.ToString();
             data[SubScopeDeviceTable.Quantity.Name] = "1";
-            data[SubScopeDeviceTable.ScopeIndex.Name] = "0";
+            data[SubScopeDeviceTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeDeviceTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
@@ -994,20 +994,20 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopeDeviceTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
             data[SubScopeDeviceTable.DeviceID.Name] = device.Guid.ToString();
             data[SubScopeDeviceTable.Quantity.Name] = "1";
-            data[SubScopeDeviceTable.ScopeIndex.Name] = "0";
+            data[SubScopeDeviceTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeDeviceTable.TableName, data));
             
             data = new Dictionary<string, string>();
             data[EquipmentSubScopeTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
             data[EquipmentSubScopeTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
-            data[EquipmentSubScopeTable.ScopeIndex.Name] = "0";
+            data[EquipmentSubScopeTable.Index.Name] = "0";
 
             expectedItems.Add(new UpdateItem(Change.Add, EquipmentSubScopeTable.TableName, data));
             
             data = new Dictionary<string, string>();
             data[SystemEquipmentTable.SystemID.Name] = instance.Guid.ToString();
             data[SystemEquipmentTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
-            data[SystemEquipmentTable.ScopeIndex.Name] = "0";
+            data[SystemEquipmentTable.Index.Name] = "0";
 
             expectedItems.Add(new UpdateItem(Change.Add, SystemEquipmentTable.TableName, data));
             
@@ -1046,7 +1046,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopeDeviceTable.SubScopeID.Name] = subScope.Guid.ToString();
             data[SubScopeDeviceTable.DeviceID.Name] = valve.Guid.ToString();
             data[SubScopeDeviceTable.Quantity.Name] = "1";
-            data[SubScopeDeviceTable.ScopeIndex.Name] = "0";
+            data[SubScopeDeviceTable.Index.Name] = "0";
             UpdateItem expectedItem = new UpdateItem(Change.Add, SubScopeDeviceTable.TableName, data);
             int expectedCount = 1;
 
@@ -1080,13 +1080,13 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopeDeviceTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
             data[SubScopeDeviceTable.DeviceID.Name] = valve.Guid.ToString();
             data[SubScopeDeviceTable.Quantity.Name] = "1";
-            data[SubScopeDeviceTable.ScopeIndex.Name] = "0";
+            data[SubScopeDeviceTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeDeviceTable.TableName, data));
             data = new Dictionary<string, string>();
             data[SubScopeDeviceTable.SubScopeID.Name] = system.Equipment[0].SubScope[0].Guid.ToString();
             data[SubScopeDeviceTable.DeviceID.Name] = valve.Guid.ToString();
             data[SubScopeDeviceTable.Quantity.Name] = "1";
-            data[SubScopeDeviceTable.ScopeIndex.Name] = "0";
+            data[SubScopeDeviceTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeDeviceTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
@@ -1146,20 +1146,20 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopeDeviceTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
             data[SubScopeDeviceTable.DeviceID.Name] = valve.Guid.ToString();
             data[SubScopeDeviceTable.Quantity.Name] = "1";
-            data[SubScopeDeviceTable.ScopeIndex.Name] = "0";
+            data[SubScopeDeviceTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeDeviceTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[EquipmentSubScopeTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
             data[EquipmentSubScopeTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
-            data[EquipmentSubScopeTable.ScopeIndex.Name] = "0";
+            data[EquipmentSubScopeTable.Index.Name] = "0";
 
             expectedItems.Add(new UpdateItem(Change.Add, EquipmentSubScopeTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[SystemEquipmentTable.SystemID.Name] = instance.Guid.ToString();
             data[SystemEquipmentTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
-            data[SystemEquipmentTable.ScopeIndex.Name] = "0";
+            data[SystemEquipmentTable.Index.Name] = "0";
 
             expectedItems.Add(new UpdateItem(Change.Add, SystemEquipmentTable.TableName, data));
 

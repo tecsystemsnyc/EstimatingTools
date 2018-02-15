@@ -26,7 +26,7 @@ namespace EstimateBuilder.MVVM
             ItemizedSummaryVM = new ItemizedSummaryVM(bid, watcher);
             MaterialSummaryVM = new MaterialSummaryVM(bid, watcher);
             RiserVM = new RiserVM(bid, watcher);
-            ScheduleVM = new ScheduleVM(bid.Schedule);
+            ScheduleVM = new ScheduleVM(bid, watcher);
         }
 
         public void Refresh(TECBid bid, TECTemplates templates, ChangeWatcher watcher, TECEstimator estimate)
@@ -38,7 +38,7 @@ namespace EstimateBuilder.MVVM
             ItemizedSummaryVM.Refresh(bid, watcher);
             MaterialSummaryVM.Refresh(bid, watcher);
             RiserVM.Refresh(bid, watcher);
-            ScheduleVM.Refresh(bid.Schedule);
+            ScheduleVM.Refresh(bid, watcher);
         }
     }
 }

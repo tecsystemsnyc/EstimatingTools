@@ -51,7 +51,7 @@ namespace TECUserControlLibraryTests
                 .Setup(x => x.Show(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<MessageBoxButton>(), It.IsAny<MessageBoxImage>()))
                 .Returns(MessageBoxResult.Yes);
 
-            DeleteDeviceVM vm = new DeleteDeviceVM(dev, templates);
+            DeleteEndDeviceVM vm = new DeleteEndDeviceVM(dev, templates);
             vm.messageBox = mockMessageBox.Object;
             vm.DeleteCommand.Execute(null);
 
@@ -98,7 +98,7 @@ namespace TECUserControlLibraryTests
                 .Setup(x => x.Show(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<MessageBoxButton>(), It.IsAny<MessageBoxImage>()))
                 .Returns(MessageBoxResult.No);
 
-            DeleteDeviceVM vm = new DeleteDeviceVM(dev, templates);
+            DeleteEndDeviceVM vm = new DeleteEndDeviceVM(dev, templates);
             vm.messageBox = mockMessageBox.Object;
             vm.DeleteCommand.Execute(null);
 

@@ -108,6 +108,7 @@ namespace EstimatingLibrary.Utilities
                         {
                             if(obj.Guid == item.Scope.Guid)
                             {
+                                item.Scope = obj;
                                 found = true;
                                 break;
                             }
