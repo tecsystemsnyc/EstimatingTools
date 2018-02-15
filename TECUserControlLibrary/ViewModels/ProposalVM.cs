@@ -25,6 +25,7 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         public RelayCommand<TECScopeBranch> AddScopeBranchCommand { get; private set; }
+        public RelayCommand<TECSystem> AddSystemNoteCommand { get; private set; }
         public RelayCommand AddNoteCommand { get; private set; }
         public RelayCommand AddExclusionCommand { get; private set; }
 
@@ -34,6 +35,12 @@ namespace TECUserControlLibrary.ViewModels
             AddScopeBranchCommand = new RelayCommand<TECScopeBranch>(addScopBranchExecute);
             AddNoteCommand = new RelayCommand(addNoteExecute);
             AddExclusionCommand = new RelayCommand(addExclusionExecute);
+            AddSystemNoteCommand = new RelayCommand<TECSystem>(addSystemNoteExecute);
+        }
+
+        private void addSystemNoteExecute(TECSystem obj)
+        {
+            obj.ScopeBranches.Add(new TECScopeBranch(obj.IsTypical));
         }
 
         private void addNoteExecute()

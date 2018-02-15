@@ -93,6 +93,10 @@
                                 <views:ProposalView
                                 ViewModel="{Binding ProposalVM}"/>
                             </TabItem>
+                            <TabItem Header="Schedule">
+                                <views:ScheduleView
+                                    ViewModel="{Binding ScheduleVM}"/>
+                            </TabItem>
                             
                         </TabControl>
                         <views:StatusBarView ViewModel="{Binding ElementName=mainWindow, Path=DataContext.StatusBarVM}"

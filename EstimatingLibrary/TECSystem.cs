@@ -291,9 +291,9 @@ namespace EstimatingLibrary
         
         #region Event Handlers
         protected virtual void handleCollectionChanged(object sender,
-            System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
+            NotifyCollectionChangedEventArgs e, string propertyName)
         {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            if (e.Action == NotifyCollectionChangedAction.Add)
             {
                 CostBatch costs = new CostBatch();
                 int pointNum = 0;
@@ -319,7 +319,7 @@ namespace EstimatingLibrary
                     notifyPointChanged(pointNum);
                 }
             }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
                 CostBatch costs = new CostBatch();
                 int pointNum = 0;
@@ -346,7 +346,7 @@ namespace EstimatingLibrary
                     notifyPointChanged(pointNum * -1);
                 }
             }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
+            else if (e.Action == NotifyCollectionChangedAction.Move)
             {
                 notifyTECChanged(Change.Edit, propertyName, this, sender);
             }
