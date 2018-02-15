@@ -26,7 +26,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECTypical> _systems;
         private ObservableCollection<TECLabeled> _notes;
         private ObservableCollection<TECLabeled> _exclusions;
-        private ObservableCollection<TECLabeled> _locations;
+        private ObservableCollection<TECLocation> _locations;
         private ObservableCollection<TECController> _controllers;
         private ObservableCollection<TECMisc> _miscCosts;
         private ObservableCollection<TECPanel> _panels;
@@ -174,16 +174,14 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "Exclusions", this, value, old);
             }
         }
-        public ObservableCollection<TECLabeled> Locations
+        public ObservableCollection<TECLocation> Locations
         {
             get { return _locations; }
             set
             {
                 var old = Locations;
-                Locations.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "Locations");
                 Locations.CollectionChanged -= locationsCollectionChanged;
                 _locations = value;
-                Locations.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Locations");
                 Locations.CollectionChanged += locationsCollectionChanged;
                 notifyCombinedChanged(Change.Edit, "Locations", this, value, old);
             }
@@ -258,7 +256,7 @@ namespace EstimatingLibrary
             _systems = new ObservableCollection<TECTypical>();
             _notes = new ObservableCollection<TECLabeled>();
             _exclusions = new ObservableCollection<TECLabeled>();
-            _locations = new ObservableCollection<TECLabeled>();
+            _locations = new ObservableCollection<TECLocation>();
             _controllers = new ObservableCollection<TECController>();
             _miscCosts = new ObservableCollection<TECMisc>();
             _panels = new ObservableCollection<TECPanel>();
@@ -396,6 +394,7 @@ namespace EstimatingLibrary
         }
         private void locationsCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
+            collectionChanged(sender, e, "Locations");
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 foreach (TECLabeled location in e.OldItems)
