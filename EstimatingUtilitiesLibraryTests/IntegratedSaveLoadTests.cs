@@ -2007,8 +2007,8 @@ namespace Tests
             //Act
             int expectedNumLocations = bid.Locations.Count;
 
-            TECLabeled expectedLocation = null;
-            foreach (TECLabeled loc in bid.Locations)
+            TECLocation expectedLocation = null;
+            foreach (TECLocation loc in bid.Locations)
             {
                 if (loc.Label == "Cellar")
                 {

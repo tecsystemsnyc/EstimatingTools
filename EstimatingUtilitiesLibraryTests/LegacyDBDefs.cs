@@ -835,7 +835,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
 
         public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
         public static TableField BidID = new TableField("BidID", "TEXT", BidType.GetProperty("Guid"));
-        public static TableField Index = new TableField("Index", "INTEGER", Helpers.GetProperty("Index"));
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>()
         {
@@ -858,7 +858,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
 
         public static TableField SystemID = new TableField("SystemID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField EquipmentID = new TableField("EquipmentID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField Index = new TableField("Index", "INTEGER", HelperType.GetProperty("Index"));
+        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             SystemID,
@@ -881,7 +881,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
 
         public static TableField EquipmentID = new TableField("EquipmentID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField SubScopeID = new TableField("SubScopeID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField Index = new TableField("Index", "INTEGER", HelperType.GetProperty("Index"));
+        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             EquipmentID,
@@ -905,7 +905,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         public static TableField SubScopeID = new TableField("SubScopeID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField DeviceID = new TableField("DeviceID", "TEXT", ReferenceType.GetProperty("Guid"));
         public static TableField Quantity = new TableField("Quantity", "INTEGER", HelperType.GetProperty("Quantity"));
-        public static TableField Index = new TableField("Index", "INTEGER", HelperType.GetProperty("Index"));
+        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"));
 
         public static new List<TableField> PrimaryKey = new List<TableField>() {
             SubScopeID,
