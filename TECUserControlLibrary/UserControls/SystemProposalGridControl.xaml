@@ -36,9 +36,20 @@
                     <i:Interaction.Behaviors>
                         <utilities:BubbleScrollEvent/>
                     </i:Interaction.Behaviors>
-                    <Label Content="Notes" FontSize="10"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="40"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Notes" FontSize="10"/>
+                        <Button Content="Add" Command="{Binding Data.AddSystemNoteCommand, Source={StaticResource proxy}}"
+                                CommandParameter="{Binding}"
+                                Grid.Column="1"/>
+
+                    </Grid>
                     <local:ScopeBranchAsNoteGridControl ScopeTreeSource="{Binding ScopeBranches}"
-                                                    Margin="30, 0, 0, 0"/>
+                                                        Margin="30, 0, 0, 0"
+                                                        AddCommand="{Binding Data.AddScopeBranchCommand, Source={StaticResource proxy}}"/>
                 </StackPanel>
             </DataTemplate>
         </DataGrid.RowDetailsTemplate>

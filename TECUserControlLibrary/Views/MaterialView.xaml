@@ -44,7 +44,12 @@
     </UserControl.Resources>
     <Grid>
         <Grid.Triggers>
-            <EventTrigger RoutedEvent="views:DeleteDeviceView.Done">
+            <EventTrigger RoutedEvent="views:DeleteEndDeviceView.Done">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource modalOut}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="views:ReplaceActuatorView.Done">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalOut}"/>
                 </EventTrigger.Actions>
@@ -60,6 +65,7 @@
             </Grid.RowDefinitions>
             <Grid.Resources>
                 <ResourceDictionary>
+                    <!--Devices-->
                     <DataTemplate x:Key="DevicesTemplate">
                         <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
                             <Grid.Resources>
@@ -141,6 +147,7 @@
                             </Grid>
                         </Grid>
                     </DataTemplate>
+                    <!--Valves-->
                     <DataTemplate x:Key="ValveTemplate">
                         <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
                             <Grid.Resources>
@@ -152,6 +159,7 @@
                                 <RowDefinition Height="30"/>
                                 <RowDefinition Height="30"/>
                                 <RowDefinition Height="*"/>
+                                <RowDefinition Height="30"/>
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
                                 <Grid.ColumnDefinitions>
@@ -226,6 +234,20 @@
                                                      DropHandler="{Binding ElementName=materialView, Path=ViewModel}"
                                                          Selected="{Binding SelectedValve}"
                                                      Grid.Row="4"/>
+                            <Grid Grid.Row="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Button Content="Replace Actuator"
+                                        Command="{Binding ElementName=materialView, Path=ViewModel.ReplaceActuatorCommand}"
+                                        Click="Remove_Clicked"/>
+                                <Button Grid.Column="1"
+                                    Content="Delete"
+                                    Command="{Binding ElementName=materialView, Path=ViewModel.DeleteValveCommand}"
+                                    Click="Remove_Clicked"/>
+                                
+                            </Grid>
                         </Grid>
                     </DataTemplate>
                     <DataTemplate x:Key="ConnectionTypeTemplate">
@@ -271,11 +293,11 @@
                                 <TextBlock Text="(Marginal) Plenum Cost:" Grid.Column="0" Margin="5,0,0,0"
                            VerticalAlignment="Center"/>
                                 <TextBox  Grid.Column="1" Margin="2"
-                          Text="{Binding ConnectionTypeCost, StringFormat={}{0:C}}"/>
+                          Text="{Binding ConnectionTypePlenumCost, StringFormat={}{0:C}}"/>
                                 <TextBlock Text="Plenum Labor:" Margin="5,0,0,0"
                            VerticalAlignment="Center" Grid.Column="2"/>
                                 <TextBox  Grid.Column="3" Margin="2"
-                          Text="{Binding ConnectionTypeLabor, StringFormat={}{0} ($/hr)}"/>
+                          Text="{Binding ConnectionTypePlenumLabor, StringFormat={}{0} ($/hr)}"/>
                                 <Button Grid.Column="4"
                         Content="Add" Margin="2"
                         Command="{Binding AddConnectionTypeCommand}"/>
@@ -776,10 +798,13 @@
                     <DropShadowBitmapEffect Color="Black" Direction="320" ShadowDepth="25" Softness="1" 
                                             Opacity="0.5"/>
                 </Border.BitmapEffect>
-                <ContentPresenter Content="{Binding ElementName=materialView, Path=ViewModel.DeleteDeviceVM}">
+                <ContentPresenter Content="{Binding ElementName=materialView, Path=ViewModel.ModalVM}">
                     <ContentPresenter.Resources>
-                        <DataTemplate DataType="{x:Type vms:DeleteDeviceVM}">
-                            <views:DeleteDeviceView ViewModel="{Binding}"/>
+                        <DataTemplate DataType="{x:Type vms:DeleteEndDeviceVM}">
+                            <views:DeleteEndDeviceView ViewModel="{Binding}"/>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type vms:ReplaceActuatorVM}">
+                            <views:ReplaceActuatorView VM="{Binding}"/>
                         </DataTemplate>
                     </ContentPresenter.Resources>
                 </ContentPresenter>

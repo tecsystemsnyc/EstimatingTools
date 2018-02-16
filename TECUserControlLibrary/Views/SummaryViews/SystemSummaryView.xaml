@@ -25,6 +25,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
+            <ColumnDefinition Width="220"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -41,7 +42,8 @@
                 <Label Content="Systems"/>
 
             </Border>
-            <ListView ItemsSource="{Binding Systems}" Grid.Row="1">
+            <ListView ItemsSource="{Binding Systems}" Grid.Row="1"
+                      SelectedItem="{Binding SelectedSystem}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Border BorderThickness="0,0,0,2" BorderBrush="Gray">
@@ -56,7 +58,8 @@
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding Typical.Name, Mode=OneWay}"/>
                                 <TextBlock Text="{Binding Typical.Instances.Count, StringFormat=Qty. {0}, Mode=OneWay}" Grid.Column="1"/>
-                                <TextBlock Text="Unit: " Grid.Column="2" HorizontalAlignment="Right"/>
+                                <TextBlock Text="Unit: " Grid.Column="2" HorizontalAlignment="Right"
+                                           Margin="0"/>
                                 <TextBlock Text="{Binding UnitPrice, StringFormat={}{0:C}, Mode=OneWay}" Grid.Column="3"
                                        HorizontalAlignment="Right"/>
                                 <TextBlock Text="Total: " Grid.Column="4" HorizontalAlignment="Right"/>
@@ -82,7 +85,8 @@
             <Border BorderBrush="Gray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
                 <Label Content="Bid Controllers and Panels"/>
             </Border>
-            <ListView ItemsSource="{Binding Riser}" Grid.Row="1">
+            <ListView ItemsSource="{Binding Riser}" Grid.Row="1"
+                      SelectedItem="{Binding SelectedRiser}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Border BorderThickness="0,0,0,2" BorderBrush="Gray">
@@ -114,7 +118,8 @@
 
                 <Label Content="Bid Misc."/>
             </Border>
-            <ListView ItemsSource="{Binding Misc}" Grid.Row="1">
+            <ListView ItemsSource="{Binding Misc}" Grid.Row="1"
+                      SelectedItem="{Binding SelectedMisc}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Border BorderThickness="0,0,0,2" BorderBrush="Gray">
@@ -135,5 +140,17 @@
                        HorizontalAlignment="Right"
                        FontWeight="Bold"/>
         </Grid>
+        <!--Details-->
+        <Border  Grid.Column="2" Grid.RowSpan="2" BorderBrush="DarkGray" BorderThickness="1,0,0,0">
+            <Grid>
+                <ScrollViewer
+                VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Disabled">
+                    <views:ItemizedDetailsView Selected="{Binding Selected}"/>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+            
+        
     </Grid>
 </views:BaseView>

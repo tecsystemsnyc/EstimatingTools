@@ -10,12 +10,16 @@
              mc:Ignorable="d" 
              xmlns:dd="urn:gong-wpf-dragdrop"
              x:Name="systemConnectionsView"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="500" d:DesignWidth="600">
     <UserControl.Resources>
         <Style TargetType="local:SystemConnectionsView">
             <Setter Property="UpdateConnectionVM" Value="{Binding ElementName=systemConnectionsView, Path=ViewModel.UpdateConnectionVM}"/>
         </Style>
-        
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=systemConnectionsView, Path=ViewModel}">
         <Grid.Resources>
@@ -26,8 +30,7 @@
         </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -40,11 +43,11 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition/>
                     <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition/>
+                    <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid.Resources>
@@ -53,62 +56,72 @@
                         <Label Content="{Binding Data.CannotConnectMessage, Source={StaticResource proxy}}"/>
                     </DataTemplate>
                 </Grid.Resources>
-                <Border Grid.ColumnSpan="2" BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
+                <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
                     <TextBlock Text="Controllers" Style="{StaticResource ListHeader}"/>
                 </Border>
                 <listControls:ControllerListControl
                 Source="{Binding Controllers}"
                 SelectedItem="{Binding SelectedController}"
-                    Grid.Row="1"
-                    Grid.ColumnSpan="2"/>
+                    Grid.Row="1"/>
 
-                <Border Grid.Row="2" Grid.ColumnSpan="2" BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
+                <Border Grid.Row="2" BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
                     <TextBlock Text="Unconnected Points" Style="{StaticResource ListHeader}"/>
                 </Border>
 
 
-                <Label Content="Equipment:" Grid.Row="3"/>
-                <ComboBox Grid.Row="3"
-                          Grid.Column="1"
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Equipment:" />
+                <ComboBox Grid.Column="1"
                           ItemsSource="{Binding Equipment}"
                           SelectedItem="{Binding SelectedEquipment}"
                           DisplayMemberPath="Name"
                           Width="Auto"
-                          SelectedIndex="0"
-                          Margin="2"/>
-                <listControls:SubScopeListControl Source="{Binding UnconnectedSubScope}"
+                          Margin="2,0,2,0"
+                          SelectedIndex="0"/>
+            </Grid>
+            <Button Content="Connect All"
+                    Grid.Row="4"
+                    Command="{Binding ConnectAllCommand}"
+                    Margin="2"/>
+
+            <listControls:SubScopeListControl Source="{Binding UnconnectedSubScope}"
                                                   IsDragSource="True"
-                                                  DropHandler="{Binding}" Grid.Row="4" Grid.ColumnSpan="2"
+                                                  DropHandler="{Binding}" Grid.Row="5" 
                                                   DragAdornerTemplate="{StaticResource cannotConnectAdorner}"
                                                   SelectedItem="{Binding SelectedUnconnectedSubScope}"/>
             </Grid>
         
         <!--SubScope Connections-->
-        <Grid Grid.Column="1" Grid.ColumnSpan="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Border BorderThickness="0,0,0,1" Margin="20,0,20,0" BorderBrush="DarkGray">
-                    <Grid>
-                        <TextBlock Text="{Binding SelectedController.Name, StringFormat=Connected to {0}}" HorizontalAlignment="Center"
-                               Visibility="{Binding SelectedController, 
-                    Converter={utilities:NullToCollapsedConverter}}" Style="{StaticResource ListHeader}"/>
-                        <TextBlock Text="Select a Controller to Create Connections" HorizontalAlignment="Center"
-                               Visibility="{Binding SelectedController, 
-                    Converter={utilities:NullToVisibilityConverter}}" Style="{StaticResource ListHeader}"/>
-                    </Grid>
-                </Border>
-                <Button Content="Update All"
-                        Command="{Binding UpdateAllCommand}"
-                        Margin="5"
-                        Visibility="{Binding 
-                    ElementName=systemConnectionsView, 
-                    Path=IsTypical, 
-                    Converter={utilities:BooleanToVisibilityConverter}}"
-                        Grid.Row="1"/>
-                <listControls:SubScopeConnectionListControl
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Border BorderThickness="0,0,0,1" Margin="20,0,20,0" BorderBrush="DarkGray">
+                <Grid>
+                    <TextBlock Text="{Binding SelectedController.Name, StringFormat=Connected to {0}}" HorizontalAlignment="Center"
+                            Visibility="{Binding SelectedController, 
+                Converter={utilities:NullToCollapsedConverter}}" Style="{StaticResource ListHeader}"/>
+                    <TextBlock Text="Select a Controller to Create Connections" HorizontalAlignment="Center"
+                            Visibility="{Binding SelectedController, 
+                Converter={utilities:NullToVisibilityConverter}}" Style="{StaticResource ListHeader}"/>
+                </Grid>
+            </Border>
+            <Button Content="Update All"
+                    Command="{Binding UpdateAllCommand}"
+                    Margin="5"
+                    Visibility="{Binding 
+                ElementName=systemConnectionsView, 
+                Path=IsTypical, 
+                Converter={utilities:BooleanToVisibilityConverter}}"
+                    Grid.Row="1"/>
+            <listControls:SubScopeConnectionListControl
                     Source="{Binding ConnectedSubScope}"
                     ConduitTypes="{Binding ConduitTypes}"
                     UpdateCommand="{Binding UpdateItemCommand}"
@@ -135,6 +148,45 @@
                         </MultiBinding>
                     </listControls:SubScopeConnectionListControl.UpdateButtonVisibility>
                 </listControls:SubScopeConnectionListControl>
+            <Grid Grid.Row="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="55"/>
+                    <ColumnDefinition Width="45"/>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Defaults:" FontWeight="DemiBold"/>
+                <TextBlock Text="Length:" Grid.Column="1"/>
+                <TextBox Text="{Binding DefaultLength}"
+                         Grid.Column="2"
+                         Margin="2"/>
+                <TextBlock Text="Plenum:" Grid.Column="1"
+                           Grid.Row="1"/>
+                <CheckBox IsChecked="{Binding DefaultPlenum}"
+                          Grid.Column="2"
+                          Grid.Row="1"
+                          VerticalAlignment="Center"
+                          HorizontalAlignment="Center"/>
+                <TextBlock Text="Conduit Length:" Grid.Column="3"/>
+                <TextBox Text="{Binding DefaultConduitLength}"
+                         Grid.Column="4" Width="40"
+                         HorizontalAlignment="Left"
+                         Margin="2"/>
+                <TextBlock Text="Conduit Type:" Grid.Column="3"
+                           Grid.Row="1"/>
+                <ComboBox ItemsSource="{Binding ConduitTypes}"
+                          SelectedItem="{Binding DefaultConduitType}"
+                          DisplayMemberPath="Name"
+                            Grid.Column="4"
+                          Grid.Row="1"
+                          Margin="2"/>
+                
             </Grid>
+        </Grid>
     </Grid>
 </UserControl>

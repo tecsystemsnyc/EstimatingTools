@@ -22,10 +22,11 @@ namespace EstimatingLibrary
             get { return _parentConnection; }
             set
             {
-                var old = ParentConnection;
-                _parentConnection = value;
-                raisePropertyChanged("ParentConnection");
-                raisePropertyChanged("NetworkIO");
+                if (ParentConnection != value)
+                {
+                    _parentConnection = value;
+                    raisePropertyChanged("ParentConnection");
+                }
             }
         }
         public ObservableCollection<TECConnection> ChildrenConnections
@@ -34,9 +35,9 @@ namespace EstimatingLibrary
             set
             {
                 var old = ChildrenConnections;
-                ChildrenConnections.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "ChildrenConnections");
+                ChildrenConnections.CollectionChanged -= handleChildrenChanged;
                 _childrenConnections = value;
-                ChildrenConnections.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ChildrenConnections");
+                ChildrenConnections.CollectionChanged += handleChildrenChanged;
                 notifyCombinedChanged(Change.Edit, "ChildrenConnections", this, value, old);
                 raisePropertyChanged("ChildNetworkConnections");
             }
@@ -68,9 +69,9 @@ namespace EstimatingLibrary
             set
             {
                 var old = IOModules;
-                IOModules.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "IOModules");
+                IOModules.CollectionChanged -= handleModulesChanged;
                 _ioModules = value;
-                IOModules.CollectionChanged += (sender, args) => collectionChanged(sender, args, "IOModules");
+                IOModules.CollectionChanged += handleModulesChanged;
                 notifyCombinedChanged(Change.Edit, "IOModules", this, value, old);
             }
         }
@@ -122,8 +123,8 @@ namespace EstimatingLibrary
             _type = type;
             _childrenConnections = new ObservableCollection<TECConnection>();
             _ioModules = new ObservableCollection<TECIOModule>();
-            ChildrenConnections.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ChildrenConnections");
-            IOModules.CollectionChanged += (sender, args) => collectionChanged(sender, args, "IOModules");
+            ChildrenConnections.CollectionChanged += handleChildrenChanged;
+            IOModules.CollectionChanged += handleModulesChanged;
         }
 
         public TECController(TECControllerType type, bool isTypical) : this(Guid.NewGuid(), type, isTypical) { }
@@ -198,14 +199,27 @@ namespace EstimatingLibrary
         {
             return (AvailableNetworkIO.Contains(netConnect.IOType));
         }
-
-        public bool CanConnectSubScope(TECSubScope subScope)
+        
+        private bool canTakeIO(IOCollection collection)
         {
             IOCollection availableIO = getAvailableIO();
             IOCollection potentialIO = getPotentialIO();
-            bool hasIO = availableIO.Contains(subScope.IO);
-            bool canHasIO = potentialIO.Contains(subScope.IO);
+            bool hasIO = availableIO.Contains(collection);
+            bool canHasIO = potentialIO.Contains(collection);
             return hasIO || canHasIO;
+        }
+        public bool CanConnectSubScope(TECSubScope subScope)
+        {
+            return canTakeIO(subScope.IO);
+        }
+        public bool CanConnectSubScope(IEnumerable<TECSubScope> subScope)
+        {
+            IOCollection collection = new IOCollection();
+            foreach(TECSubScope item in subScope)
+            {
+                collection += item.IO;
+            }
+            return canTakeIO(collection);
         }
         public TECSubScopeConnection AddSubScope(TECSubScope subScope)
         {
@@ -285,8 +299,9 @@ namespace EstimatingLibrary
                 TECSubScopeConnection connection = new TECSubScopeConnection(isTypical);
                 connection.ParentController = this;
                 connection.SubScope = subScope;
-                addChildConnection(connection);
                 subScope.Connection = connection;
+                addChildConnection(connection);
+
                 return connection;
             }
         }
@@ -520,6 +535,15 @@ namespace EstimatingLibrary
             {
                 notifyCostChanged(connection.CostBatch * -1);
             }
+        }
+
+        private void handleChildrenChanged(Object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            collectionChanged(sender, e, "ChildrenConnections");
+        }
+        private void handleModulesChanged(Object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            collectionChanged(sender, e, "IOModules");
         }
 
         private IOCollection getTotalIO()

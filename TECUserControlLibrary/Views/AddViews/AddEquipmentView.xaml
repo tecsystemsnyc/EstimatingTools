@@ -23,6 +23,7 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Label Content="Equipment: "/>
@@ -40,7 +41,11 @@
                 <Label Content="Add as Template"/>
                 <CheckBox IsChecked="{Binding ElementName=addEquipmentView, Path=ViewModel.AsReference}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
-            
+            <views:ConnectOnAddView ViewModel="{Binding ElementName=addEquipmentView, Path=ViewModel.ConnectVM}"
+                                    Grid.Row="3" Grid.ColumnSpan="2"
+                                    Visibility="{Binding ElementName=addEquipmentView, Path=ViewModel.ConnectVM,
+                Converter={utilities:NullToCollapsedConverter}}"/>
+
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>

@@ -97,6 +97,10 @@
                                                HardwareItemType="Devices"/>
                 </TabItem>
 
+                <TabItem Visibility="Collapsed">
+                    <local:ValveSummaryView ViewModel="{Binding ValveSummaryVM}"/>
+                </TabItem>
+
                 <!--Controller Summary-->
                 <TabItem Visibility="Collapsed">
                     <local:HardwareSummaryView ViewModel="{Binding ControllerSummaryVM}"

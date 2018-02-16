@@ -1134,6 +1134,104 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+    internal class ScheduleTable : TableBase
+    {
+        public static string TableName = "Schedule";
+        public static Type ScheduleType = typeof(TECSchedule);
+
+        public static TableField ID = new TableField("ID", "TEXT", ScheduleType.GetProperty("Guid"));
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ScheduleType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ID
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Schedule"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class ScheduleTableTable : TableBase
+    {
+        public static string TableName = "ScheduleTable";
+        public static Type ScheduleType = typeof(TECScheduleTable);
+
+        public static TableField ID = new TableField("ID", "TEXT", ScheduleType.GetProperty("Guid"));
+        public static TableField Name = new TableField("Name", "TEXT", ScheduleType.GetProperty("Name"));
+        
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ScheduleType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ID,
+            Name
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Tables"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class ScheduleItemTable : TableBase
+    {
+        public static string TableName = "ScheduleItem";
+        public static Type ScheduleType = typeof(TECScheduleItem);
+
+        public static TableField ID = new TableField("ID", "TEXT", ScheduleType.GetProperty("Guid"));
+        public static TableField Tag = new TableField("Tag", "TEXT", ScheduleType.GetProperty("Tag"));
+        public static TableField Service = new TableField("Service", "TEXT", ScheduleType.GetProperty("Service"));
+        public static TableField Location = new TableField("Location", "TEXT", ScheduleType.GetProperty("Location"));
+        
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ScheduleType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ID,
+            Tag,
+            Service,
+            Location
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Items"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
     #endregion
 
     #region Relationship Tables
@@ -1182,6 +1280,9 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField BidID = new TableField("BidID", "TEXT", BidType.GetProperty("Guid"));
         public static TableField MiscID = new TableField("MiscID", "TEXT", CostType.GetProperty("Guid"));
 
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "MiscCosts", "0");
+
         private List<TableField> primaryKeys = new List<TableField>()
         {
             BidID,
@@ -1196,7 +1297,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             BidID,
-            MiscID
+            MiscID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -1428,6 +1530,9 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField ParentID = new TableField("ParentID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField ChildID = new TableField("ChildID", "TEXT", ReferenceType.GetProperty("Guid"));
 
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "Branches", "0");
+
         private List<TableField> primaryKeys = new List<TableField>() {
             ParentID,
             ChildID
@@ -1440,7 +1545,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             ParentID,
-            ChildID
+            ChildID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -1464,7 +1570,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
         public static TableField BidID = new TableField("BidID", "TEXT", BidType.GetProperty("Guid"));
         public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
-        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "Systems");
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "Systems", "0");
 
         private List<TableField> primaryKeys = new List<TableField>()
         {
@@ -1503,7 +1609,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
         public static TableField SystemID = new TableField("SystemID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField EquipmentID = new TableField("EquipmentID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"), "Equipment");
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"), "Equipment", "0");
 
         private List<TableField> primaryKeys = new List<TableField>() {
             SystemID,
@@ -1518,7 +1624,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             SystemID,
             EquipmentID,
-            ScopeIndex
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -1542,7 +1648,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
         public static TableField EquipmentID = new TableField("EquipmentID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField SubScopeID = new TableField("SubScopeID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"), "SubScope");
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"), "SubScope", "0");
 
         private List<TableField> primaryKeys = new List<TableField>() {
             EquipmentID,
@@ -1557,7 +1663,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             EquipmentID,
             SubScopeID,
-            ScopeIndex
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -1582,7 +1688,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField SubScopeID = new TableField("SubScopeID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField DeviceID = new TableField("DeviceID", "TEXT", ReferenceType.GetProperty("Guid"));
         public static TableField Quantity = new TableField("Quantity", "INTEGER", HelperType.GetProperty("Quantity"), "Devices");
-        public static TableField ScopeIndex = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"), "Devices");
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"), "Devices", "0");
 
         private List<TableField> primaryKeys = new List<TableField>() {
             SubScopeID,
@@ -1598,7 +1704,7 @@ namespace EstimatingUtilitiesLibrary.Database
             SubScopeID,
             DeviceID,
             Quantity,
-            ScopeIndex
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -1621,6 +1727,9 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField SubScopeID = new TableField("SubScopeID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField PointID = new TableField("PointID", "TEXT", ReferenceType.GetProperty("Guid"));
 
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "Points", "0");
+
         private List<TableField> primaryKeys = new List<TableField>() {
             SubScopeID,
             PointID
@@ -1633,7 +1742,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             SubScopeID,
-            PointID
+            PointID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -1944,7 +2054,10 @@ namespace EstimatingUtilitiesLibrary.Database
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ConnectionType.GetProperty("Guid"));
         public static TableField ChildID = new TableField("ChildID", "TEXT", ChildType.GetProperty("Guid"));
-       
+
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "Children", "0");
+
         private List<TableField> primaryKeys = new List<TableField>() {
             ConnectionID,
             ChildID
@@ -1957,7 +2070,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             ConnectionID,
-            ChildID
+            ChildID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -2082,6 +2196,9 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
         public static TableField ControllerID = new TableField("ControllerID", "TEXT", ControllerType.GetProperty("Guid"));
 
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "Controllers", "0");
+
         private List<TableField> primaryKeys = new List<TableField>() {
             SystemID,
             ControllerID
@@ -2094,7 +2211,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             SystemID,
-            ControllerID
+            ControllerID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -2116,6 +2234,9 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
         public static TableField PanelID = new TableField("PanelID", "TEXT", PanelType.GetProperty("Guid"));
 
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "Panels", "0");
+
         private List<TableField> primaryKeys = new List<TableField>() {
             SystemID,
             PanelID
@@ -2128,7 +2249,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             SystemID,
-            PanelID
+            PanelID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -2151,6 +2273,9 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
         public static TableField BranchID = new TableField("BranchID", "TEXT", ScopeBranchType.GetProperty("Guid"));
 
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "ScopeBranches", "0");
+
         private List<TableField> primaryKeys = new List<TableField>() {
             SystemID,
             BranchID
@@ -2163,7 +2288,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             SystemID,
-            BranchID
+            BranchID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -2184,6 +2310,9 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField ParentID = new TableField("ParentID", "TEXT", SystemType.GetProperty("Guid"));
         public static TableField ChildID = new TableField("ChildID", "TEXT", SystemType.GetProperty("Guid"));
 
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "Instances", "0");
+
         private List<TableField> primaryKeys = new List<TableField>() {
             ParentID,
             ChildID
@@ -2196,7 +2325,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             ParentID,
-            ChildID
+            ChildID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -2217,7 +2347,10 @@ namespace EstimatingUtilitiesLibrary.Database
 
         public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
         public static TableField MiscID = new TableField("MiscID", "TEXT", MiscType.GetProperty("Guid"));
-        
+
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "MiscCosts", "0");
+
         private List<TableField> primaryKeys = new List<TableField>() {
             SystemID,
             MiscID
@@ -2230,7 +2363,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             SystemID,
-            MiscID
+            MiscID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -2557,6 +2691,120 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+
+    internal class ScheduleScheduleTableTable : TableBase
+    {
+        public static string TableName = "ScheduleScheduleTable";
+        public static Type ObjectType = typeof(TECSchedule);
+        public static Type ReferenceType = typeof(TECScheduleTable);
+
+        public static TableField ScheduleID = new TableField("ScheduleID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField TableID = new TableField("TableID", "TEXT", ReferenceType.GetProperty("Guid"));
+
+        public static Type HelperType = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"), "Tables", "0");
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ScheduleID,
+            TableID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ScheduleID,
+            TableID,
+            Index
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Tables"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class ScheduleTableScheduleItemTable : TableBase
+    {
+        public static string TableName = "ScheduleScheduleItem";
+        public static Type ObjectType = typeof(TECScheduleTable);
+        public static Type ReferenceType = typeof(TECScheduleItem);
+
+        public static TableField TableID = new TableField("TableID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField ItemID = new TableField("ItemID", "TEXT", ReferenceType.GetProperty("Guid"));
+
+        public static Type HelperType = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"), "Items", "0");
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            TableID,
+            ItemID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            TableID,
+            ItemID,
+            Index
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Items"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class ScheduleItemScopeTable : TableBase
+    {
+        public static string TableName = "ScheduleItemScope";
+        public static Type ObjectType = typeof(TECScheduleItem);
+        public static Type ReferenceType = typeof(TECScope);
+
+        public static TableField ItemID = new TableField("ItemID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField ScopeID = new TableField("ScopeID", "TEXT", ReferenceType.GetProperty("Guid"));
+        
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ItemID,
+            ScopeID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ItemID,
+            ScopeID
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Scope"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
     #endregion
 
     internal static class AllBidTables
@@ -2586,6 +2834,9 @@ namespace EstimatingUtilitiesLibrary.Database
             new IOModuleTable(),
             new ControllerTypeTable(),
             new ValveTable(),
+            new ScheduleTable(),
+            new ScheduleTableTable(),
+            new ScheduleItemTable(),
 
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -2623,7 +2874,10 @@ namespace EstimatingUtilitiesLibrary.Database
             new SubScopeConnectionChildrenTable(),
             new NetworkConnectionChildrenTable(),
             new NetworkConnectionConnectionTypeTable(),
-            new ValveActuatorTable()
+            new ValveActuatorTable(),
+            new ScheduleScheduleTableTable(),
+            new ScheduleTableScheduleItemTable(),
+            new ScheduleItemScopeTable()
             };
     }
 
@@ -2724,6 +2978,9 @@ namespace EstimatingUtilitiesLibrary.Database
             new IOTable(),
             new ControllerTypeTable(),
             new ValveTable(),
+            new ScheduleTable(),
+            new ScheduleTableTable(),
+            new ScheduleItemTable(),
 
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -2767,7 +3024,10 @@ namespace EstimatingUtilitiesLibrary.Database
             new TemplatesControllerTable(),
             new TemplatesMiscCostTable(),
             new TemplatesPanelTable(),
-            new TemplateReferenceTable()
+            new TemplateReferenceTable(),
+            new ScheduleScheduleTableTable(),
+            new ScheduleTableScheduleItemTable(),
+            new ScheduleItemScopeTable()
         };
     }
 

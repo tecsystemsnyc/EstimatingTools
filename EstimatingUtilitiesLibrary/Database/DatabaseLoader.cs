@@ -68,6 +68,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
             bid.Parameters = getBidParameters(bid);
             bid.ExtraLabor = getExtraLabor(bid);
+            bid.Schedule = getSchedule(bid);
             bid.ScopeTree = getBidScopeBranches();
             bid.Systems = getAllSystemsInBid(bid.Guid);
             bid.Locations = getAllLocations();
@@ -82,6 +83,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
             return (bid, needsSave);
         }
+        
         static private (TECTemplates templates, bool needsUpdate) loadTemplates()
         {
             TECTemplates templates = new TECTemplates();
@@ -248,7 +250,7 @@ namespace EstimatingUtilitiesLibrary.Database
         static private ObservableCollection<TECPanel> getPanelsInSystem(Guid guid, bool isTypical)
         {
             ObservableCollection<TECPanel> panels = new ObservableCollection<TECPanel>();
-            DataTable dt = getChildObjects(new SystemPanelTable(), new PanelTable(), guid);
+            DataTable dt = getChildObjects(new SystemPanelTable(), new PanelTable(), guid, SystemPanelTable.Index.Name);
             foreach (DataRow row in dt.Rows)
             { panels.Add(getPanelFromRow(row, isTypical)); }
 
@@ -258,7 +260,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             ObservableCollection<TECEquipment> equipment = new ObservableCollection<TECEquipment>();
             DataTable equipmentDT = getChildObjects(new SystemEquipmentTable(), new EquipmentTable(),
-                systemID, SystemEquipmentTable.ScopeIndex.Name);
+                systemID, SystemEquipmentTable.Index.Name);
             foreach (DataRow row in equipmentDT.Rows)
             { equipment.Add(getEquipmentFromRow(row, isTypical)); }
             return equipment;
@@ -266,7 +268,7 @@ namespace EstimatingUtilitiesLibrary.Database
         static private ObservableCollection<TECSystem> getChildrenSystems(Guid parentID)
         {
             ObservableCollection<TECSystem> children = new ObservableCollection<TECSystem>();
-            DataTable childDT = getChildObjects(new SystemHierarchyTable(), new SystemTable(), parentID);
+            DataTable childDT = getChildObjects(new SystemHierarchyTable(), new SystemTable(), parentID, SystemHierarchyTable.Index.Name);
             foreach (DataRow row in childDT.Rows)
             {
                 children.Add(getSystemFromRow(row));
@@ -277,7 +279,7 @@ namespace EstimatingUtilitiesLibrary.Database
         static private ObservableCollection<TECController> getControllersInSystem(Guid guid, bool isTypical)
         {
             ObservableCollection<TECController> controllers = new ObservableCollection<TECController>();
-            DataTable controllerDT = getChildObjects(new SystemControllerTable(), new ControllerTable(), guid);
+            DataTable controllerDT = getChildObjects(new SystemControllerTable(), new ControllerTable(), guid, SystemControllerTable.Index.Name);
             foreach (DataRow row in controllerDT.Rows)
             {
                 controllers.Add(getControllerFromRow(row, isTypical));
@@ -308,7 +310,7 @@ namespace EstimatingUtilitiesLibrary.Database
         static private ObservableCollection<TECMisc> getMiscInSystem(Guid guid, bool isTypical)
         {
             ObservableCollection<TECMisc> misc = new ObservableCollection<TECMisc>();
-            DataTable miscDT = getChildObjects(new SystemMiscTable(), new MiscTable(), guid);
+            DataTable miscDT = getChildObjects(new SystemMiscTable(), new MiscTable(), guid, SystemMiscTable.Index.Name);
             foreach (DataRow row in miscDT.Rows)
             {
                 misc.Add(getMiscFromRow(row, isTypical));
@@ -403,6 +405,24 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             return getExtraLaborFromRow(DT.Rows[0]);
         }
+        private static TECSchedule getSchedule(TECBid bid)
+        {
+            DataTable DT = SQLiteDB.GetDataFromTable(ScheduleTable.TableName);
+            if (DT.Rows.Count > 1)
+            {
+                logger.Error("Multiple rows found in schedule table. Using first found.");
+            }
+            else if (DT.Rows.Count < 1)
+            {
+                logger.Error("Schedule not found in database. Creating a new schedule.");
+                return new TECSchedule();
+            }
+            Guid guid = new Guid(DT.Rows[0][ScheduleTable.ID.Name].ToString());
+            List<TECScheduleTable> tables = getTablesForSchedule(guid);
+            TECSchedule schedule = new TECSchedule(guid, tables);
+            return schedule;
+        }
+        
         static private ObservableCollection<TECScopeBranch> getBidScopeBranches()
         {
             ObservableCollection<TECScopeBranch> mainBranches = new ObservableCollection<TECScopeBranch>();
@@ -425,7 +445,7 @@ namespace EstimatingUtilitiesLibrary.Database
         static private ObservableCollection<TECScopeBranch> getChildBranchesInBranch(Guid parentID, bool isTypical)
         {
             ObservableCollection<TECScopeBranch> childBranches = new ObservableCollection<TECScopeBranch>();
-            DataTable childBranchDT = getChildObjects(new ScopeBranchHierarchyTable(), new ScopeBranchTable(), parentID);
+            DataTable childBranchDT = getChildObjects(new ScopeBranchHierarchyTable(), new ScopeBranchTable(), parentID, ScopeBranchHierarchyTable.Index.Name);
             foreach (DataRow row in childBranchDT.Rows)
             {
                 childBranches.Add(getScopeBranchFromRow(row, isTypical));
@@ -487,7 +507,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             ObservableCollection<TECSubScope> subScope = new ObservableCollection<TECSubScope>();
             DataTable subScopeDT = getChildObjects(new EquipmentSubScopeTable(), new SubScopeTable(),
-                equipmentID, EquipmentSubScopeTable.ScopeIndex.Name);
+                equipmentID, EquipmentSubScopeTable.Index.Name);
             foreach (DataRow row in subScopeDT.Rows)
             { subScope.Add(getSubScopeFromRow(row, isTypical)); }
             return subScope;
@@ -513,7 +533,7 @@ namespace EstimatingUtilitiesLibrary.Database
         static private ObservableCollection<TECPoint> getPointsInSubScope(Guid subScopeID, bool isTypical)
         {
             ObservableCollection<TECPoint> points = new ObservableCollection<TECPoint>();
-            DataTable pointsDT = getChildObjects(new SubScopePointTable(), new PointTable(), subScopeID);
+            DataTable pointsDT = getChildObjects(new SubScopePointTable(), new PointTable(), subScopeID, SubScopePointTable.Index.Name);
             foreach (DataRow row in pointsDT.Rows)
             { points.Add(getPointFromRow(row, isTypical)); }
 
@@ -633,6 +653,33 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             return outModules;
         }
+        private static List<TECScheduleTable> getTablesForSchedule(Guid guid)
+        {
+            List<TECScheduleTable> tables = new List<TECScheduleTable>();
+            DataTable dataTable = getChildObjects(new ScheduleScheduleTableTable(), new ScheduleTableTable(),
+                guid, ScheduleScheduleTableTable.Index.Name);
+            foreach (DataRow row in dataTable.Rows)
+            { tables.Add(getScheduleTableFromRow(row)); }
+            return tables;
+        }
+        private static TECScheduleTable getScheduleTableFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[ScheduleTableTable.ID.Name].ToString());
+            String name = row[ScheduleTableTable.Name.Name].ToString();
+            List<TECScheduleItem> items = getScheduleItemsInTable(guid);
+            TECScheduleTable table = new TECScheduleTable(guid, items);
+            table.Name = name;
+            return table;
+        }
+        private static List<TECScheduleItem> getScheduleItemsInTable(Guid guid)
+        {
+            List<TECScheduleItem> items = new List<TECScheduleItem>();
+            DataTable dataTable = getChildObjects(new ScheduleTableScheduleItemTable(), new ScheduleItemTable(),
+                guid, ScheduleTableScheduleItemTable.Index.Name);
+            foreach (DataRow row in dataTable.Rows)
+            { items.Add(getScheduleItemFromRow(row)); }
+            return items;
+        }
 
         static private ObservableCollection<TECIOModule> getIOModules()
         {
@@ -668,11 +715,11 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             var outScope = new ObservableCollection<INetworkConnectable>();
 
-            DataTable dt = getChildObjects(new NetworkConnectionChildrenTable(), new ControllerTable(), connectionID);
+            DataTable dt = getChildObjects(new NetworkConnectionChildrenTable(), new ControllerTable(), connectionID, NetworkConnectionChildrenTable.Index.Name);
             foreach (DataRow row in dt.Rows)
             { outScope.Add(getControllerPlaceholderFromRow(row, isTypical)); }
 
-            dt = getChildObjects(new NetworkConnectionChildrenTable(), new SubScopeTable(), connectionID);
+            dt = getChildObjects(new NetworkConnectionChildrenTable(), new SubScopeTable(), connectionID, NetworkConnectionChildrenTable.Index.Name);
             foreach (DataRow row in dt.Rows)
             { outScope.Add(getPlaceholderSubScopeFromRow(row, isTypical)); }
 
@@ -852,7 +899,7 @@ namespace EstimatingUtilitiesLibrary.Database
         static private ObservableCollection<TECMisc> getMiscInBid(Guid guid)
         {
             ObservableCollection<TECMisc> misc = new ObservableCollection<TECMisc>();
-            DataTable miscDT = getChildObjects(new BidMiscTable(), new MiscTable(), guid);
+            DataTable miscDT = getChildObjects(new BidMiscTable(), new MiscTable(), guid, BidMiscTable.Index.Name);
             foreach (DataRow row in miscDT.Rows)
             {
                 misc.Add(getMiscFromRow(row, false));
@@ -1292,6 +1339,22 @@ namespace EstimatingUtilitiesLibrary.Database
         }
         #endregion
 
+        private static TECScheduleItem getScheduleItemFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[ScheduleItemTable.ID.Name].ToString());
+            String tag = row[ScheduleItemTable.Tag.Name].ToString();
+            String service = row[ScheduleItemTable.Service.Name].ToString();
+            String location = row[ScheduleItemTable.Location.Name].ToString();
+            DataTable dataTable = getChildIDs(new ScheduleItemScopeTable(), guid);
+            TECScope scope = dataTable.Rows.Count > 0 ?
+                new TECSubScope(new Guid(dataTable.Rows[0][ScheduleItemScopeTable.ScopeID.Name].ToString()), false) : null;
+            TECScheduleItem item = new TECScheduleItem(guid);
+            item.Tag = tag;
+            item.Service = service;
+            item.Location = location;
+            item.Scope = scope;
+            return item;
+        }
         private static void getScopeChildren(TECScope scope)
         {
             scope.Tags = getTagsInScope(scope.Guid);
@@ -1469,10 +1532,14 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 throw new Exception("Child object table must haveone primary key");
             }
-            string command = string.Format("select {0} from {1} where {2} in (select {3} from {4} where {5} = '{6}'{7})",
-                DatabaseHelper.AllFieldsInTableString(childTable), childTable.NameString, childTable.PrimaryKeys[0].Name,
-                relationTable.PrimaryKeys[1].Name, relationTable.NameString,
-                relationTable.PrimaryKeys[0].Name, parentID.ToString(),
+            string command = string.Format("select {0} from {1} join {2} on {3} = {4} AND {5} = '{6}' {7}",
+                DatabaseHelper.AllFieldsInTableString(childTable),
+                childTable.NameString,
+                relationTable.NameString,
+                childTable.PrimaryKeys[0].Name,
+                relationTable.PrimaryKeys[1].Name,
+                relationTable.PrimaryKeys[0].Name,
+                parentID.ToString(),
                 orderString);
             return SQLiteDB.GetDataFromCommand(command);
         }

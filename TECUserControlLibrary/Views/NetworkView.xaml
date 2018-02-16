@@ -51,6 +51,7 @@
                                              VM="{Binding ParentableFilterVM}"/>
                 <listControls:NetworkParentableListControl Source="{Binding FilteredParentables}"
                                                            SelectedItem="{Binding SelectedParentable}"
+                                                           DropHandler="{Binding}"
                                                            Grid.Row="2"/>
             </Grid>
             <Grid Grid.Row="1">
@@ -59,6 +60,12 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
+                <Grid.Resources>
+                    <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=networkView, Path=ViewModel}"/>
+                    <DataTemplate x:Key="cannotConnectAdorner">
+                        <Label Content="{Binding Data.CannotConnectMessage, Source={StaticResource proxy}}"/>
+                    </DataTemplate>
+                </Grid.Resources>
                 <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="10,0,10,0">
                     <TextBlock Text="Children" Style="{StaticResource ListHeader}"/>
                 </Border>
@@ -66,7 +73,9 @@
                                              VM="{Binding ConnectableFilterVM}"/>
                 <listControls:NetworkConnectableListControl Source="{Binding FilteredConnectables}"
                                                             SelectedItem="{Binding SelectedConnectable}"
+                                                            DragAdornerTemplate="{StaticResource cannotConnectAdorner}"
                                                             IsDragSource="True"
+                                                            DropHandler="{Binding}"
                                                             Grid.Row="2"/>
             </Grid>
         </Grid>
@@ -82,7 +91,8 @@
                     <ColumnDefinition/>
                     <ColumnDefinition Width="120"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding SelectedParentable.Name}"/>
+                <TextBlock Text="{Binding SelectedParentable.Name}"
+                           VerticalAlignment="Center" FontSize="14" FontWeight="DemiBold"/>
                 <Button Content="Update" Command="{Binding UpdateCommand}"
                         Grid.Column="1" Margin="2"
                         Visibility="{Binding UpdateCommand, Converter={utilities:NullToCollapsedConverter}, UpdateSourceTrigger=PropertyChanged}"/>
@@ -158,22 +168,32 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="{Binding SelectedParentable.Name, StringFormat=Connections in {0}}"
+                <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="10,0,10,0">
+                    <TextBlock Text="{Binding SelectedParentable.Name, StringFormat=Connections in {0}}"
                            Style="{StaticResource ListHeader}"/>
+                </Border>
+
                 <listControls:NetworkConnectionListControl Source="{Binding SelectedParentable.ChildNetworkConnections}"
                                                            SelectedItem="{Binding SelectedConnection}"
                                                            ConduitTypes="{Binding Catalogs.ConduitTypes}"
                                                            RemoveConnectionCommand="{Binding RemoveConnectionCommand}"
+                                                           x:Name="connectionsList"
                                                            Grid.Row="1"/>
             </Grid>
-            <Grid Grid.Row="3">
+            <Grid Grid.Row="3" Visibility="{Binding ElementName=connectionsList, Path=SelectedItem, Converter={utilities:NullToCollapsedConverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="Connected to Selected Connection"
+                
+                <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="10,0,10,0">
+                    <TextBlock Text="Connected to Selected Connection"
                            Style="{StaticResource ListHeader}"/>
+                </Border>
+                
                 <listControls:NetworkConnectableListControl Source="{Binding SelectedConnection.Children}"
+                                                            DeleteCommand="{Binding RemoveChildCommand}"
+                                                            DropHandler="{Binding}"
                                                             Grid.Row="1"/>
             </Grid>
         </Grid>

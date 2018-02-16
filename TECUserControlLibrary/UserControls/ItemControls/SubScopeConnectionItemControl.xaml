@@ -25,7 +25,8 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Border BorderBrush="{StaticResource ItemBorderBrush}" CornerRadius="5">
+    <Border BorderBrush="{StaticResource ItemBorderBrush}" CornerRadius="5"
+            BorderThickness="1">
         <Border.Background>
             <MultiBinding Converter="{converters:BooleanChoiceConverter}">
                 <Binding ElementName="subScopeConnectionItemControl" Path="SubScopeConnectionItem.NeedsUpdate"/>
@@ -36,6 +37,7 @@
         </Border.Background>
         <Grid DataContext="{Binding ElementName=subScopeConnectionItemControl}">
             <Grid.RowDefinitions>
+                <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -61,9 +63,10 @@
             
             
             <TextBlock Grid.Row="1" Text="{Binding SubScopeConnectionItem.SubScope.Connection.ParentController.Name, StringFormat=Controller: {0}}"/>
-            <TextBlock Grid.Row="2" Text="{Binding SubScopeConnectionItem.EquipmentName, StringFormat=Equipment: {0}}" Grid.Column="1"/>
+            <TextBlock Grid.Row="2" Text="{Binding SubScopeConnectionItem.SystemName, StringFormat=System: {0}}"/>
+            <TextBlock Grid.Row="3" Text="{Binding SubScopeConnectionItem.EquipmentName, StringFormat=Equipment: {0}}"/>
 
-            <Grid Grid.Row="3">
+            <Grid Grid.Row="4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="65"/>
                     <ColumnDefinition/>
@@ -89,7 +92,7 @@
             </Grid>
             
 
-            <Grid Grid.Row="4">
+            <Grid Grid.Row="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
@@ -107,7 +110,7 @@
             </Grid>
             
 
-            <Grid Grid.Row="5">
+            <Grid Grid.Row="6">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition/>
@@ -122,7 +125,7 @@
             </Grid>
             
 
-            <Grid Grid.Row="6">
+            <Grid Grid.Row="7">
                 <Button Content="Update"
                         Command="{Binding UpdateCommand}"
                         CommandParameter="{Binding SubScopeConnectionItem}"

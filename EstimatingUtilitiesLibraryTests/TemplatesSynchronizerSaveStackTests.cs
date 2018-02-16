@@ -97,7 +97,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopeDeviceTable.SubScopeID.Name] = refSS.Guid.ToString();
             data[SubScopeDeviceTable.DeviceID.Name] = testDevice.Guid.ToString();
             data[SubScopeDeviceTable.Quantity.Name] = "1";
-            data[SubScopeDeviceTable.ScopeIndex.Name] = "0";
+            data[SubScopeDeviceTable.Index.Name] = "0";
             expectedStack.Add(new UpdateItem(Change.Add, SubScopeDeviceTable.TableName, data));
 
             //New Point entry
@@ -112,13 +112,14 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SubScopePointTable.SubScopeID.Name] = refSS.Guid.ToString();
             data[SubScopePointTable.PointID.Name] = newPoint.Guid.ToString();
+            data[SubScopePointTable.Index.Name] = "0";
             expectedStack.Add(new UpdateItem(Change.Add, SubScopePointTable.TableName, data));
 
             //Equipment SubScope relationship
             data = new Dictionary<string, string>();
             data[EquipmentSubScopeTable.EquipmentID.Name] = equip.Guid.ToString();
             data[EquipmentSubScopeTable.SubScopeID.Name] = refSS.Guid.ToString();
-            data[EquipmentSubScopeTable.ScopeIndex.Name] = "0";
+            data[EquipmentSubScopeTable.Index.Name] = "0";
             expectedStack.Add(new UpdateItem(Change.Add, EquipmentSubScopeTable.TableName, data));
 
             //Assert
@@ -463,7 +464,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopeDeviceTable.SubScopeID.Name] = templateSS.Guid.ToString();
             data[SubScopeDeviceTable.DeviceID.Name] = testDevice.Guid.ToString();
             data[SubScopeDeviceTable.Quantity.Name] = "1";
-            data[SubScopeDeviceTable.ScopeIndex.Name] = "0";
+            data[SubScopeDeviceTable.Index.Name] = "0";
             expectedStack.Add(new UpdateItem(Change.Add, SubScopeDeviceTable.TableName, data));
 
             //Reference SubScope Device relationship
@@ -471,7 +472,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopeDeviceTable.SubScopeID.Name] = refSS.Guid.ToString();
             data[SubScopeDeviceTable.DeviceID.Name] = testDevice.Guid.ToString();
             data[SubScopeDeviceTable.Quantity.Name] = "1";
-            data[SubScopeDeviceTable.ScopeIndex.Name] = "0";
+            data[SubScopeDeviceTable.Index.Name] = "0";
             expectedStack.Add(new UpdateItem(Change.Add, SubScopeDeviceTable.TableName, data));
 
             //Assert
@@ -578,6 +579,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SubScopePointTable.SubScopeID.Name] = templateSS.Guid.ToString();
             data[SubScopePointTable.PointID.Name] = testPoint.Guid.ToString();
+            data[SubScopePointTable.Index.Name] = "0";
             expectedStack.Add(new UpdateItem(Change.Add, SubScopePointTable.TableName, data));
 
             //Reference Point Entry
@@ -592,6 +594,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SubScopePointTable.SubScopeID.Name] = refSS.Guid.ToString();
             data[SubScopePointTable.PointID.Name] = refPoint.Guid.ToString();
+            data[SubScopePointTable.Index.Name] = "0";
             expectedStack.Add(new UpdateItem(Change.Add, SubScopePointTable.TableName, data));
 
             //Assert
@@ -734,6 +737,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SubScopePointTable.SubScopeID.Name] = refSS.Guid.ToString();
             data[SubScopePointTable.PointID.Name] = labeled.Guid.ToString();
+            data[SubScopePointTable.Index.Name] = "0";
             expectedStack.Add(new UpdateItem(Change.Add, SubScopePointTable.TableName, data));
 
 
@@ -766,10 +770,9 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SubScopePointTable.SubScopeID.Name] = refSS.Guid.ToString();
             data[SubScopePointTable.PointID.Name] = typed.Guid.ToString();
+            data[SubScopePointTable.Index.Name] = "0";
             expectedStack.Add(new UpdateItem(Change.Add, SubScopePointTable.TableName, data));
-
-
-
+            
             //Template Point quantity change
             data = new Dictionary<string, string>();
             pk = new Tuple<string, string>(PointTable.ID.Name, testPoint.Guid.ToString());
@@ -799,6 +802,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SubScopePointTable.SubScopeID.Name] = refSS.Guid.ToString();
             data[SubScopePointTable.PointID.Name] = quantitied.Guid.ToString();
+            data[SubScopePointTable.Index.Name] = "0";
             expectedStack.Add(new UpdateItem(Change.Add, SubScopePointTable.TableName, data));
             
             //Assert
@@ -894,14 +898,14 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[EquipmentSubScopeTable.EquipmentID.Name] = refEquip.Guid.ToString();
             data[EquipmentSubScopeTable.SubScopeID.Name] = newSS.Guid.ToString();
-            data[EquipmentSubScopeTable.ScopeIndex.Name] = "0";
+            data[EquipmentSubScopeTable.Index.Name] = "0";
             expectedStack.Add(new UpdateItem(Change.Add, EquipmentSubScopeTable.TableName, data));
 
             //System Equipment relationship
             data = new Dictionary<string, string>();
             data[SystemEquipmentTable.SystemID.Name] = sys.Guid.ToString();
             data[SystemEquipmentTable.EquipmentID.Name] = refEquip.Guid.ToString();
-            data[SystemEquipmentTable.ScopeIndex.Name] = "0";
+            data[SystemEquipmentTable.Index.Name] = "0";
             expectedStack.Add(new UpdateItem(Change.Add, SystemEquipmentTable.TableName, data));
             
             //Assert
@@ -1245,7 +1249,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[EquipmentSubScopeTable.EquipmentID.Name] = templateEquip.Guid.ToString();
             data[EquipmentSubScopeTable.SubScopeID.Name] = ss.Guid.ToString();
-            data[EquipmentSubScopeTable.ScopeIndex.Name] = "0";
+            data[EquipmentSubScopeTable.Index.Name] = "0";
             expectedStack.Add(new UpdateItem(Change.Add, EquipmentSubScopeTable.TableName, data));
 
             //Template Reference relationship
@@ -1265,7 +1269,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[EquipmentSubScopeTable.EquipmentID.Name] = refEquip.Guid.ToString();
             data[EquipmentSubScopeTable.SubScopeID.Name] = newSS.Guid.ToString();
-            data[EquipmentSubScopeTable.ScopeIndex.Name] = "0";
+            data[EquipmentSubScopeTable.Index.Name] = "0";
             expectedStack.Add(new UpdateItem(Change.Add, EquipmentSubScopeTable.TableName, data));
 
 

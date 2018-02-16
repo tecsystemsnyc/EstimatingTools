@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 using TECUserControlLibrary.Utilities;
 
@@ -18,6 +19,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private bool isTypical = false;
         private TECEquipment underlyingTemplate;
         private bool _displayReferenceProperty = false;
+        private ConnectOnAddVM _connectVM;
 
         public TECEquipment ToAdd
         {
@@ -35,14 +37,39 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             {
                 quantity = value;
                 RaisePropertyChanged("Quantity");
+                updateConnectVMFromQuantity(value);
             }
         }
+
+        private void updateConnectVMFromQuantity(int value)
+        {
+            if(ConnectVM == null)
+            {
+                return;
+            }
+            List<TECSubScope> toConnect = new List<TECSubScope>();
+            for(int x = 0; x < quantity; x++)
+            {
+                toConnect.AddRange(ToAdd.SubScope);
+            }
+            ConnectVM.Update(toConnect);
+        }
+
         public bool DisplayReferenceProperty {
             get { return _displayReferenceProperty; }
             private set
             {
                 _displayReferenceProperty = value;
                 RaisePropertyChanged("DisplayReferenceProperty");
+            }
+        }
+        public ConnectOnAddVM ConnectVM
+        {
+            get { return _connectVM; }
+            set
+            {
+                _connectVM = value;
+                RaisePropertyChanged("ConnectVM");
             }
         }
 
@@ -57,6 +84,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             };
             AddCommand = new RelayCommand(addExecute, addCanExecute);
             Quantity = 1;
+            ConnectVM = new ConnectOnAddVM(ToAdd.SubScope, parent, scopeManager.Catalogs.ConduitTypes, scopeManager.Catalogs.ConnectionTypes);
         }
         public AddEquipmentVM(Action<TECEquipment> addMethod, TECScopeManager scopeManager) : base(scopeManager)
         {
@@ -69,7 +97,14 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
 
         private bool addCanExecute()
         {
-            return true;
+            if(ConnectVM != null)
+            {
+                return ConnectVM.CanConnect();
+            }
+            else
+            {
+                return true;
+            }
         }
         private void addExecute()
         {
@@ -97,6 +132,10 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 }
                 equipment.CopyPropertiesFromScope(ToAdd);
                 add(equipment);
+                if(ConnectVM != null)
+                {
+                    ConnectVM.ExecuteConnection(equipment.SubScope);
+                }
                 Added?.Invoke(equipment);
             }
         }
@@ -108,6 +147,11 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             if (IsTemplates)
             {
                 DisplayReferenceProperty = true;
+            }
+            if(ConnectVM != null)
+            {
+                ConnectVM.Update(ToAdd.SubScope);
+
             }
         }
         

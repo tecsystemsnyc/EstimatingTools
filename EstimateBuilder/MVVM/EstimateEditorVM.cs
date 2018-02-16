@@ -14,6 +14,8 @@ namespace EstimateBuilder.MVVM
         public ProposalVM ProposalVM { get; }
         public ItemizedSummaryVM ItemizedSummaryVM { get; }
         public MaterialSummaryVM MaterialSummaryVM { get; }
+        public RiserVM RiserVM { get; }
+        public ScheduleVM ScheduleVM { get; }
         public BidPropertiesVM BidPropertiesVM { get; }
         
         public EstimateEditorVM(TECBid bid, TECTemplates templates, ChangeWatcher watcher, TECEstimator estimate)
@@ -24,6 +26,8 @@ namespace EstimateBuilder.MVVM
             ProposalVM = new ProposalVM(bid);
             ItemizedSummaryVM = new ItemizedSummaryVM(bid, watcher);
             MaterialSummaryVM = new MaterialSummaryVM(bid, watcher);
+            RiserVM = new RiserVM(bid, watcher);
+            ScheduleVM = new ScheduleVM(bid, watcher);
             BidPropertiesVM = new BidPropertiesVM(bid);
         }
 
@@ -35,6 +39,8 @@ namespace EstimateBuilder.MVVM
             ProposalVM.Refresh(bid);
             ItemizedSummaryVM.Refresh(bid, watcher);
             MaterialSummaryVM.Refresh(bid, watcher);
+            RiserVM.Refresh(bid, watcher);
+            ScheduleVM.Refresh(bid, watcher);
             BidPropertiesVM.Refresh(bid);
         }
     }

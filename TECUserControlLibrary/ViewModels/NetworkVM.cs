@@ -125,6 +125,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public ICommand UpdateCommand { get; private set; }
         public RelayCommand<TECNetworkConnection> RemoveConnectionCommand { get; private set; }
+        public RelayCommand<INetworkConnectable> RemoveChildCommand { get; private set; }
         #endregion
 
         private NetworkVM(
@@ -150,8 +151,9 @@ namespace TECUserControlLibrary.ViewModels
                 UpdateCommand = new RelayCommand(() => updateExecute(SelectedParentable), () => updateCanExecute(SelectedParentable));
             }
             RemoveConnectionCommand = new RelayCommand<TECNetworkConnection>(removeConnectionExecute);
+            RemoveChildCommand = new RelayCommand<INetworkConnectable>(removeChildExecute);
         }
-
+        
         public event Action<TECObject> Selected;
 
         public void DragOver(IDropInfo dropInfo)
@@ -185,6 +187,8 @@ namespace TECUserControlLibrary.ViewModels
                     if (item is INetworkConnectable connectable)
                     {
                         SelectedConnection.AddINetworkConnectable(connectable);
+                        ConnectableFilterVM.Refilter();
+                        ParentableFilterVM.Refilter();
                     }
                     else
                     {
@@ -202,7 +206,7 @@ namespace TECUserControlLibrary.ViewModels
                 && e.PropertyName != "TypicalInstanceDictionary")
             {
                 //Looks for INetworkConnectable children of item
-                if(e.Value is TECObject item && isProperty(e.Sender, item))
+                if(e.Value is TECObject item && isProperty(e.Sender, e.PropertyName, item))
                 {
                     foreach(INetworkConnectable connectable in getConnectables(item))
                     {
@@ -259,9 +263,11 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private bool isProperty(TECObject sender, TECObject item)
+        private bool isProperty(TECObject sender, string propertyName, TECObject item)
         {
-            if (sender is IRelatable parent && !parent.LinkedObjects.Contains(item))
+            if (sender is IRelatable parent &&
+                !parent.LinkedObjects.Contains(item) &&
+                !parent.LinkedObjects.Contains(propertyName))
             {
                 return true;
             }
@@ -294,9 +300,20 @@ namespace TECUserControlLibrary.ViewModels
             if (result == MessageBoxResult.OK)
             {
                 SelectedParentable.RemoveNetworkConnection(netConnection);
+                refilter();
             }
         }
 
+        private void removeChildExecute(INetworkConnectable obj)
+        {
+            SelectedConnection.RemoveINetworkConnectable(obj);
+            refilter();            
+        }
+        private void refilter()
+        {
+            ConnectableFilterVM.Refilter();
+            ParentableFilterVM.Refilter();
+        }
         #region Static Constructors
         public static NetworkVM GetNetworkVMFromBid(TECBid bid, ChangeWatcher watcher)
         {

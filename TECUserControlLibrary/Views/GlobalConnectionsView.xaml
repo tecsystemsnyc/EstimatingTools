@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              x:Name="globalConnectionView"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -16,13 +17,14 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid DataContext="{Binding ElementName=globalConnectionView, Path=ViewModel}" Background="{StaticResource SectionBackgroundBrush}">
+    <Grid DataContext="{Binding ElementName=globalConnectionView, Path=ViewModel}"
+          Background="{StaticResource SectionBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="200"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid>
@@ -30,13 +32,14 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
-                <TextBlock Text="Controllers"/>
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="10,0,10,0">
+                <TextBlock Text="Controllers" Style="{StaticResource ListHeader}"/>
             </Border>
             <listControls:ControllerListControl Source="{Binding GlobalControllers}"
                                                 SelectedItem="{Binding SelectedController}"
                                                 DropHandler="{Binding ElementName=globalConnectionView, Path=DropHandler}"
-                                                Grid.Row="1"/>
+                                                Grid.Row="1"
+                                                x:Name="controllerList"/>
         </Grid>
         <Grid Grid.Row="1">
             
@@ -52,8 +55,9 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
                 <RowDefinition/>
+                <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
-            <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Margin="10,0,10,0">
                 <TextBlock Text="{Binding SelectedController.Name, StringFormat=Connections in {0}}"/>
             </Border>
             <listControls:SubScopeConnectionListControl Source="{Binding ConnectedSubScope}"
@@ -64,6 +68,54 @@
                                                         DisconnectCommand="{Binding DisconnectSubScopeCommand}"
                                                         ConduitTypes="{Binding ConduitTypes}"
                                                         Grid.Row="1"/>
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="55"/>
+                    <ColumnDefinition Width="45"/>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Defaults:" FontWeight="DemiBold"/>
+                <TextBlock Text="Length:" Grid.Column="1"/>
+                <TextBox Text="{Binding DefaultLength}"
+                         Grid.Column="2"
+                         Margin="2"/>
+                <TextBlock Text="Plenum:" Grid.Column="1"
+                           Grid.Row="1"/>
+                <CheckBox IsChecked="{Binding DefaultPlenum}"
+                          Grid.Column="2"
+                          Grid.Row="1"
+                          VerticalAlignment="Center"
+                          HorizontalAlignment="Center"/>
+                <TextBlock Text="Conduit Length:" Grid.Column="3"/>
+                <TextBox Text="{Binding DefaultConduitLength}"
+                         Grid.Column="4" Width="40"
+                         HorizontalAlignment="Left"
+                         Margin="2"/>
+                <TextBlock Text="Conduit Type:" Grid.Column="3"
+                           Grid.Row="1"/>
+                <ComboBox ItemsSource="{Binding ConduitTypes}"
+                          SelectedItem="{Binding DefaultConduitType}"
+                          DisplayMemberPath="Name"
+                            Grid.Column="4"
+                          Grid.Row="1"
+                          Margin="2"/>
+
+            </Grid>
+        </Grid>
+        <Grid Grid.Column="1" Grid.RowSpan="2" 
+              Visibility="{Binding ElementName=controllerList, Path=SelectedItem, 
+              Converter={utilities:NullToVisibilityConverter}}"
+              Background="{StaticResource SectionBackgroundBrush}">
+            <TextBlock Text="Select a controller to view connections."
+                       VerticalAlignment="Center"
+                       Foreground="Black"
+                       HorizontalAlignment="Center"/>
         </Grid>
     </Grid>
 </UserControl>

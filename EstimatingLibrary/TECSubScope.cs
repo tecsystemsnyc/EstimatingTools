@@ -73,7 +73,7 @@ namespace EstimatingLibrary
             }
         }
         
-        public ObservableCollection<TECElectricalMaterial> ConnectionTypes
+        public ObservableCollection<TECConnectionType> ConnectionTypes
         {
             get { return getConnectionTypes(); }
         }
@@ -119,7 +119,13 @@ namespace EstimatingLibrary
         {
             get { return isNetwork(); }
         }
-        
+        public bool IsConnected
+        {
+            get
+            {
+                return Connection != null;
+            }
+        }
         #endregion //Properties
 
         #region Constructors
@@ -220,6 +226,26 @@ namespace EstimatingLibrary
         #endregion
 
         #region Methods
+        public List<IOType> PossibleIOTypes()
+        {
+            List<IOType> resultList = new List<IOType>();
+            if (this.Points.Count == 0)
+            {
+                resultList.AddRange(TECIO.NetworkIO);
+                resultList.AddRange(TECIO.PointIO);
+            }
+            else if (this.IsNetwork)
+            {
+                IOType type = this.Points[0].Type;
+                resultList.Add(type);
+            }
+            else
+            {
+                resultList.AddRange(TECIO.PointIO);
+            }
+            return resultList;
+        }
+
         public object DragDropCopy(TECScopeManager scopeManager)
         {
             TECSubScope outScope = new TECSubScope(this, this.IsTypical);
@@ -271,18 +297,17 @@ namespace EstimatingLibrary
             IOCollection netConnectIO = netConnect.IO;
             bool ioMatches = IOCollection.IOTypesMatch(thisIO, netConnectIO);
 
-            bool connectionTypesMatch = (this.ConnectionTypes.Except(netConnect.ConnectionTypes).Count() == 0) 
-                && (netConnect.ConnectionTypes.Except(this.ConnectionTypes).Count() == 0);
+            bool connectionTypesMatch = (this.ConnectionTypes.Matches(netConnect.ConnectionTypes));
 
             return (ioMatches && connectionTypesMatch);
         }
 
-        private ObservableCollection<TECElectricalMaterial> getConnectionTypes()
+        private ObservableCollection<TECConnectionType> getConnectionTypes()
         {
-            var outTypes = new ObservableCollection<TECElectricalMaterial>();
+            var outTypes = new ObservableCollection<TECConnectionType>();
             foreach (IEndDevice device in Devices)
             {
-                foreach(TECElectricalMaterial type in device.ConnectionTypes)
+                foreach(TECConnectionType type in device.ConnectionTypes)
                 {
                     outTypes.Add(type);
                 }

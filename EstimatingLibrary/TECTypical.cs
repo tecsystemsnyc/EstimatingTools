@@ -272,6 +272,10 @@ namespace EstimatingLibrary
                 {
                     handlePointChanged(args.Sender as TECPoint, args.PropertyName);
                 }
+                else if (args.Sender is TECMisc)
+                {
+                    handleMiscChanged(args.Sender as TECMisc, args.PropertyName);
+                }
             }
         }
         
@@ -398,6 +402,17 @@ namespace EstimatingLibrary
                 foreach (TECPoint instance in TypicalInstanceDictionary.GetInstances(point))
                 {
                     property.SetValue(instance, property.GetValue(point), null);
+                }
+            }
+        }
+        private void handleMiscChanged(TECMisc misc, string propertyName)
+        {
+            PropertyInfo property = typeof(TECMisc).GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
+            if (property != null && property.CanWrite && TypicalInstanceDictionary.ContainsKey(misc))
+            {
+                foreach (TECMisc instance in TypicalInstanceDictionary.GetInstances(misc))
+                {
+                    property.SetValue(instance, property.GetValue(misc), null);
                 }
             }
         }

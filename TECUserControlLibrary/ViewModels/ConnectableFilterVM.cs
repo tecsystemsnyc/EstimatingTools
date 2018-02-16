@@ -14,7 +14,8 @@ using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class ConnectableFilterVM<T> : ViewModelBase, IConnectableFilterVM where T : ITECObject, INetworkConnectable
+    public class ConnectableFilterVM<T> : ViewModelBase, IConnectableFilterVM 
+        where T : ITECObject, INetworkConnectable
     {
         private readonly ReadOnlyObservableCollection<T> allConnectables;
 
@@ -38,7 +39,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     _searchQuery = value;
                     RaisePropertyChanged("SearchQuery");
-                    refilter();
+                    Refilter();
                 }
             }
         }
@@ -51,7 +52,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     _includeConnected = value;
                     RaisePropertyChanged("IncludeConnected");
-                    refilter();
+                    Refilter();
                 }
             }
         }
@@ -64,7 +65,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     _selectedIOType = value;
                     RaisePropertyChanged("IOType");
-                    refilter();
+                    Refilter();
                 }
             }
         }
@@ -77,7 +78,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     _filterByIO = value;
                     RaisePropertyChanged("FilterByIO");
-                    refilter();
+                    Refilter();
                 }
             }
         }
@@ -95,7 +96,7 @@ namespace TECUserControlLibrary.ViewModels
             NetworkIOTypes = new ReadOnlyCollection<IOType>(TECIO.NetworkIO);
             _exclusions = new List<T>();
 
-            refilter();
+            Refilter();
         }
 
         public void AddExclusion(T exclusion)
@@ -103,7 +104,7 @@ namespace TECUserControlLibrary.ViewModels
             if (exclusion != null)
             {
                 _exclusions.Add(exclusion);
-                refilter();
+                Refilter();
             }
         }
         public void RemoveExclusion(T exclusion)
@@ -111,7 +112,32 @@ namespace TECUserControlLibrary.ViewModels
             if (exclusion != null && Exclusions.Contains(exclusion))
             {
                 _exclusions.Remove(exclusion);
-                refilter();
+                Refilter();
+            }
+        }
+        public void Refilter()
+        {
+            //Remove connectables that don't pass
+            List<T> toRemove = new List<T>();
+            foreach(T connectable in FilteredConnectables)
+            {
+                if (!passesFilter(connectable))
+                {
+                    toRemove.Add(connectable);
+                }
+            }
+            foreach(T connectable in toRemove)
+            {
+                FilteredConnectables.Remove(connectable);
+            }
+
+            //Add connectables that do pass
+            foreach(T connectable in allConnectables)
+            {
+                if (!FilteredConnectables.Contains(connectable) && passesFilter(connectable))
+                {
+                    FilteredConnectables.Add(connectable);
+                }
             }
         }
 
@@ -140,62 +166,20 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-
-        private void refilter()
-        {
-            //Remove connectables that don't pass
-            List<T> toRemove = new List<T>();
-            foreach(T connectable in FilteredConnectables)
-            {
-                if (!passesFilter(connectable))
-                {
-                    toRemove.Add(connectable);
-                }
-            }
-            foreach(T connectable in toRemove)
-            {
-                FilteredConnectables.Remove(connectable);
-            }
-
-            //Add connectables that do pass
-            foreach(T connectable in allConnectables)
-            {
-                if (!FilteredConnectables.Contains(connectable) && passesFilter(connectable))
-                {
-                    FilteredConnectables.Add(connectable);
-                }
-            }
-        }
-
+        
         private bool passesFilter(T connectable)
         {
             //Search filter
             List<T> results = allConnectables.GetSearchResult(SearchQuery);
-            if (!results.Contains(connectable))
-            {
-                return false;
-            }
-
+            bool passesSearch = results.Contains(connectable);
             //Connected filter
-            if (!IncludeConnected && connectable.ParentConnection != null)
-            {
-                return false;
-            }
-
+            bool passesConnected = IncludeConnected || connectable.ParentConnection == null;
             //IOType filter
-            if (FilterByIO && !(connectable.AvailableNetworkIO.Contains(SelectedIOType)))
-            {
-                return false;
-            }
-
+            bool passesIO = !FilterByIO || connectable.AvailableNetworkIO.Contains(SelectedIOType);
             //Exclusions filter
-            if (Exclusions.Contains(connectable))
-            {
-                return false;
-            }
+            bool passesExclusions = !Exclusions.Contains(connectable);
 
-            //All filters passed
-            return true;
+            return passesSearch && passesConnected && passesIO && passesExclusions;
         }
     }
 }

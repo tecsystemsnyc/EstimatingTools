@@ -18,5 +18,11 @@ namespace EstimatingLibrary.Utilities
                 collection.Remove(item);
             }
         }
+
+        public static bool Matches<T>(this IEnumerable<T> first, IEnumerable<T> second)
+        {
+            return (first.Except(second).Count() == 0)
+                && (second.Except(first).Count() == 0);
+        }
     }
 }

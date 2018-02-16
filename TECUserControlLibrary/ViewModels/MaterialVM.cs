@@ -420,17 +420,6 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         public ICommand DeleteDeviceCommand { get; private set; }
-
-        private DeleteDeviceVM _deleteDeviceVM;
-        public DeleteDeviceVM DeleteDeviceVM
-        {
-            get { return _deleteDeviceVM; }
-            set
-            {
-                _deleteDeviceVM = value;
-                RaisePropertyChanged("DeleteDeviceVM");
-            }
-        }
         #endregion
         #region Valve
         private string _valveName;
@@ -536,6 +525,9 @@ namespace TECUserControlLibrary.ViewModels
                 Selected = value;
             }
         }
+
+        public ICommand DeleteValveCommand { get; private set; }
+        public ICommand ReplaceActuatorCommand { get; private set; }
         #endregion
         #region Controller Types
         private string _controllerTypeName;
@@ -713,10 +705,24 @@ namespace TECUserControlLibrary.ViewModels
 
         #region ViewModels
         public MiscCostsVM MiscVM { get; private set; }
+
+        private ViewModelBase _modalVM;
+        public ViewModelBase ModalVM
+        {
+            get { return _modalVM; }
+            set
+            {
+                if (_modalVM != value)
+                {
+                    _modalVM = value;
+                    RaisePropertyChanged("ModalVM");
+                }
+            }
+        }
         #endregion
 
         #endregion
-        
+
         public MaterialVM(TECTemplates templates)
         {
             ReferenceDropHandler = new ReferenceDropper(templates);
@@ -750,6 +756,8 @@ namespace TECUserControlLibrary.ViewModels
             AddIOToModuleCommand = new RelayCommand(addIOToModuleExecute, canAddIOToModule);
 
             DeleteDeviceCommand = new RelayCommand(deleteDeviceExecute, canDeleteDevice);
+            DeleteValveCommand = new RelayCommand(deleteValveExecute, canDeleteValve);
+            ReplaceActuatorCommand = new RelayCommand(replaceActuatorExecute, canReplaceActuator);
         }
 
         private void addIOToControllerTypeExecute()
@@ -1006,11 +1014,29 @@ namespace TECUserControlLibrary.ViewModels
 
         private void deleteDeviceExecute()
         {
-            DeleteDeviceVM = new DeleteDeviceVM(SelectedDevice, Templates);
+            ModalVM = new DeleteEndDeviceVM(SelectedDevice, Templates);
         }
         private bool canDeleteDevice()
         {
             return SelectedDevice != null;
+        }
+
+        private void deleteValveExecute()
+        {
+            ModalVM = new DeleteEndDeviceVM(SelectedValve, Templates);
+        }
+        private bool canDeleteValve()
+        {
+            return SelectedValve != null;
+        }
+
+        private void replaceActuatorExecute()
+        {
+            ModalVM = new ReplaceActuatorVM(SelectedValve, Templates.Catalogs.Devices);
+        }
+        private bool canReplaceActuator()
+        {
+            return SelectedValve != null;
         }
 
         private bool canAddManufacturer()

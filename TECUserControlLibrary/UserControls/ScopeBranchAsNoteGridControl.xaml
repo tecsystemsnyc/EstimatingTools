@@ -21,11 +21,24 @@
                            AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="..." CellTemplate="{DynamicResource ExpandDetails}" Width="30" IsReadOnly="True"/>
-                <DataGridTextColumn Binding="{Binding Name}" Header="Text" Width="Auto" MinWidth="100"/>
+                <DataGridTextColumn Binding="{Binding Label}" Header="Text" Width="Auto" MinWidth="100"/>
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <HierarchicalDataTemplate>
-                    <DataGrid RowDetailsTemplate="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="40"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Notes"/>
+                            <Button Content="Add" Grid.Column="1"
+                                Command="{Binding ElementName=parent, Path=AddCommand}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                              AncestorType={x:Type DataGridRow}},
+                              Path=DataContext}"/>
+                        </Grid>
+                        <DataGrid RowDetailsTemplate="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
                               AncestorType={x:Type DataGrid}},
                             Path=RowDetailsTemplate}"
                             ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
@@ -34,11 +47,13 @@
                                 AutoGenerateColumns="False"
                            VirtualizingPanel.ScrollUnit="Pixel"
                               Margin="20,5,5,5">
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="" CellTemplate="{DynamicResource ExpandDetails}" Width="30" />
-                            <DataGridTextColumn Binding="{Binding Name}" Header="Text" Width="Auto" MinWidth="100"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="..." CellTemplate="{DynamicResource ExpandDetails}" Width="30" />
+                                <DataGridTextColumn Binding="{Binding Label}" Header="Text" Width="Auto" MinWidth="100"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                    
                 </HierarchicalDataTemplate>
             </DataGrid.RowDetailsTemplate>
         </DataGrid>

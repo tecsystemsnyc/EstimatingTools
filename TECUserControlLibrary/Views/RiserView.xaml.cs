@@ -12,44 +12,42 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.Utilities;
 using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.Views
 {
     /// <summary>
-    /// Interaction logic for DeleteDeviceView.xaml
+    /// Interaction logic for RiserView.xaml
     /// </summary>
-    public partial class DeleteDeviceView : UserControl
+    public partial class RiserView : UserControl
     {
-        public static readonly RoutedEvent DoneEvent =
-        EventManager.RegisterRoutedEvent("Done", RoutingStrategy.Bubble,
-        typeof(RoutedEventHandler), typeof(DeleteDeviceView));
 
-        public event RoutedEventHandler Done
+        public RiserVM ViewModel
         {
-            add { AddHandler(DoneEvent, value); }
-            remove { RemoveHandler(DoneEvent, value); }
-        }
-
-        public DeleteDeviceVM ViewModel
-        {
-            get { return (DeleteDeviceVM)GetValue(ViewModelProperty); }
+            get { return (RiserVM)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for ViewModel.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(DeleteDeviceVM), typeof(DeleteDeviceView));
+            DependencyProperty.Register("ViewModel", typeof(RiserVM), typeof(RiserView));
 
 
-        public DeleteDeviceView()
+        public RiserView()
         {
             InitializeComponent();
         }
 
-        protected void doneButton_Click(object sender, RoutedEventArgs e)
+        protected void ItemControl_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            RaiseEvent(new RoutedEventArgs(DoneEvent, this));
+            ListView parent = UIHelpers.FindVisualParent<ListView>(sender as FrameworkElement);
+            var item = parent.SelectedItem;
+            if (parent.SelectedItems.Count == 1)
+            {
+                parent.SelectedItem = null;
+                parent.SelectedItem = item;
+            }
         }
     }
 }

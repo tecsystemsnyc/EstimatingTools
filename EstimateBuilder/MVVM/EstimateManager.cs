@@ -119,7 +119,11 @@ namespace EstimateBuilder.MVVM
 
             void assignData(TECTemplates loadedTemplates)
             {
-                templatesDatabaseManager.LoadComplete -= assignData;
+                if (templatesDatabaseManager != null)
+                {
+                    templatesDatabaseManager.LoadComplete -= assignData;
+                }
+
                 templates = loadedTemplates;
                 if (bidFilePath != "")
                 {

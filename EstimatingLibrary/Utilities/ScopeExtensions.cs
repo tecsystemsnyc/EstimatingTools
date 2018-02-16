@@ -61,6 +61,24 @@ namespace EstimatingLibrary.Utilities
             return null;
         }
 
+        public static List<TECSystem> GetAllSystems(this TECScopeManager manager)
+        {
+            List<TECSystem> systems = new List<TECSystem>();
+            if (manager is TECBid bid)
+            {
+                foreach(TECTypical typ in bid.Systems)
+                {
+                    systems.AddRange(typ.Instances);
+                }
+                systems.AddRange(bid.Systems);
+            }
+            else if (manager is TECTemplates templates)
+            {
+                systems.AddRange(templates.SystemTemplates);
+            }
+            return systems;
+        }
+
         public static List<TECEquipment> GetAllEquipment(this TECScopeManager manager)
         {
             List<TECEquipment> equip = new List<TECEquipment>();
@@ -72,6 +90,7 @@ namespace EstimatingLibrary.Utilities
                     {
                         equip.AddRange(sys.Equipment);
                     }
+                    equip.AddRange(typ.Equipment);
                 }
             }
             else if (manager is TECTemplates templates)
@@ -113,6 +132,18 @@ namespace EstimatingLibrary.Utilities
                 }
             }
             return instanceSubScope;
+        }
+
+        public static TECSystem FindParentSystem(this TECEquipment equip, TECScopeManager manager)
+        {
+            foreach (TECSystem sys in manager.GetAllSystems())
+            {
+                if (sys.Equipment.Contains(equip))
+                {
+                    return sys;
+                }
+            }
+            return null;
         }
     }
 }

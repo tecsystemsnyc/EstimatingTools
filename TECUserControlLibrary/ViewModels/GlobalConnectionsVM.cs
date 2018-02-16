@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using TECUserControlLibrary.Models;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -25,6 +26,11 @@ namespace TECUserControlLibrary.ViewModels
         private TECEquipment _selectedEquipment;
         private SubScopeConnectionItem _selectedConnectedSubScope;
         private TECSubScope _selectedUnconnectedSubScope;
+
+        private Double _defaultLength = 30;
+        private Double _defaultConduitLength = 20;
+        private bool _defaultPlenum = false;
+        private TECElectricalMaterial _defaultConduitType;
 
         public ObservableCollection<TECController> GlobalControllers { get; }
         public ObservableCollection<SubScopeConnectionItem> ConnectedSubScope { get; }
@@ -103,6 +109,43 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        public Double DefaultLength
+        {
+            get { return _defaultLength; }
+            set
+            {
+                _defaultLength = value;
+                RaisePropertyChanged("DefaultLength");
+            }
+        }
+        public Double DefaultConduitLength
+        {
+            get { return _defaultConduitLength; }
+            set
+            {
+                _defaultConduitLength = value;
+                RaisePropertyChanged("DefaultConduitLength");
+            }
+        }
+        public bool DefaultPlenum
+        {
+            get { return _defaultPlenum; }
+            set
+            {
+                _defaultPlenum = value;
+                RaisePropertyChanged("DefaultPlenum");
+            }
+        }
+        public TECElectricalMaterial DefaultConduitType
+        {
+            get { return _defaultConduitType; }
+            set
+            {
+                _defaultConduitType = value;
+                RaisePropertyChanged("DefaultConduitType");
+            }
+        }
+
         public RelayCommand<SubScopeConnectionItem> DisconnectSubScopeCommand { get; }
 
         public event Action<TECObject> Selected;
@@ -137,34 +180,90 @@ namespace TECUserControlLibrary.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
-            if (dropInfo.Data is TECSubScope ss)
+            UIHelpers.DragOver(dropInfo, (data, sourceType, targetType) =>
             {
-                if (UnconnectedSubScope.Contains(ss))
+                bool allow = false;
+                if (data is TECSubScope ss)
                 {
-                    Console.WriteLine("Target Collection: " + dropInfo.TargetCollection);
-                    if (dropInfo.TargetCollection == ConnectedSubScope)
+                    allow = checkCompatible(ss);
+                }
+                else if (data is TECEquipment equipment)
+                {
+                    allow = true;
+                    foreach (TECSubScope sub in equipment.SubScope.
+                        Where(item => item.Connection == null && item.ParentConnection == null))
                     {
-                        if (SelectedController.CanConnectSubScope(ss))
+                        if (!checkCompatible(sub))
                         {
-                            dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                            dropInfo.Effects = DragDropEffects.Copy;
+                            allow = false;
+                            break;
                         }
                     }
                 }
+                else if (data is TECSystem system)
+                {
+                    allow = true;
+                    foreach (TECSubScope sub in system.GetAllSubScope().
+                        Where(item => item.Connection == null && item.ParentConnection == null))
+                    {
+                        if (!checkCompatible(sub))
+                        {
+                            allow = false;
+                            break;
+                        }
+                    }
+                }
+                return allow;
+            },()=> { });
+
+            bool checkCompatible(TECSubScope subScope)
+            {
+                if (dropInfo.TargetCollection == ConnectedSubScope)
+                {
+                    if (subScope.IsNetwork || SelectedController.CanConnectSubScope(subScope))
+                    {
+                        return true;
+                    }
+                }
+                return false;
             }
         }
         public void Drop(IDropInfo dropInfo)
         {
-            if (dropInfo.Data is TECSubScope ss)
-            {
-                if (UnconnectedSubScope.Contains(ss))
+
+            UIHelpers.Drop(dropInfo, data => {
+                if (data is TECSubScope ss && !ss.IsNetwork)
                 {
-                    if (dropInfo.TargetCollection == ConnectedSubScope)
+                    connectSubScope(ss);
+                }
+                else if (data is TECEquipment equip)
+                {
+                    foreach (TECSubScope item in equip.SubScope.
+                        Where(thing => thing.ParentConnection == null && thing.Connection == null && !thing.IsNetwork))
                     {
-                        if (SelectedController.CanConnectSubScope(ss))
-                        {
-                            SelectedController.AddSubScope(ss);
-                        }
+                        connectSubScope(item);
+                    }
+                }
+                else if (data is TECSystem system)
+                {
+                    foreach (TECSubScope item in system.GetAllSubScope().
+                        Where(thing => thing.ParentConnection == null && thing.Connection == null && !thing.IsNetwork))
+                    {
+                        connectSubScope(item);
+                    }
+                }
+                return null;
+            }, false);
+            
+            filterSystems(bid);
+            void connectSubScope(TECSubScope subScope)
+            {
+                if (dropInfo.TargetCollection == ConnectedSubScope)
+                {
+                    if (SelectedController.CanConnectSubScope(subScope))
+                    {
+                        var connection = SelectedController.AddSubScope(subScope);
+                        setConnectionDefaults(connection);
                     }
                 }
             }
@@ -172,7 +271,10 @@ namespace TECUserControlLibrary.ViewModels
 
         private void filterSystems(TECBid bid)
         {
-            UnconnectedSystems.Clear();
+            var previousSystem = SelectedSystem;
+            var previousEquipment = SelectedEquipment;
+
+            UnconnectedSystems.ObservablyClear();
             foreach (TECTypical typ in bid.Systems)
             {
                 foreach (TECSystem sys in typ.Instances)
@@ -183,6 +285,8 @@ namespace TECUserControlLibrary.ViewModels
                     }
                 }
             }
+            SelectedSystem = previousSystem;
+            SelectedEquipment = previousEquipment;
         }
         
         private void handleSelectedControllerChanged()
@@ -195,14 +299,14 @@ namespace TECUserControlLibrary.ViewModels
                 (connection) => connection is TECSubScopeConnection))
                 {
                     TECEquipment parent = ssConnect.SubScope.FindParentEquipment(bid);
-                    addSubScopeConnectionItem(ssConnect, parent);
+                    addSubScopeConnectionItem(ssConnect);
                 }
             }
         }
         private void handleSelectedSystemChanged()
         {
-            UnconnectedEquipment.Clear();
-            UnconnectedSubScope.Clear();
+            UnconnectedEquipment.ObservablyClear();
+            UnconnectedSubScope.ObservablyClear();
             SelectedEquipment = null;
 
             if (SelectedSystem != null)
@@ -218,7 +322,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void handleSelectedEquipmentChanged()
         {
-            UnconnectedSubScope.Clear();
+            UnconnectedSubScope.ObservablyClear();
 
             if (SelectedEquipment != null)
             {
@@ -247,13 +351,18 @@ namespace TECUserControlLibrary.ViewModels
         {
             foreach (TECSubScope ss in equip.SubScope)
             {
-                if (ssIsUnconnected(ss)) { return true; }
+                if (ssIsUnconnected(ss))
+                {
+                    return true;
+                }
             }
             return false;
         }
         private bool ssIsUnconnected(TECSubScope ss)
         {
-            return (!ss.IsNetwork && ss.Connection == null);
+            //Only want unconnected non-network subscope.
+            bool ssUnconnected = (!ss.IsNetwork && ss.Connection == null);
+            return ssUnconnected;
         }
 
         private void handleInstanceChanged(TECChangedEventArgs args)
@@ -296,8 +405,9 @@ namespace TECUserControlLibrary.ViewModels
                         UnconnectedSubScope.Remove(ssConnect.SubScope);
                     }
                     TECEquipment parent = ssConnect.SubScope.FindParentEquipment(bid);
-                    addSubScopeConnectionItem(ssConnect, parent);
+                    addSubScopeConnectionItem(ssConnect);
                 }
+                filterSystems(bid);
             }
             else if (change == Change.Remove)
             {
@@ -315,7 +425,6 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         SelectedSystem = null;
                     }
-                    UnconnectedSystems.Remove(sys);
                 }
                 else if (obj is TECEquipment equip && UnconnectedEquipment.Contains(equip))
                 {
@@ -323,7 +432,6 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         SelectedEquipment = null;
                     }
-                    UnconnectedEquipment.Remove(equip);
                 }
                 else if (obj is TECSubScope ss && UnconnectedSubScope.Contains(ss))
                 {
@@ -331,19 +439,16 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         SelectedUnconnectedSubScope = null;
                     }
-                    UnconnectedSubScope.Remove(ss);
                 }
                 else if (obj is TECSubScopeConnection ssConnect)
                 {
-                    if (SelectedEquipment != null && SelectedEquipment.SubScope.Contains(ssConnect.SubScope))
-                    {
-                        UnconnectedSubScope.Add(ssConnect.SubScope);
-                    }
-                    if (ConnectedSubScope.Contains(subScopeConnectionDictionary[ssConnect]))
+                    if (subScopeConnectionDictionary.ContainsKey(ssConnect) &&
+                        ConnectedSubScope.Contains(subScopeConnectionDictionary[ssConnect]))
                     {
                         removeSubScopeConnectionItem(ssConnect);
                     }
                 }
+                filterSystems(bid);
             }
         }
 
@@ -352,11 +457,17 @@ namespace TECUserControlLibrary.ViewModels
             ssConnect.SubScope.Connection.ParentController.RemoveSubScope(ssConnect.SubScope);
         }
 
-        private void addSubScopeConnectionItem(TECSubScopeConnection ssConnect, TECEquipment parent)
+        private void addSubScopeConnectionItem(TECSubScopeConnection ssConnect)
         {
-            SubScopeConnectionItem newItem = new SubScopeConnectionItem(ssConnect.SubScope, noneConduit, parent: parent);
-            subScopeConnectionDictionary.Add(ssConnect, newItem);
-            ConnectedSubScope.Add(newItem);
+            SubScopeConnectionItem newItem = new SubScopeConnectionItem(ssConnect.SubScope, noneConduit, 
+                ssConnect.SubScope.FindParentEquipment(bid).FindParentSystem(bid), 
+                ssConnect.SubScope.FindParentEquipment(bid));
+            if(!subScopeConnectionDictionary.ContainsKey(ssConnect))
+            {
+                subScopeConnectionDictionary.Add(ssConnect, newItem);
+                ConnectedSubScope.Add(newItem);
+            }
+
         }
         private void removeSubScopeConnectionItem(TECSubScopeConnection ssConnect)
         {
@@ -366,8 +477,16 @@ namespace TECUserControlLibrary.ViewModels
 
         private void clearConnectedSubScope()
         {
-            ConnectedSubScope.Clear();
+            ConnectedSubScope.ObservablyClear();
             subScopeConnectionDictionary.Clear();
         }
+        private void setConnectionDefaults(TECConnection connection)
+        {
+            connection.Length = DefaultLength;
+            connection.ConduitType = DefaultConduitType;
+            connection.ConduitLength = DefaultConduitLength;
+            connection.IsPlenum = DefaultPlenum;
+        }
+
     }
 }
