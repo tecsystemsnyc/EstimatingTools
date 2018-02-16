@@ -241,12 +241,20 @@
         <TextBlock Text="{Binding Estimate.TECFieldLaborCost, Mode=OneWay, StringFormat={}{0:C}}"
                    Grid.Row="6" Grid.Column="7" HorizontalAlignment="Right"/>
 
-        <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type local:LaborTime}}}"
+        <Grid Grid.Row="3" Margin="10,0,0,0"
+                  Grid.Column="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Time Unit: "/>
+            <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type local:LaborTime}}}"
                   x:Name="laborTimeCombo"
                   Margin="2"
-                  Grid.Row="7"
-                  Grid.Column="5"
+                      Grid.Column="1"
                   SelectedIndex="0"/>
+        </Grid>
+        
 
         <!--Confidence-->
         <Grid Grid.Row="1" Grid.Column="8" Margin="10,0,0,0">
@@ -292,9 +300,14 @@
         <!--Electrical Values-->
         <TextBlock Text="Electrical: "
                Grid.Row="10"/>
-        <TextBlock Text="{Binding Estimate.ElectricalLaborHours, StringFormat= {} {0:F2}}"
-                 Grid.Row="10" Grid.Column="1"
-                 />
+        <TextBlock Grid.Row="10" Grid.Column="1">
+            <TextBlock.Text>
+                <MultiBinding Converter="{local:LaborTimeConverter}">
+                    <Binding Path="Estimate.ElectricalLaborHours"/>
+                    <Binding ElementName="laborTimeCombo" Path="SelectedItem"/>
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
         <TextBlock Text="{Binding Bid.Parameters.ElectricalEffectiveRate, StringFormat= {} {0:C}}"
                  Grid.Row="10" Grid.Column="2" HorizontalAlignment="Right"
                  />
@@ -305,9 +318,14 @@
         <!--Electrical Super Values-->
         <TextBlock Text="Electrical Supervision: "
                Grid.Row="11"/>
-        <TextBlock Text="{Binding Estimate.ElectricalSuperLaborHours, StringFormat= {} {0:F2}}"
-                 Grid.Row="11" Grid.Column="1"
-                 />
+        <TextBlock Grid.Row="11" Grid.Column="1">
+            <TextBlock.Text>
+                <MultiBinding Converter="{local:LaborTimeConverter}">
+                    <Binding Path="Estimate.ElectricalSuperLaborHours"/>
+                    <Binding ElementName="laborTimeCombo" Path="SelectedItem"/>
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
         <TextBlock Text="{Binding Bid.Parameters.ElectricalSuperEffectiveRate, StringFormat= {} {0:C}}"
                  Grid.Row="11" Grid.Column="2" HorizontalAlignment="Right"
                  />
@@ -378,15 +396,25 @@
         
         
         <!--Reload Button-->
-        <ComboBox ItemsSource="{Binding Templates.Parameters}" Name="parametersComboBox" Grid.Row="2" Grid.Column="8" Margin="10,2,2,2"
-                  DisplayMemberPath="Label"/>
-        <Button Content="Set Parameters" Command="{Binding SetParametersCommand}"
+        <Grid  Grid.Row="2" Grid.Column="8" Margin="10,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="40"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Parameters: "/>
+            <ComboBox ItemsSource="{Binding Templates.Parameters}" Name="parametersComboBox" Margin="2"
+                  DisplayMemberPath="Label"
+                      Grid.Column="1"/>
+            <Button Content="Set" Command="{Binding SetParametersCommand}"
                 CommandParameter="{Binding ElementName=parametersComboBox, Path=SelectedItem}"
-                Grid.Row="3" Grid.Column="8" Margin="10,2,2,2">
-            <Button.ToolTip>
-                <Label Content="Previous parameter data will be lost"/>
-            </Button.ToolTip>
-        </Button>
+                Grid.Row="3" Grid.Column="2" Margin="2">
+                <Button.ToolTip>
+                    <Label Content="Previous parameter data will be lost"/>
+                </Button.ToolTip>
+            </Button>
+        </Grid>
+        
         <!--<Button Grid.Row="14" Grid.Column="0"
                 Grid.RowSpan="2"
                 Margin="5"
