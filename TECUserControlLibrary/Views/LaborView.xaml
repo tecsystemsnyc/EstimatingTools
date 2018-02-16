@@ -48,8 +48,8 @@
             <ColumnDefinition Width="90"/>
             <ColumnDefinition Width="90"/>
             <ColumnDefinition Width="90"/>
-            <ColumnDefinition Width="70"/>
-            <ColumnDefinition Width="110"/>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="70"/>
             <ColumnDefinition Width="90"/>
             <ColumnDefinition Width="210"/>
@@ -59,38 +59,66 @@
         <!--TEC Labor Headers-->
         <TextBlock Text="TEC Labor"
                FontWeight="Bold"/>
-        <TextBlock Text="Points"
-               Grid.Column="1"/>
-        <TextBlock Text="Hours/Point"
-               Grid.Column="2"/>
-        <TextBlock Text="Hours (Points)"
-               Grid.Column="3"/>
-        <TextBlock Text="Extra Hours"
-               Grid.Column="4"/>
-        <TextBlock Text="Total"
-               Grid.Column="5"/>
-        <TextBlock Text="$/Hour"
-               Grid.Column="6"/>
-        <TextBlock Text="SubTotal"
-               Grid.Column="7"/>
+        <Border BorderBrush="DarkGray"
+                BorderThickness="0,0,0,1"
+                Margin="10,0,10,0"
+               Grid.Column="1">
+            <TextBlock Text="Points" HorizontalAlignment="Center"/>
+        </Border>
+        <Border BorderBrush="DarkGray"
+                BorderThickness="0,0,0,1"
+                Margin="10,0,10,0"
+               Grid.Column="2">
+            <TextBlock Text="Hours/Point" HorizontalAlignment="Center"/>
+        </Border>
+        <Border BorderBrush="DarkGray"
+                BorderThickness="0,0,0,1"
+                Margin="10,0,10,0"
+               Grid.Column="3">
+            <TextBlock Text="Hours" HorizontalAlignment="Center" />
+        </Border>
+        <Border BorderBrush="DarkGray"
+                BorderThickness="0,0,0,1"
+                Margin="10,0,10,0"
+               Grid.Column="4">
+            <TextBlock Text="Extra Hours" HorizontalAlignment="Center"/>
+        </Border>
+        <Border BorderBrush="DarkGray"
+                BorderThickness="0,0,0,1"
+                Margin="10,0,10,0"
+               Grid.Column="5">
+            <TextBlock Text="Total" HorizontalAlignment="Center"/>
+        </Border>
+        <Border BorderBrush="DarkGray"
+                BorderThickness="0,0,0,1"
+                Margin="10,0,10,0"
+               Grid.Column="6">
+            <TextBlock Text="$/Hour" HorizontalAlignment="Center"/>
+        </Border>
+        <Border BorderBrush="DarkGray"
+                BorderThickness="0,0,0,1"
+                Margin="10,0,10,0"
+               Grid.Column="7">
+            <TextBlock Text="SubTotal" HorizontalAlignment="Center"/>
+        </Border>
 
 
         <!--Project Management Values-->
         <TextBlock Text="Project Management: "
                Grid.Row="1"/>
-        <TextBlock Text="{Binding Estimate.TotalPointNumber, StringFormat= {} {0:F2}}"
-                 Grid.Row="1" Grid.Column="1"
+        <TextBlock Text="{Binding Estimate.TotalPointNumber, StringFormat= {} {0:N2}}"
+                 Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right"
                  />
         <TextBlock Text="{Binding Bid.Parameters.PMExtenedCoef, StringFormat= {} {0:F2}}"
-                 Grid.Row="1" Grid.Column="2"
+                 Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right"
                  />
-        <TextBlock Text="{Binding Estimate.PMPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
-                 Grid.Row="1" Grid.Column="3"
+        <TextBlock Text="{Binding Estimate.PMPointLaborHours, Mode=OneWay, StringFormat= {} {0:N2}}"
+                 Grid.Row="1" Grid.Column="3" HorizontalAlignment="Right"
                  />
-        <TextBox Text="{Binding Bid.ExtraLabor.PMExtraHours, StringFormat= {} {0:F2}}"
-                 Grid.Row="1" Grid.Column="4"
-                 Margin="2"/>
-        <TextBlock Grid.Column="5" Grid.Row="1">
+        <TextBox Text="{Binding Bid.ExtraLabor.PMExtraHours, StringFormat= {} {0:N2}}"
+                 Grid.Row="1" Grid.Column="4" HorizontalContentAlignment="Right"
+                 Margin="10,2,10,2"/>
+        <TextBlock Grid.Column="5" Grid.Row="1" HorizontalAlignment="Right">
             <TextBlock.Text>
                 <MultiBinding Converter="{local:LaborTimeConverter}">
                     <Binding Path="Estimate.PMLaborHours"/>
@@ -100,7 +128,7 @@
         </TextBlock>
         
         <TextBox Text="{Binding Bid.Parameters.PMRate, StringFormat= {} {0:C}}" HorizontalContentAlignment="Right"
-                 Grid.Row="1" Grid.Column="6" Margin="2"
+                 Grid.Row="1" Grid.Column="6" Margin="10,2,10,2"
                  />
         <TextBlock Text="{Binding Estimate.PMLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="1" Grid.Column="7" HorizontalAlignment="Right"
@@ -109,19 +137,19 @@
         <!--Engineering Values-->
         <TextBlock Text="Engineering: "
                Grid.Row="2"/>
-        <TextBlock Text="{Binding Estimate.TotalPointNumber, StringFormat= {} {0:F2}}"
-                 Grid.Row="2" Grid.Column="1"
+        <TextBlock Text="{Binding Estimate.TotalPointNumber, StringFormat= {} {0:N2}}"
+                 Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right"
                  />
         <TextBlock Text="{Binding Bid.Parameters.ENGExtenedCoef, StringFormat= {} {0:F2}}"
-                 Grid.Row="2" Grid.Column="2"
+                 Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right"
                  />
-        <TextBlock Text="{Binding Estimate.ENGPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
-                 Grid.Row="2" Grid.Column="3"
+        <TextBlock Text="{Binding Estimate.ENGPointLaborHours, Mode=OneWay, StringFormat= {} {0:N2}}"
+                 Grid.Row="2" Grid.Column="3" HorizontalAlignment="Right"
                  />
-        <TextBox Text="{Binding Bid.ExtraLabor.ENGExtraHours, StringFormat= {} {0:F2}}"
-                 Grid.Row="2" Grid.Column="4"
-                 Margin="2"/>
-        <TextBlock Grid.Row="2" Grid.Column="5">
+        <TextBox Text="{Binding Bid.ExtraLabor.ENGExtraHours, StringFormat= {} {0:N2}}"
+                 Grid.Row="2" Grid.Column="4" HorizontalContentAlignment="Right"
+                 Margin="10,2,10,2"/>
+        <TextBlock Grid.Row="2" Grid.Column="5" HorizontalAlignment="Right">
             <TextBlock.Text>
                 <MultiBinding Converter="{local:LaborTimeConverter}">
                     <Binding Path="Estimate.ENGLaborHours"/>
@@ -130,7 +158,7 @@
             </TextBlock.Text>
         </TextBlock>
         <TextBox Text="{Binding Bid.Parameters.ENGRate, StringFormat= {} {0:C}}" HorizontalContentAlignment="Right"
-                 Grid.Row="2" Grid.Column="6" Margin="2"
+                 Grid.Row="2" Grid.Column="6" Margin="10,2,10,2"
                  />
         <TextBlock Text="{Binding Estimate.ENGLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="2" Grid.Column="7" HorizontalAlignment="Right"
@@ -139,19 +167,19 @@
         <!--Software Values-->
         <TextBlock Text="Software: "
                Grid.Row="3"/>
-        <TextBlock Text="{Binding Estimate.TotalPointNumber, StringFormat= {} {0:F2}}"
-                 Grid.Row="3" Grid.Column="1"
+        <TextBlock Text="{Binding Estimate.TotalPointNumber, StringFormat= {} {0:N2}}"
+                 Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right"
                  />
         <TextBlock Text="{Binding Bid.Parameters.SoftExtenedCoef, StringFormat= {} {0:F2}}"
-                 Grid.Row="3" Grid.Column="2"
+                 Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right"
                  />
-        <TextBlock Text="{Binding Estimate.SoftPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
-                 Grid.Row="3" Grid.Column="3"
+        <TextBlock Text="{Binding Estimate.SoftPointLaborHours, Mode=OneWay, StringFormat= {} {0:N2}}"
+                 Grid.Row="3" Grid.Column="3" HorizontalAlignment="Right"
                  />
-        <TextBox Text="{Binding Bid.ExtraLabor.SoftExtraHours, StringFormat= {} {0:F2}}"
-                 Grid.Row="3" Grid.Column="4"
-                 Margin="2"/>
-        <TextBlock Grid.Row="3" Grid.Column="5">
+        <TextBox Text="{Binding Bid.ExtraLabor.SoftExtraHours, StringFormat= {} {0:N2}}"
+                 Grid.Row="3" Grid.Column="4" HorizontalContentAlignment="Right"
+                 Margin="10,2,10,2"/>
+        <TextBlock Grid.Row="3" Grid.Column="5" HorizontalAlignment="Right">
             <TextBlock.Text>
                 <MultiBinding Converter="{local:LaborTimeConverter}">
                     <Binding Path="Estimate.SoftLaborHours"/>
@@ -160,7 +188,7 @@
             </TextBlock.Text>
         </TextBlock>
         <TextBox Text="{Binding Bid.Parameters.SoftRate, StringFormat= {} {0:C}}"
-                 Grid.Row="3" Grid.Column="6" Margin="2" HorizontalContentAlignment="Right"/>
+                 Grid.Row="3" Grid.Column="6" Margin="10,2,10,2" HorizontalContentAlignment="Right"/>
         <TextBlock Text="{Binding Estimate.SoftLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="3" Grid.Column="7" HorizontalAlignment="Right"
                  />
@@ -168,19 +196,19 @@
         <!--Graphics Values-->
         <TextBlock Text="Graphics: "
                Grid.Row="4"/>
-        <TextBlock Text="{Binding Estimate.TotalPointNumber, StringFormat= {} {0:F2}}"
-                 Grid.Row="4" Grid.Column="1"
+        <TextBlock Text="{Binding Estimate.TotalPointNumber, StringFormat= {} {0:N2}}"
+                 Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right"
                  />
         <TextBlock Text="{Binding Bid.Parameters.GraphExtenedCoef, StringFormat= {} {0:F2}}"
-                 Grid.Row="4" Grid.Column="2"
+                 Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right"
                  />
-        <TextBlock Text="{Binding Estimate.GraphPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
-                 Grid.Row="4" Grid.Column="3"
+        <TextBlock Text="{Binding Estimate.GraphPointLaborHours, Mode=OneWay, StringFormat= {} {0:N2}}"
+                 Grid.Row="4" Grid.Column="3" HorizontalAlignment="Right"
                  />
-        <TextBox Text="{Binding Bid.ExtraLabor.GraphExtraHours, StringFormat= {} {0:F2}}"
-                 Grid.Row="4" Grid.Column="4"
-                 Margin="2"/>
-        <TextBlock Grid.Row="4" Grid.Column="5">
+        <TextBox Text="{Binding Bid.ExtraLabor.GraphExtraHours, StringFormat= {} {0:N2}}"
+                 Grid.Row="4" Grid.Column="4" HorizontalContentAlignment="Right"
+                 Margin="10,2,10,2"/>
+        <TextBlock Grid.Row="4" Grid.Column="5" HorizontalAlignment="Right">
             <TextBlock.Text>
                 <MultiBinding Converter="{local:LaborTimeConverter}">
                     <Binding Path="Estimate.GraphLaborHours"/>
@@ -189,7 +217,7 @@
             </TextBlock.Text>
         </TextBlock>
         <TextBox Text="{Binding Bid.Parameters.GraphRate, StringFormat= {} {0:C}}"
-                 Grid.Row="4" Grid.Column="6" Margin="2" HorizontalContentAlignment="Right"
+                 Grid.Row="4" Grid.Column="6" Margin="10,2,10,2" HorizontalContentAlignment="Right"
                  />
         <TextBlock Text="{Binding Estimate.GraphLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="4" Grid.Column="7" HorizontalAlignment="Right"
@@ -198,19 +226,19 @@
         <!--Commisioning Values-->
         <TextBlock Text="Commisioning: "
                Grid.Row="5"/>
-        <TextBlock Text="{Binding Estimate.TotalPointNumber, StringFormat= {} {0:F2}}"
-                 Grid.Row="5" Grid.Column="1"
+        <TextBlock Text="{Binding Estimate.TotalPointNumber, StringFormat= {} {0:N2}}"
+                 Grid.Row="5" Grid.Column="1" HorizontalAlignment="Right"
                  />
         <TextBlock Text="{Binding Bid.Parameters.CommExtenedCoef, StringFormat= {} {0:F2}}"
-                 Grid.Row="5" Grid.Column="2"
+                 Grid.Row="5" Grid.Column="2" HorizontalAlignment="Right"
                  />
-        <TextBlock Text="{Binding Estimate.CommPointLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
-                 Grid.Row="5" Grid.Column="3"
+        <TextBlock Text="{Binding Estimate.CommPointLaborHours, Mode=OneWay, StringFormat= {} {0:N2}}"
+                 Grid.Row="5" Grid.Column="3" HorizontalAlignment="Right"
                  />
-        <TextBox Text="{Binding Bid.ExtraLabor.CommExtraHours, StringFormat= {} {0:F2}}"
-                 Grid.Row="5" Grid.Column="4"
-                 Margin="2"/>
-        <TextBlock Grid.Row="5" Grid.Column="5">
+        <TextBox Text="{Binding Bid.ExtraLabor.CommExtraHours, StringFormat= {} {0:N2}}"
+                 Grid.Row="5" Grid.Column="4" HorizontalContentAlignment="Right"
+                 Margin="10,2,10,2"/>
+        <TextBlock Grid.Row="5" Grid.Column="5" HorizontalAlignment="Right">
             <TextBlock.Text>
                 <MultiBinding Converter="{local:LaborTimeConverter}">
                     <Binding Path="Estimate.CommLaborHours"/>
@@ -219,7 +247,7 @@
             </TextBlock.Text>
         </TextBlock>
         <TextBox Text="{Binding Bid.Parameters.CommRate, StringFormat= {} {0:C}}"
-                 Grid.Row="5" Grid.Column="6" Margin="2" HorizontalContentAlignment="Right"
+                 Grid.Row="5" Grid.Column="6" Margin="10,2,10,2" HorizontalContentAlignment="Right"
                  />
         <TextBlock Text="{Binding Estimate.CommLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
                  Grid.Row="5" Grid.Column="7" HorizontalAlignment="Right"
@@ -228,7 +256,7 @@
         <!--TEC Field Labor Values-->
         <TextBlock Text="Field Labor:"
                    Grid.Row="6"/>
-        <TextBlock Grid.Row="6" Grid.Column="5">
+        <TextBlock Grid.Row="6" Grid.Column="5" HorizontalAlignment="Right">
             <TextBlock.Text>
                 <MultiBinding Converter="{local:LaborTimeConverter}">
                     <Binding Path="Estimate.TECFieldHours"/>
@@ -236,7 +264,7 @@
                 </MultiBinding>
             </TextBlock.Text>
         </TextBlock>
-        <TextBox Text="{Binding Bid.Parameters.CommRate, StringFormat= {} {0:C}}"  Margin="2" HorizontalContentAlignment="Right"
+        <TextBox Text="{Binding Bid.Parameters.CommRate, StringFormat= {} {0:C}}"  Margin="10,2,10,2" HorizontalContentAlignment="Right"
                  Grid.Row="6" Grid.Column="6"/>
         <TextBlock Text="{Binding Estimate.TECFieldLaborCost, Mode=OneWay, StringFormat={}{0:C}}"
                    Grid.Row="6" Grid.Column="7" HorizontalAlignment="Right"/>
@@ -287,20 +315,32 @@
         <TextBlock Text="Subcontractor Labor"
                FontWeight="Bold"
                Grid.Row="9"/>
-        <TextBlock Text="Hours"
-               Grid.Row="9" Grid.Column="1"
-                   HorizontalAlignment="Center"/>
-        <TextBlock Text="$/Hour"
-               Grid.Row="9" Grid.Column="2"
-                   HorizontalAlignment="Center"/>
-        <TextBlock Text="SubTotal"
-               Grid.Row="9" Grid.Column="3"
-                   HorizontalAlignment="Center"/>
-        
+        <Border BorderBrush="DarkGray"
+                BorderThickness="0,0,0,1"
+                Margin="10,0,10,0"
+                Grid.Row="9"
+               Grid.Column="1">
+            <TextBlock Text="Hours" HorizontalAlignment="Center"/>
+        </Border>
+        <Border BorderBrush="DarkGray"
+                BorderThickness="0,0,0,1"
+                Margin="10,0,10,0"
+                Grid.Row="9"
+               Grid.Column="2">
+            <TextBlock Text="$/Hour" HorizontalAlignment="Center"/>
+        </Border>
+        <Border BorderBrush="DarkGray"
+                BorderThickness="0,0,0,1"
+                Margin="10,0,10,0"
+                Grid.Row="9"
+               Grid.Column="3">
+            <TextBlock Text="SubTotal" HorizontalAlignment="Center"/>
+        </Border>
+
         <!--Electrical Values-->
         <TextBlock Text="Electrical: "
                Grid.Row="10"/>
-        <TextBlock Grid.Row="10" Grid.Column="1">
+        <TextBlock Grid.Row="10" Grid.Column="1" HorizontalAlignment="Right">
             <TextBlock.Text>
                 <MultiBinding Converter="{local:LaborTimeConverter}">
                     <Binding Path="Estimate.ElectricalLaborHours"/>
@@ -318,7 +358,7 @@
         <!--Electrical Super Values-->
         <TextBlock Text="Electrical Supervision: "
                Grid.Row="11"/>
-        <TextBlock Grid.Row="11" Grid.Column="1">
+        <TextBlock Grid.Row="11" Grid.Column="1" HorizontalAlignment="Right">
             <TextBlock.Text>
                 <MultiBinding Converter="{local:LaborTimeConverter}">
                     <Binding Path="Estimate.ElectricalSuperLaborHours"/>
@@ -342,8 +382,9 @@
         <TextBlock Text="{Binding Estimate.SubcontractorLaborCost, Mode=OneWay, StringFormat={}{0:C}}"
                    Grid.Row="12" Grid.Column="3" HorizontalAlignment="Right"/>
         <!--Rates-->
-        <Grid Grid.Row="9" Grid.Column="5" Grid.ColumnSpan="4" Grid.RowSpan="3">
+        <Grid Grid.Row="9" Grid.Column="5" Grid.ColumnSpan="4" Grid.RowSpan="4">
             <Grid.RowDefinitions>
+                <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -392,6 +433,9 @@
             <TextBlock Margin="20,0,0,0" Text="Non-Union Supervisor:" Grid.Row="2" Grid.Column="2"/>
             <TextBox Text="{Binding  Bid.Parameters.ElectricalSuperNonUnionRate, StringFormat= {} {0:C}}" Grid.Row="2" Grid.Column="3"
                      Margin="2" HorizontalContentAlignment="Right"/>
+            <TextBlock Grid.Row="3" Text="Supervisor Ratio: "/>
+            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Bid.Parameters.ElectricalSuperRatio}"
+                     Margin="2" HorizontalContentAlignment="Right"/>
         </Grid>
         
         
@@ -428,50 +472,50 @@
                   Grid.Row="1"
                   Grid.ColumnSpan="7"
                 BorderThickness="0 0 0 1"
-                BorderBrush="Black"/>
+                BorderBrush="DarkGray"/>
         <Border Grid.Column="1" 
                   Grid.Row="2"
                   Grid.ColumnSpan="7"
                 BorderThickness="0 0 0 1"
-                BorderBrush="Black"/>
+                BorderBrush="DarkGray"/>
         <Border Grid.Column="1" 
                   Grid.Row="3"
                   Grid.ColumnSpan="7"
                 BorderThickness="0 0 0 1"
-                BorderBrush="Black"/>
+                BorderBrush="DarkGray"/>
         <Border Grid.Column="1" 
                   Grid.Row="4"
                   Grid.ColumnSpan="7"
                 BorderThickness="0 0 0 1"
-                BorderBrush="Black"/>
+                BorderBrush="DarkGray"/>
         <Border Grid.Column="1" 
                 Grid.Row="5"
                 Grid.ColumnSpan="7"
                 BorderThickness="0 0 0 1"
-                BorderBrush="Black"/>
-        <Border Grid.Column="1"
+                BorderBrush="DarkGray"/>
+        <Border Grid.Column="5"
                 Grid.Row="6"
-                Grid.ColumnSpan="7"
+                Grid.ColumnSpan="3"
                 BorderThickness="0 0 0 1"
-                BorderBrush="Black"/>
+                BorderBrush="DarkGray"/>
         
         <!--Separation Border-->
         <Border Grid.Column="0"
                 Grid.Row="8"
                 Grid.ColumnSpan="11"
                 BorderThickness="0 0 0 1"
-                BorderBrush="Black"/>
+                BorderBrush="DarkGray"/>
 
         <!--Subcontractor Labor Borders-->
         <Border Grid.Column="1" 
                   Grid.Row="10"
                   Grid.ColumnSpan="3"
                 BorderThickness="0 0 0 1"
-                BorderBrush="Black"/>
+                BorderBrush="DarkGray"/>
         <Border Grid.Column="1" 
                   Grid.Row="11"
                   Grid.ColumnSpan="3"
                 BorderThickness="0 0 0 1"
-                BorderBrush="Black"/>
+                BorderBrush="DarkGray"/>
     </Grid>
 </UserControl>
