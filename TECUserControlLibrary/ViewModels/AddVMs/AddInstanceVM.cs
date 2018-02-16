@@ -20,7 +20,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private string _patternName = "";
         private int _patternStart = 1;
         private int _patternEnd = 1;
-        private TECLabeled _patternLocation = null;
+        private TECLocation _patternLocation = null;
         
         public TECSystem ToAdd
         {
@@ -41,7 +41,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 RaisePropertyChanged("Names");
             }
         }
-        public ObservableCollection<TECLabeled> Locations { get; }
+        public ObservableCollection<TECLocation> Locations { get; }
         public bool LabelInstances
         {
             get { return _labelInstances; }
@@ -88,7 +88,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 }
             }
         }
-        public TECLabeled PatternLocation
+        public TECLocation PatternLocation
         {
             get { return _patternLocation; }
             set
@@ -136,7 +136,6 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 }
             }
         }
-
         private bool canAdd()
         {
             if(Names.Count > 0)
@@ -174,7 +173,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
     {
 
         private String _name = "";
-        private TECLabeled _location = null;
+        private TECLocation _location = null;
 
         public String Name
         {
@@ -185,7 +184,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 RaisePropertyChanged("Name");
             }
         }
-        public TECLabeled Location
+        public TECLocation Location
         {
             get { return _location; }
             set

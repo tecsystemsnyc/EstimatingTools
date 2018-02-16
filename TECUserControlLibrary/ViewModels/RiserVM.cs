@@ -120,8 +120,9 @@ namespace TECUserControlLibrary.ViewModels
         {
             for(int x = PatternStart; x <= PatternEnd; x++)
             {
-                TECLabeled newLocation = new TECLabeled();
-                newLocation.Label = String.Format("{0} {1}", PatternName, x);
+                TECLocation newLocation = new TECLocation();
+                newLocation.Name = String.Format("{0} {1}", PatternName, x);
+                newLocation.Label = x.ToString();
                 bid.Locations.Add(newLocation);
             }
         }
@@ -143,8 +144,8 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addLocationExecute()
         {
-            TECLabeled newLocation = new TECLabeled();
-            newLocation.Label = LocationText;
+            TECLocation newLocation = new TECLocation();
+            newLocation.Name = LocationText;
             bid.Locations.Add(newLocation);
             LocationText = "";
         }
@@ -155,7 +156,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void changed(TECChangedEventArgs obj)
         {
-            if (obj.PropertyName == "Locations" && obj.Value is TECLabeled location)
+            if (obj.PropertyName == "Locations" && obj.Value is TECLocation location)
             {
                 if (obj.Change == Change.Add)
                 {
@@ -230,7 +231,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             Locations = new LocationList();
             Unlocated = new ObservableCollection<TECLocated>();
-            foreach(TECLabeled label in bid.Locations)
+            foreach(TECLocation label in bid.Locations)
             {
                 Locations.Add(label);
             }
@@ -292,10 +293,10 @@ namespace TECUserControlLibrary.ViewModels
 
     public class LocationContainer
     {
-        public TECLabeled Location { get; }
+        public TECLocation Location { get; }
         public ObservableCollection<TECLocated> Scope { get; }
 
-        public LocationContainer(TECLabeled location, IEnumerable<TECLocated> scope)
+        public LocationContainer(TECLocation location, IEnumerable<TECLocated> scope)
         {
             Location = location;
             Scope = new ObservableCollection<TECLocated>(scope);
@@ -339,7 +340,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public void Add(TECLabeled location)
+        public void Add(TECLocation location)
         {
             if(!locations.Any(item => item.Location == location))
             {

@@ -98,7 +98,7 @@ TECPage,PageID,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,
 TECPage,Image,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE
 TECPage,PageNum,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE
 TECLocation,LocationID,Location,ID,Location,ID,Location,ID,Location,ID,Location,ID,Location,ID,Location,ID
-TECLocation,Name,Location,Label,Location,Label,Location,Label,Location,Label,Location,Label,Location,Label,Location,NONE
+TECLocation,Name,Location,Label,Location,Label,Location,Label,Location,Label,Location,Label,Location,Label,Location,Name
 TECVisualScope,VisualScopeID,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE
 TECVisualScope,Xpos,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE
 TECVisualScope,Ypos,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE
