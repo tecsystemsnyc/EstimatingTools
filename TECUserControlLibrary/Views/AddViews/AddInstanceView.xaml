@@ -84,7 +84,7 @@
                 <TextBlock Text="Location: "
                            Grid.Row="2"/>
                 <ComboBox ItemsSource="{Binding ElementName=addInstanceView, Path=DataContext.Locations}"
-                          DisplayMemberPath="Label"
+                          DisplayMemberPath="Name"
                           SelectedItem="{Binding ElementName=addInstanceView,Path=DataContext.PatternLocation}"
                           Margin="2"
                           Grid.Row="2"
@@ -109,7 +109,7 @@
                     <DataGridComboBoxColumn Header="Location"
                                             ItemsSource="{Binding Data.Locations, Source={StaticResource proxy}}"
                                             SelectedItemBinding="{Binding Location}"
-                                            DisplayMemberPath="Label"/>
+                                            DisplayMemberPath="Name"/>
                 </DataGrid.Columns>
             </DataGrid>
             <Grid Grid.Row="4" Grid.ColumnSpan="2">

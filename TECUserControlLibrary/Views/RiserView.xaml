@@ -136,7 +136,7 @@
                                         <RowDefinition MinHeight="60"/>
                                     </Grid.RowDefinitions>
                                     <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Width="120" HorizontalAlignment="Left">
-                                        <TextBlock Text="{Binding Location.Label}"
+                                        <TextBlock Text="{Binding Location.Name}"
                                            Foreground="Black"/>
                                     </Border>
                                     <ListView ItemsSource="{Binding Scope}"
