@@ -1,5 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.Globalization;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using TECUserControlLibrary.Utilities;
 using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.Views
@@ -34,4 +38,42 @@ namespace TECUserControlLibrary.Views
             InitializeComponent();
         }
     }
+
+    public class LaborTimeConverter : BaseConverter, IMultiValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object[] values, Type targetType,
+           object parameter, System.Globalization.CultureInfo culture)
+        {
+            double hours = (double)values[0];
+            double time = 0.0;
+            LaborTime laborTime = (LaborTime)values[1];
+            switch (laborTime)
+            {
+                case LaborTime.Hours:
+                    time = hours;
+                    return String.Format("{0:n2} Hours", time);
+                case LaborTime.Days:
+                    time = hours / 8.0;
+                    return String.Format("{0:n2} Days", time);
+                case LaborTime.Weeks:
+                    time = hours / 40;
+                    return String.Format("{0:n2} Weeks", time);
+                default:
+                    time = hours;
+                    return String.Format("{0:n2} Hours", time);
+            }
+
+        }
+        public object[] ConvertBack(object value, Type[] targetTypes,
+               object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
+
+    public enum LaborTime { Hours, Days, Weeks }
 }

@@ -6,6 +6,7 @@
              xmlns:ignore="http://www.galasoft.ch/ignore"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+             xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              mc:Ignorable="d ignore"
              x:Name="parent"
              d:DesignWidth="960" d:DesignHeight="660">
@@ -47,9 +48,9 @@
             <ColumnDefinition Width="90"/>
             <ColumnDefinition Width="90"/>
             <ColumnDefinition Width="90"/>
-            <ColumnDefinition Width="90"/>
-            <ColumnDefinition Width="90"/>
-            <ColumnDefinition Width="90"/>
+            <ColumnDefinition Width="70"/>
+            <ColumnDefinition Width="110"/>
+            <ColumnDefinition Width="70"/>
             <ColumnDefinition Width="90"/>
             <ColumnDefinition Width="210"/>
             <ColumnDefinition Width="*"/>
@@ -66,7 +67,7 @@
                Grid.Column="3"/>
         <TextBlock Text="Extra Hours"
                Grid.Column="4"/>
-        <TextBlock Text="Total Hours"
+        <TextBlock Text="Total"
                Grid.Column="5"/>
         <TextBlock Text="$/Hour"
                Grid.Column="6"/>
@@ -89,9 +90,15 @@
         <TextBox Text="{Binding Bid.ExtraLabor.PMExtraHours, StringFormat= {} {0:F2}}"
                  Grid.Row="1" Grid.Column="4"
                  Margin="2"/>
-        <TextBlock Text="{Binding Estimate.PMLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
-                 Grid.Row="1" Grid.Column="5"
-                 />
+        <TextBlock Grid.Column="5" Grid.Row="1">
+            <TextBlock.Text>
+                <MultiBinding Converter="{local:LaborTimeConverter}">
+                    <Binding Path="Estimate.PMLaborHours"/>
+                    <Binding ElementName="laborTimeCombo" Path="SelectedItem"/>
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
+        
         <TextBox Text="{Binding Bid.Parameters.PMRate, StringFormat= {} {0:C}}" HorizontalContentAlignment="Right"
                  Grid.Row="1" Grid.Column="6" Margin="2"
                  />
@@ -114,9 +121,14 @@
         <TextBox Text="{Binding Bid.ExtraLabor.ENGExtraHours, StringFormat= {} {0:F2}}"
                  Grid.Row="2" Grid.Column="4"
                  Margin="2"/>
-        <TextBlock Text="{Binding Estimate.ENGLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
-                 Grid.Row="2" Grid.Column="5"
-                 />
+        <TextBlock Grid.Row="2" Grid.Column="5">
+            <TextBlock.Text>
+                <MultiBinding Converter="{local:LaborTimeConverter}">
+                    <Binding Path="Estimate.ENGLaborHours"/>
+                    <Binding ElementName="laborTimeCombo" Path="SelectedItem"/>
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
         <TextBox Text="{Binding Bid.Parameters.ENGRate, StringFormat= {} {0:C}}" HorizontalContentAlignment="Right"
                  Grid.Row="2" Grid.Column="6" Margin="2"
                  />
@@ -139,8 +151,14 @@
         <TextBox Text="{Binding Bid.ExtraLabor.SoftExtraHours, StringFormat= {} {0:F2}}"
                  Grid.Row="3" Grid.Column="4"
                  Margin="2"/>
-        <TextBlock Text="{Binding Estimate.SoftLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
-                 Grid.Row="3" Grid.Column="5"/>
+        <TextBlock Grid.Row="3" Grid.Column="5">
+            <TextBlock.Text>
+                <MultiBinding Converter="{local:LaborTimeConverter}">
+                    <Binding Path="Estimate.SoftLaborHours"/>
+                    <Binding ElementName="laborTimeCombo" Path="SelectedItem"/>
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
         <TextBox Text="{Binding Bid.Parameters.SoftRate, StringFormat= {} {0:C}}"
                  Grid.Row="3" Grid.Column="6" Margin="2" HorizontalContentAlignment="Right"/>
         <TextBlock Text="{Binding Estimate.SoftLaborCost, Mode=OneWay, StringFormat= {} {0:C}}"
@@ -162,9 +180,14 @@
         <TextBox Text="{Binding Bid.ExtraLabor.GraphExtraHours, StringFormat= {} {0:F2}}"
                  Grid.Row="4" Grid.Column="4"
                  Margin="2"/>
-        <TextBlock Text="{Binding Estimate.GraphLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
-                 Grid.Row="4" Grid.Column="5"
-                 />
+        <TextBlock Grid.Row="4" Grid.Column="5">
+            <TextBlock.Text>
+                <MultiBinding Converter="{local:LaborTimeConverter}">
+                    <Binding Path="Estimate.GraphLaborHours"/>
+                    <Binding ElementName="laborTimeCombo" Path="SelectedItem"/>
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
         <TextBox Text="{Binding Bid.Parameters.GraphRate, StringFormat= {} {0:C}}"
                  Grid.Row="4" Grid.Column="6" Margin="2" HorizontalContentAlignment="Right"
                  />
@@ -187,9 +210,14 @@
         <TextBox Text="{Binding Bid.ExtraLabor.CommExtraHours, StringFormat= {} {0:F2}}"
                  Grid.Row="5" Grid.Column="4"
                  Margin="2"/>
-        <TextBlock Text="{Binding Estimate.CommLaborHours, Mode=OneWay, StringFormat= {} {0:F2}}"
-                 Grid.Row="5" Grid.Column="5"
-                 />
+        <TextBlock Grid.Row="5" Grid.Column="5">
+            <TextBlock.Text>
+                <MultiBinding Converter="{local:LaborTimeConverter}">
+                    <Binding Path="Estimate.CommLaborHours"/>
+                    <Binding ElementName="laborTimeCombo" Path="SelectedItem"/>
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
         <TextBox Text="{Binding Bid.Parameters.CommRate, StringFormat= {} {0:C}}"
                  Grid.Row="5" Grid.Column="6" Margin="2" HorizontalContentAlignment="Right"
                  />
@@ -200,13 +228,26 @@
         <!--TEC Field Labor Values-->
         <TextBlock Text="Field Labor:"
                    Grid.Row="6"/>
-        <TextBlock Text="{Binding Estimate.TECFieldHours, Mode=OneWay, StringFormat={}{0:F2}}"
-                   Grid.Row="6" Grid.Column="5"/>
+        <TextBlock Grid.Row="6" Grid.Column="5">
+            <TextBlock.Text>
+                <MultiBinding Converter="{local:LaborTimeConverter}">
+                    <Binding Path="Estimate.TECFieldHours"/>
+                    <Binding ElementName="laborTimeCombo" Path="SelectedItem"/>
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
         <TextBox Text="{Binding Bid.Parameters.CommRate, StringFormat= {} {0:C}}"  Margin="2" HorizontalContentAlignment="Right"
                  Grid.Row="6" Grid.Column="6"/>
         <TextBlock Text="{Binding Estimate.TECFieldLaborCost, Mode=OneWay, StringFormat={}{0:C}}"
                    Grid.Row="6" Grid.Column="7" HorizontalAlignment="Right"/>
-        
+
+        <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type local:LaborTime}}}"
+                  x:Name="laborTimeCombo"
+                  Margin="2"
+                  Grid.Row="7"
+                  Grid.Column="5"
+                  SelectedIndex="0"/>
+
         <!--Confidence-->
         <Grid Grid.Row="1" Grid.Column="8" Margin="10,0,0,0">
             <Grid.ColumnDefinitions>
