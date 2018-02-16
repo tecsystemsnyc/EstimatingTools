@@ -160,6 +160,16 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
+                <TextBlock Text="Labor:"/>
+                <TextBlock Text="{Binding Estimate.SubcontractorLaborCost, StringFormat= {} {0:C}}"
+                   Grid.Column="1"
+                   TextAlignment="Right"/>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
                 <TextBlock Text="Escalation:" />
                 <TextBlock Text="{Binding Estimate.ElectricalEscalation, StringFormat={}{0:C}}"
                  Grid.Column="1"
