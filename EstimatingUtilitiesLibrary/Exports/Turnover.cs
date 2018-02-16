@@ -568,13 +568,16 @@ namespace EstimatingUtilitiesLibrary.Exports
         {
             Paragraph par = new Paragraph();
             Text materialText = new Text(String.Format("Material Cost: {0:C}", estimate.TECMaterialCost));
-            Text subLaborText = new Text(String.Format("Subcontractor Labor: {0:C}", estimate.SubcontractorLaborHours));
+            Text subLaborText = new Text(String.Format("Subcontractor Labor Hours: {0}", estimate.SubcontractorLaborHours));
+            Text subLaborCostText = new Text(String.Format("Subcontractor Labor Cost: {0:C}", estimate.SubcontractorLaborCost));
             Text subMaterialText = new Text(String.Format("Subcontractor Material: {0:C}", estimate.ElectricalMaterialCost));
             
             par.Append(new Break());
             par.Append(new Run(materialText));
             par.Append(new Break());
             par.Append(new Run(subLaborText));
+            par.Append(new Break());
+            par.Append(new Run(subLaborCostText));
             par.Append(new Break());
             par.Append(new Run(subMaterialText));
 

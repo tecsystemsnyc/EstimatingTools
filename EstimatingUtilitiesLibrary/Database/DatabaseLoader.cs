@@ -68,6 +68,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
             bid.Parameters = getBidParameters(bid);
             bid.ExtraLabor = getExtraLabor(bid);
+            bid.Schedule = getSchedule(bid);
             bid.ScopeTree = getBidScopeBranches();
             bid.Systems = getAllSystemsInBid(bid.Guid);
             bid.Locations = getAllLocations();
@@ -82,6 +83,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
             return (bid, needsSave);
         }
+        
         static private (TECTemplates templates, bool needsUpdate) loadTemplates()
         {
             TECTemplates templates = new TECTemplates();
@@ -403,6 +405,24 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             return getExtraLaborFromRow(DT.Rows[0]);
         }
+        private static TECSchedule getSchedule(TECBid bid)
+        {
+            DataTable DT = SQLiteDB.GetDataFromTable(ScheduleTable.TableName);
+            if (DT.Rows.Count > 1)
+            {
+                logger.Error("Multiple rows found in schedule table. Using first found.");
+            }
+            else if (DT.Rows.Count < 1)
+            {
+                logger.Error("Schedule not found in database. Creating a new schedule.");
+                return new TECSchedule();
+            }
+            Guid guid = new Guid(DT.Rows[0][ScheduleTable.ID.Name].ToString());
+            List<TECScheduleTable> tables = getTablesForSchedule(guid);
+            TECSchedule schedule = new TECSchedule(guid, tables);
+            return schedule;
+        }
+        
         static private ObservableCollection<TECScopeBranch> getBidScopeBranches()
         {
             ObservableCollection<TECScopeBranch> mainBranches = new ObservableCollection<TECScopeBranch>();
@@ -632,6 +652,33 @@ namespace EstimatingUtilitiesLibrary.Database
                 { outModules.Add(module); }
             }
             return outModules;
+        }
+        private static List<TECScheduleTable> getTablesForSchedule(Guid guid)
+        {
+            List<TECScheduleTable> tables = new List<TECScheduleTable>();
+            DataTable dataTable = getChildObjects(new ScheduleScheduleTableTable(), new ScheduleTableTable(),
+                guid, ScheduleScheduleTableTable.Index.Name);
+            foreach (DataRow row in dataTable.Rows)
+            { tables.Add(getScheduleTableFromRow(row)); }
+            return tables;
+        }
+        private static TECScheduleTable getScheduleTableFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[ScheduleTableTable.ID.Name].ToString());
+            String name = row[ScheduleTableTable.Name.Name].ToString();
+            List<TECScheduleItem> items = getScheduleItemsInTable(guid);
+            TECScheduleTable table = new TECScheduleTable(guid, items);
+            table.Name = name;
+            return table;
+        }
+        private static List<TECScheduleItem> getScheduleItemsInTable(Guid guid)
+        {
+            List<TECScheduleItem> items = new List<TECScheduleItem>();
+            DataTable dataTable = getChildObjects(new ScheduleTableScheduleItemTable(), new ScheduleItemTable(),
+                guid, ScheduleTableScheduleItemTable.Index.Name);
+            foreach (DataRow row in dataTable.Rows)
+            { items.Add(getScheduleItemFromRow(row)); }
+            return items;
         }
 
         static private ObservableCollection<TECIOModule> getIOModules()
@@ -1292,6 +1339,22 @@ namespace EstimatingUtilitiesLibrary.Database
         }
         #endregion
 
+        private static TECScheduleItem getScheduleItemFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[ScheduleItemTable.ID.Name].ToString());
+            String tag = row[ScheduleItemTable.Tag.Name].ToString();
+            String service = row[ScheduleItemTable.Service.Name].ToString();
+            String location = row[ScheduleItemTable.Location.Name].ToString();
+            DataTable dataTable = getChildIDs(new ScheduleItemScopeTable(), guid);
+            TECScope scope = dataTable.Rows.Count > 0 ?
+                new TECSubScope(new Guid(dataTable.Rows[0][ScheduleItemScopeTable.ScopeID.Name].ToString()), false) : null;
+            TECScheduleItem item = new TECScheduleItem(guid);
+            item.Tag = tag;
+            item.Service = service;
+            item.Location = location;
+            item.Scope = scope;
+            return item;
+        }
         private static void getScopeChildren(TECScope scope)
         {
             scope.Tags = getTagsInScope(scope.Guid);
@@ -1469,10 +1532,14 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 throw new Exception("Child object table must haveone primary key");
             }
-            string command = string.Format("select {0} from {1} where {2} in (select {3} from {4} where {5} = '{6}'{7})",
-                DatabaseHelper.AllFieldsInTableString(childTable), childTable.NameString, childTable.PrimaryKeys[0].Name,
-                relationTable.PrimaryKeys[1].Name, relationTable.NameString,
-                relationTable.PrimaryKeys[0].Name, parentID.ToString(),
+            string command = string.Format("select {0} from {1} join {2} on {3} = {4} AND {5} = '{6}' {7}",
+                DatabaseHelper.AllFieldsInTableString(childTable),
+                childTable.NameString,
+                relationTable.NameString,
+                childTable.PrimaryKeys[0].Name,
+                relationTable.PrimaryKeys[1].Name,
+                relationTable.PrimaryKeys[0].Name,
+                parentID.ToString(),
                 orderString);
             return SQLiteDB.GetDataFromCommand(command);
         }

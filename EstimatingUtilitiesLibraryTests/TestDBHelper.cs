@@ -668,6 +668,7 @@ namespace EstimatingUtilitiesLibraryTests
             List<string> values = new List<string>();
             values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
             values.Add("5df99701-1d7b-4fbe-843d-40793f4145a8");
+            values.Add("0");
             addDataToTable(new BidMiscTable(), values);
         }
         private static void addToIOModuleIOTable()
@@ -724,11 +725,13 @@ namespace EstimatingUtilitiesLibraryTests
             List<string> values = new List<string>();
             values.Add("25e815fa-4ac7-4b69-9640-5ae220f0cd40");
             values.Add("81adfc62-20ec-466f-a2a0-430e1223f64f");
+            values.Add("0");
             addDataToTable(new ScopeBranchHierarchyTable(), values);
 
             values = new List<string>();
             values.Add("814710f1-f2dd-4ae6-9bc4-9279288e4994");
             values.Add("542802f6-a7b1-4020-9be4-e58225c433a8");
+            values.Add("0");
             addDataToTable(new ScopeBranchHierarchyTable(), values);
         }
         private static void addToBidSystemTable()
@@ -801,16 +804,19 @@ namespace EstimatingUtilitiesLibraryTests
             List<string> values = new List<string>();
             values.Add("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
             values.Add("03a16819-9205-4e65-a16b-96616309f171");
+            values.Add("0");
             addDataToTable(new SubScopePointTable(), values);
 
             values = new List<string>();
             values.Add("94726d87-b468-46a8-9421-3ff9725d5239");
             values.Add("e60437bc-09a1-47eb-9fd5-78711d942a12");
+            values.Add("0");
             addDataToTable(new SubScopePointTable(), values);
 
             values = new List<string>();
             values.Add("3ebdfd64-5249-4332-a832-ff3cc0cdb309");
             values.Add("6776a30b-0325-42ad-8aa3-3c065b4bb908");
+            values.Add("0");
             addDataToTable(new SubScopePointTable(), values);
         }
         private static void addToScopeTagTable()
@@ -1305,26 +1311,31 @@ namespace EstimatingUtilitiesLibraryTests
             List<string> values = new List<string>();
             values.Add("4f93907a-9aab-4ed5-8e55-43aab2af5ef8");
             values.Add("f22913a6-e348-4a77-821f-80447621c6e0");
+            values.Add("0");
             addDataToTable(new NetworkConnectionChildrenTable(), values);
 
             values = new List<string>();
             values.Add("6aca8c22-5115-4534-a5b1-698b7e42d6c2");
             values.Add("973e6100-31f7-40b0-bfe7-9d64630c1c56");
+            values.Add("0");
             addDataToTable(new NetworkConnectionChildrenTable(), values);
 
             values = new List<string>();
             values.Add("99aea45e-ebeb-4c1a-8407-1d1a3540ceeb");
             values.Add("bf17527a-18ba-4765-a01e-8ab8de5664a3");
+            values.Add("0");
             addDataToTable(new NetworkConnectionChildrenTable(), values);
 
             values = new List<string>();
             values.Add("99aea45e-ebeb-4c1a-8407-1d1a3540ceeb");
             values.Add("7b6825df-57da-458a-a859-a9459c15907b");
+            values.Add("0");
             addDataToTable(new NetworkConnectionChildrenTable(), values);
 
             values = new List<string>();
             values.Add("e503fdd4-f299-4618-8d54-6751c3b2bc25");
             values.Add("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
+            values.Add("0");
             addDataToTable(new NetworkConnectionChildrenTable(), values);
         }
         private static void addToSubScopeConnectionChildrenTable()
@@ -1378,21 +1389,25 @@ namespace EstimatingUtilitiesLibraryTests
             List<string> values = new List<string>();
             values.Add("ebdbcc85-10f4-46b3-99e7-d896679f874a");
             values.Add("1bb86714-2512-4fdd-a80f-46969753d8a0");
+            values.Add("0");
             addDataToTable(new SystemControllerTable(), values);
 
             values = new List<string>();
             values.Add("ba2e71d4-a2b9-471a-9229-9fbad7432bf7");
             values.Add("f22913a6-e348-4a77-821f-80447621c6e0");
+            values.Add("0");
             addDataToTable(new SystemControllerTable(), values);
 
             values = new List<string>();
             values.Add("ebdbcc85-10f4-46b3-99e7-d896679f874a");
             values.Add("95032348-c661-470f-9bea-47dd750a47a5");
+            values.Add("0");
             addDataToTable(new SystemControllerTable(), values);
 
             values = new List<string>();
             values.Add("ba2e71d4-a2b9-471a-9229-9fbad7432bf7");
             values.Add("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
+            values.Add("0");
             addDataToTable(new SystemControllerTable(), values);
         }
         private static void addToSystemPanelTable()
@@ -1400,11 +1415,13 @@ namespace EstimatingUtilitiesLibraryTests
             List<string> values = new List<string>();
             values.Add("ebdbcc85-10f4-46b3-99e7-d896679f874a");
             values.Add("e7695d68-d79f-44a2-92f5-b303436186af");
+            values.Add("0");
             addDataToTable(new SystemPanelTable(), values);
 
             values = new List<string>();
             values.Add("ba2e71d4-a2b9-471a-9229-9fbad7432bf7");
             values.Add("10b07f6c-4374-49fc-ba6f-84db65b61ffa");
+            values.Add("0");
             addDataToTable(new SystemPanelTable(), values);
         }
         private static void addToSystemScopeBranchTable()
@@ -1412,6 +1429,7 @@ namespace EstimatingUtilitiesLibraryTests
             List<string> values = new List<string>();
             values.Add("ebdbcc85-10f4-46b3-99e7-d896679f874a");
             values.Add("814710f1-f2dd-4ae6-9bc4-9279288e4994");
+            values.Add("0");
             addDataToTable(new SystemScopeBranchTable(), values);
         }
         private static void addToSystemHierarchyTable()
@@ -1419,6 +1437,7 @@ namespace EstimatingUtilitiesLibraryTests
             List<string> values = new List<string>();
             values.Add("ebdbcc85-10f4-46b3-99e7-d896679f874a");
             values.Add("ba2e71d4-a2b9-471a-9229-9fbad7432bf7");
+            values.Add("0");
             addDataToTable(new SystemHierarchyTable(), values);
         }
         private static void addToSystemMiscTable()
@@ -1426,6 +1445,7 @@ namespace EstimatingUtilitiesLibraryTests
             List<string> values = new List<string>();
             values.Add("ebdbcc85-10f4-46b3-99e7-d896679f874a");
             values.Add("e3ecee54-1f90-415a-b493-90a78f618476");
+            values.Add("0");
             addDataToTable(new SystemMiscTable(), values);
         }
         private static void addToCharacteristicScopeInstanceScopeTable()

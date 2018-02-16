@@ -38,7 +38,8 @@ namespace EstimatingLibrary
             set
             {
                 var old = new TECMisc(this, this.IsTypical);
-                base.Cost = value;
+                base._cost = value;
+                notifyCombinedChanged(Change.Edit, "Cost", this, value, old.Cost);
                 NotifyMiscChanged(this, old);
             }
         }
@@ -51,7 +52,8 @@ namespace EstimatingLibrary
             set
             {
                 var old = new TECMisc(this, this.IsTypical);
-                base.Labor = value;
+                base._labor = value;
+                notifyCombinedChanged(Change.Edit, "Labor", this, value, old.Labor);
                 NotifyMiscChanged(this, old);
             }
         }
@@ -64,7 +66,8 @@ namespace EstimatingLibrary
             set
             {
                 var old = new TECMisc(this, this.IsTypical);
-                base.Type = value;
+                base._type = value;
+                notifyCombinedChanged(Change.Edit, "Type", this, value, old.Type);
                 NotifyMiscChanged(this, old);
             }
         }

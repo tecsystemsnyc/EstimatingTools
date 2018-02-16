@@ -241,6 +241,7 @@
     <Compile Include="ViewModels\NetworkVM.cs" />
     <Compile Include="ViewModels\ReplaceActuatorVM.cs" />
     <Compile Include="ViewModels\RiserVM.cs" />
+    <Compile Include="ViewModels\ScheduleVM.cs" />
     <Compile Include="ViewModels\ValveSummaryVM.cs" />
     <Compile Include="ViewModels\WorkBoxVM.cs" />
     <Compile Include="Views\ConnectableFilterView.xaml.cs">
@@ -368,6 +369,9 @@
     <Compile Include="Utilities\BindingProxy.cs" />
     <Compile Include="Utilities\BubbleScrollEvent .cs" />
     <Compile Include="ViewModels\MiscCostsVM.cs" />
+    <Compile Include="Views\ItemizedDetailsView.xaml.cs">
+      <DependentUpon>ItemizedDetailsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LengthSummaryView.xaml.cs">
       <DependentUpon>LengthSummaryView.xaml</DependentUpon>
     </Compile>
@@ -422,6 +426,9 @@
     </Compile>
     <Compile Include="Views\RiserView.xaml.cs">
       <DependentUpon>RiserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ScheduleView.xaml.cs">
+      <DependentUpon>ScheduleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ScopeCollectionsTabView.xaml.cs">
       <DependentUpon>ScopeCollectionsTabView.xaml</DependentUpon>
@@ -793,6 +800,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ItemizedDetailsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\LengthSummaryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -866,6 +877,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\RiserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ScheduleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

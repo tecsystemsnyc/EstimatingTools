@@ -30,6 +30,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECController> _controllers;
         private ObservableCollection<TECMisc> _miscCosts;
         private ObservableCollection<TECPanel> _panels;
+        private TECSchedule _schedule;
         #endregion
 
         #region Properties
@@ -124,6 +125,16 @@ namespace EstimatingLibrary
                 CostChanged?.Invoke(value.CostBatch - old.CostBatch);
             }
 
+        }
+        public TECSchedule Schedule
+        {
+            get { return _schedule; }
+            set
+            {
+                var old = _schedule;
+                _schedule = value;
+                notifyCombinedChanged(Change.Edit, "Schedule", this, value, old);
+            }
         }
 
         public ObservableCollection<TECScopeBranch> ScopeTree
@@ -262,6 +273,7 @@ namespace EstimatingLibrary
             _panels = new ObservableCollection<TECPanel>();
             _extraLabor = new TECExtraLabor(this.Guid);
             _parameters = new TECParameters(this.Guid);
+            _schedule = new TECSchedule();
 
             Systems.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Systems");
             ScopeTree.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ScopeTree");
@@ -432,6 +444,7 @@ namespace EstimatingLibrary
             saveList.Add(this.Parameters, "Parameters");
             saveList.Add(this.Catalogs, "Catalogs");
             saveList.Add(this.ExtraLabor, "ExtraLabor");
+            saveList.Add(this.Schedule, "Schedule");
             saveList.AddRange(this.ScopeTree, "ScopeTree");
             saveList.AddRange(this.Notes, "Notes");
             saveList.AddRange(this.Exclusions, "Exclusions");
