@@ -176,6 +176,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[BidMiscTable.BidID.Name] = bid.Guid.ToString();
             data[BidMiscTable.MiscID.Name] = misc.Guid.ToString();
+            data[BidMiscTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, BidMiscTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
@@ -243,6 +244,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[ScopeBranchHierarchyTable.ParentID.Name] = parentBranch.Guid.ToString();
             data[ScopeBranchHierarchyTable.ChildID.Name] = scopeBranch.Guid.ToString();
+            data[ScopeBranchHierarchyTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, ScopeBranchHierarchyTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
@@ -389,6 +391,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SystemHierarchyTable.ParentID.Name] = system.Guid.ToString();
             data[SystemHierarchyTable.ChildID.Name] = instance.Guid.ToString();
+            data[SystemHierarchyTable.Index.Name] = "0";
 
             expectedItems.Add(new UpdateItem(Change.Add, SystemHierarchyTable.TableName, data));
 
@@ -528,6 +531,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SystemHierarchyTable.ParentID.Name] = typical.Guid.ToString();
             data[SystemHierarchyTable.ChildID.Name] = instance.Guid.ToString();
+            data[SystemHierarchyTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemHierarchyTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
@@ -681,6 +685,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SystemHierarchyTable.ParentID.Name] = system.Guid.ToString();
             data[SystemHierarchyTable.ChildID.Name] = instance.Guid.ToString();
+            data[SystemHierarchyTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemHierarchyTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
@@ -720,6 +725,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SubScopePointTable.SubScopeID.Name] = subScope.Guid.ToString();
             data[SubScopePointTable.PointID.Name] = point.Guid.ToString();
+            data[SubScopePointTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SubScopePointTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
@@ -764,6 +770,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SubScopePointTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
             data[SubScopePointTable.PointID.Name] = instance.Equipment[0].SubScope[0].Points[0].Guid.ToString();
+            data[SubScopePointTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SubScopePointTable.TableName, data));
 
             data = new Dictionary<string, string>();
@@ -776,6 +783,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SubScopePointTable.SubScopeID.Name] = subScope.Guid.ToString();
             data[SubScopePointTable.PointID.Name] = point.Guid.ToString();
+            data[SubScopePointTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SubScopePointTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
@@ -849,6 +857,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SubScopePointTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
             data[SubScopePointTable.PointID.Name] = instance.Equipment[0].SubScope[0].Points[0].Guid.ToString();
+            data[SubScopePointTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SubScopePointTable.TableName, data));
             
             data = new Dictionary<string, string>();
@@ -866,6 +875,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SystemHierarchyTable.ParentID.Name] = system.Guid.ToString();
             data[SystemHierarchyTable.ChildID.Name] = instance.Guid.ToString();
+            data[SystemHierarchyTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemHierarchyTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
@@ -1014,6 +1024,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SystemHierarchyTable.ParentID.Name] = system.Guid.ToString();
             data[SystemHierarchyTable.ChildID.Name] = instance.Guid.ToString();
+            data[SystemHierarchyTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemHierarchyTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
@@ -1166,6 +1177,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SystemHierarchyTable.ParentID.Name] = system.Guid.ToString();
             data[SystemHierarchyTable.ChildID.Name] = instance.Guid.ToString();
+            data[SystemHierarchyTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemHierarchyTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
@@ -1204,6 +1216,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SystemControllerTable.SystemID.Name] = system.Guid.ToString();
             data[SystemControllerTable.ControllerID.Name] = controller.Guid.ToString();
+            data[SystemControllerTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemControllerTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
@@ -1251,6 +1264,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SystemControllerTable.SystemID.Name] = instance.Guid.ToString();
             data[SystemControllerTable.ControllerID.Name] = instance.Controllers[0].Guid.ToString();
+            data[SystemControllerTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemControllerTable.TableName, data));
             data = new Dictionary<string, string>();
             data[ControllerTable.ID.Name] = controller.Guid.ToString();
@@ -1265,6 +1279,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SystemControllerTable.SystemID.Name] = typical.Guid.ToString();
             data[SystemControllerTable.ControllerID.Name] = controller.Guid.ToString();
+            data[SystemControllerTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemControllerTable.TableName, data));
             data = new Dictionary<string, string>();
 
@@ -1319,11 +1334,13 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SystemControllerTable.SystemID.Name] = instance.Guid.ToString();
             data[SystemControllerTable.ControllerID.Name] = instance.Controllers[0].Guid.ToString();
+            data[SystemControllerTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemControllerTable.TableName, data));
             
             data = new Dictionary<string, string>();
             data[SystemHierarchyTable.ParentID.Name] = typical.Guid.ToString();
             data[SystemHierarchyTable.ChildID.Name] = instance.Guid.ToString();
+            data[SystemHierarchyTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemHierarchyTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
@@ -1361,6 +1378,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SystemPanelTable.SystemID.Name] = system.Guid.ToString();
             data[SystemPanelTable.PanelID.Name] = panel.Guid.ToString();
+            data[SystemPanelTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemPanelTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
@@ -1441,6 +1459,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SystemPanelTable.SystemID.Name] = instance.Guid.ToString();
             data[SystemPanelTable.PanelID.Name] = instance.Panels[0].Guid.ToString();
+            data[SystemPanelTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemPanelTable.TableName, data));
             data = new Dictionary<string, string>();
             data[PanelTable.ID.Name] = panel.Guid.ToString();
@@ -1455,6 +1474,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SystemPanelTable.SystemID.Name] = typical.Guid.ToString();
             data[SystemPanelTable.PanelID.Name] = panel.Guid.ToString();
+            data[SystemPanelTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemPanelTable.TableName, data));
             int expectedCount = expectedItems.Count;
             
@@ -1503,11 +1523,13 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SystemPanelTable.SystemID.Name] = instance.Guid.ToString();
             data[SystemPanelTable.PanelID.Name] = instance.Panels[0].Guid.ToString();
+            data[SystemPanelTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemPanelTable.TableName, data));
             
             data = new Dictionary<string, string>();
             data[SystemHierarchyTable.ParentID.Name] = typical.Guid.ToString();
             data[SystemHierarchyTable.ChildID.Name] = instance.Guid.ToString();
+            data[SystemHierarchyTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemHierarchyTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
@@ -1543,6 +1565,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SystemMiscTable.SystemID.Name] = system.Guid.ToString();
             data[SystemMiscTable.MiscID.Name] = misc.Guid.ToString();
+            data[SystemMiscTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemMiscTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
@@ -1586,6 +1609,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SystemMiscTable.SystemID.Name] = instance.Guid.ToString();
             data[SystemMiscTable.MiscID.Name] = instance.MiscCosts[0].Guid.ToString();
+            data[SystemMiscTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemMiscTable.TableName, data));
 
             data = new Dictionary<string, string>();
@@ -1599,6 +1623,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SystemMiscTable.SystemID.Name] = typical.Guid.ToString();
             data[SystemMiscTable.MiscID.Name] = misc.Guid.ToString();
+            data[SystemMiscTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemMiscTable.TableName, data));
 
 
@@ -1648,12 +1673,14 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SystemMiscTable.SystemID.Name] = instance.Guid.ToString();
             data[SystemMiscTable.MiscID.Name] = instance.MiscCosts[0].Guid.ToString();
+            data[SystemMiscTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemMiscTable.TableName, data));
 
             
             data = new Dictionary<string, string>();
             data[SystemHierarchyTable.ParentID.Name] = typical.Guid.ToString();
             data[SystemHierarchyTable.ChildID.Name] = instance.Guid.ToString();
+            data[SystemHierarchyTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemHierarchyTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
@@ -1684,6 +1711,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[SystemScopeBranchTable.SystemID.Name] = system.Guid.ToString();
             data[SystemScopeBranchTable.BranchID.Name] = scopeBranch.Guid.ToString();
+            data[SystemScopeBranchTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemScopeBranchTable.TableName, data));
             int expectedCount = expectedItems.Count;
 
@@ -1745,6 +1773,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[NetworkConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
             data[NetworkConnectionChildrenTable.ChildID.Name] = child.Guid.ToString();
+            data[NetworkConnectionChildrenTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionChildrenTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
@@ -1807,6 +1836,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[NetworkConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
             data[NetworkConnectionChildrenTable.ChildID.Name] = instanceController.Guid.ToString();
+            data[NetworkConnectionChildrenTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionChildrenTable.TableName, data));
             
             int expectedCount = expectedItems.Count;
@@ -1875,6 +1905,7 @@ namespace EstimatingUtilitiesLibraryTests
             data = new Dictionary<string, string>();
             data[NetworkConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
             data[NetworkConnectionChildrenTable.ChildID.Name] = otherInstanceController.Guid.ToString();
+            data[NetworkConnectionChildrenTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionChildrenTable.TableName, data));
             
             int expectedCount = expectedItems.Count;

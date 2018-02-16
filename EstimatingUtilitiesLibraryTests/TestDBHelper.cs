@@ -725,11 +725,13 @@ namespace EstimatingUtilitiesLibraryTests
             List<string> values = new List<string>();
             values.Add("25e815fa-4ac7-4b69-9640-5ae220f0cd40");
             values.Add("81adfc62-20ec-466f-a2a0-430e1223f64f");
+            values.Add("0");
             addDataToTable(new ScopeBranchHierarchyTable(), values);
 
             values = new List<string>();
             values.Add("814710f1-f2dd-4ae6-9bc4-9279288e4994");
             values.Add("542802f6-a7b1-4020-9be4-e58225c433a8");
+            values.Add("0");
             addDataToTable(new ScopeBranchHierarchyTable(), values);
         }
         private static void addToBidSystemTable()
