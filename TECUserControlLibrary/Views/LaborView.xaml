@@ -43,7 +43,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="130"/>
             <ColumnDefinition Width="90"/>
             <ColumnDefinition Width="90"/>
             <ColumnDefinition Width="90"/>
@@ -51,6 +51,7 @@
             <ColumnDefinition Width="90"/>
             <ColumnDefinition Width="90"/>
             <ColumnDefinition Width="90"/>
+            <ColumnDefinition Width="210"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         
@@ -207,7 +208,7 @@
                    Grid.Row="6" Grid.Column="7" HorizontalAlignment="Right"/>
         
         <!--Confidence-->
-        <Grid Grid.Row="1" Grid.Column="12">
+        <Grid Grid.Row="1" Grid.Column="8" Margin="10,0,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="60"/>
@@ -289,10 +290,10 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="60"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Rates" FontWeight="Bold"/>
             <Grid Grid.Column="1" Grid.ColumnSpan="3">
@@ -336,11 +337,11 @@
         
         
         <!--Reload Button-->
-        <ComboBox ItemsSource="{Binding Templates.Parameters}" Name="parametersComboBox" Grid.Row="2" Grid.Column="12" Margin="2"
+        <ComboBox ItemsSource="{Binding Templates.Parameters}" Name="parametersComboBox" Grid.Row="2" Grid.Column="8" Margin="10,2,2,2"
                   DisplayMemberPath="Label"/>
         <Button Content="Set Parameters" Command="{Binding SetParametersCommand}"
                 CommandParameter="{Binding ElementName=parametersComboBox, Path=SelectedItem}"
-                Grid.Row="3" Grid.Column="12" Margin="2">
+                Grid.Row="3" Grid.Column="8" Margin="10,2,2,2">
             <Button.ToolTip>
                 <Label Content="Previous parameter data will be lost"/>
             </Button.ToolTip>
