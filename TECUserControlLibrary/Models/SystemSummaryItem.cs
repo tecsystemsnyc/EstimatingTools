@@ -7,16 +7,16 @@ namespace TECUserControlLibrary.Models
 {
     public class SystemSummaryItem : ViewModelBase
     {
-        private double _untiPrice;
+        private double _unitPrice;
 
         public TECTypical Typical { get; }
         public TECEstimator Estimate { get; }
         public double UnitPrice
         {
-            get { return _untiPrice; }
+            get { return _unitPrice; }
             set
             {
-                _untiPrice = value;
+                _unitPrice = value;
                 RaisePropertyChanged("UnitPrice");
             }
         }
@@ -26,7 +26,7 @@ namespace TECUserControlLibrary.Models
             this.Typical = typical;
             Estimate = new TECEstimator(Typical, parameters, new TECExtraLabor(Guid.NewGuid()), duration, new ChangeWatcher(Typical));
             UnitPrice = Estimate.TotalPrice / Typical.Instances.Count;
-            typical.CostChanged += change => {
+            Estimate.PropertyChanged += (x, y) => {
                 UnitPrice = Estimate.TotalPrice / Typical.Instances.Count;
             };
         }
