@@ -16,6 +16,51 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
         private ObservableCollection<ScopeSummaryItem> _riser;
         private ObservableCollection<ScopeSummaryItem> _misc;
         private TECBid bid;
+
+        private SystemSummaryItem _selectedSystem;
+        private ScopeSummaryItem _selectedRiser;
+        private ScopeSummaryItem _selectedMisc;
+        private ScopeSummaryItem _selected;
+        
+        public SystemSummaryItem SelectedSystem
+        {
+            get { return _selectedSystem; }
+            set
+            {
+                _selectedSystem = value;
+                RaisePropertyChanged("SelectedSystem");
+                Selected = new ScopeSummaryItem(new TECSystem(value.Typical, false, bid), bid.Parameters, bid.Duration);
+            }
+        }
+        public ScopeSummaryItem SelectedRiser
+        {
+            get { return _selectedRiser; }
+            set
+            {
+                _selectedRiser = value;
+                RaisePropertyChanged("SelectedRiser");
+                Selected = SelectedRiser;
+            }
+        }
+        public ScopeSummaryItem SelectedMisc
+        {
+            get { return _selectedMisc; }
+            set
+            {
+                _selectedMisc = value;
+                RaisePropertyChanged("SelectedMisc");
+                Selected = SelectedMisc;
+            }
+        }
+        public ScopeSummaryItem Selected
+        {
+            get { return _selected; }
+            set
+            {
+                _selected = value;
+                RaisePropertyChanged("Selected");
+            }
+        }
         
         public ObservableCollection<SystemSummaryItem> Systems
         {
@@ -166,7 +211,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
             ObservableCollection<SystemSummaryItem> systemItems = new ObservableCollection<SystemSummaryItem>();
             foreach(TECTypical typical in typicals)
             {
-                SystemSummaryItem summaryItem = new SystemSummaryItem(typical, bid.Parameters);
+                SystemSummaryItem summaryItem = new SystemSummaryItem(typical, bid.Parameters, bid.Duration);
                 summaryItem.Estimate.PropertyChanged += (sender, e) =>
                 {
                     if (e.PropertyName == "TotalPrice")
@@ -184,7 +229,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
             ObservableCollection<ScopeSummaryItem> miscItems = new ObservableCollection<ScopeSummaryItem>();
             foreach(TECMisc misc in miscCosts)
             {
-                ScopeSummaryItem summaryItem = new ScopeSummaryItem(misc, bid.Parameters);
+                ScopeSummaryItem summaryItem = new ScopeSummaryItem(misc, bid.Parameters, bid.Duration);
                 summaryItem.Estimate.PropertyChanged += (sender, e) =>
                 {
                     if (e.PropertyName == "TotalPrice")
@@ -202,7 +247,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
             ObservableCollection<ScopeSummaryItem> riserItems = new ObservableCollection<ScopeSummaryItem>();
             foreach (TECController controller in controllers)
             {
-                ScopeSummaryItem summaryItem = new ScopeSummaryItem(controller, bid.Parameters);
+                ScopeSummaryItem summaryItem = new ScopeSummaryItem(controller, bid.Parameters, bid.Duration);
                 summaryItem.Estimate.PropertyChanged += (sender, e) =>
                 {
                     if (e.PropertyName == "TotalPrice")

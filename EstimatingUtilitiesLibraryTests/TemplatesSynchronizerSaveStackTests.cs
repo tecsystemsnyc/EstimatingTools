@@ -772,9 +772,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopePointTable.PointID.Name] = typed.Guid.ToString();
             data[SubScopePointTable.Index.Name] = "0";
             expectedStack.Add(new UpdateItem(Change.Add, SubScopePointTable.TableName, data));
-
-
-
+            
             //Template Point quantity change
             data = new Dictionary<string, string>();
             pk = new Tuple<string, string>(PointTable.ID.Name, testPoint.Guid.ToString());
