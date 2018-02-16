@@ -41,59 +41,58 @@
             </StackPanel.Resources>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="100"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Name"/>
+                <TextBlock Text="Name: "/>
                 <TextBox Text="{Binding Bid.Name}"
                          Grid.Column="1"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="100"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Number"/>
+                <TextBlock Text="Number: "/>
                 <TextBox Text="{Binding Bid.BidNumber}"
                          Grid.Column="1"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="100"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Salesperson"/>
+                <TextBlock Text="Salesperson: "/>
                 <TextBox Text="{Binding Bid.Salesperson}"
                          Grid.Column="1"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="100"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Estimator"/>
+                <TextBlock Text="Estimator: "/>
                 <TextBox Text="{Binding Bid.Estimator}"
                          Grid.Column="1"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="100"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Due"/>
+                <TextBlock Text="Due Date:"/>
                 <DatePicker SelectedDate="{Binding Bid.DueDate}"
                             Grid.Column="1" Margin="2"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="100"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Duration"/>
+                <TextBlock Text="Duration (Weeks): "/>
                 <TextBox Text="{Binding Bid.Duration}"
                          Grid.Column="1"/>
             </Grid>
-
         </StackPanel>
     </Grid>
 </UserControl>

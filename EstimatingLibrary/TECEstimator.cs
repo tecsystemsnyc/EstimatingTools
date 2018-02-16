@@ -209,6 +209,14 @@ namespace EstimatingLibrary
             }
         }
 
+        public double BondCost
+        {
+            get
+            {
+                return getBondCost();
+            }
+        }
+
         public double TotalPrice
         {
             get
@@ -719,11 +727,24 @@ namespace EstimatingLibrary
             double subcontractSubtotal = getSubcontractorSubtotal();
 
             double outPrice = tecSubtotal + subcontractSubtotal;
+            outPrice += getBondCost();
+            
+            return outPrice;
+        }
+
+        private double getBondCost()
+        {
+            double tecSubtotal = getTECSubtotal();
+            double subcontractSubtotal = getSubcontractorSubtotal();
+            double outPrice = tecSubtotal + subcontractSubtotal;
+
             if (parameters.RequiresBond)
             {
-                outPrice *= parameters.BondRate;
+                return outPrice * parameters.BondRate / 100.0;
+            } else
+            {
+                return 0.0;
             }
-            return outPrice;
         }
 
         #region Metrics
@@ -843,6 +864,7 @@ namespace EstimatingLibrary
             raisePropertyChanged("PricePerPoint");
             raisePropertyChanged("Margin");
             raisePropertyChanged("Markup");
+            raisePropertyChanged("BondCost");
         }
         private void raiseAll()
         {
@@ -887,11 +909,8 @@ namespace EstimatingLibrary
             raisePropertyChanged("ElectricalEscalation");
             raisePropertyChanged("ElectricalMarkup");
             raisePropertyChanged("TotalLaborCost");
-            raisePropertyChanged("TotalCost");
-            raisePropertyChanged("TotalPrice");
-            raisePropertyChanged("PricePerPoint");
-            raisePropertyChanged("Margin");
-            raisePropertyChanged("Markup");
+
+            raiseTotals();
         }
         #endregion
         
