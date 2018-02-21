@@ -21,6 +21,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private int _patternStart = 1;
         private int _patternEnd = 1;
         private TECLocation _patternLocation = null;
+        private bool _includeLocationTag = true;
         
         public TECSystem ToAdd
         {
@@ -100,6 +101,18 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 }
             }
         }
+        public bool IncludeLocationTag
+        {
+            get { return _includeLocationTag; }
+            set
+            {
+                if (_includeLocationTag != value)
+                {
+                    _includeLocationTag = value;
+                    RaisePropertyChanged("IncludeLocationTag");
+                }
+            }
+        }
 
         public ICommand AddPatternCommand { get; }
         
@@ -150,7 +163,14 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             for(int x = PatternStart; x <= PatternEnd; x++)
             {
                 NameConatiner newItem = new NameConatiner();
-                newItem.Name = String.Format("{0}-{1}", PatternName, x);
+                if (IncludeLocationTag)
+                {
+                    newItem.Name = string.Format("{0}-{1}-{2}", PatternName, PatternLocation.Label, x);
+                }
+                else
+                {
+                    newItem.Name = String.Format("{0}-{1}", PatternName, x);
+                }
                 newItem.Location = PatternLocation;
                 Names.Add(newItem);
             }

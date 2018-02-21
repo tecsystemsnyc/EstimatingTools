@@ -49,6 +49,7 @@
                     <RowDefinition Height="25"/>
                     <RowDefinition Height="25"/>
                     <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -89,9 +90,15 @@
                           Margin="2"
                           Grid.Row="2"
                           Grid.Column="1" Grid.ColumnSpan="3"/>
+                <TextBlock Grid.Row="3" Text="Include Location Tag"
+                           Grid.ColumnSpan="3"/>
+                <CheckBox Grid.Row="3" Grid.Column="3"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          IsChecked="{Binding ElementName=addInstanceView, Path=DataContext.IncludeLocationTag}"/>
                 <Button Content="Add with Pattern"
                         Command="{Binding ElementName=addInstanceView, Path=DataContext.AddPatternCommand}"
-                        Grid.Row="3"
+                        Grid.Row="4"
                         Grid.ColumnSpan="4"
                         Margin="2"/>
                 
