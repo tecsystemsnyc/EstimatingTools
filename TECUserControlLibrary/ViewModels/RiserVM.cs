@@ -112,7 +112,7 @@ namespace TECUserControlLibrary.ViewModels
             this.watcher.Changed += changed;
             populateBidLocations(bid);
             AddLocationCommand = new RelayCommand(addLocationExecute, canAddLocation);
-            AddPatternCommand = new RelayCommand(addPatternExecute, canAdPattern);
+            AddPatternCommand = new RelayCommand(addPatternExecute, canAddPattern);
             PropertiesVM = new PropertiesVM(bid.Catalogs, bid);
         }
 
@@ -127,7 +127,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private bool canAdPattern()
+        private bool canAddPattern()
         {
             return PatternEnd > PatternStart;
         }
