@@ -231,8 +231,9 @@ namespace Tests
             {
                 expected.Add(item);
             }
-            TECLabeled edit = new TECLabeled();
-            edit.Label = "Edit";
+            TECLocation edit = new TECLocation();
+            edit.Name = "Edit";
+            edit.Label = "E";
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -242,7 +243,7 @@ namespace Tests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECLabeled> actual = Bid.Locations;
+            ObservableCollection<TECLocation> actual = Bid.Locations;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -547,8 +548,9 @@ namespace Tests
                 }
             }
             Guid expected = new Guid(system.Location.Guid.ToString());
-            TECLabeled edit = new TECLabeled();
-            edit.Label = "Floor 42";
+            TECLocation edit = new TECLocation();
+            edit.Name = "Floor 42";
+            edit.Label = "42";
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -1124,8 +1126,9 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECLabeled edit = new TECLabeled();
-            edit.Label = "This";
+            TECLocation edit = new TECLocation();
+            edit.Name = "This";
+            edit.Label = "T";
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -1139,7 +1142,7 @@ namespace Tests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECLabeled> actual = Bid.Locations;
+            ObservableCollection<TECLocation> actual = Bid.Locations;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -1366,8 +1369,9 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECLabeled edit = new TECLabeled();
-            edit.Label = "Floor 42";
+            TECLocation edit = new TECLocation();
+            edit.Name = "Floor 42";
+            edit.Label = "42";
 
             var system = new TECTypical();
             Bid.Systems.Add(system);

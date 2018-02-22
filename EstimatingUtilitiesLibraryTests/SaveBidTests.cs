@@ -1768,8 +1768,9 @@ namespace Tests
         public void Save_Bid_Add_Location()
         {
             //Act
-            TECLabeled expectedLocation = new TECLabeled();
-            expectedLocation.Label = "New Location";
+            TECLocation expectedLocation = new TECLocation();
+            expectedLocation.Name = "New Location";
+            expectedLocation.Label = "NL";
             bid.Locations.Add(expectedLocation);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
@@ -1796,7 +1797,7 @@ namespace Tests
         {
             //Act
             int oldNumLocations = bid.Locations.Count;
-            TECLabeled locationToRemove = bid.Locations[0];
+            TECLocation locationToRemove = bid.Locations[0];
             bid.Locations.Remove(locationToRemove);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
@@ -1841,7 +1842,7 @@ namespace Tests
         public void Save_Bid_Add_Location_ToScope()
         {
             //Act
-            TECLabeled expectedLocation = bid.Locations[0];
+            TECLocation expectedLocation = bid.Locations[0];
 
             TECSystem sysToModify = null;
             foreach (TECSystem sys in bid.Systems)
@@ -1965,8 +1966,8 @@ namespace Tests
             //Act
             int expectedNumLocations = bid.Locations.Count;
 
-            TECLabeled expectedLocation = null;
-            foreach (TECLabeled loc in bid.Locations)
+            TECLocation expectedLocation = null;
+            foreach (TECLocation loc in bid.Locations)
             {
                 if (loc.Label == "Cellar")
                 {

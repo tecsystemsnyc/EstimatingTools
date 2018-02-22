@@ -23,16 +23,23 @@ namespace Tests
             bid.ExtraLabor = CreateTestExtraLabor(bid.Guid);
             bid.Parameters = CreateTestParameters(bid.Guid);
             bid.Catalogs = CreateTestCatalogs();
-            
+
             //Locations
-            var cellar = new TECLabeled();
-            cellar.Label = "Cellar";
-            var location1 = new TECLabeled();
-            location1.Label = "1st Floor";
-            var location2 = new TECLabeled();
-            location2.Label = "2nd Floor";
-            var location3 = new TECLabeled();
-            location3.Label = "3rd Floor";
+            var cellar = new TECLocation();
+            cellar.Name = "Cellar";
+            cellar.Label = "C";
+
+            var location1 = new TECLocation();
+            location1.Name = "1st Floor";
+            location1.Label = "1";
+
+            var location2 = new TECLocation();
+            location2.Name = "2nd Floor";
+            location2.Label = "2";
+
+            var location3 = new TECLocation();
+            location3.Name = "3rd Floor";
+            location3.Label = "3";
 
             bid.Locations.Add(cellar);
             bid.Locations.Add(location1);

@@ -242,7 +242,7 @@ namespace Tests
         public void AddLocationToBid()
         {
             //Arrange
-            TECLabeled location = new TECLabeled();
+            TECLocation location = new TECLocation();
 
             //Act
             bid.Locations.Add(location);
@@ -1136,7 +1136,7 @@ namespace Tests
         public void RemoveLocationFromBid()
         {
             //Arrange
-            TECLabeled location = new TECLabeled();
+            TECLocation location = new TECLocation();
             bid.Locations.Add(location);
 
             resetRaised();
@@ -2381,8 +2381,9 @@ namespace Tests
         {
             //Arrange
             var original = bid.Locations[0];
-            var edited = new TECLabeled();
-            edited.Label = "edit";
+            var edited = new TECLocation();
+            edited.Name = "edit";
+            edited.Label = "e";
             bid.Locations.Add(edited);
 
             TECTypical typical = new TECTypical();

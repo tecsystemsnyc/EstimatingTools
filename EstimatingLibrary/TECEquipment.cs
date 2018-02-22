@@ -93,7 +93,7 @@ namespace EstimatingLibrary
                     costs += item.CostBatch;
                     if ((item as TECSubScope).Location == null)
                     {
-                        (item as TECSubScope).SetLocationFromParent(this.Location);
+                        (item as TECSubScope).Location = this.Location;
                     }
                     notifyCombinedChanged(Change.Add, "SubScope", this, item);
                 }
@@ -129,7 +129,7 @@ namespace EstimatingLibrary
                 {
                     if (subScope.Location == location)
                     {
-                        subScope.SetLocationFromParent(this.Location);
+                        subScope.Location = this.Location;
                     }
                 }
             }
