@@ -310,7 +310,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
-            TECLabeled location = new TECLabeled();
+            TECLocation location = new TECLocation();
             location.Label = "Location";
 
             //Act
@@ -2394,7 +2394,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
-            TECLabeled location = new TECLabeled();
+            TECLocation location = new TECLocation();
             bid.Locations.Add(location);
 
             //Act

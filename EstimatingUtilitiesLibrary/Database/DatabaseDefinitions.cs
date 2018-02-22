@@ -613,10 +613,11 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class LocationTable : TableBase
     {
         public static string TableName = "Location";
-        public static Type ObjectType = typeof(TECLabeled);
+        public static Type ObjectType = typeof(TECLocation);
 
         public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField Name = new TableField("Label", "TEXT", ObjectType.GetProperty("Label"));
+        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"), defaultValue: ""); 
+        public static TableField Label = new TableField("Label", "TEXT", ObjectType.GetProperty("Label"), defaultValue: "");
 
         private List<TableField> primaryKeys = new List<TableField>() {
             ID
@@ -628,7 +629,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             ID,
-            Name
+            Name,
+            Label
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -1834,7 +1836,7 @@ namespace EstimatingUtilitiesLibrary.Database
     {
         public static string TableName = "LocatedLocation";
         public static Type ObjectType = typeof(TECLocated);
-        public static Type ReferenceType = typeof(TECLabeled);
+        public static Type ReferenceType = typeof(TECLocation);
 
         public static TableField ScopeID = new TableField("ScopeID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField LocationID = new TableField("LocationID", "TEXT", ReferenceType.GetProperty("Guid"));
