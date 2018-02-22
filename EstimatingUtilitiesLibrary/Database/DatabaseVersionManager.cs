@@ -8,21 +8,30 @@ namespace EstimatingUtilitiesLibrary.Database
 {
     internal class DatabaseVersionManager
     {
-        public static bool CheckAndUpdate(string path, DataTable versionDefintion)
+        public enum UpdateStatus { Updated = 1, NotUpdated, Incompatible }
+        public static UpdateStatus CheckAndUpdate(string path, DataTable versionDefintion)
         {
             SQLiteDatabase db = new SQLiteDatabase(path);
-            if (!isUpToDate(db))
+            int vDiff = versionDifference(db);
+            if (vDiff > 0)
             {
                 updateDatabase(db, versionDefintion);
                 db.Connection.Close();
-                return true;
+                return UpdateStatus.Updated;
             }
-            db.Connection.Close();
-            return false;
+            else if (vDiff < 0)
+            {
+                db.Connection.Close();
+                return UpdateStatus.Incompatible;
+            }
+            else
+            {
+                return UpdateStatus.NotUpdated;
+            }
         }
 
         #region Database Version Update Methods
-        static private bool isUpToDate(SQLiteDatabase db)
+        static private int versionDifference(SQLiteDatabase db)
         {
             int currentVersion = Properties.Settings.Default.Version;
             DataTable infoDT = db.GetDataFromTable(MetadataTable.TableName);
@@ -37,15 +46,12 @@ namespace EstimatingUtilitiesLibrary.Database
                 if (infoDT.Columns.Contains(MetadataTable.Version.Name))
                 {
                     int version = infoRow[MetadataTable.Version.Name].ToString().ToInt();
-                    if(currentVersion < version)
-                    {
-                        throw new Exception("File version is higher than software version.");
-                    }
-                    return (version == currentVersion);
+                    return (currentVersion - version);
                 }
                 else
-                { return false; }
-            } else
+                { return 1; }
+            }
+            else
             {
                 throw new DataException("Improperly formatted database data.");
             }

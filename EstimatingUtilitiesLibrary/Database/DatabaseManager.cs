@@ -7,7 +7,7 @@ using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Threading;
-using System.Windows.Forms;
+using System.Windows;
 
 namespace EstimatingUtilitiesLibrary.Database
 {
@@ -146,13 +146,24 @@ namespace EstimatingUtilitiesLibrary.Database
 
             bool needsSave;
             TECScopeManager scopeManager;
-            if (DatabaseVersionManager.CheckAndUpdate(path, versionMap))
+
+            DatabaseVersionManager.UpdateStatus status = DatabaseVersionManager.CheckAndUpdate(path, versionMap);
+            if (status == DatabaseVersionManager.UpdateStatus.Updated)
             {
                 (scopeManager, needsSave) = DatabaseLoader.Load(path, true);
             }
-            else
+            else if (status == DatabaseVersionManager.UpdateStatus.NotUpdated)
             {
                 (scopeManager, needsSave) = DatabaseLoader.Load(path);
+            }
+            else if (status == DatabaseVersionManager.UpdateStatus.Incompatible)
+            {
+                System.Windows.MessageBox.Show("Database is incompatible with this version of the program.", "Incompatible", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return null;
+            }
+            else
+            {
+                throw new NotImplementedException("UpdateStatus not recognized.");
             }
 
             if (needsSave)

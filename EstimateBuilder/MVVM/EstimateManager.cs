@@ -141,17 +141,24 @@ namespace EstimateBuilder.MVVM
 
         protected override void handleLoaded(TECBid loadedBid)
         {
-            bid = loadedBid;
-            watcher = new ChangeWatcher(bid);
-            doStack = new DoStacker(watcher);
-            deltaStack = new DeltaStacker(watcher, bid);
-            bid.Catalogs.Unionize(templates.Catalogs);
-            ModelLinkingHelper.LinkBidToCatalogs(bid);
+            if (loadedBid != null && templates != null)
+            {
+                bid = loadedBid;
+                watcher = new ChangeWatcher(bid);
+                doStack = new DoStacker(watcher);
+                deltaStack = new DeltaStacker(watcher, bid);
+                bid.Catalogs.Unionize(templates.Catalogs);
+                ModelLinkingHelper.LinkBidToCatalogs(bid);
 
-            estimate = new TECEstimator(bid, watcher);
+                estimate = new TECEstimator(bid, watcher);
 
-            EditorVM = new EstimateEditorVM(bid, templates, watcher, estimate);
-            CurrentVM = EditorVM;
+                EditorVM = new EstimateEditorVM(bid, templates, watcher, estimate);
+                CurrentVM = EditorVM;
+            }
+            else
+            {
+                this.splashVM.LoadingText = "";
+            }
             ViewEnabled = true;
         }
         private void handleLoadedTemplates(TECTemplates templates)
