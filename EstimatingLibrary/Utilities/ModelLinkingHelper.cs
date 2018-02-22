@@ -738,7 +738,7 @@ namespace EstimatingLibrary.Utilities
         }
 
         #region Location Linking
-        private static void linkLocation(TECSystem system, ObservableCollection<TECLabeled> locations)
+        private static void linkLocation(TECSystem system, IEnumerable<TECLocation> locations)
         {
             linkLocation(system as TECLocated, locations);
             if(system is TECTypical typical)
@@ -755,7 +755,7 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        private static void linkLocation(TECEquipment equipment, ObservableCollection<TECLabeled> locations)
+        private static void linkLocation(TECEquipment equipment, IEnumerable<TECLocation> locations)
         {
             linkLocation(equipment as TECLocated, locations);
             foreach (TECSubScope ss in equipment.SubScope)
@@ -764,12 +764,12 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        static private void linkLocation(TECLocated scope, ObservableCollection<TECLabeled> locations)
+        static private void linkLocation(TECLocated scope, IEnumerable<TECLocation> locations)
         {
             if (scope.Location != null)
             {
                 bool found = false;
-                foreach (TECLabeled location in locations)
+                foreach (TECLocation location in locations)
                 {
                     if (scope.Location.Guid == location.Guid)
                     {

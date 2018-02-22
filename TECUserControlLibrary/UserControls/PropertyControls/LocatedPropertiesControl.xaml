@@ -22,6 +22,6 @@
         <ComboBox SelectedItem="{Binding Location}"
                   Grid.Column="1"
                   ItemsSource="{Binding ElementName=locatedPropertiesControl, Path=LocationSource}"
-                  DisplayMemberPath="Label" Margin="2"/>
+                  DisplayMemberPath="Name" Margin="2"/>
     </Grid>
 </UserControl>
