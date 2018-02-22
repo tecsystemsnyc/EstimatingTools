@@ -19,24 +19,15 @@
     <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}"
           Background="{DynamicResource SectionBackgroundBrush}">
         <TabControl>
-            <!--<TabItem Header="TEC Materials">
-                <views:TECMaterialSummaryView ViewModel="{Binding TECMaterialSummaryVM}"/>
-            </TabItem>
-            <TabItem Header="Electrical Materials">
-                <views:ElectricalMaterialSummaryView ViewModel="{Binding ElectricalMaterialSummaryVM}"/>
-            </TabItem>-->
-            <TabItem Header="Itemized">
-                <summaryViews:ItemizedSummaryView ViewModel="{Binding ItemizedSummaryVM}"/>
-            </TabItem>
-            <TabItem Header="Riser">
-                <views:RiserView ViewModel="{Binding RiserVM}"/>
-            </TabItem>
             <TabItem Header="Labor">
                 <views:LaborView
                         ViewModel="{Binding LaborVM}"/>
             </TabItem>
             <TabItem Header="Material">
                 <views:MaterialSummaryView ViewModel="{Binding MaterialSummaryVM}"/>
+            </TabItem>
+            <TabItem Header="Itemized">
+                <summaryViews:ItemizedSummaryView ViewModel="{Binding ItemizedSummaryVM}"/>
             </TabItem>
             <TabItem Header="Summary">
                 <views:ReviewView ViewModel="{Binding ReviewVM}"/>

@@ -233,6 +233,7 @@
     <Compile Include="Utilities\SearchUtilities.cs" />
     <Compile Include="ViewModels\AddNetworkConnectionVM.cs" />
     <Compile Include="ViewModels\AddVMs\AddVM.cs" />
+    <Compile Include="ViewModels\BidPropertiesVM.cs" />
     <Compile Include="ViewModels\ConnectableFilterVM.cs" />
     <Compile Include="ViewModels\ConnectOnAddVM.cs" />
     <Compile Include="ViewModels\DeleteEndDeviceVM.cs" />
@@ -244,6 +245,9 @@
     <Compile Include="ViewModels\ScheduleVM.cs" />
     <Compile Include="ViewModels\ValveSummaryVM.cs" />
     <Compile Include="ViewModels\WorkBoxVM.cs" />
+    <Compile Include="Views\BidPropertiesView.xaml.cs">
+      <DependentUpon>BidPropertiesView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ConnectableFilterView.xaml.cs">
       <DependentUpon>ConnectableFilterView.xaml</DependentUpon>
     </Compile>
@@ -669,6 +673,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ValveGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BidPropertiesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

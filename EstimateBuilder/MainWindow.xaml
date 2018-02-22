@@ -85,9 +85,8 @@
                                 <views:ScopeEditorView
                                 ViewModel="{Binding ScopeEditorVM}"/>
                             </TabItem>
-                            <TabItem Header="Review">
-                                <controls:ReviewTabControl
-                                ViewModel="{Binding}"/>
+                            <TabItem Header="Riser">
+                                <views:RiserView ViewModel="{Binding RiserVM}"/>
                             </TabItem>
                             <TabItem Header="Proposal">
                                 <views:ProposalView
@@ -97,7 +96,13 @@
                                 <views:ScheduleView
                                     ViewModel="{Binding ScheduleVM}"/>
                             </TabItem>
-                            
+                            <TabItem Header="Properties">
+                                <views:BidPropertiesView ViewModel="{Binding BidPropertiesVM}"/>
+                            </TabItem>
+                            <TabItem Header="Review">
+                                <controls:ReviewTabControl
+                                ViewModel="{Binding}"/>
+                            </TabItem>
                         </TabControl>
                         <views:StatusBarView ViewModel="{Binding ElementName=mainWindow, Path=DataContext.StatusBarVM}"
                                                    Grid.Row="3" Grid.ColumnSpan="3"
