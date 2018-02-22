@@ -59,12 +59,8 @@
                 <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-
-            <TextBlock Text="Combined Review" FontSize="18"
-                       Grid.Row="0" Grid.ColumnSpan="2" FontWeight="Bold"/>
-
             <!--TEC-->
-            <Grid Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="13">
+            <Grid Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="13">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="25"/>
@@ -209,7 +205,7 @@
             </Grid>
             
             <!--SubContractor-->
-            <Grid Grid.Row="1" Grid.RowSpan="9" Grid.Column="2" Grid.ColumnSpan="2"
+            <Grid Grid.Row="0" Grid.RowSpan="9" Grid.Column="2" Grid.ColumnSpan="2"
                   Margin="20,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
@@ -305,7 +301,7 @@
                            TextAlignment="Right"/>
             </Grid>
             <!--Total-->
-            <Grid Grid.Row="13"  Grid.RowSpan="5" Grid.ColumnSpan="4">
+            <Grid Grid.Row="12"  Grid.RowSpan="5" Grid.ColumnSpan="4">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="25"/>
@@ -355,14 +351,14 @@
                 <TextBlock Text="{Binding Estimate.PricePerPoint, StringFormat= {} {0:C}}" 
                            Grid.Row="3" Grid.Column="1"
                            TextAlignment="Right"/>
-                
+
                 <TextBlock Text="Set Price:" 
                            Grid.Row="4" Grid.Column="0"/>
                 <TextBox Text="{Binding UserPrice, StringFormat= {} {0:C}}"
                          Grid.Row="4"
                          Grid.Column="1" Margin="2"
                          HorizontalContentAlignment="Right"/>
-                
+
                 <TextBlock Text="Total Cost:" 
                            Grid.Row="1" Grid.Column="2"/>
                 <TextBlock Text="{Binding Estimate.TotalCost, StringFormat=' \{0:C\}'}"
@@ -382,9 +378,8 @@
                            Grid.Row="3" Grid.Column="3" HorizontalAlignment="Right"/>
 
             </Grid>
-            
             <!--Dashboard-->
-            <Grid Grid.Row="1" Grid.Column="4" Grid.RowSpan="14" Grid.ColumnSpan="4">
+            <Grid Grid.Row="0" Grid.Column="4" Grid.RowSpan="14" Grid.ColumnSpan="4">
                 <oxy:Plot Title="Cost Distribution" Grid.Row="1" x:Name="costPlot" 
                           Background="{StaticResource SectionBackgroundBrush}"
                           LegendTextColor="Black"

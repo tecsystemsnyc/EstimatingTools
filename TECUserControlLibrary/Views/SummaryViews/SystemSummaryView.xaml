@@ -8,6 +8,7 @@
                 xmlns:local="clr-namespace:TECUserControlLibrary.Views.SummaryViews"
                 xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
                 xmlns:propertyControls="clr-namespace:TECUserControlLibrary.UserControls.PropertyControls"
+                xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
                 x:Name="systemSummaryView"
                 mc:Ignorable="d" 
                 d:DesignHeight="300" d:DesignWidth="600">
@@ -39,7 +40,7 @@
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
             <Border BorderBrush="Gray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
-                <Label Content="Systems"/>
+                <TextBlock Text="Systems" VerticalAlignment="Center" FontWeight="DemiBold"/>
 
             </Border>
             <ListView ItemsSource="{Binding Systems}" Grid.Row="1"
@@ -83,7 +84,7 @@
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
             <Border BorderBrush="Gray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
-                <Label Content="Bid Controllers and Panels"/>
+                <TextBlock Text="Bid Controllers and Panels" VerticalAlignment="Center" FontWeight="DemiBold"/>
             </Border>
             <ListView ItemsSource="{Binding Riser}" Grid.Row="1"
                       SelectedItem="{Binding SelectedRiser}">
@@ -116,7 +117,7 @@
             </Grid.RowDefinitions>
             <Border BorderBrush="Gray" BorderThickness="0,0,0,1" Margin="5,0,5,0">
 
-                <Label Content="Bid Misc."/>
+                <TextBlock Text="Bid Misc." VerticalAlignment="Center" FontWeight="DemiBold"/>
             </Border>
             <ListView ItemsSource="{Binding Misc}" Grid.Row="1"
                       SelectedItem="{Binding SelectedMisc}">
@@ -143,10 +144,17 @@
         <!--Details-->
         <Border Grid.Column="2" Grid.RowSpan="2" BorderBrush="DarkGray" BorderThickness="1,0,0,0" Margin="10,0,0,0">
             <Grid>
-                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                <Grid Visibility="{Binding Selected, Converter={utilities:NullToVisibilityConverter}}">
+                    <TextBlock Text="Select an item to view summary." 
+                               VerticalAlignment="Center" 
+                               HorizontalAlignment="Center"/>
+                </Grid>
+                <Grid Visibility="{Binding Selected, Converter={utilities:NullToCollapsedConverter}}">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Disabled">
-                    <views:ItemizedDetailsView Selected="{Binding Selected}"/>
-                </ScrollViewer>
+                        <views:ItemizedDetailsView Selected="{Binding Selected}"/>
+                    </ScrollViewer>
+                </Grid>
             </Grid>
         </Border>
             
