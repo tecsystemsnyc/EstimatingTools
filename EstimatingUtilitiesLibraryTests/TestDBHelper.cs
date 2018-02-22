@@ -27,10 +27,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToPointTable();
             addToTagTable();
             addToManufacturerTable();
-            addToDrawingTable();
-            addToPageTable();
             addToLocationTable();
-            addToVisualScopeTable();
             addToConnectionTypeTable();
             addToConduitTypeTable();
             addToAssociatedCostTable();
@@ -396,24 +393,13 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("0.5");
             addDataToTable(new ManufacturerTable(), values);
         }
-        private static void addToDrawingTable()
-        {
-
-        }
-        private static void addToPageTable()
-        {
-
-        }
         private static void addToLocationTable()
         {
             List<string> values = new List<string>();
             values.Add("4175d04b-82b1-486b-b742-b2cc875405cb");
             values.Add("Test Location");
+            values.Add("TL");
             addDataToTable(new LocationTable(), values);
-        }
-        private static void addToVisualScopeTable()
-        {
-
         }
         private static void addToConnectionTypeTable()
         {

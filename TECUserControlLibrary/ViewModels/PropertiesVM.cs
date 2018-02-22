@@ -21,7 +21,7 @@ namespace TECUserControlLibrary.ViewModels
         private TECObject _selected;
         private string _templateText;
         private bool _displayReferenceProperty = false;
-        private ObservableCollection<TECLabeled> _locations;
+        private ObservableCollection<TECLocation> _locations;
 
         public TECCatalogs Catalogs
         {
@@ -67,7 +67,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         public RelayCommand<TECConnectionType> DeleteConnectionTypeCommand { get; private set; }
-        public ObservableCollection<TECLabeled> Locations
+        public ObservableCollection<TECLocation> Locations
         {
             get { return _locations; }
             set
@@ -159,7 +159,7 @@ namespace TECUserControlLibrary.ViewModels
             Catalogs = catalogs;
             if(scopeManager is TECBid bid)
             {
-                Locations = bid.Locations; 
+                Locations = bid.Locations;
             }
             this.scopeManager = scopeManager;
         }

@@ -6,9 +6,9 @@ namespace EstimatingLibrary
     public abstract class TECLocated : TECScope
     {
         #region Properties
-        protected TECLabeled _location;
+        protected TECLocation _location;
 
-        public TECLabeled Location
+        public TECLocation Location
         {
             get { return _location; }
             set
@@ -26,16 +26,11 @@ namespace EstimatingLibrary
         public TECLocated(Guid guid) : base(guid) { }
 
         #region Methods
-        public void SetLocationFromParent(TECLabeled location)
-        {
-            Location = location;
-        }
-
         protected void copyPropertiesFromLocated(TECLocated scope)
         {
             copyPropertiesFromScope(scope);
             if (scope.Location != null)
-            { _location = scope.Location as TECLabeled; }
+            { _location = scope.Location; }
         }
 
         protected override SaveableMap propertyObjects()

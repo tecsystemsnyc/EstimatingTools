@@ -120,6 +120,7 @@
     <Compile Include="TECSchedule.cs" />
     <Compile Include="TECScheduleItem.cs" />
     <Compile Include="TECScheduleTable.cs" />
+    <Compile Include="TECLocation.cs" />
     <Compile Include="TECTypical.cs" />
     <Compile Include="TECValve.cs" />
     <Compile Include="Utilities\CommonUtilities.cs" />
