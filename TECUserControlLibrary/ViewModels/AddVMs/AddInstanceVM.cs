@@ -163,7 +163,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             for(int x = PatternStart; x <= PatternEnd; x++)
             {
                 NameConatiner newItem = new NameConatiner();
-                if (IncludeLocationTag)
+                if (IncludeLocationTag && PatternLocation != null && PatternLocation.Label != "")
                 {
                     newItem.Name = string.Format("{0}-{1}-{2}", PatternName, PatternLocation.Label, x);
                 }
@@ -174,10 +174,10 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 newItem.Location = PatternLocation;
                 Names.Add(newItem);
             }
-            int currentIndex = Locations.IndexOf(PatternLocation);
-            if (currentIndex != -1 && currentIndex < Locations.Count)
+            int nextIndex = Locations.IndexOf(PatternLocation) + 1;
+            if (nextIndex > 0 && nextIndex < Locations.Count)
             {
-                PatternLocation = Locations[currentIndex + 1];
+                PatternLocation = Locations[nextIndex];
             }
         }
         private bool canAddPattern()

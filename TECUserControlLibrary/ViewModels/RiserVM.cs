@@ -23,9 +23,15 @@ namespace TECUserControlLibrary.ViewModels
         private ChangeWatcher watcher;
         private LocationList _locations;
         private ObservableCollection<TECLocated> _unlocated;
-        private String _locationText = "";
-        private TECLocated _selected;   
-        
+        private TECLocated _selected;
+
+        private string _newLocationName = "";
+        private string _newLocationTag = "";
+
+        private string _patternName = "";
+        private int _patternStart = 0;
+        private int _patternEnd = 0;
+
         public LocationList Locations
         {
             get { return _locations; }
@@ -44,15 +50,6 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("Unlocated");
             }
         }
-        public String LocationText
-        {
-            get { return _locationText; }
-            set
-            {
-                _locationText = value;
-                RaisePropertyChanged("LocationText");
-            }
-        }
         public TECLocated Selected
         {
             get { return _selected; }
@@ -65,10 +62,32 @@ namespace TECUserControlLibrary.ViewModels
         }
         public PropertiesVM PropertiesVM { get; set; }
 
-
-        private String _patternName = "";
-
-        public String PatternName
+        public string NewLocationName
+        {
+            get { return _newLocationName; }
+            set
+            {
+                if (_newLocationName != value)
+                {
+                    _newLocationName = value;
+                    RaisePropertyChanged("NewLocationName");
+                }
+            }
+        }
+        public string NewLocationTag
+        {
+            get { return _newLocationTag; }
+            set
+            {
+                if (_newLocationTag != value)
+                {
+                    _newLocationTag = value;
+                    RaisePropertyChanged("NewLocationTag");
+                }
+            }
+        }
+        
+        public string PatternName
         {
             get { return _patternName; }
             set
@@ -77,9 +96,6 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("PatternName");
             }
         }
-
-        private int _patternStart = 0;
-
         public int PatternStart
         {
             get { return _patternStart; }
@@ -89,9 +105,6 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("PatternStart");
             }
         }
-
-        private int _patternEnd = 0;
-
         public int PatternEnd
         {
             get { return _patternEnd; }
@@ -145,13 +158,15 @@ namespace TECUserControlLibrary.ViewModels
         private void addLocationExecute()
         {
             TECLocation newLocation = new TECLocation();
-            newLocation.Name = LocationText;
+            newLocation.Name = NewLocationName;
+            newLocation.Label = NewLocationTag;
             bid.Locations.Add(newLocation);
-            LocationText = "";
+            NewLocationName = "";
+            NewLocationTag = "";
         }
         private bool canAddLocation()
         {
-            return LocationText != "";
+            return (NewLocationName != "");
         }
 
         private void changed(TECChangedEventArgs obj)
