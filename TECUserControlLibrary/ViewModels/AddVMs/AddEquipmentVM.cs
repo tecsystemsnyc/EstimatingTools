@@ -132,7 +132,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 }
                 equipment.CopyPropertiesFromScope(ToAdd);
                 add(equipment);
-                if(ConnectVM != null)
+                if(ConnectVM != null && ConnectVM.Connect)
                 {
                     ConnectVM.ExecuteConnection(equipment.SubScope);
                 }
