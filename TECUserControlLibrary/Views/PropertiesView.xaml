@@ -175,6 +175,14 @@
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource electricalMaterialSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource connectionTypeSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource CostBatchSelector}"/>
+            <pControls:UnitEstimatePropertiesControl>
+                <pControls:UnitEstimatePropertiesControl.Selected>
+                    <MultiBinding Converter="{pControls:SelectedToSummaryConverter}">
+                        <Binding/>
+                        <Binding ElementName="propertiesView" Path="ViewModel.Parameters"/>
+                    </MultiBinding>
+                </pControls:UnitEstimatePropertiesControl.Selected>
+            </pControls:UnitEstimatePropertiesControl>
         </StackPanel>
     </ScrollViewer>
 </UserControl>
