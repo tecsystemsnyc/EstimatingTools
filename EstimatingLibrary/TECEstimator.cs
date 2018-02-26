@@ -201,6 +201,11 @@ namespace EstimatingLibrary
         {
             get { return getSubcontractorMarkup(); }
         }
+
+        public double SubcontractorCost
+        {
+            get { return getSubcontractorCost(); }
+        }
         public double SubcontractorSubtotal
         {
             get
@@ -683,9 +688,7 @@ namespace EstimatingLibrary
         {
             double subcontractorLaborCost = getSubcontractorLaborCost();
             double extendedElectricalMaterialCost = getExtendedElectricalMaterialCost();
-            double subcontractorEscalation = getSubcontractorEscalation();
-
-            double outCost = (subcontractorLaborCost + extendedElectricalMaterialCost + subcontractorEscalation);
+            double outCost = (subcontractorLaborCost + extendedElectricalMaterialCost);
 
             return outCost;
         }
@@ -708,7 +711,8 @@ namespace EstimatingLibrary
         {
             double subContractorCost = getSubcontractorCost();
             double subContractorMarkup = parameters.SubcontractorMarkup;
-            double outCost = subContractorCost * (1 + (subContractorMarkup / 100));
+            double subcontractorEscalation = getSubcontractorEscalation();
+            double outCost = subContractorCost * (1 + (subContractorMarkup / 100)) + subcontractorEscalation;
             return outCost;
         }
         /// <summary>
@@ -840,6 +844,7 @@ namespace EstimatingLibrary
         }
         private void raiseTECTotals()
         {
+            raisePropertyChanged("TECCost");
             raisePropertyChanged("TECSubtotal");
             raisePropertyChanged("Escalation");
             raisePropertyChanged("Overhead");
@@ -848,6 +853,7 @@ namespace EstimatingLibrary
         }
         private void raiseSubcontractorTotals()
         {
+            raisePropertyChanged("SubcontractorCost");
             raisePropertyChanged("SubcontractorSubtotal");
             raisePropertyChanged("ElectricalEscalation");
             raisePropertyChanged("ElectricalMarkup");
@@ -904,6 +910,8 @@ namespace EstimatingLibrary
             raisePropertyChanged("ElectricalSuperLaborCost");
             raisePropertyChanged("SubcontractorLaborHours");
             raisePropertyChanged("SubcontractorLaborCost");
+            raisePropertyChanged("SubcontractorCost");
+            raisePropertyChanged("TECCost");
             raisePropertyChanged("TECSubtotal");
             raisePropertyChanged("SubcontractorSubtotal");
             raisePropertyChanged("ElectricalEscalation");

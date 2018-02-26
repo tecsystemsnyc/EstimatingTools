@@ -294,8 +294,8 @@ namespace EstimatingUtilitiesLibrary.Exports
 
             createProjectInfoSection(worksheet, bid, 1);
             createCostSummarySection(worksheet, estimate, 7);
-            createLaborSummarySection(worksheet, estimate, 19, 1);
-            createSalesSummarySection(worksheet, estimate, 19, 4);
+            createLaborSummarySection(worksheet, estimate, 20, 1);
+            createSalesSummarySection(worksheet, estimate, 20, 4);
             
             var image = worksheet.AddPicture(createPlotImage(estimate));
             image.MoveTo(worksheet.Cell(28, 1).Address);
@@ -376,6 +376,11 @@ namespace EstimatingUtilitiesLibrary.Exports
             worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
             worksheet.Cell(x, 2).DataType = XLCellValues.Number;
             x++;
+            worksheet.Cell(x, 1).Value = "Total Cost";
+            worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.TECCost);
+            worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 2).DataType = XLCellValues.Number;
+            x++;
             worksheet.Cell(x, 1).Value = "Overhead";
             worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.Overhead);
             worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
@@ -414,6 +419,11 @@ namespace EstimatingUtilitiesLibrary.Exports
             x++;
             worksheet.Cell(x, 4).Value = "Labor";
             worksheet.Cell(x, 5).Value = String.Format("{0}", estimate.SubcontractorLaborCost);
+            worksheet.Cell(x, 5).Style.NumberFormat.Format = accountingFormat;
+            worksheet.Cell(x, 5).DataType = XLCellValues.Number;
+            x++;
+            worksheet.Cell(x, 4).Value = "Total Cost";
+            worksheet.Cell(x, 5).Value = String.Format("{0}", estimate.SubcontractorCost);
             worksheet.Cell(x, 5).Style.NumberFormat.Format = accountingFormat;
             worksheet.Cell(x, 5).DataType = XLCellValues.Number;
             x++;
