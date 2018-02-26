@@ -15,6 +15,8 @@ namespace EstimatingUtilitiesLibrary.Exports
 {
     public static class Turnover
     {
+        const int MAX_SHEETNAME_CHARACTERS = 31;
+
         internal static string accountingFormat = "_($* #,##0.00_);_($* (#,##0.00);_($* \" - \"??_);_(@_)";
 
         public static void GenerateTurnoverExport(string path, TECBid bid, TECEstimator estimate, bool openOnComplete = true)
@@ -81,12 +83,21 @@ namespace EstimatingUtilitiesLibrary.Exports
                 {
                     sheetName = "Untitled";
                 }
+
+                int postFixChars = 5;
+                int maxChars = MAX_SHEETNAME_CHARACTERS - postFixChars;
+
+                if (sheetName.Count() > maxChars)
+                {
+                    sheetName = sheetName.Substring(0, maxChars);
+                }
                 if (sheetNames.Contains(sheetName))
                 {
                     sheetName = sheetName + "(" + postfix + ")";
                     postfix++;
                 }
                 sheetNames.Add(sheetName);
+
                 IXLWorksheet worksheet = workbook.Worksheets.Add(sheetName);
                 worksheet.Cell(1, 4).Value = sheetName;
                 worksheet.Cell(1, 4).Style.Font.SetBold();
