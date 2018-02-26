@@ -194,6 +194,60 @@ namespace EstimatingLibrary
 
             return (newSystem);
         }
+
+        public void UpdateInstanceNetworkInController(INetworkParentable controller)
+        {
+            foreach (TECController instance in this.TypicalInstanceDictionary.GetInstances(controller as TECObject))
+            {
+                instance.RemoveAllChildNetworkConnections();
+                foreach (TECNetworkConnection connection in controller.ChildNetworkConnections)
+                {
+                    TECNetworkConnection instanceConnection = instance.AddNetworkConnection(false, connection.ConnectionTypes, connection.IOType);
+                    instanceConnection.Length = connection.Length;
+                    instanceConnection.ConduitType = connection.ConduitType;
+                    instanceConnection.ConduitLength = connection.ConduitLength;
+                    foreach (INetworkConnectable child in connection.Children)
+                    {
+                        if (child is TECController childController)
+                        {
+                            foreach (TECController instanceChild in this.TypicalInstanceDictionary.GetInstances(childController))
+                            {
+                                foreach (TECSystem system in this.Instances)
+                                {
+                                    if (system.Controllers.Contains(instanceChild))
+                                    {
+                                        instanceConnection.AddINetworkConnectable(instanceChild);
+                                    }
+                                }
+                            }
+                        }
+                        else if (child is TECSubScope childSubScope)
+                        {
+                            foreach (TECSubScope instanceChild in this.TypicalInstanceDictionary.GetInstances(childSubScope))
+                            {
+                                foreach (TECSystem system in this.Instances)
+                                {
+                                    if (system.GetAllSubScope().Contains(instanceChild))
+                                    {
+                                        instanceConnection.AddINetworkConnectable(instanceChild);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        public bool CanUpdateInstanceNetworkInController(INetworkParentable controller)
+        {
+            bool canExecute =
+                    (controller != null) &&
+                    (this.Instances.Count > 0) &&
+                    (this.TypicalInstanceDictionary.GetInstances(controller as TECObject).Count > 0);
+
+            return canExecute;
+        }
+
         internal void RefreshRegistration()
         {
             watcher.Changed -= handleSystemChanged;
