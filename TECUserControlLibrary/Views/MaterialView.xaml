@@ -73,7 +73,7 @@
                 <ResourceDictionary>
                     <!--Devices-->
                     <DataTemplate x:Key="DevicesTemplate">
-                        <catalogViews:DevicesCatalogView VM="{Binding ElementName=materialView, Path=ViewModel.DevicesCatalogVM}"/>
+                        <catalogViews:DevicesCatalogView VM="{Binding ElementName=materialView, Path=ViewModel.DeviceVM}"/>
                     </DataTemplate>
                     <!--Valves-->
                     <DataTemplate x:Key="ValveTemplate">
