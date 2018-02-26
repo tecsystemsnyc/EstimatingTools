@@ -309,7 +309,8 @@ namespace EstimatingUtilitiesLibraryTests
         public void Bid_AddLocation()
         {
             //Arrange
-            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECBid bid = new TECBid();
+            ChangeWatcher watcher = new ChangeWatcher(bid);
             TECLocation location = new TECLocation();
             location.Label = "Location";
 
@@ -317,7 +318,8 @@ namespace EstimatingUtilitiesLibraryTests
             DeltaStacker stack = new DeltaStacker(watcher, bid);
             Dictionary<string, string> data = new Dictionary<string, string>();
             data[LocationTable.ID.Name] = location.Guid.ToString();
-            data[LocationTable.Name.Name] = location.Label.ToString();
+            data[LocationTable.Name.Name] = location.Name.ToString();
+            data[LocationTable.Label.Name] = location.Label.ToString();
 
             UpdateItem expectedItem = new UpdateItem(Change.Add, LocationTable.TableName, data);
             int expectedCount = 1;

@@ -2010,7 +2010,7 @@ namespace Tests
             TECLocation expectedLocation = null;
             foreach (TECLocation loc in bid.Locations)
             {
-                if (loc.Label == "Cellar")
+                if (loc.Name == "Cellar")
                 {
                     expectedLocation = loc;
                     break;

@@ -755,8 +755,8 @@ namespace Tests
             Guid expectedGuid = new Guid("4175d04b-82b1-486b-b742-b2cc875405cb");
             string expectedLocationName = "Test Location";
 
-            TECLabeled actualLocation = null;
-            foreach (TECLabeled location in actualBid.Locations)
+            TECLocation actualLocation = null;
+            foreach (TECLocation location in actualBid.Locations)
             {
                 if (location.Guid == expectedGuid)
                 {
@@ -766,7 +766,7 @@ namespace Tests
             }
 
             //Assert
-            Assert.AreEqual(expectedLocationName, actualLocation.Label);
+            Assert.AreEqual(expectedLocationName, actualLocation.Name);
         }
 
         [TestMethod]
