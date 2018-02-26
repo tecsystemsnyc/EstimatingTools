@@ -15,8 +15,10 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class PropertiesVM : ViewModelBase, IDropTarget
     {
-        private TECCatalogs _catalogs;
         private TECScopeManager scopeManager;
+
+        private TECCatalogs _catalogs;
+        private TECParameters _parameters;
         private bool _readOnly;
         private TECObject _selected;
         private string _templateText;
@@ -30,6 +32,15 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _catalogs = value;
                 RaisePropertyChanged("Catalogs");
+            }
+        }
+        public TECParameters Parameters
+        {
+            get { return _parameters; }
+            set
+            {
+                _parameters = value;
+                RaisePropertyChanged("Parameters");
             }
         }
         public bool ReadOnly
@@ -160,6 +171,7 @@ namespace TECUserControlLibrary.ViewModels
             if(scopeManager is TECBid bid)
             {
                 Locations = bid.Locations;
+                Parameters = bid.Parameters;
             }
             this.scopeManager = scopeManager;
         }
