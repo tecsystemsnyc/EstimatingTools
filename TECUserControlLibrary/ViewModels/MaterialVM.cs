@@ -7,7 +7,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using TECUserControlLibrary.BaseVMs;
 using TECUserControlLibrary.Utilities;
+using TECUserControlLibrary.ViewModels.CatalogVMs;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -345,82 +347,6 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         #endregion
-        #region Devices
-        private string _deviceName;
-        public string DeviceName
-        {
-            get { return _deviceName; }
-            set
-            {
-                _deviceName = value;
-                RaisePropertyChanged("DeviceName");
-            }
-        }
-        private string _deviceDescription;
-        public string DeviceDescription
-        {
-            get { return _deviceDescription; }
-            set
-            {
-                _deviceDescription = value;
-                RaisePropertyChanged("DeviceDescription");
-            }
-        }
-        private double _deviceListPrice;
-        public double DeviceListPrice
-        {
-            get { return _deviceListPrice; }
-            set
-            {
-                _deviceListPrice = value;
-                RaisePropertyChanged("DeviceListPrice");
-            }
-        }
-        private double _deviceLabor;
-        public double DeviceLabor
-        {
-            get { return _deviceLabor; }
-            set
-            {
-                _deviceLabor = value;
-                RaisePropertyChanged("DeviceLabor");
-            }
-        }
-        private TECManufacturer _deviceManufacturer;
-        public TECManufacturer DeviceManufacturer
-        {
-            get { return _deviceManufacturer; }
-            set
-            {
-                _deviceManufacturer = value;
-                RaisePropertyChanged("DeviceManufacturer");
-            }
-        }
-        private ObservableCollection<TECConnectionType> _deviceConnectionTypes;
-        public ObservableCollection<TECConnectionType> DeviceConnectionTypes
-        {
-            get { return _deviceConnectionTypes; }
-            set
-            {
-                _deviceConnectionTypes = value;
-                RaisePropertyChanged("DeviceConnectionTypes");
-            }
-        }
-
-        private TECDevice _selectedDevice;
-
-        public TECDevice SelectedDevice
-        {
-            get { return _selectedDevice; }
-            set
-            {
-                _selectedDevice = value;
-                RaisePropertyChanged("SelectedDevice");
-                Selected = value;
-            }
-        }
-        public ICommand DeleteDeviceCommand { get; private set; }
-        #endregion
         #region Valve
         private string _valveName;
         public string ValveName
@@ -685,14 +611,12 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         #endregion
-       
         #region Command Properties
         public ICommand AddConnectionTypeCommand { get; private set; }
         public ICommand AddConduitTypeCommand { get; private set; }
         public ICommand AddAssociatedCostCommand { get; private set; }
         public ICommand AddPanelTypeCommand { get; private set; }
         public ICommand AddIOModuleCommand { get; private set; }
-        public ICommand AddDeviceCommand { get; private set; }
         public ICommand AddControllerTypeCommand { get; private set; }
         public ICommand AddValveCommand { get; private set; }
         public ICommand AddManufacturerCommand { get; private set; }
@@ -704,7 +628,8 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region ViewModels
-        public MiscCostsVM MiscVM { get; private set; }
+        public DevicesCatalogVM DeviceVM { get; }
+        public MiscCostsVM MiscVM { get; }
 
         private ViewModelBase _modalVM;
         public ViewModelBase ModalVM
@@ -729,17 +654,13 @@ namespace TECUserControlLibrary.ViewModels
             Templates = templates;
             setupCommands();
             setupInterfaceDefaults();
-            setupVMs();
+
+            //Setup VMs
+            subscribeToVM(DeviceVM = new DevicesCatalogVM(templates, ReferenceDropHandler));
+            subscribeToVM(MiscVM = new MiscCostsVM(templates));
         }
         
         #region Methods
-        public void Refresh(TECTemplates templates)
-        {
-            Templates = templates;
-            MiscVM.Refresh(templates);
-            setupInterfaceDefaults();
-        }
-
         private void setupCommands()
         {
             AddConnectionTypeCommand = new RelayCommand(addConnectionTypeExecute);
@@ -749,13 +670,11 @@ namespace TECUserControlLibrary.ViewModels
             AddIOModuleCommand = new RelayCommand(addIOModuleExecute, canAddIOModuleExecute);
             AddControllerTypeCommand = new RelayCommand(addControllerTypeExecute, canAddControllerType);
             AddValveCommand = new RelayCommand(addValveExecute, canAddValve);
-            AddDeviceCommand = new RelayCommand(addDeviceExecute, canAddDevice);
             AddManufacturerCommand = new RelayCommand(addManufacturerExecute, canAddManufacturer);
             AddTagCommand = new RelayCommand(addTagExecute, canAddTag);
             AddIOCommand = new RelayCommand(addIOToControllerTypeExecute, canAddIOToControllerType);
             AddIOToModuleCommand = new RelayCommand(addIOToModuleExecute, canAddIOToModule);
-
-            DeleteDeviceCommand = new RelayCommand(deleteDeviceExecute, canDeleteDevice);
+            
             DeleteValveCommand = new RelayCommand(deleteValveExecute, canDeleteValve);
             ReplaceActuatorCommand = new RelayCommand(replaceActuatorExecute, canReplaceActuator);
         }
@@ -810,33 +729,7 @@ namespace TECUserControlLibrary.ViewModels
             return true;
         }
 
-        private void addDeviceExecute()
-        {
-            TECDevice toAdd = new TECDevice(DeviceConnectionTypes, DeviceManufacturer);
-            toAdd.Name = DeviceName;
-            toAdd.Description = DeviceDescription;
-            toAdd.Price = DeviceListPrice;
-            toAdd.Labor = DeviceLabor;
-            Templates.Catalogs.Devices.Add(toAdd);
 
-            DeviceName = "";
-            DeviceDescription = "";
-            DeviceListPrice = 0;
-            DeviceLabor = 0;
-            DeviceConnectionTypes = new ObservableCollection<TECConnectionType>();
-            DeviceManufacturer = null;
-        }
-        private bool canAddDevice()
-        {
-            if(DeviceManufacturer != null 
-                && DeviceConnectionTypes.Count > 0)
-            {
-                return true;
-            } else
-            {
-                return false;
-            }
-        }
         private void addConnectionTypeExecute()
         {
             var connectionType = new TECConnectionType();
@@ -1012,15 +905,6 @@ namespace TECUserControlLibrary.ViewModels
             ManufacturerToAdd = new TECManufacturer();
         }
 
-        private void deleteDeviceExecute()
-        {
-            ModalVM = new DeleteEndDeviceVM(SelectedDevice, Templates);
-        }
-        private bool canDeleteDevice()
-        {
-            return SelectedDevice != null;
-        }
-
         private void deleteValveExecute()
         {
             ModalVM = new DeleteEndDeviceVM(SelectedValve, Templates);
@@ -1129,11 +1013,6 @@ namespace TECUserControlLibrary.ViewModels
             IOModuleDescription = "";
             IOModuleCost = 0;
             ModuleIO = new ObservableCollection<TECIO>();
-            
-            DeviceName = "";
-            DeviceDescription = "";
-            DeviceListPrice = 0;
-            DeviceConnectionTypes = new ObservableCollection<TECConnectionType>();
 
             ValveName = "";
             ValveDescription = "";
@@ -1149,9 +1028,20 @@ namespace TECUserControlLibrary.ViewModels
             
         }
 
-        private void setupVMs()
+        private void subscribeToVM(TECVMBase tecVM)
         {
-            MiscVM = new MiscCostsVM(Templates);
+            tecVM.ModalVMStarted += handleModal;
+            tecVM.ObjectSelected += handleSelected;
+
+            void handleModal(ViewModelBase vm)
+            {
+                ModalVM = vm;
+            }
+
+            void handleSelected(TECObject obj)
+            {
+                Selected = obj;
+            }
         }
         #endregion
 

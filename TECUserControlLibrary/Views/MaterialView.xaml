@@ -10,6 +10,7 @@
              xmlns:views="clr-namespace:TECUserControlLibrary.Views"
              xmlns:TECLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+             xmlns:catalogViews="clr-namespace:TECUserControlLibrary.Views.CatalogViews"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:vms="clr-namespace:TECUserControlLibrary.ViewModels"
              xmlns:dd="urn:gong-wpf-dragdrop"
@@ -44,6 +45,11 @@
     </UserControl.Resources>
     <Grid>
         <Grid.Triggers>
+            <EventTrigger RoutedEvent="catalogViews:DevicesCatalogView.StartModal">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
             <EventTrigger RoutedEvent="views:DeleteEndDeviceView.Done">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalOut}"/>
@@ -67,85 +73,7 @@
                 <ResourceDictionary>
                     <!--Devices-->
                     <DataTemplate x:Key="DevicesTemplate">
-                        <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
-                            <Grid.Resources>
-                                <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
-                            </Grid.Resources>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="60"/>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="30"/>
-                            </Grid.RowDefinitions>
-                            <Grid Grid.Row="0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="60"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="80"/>
-                                    <ColumnDefinition Width="2*"/>
-                                    <ColumnDefinition Width="70"/>
-                                    <ColumnDefinition Width="70"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Name:" Margin="5,0,0,0"
-                           VerticalAlignment="Center"/>
-                                <TextBox  Grid.Column="1" Margin="2"
-                          Text="{Binding DeviceName}"/>
-                                <TextBlock Text="Description:" Margin="5,0,0,0"
-                           VerticalAlignment="Center" Grid.Column="2"/>
-                                <TextBox  Grid.Column="3" Margin="2"
-                          Text="{Binding DeviceDescription}"/>
-                                <TextBlock Text="List Price:" Grid.Column="4" Margin="5,0,0,0"
-                           VerticalAlignment="Center"/>
-                                <TextBox  Grid.Column="5" Margin="2" 
-                                          Text="{Binding DeviceListPrice, StringFormat={}{0:C}}"/>
-                            </Grid>
-                            <Grid Grid.Row="1" >
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="60"/>
-                                    <ColumnDefinition Width="70"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Labor:" Margin="5,0,0,0"
-                           VerticalAlignment="Center"/>
-                                <TextBox  Grid.Column="1" Margin="2"
-                          Text="{Binding DeviceLabor}"/>
-                                <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
-                                           VerticalAlignment="Center" Grid.Column="2" HorizontalAlignment="Right"/>
-                                <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
-                                          SelectedItem="{Binding DeviceManufacturer}"
-                                          DisplayMemberPath="Label" Grid.Column="3"
-                                          Margin="2"/>
-
-                            </Grid>
-                            <Grid Grid.Row="2">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="70"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Connection Types:" TextWrapping="Wrap"/>
-                                <Border Grid.Column="1" BorderBrush="DarkGray" BorderThickness="1">
-                                    <listControls:ElectricalMaterialListControl Source="{Binding DeviceConnectionTypes}"
-                                                                            DropHandler="{Binding ReferenceDropHandler}"/>
-                                </Border>
-
-                            </Grid>
-
-                            <Button Grid.Row="3" Grid.Column="2" 
-                                    Content="Add" Margin="2"
-                                    Command="{Binding AddDeviceCommand}"/>
-                            <controls:HardwareGridControl HardwareSource="{Binding Templates.Catalogs.Devices}"
-                                                          Selected="{Binding SelectedDevice}"
-                                                     DropHandler="{Binding ElementName=materialView, Path=ViewModel}"
-                                                     Grid.Row="4"/>
-                            <Grid Grid.Row="5">
-                                <Button Content="Delete"
-                                        Command="{Binding ElementName=materialView, Path=ViewModel.DeleteDeviceCommand}"
-                                        Click="Remove_Clicked"/>
-                            </Grid>
-                        </Grid>
+                        <catalogViews:DevicesCatalogView VM="{Binding ElementName=materialView, Path=ViewModel.DevicesCatalogVM}"/>
                     </DataTemplate>
                     <!--Valves-->
                     <DataTemplate x:Key="ValveTemplate">

@@ -99,6 +99,7 @@
   <ItemGroup>
     <Compile Include="BaseVMs\AppManager.cs" />
     <Compile Include="BaseVMs\EditorVM.cs" />
+    <Compile Include="BaseVMs\TECVMBase.cs" />
     <Compile Include="Debug\EBDebugWindow.xaml.cs">
       <DependentUpon>EBDebugWindow.xaml</DependentUpon>
     </Compile>
@@ -233,6 +234,7 @@
     <Compile Include="Utilities\SearchUtilities.cs" />
     <Compile Include="ViewModels\AddNetworkConnectionVM.cs" />
     <Compile Include="ViewModels\AddVMs\AddVM.cs" />
+    <Compile Include="ViewModels\CatalogVMs\DevicesCatalogVM.cs" />
     <Compile Include="ViewModels\ConnectableFilterVM.cs" />
     <Compile Include="ViewModels\ConnectOnAddVM.cs" />
     <Compile Include="ViewModels\DeleteEndDeviceVM.cs" />
