@@ -19,7 +19,7 @@ namespace TECUserControlLibrary.ViewModels
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class MaterialVM : ViewModelBase, IDropTarget
+    public class MaterialVM : ViewModelBase
     {
         #region Properties
         public ReferenceDropper ReferenceDropHandler { get; }
@@ -949,36 +949,6 @@ namespace TECUserControlLibrary.ViewModels
             {
                 return false;
             }
-        }
-
-        public void DragOver(IDropInfo dropInfo)
-        {
-            UIHelpers.StandardDragOver(dropInfo);
-        }
-
-        public void Drop(IDropInfo dropInfo)
-        {
-            //throw new NotImplementedException("T drop<T> is alway object for some reason.");
-            object drop<T>(T item)
-            {
-                Console.WriteLine(typeof(T));
-                bool isCatalog = item.GetType().GetInterfaces().Where(i => i.IsGenericType)
-                    .Any(i => i.GetGenericTypeDefinition() == typeof(ICatalog<>));
-                if (isCatalog)
-                {
-                    return ((dynamic)item).CatalogCopy();
-                }
-                else if (item is IDragDropable dropable)
-                {
-                    return dropable.DragDropCopy(Templates);
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
-
-            UIHelpers.StandardDrop(dropInfo, Templates, drop);
         }
 
         private void setupInterfaceDefaults()

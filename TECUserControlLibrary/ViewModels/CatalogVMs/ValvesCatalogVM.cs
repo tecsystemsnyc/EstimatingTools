@@ -11,7 +11,7 @@ using static TECUserControlLibrary.ViewModels.MaterialVM;
 
 namespace TECUserControlLibrary.ViewModels.CatalogVMs
 {
-    public class ValvesCatalogVM : TECVMBase
+    public class ValvesCatalogVM : CatalogVMBase
     {
         private string _valveName = "";
         private string _valveDescription = "";
@@ -148,18 +148,12 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
             }
         }
 
-        public TECTemplates Templates { get; }
-        public ReferenceDropper ReferenceDropHandler { get; }
-
         public ICommand AddValveCommand { get; private set; }
         public ICommand DeleteValveCommand { get; private set; }
         public ICommand ReplaceActuatorCommand { get; private set; }
 
-        public ValvesCatalogVM(TECTemplates templates, ReferenceDropper dropHandler)
+        public ValvesCatalogVM(TECTemplates templates, ReferenceDropper dropHandler) : base(templates, dropHandler)
         {
-            this.Templates = templates;
-            this.ReferenceDropHandler = dropHandler;
-
             this.AddValveCommand = new RelayCommand(addValveExecute, canAddValve);
             this.DeleteValveCommand = new RelayCommand(deleteValveExecute, canDeleteValve);
             this.ReplaceActuatorCommand = new RelayCommand(replaceActuatorExecute, canReplaceActuator);

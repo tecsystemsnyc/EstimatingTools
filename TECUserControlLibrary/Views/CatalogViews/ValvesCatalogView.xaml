@@ -91,9 +91,9 @@
                                     Content="Add" Margin="2"
                                     Command="{Binding AddValveCommand}"/>
         <controls:ValveGridControl Source="{Binding Templates.Catalogs.Valves}"
-                                                     DropHandler="{Binding ElementName=materialView, Path=ViewModel}"
-                                                     Selected="{Binding SelectedValve}"
-                                                     Grid.Row="4"/>
+                                   DropHandler="{Binding}"
+                                   Selected="{Binding SelectedValve}"
+                                   Grid.Row="4"/>
         <Grid Grid.Row="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>

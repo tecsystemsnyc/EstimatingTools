@@ -234,6 +234,7 @@
     <Compile Include="Utilities\SearchUtilities.cs" />
     <Compile Include="ViewModels\AddNetworkConnectionVM.cs" />
     <Compile Include="ViewModels\AddVMs\AddVM.cs" />
+    <Compile Include="ViewModels\CatalogVMs\CatalogVMBase.cs" />
     <Compile Include="ViewModels\CatalogVMs\DevicesCatalogVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\ValvesCatalogVM.cs" />
     <Compile Include="ViewModels\ConnectableFilterVM.cs" />

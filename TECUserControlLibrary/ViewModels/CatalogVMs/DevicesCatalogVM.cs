@@ -14,7 +14,7 @@ using static TECUserControlLibrary.ViewModels.MaterialVM;
 
 namespace TECUserControlLibrary.ViewModels.CatalogVMs
 {
-    public class DevicesCatalogVM : TECVMBase
+    public class DevicesCatalogVM : CatalogVMBase
     {
         private string _deviceName = "";
         private string _deviceDescription = "";
@@ -99,19 +99,13 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
             }
         }
 
-        public TECTemplates Templates { get; }
-        public ReferenceDropper ReferenceDropHandler { get; }
-
         public ObservableCollection<TECConnectionType> DeviceConnectionTypes { get; }
         
         public ICommand AddDeviceCommand { get; private set; }
         public ICommand DeleteDeviceCommand { get; }
         
-        public DevicesCatalogVM(TECTemplates templates, ReferenceDropper dropHandler)
+        public DevicesCatalogVM(TECTemplates templates, ReferenceDropper dropHandler) : base(templates, dropHandler)
         {
-            this.Templates = templates;
-            this.ReferenceDropHandler = dropHandler;
-
             this.DeviceConnectionTypes = new ObservableCollection<TECConnectionType>();
 
             this.AddDeviceCommand = new RelayCommand(addDeviceExecute, canAddDevice);
@@ -125,14 +119,14 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
             toAdd.Description = DeviceDescription;
             toAdd.Price = DeviceListPrice;
             toAdd.Labor = DeviceLabor;
-            Templates.Catalogs.Devices.Add(toAdd);
+            this.Templates.Catalogs.Devices.Add(toAdd);
 
-            DeviceName = "";
-            DeviceDescription = "";
-            DeviceListPrice = 0;
-            DeviceLabor = 0;
-            DeviceConnectionTypes.ObservablyClear();
-            DeviceManufacturer = null;
+            this.DeviceName = "";
+            this.DeviceDescription = "";
+            this.DeviceListPrice = 0;
+            this.DeviceLabor = 0;
+            this.DeviceConnectionTypes.ObservablyClear();
+            this.DeviceManufacturer = null;
         }
         private bool canAddDevice()
         {

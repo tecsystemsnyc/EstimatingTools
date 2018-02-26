@@ -81,9 +81,9 @@
                                     Content="Add" Margin="2"
                                     Command="{Binding AddDeviceCommand}"/>
         <controls:HardwareGridControl HardwareSource="{Binding Templates.Catalogs.Devices}"
-                                                          Selected="{Binding SelectedDevice}"
-                                                     DropHandler="{Binding ElementName=materialView, Path=ViewModel}"
-                                                     Grid.Row="4"/>
+                                      Selected="{Binding SelectedDevice}"
+                                      DropHandler="{Binding}"
+                                      Grid.Row="4"/>
         <Grid Grid.Row="5">
             <Button Content="Delete"
                     Command="{Binding DeleteDeviceCommand}"
