@@ -32,6 +32,7 @@ namespace TECUserControlLibrary.BaseVMs
         protected DoStacker doStack;
         protected DeltaStacker deltaStack;
         protected string workingFileDirectory;
+        private EditorVM _editorVM;
         private string _titleString;
         private object _currentVM;
         private bool _viewEnabled;
@@ -45,7 +46,18 @@ namespace TECUserControlLibrary.BaseVMs
         /// <summary>
         /// Generic for presentation purposes.
         /// </summary>
-        public EditorVM EditorVM { get; protected set; }
+        public EditorVM EditorVM
+        {
+            get { return _editorVM; }
+            set
+            {
+                if (_editorVM != value)
+                {
+                    _editorVM = value;
+                    RaisePropertyChanged("EditorVM");
+                }
+            }
+        }
         /// <summary>
         /// Generic for presentation purposes.
         /// </summary>

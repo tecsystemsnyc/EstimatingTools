@@ -167,7 +167,7 @@ namespace EstimateBuilder.MVVM
             bid.Catalogs.Unionize(templates.Catalogs);
             ModelLinkingHelper.LinkBidToCatalogs(bid);
             estimate = new TECEstimator(bid, watcher);
-            editorVM.Refresh(bid, this.templates, watcher, estimate);
+            EditorVM = new EstimateEditorVM(bid, templates, watcher, estimate);
         }
 
         #region Menu Commands Methods

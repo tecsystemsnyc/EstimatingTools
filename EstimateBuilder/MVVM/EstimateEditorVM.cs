@@ -28,17 +28,5 @@ namespace EstimateBuilder.MVVM
             RiserVM = new RiserVM(bid, watcher);
             ScheduleVM = new ScheduleVM(bid, watcher);
         }
-
-        public void Refresh(TECBid bid, TECTemplates templates, ChangeWatcher watcher, TECEstimator estimate)
-        {
-            ScopeEditorVM.Refresh(bid, templates, watcher);
-            LaborVM.Refresh(bid, estimate, templates);
-            ReviewVM.Refresh(estimate, bid);
-            ProposalVM.Refresh(bid);
-            ItemizedSummaryVM.Refresh(bid, watcher);
-            MaterialSummaryVM.Refresh(bid, watcher);
-            RiserVM.Refresh(bid, watcher);
-            ScheduleVM.Refresh(bid, watcher);
-        }
     }
 }
