@@ -137,7 +137,10 @@ namespace EstimatingLibrary.Utilities
         {
             linkSystemToCatalogs(system, scopeManager.Catalogs);
             linkSubScopeConnections(system.Controllers, system.GetAllSubScope(), guidDictionary);
-            linkNetworkConnections(system.Controllers, system.GetAllSubScope(), guidDictionary);
+            List<INetworkConnectable> allChildren = new List<INetworkConnectable>();
+            allChildren.AddRange(system.Controllers);
+            allChildren.AddRange(system.GetAllSubScope());
+            linkNetworkConnections(system.Controllers, allChildren, guidDictionary);
             linkPanelsToControllers(system.Panels, system.Controllers, guidDictionary);
             if(system is TECTypical typical)
             {
