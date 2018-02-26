@@ -20,6 +20,9 @@ namespace TECUserControlLibrary.ViewModels
     public class NetworkVM : ViewModelBase, IDropTarget
     {
         #region Fields and Properties
+        private readonly Action<INetworkParentable> updateExecute;
+        private readonly Func<INetworkParentable, bool> updateCanExecute;
+
         private readonly ObservableCollection<INetworkParentable> allParentables;
         private readonly ObservableCollection<INetworkConnectable> allConnectables;
         private INetworkParentable _selectedParentable;
@@ -28,6 +31,7 @@ namespace TECUserControlLibrary.ViewModels
         private TECNetworkConnection _selectedConnection;
         private TECCatalogs _catalogs;
         private string _cannotConnectMessage;
+        private RelayCommand _updateCommand;
 
         public ObservableCollection<INetworkParentable> FilteredParentables
         {
@@ -46,11 +50,15 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     ConnectableFilterVM.RemoveExclusion(SelectedParentable);
                     _selectedParentable = value;
+                    if (SelectedParentable != null && updateExecute != null && updateCanExecute != null)
+                    {
+                        UpdateCommand = new RelayCommand(() => updateExecute(SelectedParentable), () => updateCanExecute(SelectedParentable));
+                    }
                     RaisePropertyChanged("SelectedParentable");
                     ConnectableFilterVM.AddExclusion(SelectedParentable);
 
                     if(value is TECObject obj)
-                    {
+                    { 
                         Selected?.Invoke(obj);
                     }
                     AddNetConnectVM = value != null ? new AddNetworkConnectionVM(value, Catalogs.ConnectionTypes) : null;
@@ -123,7 +131,18 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public ICommand UpdateCommand { get; private set; }
+        public RelayCommand UpdateCommand
+        {
+            get { return _updateCommand; }
+            set
+            {
+                if (_updateCommand != value)
+                {
+                    _updateCommand = value;
+                    RaisePropertyChanged("UpdateCommand");
+                }
+            }
+        }
         public RelayCommand<TECNetworkConnection> RemoveConnectionCommand { get; private set; }
         public RelayCommand<INetworkConnectable> RemoveChildCommand { get; private set; }
         #endregion
@@ -134,6 +153,8 @@ namespace TECUserControlLibrary.ViewModels
             Action<INetworkParentable> updateExecute = null,
             Func<INetworkParentable, bool> updateCanExecute = null)
         {
+            this.updateExecute = updateExecute;
+            this.updateCanExecute = updateCanExecute;
             this.Catalogs = catalogs;
             this.allParentables = new ObservableCollection<INetworkParentable>();
             this.allConnectables = new ObservableCollection<INetworkConnectable>(connectables.Where(item => item.IsNetwork));
@@ -146,10 +167,6 @@ namespace TECUserControlLibrary.ViewModels
             }
             ParentableFilterVM = new ConnectableFilterVM<INetworkParentable>(allParentables);
             ConnectableFilterVM = new ConnectableFilterVM<INetworkConnectable>(allConnectables);
-            if (updateExecute != null && updateCanExecute != null)
-            {
-                UpdateCommand = new RelayCommand(() => updateExecute(SelectedParentable), () => updateCanExecute(SelectedParentable));
-            }
             RemoveConnectionCommand = new RelayCommand<TECNetworkConnection>(removeConnectionExecute);
             RemoveChildCommand = new RelayCommand<INetworkConnectable>(removeChildExecute);
         }
@@ -334,62 +351,16 @@ namespace TECUserControlLibrary.ViewModels
 
             ChangeWatcher watcher = new ChangeWatcher(typ);
 
-            NetworkVM netVM = new NetworkVM(connectables, catalogs, updateExecute, updateCanExecute);
-            watcher.Changed += netVM.handleChange;
-            return netVM;
-
-            void updateExecute(INetworkParentable controller)
+            NetworkVM netVM = new NetworkVM(connectables, catalogs, 
+                typ.UpdateInstanceNetworkInController, typ.CanUpdateInstanceNetworkInController);
+            watcher.Changed += (e) =>
             {
-                foreach(TECController instance in typ.TypicalInstanceDictionary.GetInstances(controller as TECObject))
+                if (e.Sender is ITypicalable typSender && typSender.IsTypical)
                 {
-                    instance.RemoveAllChildNetworkConnections();
-                    foreach (TECNetworkConnection connection in controller.ChildNetworkConnections)
-                    {
-                        TECNetworkConnection instanceConnection = instance.AddNetworkConnection(false, connection.ConnectionTypes, connection.IOType);
-                        instanceConnection.Length = connection.Length;
-                        instanceConnection.ConduitType = connection.ConduitType;
-                        instanceConnection.ConduitLength = connection.ConduitLength;
-                        foreach (INetworkConnectable child in connection.Children)
-                        {
-                            if (child is TECController childController)
-                            {
-                                foreach (TECController instanceChild in typ.TypicalInstanceDictionary.GetInstances(childController))
-                                {
-                                    foreach (TECSystem system in typ.Instances)
-                                    {
-                                        if (system.Controllers.Contains(instanceChild))
-                                        {
-                                            instanceConnection.AddINetworkConnectable(instanceChild);
-                                        }
-                                    }
-                                }
-                            }
-                            else if (child is TECSubScope childSubScope)
-                            {
-                                foreach (TECSubScope instanceChild in typ.TypicalInstanceDictionary.GetInstances(childSubScope))
-                                {
-                                    foreach (TECSystem system in typ.Instances)
-                                    {
-                                        if (system.GetAllSubScope().Contains(instanceChild))
-                                        {
-                                            instanceConnection.AddINetworkConnectable(instanceChild);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    netVM.handleChange(e);
                 }
-            }
-
-            bool updateCanExecute(INetworkParentable controller)
-            {
-                bool canExecute =
-                    (controller != null) &&
-                    (typ.TypicalInstanceDictionary.GetInstances(controller as TECObject).Count > 0);
-
-                return canExecute;
-            }
+            };
+            return netVM;
         }
 
         public static NetworkVM GetNetworkVMFromSystem(TECSystem sys, TECCatalogs catalogs)
