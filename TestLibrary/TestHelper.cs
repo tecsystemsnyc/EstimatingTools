@@ -94,7 +94,6 @@ namespace Tests
 
             bid.MiscCosts.Add(wiring);
             
-
             //Panels
             TECPanel panel = new TECPanel(bid.Catalogs.PanelTypes[0], false);
             panel.Name = "Test Panel";
@@ -108,7 +107,8 @@ namespace Tests
             var system1 = CreateTestTypical(bid.Catalogs);
             system1.Name = "System 1";
             system1.Description = "Locations all the way";
-            
+            system1.Location = cellar;
+
             var system2 = CreateTestTypical(bid.Catalogs);
             system2.Name = "System 2";
             system2.Description = "Description 2";
@@ -560,6 +560,14 @@ namespace Tests
             AssignSecondaryProperties(panelType, outCatalogs);
 
             outCatalogs.PanelTypes.Add(panelType);
+
+            TECPanelType otherPanelType = new TECPanelType(manufacturer1);
+            otherPanelType.Price = 46.61;
+            otherPanelType.Labor = 64.19;
+            otherPanelType.Name = "Other Test Panel Type";
+            AssignSecondaryProperties(otherPanelType, outCatalogs);
+
+            outCatalogs.PanelTypes.Add(otherPanelType);
 
             //Valves
             TECDevice actuator = new TECDevice(new ObservableCollection<TECConnectionType>() { connectionType1 },

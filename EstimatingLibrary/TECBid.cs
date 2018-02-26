@@ -279,7 +279,6 @@ namespace EstimatingLibrary
             ScopeTree.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ScopeTree");
             Notes.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Notes");
             Exclusions.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Exclusions");
-            Locations.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Locations");
             Locations.CollectionChanged += locationsCollectionChanged;
             MiscCosts.CollectionChanged += (sender, args) => collectionChanged(sender, args, "MiscCosts");
             Panels.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Panels");
