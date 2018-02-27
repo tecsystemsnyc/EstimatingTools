@@ -254,7 +254,7 @@ namespace EstimatingUtilitiesLibrary.Database
             connectionBuilder.DataSource = dbPath;
             connectionBuilder.Version = SQLITE_VERSION;
 
-            return new SQLiteConnection(connectionBuilder.ConnectionString);
+            return new SQLiteConnection(connectionBuilder.ConnectionString, true);
         }
 
         private string doubleApostraphes(string str)
