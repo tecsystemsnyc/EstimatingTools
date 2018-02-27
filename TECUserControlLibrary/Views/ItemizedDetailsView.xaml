@@ -75,6 +75,16 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
+                <TextBlock Text="Labor Hours:"/>
+                <TextBlock Text="{Binding Estimate.TECLaborHours, StringFormat= {}}" 
+                 Grid.Column="1"
+               TextAlignment="Right" />
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
                 <TextBlock Text="Labor:"/>
                 <TextBlock Text="{Binding Estimate.TECLaborCost, StringFormat= {} {0:C}}" 
                  Grid.Column="1"
@@ -154,6 +164,16 @@
                 <TextBlock Text="{Binding Estimate.ElectricalWarranty, StringFormat= {} {0:C}}"
                    Grid.Column="1"
                    TextAlignment="Right"/>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Labor Hours:"/>
+                <TextBlock Text="{Binding Estimate.SubcontractorLaborHours, StringFormat= {}}" 
+                 Grid.Column="1"
+               TextAlignment="Right" />
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
