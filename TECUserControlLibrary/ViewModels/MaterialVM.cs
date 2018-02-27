@@ -200,6 +200,8 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("IOModuleCost");
             }
         }
+        public IOType SelectedIO { get; set; }
+        public int SelectedIOQty { get; set; }
         private TECManufacturer _ioModuleManufacturer;
         public TECManufacturer IOModuleManufacturer
         {
@@ -231,112 +233,6 @@ namespace TECUserControlLibrary.ViewModels
             {
                 _selectedIOModule = value;
                 RaisePropertyChanged("SelectedIOModule");
-                Selected = value;
-            }
-        }
-        #endregion
-        #region Controller Types
-        private string _controllerTypeName;
-        public string ControllerTypeName
-        {
-            get { return _controllerTypeName; }
-            set
-            {
-                _controllerTypeName = value;
-                RaisePropertyChanged("ControllerTypeName");
-            }
-        }
-        private string _controllerTypeDescription;
-        public string ControllerTypeDescription
-        {
-            get { return _controllerTypeDescription; }
-            set
-            {
-                _controllerTypeDescription = value;
-                RaisePropertyChanged("ControllerTypeDescription");
-            }
-        }
-        private double _controllerTypeCost;
-        public double ControllerTypeCost
-        {
-            get { return _controllerTypeCost; }
-            set
-            {
-                _controllerTypeCost = value;
-                RaisePropertyChanged("ControllerTypeCost");
-            }
-        }
-        private double _controllerTypeLabor;
-        public double ControllerTypeLabor
-        {
-            get { return _controllerTypeLabor; }
-            set
-            {
-                _controllerTypeLabor = value;
-                RaisePropertyChanged("ControllerTypeLabor");
-            }
-        }
-        private TECManufacturer _controllerTypeManufacturer;
-        public TECManufacturer ControllerTypeManufacturer
-        {
-            get { return _controllerTypeManufacturer; }
-            set
-            {
-                _controllerTypeManufacturer = value;
-                RaisePropertyChanged("ControllerTypeManufacturer");
-            }
-        }
-        private IOType _selectedIO;
-        public IOType SelectedIO
-        {
-            get { return _selectedIO; }
-            set
-            {
-                _selectedIO = value;
-                RaisePropertyChanged("SelectedIO");
-            }
-        }
-        private int _selectedIOQty;
-        public int SelectedIOQty
-        {
-            get { return _selectedIOQty; }
-            set
-            {
-                _selectedIOQty = value;
-                RaisePropertyChanged("SelectedIOQty");
-            }
-        }
-        private ObservableCollection<TECIO> _controllerTypeIO;
-        public ObservableCollection<TECIO> ControllerTypeIO
-        {
-            get { return _controllerTypeIO; }
-            set
-            {
-                _controllerTypeIO = value;
-                RaisePropertyChanged("ControllerTypeIO");
-            }
-        }
-        private QuantityCollection<TECIOModule> _controllerTypeModules;
-        public QuantityCollection<TECIOModule> ControllerTypeModules
-        {
-            get { return _controllerTypeModules; }
-            set
-            {
-                _controllerTypeModules = value;
-                RaisePropertyChanged("ControllerTypeModules");
-            }
-        } 
-        public ICommand AddIOCommand { get; private set; }
-
-        private TECControllerType _selectedControllerType;
-
-        public TECControllerType SelectedControllerType
-        {
-            get { return _selectedControllerType; }
-            set
-            {
-                _selectedControllerType = value;
-                RaisePropertyChanged("SelectedControllerType");
                 Selected = value;
             }
         }
@@ -395,7 +291,6 @@ namespace TECUserControlLibrary.ViewModels
         public ICommand AddAssociatedCostCommand { get; private set; }
         public ICommand AddPanelTypeCommand { get; private set; }
         public ICommand AddIOModuleCommand { get; private set; }
-        public ICommand AddControllerTypeCommand { get; private set; }
         public ICommand AddManufacturerCommand { get; private set; }
         public ICommand AddTagCommand { get; private set; }
         #endregion
@@ -409,6 +304,7 @@ namespace TECUserControlLibrary.ViewModels
         public ValvesCatalogVM ValveVM { get; }
         public ConnectionTypesCatalogVM ConnectionTypeVM { get; }
         public ConduitTypesCatalogVM ConduitTypeVM { get; }
+        public ControllerTypesCatalogVM ControllerTypeVM { get; }
         public MiscCostsVM MiscVM { get; }
 
         private ViewModelBase _modalVM;
@@ -425,7 +321,6 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         #endregion
-
         #endregion
 
         public MaterialVM(TECTemplates templates)
@@ -440,6 +335,7 @@ namespace TECUserControlLibrary.ViewModels
             subscribeToVM(ValveVM = new ValvesCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(ConnectionTypeVM = new ConnectionTypesCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(ConduitTypeVM = new ConduitTypesCatalogVM(templates, ReferenceDropHandler));
+            subscribeToVM(ControllerTypeVM = new ControllerTypesCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(MiscVM = new MiscCostsVM(templates));
         }
         
@@ -449,36 +345,9 @@ namespace TECUserControlLibrary.ViewModels
             AddAssociatedCostCommand = new RelayCommand(addAsociatedCostExecute, canAddAssociatedCost);
             AddPanelTypeCommand = new RelayCommand(addPanelTypeExecute, canAddPanelTypeExecute);
             AddIOModuleCommand = new RelayCommand(addIOModuleExecute, canAddIOModuleExecute);
-            AddControllerTypeCommand = new RelayCommand(addControllerTypeExecute, canAddControllerType);
             AddManufacturerCommand = new RelayCommand(addManufacturerExecute, canAddManufacturer);
             AddTagCommand = new RelayCommand(addTagExecute, canAddTag);
-            AddIOCommand = new RelayCommand(addIOToControllerTypeExecute, canAddIOToControllerType);
             AddIOToModuleCommand = new RelayCommand(addIOToModuleExecute, canAddIOToModule);
-        }
-
-        private void addIOToControllerTypeExecute()
-        {
-            bool wasAdded = false;
-            for (int x = 0; x < SelectedIOQty; x++)
-            {
-                foreach (TECIO io in ControllerTypeIO)
-                {
-                    if (io.Type == SelectedIO)
-                    {
-                        io.Quantity++;
-                        wasAdded = true;
-                        break;
-                    }
-                }
-                if (!wasAdded)
-                {
-                    ControllerTypeIO.Add(new TECIO(SelectedIO));
-                }
-            }
-        }
-        private bool canAddIOToControllerType()
-        {
-            return true;
         }
 
         private void addIOToModuleExecute()
@@ -580,43 +449,6 @@ namespace TECUserControlLibrary.ViewModels
                 return false;
             }
         }
-        private void addControllerTypeExecute()
-        {
-            TECControllerType toAdd = new TECControllerType(ControllerTypeManufacturer);
-            toAdd.Name = ControllerTypeName;
-            toAdd.Description = ControllerTypeDescription;
-            toAdd.Price = ControllerTypeCost;
-            toAdd.Labor = ControllerTypeLabor;
-            ObservableCollection<TECIOModule> ioModules = new ObservableCollection<TECIOModule>();
-            foreach(QuantityItem<TECIOModule> quantItem in ControllerTypeModules)
-            {
-                for(int i = 0; i < quantItem.Quantity; i++)
-                {
-                    ioModules.Add(quantItem.Item);
-                }
-            }
-            toAdd.IOModules = ioModules;
-            toAdd.IO = ControllerTypeIO;
-
-            Templates.Catalogs.ControllerTypes.Add(toAdd);
-            ControllerTypeIO = new ObservableCollection<TECIO>();
-            ControllerTypeModules = new QuantityCollection<TECIOModule>();
-            ControllerTypeName = "";
-            ControllerTypeDescription = "";
-            ControllerTypeCost = 0;
-            ControllerTypeLabor = 0;
-            ControllerTypeManufacturer = null;
-        }
-        private bool canAddControllerType()
-        {
-            if(ControllerTypeManufacturer != null)
-            {
-                return true;
-            } else
-            {
-                return false;
-            }
-        }
         private void addManufacturerExecute()
         {
             Templates.Catalogs.Manufacturers.Add(ManufacturerToAdd);
@@ -661,13 +493,6 @@ namespace TECUserControlLibrary.ViewModels
             PanelTypeDescription = "";
             PanelTypeCost = 0;
             PanelTypeLabor = 0;
-            
-            ControllerTypeName = "";
-            ControllerTypeDescription = "";
-            ControllerTypeCost = 0;
-            ControllerTypeLabor = 0;
-            ControllerTypeIO = new ObservableCollection<TECIO>();
-            ControllerTypeModules = new QuantityCollection<TECIOModule>();
 
             IOModuleName = "";
             IOModuleDescription = "";
