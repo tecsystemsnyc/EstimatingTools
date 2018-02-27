@@ -45,6 +45,7 @@
     </UserControl.Resources>
     <Grid>
         <Grid.Triggers>
+            <!--Modal Events-->
             <EventTrigger RoutedEvent="catalogViews:DevicesCatalogView.StartModal">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
@@ -86,63 +87,9 @@
                     </DataTemplate>
                     <!--Connection Types-->
                     <DataTemplate x:Key="ConnectionTypeTemplate">
-                        <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
-                            <Grid.Resources>
-                                <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
-                            </Grid.Resources>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <Grid Grid.Row="0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="40"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="40"/>
-                                    <ColumnDefinition Width="80"/>
-                                    <ColumnDefinition Width="40"/>
-                                    <ColumnDefinition Width="80"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Name:" Margin="5,0,0,0"
-                           VerticalAlignment="Center"/>
-                                <TextBox  Grid.Column="1" Margin="2"
-                          Text="{Binding ConnectionTypeName}"/>
-                                <TextBlock Text="Cost:" Grid.Column="2" Margin="5,0,0,0"
-                           VerticalAlignment="Center"/>
-                                <TextBox  Grid.Column="3" Margin="2"
-                          Text="{Binding ConnectionTypeCost, StringFormat={}{0:C}}"/>
-                                <TextBlock Text="Labor:" Margin="5,0,0,0"
-                           VerticalAlignment="Center" Grid.Column="4"/>
-                                <TextBox  Grid.Column="5" Margin="2"
-                          Text="{Binding ConnectionTypeLabor, StringFormat={}{0} ($/hr)}"/>
-                            </Grid>
-                            <Grid Grid.Row="1" >
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="135"/>
-                                    <ColumnDefinition Width="80"/>
-                                    <ColumnDefinition Width="85"/>
-                                    <ColumnDefinition Width="80"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="(Marginal) Plenum Cost:" Grid.Column="0" Margin="5,0,0,0"
-                           VerticalAlignment="Center"/>
-                                <TextBox  Grid.Column="1" Margin="2"
-                          Text="{Binding ConnectionTypePlenumCost, StringFormat={}{0:C}}"/>
-                                <TextBlock Text="Plenum Labor:" Margin="5,0,0,0"
-                           VerticalAlignment="Center" Grid.Column="2"/>
-                                <TextBox  Grid.Column="3" Margin="2"
-                          Text="{Binding ConnectionTypePlenumLabor, StringFormat={}{0} ($/hr)}"/>
-                                <Button Grid.Column="4"
-                        Content="Add" Margin="2"
-                        Command="{Binding AddConnectionTypeCommand}"/>
-                            </Grid>
-                            <controls:ElectricalMaterialGridControl Grid.Row="2" Margin="5"
-                                             ElectricalMaterialSource="{Binding Templates.Catalogs.ConnectionTypes}"
-                                                                Selected="{Binding SelectedConnectionType, Mode=OneWayToSource}"
-                                             ViewModel="{Binding ElementName=materialView, Path=ViewModel}"/>
-                        </Grid>
+                        <catalogViews:ConnectionTypesCatalogView VM="{Binding ElementName=materialView, Path=ViewModel.ConnectionTypeVM}"/>
                     </DataTemplate>
+                    <!--Conduit Types-->
                     <DataTemplate x:Key="ConduitTypeTemplate">
                         <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
                             <Grid.Resources>
@@ -187,8 +134,8 @@
                             </Grid>
                             <controls:ElectricalMaterialGridControl Grid.Row="2" Margin="5"
                                           ElectricalMaterialSource="{Binding Templates.Catalogs.ConduitTypes}"
-                                                                    Selected="{Binding SelectedConduitType}"
-                                          ViewModel="{Binding ElementName=materialView, Path=ViewModel}"/>
+                                          Selected="{Binding SelectedConduitType}"
+                                          DropHandler="{Binding ElementName=materialView, Path=ViewModel}"/>
                         </Grid>
                     </DataTemplate>
                     <DataTemplate x:Key="ControllerTypeTemplate">

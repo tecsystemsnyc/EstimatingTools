@@ -47,72 +47,6 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         
-        #region Connection Types
-        private string _connectionTypeName;
-        public string ConnectionTypeName
-        {
-            get { return _connectionTypeName; }
-            set
-            {
-                _connectionTypeName = value;
-                RaisePropertyChanged("ConnectionTypeName");
-            }
-        }
-        private double _connectionTypeCost;
-        public double ConnectionTypeCost
-        {
-            get { return _connectionTypeCost; }
-            set
-            {
-                _connectionTypeCost = value;
-                RaisePropertyChanged("ConnectionTypeCost");
-            }
-        }
-        private double _connectionTypeLabor;
-        public double ConnectionTypeLabor
-        {
-            get { return _connectionTypeLabor; }
-            set
-            {
-                _connectionTypeLabor = value;
-                RaisePropertyChanged("ConnectionTypeLabor");
-            }
-        }
-        private double _connectionTypePlenumCost;
-        public double ConnectionTypePlenumCost
-        {
-            get { return _connectionTypePlenumCost; }
-            set
-            {
-                _connectionTypePlenumCost = value;
-                RaisePropertyChanged("ConnectionTypePlenumCost");
-            }
-        }
-        private double _connectionTypePlenumLabor;
-        public double ConnectionTypePlenumLabor
-        {
-            get { return _connectionTypePlenumLabor; }
-            set
-            {
-                _connectionTypePlenumLabor = value;
-                RaisePropertyChanged("ConnectionTypePlenumLabor");
-            }
-        }
-
-        private TECConnectionType _selectedConnectionType;
-
-        public TECConnectionType SelectedConnectionType
-        {
-            get { return _selectedConnectionType; }
-            set
-            {
-                _selectedConnectionType = value;
-                RaisePropertyChanged("SelectedConnectionType");
-                Selected = value;
-            }
-        }
-
-        #endregion
         #region Conduit Types
         private string _conduitTypeName;
         public string ConduitTypeName
@@ -612,7 +546,6 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
         #region Command Properties
-        public ICommand AddConnectionTypeCommand { get; private set; }
         public ICommand AddConduitTypeCommand { get; private set; }
         public ICommand AddAssociatedCostCommand { get; private set; }
         public ICommand AddPanelTypeCommand { get; private set; }
@@ -624,12 +557,13 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Delegates
-        public Action<Object> SelectionChanged;
+        public event Action<Object> SelectionChanged;
         #endregion
 
         #region ViewModels
         public DevicesCatalogVM DeviceVM { get; }
         public ValvesCatalogVM ValveVM { get; }
+        public ConnectionTypesCatalogVM ConnectionTypeVM { get; }
         public MiscCostsVM MiscVM { get; }
 
         private ViewModelBase _modalVM;
@@ -659,13 +593,14 @@ namespace TECUserControlLibrary.ViewModels
             //Setup VMs
             subscribeToVM(DeviceVM = new DevicesCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(ValveVM = new ValvesCatalogVM(templates, ReferenceDropHandler));
+            subscribeToVM(ConnectionTypeVM = new ConnectionTypesCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(MiscVM = new MiscCostsVM(templates));
         }
         
         #region Methods
         private void setupCommands()
         {
-            AddConnectionTypeCommand = new RelayCommand(addConnectionTypeExecute);
+            
             AddConduitTypeCommand = new RelayCommand(addConduitTypeExecute);
             AddAssociatedCostCommand = new RelayCommand(addAsociatedCostExecute, canAddAssociatedCost);
             AddPanelTypeCommand = new RelayCommand(addPanelTypeExecute, canAddPanelTypeExecute);
@@ -731,22 +666,6 @@ namespace TECUserControlLibrary.ViewModels
             return true;
         }
 
-
-        private void addConnectionTypeExecute()
-        {
-            var connectionType = new TECConnectionType();
-            connectionType.Name = ConnectionTypeName;
-            connectionType.Cost = ConnectionTypeCost;
-            connectionType.Labor = ConnectionTypeLabor;
-            connectionType.PlenumCost = ConnectionTypePlenumCost;
-            connectionType.PlenumLabor = ConnectionTypePlenumLabor;
-            Templates.Catalogs.ConnectionTypes.Add(connectionType);
-            ConnectionTypeName = "";
-            ConnectionTypeCost = 0;
-            ConnectionTypeLabor = 0;
-            ConnectionTypePlenumCost = 0;
-            ConnectionTypePlenumLabor = 0;
-        }
         private void addConduitTypeExecute()
         {
             var conduitType = new TECElectricalMaterial();
@@ -955,12 +874,6 @@ namespace TECUserControlLibrary.ViewModels
 
         private void setupInterfaceDefaults()
         {
-            ConnectionTypeName = "";
-            ConnectionTypeCost = 0;
-            ConnectionTypeLabor = 0;
-            ConnectionTypePlenumCost = 0.0;
-            ConnectionTypePlenumLabor = 0.0;
-
             ConduitTypeName = "";
             ConduitTypeCost = 0;
             ConduitTypeLabor = 0;
@@ -996,8 +909,6 @@ namespace TECUserControlLibrary.ViewModels
             ManufacturerToAdd = new TECManufacturer();
 
             TagToAdd = new TECTag();
-
-            
         }
 
         private void subscribeToVM(TECVMBase tecVM)

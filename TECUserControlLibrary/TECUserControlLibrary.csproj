@@ -235,6 +235,7 @@
     <Compile Include="ViewModels\AddNetworkConnectionVM.cs" />
     <Compile Include="ViewModels\AddVMs\AddVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\CatalogVMBase.cs" />
+    <Compile Include="ViewModels\CatalogVMs\ConnectionTypesCatalogVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\DevicesCatalogVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\ValvesCatalogVM.cs" />
     <Compile Include="ViewModels\ConnectableFilterVM.cs" />
@@ -248,6 +249,9 @@
     <Compile Include="ViewModels\ScheduleVM.cs" />
     <Compile Include="ViewModels\ValveSummaryVM.cs" />
     <Compile Include="ViewModels\WorkBoxVM.cs" />
+    <Compile Include="Views\CatalogViews\ConnectionTypesCatalogView.xaml.cs">
+      <DependentUpon>ConnectionTypesCatalogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CatalogViews\DevicesCatalogView.xaml.cs">
       <DependentUpon>DevicesCatalogView.xaml</DependentUpon>
     </Compile>
@@ -679,6 +683,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ValveGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CatalogViews\ConnectionTypesCatalogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
