@@ -81,9 +81,9 @@ namespace Tests
             var subScope = new TECSubScope(true);
             system.Equipment.Add(equipment);
             equipment.SubScope.Add(subScope);
-            bidController.AddSubScope(subScope);
+            bidController.AddSubScopeConnection(subScope);
             var instance = system.AddInstance(bid);
-            bidController.AddSubScope(instance.GetAllSubScope()[0]);
+            bidController.AddSubScopeConnection(instance.GetAllSubScope()[0]);
             
             Assert.AreEqual(2, bidController.ChildrenConnections.Count, "Connection not added");
 
@@ -110,7 +110,7 @@ namespace Tests
             TECSystem instance = typical.AddInstance(bid);
             TECSubScope instanceSS = instance.Equipment[0].SubScope[0];
 
-            controller.AddSubScope(ss);
+            controller.AddSubScopeConnection(ss);
 
             //Act
             controller.RemoveSubScope(ss);
@@ -130,7 +130,7 @@ namespace Tests
             TECEquipment equipment = system.Equipment[0];
             TECSubScope subScope = new TECSubScope(false);
             equipment.SubScope.Add(subScope);
-            controller.AddSubScope(subScope);
+            controller.AddSubScopeConnection(subScope);
             bid.Systems.Add(system);
             TECSystem instance = system.AddInstance(bid);
             
@@ -161,7 +161,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void AddSubScopeToTypicalWithInstance()
+        public void AddSubScopeConnectionToTypicalWithInstance()
         {
             TECBid bid = new TECBid();
             TECTypical typical = new TECTypical();

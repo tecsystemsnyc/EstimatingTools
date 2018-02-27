@@ -248,6 +248,50 @@ namespace EstimatingLibrary
             return canExecute;
         }
 
+        public List<TECConnection> CreateTypicalAndInstanceConnections(TECController typicalController, TECSubScope typicalSubScope)
+        {
+            if (!this.GetAllSubScope().Contains(typicalSubScope))
+            {
+                throw new Exception("SubScope does not exist in typical.");
+            }
+            if (!this.Controllers.Contains(typicalController))
+            {
+                throw new Exception("Controller does not exist in typical.");
+            }
+
+            List<TECConnection> outConnections = new List<TECConnection>();
+            outConnections.Add(typicalController.AddSubScope(typicalSubScope, true));
+
+            foreach (TECController instanceController
+                    in this.TypicalInstanceDictionary.GetInstances(typicalController))
+            {
+                foreach (TECSubScope instanceSubScope
+                    in this.TypicalInstanceDictionary.GetInstances(typicalSubScope))
+                {
+                    bool found = false;
+                    foreach (TECSystem instance in this.Instances)
+                    {
+                        if (instance.Controllers.Contains(instanceController) &&
+                            instance.GetAllSubScope().Contains(instanceSubScope))
+                        {
+                            outConnections.Add(instanceController.AddSubScope(instanceSubScope, true));
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (found)
+                        break;
+                }
+            }
+
+            return outConnections;
+        }
+        public List<T> GetInstancesFromTypical<T>(T typical) where T : TECObject
+        {
+            return this.TypicalInstanceDictionary.GetInstances(typical);
+        }
+
+
         internal void RefreshRegistration()
         {
             watcher.Changed -= handleSystemChanged;
