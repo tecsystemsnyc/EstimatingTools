@@ -29,10 +29,8 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
         }
         public void Drop(IDropInfo dropInfo)
         {
-            //throw new NotImplementedException("T drop<T> is alway object for some reason.");
             object drop<T>(T item)
             {
-                Console.WriteLine(typeof(T));
                 bool isCatalog = item.GetType().GetInterfaces().Where(i => i.IsGenericType)
                     .Any(i => i.GetGenericTypeDefinition() == typeof(ICatalog<>));
                 if (isCatalog)
