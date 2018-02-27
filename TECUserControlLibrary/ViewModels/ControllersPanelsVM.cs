@@ -290,7 +290,6 @@ namespace TECUserControlLibrary.ViewModels
             addControllerMethod = bid.AddController;
             addPanelMethod = bid.Panels.Add;
             deleteControllerMethod = controller => {
-                controller.RemoveAllConnections();
                 bid.RemoveController(controller);
             };
             deletePanelMethod = panel => { bid.Panels.Remove(panel); };
@@ -309,7 +308,6 @@ namespace TECUserControlLibrary.ViewModels
         {
             deleteControllerMethod = controller =>
             {
-                controller.RemoveAllConnections();
                 system.RemoveController(controller);
             };
             deletePanelMethod = panel => { system.Panels.Remove(panel); };

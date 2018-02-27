@@ -120,5 +120,65 @@ namespace Tests
             Assert.AreEqual(0, controller.ChildrenConnections.Count, "Bid controller still contains connections.");
         }
         
+        [TestMethod]
+        public void RemoveControllerFromTypicalWithInstanceConnections()
+        {
+            TECBid bid = new TECBid();
+            bid.Catalogs = TestHelper.CreateTestCatalogs();
+            TECTypical system = TestHelper.CreateTestTypical(bid.Catalogs);
+            TECController controller = system.Controllers[0];
+            TECEquipment equipment = system.Equipment[0];
+            TECSubScope subScope = new TECSubScope(false);
+            equipment.SubScope.Add(subScope);
+            controller.AddSubScope(subScope);
+            bid.Systems.Add(system);
+            TECSystem instance = system.AddInstance(bid);
+            
+            TECController instanceController = system.TypicalInstanceDictionary.GetInstances(controller)[0] as TECController;
+            TECSubScope instanceSubScope = system.TypicalInstanceDictionary.GetInstances(subScope)[0] as TECSubScope;
+            
+            system.RemoveController(controller);
+
+            Assert.IsFalse(instance.Controllers.Contains(instanceController));
+            Assert.IsTrue(instanceSubScope.Connection == null);
+        }
+
+        [TestMethod]
+        public void AddEquipmentToTypicalWithInstance()
+        {
+            TECBid bid = new TECBid();
+            TECTypical typical = new TECTypical();
+            bid.Systems.Add(typical);
+            TECSystem instance = typical.AddInstance(bid);
+
+            TECEquipment toAdd = new TECEquipment(true);
+            typical.Equipment.Add(toAdd);
+
+            TECEquipment instanceEquipment = typical.TypicalInstanceDictionary.GetInstances(toAdd)[0] as TECEquipment;
+
+            Assert.IsNotNull(instanceEquipment, "Not added to instance dictionary");
+            Assert.IsTrue(instance.Equipment.Contains(instanceEquipment));
+        }
+
+        [TestMethod]
+        public void AddSubScopeToTypicalWithInstance()
+        {
+            TECBid bid = new TECBid();
+            TECTypical typical = new TECTypical();
+            TECEquipment equipment = new TECEquipment(true);
+            typical.Equipment.Add(equipment);
+            bid.Systems.Add(typical);
+            TECSystem instance = typical.AddInstance(bid);
+
+            TECSubScope toAdd = new TECSubScope(true);
+            equipment.SubScope.Add(toAdd);
+
+            TECEquipment instanceEquipment = typical.TypicalInstanceDictionary.GetInstances(equipment)[0] as TECEquipment;
+            TECSubScope instanceSubScope = typical.TypicalInstanceDictionary.GetInstances(toAdd)[0] as TECSubScope;
+
+            Assert.IsNotNull(instanceSubScope, "Not added to instance dictionary");
+            Assert.IsTrue(instanceEquipment.SubScope.Contains(instanceSubScope));
+        }
+
     }
 }

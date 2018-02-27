@@ -193,6 +193,7 @@ namespace EstimatingLibrary
         }
         public void RemoveController(TECController controller)
         {
+            controller.RemoveAllConnections();
             _controllers.Remove(controller);
             notifyTECChanged(Change.Remove, "Controllers", this, controller);
             notifyCostChanged(-controller.CostBatch);
