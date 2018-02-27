@@ -86,9 +86,12 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
             get { return _selectedConnectionType; }
             set
             {
-                _selectedConnectionType = value;
-                RaisePropertyChanged("SelectedConnectionType");
-                RaiseSelectedChanged(SelectedConnectionType);
+                if (_selectedConnectionType != value)
+                {
+                    _selectedConnectionType = value;
+                    RaisePropertyChanged("SelectedConnectionType");
+                    RaiseSelectedChanged(SelectedConnectionType);
+                }
             }
         }
 

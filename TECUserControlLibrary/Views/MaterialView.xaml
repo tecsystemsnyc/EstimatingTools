@@ -79,65 +79,25 @@
                 <ResourceDictionary>
                     <!--Devices-->
                     <DataTemplate x:Key="DevicesTemplate">
-                        <catalogViews:DevicesCatalogView VM="{Binding ElementName=materialView, Path=ViewModel.DeviceVM}"/>
+                        <catalogViews:DevicesCatalogView 
+                            VM="{Binding ElementName=materialView, Path=ViewModel.DeviceVM}"/>
                     </DataTemplate>
                     <!--Valves-->
                     <DataTemplate x:Key="ValveTemplate">
-                        <catalogViews:ValvesCatalogView VM="{Binding ElementName=materialView, Path=ViewModel.ValveVM}"/>
+                        <catalogViews:ValvesCatalogView 
+                            VM="{Binding ElementName=materialView, Path=ViewModel.ValveVM}"/>
                     </DataTemplate>
                     <!--Connection Types-->
                     <DataTemplate x:Key="ConnectionTypeTemplate">
-                        <catalogViews:ConnectionTypesCatalogView VM="{Binding ElementName=materialView, Path=ViewModel.ConnectionTypeVM}"/>
+                        <catalogViews:ConnectionTypesCatalogView 
+                            VM="{Binding ElementName=materialView, Path=ViewModel.ConnectionTypeVM}"/>
                     </DataTemplate>
                     <!--Conduit Types-->
                     <DataTemplate x:Key="ConduitTypeTemplate">
-                        <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
-                            <Grid.Resources>
-                                <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
-                            </Grid.Resources>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <Grid Grid.Row="0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Name:" Margin="5,0,0,0"
-                           VerticalAlignment="Center"/>
-                                <TextBox  Grid.Column="1" Margin="2"
-                          Text="{Binding ConduitTypeName}"/>
-                                <TextBlock Text="Cost:" Margin="5,0,0,0"
-                           VerticalAlignment="Center"
-                           Grid.Column="2"/>
-                                <TextBox  Grid.Column="3" Margin="2"
-                          Text="{Binding ConduitTypeCost, StringFormat={}{0:C}}"/>
-                            </Grid>
-                            <Grid Grid.Row="1">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Labor Rate:" Margin="5,0,0,0"
-                           VerticalAlignment="Center"/>
-                                <TextBox  Grid.Column="1" Margin="2"
-                          Text="{Binding ConduitTypeLabor}"/>
-                                <Button Grid.Column="2" Grid.ColumnSpan="2"
-                        Content="Add" Margin="2"
-                        Command="{Binding AddConduitTypeCommand}"/>
-                            </Grid>
-                            <controls:ElectricalMaterialGridControl Grid.Row="2" Margin="5"
-                                          ElectricalMaterialSource="{Binding Templates.Catalogs.ConduitTypes}"
-                                          Selected="{Binding SelectedConduitType}"
-                                          DropHandler="{Binding ElementName=materialView, Path=ViewModel}"/>
-                        </Grid>
+                        <catalogViews:ConduitTypesCatalogView 
+                            VM="{Binding ElementName=materialView, Path=ViewModel.ConduitTypeVM}"/>
                     </DataTemplate>
+                    <!--Controller Types-->
                     <DataTemplate x:Key="ControllerTypeTemplate">
                         <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
                             <Grid.Resources>

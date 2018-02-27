@@ -47,52 +47,6 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         
-        #region Conduit Types
-        private string _conduitTypeName;
-        public string ConduitTypeName
-        {
-            get { return _conduitTypeName; }
-            set
-            {
-                _conduitTypeName = value;
-                RaisePropertyChanged("ConduitTypeName");
-            }
-        }
-        private double _conduitTypeCost;
-        public double ConduitTypeCost
-        {
-            get { return _conduitTypeCost; }
-            set
-            {
-                _conduitTypeCost = value;
-                RaisePropertyChanged("ConduitTypeCost");
-            }
-        }
-        private double _conduitTypeLabor;
-        public double ConduitTypeLabor
-        {
-            get { return _conduitTypeLabor; }
-            set
-            {
-                _conduitTypeLabor = value;
-                RaisePropertyChanged("ConduitTypeLabor");
-            }
-        }
-
-
-        private TECElectricalMaterial _selectedConduitType;
-
-        public TECElectricalMaterial SelectedConduitType
-        {
-            get { return _selectedConduitType; }
-            set
-            {
-                _selectedConduitType = value;
-                RaisePropertyChanged("SelectedConduitType");
-                Selected = value;
-            }
-        }
-        #endregion
         #region Associated Costs
         private string _associatedCostName;
         public string AssociatedCostName
@@ -281,114 +235,6 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         #endregion
-        #region Valve
-        private string _valveName;
-        public string ValveName
-        {
-            get { return _valveName; }
-            set
-            {
-                _valveName = value;
-                RaisePropertyChanged("ValveName");
-            }
-        }
-        private string _valveDescription;
-        public string ValveDescription
-        {
-            get { return _valveDescription; }
-            set
-            {
-                _valveDescription = value;
-                RaisePropertyChanged("ValveDescription");
-            }
-        }
-        private double _valveListPrice;
-        public double ValveListPrice
-        {
-            get { return _valveListPrice; }
-            set
-            {
-                _valveListPrice = value;
-                RaisePropertyChanged("ValveListPrice");
-            }
-        }
-        private double _valveLabor;
-        public double ValveLabor
-        {
-            get { return _valveLabor; }
-            set
-            {
-                _valveLabor = value;
-                RaisePropertyChanged("ValveLabor");
-            }
-        }
-        private double _valveCv;
-        public double ValveCv
-        {
-            get { return _valveCv; }
-            set
-            {
-                _valveCv = value;
-                RaisePropertyChanged("ValveCv");
-            }
-        }
-        private double _valveSize;
-        public double ValveSize
-        {
-            get { return _valveSize; }
-            set
-            {
-                _valveSize = value;
-                RaisePropertyChanged("ValveSize");
-            }
-        }
-        private string _valveStyle;
-        public string ValveStyle
-        {
-            get { return _valveStyle; }
-            set
-            {
-                _valveStyle = value;
-                RaisePropertyChanged("ValveStyle");
-            }
-        }
-        private TECManufacturer _valveManufacturer;
-        public TECManufacturer ValveManufacturer
-        {
-            get { return _valveManufacturer; }
-            set
-            {
-                _valveManufacturer = value;
-                RaisePropertyChanged("ValveManufacturer");
-            }
-        }
-        private TECDevice _valveActuator;
-        public TECDevice ValveActuator
-        {
-            get { return _valveActuator; }
-            set
-            {
-                _valveActuator = value;
-                RaisePropertyChanged("ValveActuator");
-            }
-        }
-
-        private TECValve _selectedValve;
-
-        public TECValve SelectedValve
-        {
-            get { return _selectedValve; }
-            set
-            {
-                _selectedValve = value;
-                RaisePropertyChanged("SelectedValve");
-                Selected = value;
-            }
-        }
-
-        public ICommand DeleteValveCommand { get; private set; }
-        public ICommand ReplaceActuatorCommand { get; private set; }
-        #endregion
         #region Controller Types
         private string _controllerTypeName;
         public string ControllerTypeName
@@ -546,12 +392,10 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
         #region Command Properties
-        public ICommand AddConduitTypeCommand { get; private set; }
         public ICommand AddAssociatedCostCommand { get; private set; }
         public ICommand AddPanelTypeCommand { get; private set; }
         public ICommand AddIOModuleCommand { get; private set; }
         public ICommand AddControllerTypeCommand { get; private set; }
-        public ICommand AddValveCommand { get; private set; }
         public ICommand AddManufacturerCommand { get; private set; }
         public ICommand AddTagCommand { get; private set; }
         #endregion
@@ -564,6 +408,7 @@ namespace TECUserControlLibrary.ViewModels
         public DevicesCatalogVM DeviceVM { get; }
         public ValvesCatalogVM ValveVM { get; }
         public ConnectionTypesCatalogVM ConnectionTypeVM { get; }
+        public ConduitTypesCatalogVM ConduitTypeVM { get; }
         public MiscCostsVM MiscVM { get; }
 
         private ViewModelBase _modalVM;
@@ -594,26 +439,21 @@ namespace TECUserControlLibrary.ViewModels
             subscribeToVM(DeviceVM = new DevicesCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(ValveVM = new ValvesCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(ConnectionTypeVM = new ConnectionTypesCatalogVM(templates, ReferenceDropHandler));
+            subscribeToVM(ConduitTypeVM = new ConduitTypesCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(MiscVM = new MiscCostsVM(templates));
         }
         
         #region Methods
         private void setupCommands()
         {
-            
-            AddConduitTypeCommand = new RelayCommand(addConduitTypeExecute);
             AddAssociatedCostCommand = new RelayCommand(addAsociatedCostExecute, canAddAssociatedCost);
             AddPanelTypeCommand = new RelayCommand(addPanelTypeExecute, canAddPanelTypeExecute);
             AddIOModuleCommand = new RelayCommand(addIOModuleExecute, canAddIOModuleExecute);
             AddControllerTypeCommand = new RelayCommand(addControllerTypeExecute, canAddControllerType);
-            AddValveCommand = new RelayCommand(addValveExecute, canAddValve);
             AddManufacturerCommand = new RelayCommand(addManufacturerExecute, canAddManufacturer);
             AddTagCommand = new RelayCommand(addTagExecute, canAddTag);
             AddIOCommand = new RelayCommand(addIOToControllerTypeExecute, canAddIOToControllerType);
             AddIOToModuleCommand = new RelayCommand(addIOToModuleExecute, canAddIOToModule);
-            
-            DeleteValveCommand = new RelayCommand(deleteValveExecute, canDeleteValve);
-            ReplaceActuatorCommand = new RelayCommand(replaceActuatorExecute, canReplaceActuator);
         }
 
         private void addIOToControllerTypeExecute()
@@ -665,18 +505,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             return true;
         }
-
-        private void addConduitTypeExecute()
-        {
-            var conduitType = new TECElectricalMaterial();
-            conduitType.Name = ConduitTypeName;
-            conduitType.Cost = ConduitTypeCost;
-            conduitType.Labor = ConduitTypeLabor;
-            Templates.Catalogs.ConduitTypes.Add(conduitType);
-            ConduitTypeName = "";
-            ConduitTypeCost = 0;
-            ConduitTypeLabor = 0;
-        }
+        
         private void addAsociatedCostExecute()
         {
             var associatedCost = new TECCost(AssociatedCostType);
@@ -788,60 +617,10 @@ namespace TECUserControlLibrary.ViewModels
                 return false;
             }
         }
-        private void addValveExecute()
-        {
-            TECValve toAdd = new TECValve(ValveManufacturer, ValveActuator);
-            toAdd.Name = ValveName;
-            toAdd.Description = ValveDescription;
-            toAdd.Price = ValveListPrice;
-            toAdd.Labor = ValveLabor;
-            toAdd.Style = ValveStyle;
-            toAdd.Cv = ValveCv;
-            toAdd.Size = ValveSize;
-            Templates.Catalogs.Valves.Add(toAdd);
-
-            ValveName = "";
-            ValveDescription = "";
-            ValveListPrice = 0;
-            ValveLabor = 0;
-            ValveCv = 0.0;
-            ValveStyle = "";
-            ValveSize = 0.0;
-            ValveActuator = null;
-            ValveManufacturer = null;
-        }
-        private bool canAddValve()
-        {
-            if(ValveActuator != null && ValveManufacturer != null)
-            {
-                return true;
-            } else
-            {
-                return false;
-            }
-        }
         private void addManufacturerExecute()
         {
             Templates.Catalogs.Manufacturers.Add(ManufacturerToAdd);
             ManufacturerToAdd = new TECManufacturer();
-        }
-
-        private void deleteValveExecute()
-        {
-            ModalVM = new DeleteEndDeviceVM(SelectedValve, Templates);
-        }
-        private bool canDeleteValve()
-        {
-            return SelectedValve != null;
-        }
-
-        private void replaceActuatorExecute()
-        {
-            ModalVM = new ReplaceActuatorVM(SelectedValve, Templates.Catalogs.Devices);
-        }
-        private bool canReplaceActuator()
-        {
-            return SelectedValve != null;
         }
 
         private bool canAddManufacturer()
@@ -874,10 +653,6 @@ namespace TECUserControlLibrary.ViewModels
 
         private void setupInterfaceDefaults()
         {
-            ConduitTypeName = "";
-            ConduitTypeCost = 0;
-            ConduitTypeLabor = 0;
-
             AssociatedCostName = "";
             AssociatedCostCost = 0;
             AssociatedCostLabor = 0;
@@ -898,13 +673,6 @@ namespace TECUserControlLibrary.ViewModels
             IOModuleDescription = "";
             IOModuleCost = 0;
             ModuleIO = new ObservableCollection<TECIO>();
-
-            ValveName = "";
-            ValveDescription = "";
-            ValveListPrice = 0;
-            ValveCv = 0.0;
-            ValveStyle = "";
-            ValveSize = 0.0;
 
             ManufacturerToAdd = new TECManufacturer();
 
