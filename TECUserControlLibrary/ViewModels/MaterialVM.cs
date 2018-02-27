@@ -629,6 +629,7 @@ namespace TECUserControlLibrary.ViewModels
 
         #region ViewModels
         public DevicesCatalogVM DeviceVM { get; }
+        public ValvesCatalogVM ValveVM { get; }
         public MiscCostsVM MiscVM { get; }
 
         private ViewModelBase _modalVM;
@@ -657,6 +658,7 @@ namespace TECUserControlLibrary.ViewModels
 
             //Setup VMs
             subscribeToVM(DeviceVM = new DevicesCatalogVM(templates, ReferenceDropHandler));
+            subscribeToVM(ValveVM = new ValvesCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(MiscVM = new MiscCostsVM(templates));
         }
         

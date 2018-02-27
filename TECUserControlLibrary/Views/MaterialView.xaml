@@ -50,6 +50,11 @@
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
+            <EventTrigger RoutedEvent="catalogViews:ValvesCatalogView.StartModal">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
             <EventTrigger RoutedEvent="views:DeleteEndDeviceView.Done">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalOut}"/>
@@ -77,107 +82,9 @@
                     </DataTemplate>
                     <!--Valves-->
                     <DataTemplate x:Key="ValveTemplate">
-                        <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
-                            <Grid.Resources>
-                                <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
-                            </Grid.Resources>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="30"/>
-                            </Grid.RowDefinitions>
-                            <Grid Grid.Row="0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="40"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="70"/>
-                                    <ColumnDefinition Width="2*"/>
-                                    <ColumnDefinition Width="60"/>
-                                    <ColumnDefinition Width="70"/>
-                                    <ColumnDefinition Width="50"/>
-                                    <ColumnDefinition Width="70"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Name:" Margin="5,0,0,0"
-                           VerticalAlignment="Center"/>
-                                <TextBox  Grid.Column="1" Margin="2"
-                          Text="{Binding ValveName}"/>
-                                <TextBlock Text="Description:" Grid.Column="2" Margin="5,0,0,0"
-                           VerticalAlignment="Center"/>
-                                <TextBox  Grid.Column="3" Margin="2"
-                          Text="{Binding ValveDescription}"/>
-                                <TextBlock Text="List Price:" Grid.Column="4" Margin="5,0,0,0"
-                           VerticalAlignment="Center"/>
-                                <TextBox  Grid.Column="5" Margin="2"
-                          Text="{Binding ValveListPrice, StringFormat={}{0:C}}"/>
-                                <TextBlock Text="Labor:" Margin="5,0,0,0"
-                           VerticalAlignment="Center" Grid.Column="6"/>
-                                <TextBox  Grid.Column="7" Margin="2"
-                          Text="{Binding ValveLabor}"/>
-                            </Grid>
-                            <Grid Grid.Row="1" >
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
-                                           VerticalAlignment="Center" Grid.Column="0"/>
-                                <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
-                                          SelectedItem="{Binding ValveManufacturer}"
-                                          DisplayMemberPath="Label" Grid.Column="1"
-                                          Margin="2"/>
-                                <TextBlock Text="Actuator:" Margin="5,0,0,0"
-                                           VerticalAlignment="Center" Grid.Column="2"/>
-                                <ComboBox ItemsSource="{Binding Templates.Catalogs.Devices}"
-                                          SelectedItem="{Binding ValveActuator}"
-                                          DisplayMemberPath="Name" Grid.Column="3"
-                                          Margin="2"/>
-
-                            </Grid>
-                            <Grid Grid.Row="2">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Cv: "/>
-                                <TextBox Text="{Binding ValveCv}" Grid.Column="1"/>
-                                <TextBlock Text="Size: " Grid.Column="2"/>
-                                <TextBox Text="{Binding ValveSize, StringFormat={}{0} inches}" Grid.Column="3"/>
-                                <TextBlock Text="Style: " Grid.Column="4"/>
-                                <TextBox Text="{Binding ValveStyle}" Grid.Column="5"/>
-                            </Grid>
-                            <Button Grid.Row="3" Grid.ColumnSpan="4"
-                                    Content="Add" Margin="2"
-                                    Command="{Binding AddValveCommand}"/>
-                            <controls:ValveGridControl Source="{Binding Templates.Catalogs.Valves}"
-                                                     DropHandler="{Binding ElementName=materialView, Path=ViewModel}"
-                                                         Selected="{Binding SelectedValve}"
-                                                     Grid.Row="4"/>
-                            <Grid Grid.Row="5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Button Content="Replace Actuator"
-                                        Command="{Binding ElementName=materialView, Path=ViewModel.ReplaceActuatorCommand}"
-                                        Click="Remove_Clicked"/>
-                                <Button Grid.Column="1"
-                                    Content="Delete"
-                                    Command="{Binding ElementName=materialView, Path=ViewModel.DeleteValveCommand}"
-                                    Click="Remove_Clicked"/>
-                                
-                            </Grid>
-                        </Grid>
+                        <catalogViews:ValvesCatalogView VM="{Binding ElementName=materialView, Path=ViewModel.ValveVM}"/>
                     </DataTemplate>
+                    <!--Connection Types-->
                     <DataTemplate x:Key="ConnectionTypeTemplate">
                         <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
                             <Grid.Resources>
