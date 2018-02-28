@@ -187,14 +187,12 @@ namespace TECUserControlLibrary.ViewModels
             DeletePanelCommand = new RelayCommand<TECPanel>(deletePanelExecute);
 
             Refresh(parent, controllers, panels);
-
         }
         public ControllersPanelsVM(TECBid bid) : this(bid, bid.Controllers, bid.Panels)
         {
             PanelSelectionReadOnly = false;
             PanelSelectionVisibility = Visibility.Visible;
             Bid = bid;
-            
         }
         public ControllersPanelsVM(TECTemplates templates) 
             : this(templates, templates.ControllerTemplates, templates.PanelTemplates)
@@ -430,17 +428,17 @@ namespace TECUserControlLibrary.ViewModels
             {
                 foreach (object item in e.OldItems)
                 {
-                    if (item is ControllerInPanel)
-                    {
-                        foreach (TECPanel panel in sourcePanels)
-                        {
-                            if (panel.Controllers.Contains((item as ControllerInPanel).Controller))
-                            {
-                                panel.Controllers.Remove((item as ControllerInPanel).Controller);
-                            }
-                        }
-                        sourceControllers.Remove((item as ControllerInPanel).Controller);
-                    }
+                    //if (item is ControllerInPanel)
+                    //{
+                    //    foreach (TECPanel panel in sourcePanels)
+                    //    {
+                    //        if (panel.Controllers.Contains((item as ControllerInPanel).Controller))
+                    //        {
+                    //            panel.Controllers.Remove((item as ControllerInPanel).Controller);
+                    //        }
+                    //    }
+                    //    sourceControllers.Remove((item as ControllerInPanel).Controller);
+                    //}
                     if (item is TECController)
                     {
                         removeController(item as TECController);
