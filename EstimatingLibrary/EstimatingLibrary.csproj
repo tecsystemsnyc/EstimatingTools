@@ -162,6 +162,7 @@
     <Compile Include="Utilities\ChangeWatcher.cs" />
     <Compile Include="Utilities\ScopeExtensions.cs" />
     <Compile Include="Utilities\TemplateSynchronizer.cs" />
+    <Compile Include="Utilities\TypeExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
