@@ -525,6 +525,11 @@ namespace TECUserControlLibrary.ViewModels
 
         private void instanceChanged(TECChangedEventArgs args)
         {
+            //Checks for a material change in the bid
+            if (args.Value is TECObject obj && args.Sender is IRelatable rel && rel.PropertyObjects.Contains(obj) && !rel.LinkedObjects.Contains(obj))
+            {
+                return;
+            }
             if (args.Change == Change.Add)
             {
                 if (args.Value is TECSystem system)
