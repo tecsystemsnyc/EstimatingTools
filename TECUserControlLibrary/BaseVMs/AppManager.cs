@@ -126,6 +126,7 @@ namespace TECUserControlLibrary.BaseVMs
             MenuVM.SetSaveNewCommand(saveNewExecute, canSaveNew);
             MenuVM.SetWikiCommand(wikiExecute);
             MenuVM.SetReportBugCommand(reportBugExecute);
+            MenuVM.SetOpenFileLocationCommand(openFileLocationExecute, canOpenFileLocation);
         }
         //New
         private void newExecute()
@@ -306,7 +307,7 @@ namespace TECUserControlLibrary.BaseVMs
         //Open File Location
         private void openFileLocationExecute()
         {
-            Process.Start(@databaseManager.GetPath());
+            Process.Start(Path.GetDirectoryName(databaseManager.GetPath()));
         }
         private bool canOpenFileLocation()
         {
