@@ -103,72 +103,6 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         #endregion
-        #region Panel Types
-        private string _panelTypeName;
-        public string PanelTypeName
-        {
-            get { return _panelTypeName; }
-            set
-            {
-                _panelTypeName = value;
-                RaisePropertyChanged("PanelTypeName");
-            }
-        }
-        private string _panelTypeDescription;
-        public string PanelTypeDescription
-        {
-            get { return _panelTypeDescription; }
-            set
-            {
-                _panelTypeDescription = value;
-                RaisePropertyChanged("PanelTypeDescription");
-            }
-        }
-        private double _panelTypeCost;
-        public double PanelTypeCost
-        {
-            get { return _panelTypeCost; }
-            set
-            {
-                _panelTypeCost = value;
-                RaisePropertyChanged("PanelTypeCost");
-            }
-        }
-        private double _panelTypeLabor;
-        public double PanelTypeLabor
-        {
-            get { return _panelTypeLabor; }
-            set
-            {
-                _panelTypeLabor = value;
-                RaisePropertyChanged("PanelTypeLabor");
-            }
-        }
-        private TECManufacturer _panelTypeManufacturer;
-        public TECManufacturer PanelTypeManufacturer
-        {
-            get { return _panelTypeManufacturer; }
-            set
-            {
-                _panelTypeManufacturer = value;
-                RaisePropertyChanged("PanelTypeManufacturer");
-            }
-        }
-
-
-        private TECPanelType _selectedPanelType;
-
-        public TECPanelType SelectedPanelType
-        {
-            get { return _selectedPanelType; }
-            set
-            {
-                _selectedPanelType = value;
-                RaisePropertyChanged("SelectedPanelType");
-                Selected = value;
-            }
-        }
-        #endregion
         #region IO Modules
         private string _ioModuleName;
         public string IOModuleName
@@ -289,15 +223,12 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
         #region Command Properties
         public ICommand AddAssociatedCostCommand { get; private set; }
-        public ICommand AddPanelTypeCommand { get; private set; }
         public ICommand AddIOModuleCommand { get; private set; }
         public ICommand AddManufacturerCommand { get; private set; }
         public ICommand AddTagCommand { get; private set; }
         #endregion
-
-        #region Delegates
+        
         public event Action<Object> SelectionChanged;
-        #endregion
 
         #region ViewModels
         public DevicesCatalogVM DeviceVM { get; }
@@ -305,6 +236,7 @@ namespace TECUserControlLibrary.ViewModels
         public ConnectionTypesCatalogVM ConnectionTypeVM { get; }
         public ConduitTypesCatalogVM ConduitTypeVM { get; }
         public ControllerTypesCatalogVM ControllerTypeVM { get; }
+        public PanelTypesCatalogVM PanelTypeVM { get; }
         public MiscCostsVM MiscVM { get; }
 
         private ViewModelBase _modalVM;
@@ -336,6 +268,7 @@ namespace TECUserControlLibrary.ViewModels
             subscribeToVM(ConnectionTypeVM = new ConnectionTypesCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(ConduitTypeVM = new ConduitTypesCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(ControllerTypeVM = new ControllerTypesCatalogVM(templates, ReferenceDropHandler));
+            subscribeToVM(PanelTypeVM = new PanelTypesCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(MiscVM = new MiscCostsVM(templates));
         }
         
@@ -343,7 +276,6 @@ namespace TECUserControlLibrary.ViewModels
         private void setupCommands()
         {
             AddAssociatedCostCommand = new RelayCommand(addAsociatedCostExecute, canAddAssociatedCost);
-            AddPanelTypeCommand = new RelayCommand(addPanelTypeExecute, canAddPanelTypeExecute);
             AddIOModuleCommand = new RelayCommand(addIOModuleExecute, canAddIOModuleExecute);
             AddManufacturerCommand = new RelayCommand(addManufacturerExecute, canAddManufacturer);
             AddTagCommand = new RelayCommand(addTagExecute, canAddTag);
@@ -397,32 +329,7 @@ namespace TECUserControlLibrary.ViewModels
                 return true;
             }
         }
-        private void addPanelTypeExecute()
-        {
-            var panelType = new TECPanelType(PanelTypeManufacturer);
-            panelType.Name = PanelTypeName;
-            panelType.Description = PanelTypeDescription;
-            panelType.Price = PanelTypeCost;
-            panelType.Labor = PanelTypeLabor;
-
-            Templates.Catalogs.PanelTypes.Add(panelType);
-            PanelTypeName = "";
-            PanelTypeDescription = "";
-            PanelTypeCost = 0;
-            PanelTypeLabor = 0;
-            PanelTypeManufacturer = null;
-        }
-        private bool canAddPanelTypeExecute()
-        {
-            if (PanelTypeName != "" && PanelTypeManufacturer != null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        
         private void addIOModuleExecute()
         {
             var ioModule = new TECIOModule(IOModuleManufacturer);
@@ -488,11 +395,6 @@ namespace TECUserControlLibrary.ViewModels
             AssociatedCostName = "";
             AssociatedCostCost = 0;
             AssociatedCostLabor = 0;
-
-            PanelTypeName = "";
-            PanelTypeDescription = "";
-            PanelTypeCost = 0;
-            PanelTypeLabor = 0;
 
             IOModuleName = "";
             IOModuleDescription = "";

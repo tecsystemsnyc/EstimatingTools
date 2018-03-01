@@ -104,7 +104,8 @@
                     </DataTemplate>
                     <!--Panel Types-->
                     <DataTemplate x:Key="PanelTypeTemplate">
-                        
+                        <catalogViews:PanelTypesCatalogView
+                            VM="{Binding ElementName=materialView, Path=ViewModel.PanelTypeVM}"/>
                     </DataTemplate>
                     <!--Associated Costs-->
                     <DataTemplate x:Key="AssociatedCostTemplate">
