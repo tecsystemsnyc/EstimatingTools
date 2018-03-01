@@ -1,9 +1,12 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using TECUserControlLibrary.Models;
+using TECUserControlLibrary.Utilities;
 using TECUserControlLibrary.ViewModels;
 
 namespace EstimateBuilder.MVVM
@@ -12,7 +15,9 @@ namespace EstimateBuilder.MVVM
     {
         const string SPLASH_TITLE = "Welcome to Estimate Builder";
         const string SPLASH_SUBTITLE = "Please select object templates and select and existing file or create a new bid";
-        
+
+        private List<string> fileExtensions = new List<string> { ".edb", ".tdb" };
+
         private string _bidPath;
         private string _templatesPath;
 
@@ -149,6 +154,31 @@ namespace EstimateBuilder.MVVM
         private bool createNewCanExecute()
         {
             return true;
+        }
+
+        public override void DragOver(IDropInfo dropInfo)
+        {
+            UIHelpers.FileDragOver(dropInfo, fileExtensions);
+        }
+
+        public override void Drop(IDropInfo dropInfo)
+        {
+            string path = UIHelpers.FileDrop(dropInfo, fileExtensions);
+            if(path != null)
+            {
+                string ext = Path.GetExtension(path);
+                switch(ext)
+                {
+                    case ".edb":
+                        BidPath = path;
+                        break;
+                    case ".tdb":
+                        TemplatesPath = path;
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
     }
 }

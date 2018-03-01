@@ -1,13 +1,13 @@
 ﻿using GalaSoft.MvvmLight;
+using GongSolutions.Wpf.DragDrop;
 using Microsoft.Win32;
 using System.Windows.Input;
 using TECUserControlLibrary.Models;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public abstract class SplashVM : ViewModelBase
+    public abstract class SplashVM : ViewModelBase, IDropTarget
     {
-        
         protected string defaultDirectory;
 
         private string _titleText;
@@ -72,8 +72,7 @@ namespace TECUserControlLibrary.ViewModels
             openFileDialog.Filter = fileParams.Filter;
             openFileDialog.DefaultExt = fileParams.DefaultExtension;
             openFileDialog.AddExtension = true;
-
-
+            
             string savePath = null;
             if (openFileDialog.ShowDialog() == true)
             {
@@ -85,5 +84,8 @@ namespace TECUserControlLibrary.ViewModels
             }
             return savePath;
         }
+
+        public abstract void DragOver(IDropInfo dropInfo);
+        public abstract void Drop(IDropInfo dropInfo);
     }
 }
