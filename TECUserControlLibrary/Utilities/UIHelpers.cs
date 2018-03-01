@@ -313,14 +313,14 @@ namespace TECUserControlLibrary.Utilities
             }
         }
         
-        public static void FileDragOver(IDropInfo dropInfo)
+        public static void FileDragOver(IDropInfo dropInfo, IEnumerable<string> extensions)
         {
             if (dropInfo.Data is DataObject)
             {
                 var dragFileList = ((DataObject)dropInfo.Data).GetFileDropList().Cast<string>();
                 if (dragFileList.Count() == 1)
                 {
-                    if (Path.GetExtension(dragFileList.First()) == ".bdb")
+                    if (extensions.Contains(Path.GetExtension(dragFileList.First())))
                     {
                         dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
                         dropInfo.Effects = DragDropEffects.Copy;
@@ -328,14 +328,14 @@ namespace TECUserControlLibrary.Utilities
                 }
             }
         }
-        public static string FileDrop(IDropInfo dropInfo)
+        public static string FileDrop(IDropInfo dropInfo, IEnumerable<string> extensions)
         {
-            if(dropInfo.Data is IEnumerable)
+            if (dropInfo.Data is DataObject)
             {
                 var dragFileList = ((DataObject)dropInfo.Data).GetFileDropList().Cast<string>();
                 if (dragFileList.Count() == 1)
                 {
-                    if (Path.GetExtension(dragFileList.First()) == ".bdb")
+                    if (extensions.Contains(Path.GetExtension(dragFileList.First())))
                     {
                         return dragFileList.First();
                     }
