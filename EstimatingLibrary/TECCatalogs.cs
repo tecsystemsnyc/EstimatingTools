@@ -10,7 +10,7 @@ namespace EstimatingLibrary
     {
         private ObservableCollection<TECConnectionType> _connectionTypes;
         private ObservableCollection<TECElectricalMaterial> _conduitTypes;
-        private ObservableCollection<TECCost> _associatedCosts;
+        private ObservableCollection<TECAssociatedCost> _associatedCosts;
         private ObservableCollection<TECPanelType> _panelTypes;
         private ObservableCollection<TECControllerType> _controllerTypes;
         private ObservableCollection<TECIOModule> _ioModules;
@@ -116,7 +116,7 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "ConduitTypes", this, value, old);
             }
         }
-        public ObservableCollection<TECCost> AssociatedCosts
+        public ObservableCollection<TECAssociatedCost> AssociatedCosts
         {
             get { return _associatedCosts; }
             set
@@ -165,7 +165,7 @@ namespace EstimatingLibrary
         {
             _conduitTypes = new ObservableCollection<TECElectricalMaterial>();
             _connectionTypes = new ObservableCollection<TECConnectionType>();
-            _associatedCosts = new ObservableCollection<TECCost>();
+            _associatedCosts = new ObservableCollection<TECAssociatedCost>();
             _panelTypes = new ObservableCollection<TECPanelType>();
             _controllerTypes = new ObservableCollection<TECControllerType>();
             _ioModules = new ObservableCollection<TECIOModule>();

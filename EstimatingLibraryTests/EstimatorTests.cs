@@ -561,7 +561,7 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost(CostType.TEC);
+            var ratedCost = new TECAssociatedCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
@@ -621,7 +621,7 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost(CostType.TEC);
+            var ratedCost = new TECAssociatedCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
@@ -683,11 +683,11 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost(CostType.Electrical);
+            var ratedCost = new TECAssociatedCost(CostType.Electrical);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
 
-            var assCost = new TECCost(CostType.Electrical);
+            var assCost = new TECAssociatedCost(CostType.Electrical);
             assCost.Cost = 1;
             assCost.Labor = 1;
 
@@ -764,11 +764,11 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost(CostType.Electrical);
+            var ratedCost = new TECAssociatedCost(CostType.Electrical);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
 
-            var assCost = new TECCost(CostType.Electrical);
+            var assCost = new TECAssociatedCost(CostType.Electrical);
             assCost.Cost = 1;
             assCost.Labor = 1;
 
@@ -842,11 +842,11 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost(CostType.Electrical);
+            var ratedCost = new TECAssociatedCost(CostType.Electrical);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
 
-            var assCost = new TECCost(CostType.Electrical);
+            var assCost = new TECAssociatedCost(CostType.Electrical);
             assCost.Cost = 1;
             assCost.Labor = 1;
 
@@ -938,7 +938,7 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost(CostType.TEC);
+            var ratedCost = new TECAssociatedCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
@@ -995,7 +995,7 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost(CostType.TEC);
+            var ratedCost = new TECAssociatedCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
@@ -1050,7 +1050,7 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost(CostType.TEC);
+            var ratedCost = new TECAssociatedCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
@@ -1301,11 +1301,11 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            var tecCost = new TECCost(CostType.TEC);
+            var tecCost = new TECAssociatedCost(CostType.TEC);
             tecCost.Cost = 1234;
             tecCost.Labor = 4321;
 
-            var eCost = new TECCost(CostType.Electrical);
+            var eCost = new TECAssociatedCost(CostType.Electrical);
             eCost.Cost = 5678;
             eCost.Labor = 8765;
 
@@ -1331,12 +1331,12 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            var tecCost = new TECCost(CostType.TEC);
+            var tecCost = new TECAssociatedCost(CostType.TEC);
             tecCost.Cost = 1234;
             tecCost.Labor = 4321;
             tecCost.Type = CostType.TEC;
 
-            var eCost = new TECCost(CostType.TEC);
+            var eCost = new TECAssociatedCost(CostType.TEC);
             eCost.Cost = 5678;
             eCost.Labor = 8765;
             eCost.Type = CostType.Electrical;
@@ -1368,12 +1368,12 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            var tecCost = new TECCost(CostType.TEC);
+            var tecCost = new TECAssociatedCost(CostType.TEC);
             tecCost.Cost = 1234;
             tecCost.Labor = 4321;
             tecCost.Type = CostType.TEC;
 
-            var eCost = new TECCost(CostType.TEC);
+            var eCost = new TECAssociatedCost(CostType.TEC);
             eCost.Cost = 5678;
             eCost.Labor = 8765;
             eCost.Type = CostType.Electrical;
@@ -1402,12 +1402,12 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            var tecCost = new TECCost(CostType.TEC);
+            var tecCost = new TECAssociatedCost(CostType.TEC);
             tecCost.Cost = 1234;
             tecCost.Labor = 4321;
             tecCost.Type = CostType.TEC;
 
-            var eCost = new TECCost(CostType.TEC);
+            var eCost = new TECAssociatedCost(CostType.TEC);
             eCost.Cost = 5678;
             eCost.Labor = 8765;
             eCost.Type = CostType.Electrical;
@@ -2050,7 +2050,7 @@ namespace Tests
             system.AddController(controller);
             bid.Systems.Add(system);
 
-            var ratedCost = new TECCost(CostType.TEC);
+            var ratedCost = new TECAssociatedCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
@@ -2107,7 +2107,7 @@ namespace Tests
             system.AddController(controller);
             bid.Systems.Add(system);
 
-            var ratedCost = new TECCost(CostType.TEC);
+            var ratedCost = new TECAssociatedCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
@@ -2195,7 +2195,7 @@ namespace Tests
             bid.Systems.Add(system);
             TECEstimator systemEstimate = new TECEstimator(system, parameters, new TECExtraLabor(Guid.NewGuid()), 0.0, new ChangeWatcher(system));
 
-            var ratedCost = new TECCost(CostType.TEC);
+            var ratedCost = new TECAssociatedCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;

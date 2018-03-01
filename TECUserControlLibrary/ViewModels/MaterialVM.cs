@@ -865,7 +865,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void addAsociatedCostExecute()
         {
-            var associatedCost = new TECCost(AssociatedCostType);
+            var associatedCost = new TECAssociatedCost(AssociatedCostType);
             associatedCost.Name = AssociatedCostName;
             associatedCost.Cost = AssociatedCostCost;
             associatedCost.Labor = AssociatedCostLabor;

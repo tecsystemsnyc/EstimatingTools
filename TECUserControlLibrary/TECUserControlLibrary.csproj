@@ -106,7 +106,6 @@
     <Compile Include="Interfaces\IUserConfirmable.cs" />
     <Compile Include="Models\ControllerPropertiesItem.cs" />
     <Compile Include="Models\ControllerTypePropertiesItem.cs" />
-    <Compile Include="Models\CostBatchPropertiesItem.cs" />
     <Compile Include="Models\IOModulePropertiesItem.cs" />
     <Compile Include="Models\NetworkConnectionVM.cs" />
     <Compile Include="Models\ScopeSummaryItem.cs" />
@@ -201,9 +200,6 @@
     </Compile>
     <Compile Include="UserControls\PropertyControls\CostPropertiesControl.xaml.cs">
       <DependentUpon>CostPropertiesControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\PropertyControls\CostBatchPropertiesControl.xaml.cs">
-      <DependentUpon>CostBatchPropertiesControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ListControls\ElectricalMaterialListControl.xaml.cs">
       <DependentUpon>ElectricalMaterialListControl.xaml</DependentUpon>
@@ -640,10 +636,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\PropertyControls\CostPropertiesControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\PropertyControls\CostBatchPropertiesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
