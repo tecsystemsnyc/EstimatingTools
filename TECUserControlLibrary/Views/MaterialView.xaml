@@ -109,75 +109,10 @@
                     </DataTemplate>
                     <!--Associated Costs-->
                     <DataTemplate x:Key="AssociatedCostTemplate">
-                        <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
-                            <Grid.Resources>
-                                <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
-                            </Grid.Resources>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <Grid Grid.Row="0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Text="Name:" Margin="5,0,0,0"
-                           VerticalAlignment="Center"/>
-                                <TextBox  Grid.Column="1" Margin="2"
-                          Text="{Binding AssociatedCostName}"/>
-
-                                <TextBlock Grid.Column="2" Text="Type:" Margin="5,0,0,0"
-                                       VerticalAlignment="Center"/>
-                                <ComboBox Grid.Column="3"
-                                      SelectedItem="{Binding AssociatedCostType}" 
-                                      ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type TECLib:CostType}}}"
-                                          Margin="2"/>
-
-                            </Grid>
-                            <Grid Grid.Row="1">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Text="Cost:" Margin="5,0,0,0"
-                           VerticalAlignment="Center"/>
-                                <TextBox  Grid.Column="1" Margin="2"
-                          Text="{Binding AssociatedCostCost, StringFormat={}{0:C}}"/>
-                                <TextBlock Text="Labor:" Grid.Column="2" Margin="5,0,0,0"
-                           VerticalAlignment="Center"/>
-                                <TextBox  Grid.Column="3" Margin="2"
-                          Text="{Binding AssociatedCostLabor}"/>
-                            </Grid>
-
-                            <Grid Grid.Row="2">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-
-                                <Button Grid.ColumnSpan="2"
-                        Content="Add" Margin="2"
-                        Command="{Binding AddAssociatedCostCommand}"/>
-                            </Grid>
-
-                            <controls:AssociatedCostsGridControl CostsSource="{Binding Templates.Catalogs.AssociatedCosts}"
-                                                                 Selected="{Binding SelectedAssociatedCost}"
-                                                                 DropHandler="{Binding}"
-                                              Grid.Row="3"
-                                              Margin="5"/>
-                        </Grid>
+                        <catalogViews:AssociatedCostsCatalogView
+                            VM="{Binding ElementName=materialView, Path=ViewModel.AssociatedCostVM}"/>
                     </DataTemplate>
+                    <!--IO Modules-->
                     <DataTemplate x:Key="IOModuleTemplate">
                         <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel}">
                             <Grid.Resources>

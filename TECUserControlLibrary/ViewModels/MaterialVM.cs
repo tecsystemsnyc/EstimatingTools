@@ -47,62 +47,6 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         
-        #region Associated Costs
-        private string _associatedCostName;
-        public string AssociatedCostName
-        {
-            get { return _associatedCostName; }
-            set
-            {
-                _associatedCostName = value;
-                RaisePropertyChanged("AssociatedCostName");
-            }
-        }
-        private CostType _associatedCostType;
-        public CostType AssociatedCostType
-        {
-            get { return _associatedCostType; }
-            set
-            {
-                _associatedCostType = value;
-                RaisePropertyChanged("AssociatedCostType");
-            }
-        }
-        private double _associatedCostCost;
-        public double AssociatedCostCost
-        {
-            get { return _associatedCostCost; }
-            set
-            {
-                _associatedCostCost = value;
-                RaisePropertyChanged("AssociatedCostCost");
-            }
-        }
-        private double _associatedCostLabor;
-        public double AssociatedCostLabor
-        {
-            get { return _associatedCostLabor; }
-            set
-            {
-                _associatedCostLabor = value;
-                RaisePropertyChanged("AssociatedCostLabor");
-            }
-        }
-
-
-        private TECCost _selectedAssociatedCost;
-
-        public TECCost SelectedAssociatedCost
-        {
-            get { return _selectedAssociatedCost; }
-            set
-            {
-                _selectedAssociatedCost = value;
-                RaisePropertyChanged("SelectedAssociatedCost");
-                Selected = value;
-            }
-        }
-        #endregion
         #region IO Modules
         private string _ioModuleName;
         public string IOModuleName
@@ -222,7 +166,6 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
         #region Command Properties
-        public ICommand AddAssociatedCostCommand { get; private set; }
         public ICommand AddIOModuleCommand { get; private set; }
         public ICommand AddManufacturerCommand { get; private set; }
         public ICommand AddTagCommand { get; private set; }
@@ -237,6 +180,7 @@ namespace TECUserControlLibrary.ViewModels
         public ConduitTypesCatalogVM ConduitTypeVM { get; }
         public ControllerTypesCatalogVM ControllerTypeVM { get; }
         public PanelTypesCatalogVM PanelTypeVM { get; }
+        public AssociatedCostsCatalogVM AssociatedCostVM { get; }
         public MiscCostsVM MiscVM { get; }
 
         private ViewModelBase _modalVM;
@@ -269,13 +213,13 @@ namespace TECUserControlLibrary.ViewModels
             subscribeToVM(ConduitTypeVM = new ConduitTypesCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(ControllerTypeVM = new ControllerTypesCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(PanelTypeVM = new PanelTypesCatalogVM(templates, ReferenceDropHandler));
+            subscribeToVM(AssociatedCostVM = new AssociatedCostsCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(MiscVM = new MiscCostsVM(templates));
         }
         
         #region Methods
         private void setupCommands()
         {
-            AddAssociatedCostCommand = new RelayCommand(addAsociatedCostExecute, canAddAssociatedCost);
             AddIOModuleCommand = new RelayCommand(addIOModuleExecute, canAddIOModuleExecute);
             AddManufacturerCommand = new RelayCommand(addManufacturerExecute, canAddManufacturer);
             AddTagCommand = new RelayCommand(addTagExecute, canAddTag);
@@ -305,29 +249,6 @@ namespace TECUserControlLibrary.ViewModels
         private bool canAddIOToModule()
         {
             return true;
-        }
-        
-        private void addAsociatedCostExecute()
-        {
-            var associatedCost = new TECAssociatedCost(AssociatedCostType);
-            associatedCost.Name = AssociatedCostName;
-            associatedCost.Cost = AssociatedCostCost;
-            associatedCost.Labor = AssociatedCostLabor;
-            Templates.Catalogs.AssociatedCosts.Add(associatedCost);
-            AssociatedCostName = "";
-            AssociatedCostCost = 0;
-            AssociatedCostLabor = 0;
-        }
-        private bool canAddAssociatedCost()
-        {
-            if (AssociatedCostName == "")
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
         }
         
         private void addIOModuleExecute()
@@ -392,10 +313,6 @@ namespace TECUserControlLibrary.ViewModels
 
         private void setupInterfaceDefaults()
         {
-            AssociatedCostName = "";
-            AssociatedCostCost = 0;
-            AssociatedCostLabor = 0;
-
             IOModuleName = "";
             IOModuleDescription = "";
             IOModuleCost = 0;
