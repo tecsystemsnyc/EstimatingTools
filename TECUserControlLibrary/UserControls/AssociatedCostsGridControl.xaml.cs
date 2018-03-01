@@ -15,15 +15,15 @@ namespace TECUserControlLibrary.UserControls
     {
         #region DPs
 
-        public ObservableCollection<TECCost> CostsSource
+        public ObservableCollection<TECAssociatedCost> CostsSource
         {
-            get { return (ObservableCollection<TECCost>)GetValue(CostsSourceProperty); }
+            get { return (ObservableCollection<TECAssociatedCost>)GetValue(CostsSourceProperty); }
             set { SetValue(CostsSourceProperty, value); }
         }
 
         public static readonly DependencyProperty CostsSourceProperty =
-            DependencyProperty.Register("CostsSource", typeof(ObservableCollection<TECCost>),
-              typeof(AssociatedCostsGridControl), new PropertyMetadata(default(ObservableCollection<TECCost>)));
+            DependencyProperty.Register("CostsSource", typeof(ObservableCollection<TECAssociatedCost>),
+              typeof(AssociatedCostsGridControl), new PropertyMetadata(default(ObservableCollection<TECAssociatedCost>)));
 
 
         /// <summary>
@@ -45,12 +45,12 @@ namespace TECUserControlLibrary.UserControls
 
         public TECCost Selected
         {
-            get { return (TECCost)GetValue(SelectedProperty); }
+            get { return (TECAssociatedCost)GetValue(SelectedProperty); }
             set { SetValue(SelectedProperty, value); }
         }
         
         public static readonly DependencyProperty SelectedProperty =
-            DependencyProperty.Register("Selected", typeof(TECCost),
+            DependencyProperty.Register("Selected", typeof(TECAssociatedCost),
                 typeof(AssociatedCostsGridControl), new FrameworkPropertyMetadata(null)
                 {
                     BindsTwoWayByDefault = true,
