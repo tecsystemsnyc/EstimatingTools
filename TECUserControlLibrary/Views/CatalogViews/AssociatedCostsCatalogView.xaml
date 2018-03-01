@@ -33,12 +33,12 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Text="Name:" Margin="5,0,0,0"
-                           VerticalAlignment="Center"/>
+                       VerticalAlignment="Center"/>
             <TextBox  Grid.Column="1" Margin="2"
-                          Text="{Binding AssociatedCostName}"/>
+                      Text="{Binding AssociatedCostName}"/>
 
             <TextBlock Grid.Column="2" Text="Type:" Margin="5,0,0,0"
-                                       VerticalAlignment="Center"/>
+                       VerticalAlignment="Center"/>
             <ComboBox Grid.Column="3"
                       SelectedItem="{Binding AssociatedCostType}" 
                       ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type TECLib:CostType}}}"
@@ -54,18 +54,18 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Text="Cost:" Margin="5,0,0,0"
-                           VerticalAlignment="Center"/>
+                       VerticalAlignment="Center"/>
             <TextBox  Grid.Column="1" Margin="2"
-                          Text="{Binding AssociatedCostCost, StringFormat={}{0:C}}"/>
+                      Text="{Binding AssociatedCostCost, StringFormat={}{0:C}}"/>
             <TextBlock Text="Labor:" Grid.Column="2" Margin="5,0,0,0"
-                           VerticalAlignment="Center"/>
+                       VerticalAlignment="Center"/>
             <TextBox  Grid.Column="3" Margin="2"
-                          Text="{Binding AssociatedCostLabor}"/>
+                      Text="{Binding AssociatedCostLabor}"/>
         </Grid>
 
         <Grid Grid.Row="2">
             <Button Content="Add" Margin="2"
-                        Command="{Binding AddAssociatedCostCommand}"/>
+                    Command="{Binding AddAssociatedCostCommand}"/>
         </Grid>
 
         <controls:AssociatedCostsGridControl CostsSource="{Binding Templates.Catalogs.AssociatedCosts}"
