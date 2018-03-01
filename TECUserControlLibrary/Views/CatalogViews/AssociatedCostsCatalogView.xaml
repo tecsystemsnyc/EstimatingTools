@@ -64,15 +64,7 @@
         </Grid>
 
         <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <Button Grid.ColumnSpan="2"
-                        Content="Add" Margin="2"
+            <Button Content="Add" Margin="2"
                         Command="{Binding AddAssociatedCostCommand}"/>
         </Grid>
 

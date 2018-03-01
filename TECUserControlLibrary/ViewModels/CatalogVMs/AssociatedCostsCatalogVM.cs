@@ -104,7 +104,7 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
         }
         private bool canAddAssociatedCost()
         {
-            return (this.AssociatedCostName != null);
+            return (this.AssociatedCostName != "");
         }
     }
 }
