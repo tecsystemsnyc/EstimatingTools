@@ -244,5 +244,10 @@ namespace EstimatingUtilitiesLibrary.Database
                 }
             }
         }
+
+        public string GetPath()
+        {
+            return path;
+        }
     }
 }

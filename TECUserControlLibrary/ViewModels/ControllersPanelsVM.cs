@@ -355,7 +355,7 @@ namespace TECUserControlLibrary.ViewModels
             foreach (TECController controller in sourceControllers)
             {
                 TECController controllerToAdd = controller;
-                TECPanel panelToAdd = sourcePanels.DefaultIfEmpty(null).First(panel =>
+                TECPanel panelToAdd = sourcePanels.FirstOrDefault(panel =>
                     { return panel.Controllers.Contains(controller); });
                 var controllerInPanelToAdd = new ControllerInPanel(controllerToAdd, panelToAdd);
                 ControllerCollection.Add(controllerInPanelToAdd);

@@ -8,6 +8,7 @@ using NLog;
 using System;
 using System.ComponentModel;
 using System.Deployment.Application;
+using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
@@ -301,6 +302,15 @@ namespace TECUserControlLibrary.BaseVMs
         private void reportBugExecute()
         {
             System.Diagnostics.Process.Start(BUG_REPORT_URL);
+        }
+        //Open File Location
+        private void openFileLocationExecute()
+        {
+            Process.Start(@databaseManager.GetPath());
+        }
+        private bool canOpenFileLocation()
+        {
+            return databaseManager != null;
         }
         #endregion
 
