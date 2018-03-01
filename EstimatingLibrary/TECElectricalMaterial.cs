@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace EstimatingLibrary
 {
-    public class TECElectricalMaterial : TECCost, ICatalog<TECElectricalMaterial>
+    public class TECElectricalMaterial : TECCost, ICatalog<TECElectricalMaterial>, IDragDropable
     {
         #region Properties
         private ObservableCollection<TECAssociatedCost> _ratedCosts;
@@ -39,7 +39,7 @@ namespace EstimatingLibrary
             RatedCosts.CollectionChanged += (sender, args) => RatedCosts_CollectionChanged(sender, args, "RatedCosts");
         }
 
-        public override object DragDropCopy(TECScopeManager scopeManager)
+        public object DragDropCopy(TECScopeManager scopeManager)
         {
             return this;
         }

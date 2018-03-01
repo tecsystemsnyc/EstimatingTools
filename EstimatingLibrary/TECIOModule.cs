@@ -58,10 +58,6 @@ namespace EstimatingLibrary
             saveMap.AddRange(IO, "IO");
             return saveMap;
         }
-        public override object DragDropCopy(TECScopeManager scopeManager)
-        {
-            return this;
-        }
 
         public TECIOModule CatalogCopy()
         {

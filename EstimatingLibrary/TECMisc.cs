@@ -88,7 +88,7 @@ namespace EstimatingLibrary
         #endregion
 
         #region Methods
-        public override object DragDropCopy(TECScopeManager scopeManager)
+        public object DragDropCopy(TECScopeManager scopeManager)
         {
             return new TECMisc(this, this.IsTypical);
         }

@@ -6,7 +6,7 @@ namespace EstimatingLibrary
 {
     public enum CostType { TEC, Electrical }
 
-    public abstract class TECCost : TECScope, IDragDropable
+    public abstract class TECCost : TECScope
     { 
         #region Properties
         protected double _cost;
@@ -76,11 +76,6 @@ namespace EstimatingLibrary
             _cost = cost.Cost;
             _labor = cost.Labor;
             _type = cost.Type;
-        }
-
-        public virtual object DragDropCopy(TECScopeManager scopeManager)
-        {
-            return this;
         }
     }
 }
