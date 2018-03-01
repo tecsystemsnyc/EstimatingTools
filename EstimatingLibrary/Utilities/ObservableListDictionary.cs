@@ -64,7 +64,7 @@ namespace EstimatingLibrary.Utilities
         public List<Y> GetInstances<Y>(Y key) where Y : T
         {
             List<Y> outList = new List<Y>();
-            if (!dictionary.ContainsKey(key))
+            if (!ContainsKey(key))
             {
                 return outList;
             }
