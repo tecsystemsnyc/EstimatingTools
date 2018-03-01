@@ -413,6 +413,20 @@ namespace TECUserControlLibrary.ViewModels
                 throw new InvalidOperationException("Can not update when system is not typical.");
             }
         }
+        private void addNewConnectedSubScope(TECSubScope ss, bool needsUpdate = false)
+        {
+            SubScopeConnectionItem ssConnectItem = new SubScopeConnectionItem(ss, noneConduitType, system,
+                ss.FindParentEquipment(system), needsUpdate);
+            ssConnectItem.PropagationPropertyChanged += handlePropagationPropertyChanged;
+            ConnectedSubScope.Add(ssConnectItem);
+        }
+        private void setConnectionDefaults(TECConnection connection)
+        {
+            connection.Length = DefaultLength;
+            connection.ConduitType = DefaultConduitType;
+            connection.ConduitLength = DefaultConduitLength;
+            connection.IsPlenum = DefaultPlenum;
+        }
 
         private bool anItemNeedsUpdate()
         {
@@ -470,6 +484,7 @@ namespace TECUserControlLibrary.ViewModels
                 else if (change == Change.Remove)
                 {
                     Controllers.Remove(controller);
+                    handleEquipmentSelected();
                 }
             }
             else if (obj is TECEquipment equip)
@@ -512,15 +527,6 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-
-        private void addNewConnectedSubScope(TECSubScope ss, bool needsUpdate = false)
-        {
-            SubScopeConnectionItem ssConnectItem = new SubScopeConnectionItem(ss, noneConduitType, system,
-                ss.FindParentEquipment(system), needsUpdate);
-            ssConnectItem.PropagationPropertyChanged += handlePropagationPropertyChanged;
-            ConnectedSubScope.Add(ssConnectItem);
-        }
-
         private void handlePropagationPropertyChanged(ISubScopeConnectionItem connected)
         {
             if (system is TECTypical typ)
@@ -532,18 +538,10 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-
         private void handleUpdatesDone()
         {
             RaisePropertyChanged("CanLeave");
         }
-
-        private void setConnectionDefaults(TECConnection connection)
-        {
-            connection.Length = DefaultLength;
-            connection.ConduitType = DefaultConduitType;
-            connection.ConduitLength = DefaultConduitLength;
-            connection.IsPlenum = DefaultPlenum;
-        }
+        
     }
 }
