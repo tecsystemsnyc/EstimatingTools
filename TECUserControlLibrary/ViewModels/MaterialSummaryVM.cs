@@ -526,8 +526,6 @@ namespace TECUserControlLibrary.ViewModels
         private void instanceChanged(TECChangedEventArgs args)
         {
             //Checks for a material change in the bid
-
-            
             if(args.Sender is IRelatable rel)
             {
                 bool hasLinked = rel.LinkedObjects.Contains(args.PropertyName);
