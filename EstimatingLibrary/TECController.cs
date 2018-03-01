@@ -221,7 +221,17 @@ namespace EstimatingLibrary
             }
             return canTakeIO(collection);
         }
-        public TECSubScopeConnection AddSubScope(TECSubScope subScope)
+        public TECConnection AddSubScope(TECSubScope subScope, bool attemptConnectionToExisting)
+        {
+            if (subScope.IsNetwork)
+            {
+                return AddSubScopeToNetwork(subScope, attemptConnectionToExisting);
+            } else
+            {
+                return AddSubScopeConnection(subScope);
+            }
+        }
+        public TECSubScopeConnection AddSubScopeConnection(TECSubScope subScope)
         {
             if (CanConnectSubScope(subScope))
             {
@@ -305,6 +315,40 @@ namespace EstimatingLibrary
                 return connection;
             }
         }
+        public TECNetworkConnection AddSubScopeToNetwork(TECSubScope subScope,
+            bool attemptConnectionToExisting)
+        {
+            if (!subScope.IsNetwork)
+            {
+                throw new Exception("Connectable must be networkcompatible");
+            }
+
+            IOType ioType = subScope.AvailableNetworkIO.ListIO()[0].Type;
+
+            bool compatibleConnectionExists = false;
+            TECNetworkConnection outConnection = null;
+            if (attemptConnectionToExisting)
+            {
+                foreach (TECNetworkConnection netConnect in this.ChildNetworkConnections)
+                {
+                    if (netConnect.CanAddINetworkConnectable(subScope))
+                    {
+                        compatibleConnectionExists = true;
+                        netConnect.AddINetworkConnectable(subScope);
+                        outConnection = netConnect;
+                        break;
+                    }
+                }
+            }
+            if (!compatibleConnectionExists)
+            {
+                TECNetworkConnection newConnection = this.AddNetworkConnection(this.IsTypical, subScope.ConnectionTypes, ioType);
+                newConnection.AddINetworkConnectable(subScope);
+                outConnection = newConnection;
+            }
+            return outConnection;
+        }
+
         public void RemoveSubScope(TECSubScope subScope)
         {
             TECSubScopeConnection connectionToRemove = null;
@@ -332,7 +376,6 @@ namespace EstimatingLibrary
                 subScope.Connection = null;
             }
         }
-
         public void RemoveAllConnections()
         {
             RemoveAllChildConnections();

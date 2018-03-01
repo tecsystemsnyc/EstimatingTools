@@ -173,7 +173,7 @@ namespace Tests
             subScope2.Points.Add(point2);
 
             //Connections
-            TECConnection testConnection = expectedController.AddSubScope(subScope1);
+            TECConnection testConnection = expectedController.AddSubScopeConnection(subScope1);
             testConnection.ConduitType = bid.Catalogs.ConduitTypes[0];
             testConnection.Length = 42;
 
@@ -742,7 +742,7 @@ namespace Tests
         {
             foreach(TECSubScope subscope in equipment.SubScope)
             {
-                controller.AddSubScope(subscope);
+                controller.AddSubScopeConnection(subscope);
             }
         }
 

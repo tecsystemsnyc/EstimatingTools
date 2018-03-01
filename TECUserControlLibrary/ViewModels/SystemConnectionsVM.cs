@@ -341,7 +341,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void createConnection(TECSubScope subScope)
         {
-            var connection = SelectedController.AddSubScope(subScope);
+            var connection = SelectedController.AddSubScopeConnection(subScope);
             setConnectionDefaults(connection);
             UnconnectedSubScope.Remove(subScope);
             if (system is TECTypical typ)

@@ -5,6 +5,7 @@ using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using TECUserControlLibrary.Models;
 using TECUserControlLibrary.Utilities;
@@ -315,14 +316,8 @@ namespace TECUserControlLibrary.ViewModels
         {
             var controllerTypes = Templates == null ? Bid.Catalogs.ControllerTypes: Templates.Catalogs.ControllerTypes;
             TECScopeManager scopeManager = Templates as TECScopeManager ?? Bid as TECScopeManager;
-            if (addPanelMethod != null)
-            {
-                SelectedVM = new AddControllerVM(addControllerMethod, controllerTypes, scopeManager);
-            }
-            else
-            {
+            SelectedVM = addPanelMethod != null ? new AddControllerVM(addControllerMethod, controllerTypes, scopeManager) :
                 SelectedVM = new AddControllerVM(SelectedSystem, controllerTypes, scopeManager);
-            }
         }
         private bool canAddController()
         {
@@ -334,14 +329,8 @@ namespace TECUserControlLibrary.ViewModels
         {
             var panelTypes = Templates == null ? Bid.Catalogs.PanelTypes : Templates.Catalogs.PanelTypes;
             TECScopeManager scopeManager = Templates as TECScopeManager ?? Bid as TECScopeManager;
-
-            if (addPanelMethod != null)
-            {
-                SelectedVM = new AddPanelVM(addPanelMethod, panelTypes, scopeManager);
-            } else
-            {
+            SelectedVM = addPanelMethod != null ? new AddPanelVM(addPanelMethod, panelTypes, scopeManager) :
                 SelectedVM = new AddPanelVM(SelectedSystem, panelTypes, scopeManager);
-            }
             
         }
         private bool canAddPanel()
@@ -366,15 +355,8 @@ namespace TECUserControlLibrary.ViewModels
             foreach (TECController controller in sourceControllers)
             {
                 TECController controllerToAdd = controller;
-                TECPanel panelToAdd = null;
-                foreach (TECPanel panel in sourcePanels)
-                {
-                    if (panel.Controllers.Contains(controller))
-                    {
-                        panelToAdd = panel;
-                        break;
-                    }
-                }
+                TECPanel panelToAdd = sourcePanels.DefaultIfEmpty(null).First(panel =>
+                    { return panel.Controllers.Contains(controller); });
                 var controllerInPanelToAdd = new ControllerInPanel(controllerToAdd, panelToAdd);
                 ControllerCollection.Add(controllerInPanelToAdd);
                 controllersIndex[controller] = controllerInPanelToAdd;
@@ -479,29 +461,14 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void Drop(IDropInfo dropInfo)
         {
-            TECScopeManager scopeManager;
-            if (Templates != null)
-            {
-                scopeManager = Templates;
-            }
-            else
-            {
-                scopeManager = Bid;
-            }
+            TECScopeManager scopeManager = Templates != null ? Templates as TECScopeManager : Bid as TECScopeManager;
             UIHelpers.Drop(dropInfo, (item) =>
             {
                 if (item is TECController controller)
                 {
                     var controllerTypes = Templates == null ? Bid.Catalogs.ControllerTypes : Templates.Catalogs.ControllerTypes;
-
-                    if (addControllerMethod != null)
-                    {
-                        SelectedVM = new AddControllerVM(addControllerMethod, controllerTypes, scopeManager);
-                    }
-                    else
-                    {
-                        SelectedVM = new AddControllerVM(SelectedSystem, controllerTypes, scopeManager);
-                    }
+                    SelectedVM = addControllerMethod != null ? new AddControllerVM(addControllerMethod, controllerTypes, scopeManager) :
+                        new AddControllerVM(SelectedSystem, controllerTypes, scopeManager);
                     TECController dropped = (TECController)controller.DragDropCopy(scopeManager);
                     ((AddControllerVM)SelectedVM).SetTemplate(dropped);
                     ((AddControllerVM)SelectedVM).SelectedType = dropped.Type;
@@ -509,43 +476,22 @@ namespace TECUserControlLibrary.ViewModels
                 else if (item is TECPanel panel)
                 {
                     var panelTypes = Templates == null ? Bid.Catalogs.PanelTypes : Templates.Catalogs.PanelTypes;
-
-                    if (addPanelMethod != null)
-                    {
-                        SelectedVM = new AddPanelVM(addPanelMethod, panelTypes, scopeManager);
-                    }
-                    else
-                    {
-                        SelectedVM = new AddPanelVM(SelectedSystem, panelTypes, scopeManager);
-                    }
+                    SelectedVM = addPanelMethod != null ? new AddPanelVM(addPanelMethod, panelTypes, scopeManager) :
+                        new AddPanelVM(SelectedSystem, panelTypes, scopeManager);
                     ((AddPanelVM)SelectedVM).SetTemplate(panel);
                 }
                 else if (item is TECControllerType controllerType)
                 {
                     var controllerTypes = Templates == null ? Bid.Catalogs.ControllerTypes : Templates.Catalogs.ControllerTypes;
-
-                    if (addControllerMethod != null)
-                    {
-                        SelectedVM = new AddControllerVM(addControllerMethod, controllerTypes, scopeManager);
-                    }
-                    else
-                    {
-                        SelectedVM = new AddControllerVM(SelectedSystem, controllerTypes, scopeManager);
-                    }
+                    SelectedVM = addControllerMethod != null ? new AddControllerVM(addControllerMethod, controllerTypes, scopeManager) :
+                        new AddControllerVM(SelectedSystem, controllerTypes, scopeManager);
                     ((AddControllerVM)SelectedVM).SelectedType = controllerType;
                 }
                 else if (item is TECPanelType panelType)
                 {
                     var panelTypes = Templates == null ? Bid.Catalogs.PanelTypes : Templates.Catalogs.PanelTypes;
-
-                    if (addPanelMethod != null)
-                    {
-                        SelectedVM = new AddPanelVM(addPanelMethod, panelTypes, scopeManager);
-                    }
-                    else
-                    {
+                    SelectedVM = addPanelMethod != null ? new AddPanelVM(addPanelMethod, panelTypes, scopeManager) :
                         SelectedVM = new AddPanelVM(SelectedSystem, panelTypes, scopeManager);
-                    }
                     ((AddPanelVM)SelectedVM).ToAdd.Type = panelType;
                 }
                 return null;

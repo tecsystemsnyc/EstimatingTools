@@ -230,7 +230,6 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void Drop(IDropInfo dropInfo)
         {
-
             UIHelpers.Drop(dropInfo, data => {
                 if (data is TECSubScope ss && !ss.IsNetwork)
                 {
@@ -262,7 +261,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (SelectedController.CanConnectSubScope(subScope))
                     {
-                        var connection = SelectedController.AddSubScope(subScope);
+                        var connection = SelectedController.AddSubScopeConnection(subScope);
                         setConnectionDefaults(connection);
                     }
                 }
