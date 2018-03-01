@@ -13,7 +13,7 @@ namespace EstimatingLibraryTests
             TECController controller = new TECController(new TECControllerType(new TECManufacturer()), false);
             TECSubScope subScope = new TECSubScope(false);
 
-            controller.AddSubScope(subScope);
+            controller.AddSubScopeConnection(subScope);
 
             Assert.AreEqual(1, controller.ChildrenConnections.Count, "Connection not added to controller");
             Assert.AreNotEqual(null, subScope.Connection, "Connection not added to subscope");
@@ -25,7 +25,7 @@ namespace EstimatingLibraryTests
             TECController controller = new TECController(new TECControllerType(new TECManufacturer()), false);
             TECSubScope subScope = new TECSubScope(false);
 
-            controller.AddSubScope(subScope);
+            controller.AddSubScopeConnection(subScope);
             controller.RemoveSubScope(subScope);
 
             Assert.AreEqual(0, controller.ChildrenConnections.Count, "Connection not removed from controller");
