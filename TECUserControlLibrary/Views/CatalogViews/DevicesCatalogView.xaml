@@ -11,7 +11,7 @@
              d:DesignHeight="300" d:DesignWidth="500">
     <Grid DataContext="{Binding ElementName=devicesCatalogView, Path=VM}">
         <Grid.Resources>
-            <Style TargetType="{x:Type TextBlock}">
+            <Style TargetType="TextBlock">
                 <Setter Property="Foreground" Value="Black"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
                 <Setter Property="Margin" Value="5,0,0,0"/>
@@ -34,7 +34,7 @@
                 <ColumnDefinition Width="70"/>
                 <ColumnDefinition Width="70"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Name:" Margin="5,0,0,0"
+            <TextBlock Text="Name" Margin="5,0,0,0"
                            VerticalAlignment="Center"/>
             <TextBox  Grid.Column="1" Margin="2"
                           Text="{Binding DeviceName}"/>
