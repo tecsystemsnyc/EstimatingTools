@@ -13,9 +13,9 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Quantity: " VerticalAlignment="Center" Foreground="Black" Margin="2"/>
+        <TextBlock Text="Quantity: " VerticalAlignment="Center" Foreground="Black"/>
         <TextBox Text="{Binding Quantity}" Grid.Column="1" Margin="2"/>
     </Grid>
 </UserControl>

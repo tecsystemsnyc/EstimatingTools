@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
-              x:Name="parent"
+              x:Name="hardwarePropertiesControl"
              mc:Ignorable="d" 
              d:DesignHeight="60" d:DesignWidth="300">
     <UserControl.Resources>
@@ -12,7 +12,7 @@
             <Setter Property="Foreground" Value="Black"/>
         </Style>
     </UserControl.Resources>
-    <Grid DataContext="{Binding ElementName=parent, Path=Selected}">
+    <Grid DataContext="{Binding ElementName=hardwarePropertiesControl, Path=Selected}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -32,7 +32,8 @@
             <TextBlock Grid.Column="0" Grid.Row="0"
                    Text="List Price:"/>
             <TextBox Grid.Column="1" Grid.Row="0"
-                   Text="{Binding Price, StringFormat={}{0:C}}"/>
+                   Text="{Binding Price, StringFormat={}{0:C}}"
+                     IsReadOnly="{Binding ElementName=hardwarePropertiesControl, Path=ReadOnly}"/>
             <TextBlock Grid.Column="0" Grid.Row="1"
                    Text="Manufacturer:"/>
             <TextBlock Grid.Column="1" Grid.Row="1"

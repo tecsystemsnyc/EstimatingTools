@@ -44,7 +44,8 @@
                     <pControls:PointPropetiesControl Selected="{Binding}"/>
                 </DataTemplate>
                 <DataTemplate x:Key="hardware">
-                    <pControls:HardwarePropertiesControl Selected="{Binding}"/>
+                    <pControls:HardwarePropertiesControl Selected="{Binding}"
+                                                         ReadOnly="{Binding ElementName=propertiesView, Path=ViewModel.ReadOnly}"/>
                 </DataTemplate>
                 <DataTemplate x:Key="located">
                     <pControls:LocatedPropertiesControl Selected="{Binding}"

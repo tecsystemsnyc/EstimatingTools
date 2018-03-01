@@ -47,7 +47,7 @@
                            Grid.Row="0" VerticalAlignment="Center">
                 <ContentPresenter.Resources>
                     <DataTemplate DataType="{x:Type models:TECHardware}">
-                        <TextBlock Text="{Binding Cost, StringFormat={}{0:C}}"/>
+                        <TextBlock Text="{Binding Cost, StringFormat={}{0:C}}" Foreground="Black"/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type models:TECCost}">
                         <TextBox Text="{Binding Cost, StringFormat={}{0:C}}" 
@@ -61,7 +61,7 @@
                            Grid.Row="1" VerticalAlignment="Center">
                 <ContentPresenter.Resources>
                     <DataTemplate DataType="{x:Type models:TECHardware}">
-                        <TextBlock Text="{Binding Labor, StringFormat={}{0:F2} (hrs)}"/>
+                        <TextBlock Text="{Binding Labor, StringFormat={}{0:F2} (hrs)}" Foreground="Black"/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type models:TECCost}">
                         <TextBox Text="{Binding Labor, StringFormat={}{0:F2} (hrs)}" 
@@ -76,7 +76,7 @@
                            Grid.Row="2" VerticalAlignment="Center" >
                 <ContentPresenter.Resources>
                     <DataTemplate DataType="{x:Type models:TECHardware}">
-                        <TextBlock Text="{Binding Type}"/>
+                        <TextBlock Text="{Binding Type}" Foreground="Black"/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type models:TECCost}">
                         <ComboBox SelectedItem="{Binding Type}" Margin="2"

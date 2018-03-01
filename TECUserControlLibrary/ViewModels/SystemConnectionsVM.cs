@@ -470,7 +470,6 @@ namespace TECUserControlLibrary.ViewModels
             {
                 UnconnectedSubScope.Add(ss);
             }
-            
         }
 
         private void handleSystemChanged(Change change, TECObject obj)
