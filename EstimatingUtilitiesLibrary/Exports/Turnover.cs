@@ -22,6 +22,7 @@ namespace EstimatingUtilitiesLibrary.Exports
         public static void GenerateTurnoverExport(string path, TECBid bid, TECEstimator estimate, bool openOnComplete = true)
         {
             XLWorkbook workbook = new XLWorkbook();
+
             createSummarySheet(workbook, bid, estimate);
             MaterialSummaryExport.AddControllersSheet(workbook, bid, "Controller Hardware");
             MaterialSummaryExport.AddPanelsSheet(workbook, bid, "Panel Hardware");
@@ -30,6 +31,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             MaterialSummaryExport.AddElectricalMaterialSheet(workbook, bid);
             MaterialSummaryExport.AddMiscCostsSheet(workbook, bid);
             workbook.SaveAs(path);
+            
             if (openOnComplete)
             {
                 System.Diagnostics.Process.Start(path);

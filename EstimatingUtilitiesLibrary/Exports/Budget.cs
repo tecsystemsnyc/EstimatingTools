@@ -8,8 +8,7 @@ namespace EstimatingUtilitiesLibrary.Exports
 {
     public class Budget
     {
-        
-        public static void GenerateReport(string filePath, TECBid bid)
+        public static void GenerateReport(string filePath, TECBid bid, bool openOnComplete = true)
         {
             XLWorkbook workbook = new XLWorkbook();
             IXLWorksheet worksheet = workbook.Worksheets.Add("Summary");
@@ -18,9 +17,12 @@ namespace EstimatingUtilitiesLibrary.Exports
             worksheet.Cell(1, 2).Style.Border.BottomBorder = XLBorderStyleValues.Thick;
             worksheet.Cell(1, 3).Value = "Price";
             worksheet.Cell(1, 3).Style.Border.BottomBorder = XLBorderStyleValues.Thick;
-            
+            worksheet.Cell(1, 4).Value = "Unit Price";
+            worksheet.Cell(1, 4).Style.Border.BottomBorder = XLBorderStyleValues.Thick;
+
             worksheet.Cell(2, 1).Value = "Systems";
             worksheet.Cell(2, 1).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+
             int x = 3;
             for(int i = 0; i < bid.Systems.Count; i++, x++)
             {
@@ -30,12 +32,15 @@ namespace EstimatingUtilitiesLibrary.Exports
                 worksheet.Cell(x, 2).Value = typical.Instances.Count;
                 worksheet.Cell(x, 3).Value = systemEstimate.TotalPrice;
                 worksheet.Cell(x, 3).Style.NumberFormat.Format = "$ #,##0.00";
+                worksheet.Cell(x, 4).Value = typical.Instances.Count > 0 ? systemEstimate.TotalPrice / typical.Instances.Count : 0;
+                worksheet.Cell(x, 4).Style.NumberFormat.Format = "$ #,##0.00";
             }
             x++;
+
             worksheet.Cell(x, 1).Value = "BMS Network";
             worksheet.Cell(x, 1).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
-
             x++;
+
             for (int i = 0; i < bid.Controllers.Count; i++, x++)
             {
                 TECController controller= bid.Controllers[i];
@@ -55,10 +60,11 @@ namespace EstimatingUtilitiesLibrary.Exports
                 worksheet.Cell(x, 3).Style.NumberFormat.Format = "$ #,##0.00";
             }
             x++;
+
             worksheet.Cell(x, 1).Value = "Miscellaneous";
             worksheet.Cell(x, 1).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
-
             x++;
+
             for (int i = 0; i < bid.MiscCosts.Count; i++, x++)
             {
                 TECMisc typical = bid.MiscCosts[i];
@@ -74,12 +80,21 @@ namespace EstimatingUtilitiesLibrary.Exports
             worksheet.Cell(x, 3).Value = extraLaborEstimate.TotalPrice;
             worksheet.Cell(x, 3).Style.NumberFormat.Format = "$ #,##0.00";
             x+=2;
+
             worksheet.Cell(x, 2).Value = "Total: ";
             worksheet.Cell(x, 2).Style.Border.BottomBorder = XLBorderStyleValues.Thick;
 
             worksheet.Cell(x, 3).FormulaA1 = "=SUM(C3:C" + (x-1) + ")";
             worksheet.Cell(x, 3).Style.NumberFormat.Format = "$ #,##0.00";
+
+            worksheet.Columns().AdjustToContents();
             workbook.SaveAs(filePath);
+
+
+            if (openOnComplete)
+            {
+                System.Diagnostics.Process.Start(filePath);
+            }
         }
     }
 }
