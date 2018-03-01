@@ -531,7 +531,7 @@ namespace EstimatingLibrary.Utilities
             device.ConnectionTypes = linkedTypes;
         }
 
-        private static void linkHardwareToManufacturers(TECHardware hardware, ObservableCollection<TECManufacturer> manufacturers)
+        private static void linkHardwareToManufacturers(TECHardware hardware, IEnumerable<TECManufacturer> manufacturers)
         {
             foreach (TECManufacturer man in manufacturers)
             {
@@ -555,12 +555,12 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        private static void linkElectricalMaterialToRatedCosts(TECElectricalMaterial component, ObservableCollection<TECCost> costs)
+        private static void linkElectricalMaterialToRatedCosts(TECElectricalMaterial component, IEnumerable<TECAssociatedCost> costs)
         {
-            ObservableCollection<TECCost> costsToAssign = new ObservableCollection<TECCost>();
-            foreach (TECCost cost in costs)
+            ObservableCollection<TECAssociatedCost> costsToAssign = new ObservableCollection<TECAssociatedCost>();
+            foreach (TECAssociatedCost cost in costs)
             {
-                foreach (TECCost scopeCost in component.RatedCosts)
+                foreach (TECAssociatedCost scopeCost in component.RatedCosts)
                 {
                     if (scopeCost.Guid == cost.Guid)
                     { costsToAssign.Add(cost); }
@@ -569,7 +569,7 @@ namespace EstimatingLibrary.Utilities
             component.RatedCosts = costsToAssign;
         }
         
-        private static void linkConnectionToConduitType(TECConnection connection, ObservableCollection<TECElectricalMaterial> conduitTypes)
+        private static void linkConnectionToConduitType(TECConnection connection, IEnumerable<TECElectricalMaterial> conduitTypes)
         {
             if (connection.ConduitType != null)
             {
@@ -584,7 +584,7 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        private static void linkNetworkConnectionToConnectionType(TECNetworkConnection netConnect, ObservableCollection<TECConnectionType> connectionTypes)
+        private static void linkNetworkConnectionToConnectionType(TECNetworkConnection netConnect, IEnumerable<TECConnectionType> connectionTypes)
         {
             ObservableCollection<TECConnectionType> linkedTypes = new ObservableCollection<TECConnectionType>();
             foreach (TECConnectionType type in connectionTypes)
@@ -600,7 +600,7 @@ namespace EstimatingLibrary.Utilities
             netConnect.ConnectionTypes = linkedTypes;
         }
 
-        private static void linkPanelToPanelType(TECPanel panel, ObservableCollection<TECPanelType> panelTypes)
+        private static void linkPanelToPanelType(TECPanel panel, IEnumerable<TECPanelType> panelTypes)
         {
             foreach(TECPanelType type in panelTypes)
             {
@@ -895,13 +895,13 @@ namespace EstimatingLibrary.Utilities
         #endregion
 
         #region Scope Children
-        static private void linkAssociatedCostsInScope(ObservableCollection<TECCost> costs, TECScope scope)
+        static private void linkAssociatedCostsInScope(IEnumerable<TECAssociatedCost> costs, TECScope scope)
         {
-            ObservableCollection<TECCost> costsToAssign = new ObservableCollection<TECCost>();
-            foreach (TECCost scopeCost in scope.AssociatedCosts)
+            ObservableCollection<TECAssociatedCost> costsToAssign = new ObservableCollection<TECAssociatedCost>();
+            foreach (TECAssociatedCost scopeCost in scope.AssociatedCosts)
             {
                 bool found = false;
-                foreach (TECCost catalogCost in costs)
+                foreach (TECAssociatedCost catalogCost in costs)
                 {
                     if (scopeCost.Guid == catalogCost.Guid)
                     {

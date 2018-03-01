@@ -184,7 +184,7 @@ namespace EstimatingLibrary
                 _typicalInstanceDictionary.AddItem(branch, toAdd);
                 newSystem.ScopeBranches.Add(toAdd);
             }
-            foreach (TECCost cost in AssociatedCosts)
+            foreach (TECAssociatedCost cost in AssociatedCosts)
             {
                 newSystem.AssociatedCosts.Add(cost);
             }
@@ -647,25 +647,23 @@ namespace EstimatingLibrary
                     }
                 }
             }
-            else if (value is TECCost && sender is TECScope && !(value is TECMisc)
-                && !(value is TECController) && !(value is IEndDevice))
+            else if (value is TECAssociatedCost assCost && sender is TECScope)
             {
                 if (sender is TECTypical)
                 {
                     foreach (TECSystem system in Instances)
                     {
-                        system.AssociatedCosts.Add(value as TECCost);
+                        system.AssociatedCosts.Add(assCost);
                     }
                 }
                 else
                 {
                     var characteristicScope = sender as TECScope;
-                    var cost = value as TECCost;
                     if (TypicalInstanceDictionary.ContainsKey(characteristicScope))
                     {
                         foreach (TECScope scope in TypicalInstanceDictionary.GetInstances(characteristicScope))
                         {
-                            scope.AssociatedCosts.Add(cost);
+                            scope.AssociatedCosts.Add(assCost);
                         }
                     }
                 }
@@ -877,20 +875,18 @@ namespace EstimatingLibrary
                     }
                 }
             }
-            else if (value is TECCost && sender is TECScope && !(value is TECMisc)
-                && !(value is TECController) && !(value is IEndDevice))
+            else if (value is TECAssociatedCost cost && sender is TECScope)
             {
                 if (sender is TECTypical)
                 {
                     foreach (TECSystem system in Instances)
                     {
-                        system.AssociatedCosts.Remove(value as TECCost);
+                        system.AssociatedCosts.Remove(cost);
                     }
                 }
                 else
                 {
                     var characteristicScope = sender as TECScope;
-                    var cost = value as TECCost;
                     if (TypicalInstanceDictionary.ContainsKey(characteristicScope))
                     {
                         foreach (TECScope scope in TypicalInstanceDictionary.GetInstances(characteristicScope))

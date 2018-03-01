@@ -2,7 +2,7 @@
 
 namespace EstimatingLibrary
 {
-    public class Defaults
+    public static class Defaults
     {
         public static List<string> Scope = new List<string>(new string[]
         {

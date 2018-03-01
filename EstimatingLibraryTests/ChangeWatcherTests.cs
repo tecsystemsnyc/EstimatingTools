@@ -383,7 +383,7 @@ namespace Tests
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECCost assCost = new TECCost(CostType.TEC);
+            TECAssociatedCost assCost = new TECAssociatedCost(CostType.TEC);
             assCost.Cost = 79.23;
             assCost.Labor = 84.69;
 
@@ -558,7 +558,7 @@ namespace Tests
             ss.Points.Add(point);
 
             equip.SubScope.Add(ss);
-            TECCost assCost = bid.Catalogs.AssociatedCosts[0];
+            TECAssociatedCost assCost = bid.Catalogs.AssociatedCosts[0];
             bid.Systems.Add(typical);
 
             resetRaised();
@@ -671,7 +671,7 @@ namespace Tests
             ss.Points.Add(point);
 
             equip.SubScope.Add(ss);
-            TECCost assCost = bid.Catalogs.AssociatedCosts[0];
+            TECAssociatedCost assCost = bid.Catalogs.AssociatedCosts[0];
 
             resetRaised();
 
@@ -1285,7 +1285,7 @@ namespace Tests
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECCost cost = new TECCost(CostType.TEC);
+            TECAssociatedCost cost = new TECAssociatedCost(CostType.TEC);
             cost.Cost = 15.45;
             cost.Labor = 67.41;
             typical.AssociatedCosts.Add(cost);
@@ -1468,7 +1468,7 @@ namespace Tests
             ss.Points.Add(point);
 
             equip.SubScope.Add(ss);
-            TECCost assCost = bid.Catalogs.AssociatedCosts[0];
+            TECAssociatedCost assCost = bid.Catalogs.AssociatedCosts[0];
             ss.AssociatedCosts.Add(assCost);
 
             resetRaised();
@@ -1582,7 +1582,7 @@ namespace Tests
             ss.Points.Add(point);
 
             equip.SubScope.Add(ss);
-            TECCost assCost = bid.Catalogs.AssociatedCosts[0];
+            TECAssociatedCost assCost = bid.Catalogs.AssociatedCosts[0];
             ss.AssociatedCosts.Add(assCost);
 
             resetRaised();
@@ -2736,7 +2736,7 @@ namespace Tests
             var original = "original";
             var edited = "edit";
 
-            TECCost cost = templates.Catalogs.AssociatedCosts[0];
+            TECAssociatedCost cost = templates.Catalogs.AssociatedCosts[0];
             cost.Name = original;
 
             resetRaised();

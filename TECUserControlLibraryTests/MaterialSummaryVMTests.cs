@@ -23,11 +23,11 @@ namespace Tests
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
             bid.Catalogs = TestHelper.CreateTestCatalogs();
-            TECCost cost = null;
+            TECAssociatedCost cost = null;
             int x = 0;
             while(cost == null)
             {
-                TECCost randomCost = bid.Catalogs.AssociatedCosts[x];
+                TECAssociatedCost randomCost = bid.Catalogs.AssociatedCosts[x];
                 if (randomCost.Type == CostType.TEC)
                 {
                     cost = randomCost;
@@ -62,8 +62,8 @@ namespace Tests
             //Arrange
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
-            TECCost cost = null;
-            foreach (TECCost assoc in bid.Catalogs.AssociatedCosts)
+            TECAssociatedCost cost = null;
+            foreach (TECAssociatedCost assoc in bid.Catalogs.AssociatedCosts)
             {
                 if (assoc.Type == CostType.Electrical)
                 {
@@ -481,11 +481,11 @@ namespace Tests
             //Arrange
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
-            TECCost cost = null;
+            TECAssociatedCost cost = null;
             int x = 0;
             while (cost == null)
             {
-                TECCost randomCost = bid.Catalogs.AssociatedCosts[x];
+                TECAssociatedCost randomCost = bid.Catalogs.AssociatedCosts[x];
                 if (randomCost.Type == CostType.TEC)
                 {
                     cost = randomCost;
@@ -526,10 +526,10 @@ namespace Tests
             //Arrange
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
-            TECCost cost = null;
+            TECAssociatedCost cost = null;
             while (cost == null)
             {
-                TECCost randomCost = bid.Catalogs.AssociatedCosts[0];
+                TECAssociatedCost randomCost = bid.Catalogs.AssociatedCosts[0];
                 if (randomCost.Type == CostType.Electrical)
                 {
                     cost = randomCost;
