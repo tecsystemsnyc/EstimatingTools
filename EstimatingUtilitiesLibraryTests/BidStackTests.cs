@@ -768,7 +768,7 @@ namespace Tests
             var Bid = TestHelper.CreateTestBid();
             TECSubScope testSubScope = Bid.Systems[0].Equipment[0].SubScope[0];
             int expected = testSubScope.AssociatedCosts.Count;
-            TECCost edit = Bid.Catalogs.AssociatedCosts[0];
+            TECAssociatedCost edit = Bid.Catalogs.AssociatedCosts[0];
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid);

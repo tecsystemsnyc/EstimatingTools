@@ -682,7 +682,7 @@ namespace Tests
             //Act
             TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
 
-            TECCost expectedCost = templates.Catalogs.AssociatedCosts[1];
+            TECAssociatedCost expectedCost = templates.Catalogs.AssociatedCosts[1];
             expectedSubScope.AssociatedCosts.Add(templates.Catalogs.AssociatedCosts[1]);
             int expectedNumCosts = expectedSubScope.AssociatedCosts.Count;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
@@ -690,13 +690,13 @@ namespace Tests
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             TECSubScope actualSubScope = null;
-            TECCost actualCost = null;
+            TECAssociatedCost actualCost = null;
             foreach (TECSubScope SubScope in actualTemplates.SubScopeTemplates)
             {
                 if (SubScope.Guid == expectedSubScope.Guid)
                 {
                     actualSubScope = SubScope;
-                    foreach (TECCost cost in actualSubScope.AssociatedCosts)
+                    foreach (TECAssociatedCost cost in actualSubScope.AssociatedCosts)
                     {
                         if (cost.Guid == expectedCost.Guid)
                         {
@@ -1318,12 +1318,12 @@ namespace Tests
 
             templates.Catalogs.ConnectionTypes.Add(expectedConnectionType);
 
-            TECCost expectedCost = templates.Catalogs.AssociatedCosts[0];
+            TECAssociatedCost expectedCost = templates.Catalogs.AssociatedCosts[0];
             expectedConnectionType.AssociatedCosts.Add(expectedCost);
             int expectedCostCount = expectedConnectionType.AssociatedCosts.Count;
 
-            TECCost expectedRated = null;
-            foreach(TECCost cost in templates.Catalogs.AssociatedCosts)
+            TECAssociatedCost expectedRated = null;
+            foreach(TECAssociatedCost cost in templates.Catalogs.AssociatedCosts)
             {
                 if(cost.Type == CostType.Electrical)
                 {
@@ -1339,7 +1339,7 @@ namespace Tests
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             TECElectricalMaterial actualConnectionType = null;
-            TECCost actualCost = null;
+            TECAssociatedCost actualCost = null;
             foreach (TECElectricalMaterial connectionType in actualTemplates.Catalogs.ConnectionTypes)
             {
                 if (connectionType.Guid == expectedConnectionType.Guid)
@@ -1367,8 +1367,8 @@ namespace Tests
             int oldNumConduitTypes = templates.Catalogs.ConduitTypes.Count;
             TECElectricalMaterial expectedConnectionType = templates.Catalogs.ConnectionTypes[0];
 
-            TECCost expectedRated = null;
-            foreach (TECCost cost in templates.Catalogs.AssociatedCosts)
+            TECAssociatedCost expectedRated = null;
+            foreach (TECAssociatedCost cost in templates.Catalogs.AssociatedCosts)
             {
                 if (cost.Type == CostType.Electrical)
                 {
@@ -1394,7 +1394,7 @@ namespace Tests
             }
 
             bool hasRated = false;
-            foreach (TECCost cost in actualConnectionType.RatedCosts)
+            foreach (TECAssociatedCost cost in actualConnectionType.RatedCosts)
             {
                 if (cost.Guid == expectedRated.Guid)
                 {
@@ -1421,8 +1421,8 @@ namespace Tests
 
             templates.Catalogs.ConduitTypes.Add(expectedConduitType);
 
-            TECCost expectedRated = null;
-            foreach (TECCost cost in templates.Catalogs.AssociatedCosts)
+            TECAssociatedCost expectedRated = null;
+            foreach (TECAssociatedCost cost in templates.Catalogs.AssociatedCosts)
             {
                 if (cost.Type == CostType.Electrical)
                 {
@@ -1484,8 +1484,8 @@ namespace Tests
             int oldNumConduitTypes = templates.Catalogs.ConduitTypes.Count;
             TECElectricalMaterial expectedConduitType = templates.Catalogs.ConduitTypes[0];
             
-            TECCost expectedRated = null;
-            foreach (TECCost cost in templates.Catalogs.AssociatedCosts)
+            TECAssociatedCost expectedRated = null;
+            foreach (TECAssociatedCost cost in templates.Catalogs.AssociatedCosts)
             {
                 if (cost.Type == CostType.Electrical)
                 {
@@ -1511,7 +1511,7 @@ namespace Tests
             }
 
             bool hasRated = false;
-            foreach(TECCost cost in actualConduitType.RatedCosts)
+            foreach(TECAssociatedCost cost in actualConduitType.RatedCosts)
             {
                 if(cost.Guid == expectedRated.Guid)
                 {
@@ -1532,7 +1532,7 @@ namespace Tests
         {
             //Act
             int oldNumAssociatedCosts = templates.Catalogs.AssociatedCosts.Count;
-            TECCost expectedAssociatedCost = new TECCost(CostType.TEC);
+            TECAssociatedCost expectedAssociatedCost = new TECAssociatedCost(CostType.TEC);
             expectedAssociatedCost.Name = "Test Associated Cost";
             expectedAssociatedCost.Cost = 21.34;
 
@@ -1542,8 +1542,8 @@ namespace Tests
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
-            TECCost actualCost = null;
-            foreach (TECCost cost in actualTemplates.Catalogs.AssociatedCosts)
+            TECAssociatedCost actualCost = null;
+            foreach (TECAssociatedCost cost in actualTemplates.Catalogs.AssociatedCosts)
             {
                 if (cost.Guid == expectedAssociatedCost.Guid)
                 {
@@ -1564,7 +1564,7 @@ namespace Tests
         {
             //Act
             int oldNumAssociatedCosts = templates.Catalogs.AssociatedCosts.Count;
-            TECCost costToRemove = templates.Catalogs.AssociatedCosts[0];
+            TECAssociatedCost costToRemove = templates.Catalogs.AssociatedCosts[0];
 
             templates.Catalogs.AssociatedCosts.Remove(costToRemove);
 
@@ -1573,7 +1573,7 @@ namespace Tests
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             //Assert
-            foreach (TECCost cost in actualTemplates.Catalogs.AssociatedCosts)
+            foreach (TECAssociatedCost cost in actualTemplates.Catalogs.AssociatedCosts)
             {
                 if (cost.Guid == costToRemove.Guid) Assert.Fail();
             }

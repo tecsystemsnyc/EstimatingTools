@@ -263,13 +263,13 @@ namespace Tests
             templates.Catalogs.ConduitTypes.Add(otherConduitType);
 
             //Associated Costs
-            TECCost testAssociatedCost = new TECCost(CostType.Electrical);
+            TECAssociatedCost testAssociatedCost = new TECAssociatedCost(CostType.Electrical);
             testAssociatedCost.Name = "Flex";
             testAssociatedCost.Cost = 42;
 
             templates.Catalogs.AssociatedCosts.Add(testAssociatedCost);
 
-            var testCost2 = new TECCost(CostType.TEC);
+            var testCost2 = new TECAssociatedCost(CostType.TEC);
             testCost2.Name = "Other Cost";
             templates.Catalogs.AssociatedCosts.Add(testCost2);
 
@@ -445,14 +445,14 @@ namespace Tests
             TECCatalogs outCatalogs = new TECCatalogs();
 
             //Associated Costs
-            TECCost elecCost = new TECCost(CostType.Electrical);
+            TECAssociatedCost elecCost = new TECAssociatedCost(CostType.Electrical);
             elecCost.Name = "Elec Cost";
             elecCost.Cost = 156.61;
             elecCost.Labor = 456.64;
             elecCost.Type = CostType.Electrical;
             outCatalogs.AssociatedCosts.Add(elecCost);
 
-            TECCost tecCost = new TECCost(CostType.TEC);
+            TECAssociatedCost tecCost = new TECAssociatedCost(CostType.TEC);
             tecCost.Name = "TEC Cost";
             tecCost.Cost = 46.43;
             tecCost.Labor = 61.45;
@@ -618,7 +618,7 @@ namespace Tests
 
             double cost = 12.61;
 
-            var assCosts = new ObservableCollection<TECCost>();
+            var assCosts = new ObservableCollection<TECAssociatedCost>();
             int costNum = 9;
             for(int x = 0; x < costNum; x++)
             {
@@ -835,7 +835,7 @@ namespace Tests
             }
             bool tecAdded = false;
             bool elecAdded = false;
-            foreach(TECCost cost in catalogs.AssociatedCosts)
+            foreach(TECAssociatedCost cost in catalogs.AssociatedCosts)
             {
                 if (cost.Type == CostType.TEC)
                 {

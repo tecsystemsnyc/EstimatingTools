@@ -58,7 +58,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECController controller = new TECController(type, false);
             bid.AddController(controller);
 
-            TECCost cost = new TECCost(CostType.TEC);
+            TECAssociatedCost cost = new TECAssociatedCost(CostType.TEC);
             controller.AssociatedCosts.Add(cost);
 
             //Act

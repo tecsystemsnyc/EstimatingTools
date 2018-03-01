@@ -9,8 +9,8 @@ namespace EstimatingLibrary
     public class TECElectricalMaterial : TECCost, ICatalog<TECElectricalMaterial>
     {
         #region Properties
-        private ObservableCollection<TECCost> _ratedCosts;
-        public ObservableCollection<TECCost> RatedCosts
+        private ObservableCollection<TECAssociatedCost> _ratedCosts;
+        public ObservableCollection<TECAssociatedCost> RatedCosts
         {
             get { return _ratedCosts; }
             set
@@ -26,16 +26,14 @@ namespace EstimatingLibrary
 
         public TECElectricalMaterial(Guid guid) : base(guid, CostType.Electrical)
         {
-            _ratedCosts = new ObservableCollection<TECCost>();
+            _ratedCosts = new ObservableCollection<TECAssociatedCost>();
             RatedCosts.CollectionChanged += (sender, args) => RatedCosts_CollectionChanged(sender, args, "RatedCosts");
         }
         public TECElectricalMaterial() : this(Guid.NewGuid()) { }
         public TECElectricalMaterial(TECElectricalMaterial materialSource) : this()
         {
             copyPropertiesFromCost(materialSource);
-            var ratedCosts = new ObservableCollection<TECCost>();
-            foreach (TECCost cost in materialSource.RatedCosts)
-            { ratedCosts.Add(cost as TECCost); }
+            var ratedCosts = new ObservableCollection<TECAssociatedCost>(materialSource.RatedCosts);
             RatedCosts.CollectionChanged -= (sender, args) => RatedCosts_CollectionChanged(sender, args, "RatedCosts");
             _ratedCosts = ratedCosts;
             RatedCosts.CollectionChanged += (sender, args) => RatedCosts_CollectionChanged(sender, args, "RatedCosts");

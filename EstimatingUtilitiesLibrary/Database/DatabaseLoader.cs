@@ -207,17 +207,17 @@ namespace EstimatingUtilitiesLibrary.Database
             { connectionTypes.Add(getConnectionTypeFromRow(row)); }
             return connectionTypes;
         }
-        static private ObservableCollection<TECCost> getRatedCostsInComponent(Guid componentID)
+        static private ObservableCollection<TECAssociatedCost> getRatedCostsInComponent(Guid componentID)
         {
 
             string command = "select " + ElectricalMaterialRatedCostTable.CostID.Name + ", " + ElectricalMaterialRatedCostTable.Quantity.Name + " from " + ElectricalMaterialRatedCostTable.TableName + " where ";
             command += ElectricalMaterialRatedCostTable.ComponentID.Name + " = '" + componentID;
             command += "'";
             DataTable DT = SQLiteDB.GetDataFromCommand(command);
-            var costs = new ObservableCollection<TECCost>();
+            var costs = new ObservableCollection<TECAssociatedCost>();
             foreach (DataRow row in DT.Rows)
             {
-                TECCost costToAdd = getPlaceholderRatedCostFromRow(row);
+                TECAssociatedCost costToAdd = getPlaceholderRatedCostFromRow(row);
                 int quantity = row[ElectricalMaterialRatedCostTable.Quantity.Name].ToString().ToInt();
                 for (int x = 0; x < quantity; x++) { costs.Add(costToAdd); }
             }
@@ -329,13 +329,13 @@ namespace EstimatingUtilitiesLibrary.Database
             { tags.Add(getPlaceholderTagFromRow(row, ScopeTagTable.TagID.Name)); }
             return tags;
         }
-        static private ObservableCollection<TECCost> getAssociatedCostsInScope(Guid scopeID)
+        static private ObservableCollection<TECAssociatedCost> getAssociatedCostsInScope(Guid scopeID)
         {
             DataTable DT = getChildIDs(new ScopeAssociatedCostTable(), scopeID, ScopeAssociatedCostTable.Quantity.Name);
-            var associatedCosts = new ObservableCollection<TECCost>();
+            var associatedCosts = new ObservableCollection<TECAssociatedCost>();
             foreach (DataRow row in DT.Rows)
             {
-                TECCost costToAdd = getPlaceholderAssociatedCostFromRow(row);
+                TECAssociatedCost costToAdd = getPlaceholderAssociatedCostFromRow(row);
                 int quantity = row[ScopeAssociatedCostTable.Quantity.Name].ToString().ToInt();
                 for (int x = 0; x < quantity; x++) { associatedCosts.Add(costToAdd); }
             }
@@ -495,9 +495,9 @@ namespace EstimatingUtilitiesLibrary.Database
             { locations.Add(getLocationFromRow(row)); }
             return locations;
         }
-        static private ObservableCollection<TECCost> getAssociatedCosts()
+        static private ObservableCollection<TECAssociatedCost> getAssociatedCosts()
         {
-            ObservableCollection<TECCost> associatedCosts = new ObservableCollection<TECCost>();
+            ObservableCollection<TECAssociatedCost> associatedCosts = new ObservableCollection<TECAssociatedCost>();
             DataTable associatedCostsDT = SQLiteDB.GetDataFromTable(AssociatedCostTable.TableName);
             foreach (DataRow row in associatedCostsDT.Rows)
             { associatedCosts.Add(getAssociatedCostFromRow(row)); }
@@ -1154,11 +1154,11 @@ namespace EstimatingUtilitiesLibrary.Database
             return conduitType;
         }
 
-        private static TECCost getAssociatedCostFromRow(DataRow row)
+        private static TECAssociatedCost getAssociatedCostFromRow(DataRow row)
         {
             Guid guid = new Guid(row[AssociatedCostTable.ID.Name].ToString());
             CostType type = UtilitiesMethods.StringToEnum<CostType>(row[AssociatedCostTable.Type.Name].ToString());
-            var associatedCost = new TECCost(guid, type);
+            var associatedCost = new TECAssociatedCost(guid, type);
             assignValuePropertiesFromTable(associatedCost, new AssociatedCostTable(), row);
             return associatedCost;
         }
@@ -1396,16 +1396,16 @@ namespace EstimatingUtilitiesLibrary.Database
             TECTag tag = new TECTag(guid);
             return tag;
         }
-        private static TECCost getPlaceholderAssociatedCostFromRow(DataRow row)
+        private static TECAssociatedCost getPlaceholderAssociatedCostFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ScopeAssociatedCostTable.AssociatedCostID.Name].ToString());
-            TECCost associatedCost = new TECCost(guid, CostType.TEC);
+            TECAssociatedCost associatedCost = new TECAssociatedCost(guid, CostType.TEC);
             return associatedCost;
         }
-        private static TECCost getPlaceholderRatedCostFromRow(DataRow row)
+        private static TECAssociatedCost getPlaceholderRatedCostFromRow(DataRow row)
         {
             Guid guid = new Guid(row[ElectricalMaterialRatedCostTable.CostID.Name].ToString());
-            TECCost associatedCost = new TECCost(guid, CostType.TEC);
+            TECAssociatedCost associatedCost = new TECAssociatedCost(guid, CostType.TEC);
             return associatedCost;
         }
         private static TECLocation getPlaceholderLocationFromRow(DataRow row)

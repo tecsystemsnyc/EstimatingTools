@@ -190,8 +190,7 @@ namespace EstimatingLibrary
             foreach (TECElectricalMaterial type in Catalogs.ConnectionTypes)
             {
                 removeChildFromScope(type, child);
-                TECCost cost = child as TECCost;
-                if (cost != null)
+                if (child is TECAssociatedCost cost)
                 {
                     type.RatedCosts.Remove(cost);
                 }
@@ -199,8 +198,7 @@ namespace EstimatingLibrary
             foreach (TECElectricalMaterial type in Catalogs.ConduitTypes)
             {
                 removeChildFromScope(type, child);
-                TECCost cost = child as TECCost;
-                if (cost != null)
+                if (child is TECAssociatedCost cost)
                 {
                     type.RatedCosts.Remove(cost);
                 }
@@ -257,13 +255,11 @@ namespace EstimatingLibrary
 
         private void removeChildFromScope(TECScope scope, TECObject child)
         {
-            TECCost cost = child as TECCost;
-            TECTag tag = child as TECTag;
-            if (cost != null)
+            if (child is TECAssociatedCost cost)
             {
                 scope.AssociatedCosts.Remove(cost);
             }
-            else if (tag != null)
+            else if (child is TECTag tag)
             {
                 scope.Tags.Remove(tag);
             }

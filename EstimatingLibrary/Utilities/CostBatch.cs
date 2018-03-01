@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace EstimatingLibrary.Utilities
 {
@@ -23,22 +24,6 @@ namespace EstimatingLibrary.Utilities
             foreach(TECCost cost in costs)
             {
                 AddCost(cost);
-            }
-        }
-
-        public List<TECCost> AllCosts
-        {
-            get
-            {
-                List<TECCost> costs = new List<TECCost>();
-                foreach(KeyValuePair<CostType, CostObject> pair in typeDictionary)
-                {
-                    TECCost cost = new TECCost(pair.Key);
-                    cost.Cost = pair.Value.Cost;
-                    cost.Labor = pair.Value.Labor;
-                    costs.Add(cost);
-                }
-                return costs;
             }
         }
 
@@ -143,6 +128,29 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
+        public void Add(CostType type, double cost, double labor)
+        {
+            if (typeDictionary.ContainsKey(type))
+            {
+                typeDictionary[type] += new CostObject(cost, labor);
+            }
+            else
+            {
+                typeDictionary.Add(type, new CostObject(cost, labor));
+            }
+        }
+        public void Remove(CostType type, double cost, double labor)
+        {
+            if (typeDictionary.ContainsKey(type))
+            {
+                typeDictionary[type] -= new CostObject(cost, labor);
+            }
+            else
+            {
+                typeDictionary.Add(type, -(new CostObject(cost, labor)));
+            }
+        }
+
         private struct CostObject
         {
             public double Cost, Labor;
@@ -179,4 +187,6 @@ namespace EstimatingLibrary.Utilities
             }
         }
     }
+
+    
 }

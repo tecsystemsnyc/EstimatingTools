@@ -31,7 +31,7 @@ namespace EstimatingLibrary.Utilities
                 scope.Tags.Add(tag);
             }
             scope.AssociatedCosts.ObservablyClear();
-            foreach (TECCost cost in otherScope.AssociatedCosts)
+            foreach (TECAssociatedCost cost in otherScope.AssociatedCosts)
             {
                 scope.AssociatedCosts.Add(cost);
             }
