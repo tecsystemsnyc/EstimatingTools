@@ -128,7 +128,7 @@ namespace TECUserControlLibrary.ViewModels
             AddPatternCommand = new RelayCommand(addPatternExecute, canAddPattern);
             PropertiesVM = new PropertiesVM(bid.Catalogs, bid);
         }
-
+        
         private void addPatternExecute()
         {
             for(int x = PatternStart; x <= PatternEnd; x++)
@@ -362,6 +362,12 @@ namespace TECUserControlLibrary.ViewModels
                 locations.Add(new LocationContainer(location, new List<TECLocated>()));
             }
         }
+        
+        public void Dislocate(TECLocated located)
+        {
+            Remove(located);
+            located.Location = null;
+        }
 
         public void Remove(TECLocated located)
         {
@@ -372,7 +378,7 @@ namespace TECUserControlLibrary.ViewModels
                     container.Scope.Remove(located);
                 }
             }
-            located.Location = null;
+            
         }
 
         public void Remove(TECLabeled location)

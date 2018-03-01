@@ -5,6 +5,7 @@ using EstimatingUtilitiesLibrary.Database;
 using EstimatingUtilitiesLibrary.Exports;
 using NLog;
 using System;
+using System.Windows;
 using TECUserControlLibrary.BaseVMs;
 using TECUserControlLibrary.Debug;
 using TECUserControlLibrary.Models;
@@ -235,13 +236,26 @@ namespace EstimateBuilder.MVVM
         {
             return templatesDatabaseManager != null && databaseReady();
         }
-        //Refresh Catalogs
+        //Update Catalogs
         private void updateCatalogsExecute()
         {
-            bid.Catalogs.Unionize(templates.Catalogs);
-            ModelLinkingHelper.LinkBidToCatalogs(bid);
-            estimate = new TECEstimator(bid, watcher);
-            editorVM.Refresh(bid, this.templates, watcher, estimate);
+            string message = "Updating catalogs could change pricing. Continue?";
+            MessageBoxResult result = MessageBox.Show(message, "Save", MessageBoxButton.YesNo,
+                    MessageBoxImage.Exclamation);
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    bid.Catalogs.Unionize(templates.Catalogs);
+                    ModelLinkingHelper.LinkBidToCatalogs(bid);
+                    estimate = new TECEstimator(bid, watcher);
+                    editorVM.Refresh(bid, this.templates, watcher, estimate);
+                    break;
+                case MessageBoxResult.No:
+                    return;
+                default:
+                    return;
+            }
+
         }
         private bool canUpdateCatalogs()
         {
