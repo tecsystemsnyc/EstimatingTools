@@ -1969,7 +1969,7 @@ namespace Tests
             TECLocation expectedLocation = null;
             foreach (TECLocation loc in bid.Locations)
             {
-                if (loc.Label == "Cellar")
+                if (loc.Name == "Cellar")
                 {
                     expectedLocation = loc;
                     break;
@@ -2623,6 +2623,39 @@ namespace Tests
 
         }
 
+        [TestMethod]
+        public void Save_Bid_Edit_PanelType_In_Panel()
+        {
+            //Act
+            TECPanel panelToEdit = bid.Panels[0];
+
+            TECPanelType newType = null;
+            int x = 0;
+            while(newType == null)
+            {
+                newType = bid.Catalogs.PanelTypes[x] != panelToEdit.Type ? bid.Catalogs.PanelTypes[x] : null;
+                x++;
+            }
+            panelToEdit.Type = newType;
+
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
+
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path);
+            TECBid actualBid = loaded as TECBid;
+
+            //Assert
+            TECPanel actualPanel = null;
+            foreach (TECPanel panel in actualBid.Panels)
+            {
+                if (panel.Guid == panelToEdit.Guid)
+                {
+                    actualPanel = panel;
+                    break;
+                }
+            }
+            Assert.AreEqual(newType.Guid, actualPanel.Type.Guid);
+        }
+        
         [TestMethod]
         public void Save_Bid_Panel_Name()
         {

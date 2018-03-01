@@ -184,7 +184,7 @@ namespace EstimatingLibrary
                 _typicalInstanceDictionary.AddItem(branch, toAdd);
                 newSystem.ScopeBranches.Add(toAdd);
             }
-            foreach (TECCost cost in AssociatedCosts)
+            foreach (TECAssociatedCost cost in AssociatedCosts)
             {
                 newSystem.AssociatedCosts.Add(cost);
             }
@@ -194,6 +194,104 @@ namespace EstimatingLibrary
 
             return (newSystem);
         }
+
+        public void UpdateInstanceNetworkInController(INetworkParentable controller)
+        {
+            foreach (TECController instance in this.TypicalInstanceDictionary.GetInstances(controller as TECObject))
+            {
+                instance.RemoveAllChildNetworkConnections();
+                foreach (TECNetworkConnection connection in controller.ChildNetworkConnections)
+                {
+                    TECNetworkConnection instanceConnection = instance.AddNetworkConnection(false, connection.ConnectionTypes, connection.IOType);
+                    instanceConnection.Length = connection.Length;
+                    instanceConnection.ConduitType = connection.ConduitType;
+                    instanceConnection.ConduitLength = connection.ConduitLength;
+                    foreach (INetworkConnectable child in connection.Children)
+                    {
+                        if (child is TECController childController)
+                        {
+                            foreach (TECController instanceChild in this.TypicalInstanceDictionary.GetInstances(childController))
+                            {
+                                foreach (TECSystem system in this.Instances)
+                                {
+                                    if (system.Controllers.Contains(instanceChild))
+                                    {
+                                        instanceConnection.AddINetworkConnectable(instanceChild);
+                                    }
+                                }
+                            }
+                        }
+                        else if (child is TECSubScope childSubScope)
+                        {
+                            foreach (TECSubScope instanceChild in this.TypicalInstanceDictionary.GetInstances(childSubScope))
+                            {
+                                foreach (TECSystem system in this.Instances)
+                                {
+                                    if (system.GetAllSubScope().Contains(instanceChild))
+                                    {
+                                        instanceConnection.AddINetworkConnectable(instanceChild);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        public bool CanUpdateInstanceNetworkInController(INetworkParentable controller)
+        {
+            bool canExecute =
+                    (controller != null) &&
+                    (this.Instances.Count > 0) &&
+                    (this.TypicalInstanceDictionary.GetInstances(controller as TECObject).Count > 0);
+
+            return canExecute;
+        }
+
+        public List<TECConnection> CreateTypicalAndInstanceConnections(TECController typicalController, TECSubScope typicalSubScope)
+        {
+            if (!this.GetAllSubScope().Contains(typicalSubScope))
+            {
+                throw new Exception("SubScope does not exist in typical.");
+            }
+            if (!this.Controllers.Contains(typicalController))
+            {
+                throw new Exception("Controller does not exist in typical.");
+            }
+
+            List<TECConnection> outConnections = new List<TECConnection>();
+            outConnections.Add(typicalController.AddSubScope(typicalSubScope, true));
+
+            foreach (TECController instanceController
+                    in this.TypicalInstanceDictionary.GetInstances(typicalController))
+            {
+                foreach (TECSubScope instanceSubScope
+                    in this.TypicalInstanceDictionary.GetInstances(typicalSubScope))
+                {
+                    bool found = false;
+                    foreach (TECSystem instance in this.Instances)
+                    {
+                        if (instance.Controllers.Contains(instanceController) &&
+                            instance.GetAllSubScope().Contains(instanceSubScope))
+                        {
+                            outConnections.Add(instanceController.AddSubScope(instanceSubScope, true));
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (found)
+                        break;
+                }
+            }
+
+            return outConnections;
+        }
+        public List<T> GetInstancesFromTypical<T>(T typical) where T : TECObject
+        {
+            return this.TypicalInstanceDictionary.GetInstances(typical);
+        }
+
+
         internal void RefreshRegistration()
         {
             watcher.Changed -= handleSystemChanged;
@@ -549,25 +647,23 @@ namespace EstimatingLibrary
                     }
                 }
             }
-            else if (value is TECCost && sender is TECScope && !(value is TECMisc)
-                && !(value is TECController) && !(value is IEndDevice))
+            else if (value is TECAssociatedCost assCost && sender is TECScope)
             {
                 if (sender is TECTypical)
                 {
                     foreach (TECSystem system in Instances)
                     {
-                        system.AssociatedCosts.Add(value as TECCost);
+                        system.AssociatedCosts.Add(assCost);
                     }
                 }
                 else
                 {
                     var characteristicScope = sender as TECScope;
-                    var cost = value as TECCost;
                     if (TypicalInstanceDictionary.ContainsKey(characteristicScope))
                     {
                         foreach (TECScope scope in TypicalInstanceDictionary.GetInstances(characteristicScope))
                         {
-                            scope.AssociatedCosts.Add(cost);
+                            scope.AssociatedCosts.Add(assCost);
                         }
                     }
                 }
@@ -779,20 +875,18 @@ namespace EstimatingLibrary
                     }
                 }
             }
-            else if (value is TECCost && sender is TECScope && !(value is TECMisc)
-                && !(value is TECController) && !(value is IEndDevice))
+            else if (value is TECAssociatedCost cost && sender is TECScope)
             {
                 if (sender is TECTypical)
                 {
                     foreach (TECSystem system in Instances)
                     {
-                        system.AssociatedCosts.Remove(value as TECCost);
+                        system.AssociatedCosts.Remove(cost);
                     }
                 }
                 else
                 {
                     var characteristicScope = sender as TECScope;
-                    var cost = value as TECCost;
                     if (TypicalInstanceDictionary.ContainsKey(characteristicScope))
                     {
                         foreach (TECScope scope in TypicalInstanceDictionary.GetInstances(characteristicScope))

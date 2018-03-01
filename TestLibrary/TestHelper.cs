@@ -94,7 +94,6 @@ namespace Tests
 
             bid.MiscCosts.Add(wiring);
             
-
             //Panels
             TECPanel panel = new TECPanel(bid.Catalogs.PanelTypes[0], false);
             panel.Name = "Test Panel";
@@ -108,7 +107,8 @@ namespace Tests
             var system1 = CreateTestTypical(bid.Catalogs);
             system1.Name = "System 1";
             system1.Description = "Locations all the way";
-            
+            system1.Location = cellar;
+
             var system2 = CreateTestTypical(bid.Catalogs);
             system2.Name = "System 2";
             system2.Description = "Description 2";
@@ -173,7 +173,7 @@ namespace Tests
             subScope2.Points.Add(point2);
 
             //Connections
-            TECConnection testConnection = expectedController.AddSubScope(subScope1);
+            TECConnection testConnection = expectedController.AddSubScopeConnection(subScope1);
             testConnection.ConduitType = bid.Catalogs.ConduitTypes[0];
             testConnection.Length = 42;
 
@@ -263,13 +263,13 @@ namespace Tests
             templates.Catalogs.ConduitTypes.Add(otherConduitType);
 
             //Associated Costs
-            TECCost testAssociatedCost = new TECCost(CostType.Electrical);
+            TECAssociatedCost testAssociatedCost = new TECAssociatedCost(CostType.Electrical);
             testAssociatedCost.Name = "Flex";
             testAssociatedCost.Cost = 42;
 
             templates.Catalogs.AssociatedCosts.Add(testAssociatedCost);
 
-            var testCost2 = new TECCost(CostType.TEC);
+            var testCost2 = new TECAssociatedCost(CostType.TEC);
             testCost2.Name = "Other Cost";
             templates.Catalogs.AssociatedCosts.Add(testCost2);
 
@@ -445,14 +445,14 @@ namespace Tests
             TECCatalogs outCatalogs = new TECCatalogs();
 
             //Associated Costs
-            TECCost elecCost = new TECCost(CostType.Electrical);
+            TECAssociatedCost elecCost = new TECAssociatedCost(CostType.Electrical);
             elecCost.Name = "Elec Cost";
             elecCost.Cost = 156.61;
             elecCost.Labor = 456.64;
             elecCost.Type = CostType.Electrical;
             outCatalogs.AssociatedCosts.Add(elecCost);
 
-            TECCost tecCost = new TECCost(CostType.TEC);
+            TECAssociatedCost tecCost = new TECAssociatedCost(CostType.TEC);
             tecCost.Name = "TEC Cost";
             tecCost.Cost = 46.43;
             tecCost.Labor = 61.45;
@@ -561,6 +561,14 @@ namespace Tests
 
             outCatalogs.PanelTypes.Add(panelType);
 
+            TECPanelType otherPanelType = new TECPanelType(manufacturer1);
+            otherPanelType.Price = 46.61;
+            otherPanelType.Labor = 64.19;
+            otherPanelType.Name = "Other Test Panel Type";
+            AssignSecondaryProperties(otherPanelType, outCatalogs);
+
+            outCatalogs.PanelTypes.Add(otherPanelType);
+
             //Valves
             TECDevice actuator = new TECDevice(new ObservableCollection<TECConnectionType>() { connectionType1 },
                 manufacturer1);
@@ -610,7 +618,7 @@ namespace Tests
 
             double cost = 12.61;
 
-            var assCosts = new ObservableCollection<TECCost>();
+            var assCosts = new ObservableCollection<TECAssociatedCost>();
             int costNum = 9;
             for(int x = 0; x < costNum; x++)
             {
@@ -734,7 +742,7 @@ namespace Tests
         {
             foreach(TECSubScope subscope in equipment.SubScope)
             {
-                controller.AddSubScope(subscope);
+                controller.AddSubScopeConnection(subscope);
             }
         }
 
@@ -827,7 +835,7 @@ namespace Tests
             }
             bool tecAdded = false;
             bool elecAdded = false;
-            foreach(TECCost cost in catalogs.AssociatedCosts)
+            foreach(TECAssociatedCost cost in catalogs.AssociatedCosts)
             {
                 if (cost.Type == CostType.TEC)
                 {

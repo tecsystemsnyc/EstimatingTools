@@ -37,9 +37,9 @@
                     <pControls:CostPropertiesControl Selected="{Binding}"
                                                      ReadOnly="{Binding ElementName=propertiesView, Path=ViewModel.ReadOnly}"/>
                 </DataTemplate>
-                <DataTemplate x:Key="costBatchInterface">
+                <!--<DataTemplate x:Key="costBatchInterface">
                     <pControls:CostBatchPropertiesControl Selected="{Binding}"/>
-                </DataTemplate>
+                </DataTemplate>-->
                 <DataTemplate x:Key="pointInterface">
                     <pControls:PointPropetiesControl Selected="{Binding}"/>
                 </DataTemplate>
@@ -94,10 +94,22 @@
                 <DataTemplate x:Key="subScope">
                     <pControls:SubScopePropertiesControl Selected="{Binding}"/>
                 </DataTemplate>
+                <DataTemplate x:Key="estimate">
+                    <Expander Header="Estimate" Visibility="{Binding ElementName=propertiesView, Path=ViewModel.Parameters, Converter={utilities:NullToCollapsedConverter}}">
+                        <pControls:UnitEstimatePropertiesControl>
+                            <pControls:UnitEstimatePropertiesControl.Selected>
+                                <MultiBinding Converter="{pControls:SelectedToSummaryConverter}">
+                                    <Binding/>
+                                    <Binding ElementName="propertiesView" Path="ViewModel.Parameters"/>
+                                </MultiBinding>
+                            </pControls:UnitEstimatePropertiesControl.Selected>
+                        </pControls:UnitEstimatePropertiesControl>
+                    </Expander>
+                </DataTemplate>
                 <DataTemplate x:Key="default"/>
-                <utilities:CostBatchInterfaceSelector x:Key="CostBatchSelector"
+                <!--<utilities:CostBatchInterfaceSelector x:Key="CostBatchSelector"
                                               InterfaceTemplate="{StaticResource costBatchInterface}" 
-                                              DefaultTemplate="{StaticResource default}"/>
+                                              DefaultTemplate="{StaticResource default}"/>-->
                 <utilities:PointInterfaceSelector x:Key="PointSelector"
                                               InterfaceTemplate="{StaticResource pointInterface}" 
                                               DefaultTemplate="{StaticResource default}"/>
@@ -149,6 +161,9 @@
                 <utilities:SubScopeSelector x:Key="subScopeSelector"
                                             InterfaceTemplate="{StaticResource subScope}"
                                             DefaultTemplate="{StaticResource default}"/>
+                <utilities:ScopeSelector x:Key="estimateSelector"
+                                         InterfaceTemplate="{StaticResource estimate}"
+                                         DefaultTemplate="{StaticResource default}"/>
             </ResourceDictionary>
         </ScrollViewer.Resources>
         <StackPanel>
@@ -174,7 +189,8 @@
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource connectionSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource electricalMaterialSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource connectionTypeSelector}"/>
-            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource CostBatchSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource estimateSelector}"/>
+
         </StackPanel>
     </ScrollViewer>
 </UserControl>

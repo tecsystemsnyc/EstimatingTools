@@ -561,7 +561,7 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost(CostType.TEC);
+            var ratedCost = new TECAssociatedCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
@@ -595,7 +595,7 @@ namespace Tests
             
             subScope.Devices.Add(device);
 
-            var connection = controller.AddSubScope(subScope);
+            var connection = controller.AddSubScopeConnection(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -621,7 +621,7 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost(CostType.TEC);
+            var ratedCost = new TECAssociatedCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
@@ -655,7 +655,7 @@ namespace Tests
 
             subScope.Devices.Add(device);
 
-            var connection = controller.AddSubScope(subScope);
+            var connection = controller.AddSubScopeConnection(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -673,7 +673,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Estimate_AddSubScopeConnectionInSystem()
+        public void Estimate_AddSubScopeConnectionConnectionInSystem()
         {
             var bid = new TECBid();
             bid.Parameters = parameters;
@@ -683,11 +683,11 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost(CostType.Electrical);
+            var ratedCost = new TECAssociatedCost(CostType.Electrical);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
 
-            var assCost = new TECCost(CostType.Electrical);
+            var assCost = new TECAssociatedCost(CostType.Electrical);
             assCost.Cost = 1;
             assCost.Labor = 1;
 
@@ -725,7 +725,7 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
             
-            var connection = controller.AddSubScope(subScope);
+            var connection = controller.AddSubScopeConnection(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -737,7 +737,7 @@ namespace Tests
                 {
                     foreach(TECSubScope instanceSubScope in instance.GetAllSubScope())
                     {
-                        var instanceConnection = instanceController.AddSubScope(instanceSubScope);
+                        var instanceConnection = instanceController.AddSubScopeConnection(instanceSubScope);
                         instanceConnection.Length = 10;
                         instanceConnection.ConduitLength = 5;
                         instanceConnection.ConduitType = conduitType;
@@ -764,11 +764,11 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost(CostType.Electrical);
+            var ratedCost = new TECAssociatedCost(CostType.Electrical);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
 
-            var assCost = new TECCost(CostType.Electrical);
+            var assCost = new TECAssociatedCost(CostType.Electrical);
             assCost.Cost = 1;
             assCost.Labor = 1;
 
@@ -807,7 +807,7 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            var connection = controller.AddSubScope(subScope);
+            var connection = controller.AddSubScopeConnection(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -842,11 +842,11 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost(CostType.Electrical);
+            var ratedCost = new TECAssociatedCost(CostType.Electrical);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
 
-            var assCost = new TECCost(CostType.Electrical);
+            var assCost = new TECAssociatedCost(CostType.Electrical);
             assCost.Cost = 1;
             assCost.Labor = 1;
 
@@ -884,7 +884,7 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            var connection = controller.AddSubScope(subScope);
+            var connection = controller.AddSubScopeConnection(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -896,7 +896,7 @@ namespace Tests
                 {
                     foreach (TECSubScope instanceSubScope in instance.GetAllSubScope())
                     {
-                        var instanceConnection = instanceController.AddSubScope(instanceSubScope);
+                        var instanceConnection = instanceController.AddSubScopeConnection(instanceSubScope);
                         instanceConnection.Length = 10;
                         instanceConnection.ConduitLength = 5;
                         instanceConnection.ConduitType = conduitType;
@@ -913,7 +913,7 @@ namespace Tests
                 {
                     foreach (TECSubScope instanceSubScope in instance.GetAllSubScope())
                     {
-                        var instanceConnection = instanceController.AddSubScope(instanceSubScope);
+                        var instanceConnection = instanceController.AddSubScopeConnection(instanceSubScope);
                         instanceConnection.Length += 1;
                         instanceConnection.ConduitLength += 1;
                     }
@@ -929,7 +929,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Estimate_AddSubScopeConnectionInTypical()
+        public void Estimate_AddSubScopeConnectionConnectionInTypical()
         {
             var bid = new TECBid();
             bid.Parameters = parameters;
@@ -938,7 +938,7 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost(CostType.TEC);
+            var ratedCost = new TECAssociatedCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
@@ -972,7 +972,7 @@ namespace Tests
             subScope.Devices.Add(device);
             bid.Systems.Add(system);
 
-            var connection = controller.AddSubScope(subScope);
+            var connection = controller.AddSubScopeConnection(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -995,7 +995,7 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost(CostType.TEC);
+            var ratedCost = new TECAssociatedCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
@@ -1028,7 +1028,7 @@ namespace Tests
             equipment.SubScope.Add(subScope);
             subScope.Devices.Add(device);
             bid.Systems.Add(system);
-            var connection = controller.AddSubScope(subScope);
+            var connection = controller.AddSubScopeConnection(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -1050,7 +1050,7 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
-            var ratedCost = new TECCost(CostType.TEC);
+            var ratedCost = new TECAssociatedCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
@@ -1084,7 +1084,7 @@ namespace Tests
             subScope.Devices.Add(device);
             bid.Systems.Add(system);
 
-            var connection = controller.AddSubScope(subScope);
+            var connection = controller.AddSubScopeConnection(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -1301,11 +1301,11 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            var tecCost = new TECCost(CostType.TEC);
+            var tecCost = new TECAssociatedCost(CostType.TEC);
             tecCost.Cost = 1234;
             tecCost.Labor = 4321;
 
-            var eCost = new TECCost(CostType.Electrical);
+            var eCost = new TECAssociatedCost(CostType.Electrical);
             eCost.Cost = 5678;
             eCost.Labor = 8765;
 
@@ -1331,12 +1331,12 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            var tecCost = new TECCost(CostType.TEC);
+            var tecCost = new TECAssociatedCost(CostType.TEC);
             tecCost.Cost = 1234;
             tecCost.Labor = 4321;
             tecCost.Type = CostType.TEC;
 
-            var eCost = new TECCost(CostType.TEC);
+            var eCost = new TECAssociatedCost(CostType.TEC);
             eCost.Cost = 5678;
             eCost.Labor = 8765;
             eCost.Type = CostType.Electrical;
@@ -1368,12 +1368,12 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            var tecCost = new TECCost(CostType.TEC);
+            var tecCost = new TECAssociatedCost(CostType.TEC);
             tecCost.Cost = 1234;
             tecCost.Labor = 4321;
             tecCost.Type = CostType.TEC;
 
-            var eCost = new TECCost(CostType.TEC);
+            var eCost = new TECAssociatedCost(CostType.TEC);
             eCost.Cost = 5678;
             eCost.Labor = 8765;
             eCost.Type = CostType.Electrical;
@@ -1402,12 +1402,12 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            var tecCost = new TECCost(CostType.TEC);
+            var tecCost = new TECAssociatedCost(CostType.TEC);
             tecCost.Cost = 1234;
             tecCost.Labor = 4321;
             tecCost.Type = CostType.TEC;
 
-            var eCost = new TECCost(CostType.TEC);
+            var eCost = new TECAssociatedCost(CostType.TEC);
             eCost.Cost = 5678;
             eCost.Labor = 8765;
             eCost.Type = CostType.Electrical;
@@ -1796,7 +1796,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Estimate_AddSubScopeToSystem()
+        public void Estimate_AddSubScopeConnectionToSystem()
         {
             var bid = new TECBid();
             bid.Parameters = parameters;
@@ -2050,7 +2050,7 @@ namespace Tests
             system.AddController(controller);
             bid.Systems.Add(system);
 
-            var ratedCost = new TECCost(CostType.TEC);
+            var ratedCost = new TECAssociatedCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
@@ -2069,7 +2069,7 @@ namespace Tests
 
             subScope.Devices.Add(device);
 
-            var connection = controller.AddSubScope(subScope);
+            var connection = controller.AddSubScopeConnection(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -2107,7 +2107,7 @@ namespace Tests
             system.AddController(controller);
             bid.Systems.Add(system);
 
-            var ratedCost = new TECCost(CostType.TEC);
+            var ratedCost = new TECAssociatedCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
@@ -2126,7 +2126,7 @@ namespace Tests
 
             subScope.Devices.Add(device);
 
-            var connection = controller.AddSubScope(subScope);
+            var connection = controller.AddSubScopeConnection(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -2160,7 +2160,7 @@ namespace Tests
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
-            TECSubScopeConnection ssConnect = controller.AddSubScope(subScope);
+            TECSubScopeConnection ssConnect = controller.AddSubScopeConnection(subScope);
             ssConnect.Length = 50;
 
             typical.Instances.Remove(instance);
@@ -2195,7 +2195,7 @@ namespace Tests
             bid.Systems.Add(system);
             TECEstimator systemEstimate = new TECEstimator(system, parameters, new TECExtraLabor(Guid.NewGuid()), 0.0, new ChangeWatcher(system));
 
-            var ratedCost = new TECCost(CostType.TEC);
+            var ratedCost = new TECAssociatedCost(CostType.TEC);
             ratedCost.Cost = 1;
             ratedCost.Labor = 1;
             ratedCost.Type = CostType.Electrical;
@@ -2214,7 +2214,7 @@ namespace Tests
 
             subScope.Devices.Add(device);
 
-            var connection = controller.AddSubScope(subScope);
+            var connection = controller.AddSubScopeConnection(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;

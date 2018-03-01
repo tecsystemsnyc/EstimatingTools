@@ -50,10 +50,7 @@ namespace EstimatingLibrary
             CostBatch outCosts = base.GetCosts(length);
             if (isPlenum)
             {
-                TECCost plenumCost = new TECCost(CostType.Electrical);
-                plenumCost.Cost = length * PlenumCost;
-                plenumCost.Labor = length * PlenumLabor;
-                outCosts.AddCost(plenumCost);
+                outCosts.Add(CostType.Electrical, (length * PlenumCost), (length * PlenumLabor));
             }
             return outCosts;
         } 

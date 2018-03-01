@@ -199,7 +199,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 }
                 
                 add(subScope);
-                if (ConnectVM != null)
+                if (ConnectVM != null && ConnectVM.Connect)
                 {
                     ConnectVM.ExecuteConnection(subScope);
                 }

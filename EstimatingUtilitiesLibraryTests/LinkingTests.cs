@@ -84,7 +84,7 @@ namespace Tests
         {
             foreach(TECElectricalMaterial connectionType in bid.Catalogs.ConnectionTypes)
             {
-                foreach(TECCost cost in connectionType.RatedCosts)
+                foreach(TECAssociatedCost cost in connectionType.RatedCosts)
                 {
                     if (!bid.Catalogs.AssociatedCosts.Contains(cost))
                     {
@@ -100,7 +100,7 @@ namespace Tests
         {
             foreach(TECElectricalMaterial conduitType in bid.Catalogs.ConduitTypes)
             {
-                foreach (TECCost cost in conduitType.RatedCosts)
+                foreach (TECAssociatedCost cost in conduitType.RatedCosts)
                 {
                     if (!bid.Catalogs.AssociatedCosts.Contains(cost))
                     {
@@ -670,7 +670,7 @@ namespace Tests
 
         private void checkScopeChildrenCatalogLinks(TECScope scope, TECCatalogs catalogs)
         {
-            foreach(TECCost cost in scope.AssociatedCosts)
+            foreach(TECAssociatedCost cost in scope.AssociatedCosts)
             {
                 if (!catalogs.AssociatedCosts.Contains(cost))
                 {

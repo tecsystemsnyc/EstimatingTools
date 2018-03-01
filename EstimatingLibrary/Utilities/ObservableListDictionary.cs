@@ -60,30 +60,23 @@ namespace EstimatingLibrary.Utilities
                 return null;
             }
         }
-
-        public List<T> GetInstances(T key)
-        {
-            return dictionary[key];
-        }
-        public List<Y> GetInstancesOfType<Y>(Y key)
+        
+        public List<Y> GetInstances<Y>(Y key) where Y : T
         {
             List<Y> outList = new List<Y>();
-            if (key is T tKey)
+            if (!ContainsKey(key))
             {
-                var subList = dictionary[tKey];
-                foreach(T item in subList)
+                return outList;
+            }
+            var subList = dictionary[key];
+            foreach (T item in subList)
+            {
+                if (item is Y yItem)
                 {
-                    if(item is Y yItem)
-                    {
-                        outList.Add(yItem);
-                    }
+                    outList.Add(yItem);
                 }
-                return outList;
             }
-            else
-            {
-                return outList;
-            }
+            return outList;
         }
 
         public bool ContainsKey(T key)

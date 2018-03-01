@@ -230,7 +230,6 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void Drop(IDropInfo dropInfo)
         {
-
             UIHelpers.Drop(dropInfo, data => {
                 if (data is TECSubScope ss && !ss.IsNetwork)
                 {
@@ -262,7 +261,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (SelectedController.CanConnectSubScope(subScope))
                     {
-                        var connection = SelectedController.AddSubScope(subScope);
+                        var connection = SelectedController.AddSubScopeConnection(subScope);
                         setConnectionDefaults(connection);
                     }
                 }
@@ -371,17 +370,21 @@ namespace TECUserControlLibrary.ViewModels
             object obj = args.Value;
             TECObject sender = args.Sender;
 
+            bool refresh = false;
+
             if (change == Change.Add)
             {
                 if (obj is TECController controller && sender is TECBid)
                 {
                     GlobalControllers.Add(controller);
+                    refresh = true;
                 }
                 else if (obj is TECSystem sys)
                 {
                     if (systemHasUnconnected(sys))
                     {
                         UnconnectedSystems.Add(sys);
+                        refresh = true;
                     }
                 }
                 else if (obj is TECEquipment equip && sender == SelectedSystem)
@@ -389,6 +392,7 @@ namespace TECUserControlLibrary.ViewModels
                     if (equipHasUnconnected(equip))
                     {
                         UnconnectedEquipment.Add(equip);
+                        refresh = true;
                     }
                 }
                 else if (obj is TECSubScope ss && sender == SelectedEquipment)
@@ -396,6 +400,7 @@ namespace TECUserControlLibrary.ViewModels
                     if (ssIsUnconnected(ss))
                     {
                         UnconnectedSubScope.Add(ss);
+                        refresh = true;
                     }
                 }
                 else if (obj is TECSubScopeConnection ssConnect && sender == SelectedController)
@@ -406,8 +411,8 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     TECEquipment parent = ssConnect.SubScope.FindParentEquipment(bid);
                     addSubScopeConnectionItem(ssConnect);
+                    refresh = true;
                 }
-                filterSystems(bid);
             }
             else if (change == Change.Remove)
             {
@@ -418,6 +423,7 @@ namespace TECUserControlLibrary.ViewModels
                         SelectedController = null;
                     }
                     GlobalControllers.Remove(controller);
+                    refresh = true;
                 }
                 else if (obj is TECSystem sys && UnconnectedSystems.Contains(sys))
                 {
@@ -446,10 +452,12 @@ namespace TECUserControlLibrary.ViewModels
                         ConnectedSubScope.Contains(subScopeConnectionDictionary[ssConnect]))
                     {
                         removeSubScopeConnectionItem(ssConnect);
+                        refresh = true;
                     }
                 }
-                filterSystems(bid);
             }
+
+            if (refresh) filterSystems(bid);
         }
 
         private void disconnectSubScopeExecute(SubScopeConnectionItem ssConnect)

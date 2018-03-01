@@ -83,6 +83,11 @@ namespace TECUserControlLibrary.ViewModels
             RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
             setCommand("Report Bug", command);
         }
+        public void SetOpenFileLocationCommand(Action execute, Func<bool> canExecute = null)
+        {
+            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Open File Location", command);
+        }
 
         protected TECMenuItem addMenuItem(string newItemName, string disabledText = null, string parentItemName = null)
         {
@@ -153,6 +158,7 @@ namespace TECUserControlLibrary.ViewModels
             addMenuItem("Save", "Nothing to save", parentItemName: "File");
             addMenuItem("Save As", BUSY_TEXT, parentItemName: "File");
             addMenuItem("Export", parentItemName: "File");
+            addMenuItem("Open File Location", parentItemName: "File");
 
             //Edit menu items
             addMenuItem("Undo", "Nothing to undo", parentItemName: "Edit");

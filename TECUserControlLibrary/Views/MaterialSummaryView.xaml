@@ -15,7 +15,8 @@
             <Setter Property="Margin" Value="2"/>
         </Style>
     </UserControl.Resources>
-    <Grid DataContext="{Binding ElementName=materialSummaryView, Path=ViewModel}">
+    <Grid DataContext="{Binding ElementName=materialSummaryView, Path=ViewModel}"
+          Background="{StaticResource SectionBackgroundBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>

@@ -18,7 +18,5 @@ namespace TECUserControlLibrary.Models
             watcher = new ChangeWatcher(scope);
             Estimate = new TECEstimator(scope, parameters, new TECExtraLabor(Guid.NewGuid()), duration, watcher);
         }
-        
-
     }
 }

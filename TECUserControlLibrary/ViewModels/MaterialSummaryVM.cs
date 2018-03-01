@@ -525,6 +525,18 @@ namespace TECUserControlLibrary.ViewModels
 
         private void instanceChanged(TECChangedEventArgs args)
         {
+            //Checks for a material change in the bid
+            if(args.Sender is IRelatable rel)
+            {
+                bool hasLinked = rel.LinkedObjects.Contains(args.PropertyName);
+                bool isCatalog = (args.Value.GetType().IsImplementationOf(typeof(ICatalog<>)));
+                if (hasLinked && !isCatalog)
+                {
+                    return;
+                }
+
+            }
+            
             if (args.Change == Change.Add)
             {
                 if (args.Value is TECSystem system)

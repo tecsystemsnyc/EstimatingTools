@@ -107,7 +107,6 @@
     <Compile Include="Interfaces\IUserConfirmable.cs" />
     <Compile Include="Models\ControllerPropertiesItem.cs" />
     <Compile Include="Models\ControllerTypePropertiesItem.cs" />
-    <Compile Include="Models\CostBatchPropertiesItem.cs" />
     <Compile Include="Models\IOModulePropertiesItem.cs" />
     <Compile Include="Models\NetworkConnectionVM.cs" />
     <Compile Include="Models\ScopeSummaryItem.cs" />
@@ -203,9 +202,6 @@
     <Compile Include="UserControls\PropertyControls\CostPropertiesControl.xaml.cs">
       <DependentUpon>CostPropertiesControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\PropertyControls\CostBatchPropertiesControl.xaml.cs">
-      <DependentUpon>CostBatchPropertiesControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\ListControls\ElectricalMaterialListControl.xaml.cs">
       <DependentUpon>ElectricalMaterialListControl.xaml</DependentUpon>
     </Compile>
@@ -224,6 +220,9 @@
     <Compile Include="UserControls\PropertyControls\SubScopePropertiesControl.xaml.cs">
       <DependentUpon>SubScopePropertiesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\PropertyControls\UnitEstimatePropertiesControl.xaml.cs">
+      <DependentUpon>UnitEstimatePropertiesControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\PropertyControls\ValvePropertiesControl.xaml.cs">
       <DependentUpon>ValvePropertiesControl.xaml</DependentUpon>
     </Compile>
@@ -241,6 +240,7 @@
     <Compile Include="ViewModels\CatalogVMs\DevicesCatalogVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\PanelTypesCatalogVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\ValvesCatalogVM.cs" />
+    <Compile Include="ViewModels\BidPropertiesVM.cs" />
     <Compile Include="ViewModels\ConnectableFilterVM.cs" />
     <Compile Include="ViewModels\ConnectOnAddVM.cs" />
     <Compile Include="ViewModels\DeleteEndDeviceVM.cs" />
@@ -269,6 +269,9 @@
     </Compile>
     <Compile Include="Views\CatalogViews\ValvesCatalogView.xaml.cs">
       <DependentUpon>ValvesCatalogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BidPropertiesView.xaml.cs">
+      <DependentUpon>BidPropertiesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ConnectableFilterView.xaml.cs">
       <DependentUpon>ConnectableFilterView.xaml</DependentUpon>
@@ -662,10 +665,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\PropertyControls\CostBatchPropertiesControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UserControls\ListControls\ElectricalMaterialListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -687,6 +686,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\PropertyControls\SubScopePropertiesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PropertyControls\UnitEstimatePropertiesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -719,6 +722,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CatalogViews\ValvesCatalogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BidPropertiesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -147,7 +147,7 @@ namespace EstimateBuilder.MVVM
                 watcher = new ChangeWatcher(bid);
                 doStack = new DoStacker(watcher);
                 deltaStack = new DeltaStacker(watcher, bid);
-                bid.Catalogs.Unionize(templates.Catalogs);
+                bid.Catalogs.Fill(templates.Catalogs);
                 ModelLinkingHelper.LinkBidToCatalogs(bid);
 
                 estimate = new TECEstimator(bid, watcher);
@@ -164,12 +164,12 @@ namespace EstimateBuilder.MVVM
         private void handleLoadedTemplates(TECTemplates templates)
         {
             this.templates = templates;
-            bid.Catalogs.Unionize(templates.Catalogs);
+            bid.Catalogs.Fill(templates.Catalogs);
             ModelLinkingHelper.LinkBidToCatalogs(bid);
             estimate = new TECEstimator(bid, watcher);
             EditorVM = new EstimateEditorVM(bid, templates, watcher, estimate);
         }
-
+        
         #region Menu Commands Methods
         private void setupCommands()
         {
@@ -184,6 +184,7 @@ namespace EstimateBuilder.MVVM
             menuVM.SetExportBudgetCommand(exportBudgetExecute, canExportBudget);
             menuVM.SetExportBOMCommand(exportBOMExecute, canExportBOM);
             menuVM.SetDebugWindowCommand(debugWindowExecute, canDebugWindow);
+            menuVM.SetUpdateCatalogsCommand(updateCatalogsExecute, canUpdateCatalogs);
         }
         
         //Load Templates
@@ -233,6 +234,18 @@ namespace EstimateBuilder.MVVM
         private bool canRefreshTemplates()
         {
             return templatesDatabaseManager != null && databaseReady();
+        }
+        //Refresh Catalogs
+        private void updateCatalogsExecute()
+        {
+            bid.Catalogs.Unionize(templates.Catalogs);
+            ModelLinkingHelper.LinkBidToCatalogs(bid);
+            estimate = new TECEstimator(bid, watcher);
+            editorVM.Refresh(bid, this.templates, watcher, estimate);
+        }
+        private bool canUpdateCatalogs()
+        {
+            return templates != null;
         }
         //Export Proposal
         private void exportProposalExecute()

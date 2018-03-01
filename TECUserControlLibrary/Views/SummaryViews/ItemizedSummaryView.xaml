@@ -11,7 +11,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid DataContext="{Binding ElementName=itemizedSummaryView, Path=ViewModel}">
         <TabControl>
-            <TabItem Header="Systems">
+            <TabItem Header="Systems" Visibility="Collapsed">
                 <local:SystemSummaryView ViewModel="{Binding SystemVM}"/>
             </TabItem>
         </TabControl>

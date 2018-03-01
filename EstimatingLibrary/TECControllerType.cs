@@ -135,11 +135,6 @@ namespace EstimatingLibrary
             return saveList;
         }
 
-        public override object DragDropCopy(TECScopeManager scopeManager)
-        {
-            return this;
-        }
-
         public TECControllerType CatalogCopy()
         {
             return new TECControllerType(this);

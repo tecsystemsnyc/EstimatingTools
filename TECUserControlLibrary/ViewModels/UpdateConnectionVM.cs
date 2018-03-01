@@ -68,7 +68,7 @@ namespace TECUserControlLibrary.ViewModels
             List<SubScopeUpdatedWrapper> instances = new List<SubScopeUpdatedWrapper>();
             foreach(ISubScopeConnectionItem typ in subScope)
             {
-                List<TECSubScope> ssInstances = typical.TypicalInstanceDictionary.GetInstancesOfType(typ.SubScope);
+                List<TECSubScope> ssInstances = typical.GetInstancesFromTypical(typ.SubScope);
                 foreach(TECSubScope instance in ssInstances)
                 {
                     bool needsUpdate =
@@ -195,7 +195,7 @@ namespace TECUserControlLibrary.ViewModels
 
                 if (equivalentInstanceController != null)
                 {
-                    equivalentInstanceController.AddSubScope(SelectedInstance.SubScope);
+                    equivalentInstanceController.AddSubScopeConnection(SelectedInstance.SubScope);
                     updateProperties(SelectedTypical, SelectedInstance.SubScope);
                 }
             }

@@ -4,7 +4,7 @@ using System;
 
 namespace EstimatingLibrary
 {
-    public abstract class TECHardware : TECCost
+    public abstract class TECHardware : TECCost, IDragDropable
     {
         #region Fields
         private TECManufacturer _manufacturer;
@@ -55,8 +55,13 @@ namespace EstimatingLibrary
             }
         }
         #endregion
-        
+
         #region Methods
+        public object DragDropCopy(TECScopeManager scopeManager)
+        {
+            return this;
+        }
+
         protected void copyPropertiesFromHardware(TECHardware hardware)
         {
             copyPropertiesFromCost(hardware);

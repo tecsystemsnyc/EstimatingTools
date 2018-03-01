@@ -166,7 +166,7 @@ namespace EstimatingLibraryTests
             point.Type = IOType.AI;
             point.Quantity = 5;
 
-            TECCost cost = new TECCost(CostType.TEC);
+            TECAssociatedCost cost = new TECAssociatedCost(CostType.TEC);
             templates.Catalogs.AssociatedCosts.Add(cost);
 
             TECTag tag = new TECTag();
@@ -214,7 +214,7 @@ namespace EstimatingLibraryTests
             point.Type = IOType.AI;
             point.Quantity = 5;
 
-            TECCost cost = new TECCost(CostType.TEC);
+            TECAssociatedCost cost = new TECAssociatedCost(CostType.TEC);
             templates.Catalogs.AssociatedCosts.Add(cost);
 
             TECTag tag = new TECTag();
@@ -261,7 +261,7 @@ namespace EstimatingLibraryTests
             point.Type = IOType.AI;
             point.Quantity = 5;
 
-            TECCost cost = new TECCost(CostType.TEC);
+            TECAssociatedCost cost = new TECAssociatedCost(CostType.TEC);
             templates.Catalogs.AssociatedCosts.Add(cost);
 
             TECTag tag = new TECTag();
@@ -327,7 +327,7 @@ namespace EstimatingLibraryTests
             point.Type = IOType.AI;
             point.Quantity = 5;
 
-            TECCost cost = new TECCost(CostType.TEC);
+            TECAssociatedCost cost = new TECAssociatedCost(CostType.TEC);
             templates.Catalogs.AssociatedCosts.Add(cost);
 
             TECTag tag = new TECTag();

@@ -1,6 +1,8 @@
 ﻿using EstimatingLibrary.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace EstimatingLibrary
 {
@@ -8,7 +10,7 @@ namespace EstimatingLibrary
     {
         private ObservableCollection<TECConnectionType> _connectionTypes;
         private ObservableCollection<TECElectricalMaterial> _conduitTypes;
-        private ObservableCollection<TECCost> _associatedCosts;
+        private ObservableCollection<TECAssociatedCost> _associatedCosts;
         private ObservableCollection<TECPanelType> _panelTypes;
         private ObservableCollection<TECControllerType> _controllerTypes;
         private ObservableCollection<TECIOModule> _ioModules;
@@ -114,7 +116,7 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "ConduitTypes", this, value, old);
             }
         }
-        public ObservableCollection<TECCost> AssociatedCosts
+        public ObservableCollection<TECAssociatedCost> AssociatedCosts
         {
             get { return _associatedCosts; }
             set
@@ -163,7 +165,7 @@ namespace EstimatingLibrary
         {
             _conduitTypes = new ObservableCollection<TECElectricalMaterial>();
             _connectionTypes = new ObservableCollection<TECConnectionType>();
-            _associatedCosts = new ObservableCollection<TECCost>();
+            _associatedCosts = new ObservableCollection<TECAssociatedCost>();
             _panelTypes = new ObservableCollection<TECPanelType>();
             _controllerTypes = new ObservableCollection<TECControllerType>();
             _ioModules = new ObservableCollection<TECIOModule>();
@@ -256,12 +258,11 @@ namespace EstimatingLibrary
             unionizeScope(this.Valves, catalogToAdd.Valves);
             unionizeScope(this.Manufacturers, catalogToAdd.Manufacturers);
             unionizeScope(this.Tags, catalogToAdd.Tags);
-
-
+            
         }
-        private static void unionizeScope<T>(ObservableCollection<T> bidItems, ObservableCollection<T> templateItems) where T : TECObject
+        private static void unionizeScope<T>(IList<T> bidItems, IList<T> templateItems) where T : TECObject
         {
-            ObservableCollection<T> itemsToRemove = new ObservableCollection<T>();
+            List<T> itemsToRemove = new List<T>();
 
             foreach (T templateItem in templateItems)
             {
@@ -280,6 +281,30 @@ namespace EstimatingLibrary
             foreach (T item in templateItems)
             {
                 bidItems.Add(item);
+            }
+        }
+
+        public void Fill(TECCatalogs catalogToAdd)
+        {
+            fillScope(this.ConnectionTypes, catalogToAdd.ConnectionTypes);
+            fillScope(this.ConduitTypes, catalogToAdd.ConduitTypes);
+            fillScope(this.AssociatedCosts, catalogToAdd.AssociatedCosts);
+            fillScope(this.PanelTypes, catalogToAdd.PanelTypes);
+            fillScope(this.ControllerTypes, catalogToAdd.ControllerTypes);
+            fillScope(this.IOModules, catalogToAdd.IOModules);
+            fillScope(this.Devices, catalogToAdd.Devices);
+            fillScope(this.Valves, catalogToAdd.Valves);
+            fillScope(this.Manufacturers, catalogToAdd.Manufacturers);
+            fillScope(this.Tags, catalogToAdd.Tags);
+        }
+        private static void fillScope<T>(IList<T> bidItems, IList<T> templateItems) where T : TECObject
+        {
+            foreach(T templateItem in templateItems)
+            {
+                if(!bidItems.Any(item => item.Guid == templateItem.Guid))
+                {
+                    bidItems.Add(templateItem);
+                }
             }
         }
     }
