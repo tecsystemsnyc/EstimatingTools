@@ -47,74 +47,6 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         
-        #region IO Modules
-        private string _ioModuleName;
-        public string IOModuleName
-        {
-            get { return _ioModuleName; }
-            set
-            {
-                _ioModuleName = value;
-                RaisePropertyChanged("IOModuleName");
-            }
-        }
-        private string _ioModuleDescription;
-        public string IOModuleDescription
-        {
-            get { return _ioModuleDescription; }
-            set
-            {
-                _ioModuleDescription = value;
-                RaisePropertyChanged("IOModuleDescription");
-            }
-        }
-        private double _ioModuleCCost;
-        public double IOModuleCost
-        {
-            get { return _ioModuleCCost; }
-            set
-            {
-                _ioModuleCCost = value;
-                RaisePropertyChanged("IOModuleCost");
-            }
-        }
-        public IOType SelectedIO { get; set; }
-        public int SelectedIOQty { get; set; }
-        private TECManufacturer _ioModuleManufacturer;
-        public TECManufacturer IOModuleManufacturer
-        {
-            get { return _ioModuleManufacturer; }
-            set
-            {
-                _ioModuleManufacturer = value;
-                RaisePropertyChanged("IOModuleManufacturer");
-            }
-        }
-        private ObservableCollection<TECIO> _moduleIO;
-        public ObservableCollection<TECIO> ModuleIO
-        {
-            get { return _moduleIO; }
-            set
-            {
-                _moduleIO = value;
-                RaisePropertyChanged("ModuleIO");
-            }
-        }
-        public ICommand AddIOToModuleCommand { get; private set; }
-
-        private TECIOModule _selectedIOModule;
-
-        public TECIOModule SelectedIOModule
-        {
-            get { return _selectedIOModule; }
-            set
-            {
-                _selectedIOModule = value;
-                RaisePropertyChanged("SelectedIOModule");
-                Selected = value;
-            }
-        }
-        #endregion
         #region Manufacturer
         private TECManufacturer _manufacturerToAdd;
         public TECManufacturer ManufacturerToAdd
@@ -166,7 +98,6 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
         #region Command Properties
-        public ICommand AddIOModuleCommand { get; private set; }
         public ICommand AddManufacturerCommand { get; private set; }
         public ICommand AddTagCommand { get; private set; }
         #endregion
@@ -181,6 +112,7 @@ namespace TECUserControlLibrary.ViewModels
         public ControllerTypesCatalogVM ControllerTypeVM { get; }
         public PanelTypesCatalogVM PanelTypeVM { get; }
         public AssociatedCostsCatalogVM AssociatedCostVM { get; }
+        public IOModulesCatalogVM IOModuleVM { get; }
         public MiscCostsVM MiscVM { get; }
 
         private ViewModelBase _modalVM;
@@ -214,75 +146,22 @@ namespace TECUserControlLibrary.ViewModels
             subscribeToVM(ControllerTypeVM = new ControllerTypesCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(PanelTypeVM = new PanelTypesCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(AssociatedCostVM = new AssociatedCostsCatalogVM(templates, ReferenceDropHandler));
+            subscribeToVM(IOModuleVM = new IOModulesCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(MiscVM = new MiscCostsVM(templates));
         }
         
         #region Methods
         private void setupCommands()
         {
-            AddIOModuleCommand = new RelayCommand(addIOModuleExecute, canAddIOModuleExecute);
             AddManufacturerCommand = new RelayCommand(addManufacturerExecute, canAddManufacturer);
             AddTagCommand = new RelayCommand(addTagExecute, canAddTag);
-            AddIOToModuleCommand = new RelayCommand(addIOToModuleExecute, canAddIOToModule);
         }
 
-        private void addIOToModuleExecute()
-        {
-            bool wasAdded = false;
-            for(int x = 0; x < SelectedIOQty; x++)
-            {
-                foreach (TECIO io in ModuleIO)
-                {
-                    if (io.Type == SelectedIO)
-                    {
-                        io.Quantity++;
-                        wasAdded = true;
-                        break;
-                    }
-                }
-                if (!wasAdded)
-                {
-                    ModuleIO.Add(new TECIO(SelectedIO));
-                }
-            }
-        }
-        private bool canAddIOToModule()
-        {
-            return true;
-        }
-        
-        private void addIOModuleExecute()
-        {
-            var ioModule = new TECIOModule(IOModuleManufacturer);
-            ioModule.Name = IOModuleName;
-            ioModule.Price = IOModuleCost;
-            ioModule.Description = IOModuleDescription;
-            ioModule.IO = ModuleIO;
-
-            Templates.Catalogs.IOModules.Add(ioModule);
-            ModuleIO = new ObservableCollection<TECIO>();
-            IOModuleName = "";
-            IOModuleDescription = "";
-            IOModuleCost = 0;
-            IOModuleManufacturer = null;
-        }
-        private bool canAddIOModuleExecute()
-        {
-            if (IOModuleName != "" && IOModuleManufacturer != null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
         private void addManufacturerExecute()
         {
             Templates.Catalogs.Manufacturers.Add(ManufacturerToAdd);
             ManufacturerToAdd = new TECManufacturer();
         }
-
         private bool canAddManufacturer()
         {
             if(ManufacturerToAdd.Label != "")
@@ -299,7 +178,6 @@ namespace TECUserControlLibrary.ViewModels
             Templates.Catalogs.Tags.Add(TagToAdd);
             TagToAdd = new TECTag();
         }
-
         private bool canAddTag()
         {
             if(TagToAdd.Label != "")
@@ -313,11 +191,6 @@ namespace TECUserControlLibrary.ViewModels
 
         private void setupInterfaceDefaults()
         {
-            IOModuleName = "";
-            IOModuleDescription = "";
-            IOModuleCost = 0;
-            ModuleIO = new ObservableCollection<TECIO>();
-
             ManufacturerToAdd = new TECManufacturer();
 
             TagToAdd = new TECTag();

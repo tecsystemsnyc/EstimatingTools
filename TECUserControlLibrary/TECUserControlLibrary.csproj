@@ -239,6 +239,7 @@
     <Compile Include="ViewModels\CatalogVMs\ConnectionTypesCatalogVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\ControllerTypesCatalogVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\DevicesCatalogVM.cs" />
+    <Compile Include="ViewModels\CatalogVMs\IOModulesCatalogVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\PanelTypesCatalogVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\ValvesCatalogVM.cs" />
     <Compile Include="ViewModels\BidPropertiesVM.cs" />
@@ -267,6 +268,9 @@
     </Compile>
     <Compile Include="Views\CatalogViews\DevicesCatalogView.xaml.cs">
       <DependentUpon>DevicesCatalogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CatalogViews\IOModulesCatalogView.xaml.cs">
+      <DependentUpon>IOModulesCatalogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CatalogViews\PanelTypesCatalogView.xaml.cs">
       <DependentUpon>PanelTypesCatalogView.xaml</DependentUpon>
@@ -724,6 +728,10 @@
     <Page Include="Views\CatalogViews\DevicesCatalogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CatalogViews\IOModulesCatalogView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\CatalogViews\PanelTypesCatalogView.xaml">
       <SubType>Designer</SubType>
