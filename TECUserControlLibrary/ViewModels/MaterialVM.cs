@@ -46,34 +46,6 @@ namespace TECUserControlLibrary.ViewModels
                 SelectionChanged?.Invoke(value);
             }
         }
-
-        #region Tag
-        private TECTag _tagToAdd;
-        public TECTag TagToAdd
-        {
-            get { return _tagToAdd; }
-            set
-            {
-                _tagToAdd = value;
-                RaisePropertyChanged("TagToAdd");
-            }
-        }
-
-        private TECTag _selectedTag;
-
-        public TECTag SelectedTag
-        {
-            get { return _selectedTag; }
-            set
-            {
-                _selectedTag = value;
-                RaisePropertyChanged("SelectedTag");
-                Selected = value;
-            }
-        }
-        #endregion
-        #region Command Properties
-        public ICommand AddTagCommand { get; private set; }
         #endregion
         
         public event Action<Object> SelectionChanged;
@@ -88,6 +60,7 @@ namespace TECUserControlLibrary.ViewModels
         public AssociatedCostsCatalogVM AssociatedCostVM { get; }
         public IOModulesCatalogVM IOModuleVM { get; }
         public ManufacturersCatalogVM ManufacturerVM { get; }
+        public TagsCatalogVM TagVM { get; }
         public MiscCostsVM MiscVM { get; }
 
         private ViewModelBase _modalVM;
@@ -104,14 +77,11 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         #endregion
-        #endregion
 
         public MaterialVM(TECTemplates templates)
         {
             ReferenceDropHandler = new ReferenceDropper(templates);
             Templates = templates;
-            setupCommands();
-            setupInterfaceDefaults();
 
             //Setup VMs
             subscribeToVM(DeviceVM = new DevicesCatalogVM(templates, ReferenceDropHandler));
@@ -123,36 +93,10 @@ namespace TECUserControlLibrary.ViewModels
             subscribeToVM(AssociatedCostVM = new AssociatedCostsCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(IOModuleVM = new IOModulesCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(ManufacturerVM = new ManufacturersCatalogVM(templates, ReferenceDropHandler));
+            subscribeToVM(TagVM = new TagsCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(MiscVM = new MiscCostsVM(templates));
         }
         
-        #region Methods
-        private void setupCommands()
-        {
-            AddTagCommand = new RelayCommand(addTagExecute, canAddTag);
-        }
-        
-        private void addTagExecute()
-        {
-            Templates.Catalogs.Tags.Add(TagToAdd);
-            TagToAdd = new TECTag();
-        }
-        private bool canAddTag()
-        {
-            if(TagToAdd.Label != "")
-            {
-                return true;
-            } else
-            {
-                return false;
-            }
-        }
-
-        private void setupInterfaceDefaults()
-        {
-            TagToAdd = new TECTag();
-        }
-
         private void subscribeToVM(TECVMBase tecVM)
         {
             tecVM.ModalVMStarted += handleModal;
@@ -168,7 +112,6 @@ namespace TECUserControlLibrary.ViewModels
                 Selected = obj;
             }
         }
-        #endregion
 
         public class ReferenceDropper : IDropTarget
         {

@@ -124,35 +124,8 @@
                     </DataTemplate>
                     <!--Tags-->
                     <DataTemplate x:Key="TagTemplate">
-                        <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel }">
-                            <Grid.Resources>
-                                <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
-                            </Grid.Resources>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Grid Grid.Row="0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50"/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="80"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Label: " Grid.Row="0" Grid.Column="0"/>
-                                <TextBox Text="{Binding TagToAdd.Label, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" Margin="2">
-                                    <TextBox.InputBindings>
-                                        <KeyBinding Key="Return" 
-                                                    Command="{Binding AddTagCommand}"/>
-                                    </TextBox.InputBindings>
-                                </TextBox>
-                                <Button Content="Add" Command="{Binding AddTagCommand}" Grid.Row="0" Grid.Column="2" Margin="2"/>
-                            </Grid>
-                            <controls:LabeledGridControl LabeledSource="{Binding Templates.Catalogs.Tags}"
-                                                               Grid.Row="1"/>
-                        </Grid>
+                        <catalogViews:TagsCatalogView
+                            VM="{Binding ElementName=materialView, Path=ViewModel.TagVM}"/>
                     </DataTemplate>
                     <utilities:MaterialTypeSelector x:Key="materialTypeSelector"
                                                     DeviceTemplate="{StaticResource DevicesTemplate}"
