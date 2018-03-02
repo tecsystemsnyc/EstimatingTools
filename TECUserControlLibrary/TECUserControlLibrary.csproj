@@ -99,6 +99,7 @@
   <ItemGroup>
     <Compile Include="BaseVMs\AppManager.cs" />
     <Compile Include="BaseVMs\EditorVM.cs" />
+    <Compile Include="BaseVMs\TECVMBase.cs" />
     <Compile Include="Debug\EBDebugWindow.xaml.cs">
       <DependentUpon>EBDebugWindow.xaml</DependentUpon>
     </Compile>
@@ -232,6 +233,17 @@
     <Compile Include="Utilities\SearchUtilities.cs" />
     <Compile Include="ViewModels\AddNetworkConnectionVM.cs" />
     <Compile Include="ViewModels\AddVMs\AddVM.cs" />
+    <Compile Include="ViewModels\CatalogVMs\AssociatedCostsCatalogVM.cs" />
+    <Compile Include="ViewModels\CatalogVMs\CatalogVMBase.cs" />
+    <Compile Include="ViewModels\CatalogVMs\ConduitTypesCatalogVM.cs" />
+    <Compile Include="ViewModels\CatalogVMs\ConnectionTypesCatalogVM.cs" />
+    <Compile Include="ViewModels\CatalogVMs\ControllerTypesCatalogVM.cs" />
+    <Compile Include="ViewModels\CatalogVMs\DevicesCatalogVM.cs" />
+    <Compile Include="ViewModels\CatalogVMs\IOModulesCatalogVM.cs" />
+    <Compile Include="ViewModels\CatalogVMs\ManufacturersCatalogVM.cs" />
+    <Compile Include="ViewModels\CatalogVMs\PanelTypesCatalogVM.cs" />
+    <Compile Include="ViewModels\CatalogVMs\TagsCatalogVM.cs" />
+    <Compile Include="ViewModels\CatalogVMs\ValvesCatalogVM.cs" />
     <Compile Include="ViewModels\BidPropertiesVM.cs" />
     <Compile Include="ViewModels\ConnectableFilterVM.cs" />
     <Compile Include="ViewModels\ConnectOnAddVM.cs" />
@@ -244,6 +256,36 @@
     <Compile Include="ViewModels\ScheduleVM.cs" />
     <Compile Include="ViewModels\ValveSummaryVM.cs" />
     <Compile Include="ViewModels\WorkBoxVM.cs" />
+    <Compile Include="Views\CatalogViews\AssociatedCostsCatalogView.xaml.cs">
+      <DependentUpon>AssociatedCostsCatalogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CatalogViews\ConduitTypesCatalogView.xaml.cs">
+      <DependentUpon>ConduitTypesCatalogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CatalogViews\ConnectionTypesCatalogView.xaml.cs">
+      <DependentUpon>ConnectionTypesCatalogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CatalogViews\ControllerTypesCatalogView.xaml.cs">
+      <DependentUpon>ControllerTypesCatalogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CatalogViews\DevicesCatalogView.xaml.cs">
+      <DependentUpon>DevicesCatalogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CatalogViews\IOModulesCatalogView.xaml.cs">
+      <DependentUpon>IOModulesCatalogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CatalogViews\ManufacturersCatalogView.xaml.cs">
+      <DependentUpon>ManufacturersCatalogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CatalogViews\PanelTypesCatalogView.xaml.cs">
+      <DependentUpon>PanelTypesCatalogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CatalogViews\TagsCatalogView.xaml.cs">
+      <DependentUpon>TagsCatalogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CatalogViews\ValvesCatalogView.xaml.cs">
+      <DependentUpon>ValvesCatalogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\BidPropertiesView.xaml.cs">
       <DependentUpon>BidPropertiesView.xaml</DependentUpon>
     </Compile>
@@ -672,6 +714,46 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ValveGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CatalogViews\AssociatedCostsCatalogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CatalogViews\ConduitTypesCatalogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CatalogViews\ConnectionTypesCatalogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CatalogViews\ControllerTypesCatalogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CatalogViews\DevicesCatalogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CatalogViews\IOModulesCatalogView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CatalogViews\ManufacturersCatalogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CatalogViews\PanelTypesCatalogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CatalogViews\TagsCatalogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CatalogViews\ValvesCatalogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

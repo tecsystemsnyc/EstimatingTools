@@ -71,18 +71,6 @@ namespace TemplateBuilder.MVVM
 
         public event Action<Object> SelectionChanged;
 
-        public void Refresh(TECTemplates templates)
-        {
-            Templates = templates;
-            ScopeCollection.Refresh(templates, templates.Catalogs);
-            MaterialsTab.Refresh(templates);
-            SystemHierarchyVM.Refresh(templates);
-            EquipmentHierarchyVM.Refresh(templates);
-            SubScopeHierarchyVM.Refresh(templates);
-            PropertiesVM.Refresh(templates.Catalogs, templates);
-            MiscVM.Refresh(templates);
-        }
-
         public void DragOver(IDropInfo dropInfo)
         {
             UIHelpers.StandardDragOver(dropInfo);
