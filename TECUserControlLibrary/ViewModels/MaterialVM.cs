@@ -46,32 +46,7 @@ namespace TECUserControlLibrary.ViewModels
                 SelectionChanged?.Invoke(value);
             }
         }
-        
-        #region Manufacturer
-        private TECManufacturer _manufacturerToAdd;
-        public TECManufacturer ManufacturerToAdd
-        {
-            get { return _manufacturerToAdd; }
-            set
-            {
-                _manufacturerToAdd = value;
-                RaisePropertyChanged("ManufacturerToAdd");
-            }
-        }
 
-        private TECManufacturer _selectedManufacturer;
-
-        public TECManufacturer SelectedManufacturer
-        {
-            get { return _selectedManufacturer; }
-            set
-            {
-                _selectedManufacturer = value;
-                RaisePropertyChanged("SelectedManufacturer");
-                Selected = value;
-            }
-        }
-        #endregion
         #region Tag
         private TECTag _tagToAdd;
         public TECTag TagToAdd
@@ -98,7 +73,6 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
         #region Command Properties
-        public ICommand AddManufacturerCommand { get; private set; }
         public ICommand AddTagCommand { get; private set; }
         #endregion
         
@@ -113,6 +87,7 @@ namespace TECUserControlLibrary.ViewModels
         public PanelTypesCatalogVM PanelTypeVM { get; }
         public AssociatedCostsCatalogVM AssociatedCostVM { get; }
         public IOModulesCatalogVM IOModuleVM { get; }
+        public ManufacturersCatalogVM ManufacturerVM { get; }
         public MiscCostsVM MiscVM { get; }
 
         private ViewModelBase _modalVM;
@@ -147,32 +122,16 @@ namespace TECUserControlLibrary.ViewModels
             subscribeToVM(PanelTypeVM = new PanelTypesCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(AssociatedCostVM = new AssociatedCostsCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(IOModuleVM = new IOModulesCatalogVM(templates, ReferenceDropHandler));
+            subscribeToVM(ManufacturerVM = new ManufacturersCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(MiscVM = new MiscCostsVM(templates));
         }
         
         #region Methods
         private void setupCommands()
         {
-            AddManufacturerCommand = new RelayCommand(addManufacturerExecute, canAddManufacturer);
             AddTagCommand = new RelayCommand(addTagExecute, canAddTag);
         }
-
-        private void addManufacturerExecute()
-        {
-            Templates.Catalogs.Manufacturers.Add(ManufacturerToAdd);
-            ManufacturerToAdd = new TECManufacturer();
-        }
-        private bool canAddManufacturer()
-        {
-            if(ManufacturerToAdd.Label != "")
-            {
-                return true;
-            } else
-            {
-                return false;
-            }
-        }
-
+        
         private void addTagExecute()
         {
             Templates.Catalogs.Tags.Add(TagToAdd);
@@ -191,8 +150,6 @@ namespace TECUserControlLibrary.ViewModels
 
         private void setupInterfaceDefaults()
         {
-            ManufacturerToAdd = new TECManufacturer();
-
             TagToAdd = new TECTag();
         }
 

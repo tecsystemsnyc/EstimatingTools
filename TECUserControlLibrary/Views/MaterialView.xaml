@@ -119,37 +119,10 @@
                     </DataTemplate>
                     <!--Manufacturers-->
                     <DataTemplate x:Key="ManufacturerTemplate">
-                        <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel }">
-                            <Grid.Resources>
-                                <Style TargetType="TextBlock" BasedOn="{StaticResource blackText}"/>
-                            </Grid.Resources>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="60"/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Grid Grid.Row="0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="30"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50"/>
-                                    <ColumnDefinition Width="2*"/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Name: " Grid.Row="0" Grid.Column="0"/>
-                                <TextBox Text="{Binding ManufacturerToAdd.Label}" Grid.Row="0" Grid.Column="1" Margin="2"/>
-                                <TextBlock Text="Multiplier: " Grid.Row="0" Grid.Column="2"/>
-                                <TextBox Text="{Binding ManufacturerToAdd.Multiplier, StringFormat={}{0:F2}}" Grid.Row="0" Grid.Column="3" Margin="2"/>
-                                <Button Content="Add" Command="{Binding AddManufacturerCommand}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4"
-                                        Margin="2"/>
-                            </Grid>
-                            <controls:ManufacturersGridControl ManufacturersSource="{Binding Templates.Catalogs.Manufacturers}"
-                                                               SelectedItem="{Binding SelectedManufacturer}"
-                                                               Grid.Row="1"/>
-                        </Grid>
+                        <catalogViews:ManufacturersCatalogView
+                            VM="{Binding ElementName=materialView, Path=ViewModel.ManufacturerVM}"/>
                     </DataTemplate>
+                    <!--Tags-->
                     <DataTemplate x:Key="TagTemplate">
                         <Grid DataContext="{Binding ElementName=materialView, Path=ViewModel }">
                             <Grid.Resources>
