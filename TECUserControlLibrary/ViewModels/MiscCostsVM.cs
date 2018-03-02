@@ -6,6 +6,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
+using TECUserControlLibrary.BaseVMs;
 using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
@@ -16,7 +17,7 @@ namespace TECUserControlLibrary.ViewModels
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class MiscCostsVM : ViewModelBase, IDropTarget
+    public class MiscCostsVM : TECVMBase, IDropTarget
     {
         private ObservableCollection<TECMisc> _tecCostCollection;
         public ObservableCollection<TECMisc> TECCostCollection

@@ -98,6 +98,14 @@ namespace TECUserControlLibrary.Utilities
                 return false;
             }
         }
+
+        public void ObservablyClear()
+        {
+            foreach(QuantityItem<T> item in new List<QuantityItem<T>>(this))
+            {
+                RemoveAll(item.Item);
+            }
+        }
     }
 
     public class QuantityItem<T> : INotifyPropertyChanged
