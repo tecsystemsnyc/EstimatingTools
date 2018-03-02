@@ -43,9 +43,5 @@ namespace EstimatingLibrary
         }
     }
 
-    public class TECTag : TECLabeled
-    {
-        public TECTag() : base() { }
-        public TECTag(Guid guid): base(guid) { }
-    }
+    
 }
