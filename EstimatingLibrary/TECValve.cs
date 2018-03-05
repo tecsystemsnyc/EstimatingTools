@@ -28,6 +28,9 @@ namespace EstimatingLibrary
                 _actuator = value;
                 notifyCombinedChanged(Change.Edit, "Actuator", this, _actuator, old);
                 notifyCostChanged(value.CostBatch - old.CostBatch);
+                raisePropertyChanged("Price");
+                raisePropertyChanged("Cost");
+                raisePropertyChanged("Labor");
             }
         }
         public double Cv
