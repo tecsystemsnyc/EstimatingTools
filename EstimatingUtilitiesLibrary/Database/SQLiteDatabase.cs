@@ -245,6 +245,7 @@ namespace EstimatingUtilitiesLibrary.Database
                 throw e;
             }
             reader.Close();
+            //Console.WriteLine("Command: " + commandText);
             return data;
         }
 

@@ -826,10 +826,10 @@ namespace Tests
             Dictionary<Guid, CostBatch> loadCostDictionary = new Dictionary<Guid, CostBatch>();
             addToCost(loadCostDictionary, loadedBid, loadedBid);
 
+            compareCosts(saveBid, loadedBid, saveCostDictionary, loadCostDictionary);
             Assert.AreEqual(expectedTotalCost, loadedEstimate.TotalCost, delta);
 
 
-            compareCosts(saveBid, loadedBid, saveCostDictionary, loadCostDictionary);
 
         }
 
@@ -847,8 +847,22 @@ namespace Tests
                     CostBatch saveCost = pair.Value;
                     CostBatch loadCost = loadCostDictionary[pair.Key];
                     TECObject item = TestHelper.ObjectWithGuid(pair.Key, LoadBid);
-                    Assert.IsTrue(compareCosts(saveCost, loadCost),
-                        "Loaded value not correct: " + item);
+                    //Assert.IsTrue(compareCosts(saveCost, loadCost),
+                      //  "Loaded value not correct: " + item);
+                      if(!compareCosts(saveCost, loadCost))
+                    {
+                        Console.WriteLine("Loaded value not correct: " + item);
+                        if(item is IRelatable rel)
+                        {
+                            foreach(TECObject thing in rel.PropertyObjects.Objects)
+                            {
+                                if(thing is INotifyCostChanged costItem)
+                                {
+                                    Console.WriteLine("Loaded item: " + costItem + "; with electrical cost: " + costItem.CostBatch.GetCost(CostType.Electrical) + "; and TEC cost: " + costItem.CostBatch.GetCost(CostType.TEC));
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
