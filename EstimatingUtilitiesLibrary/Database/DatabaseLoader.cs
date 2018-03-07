@@ -88,7 +88,7 @@ namespace EstimatingUtilitiesLibrary.Database
             bid.Schedule = getSchedule(bid);
             bid.ScopeTree = getBidScopeBranches();
             bid.Systems = getChildObjects(new BidSystemTable(), new SystemTable(),
-                bid.Guid, data => { return getTypicalFromRow(data, controllerTypeDictionary, panelTypeDictionary); }, BidSystemTable.Index.Name);
+                bid.Guid, data => { return getTypicalFromRow(data, controllerTypeDictionary, panelTypeDictionary); });
             bid.Notes = getItemsFromTable(new NoteTable(), getNoteFromRow);
             bid.Exclusions = getItemsFromTable(new ExclusionTable(), getNoteFromRow);
             bid.SetControllers(getOrphanControllers(controllerTypeDictionary));
@@ -622,15 +622,15 @@ namespace EstimatingUtilitiesLibrary.Database
                 return new TECSchedule();
             }
             Guid guid = new Guid(DT.Rows[0][ScheduleTable.ID.Name].ToString());
-            List<TECScheduleTable> tables = getChildObjects(new ScheduleScheduleTableTable(), new ScheduleTableTable(), guid, getScheduleTableFromRow, ScheduleScheduleTableTable.Index.Name).ToList();
+            List<TECScheduleTable> tables = getChildObjects(new ScheduleScheduleTableTable(), new ScheduleTableTable(), guid, getScheduleTableFromRow).ToList();
             TECSchedule schedule = new TECSchedule(guid, tables);
             return schedule;
         }
 
-        static private ObservableCollection<T> getChildObjects<T>(TableBase relationTable, TableBase childTable, Guid parentID, Func<DataRow,T> dataHandler, string orderKey = "") where T: TECObject
+        static private ObservableCollection<T> getChildObjects<T>(TableBase relationTable, TableBase childTable, Guid parentID, Func<DataRow,T> dataHandler) where T: TECObject
         {
             ObservableCollection<T> children = new ObservableCollection<T>();
-            DataTable data = getChildData(relationTable, childTable, parentID, orderKey);
+            DataTable data = getChildData(relationTable, childTable, parentID);
             foreach (DataRow row in data.Rows)
             {
                 children.Add(dataHandler(row));
@@ -743,11 +743,11 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             var outScope = new ObservableCollection<INetworkConnectable>();
 
-            DataTable dt = getChildData(new NetworkConnectionChildrenTable(), new ControllerTable(), connectionID, NetworkConnectionChildrenTable.Index.Name);
+            DataTable dt = getChildData(new NetworkConnectionChildrenTable(), new ControllerTable(), connectionID);
             foreach (DataRow row in dt.Rows)
             { outScope.Add(getControllerPlaceholderFromRow(row, isTypical)); }
 
-            dt = getChildData(new NetworkConnectionChildrenTable(), new SubScopeTable(), connectionID, NetworkConnectionChildrenTable.Index.Name);
+            dt = getChildData(new NetworkConnectionChildrenTable(), new SubScopeTable(), connectionID);
             foreach (DataRow row in dt.Rows)
             { outScope.Add(getPlaceholderSubScopeFromRow(row, isTypical)); }
 
@@ -1051,7 +1051,7 @@ namespace EstimatingUtilitiesLibrary.Database
             TECEquipment equipmentToAdd = new TECEquipment(equipmentID, isTypical);
             assignValuePropertiesFromTable(equipmentToAdd, new EquipmentTable(), row);
             equipmentToAdd.SubScope = getChildObjects(new EquipmentSubScopeTable(), new SubScopeTable(), 
-                equipmentID, data => { return getPlaceholderSubScopeFromRow(data, isTypical); }, EquipmentSubScopeTable.Index.Name);
+                equipmentID, data => { return getPlaceholderSubScopeFromRow(data, isTypical); });
             return equipmentToAdd;
         }
         private static TECSubScope getSubScopeFromRow(DataRow row, bool isTypical)
@@ -1190,7 +1190,7 @@ namespace EstimatingUtilitiesLibrary.Database
             Guid scopeBranchID = new Guid(row[ScopeBranchTable.ID.Name].ToString());
             TECScopeBranch branch = new TECScopeBranch(scopeBranchID, isTypical);
             assignValuePropertiesFromTable(branch, new ScopeBranchTable(), row);
-            branch.Branches = getChildObjects(new ScopeBranchHierarchyTable(), new ScopeBranchTable(), scopeBranchID, data => { return getScopeBranchFromRow(data, isTypical); }, ScopeBranchHierarchyTable.Index.Name);
+            branch.Branches = getChildObjects(new ScopeBranchHierarchyTable(), new ScopeBranchTable(), scopeBranchID, data => { return getScopeBranchFromRow(data, isTypical); });
                 
                 
                 //getChildBranchesInBranch(scopeBranchID, isTypical);
@@ -1308,7 +1308,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             Guid guid = new Guid(row[ScheduleTableTable.ID.Name].ToString());
             String name = row[ScheduleTableTable.Name.Name].ToString();
-            List<TECScheduleItem> items = getChildObjects(new ScheduleTableScheduleItemTable(), new ScheduleItemTable(), guid, getScheduleItemFromRow, ScheduleTableScheduleItemTable.Index.Name).ToList();
+            List<TECScheduleItem> items = getChildObjects(new ScheduleTableScheduleItemTable(), new ScheduleItemTable(), guid, getScheduleItemFromRow).ToList();
             TECScheduleTable table = new TECScheduleTable(guid, items);
             table.Name = name;
             return table;
@@ -1402,8 +1402,9 @@ namespace EstimatingUtilitiesLibrary.Database
             }
         }
 
-        private static DataTable getChildData(TableBase relationTable, TableBase childTable, Guid parentID, string orderKey = "")
+        private static DataTable getChildData(TableBase relationTable, TableBase childTable, Guid parentID)
         {
+            string orderKey = relationTable.IndexString;
             string orderString = "";
             if(orderKey != "")
             {
@@ -1445,6 +1446,5 @@ namespace EstimatingUtilitiesLibrary.Database
                 relationTable.PrimaryKeys[0].Name, parentID.ToString());
             return SQLiteDB.GetDataFromCommand(command);
         }
-        
     }
 }
