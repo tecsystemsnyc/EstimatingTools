@@ -903,7 +903,15 @@ namespace EstimatingUtilitiesLibrary.Database
         private static TECPanel getPanelFromRow(DataRow row, bool isTypical, Dictionary<Guid, TECPanelType> panelTypes)
         {
             Guid guid = new Guid(row[PanelTable.ID.Name].ToString());
-            TECPanelType type = panelTypes[guid];
+            TECPanelType type = null;
+            if (!panelTypes.ContainsKey(guid) && justUpdated)
+            {
+                type = tempPanelType;
+            }
+            else
+            {
+                type = panelTypes[guid];
+            }
             TECPanel panel = new TECPanel(guid, type, isTypical);
             assignValuePropertiesFromTable(panel, new PanelTable(), row);
 
@@ -912,7 +920,15 @@ namespace EstimatingUtilitiesLibrary.Database
         private static TECController getControllerFromRow(DataRow row, bool isTypical, Dictionary<Guid, TECControllerType> controllerTypes)
         {
             Guid guid = new Guid(row[ControllerTable.ID.Name].ToString());
-            TECController controller = new TECController(guid, controllerTypes[guid], isTypical);
+            TECControllerType type = null;
+            if (!controllerTypes.ContainsKey(guid) && justUpdated)
+            {
+                type = tempControllerType;
+            } else
+            {
+                type = controllerTypes[guid];
+            }
+            TECController controller = new TECController(guid, type, isTypical);
             assignValuePropertiesFromTable(controller, new ControllerTable(), row);
             controller.ChildrenConnections = getConnectionsInController(controller, isTypical);
             return controller;
