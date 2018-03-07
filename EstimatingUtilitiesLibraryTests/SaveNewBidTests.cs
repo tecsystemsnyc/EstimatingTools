@@ -828,9 +828,7 @@ namespace Tests
 
             compareCosts(saveBid, loadedBid, saveCostDictionary, loadCostDictionary);
             Assert.AreEqual(expectedTotalCost, loadedEstimate.TotalCost, delta);
-
-
-
+            
         }
 
         private void compareCosts(TECBid saveBid, TECBid LoadBid, 

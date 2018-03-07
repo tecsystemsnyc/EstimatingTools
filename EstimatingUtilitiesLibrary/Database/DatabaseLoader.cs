@@ -91,11 +91,9 @@ namespace EstimatingUtilitiesLibrary.Database
             bid.Panels = getOrphanPanels();
             var placeholderDict = getCharacteristicInstancesList();
             populateTypicalProperties(bid.Systems, tags, costs, points, endDevices, connectionConduitTypes);
-            bid.Controllers.ForEach(controller => populateScopeProperties(controller, tags, costs));
             bid.Controllers.ForEach(controller => populateConduitTypesInControllerConnections(controller, connectionConduitTypes));
-            bid.Panels.ForEach(panel => populateScopeProperties(panel, tags, costs));
-            bid.MiscCosts.ForEach(misc => populateScopeProperties(misc, tags, costs));
-            
+            populateScopeProperties(bid, tags, costs);
+
             bool needsSave = ModelLinkingHelper.LinkBid(bid, placeholderDict);
 
             return (bid, needsSave);
@@ -339,7 +337,6 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             foreach(TECTypical typical in typicals)
             {
-                populateScopeProperties(typical, tags, costs);
                 foreach(TECSubScope subScope in typical.GetAllSubScope())
                 {
                     populateSubScopeChildren(subScope, points, devices);
@@ -395,23 +392,27 @@ namespace EstimatingUtilitiesLibrary.Database
                 }
             }
         }
-        private static void populateScopeProperties(TECScope scope, Dictionary<Guid, List<Guid>> tags, Dictionary<Guid, List<Guid>> costs)
+        private static void populateScopeProperties(TECObject obj, Dictionary<Guid, List<Guid>> tags, Dictionary<Guid, List<Guid>> costs)
         {
-            if (tags.ContainsKey(scope.Guid))
+            if(obj is TECScope scope)
             {
-                foreach (Guid tagID in tags[scope.Guid])
+                if (tags.ContainsKey(scope.Guid))
                 {
-                    scope.Tags.Add(new TECTag(tagID));
+                    foreach (Guid tagID in tags[scope.Guid])
+                    {
+                        scope.Tags.Add(new TECTag(tagID));
+                    }
+                }
+                if (costs.ContainsKey(scope.Guid))
+                {
+                    foreach (Guid costID in costs[scope.Guid])
+                    {
+                        scope.AssociatedCosts.Add(new TECAssociatedCost(costID, CostType.TEC));
+                    }
                 }
             }
-            if (costs.ContainsKey(scope.Guid))
-            {
-                foreach(Guid costID in costs[scope.Guid])
-                {
-                    scope.AssociatedCosts.Add(new TECAssociatedCost(costID, CostType.TEC));
-                }
-            }
-            if(scope is IRelatable rel)
+            
+            if(obj is IRelatable rel)
             {
                 foreach(TECObject item in rel.PropertyObjects.Objects)
                 {
@@ -469,14 +470,7 @@ namespace EstimatingUtilitiesLibrary.Database
             catalogs.ControllerTypes = getControllerTypes(hardwareManufacturer);
             catalogs.Tags = getAllTags();
 
-            catalogs.Devices.ForEach(item => populateScopeProperties(item, tags, costs));
-            catalogs.Valves.ForEach(item => populateScopeProperties(item, tags, costs));
-            catalogs.ConnectionTypes.ForEach(item => populateScopeProperties(item, tags, costs));
-            catalogs.ConduitTypes.ForEach(item => populateScopeProperties(item, tags, costs));
-            catalogs.AssociatedCosts.ForEach(item => populateScopeProperties(item, tags, costs));
-            catalogs.PanelTypes.ForEach(item => populateScopeProperties(item, tags, costs));
-            catalogs.IOModules.ForEach(item => populateScopeProperties(item, tags, costs));
-            catalogs.ControllerTypes.ForEach(item => populateScopeProperties(item, tags, costs));
+            populateScopeProperties(catalogs, tags, costs);
 
             return catalogs;
         }
