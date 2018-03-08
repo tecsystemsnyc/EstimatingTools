@@ -523,6 +523,20 @@ namespace EstimatingUtilitiesLibrary.Database
             return outDict;
         }
 
+        private static ObservableCollection<TECTypical> getTypicals(Guid bidID)
+        {
+            ObservableCollection<TECTypical> typicals = getChildObjects(new BidSystemTable(), new SystemTable(), bidID, getEmptyTypicalFromRow);
+            return typicals;
+        }
+
+        private static TECTypical getEmptyTypicalFromRow(DataRow row)
+        {
+            Guid guid = new Guid(row[SystemTable.ID.Name].ToString());
+            TECTypical system = new TECTypical(guid);
+            assignValuePropertiesFromTable(system, new SystemTable(), row);
+            return system;
+        }
+
         #region Data Handlers
         private static TECTypical getTypicalFromRow(DataRow row, Dictionary<Guid, TECControllerType> controllerTypes, Dictionary<Guid, TECPanelType> panelTypes)
         {
