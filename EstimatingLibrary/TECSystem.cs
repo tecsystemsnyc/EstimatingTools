@@ -195,6 +195,10 @@ namespace EstimatingLibrary
         {
             controller.RemoveAllConnections();
             _controllers.Remove(controller);
+            foreach(TECPanel panel in this.Panels)
+            {
+                if (panel.Controllers.Contains(controller)) { panel.Controllers.Remove(controller); }
+            }
             notifyTECChanged(Change.Remove, "Controllers", this, controller);
             notifyCostChanged(-controller.CostBatch);
         }

@@ -410,7 +410,6 @@ namespace Tests
             //Panels
             TECPanel panel = new TECPanel(panelType, false);
             panel.Name = "Test Panel";
-            panel.Controllers.Add(expectedController);
             panel.AssociatedCosts.Add(testAssociatedCost);
             panel.AssociatedCosts.Add(testAssociatedCost);
 

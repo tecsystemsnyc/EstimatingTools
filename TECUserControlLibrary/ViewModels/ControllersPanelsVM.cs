@@ -410,17 +410,6 @@ namespace TECUserControlLibrary.ViewModels
             {
                 foreach (object item in e.OldItems)
                 {
-                    //if (item is ControllerInPanel)
-                    //{
-                    //    foreach (TECPanel panel in sourcePanels)
-                    //    {
-                    //        if (panel.Controllers.Contains((item as ControllerInPanel).Controller))
-                    //        {
-                    //            panel.Controllers.Remove((item as ControllerInPanel).Controller);
-                    //        }
-                    //    }
-                    //    sourceControllers.Remove((item as ControllerInPanel).Controller);
-                    //}
                     if (item is TECController)
                     {
                         removeController(item as TECController);

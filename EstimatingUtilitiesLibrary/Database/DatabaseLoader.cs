@@ -105,7 +105,7 @@ namespace EstimatingUtilitiesLibrary.Database
             allNetworkConnectable.AddRange(allControllers);
             Dictionary<Guid, List<INetworkConnectable>> networkChildrenRelationships = getOneToManyRelationships(new NetworkConnectionChildrenTable(), allNetworkConnectable);
 
-            Dictionary<Guid, List<TECSubScope>> subScopeConnectionChildrenRelationships = getOneToManyRelationships(new SubScopeConnectionChildrenTable(), allSubScope);
+            Dictionary<Guid, TECSubScope> subScopeConnectionChildrenRelationships = getOneToOneRelationships(new SubScopeConnectionChildrenTable(), allSubScope);
 
             List<TECPanel> allPanels = getAll<TECPanel>(bid);
             allPanels.ForEach(item => populatePanelControllers(item, panelControllerRelationships));
@@ -173,7 +173,7 @@ namespace EstimatingUtilitiesLibrary.Database
             List<INetworkConnectable> allNetworkConnectable = new List<INetworkConnectable>(allSubScope);
             allNetworkConnectable.AddRange(allControllers);
             Dictionary<Guid, List<INetworkConnectable>> networkChildrenRelationships = getOneToManyRelationships(new NetworkConnectionChildrenTable(), allNetworkConnectable);
-            Dictionary<Guid, List<TECSubScope>> subScopeConnectionChildrenRelationships = getOneToManyRelationships(new SubScopeConnectionChildrenTable(), allSubScope);
+            Dictionary<Guid, TECSubScope> subScopeConnectionChildrenRelationships = getOneToOneRelationships(new SubScopeConnectionChildrenTable(), allSubScope);
 
             List<TECSubScopeConnection> subScopeConnections = getAll<TECSubScopeConnection>(templates);
             List<TECNetworkConnection> networkConnections = getAll<TECNetworkConnection>(templates);
@@ -304,12 +304,9 @@ namespace EstimatingUtilitiesLibrary.Database
                 ratedCosts[material.Guid].ForEach(item => material.RatedCosts.Add(item));
             }
         }
-        private static void populateSubScopeConnectionProperties(TECSubScopeConnection connection, Dictionary<Guid, List<TECSubScope>> subScope, Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes)
+        private static void populateSubScopeConnectionProperties(TECSubScopeConnection connection, Dictionary<Guid, TECSubScope> subScope, Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes)
         {
-            if (subScope.ContainsKey(connection.Guid))
-            {
-                subScope[connection.Guid].ForEach(item => connection.SubScope = item);
-            }
+            connection.SubScope = subScope[connection.Guid];
             populateConnectionProperties(connection, connectionConduitTypes);
         }
         private static void populateNetworkConnectionProperties(TECNetworkConnection connection, Dictionary<Guid, List<INetworkConnectable>> connectables,
@@ -800,6 +797,10 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 Guid parentID = new Guid(row[parentField].ToString());
                 Guid childID = new Guid(row[childField].ToString());
+                //if(references.Count(item => item.Guid == childID) == 0)
+                //{
+                //    continue;
+                //}
                 T reference = references.First(item => item.Guid == childID);
                 int quantity = 1;
                 if (qtyField != "")
@@ -839,6 +840,10 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 Guid parentID = new Guid(row[parentField].ToString());
                 Guid childID = new Guid(row[childField].ToString());
+                //if (references.Count(item => item.Guid == childID) == 0)
+                //{
+                //    continue;
+                //}
                 T outItem = references.First(item => item.Guid == childID);
                 dictionary[parentID] = outItem;
             }
@@ -937,15 +942,12 @@ namespace EstimatingUtilitiesLibrary.Database
         private static string getQuantityField(TableBase table)
         {
             string qtyField = "";
-            if (table.Types.Contains(typeof(HelperProperties)))
+            foreach (TableField field in table.Fields)
             {
-                foreach (TableField field in table.Fields)
+                if (field.Property.DeclaringType == typeof(HelperProperties) && field.Property.Name == "Quantity")
                 {
-                    if (field.Property.DeclaringType == typeof(HelperProperties) && field.Property.Name == "Quantity")
-                    {
-                        qtyField = field.Name;
-                        break;
-                    }
+                    qtyField = field.Name;
+                    break;
                 }
             }
             return qtyField;

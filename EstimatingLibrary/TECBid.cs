@@ -324,6 +324,10 @@ namespace EstimatingLibrary
         {
             controller.RemoveAllConnections();
             _controllers.Remove(controller);
+            foreach(TECPanel panel in this.Panels)
+            {
+                if (panel.Controllers.Contains(controller)) { panel.Controllers.Remove(controller); }
+            }
             notifyCombinedChanged(Change.Remove, "Controllers", this, controller);
             CostChanged?.Invoke(-controller.CostBatch);
         }
