@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary.Interfaces
 {
-    public interface IEndDevice 
+    public interface IEndDevice : ITECObject
     {
         Guid Guid { get; }
 

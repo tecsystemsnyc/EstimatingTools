@@ -76,12 +76,12 @@ namespace EstimatingUtilitiesLibraryTests
             ////db.NonQueryCommand("CREATE INDEX subScope_device on SubScopeDevice (SubScopeID, DeviceID, ScopeIndex);");
 
 
-            //Stopwatch watch = new Stopwatch();
-            //DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
-            //watch.Start();
-            //TECBid bid = manager.Load();
-            //watch.Stop();
-            //Console.WriteLine(watch.ElapsedMilliseconds);
+            Stopwatch watch = new Stopwatch();
+            DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
+            watch.Start();
+            TECBid bid = manager.Load();
+            watch.Stop();
+            Console.WriteLine(watch.ElapsedMilliseconds);
 
         }
     }
