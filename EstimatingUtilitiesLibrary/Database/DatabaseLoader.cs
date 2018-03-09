@@ -83,8 +83,9 @@ namespace EstimatingUtilitiesLibrary.Database
             bid.Schedule = getSchedule(bid);
             bid.ScopeTree = getChildObjects(new BidScopeBranchTable(), new ScopeBranchTable(),
                 bid.Guid, data => { return getScopeBranchFromRow(data, false); });
-            bid.Systems = getChildObjects(new BidSystemTable(), new SystemTable(),
-                bid.Guid, data => { return getTypicalFromRow(data, controllerTypeDictionary, panelTypeDictionary); });
+            //bid.Systems = getChildObjects(new BidSystemTable(), new SystemTable(),
+            //    bid.Guid, data => { return getTypicalFromRow(data, controllerTypeDictionary, panelTypeDictionary); });
+            bid.Systems = getScopeHierarchy(bid.Guid, controllerTypeDictionary, panelTypeDictionary);
             bid.Notes = getObjectsFromTable(new NoteTable(), id => { return new TECLabeled(id); });
             bid.Exclusions = getObjectsFromTable(new ExclusionTable(), id => { return new TECLabeled(id); });
             bid.SetControllers(getOrphanControllers(controllerTypeDictionary));
@@ -523,10 +524,180 @@ namespace EstimatingUtilitiesLibrary.Database
             return outDict;
         }
 
-        private static ObservableCollection<TECTypical> getTypicals(Guid bidID)
+        private static ObservableCollection<TECTypical> getScopeHierarchy(Guid bidID, Dictionary<Guid, TECControllerType> controllerTypes, Dictionary<Guid, TECPanelType> panelTypes)
         {
-            ObservableCollection<TECTypical> typicals = getChildObjects(new BidSystemTable(), new SystemTable(), bidID, getEmptyTypicalFromRow);
-            return typicals;
+            Dictionary<Guid, List<Guid>> bidTypicals = getOneToManyRelationships(new BidSystemTable());
+            List<Guid> typicalIDs = bidTypicals[bidID];
+            Dictionary<Guid, List<Guid>> typicalSystems = getOneToManyRelationships(new SystemHierarchyTable());
+            Dictionary<Guid, List<Guid>> systemEquipment = getOneToManyRelationships(new SystemEquipmentTable());
+            Dictionary<Guid, List<Guid>> equipmentSubScope = getOneToManyRelationships(new EquipmentSubScopeTable());
+            Dictionary<Guid, List<Guid>> subScopePoints = getOneToManyRelationships(new SubScopePointTable());
+            Dictionary<Guid, List<Guid>> systemControllers = getOneToManyRelationships(new SystemControllerTable());
+            Dictionary<Guid, List<Guid>> systemPanels = getOneToManyRelationships(new SystemPanelTable());
+            Dictionary<Guid, List<Guid>> controllerConnections = getOneToManyRelationships(new ControllerConnectionTable());
+            Dictionary<Guid, List<Guid>> systemMisc = getOneToManyRelationships(new SystemMiscTable());
+            Dictionary<Guid, List<Guid>> systemScopeBranches = getOneToManyRelationships(new SystemScopeBranchTable());
+            Dictionary<Guid, List<Guid>> scopeBranchHierarchy = getOneToManyRelationships(new ScopeBranchHierarchyTable());
+            
+            DataTable allSystemData = SQLiteDB.GetDataFromTable(SystemTable.TableName);
+            var typicalRows = from row in allSystemData.AsEnumerable() where typicalSystems.ContainsKey(new Guid(row[SystemTable.ID.Name].ToString())) select row;
+            var systemRows = from row in allSystemData.AsEnumerable() where !typicalSystems.ContainsKey(new Guid(row[SystemTable.ID.Name].ToString())) select row;
+            DataTable typicalData = typicalRows.CopyToDataTable();
+            DataTable systemData = systemRows.CopyToDataTable();
+
+            DataTable equipmentData = SQLiteDB.GetDataFromTable(EquipmentTable.TableName);
+            DataTable subScopeData = SQLiteDB.GetDataFromTable(SubScopeTable.TableName);
+            DataTable pointData = SQLiteDB.GetDataFromTable(PointTable.TableName);
+            DataTable controllerData = SQLiteDB.GetDataFromTable(ControllerTable.TableName);
+            DataTable panelData = SQLiteDB.GetDataFromTable(PanelTable.TableName);
+            DataTable subScopeConnectionData = SQLiteDB.GetDataFromTable(SubScopeConnectionTable.TableName);
+            DataTable networkConnectionData = SQLiteDB.GetDataFromTable(SubScopeConnectionTable.TableName);
+            DataTable miscData = SQLiteDB.GetDataFromTable(MiscTable.TableName);
+            DataTable scopeBranchData = SQLiteDB.GetDataFromTable(ScopeBranchTable.TableName);
+
+            Dictionary<Guid, bool> typicalDictionary = new Dictionary<Guid, bool>();
+            foreach(Guid typID in typicalIDs)
+            {
+                typicalDictionary.Add(typID, true);
+                if (typicalSystems.ContainsKey(typID))
+                {
+                    foreach (Guid sysID in typicalSystems[typID])
+                    {
+                        typicalDictionary.Add(sysID, false);
+                        addSystemChildrenToTypicalDict(sysID, false);
+                    }
+                }
+                addSystemChildrenToTypicalDict(typID, true);
+            }
+
+            List<TECPoint> points = getObjectsFromData(new PointTable(), pointData, row => { return getPointFromRow(row, typicalDictionary); });
+            List<TECSubScope> subScope = getObjectsFromData(new SubScopeTable(), subScopeData, id => { return new TECSubScope(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false); });
+            List<TECEquipment> equipment = getObjectsFromData(new EquipmentTable(), equipmentData, id => { return new TECEquipment(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false); });
+            List<TECMisc> misc = getObjectsFromData(new MiscTable(), miscData, row => { return getMiscFromRow(row, typicalDictionary); });
+            List<TECScopeBranch> scopeBranches = getObjectsFromData(new ScopeBranchTable(), scopeBranchData, id => { return new TECScopeBranch(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false); });
+            List<TECController> controllers = getObjectsFromData(new ControllerTable(), controllerData, row => { return getControllerFromRow(row, typicalDictionary, controllerTypes); });
+            List<TECPanel> panels = getObjectsFromData(new PanelTable(), panelData, row => { return getPanelFromRow(row, typicalDictionary, panelTypes); });
+            List<TECSubScopeConnection> subScopeConnections = getObjectsFromData(new SubScopeConnectionTable(), subScopeConnectionData, id => { return new TECSubScopeConnection(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false); });
+            List<TECNetworkConnection> networkConnections = getObjectsFromData(new NetworkConnectionTable(), networkConnectionData, id => { return new TECNetworkConnection(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false); });
+            List<TECConnection> allConnections = new List<TECConnection>(subScopeConnections);
+            allConnections.AddRange(networkConnections);
+            List<TECSystem> systems = getObjectsFromData(new SystemTable(), systemData, id => { return new TECSystem(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false); });
+            List<TECTypical> typicals = getObjectsFromData(new SystemTable(), typicalData, id => { return new TECTypical(id); });
+
+            foreach (TECSubScope item in subScope.Where(x => subScopePoints.ContainsKey(x.Guid)))
+            {
+                item.Points = new ObservableCollection<TECPoint>(getRelatedReferences(subScopePoints[item.Guid], points));
+            }
+            foreach(TECEquipment item in equipment.Where(x => equipmentSubScope.ContainsKey(x.Guid)))
+            {
+                item.SubScope = new ObservableCollection<TECSubScope>(getRelatedReferences(equipmentSubScope[item.Guid], subScope));
+            }
+            foreach(TECController item in controllers.Where(x => controllerConnections.ContainsKey(x.Guid)))
+            {
+                item.ChildrenConnections = new ObservableCollection<TECConnection>(getRelatedReferences(controllerConnections[item.Guid], allConnections));
+            }
+            foreach(TECSystem item in systems)
+            {
+                setSystemChildren(item);
+            }
+            foreach(TECTypical item in typicals)
+            {
+                setSystemChildren(item);
+                if (typicalSystems.ContainsKey(item.Guid)) 
+                    item.Instances = new ObservableCollection<TECSystem>(getRelatedReferences(typicalSystems[item.Guid], systems));
+            }
+
+            return new ObservableCollection<TECTypical>(typicals);
+
+            void addSystemChildrenToTypicalDict(Guid parentID, bool isTypical)
+            {
+                if (systemEquipment.ContainsKey(parentID))
+                {
+                    foreach (Guid equipID in systemEquipment[parentID])
+                    {
+                        typicalDictionary.Add(equipID, isTypical);
+                        if (equipmentSubScope.ContainsKey(equipID))
+                        {
+                            foreach (Guid subID in equipmentSubScope[equipID])
+                            {
+                                typicalDictionary.Add(subID, isTypical);
+                                if (subScopePoints.ContainsKey(subID))
+                                {
+                                    foreach (Guid pointID in subScopePoints[subID])
+                                    {
+                                        typicalDictionary.Add(pointID, isTypical);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (systemControllers.ContainsKey(parentID))
+                {
+                    foreach (Guid controllerID in systemControllers[parentID])
+                    {
+                        typicalDictionary.Add(controllerID, isTypical);
+                        if (controllerConnections.ContainsKey(controllerID))
+                        {
+                            foreach (Guid connectionID in controllerConnections[controllerID])
+                            {
+                                typicalDictionary.Add(connectionID, isTypical);
+                            }
+                        }
+                    }
+                }
+                if (systemPanels.ContainsKey(parentID))
+                {
+                    foreach (Guid panelGuid in systemPanels[parentID])
+                    {
+                        typicalDictionary.Add(panelGuid, isTypical);
+                    }
+                }
+                if (systemScopeBranches.ContainsKey(parentID))
+                {
+                    foreach (Guid branchGuid in systemScopeBranches[parentID])
+                    {
+                        typicalDictionary.Add(branchGuid, isTypical);
+                    }
+                }
+            }
+            void linkBranchHierarchy(TECScopeBranch branch)
+            {
+                if (scopeBranchHierarchy.ContainsKey(branch.Guid))
+                {
+                    branch.Branches = new ObservableCollection<TECScopeBranch>(getRelatedReferences(scopeBranchHierarchy[branch.Guid], scopeBranches));
+                    foreach (var subBranch in branch.Branches)
+                    {
+                        linkBranchHierarchy(subBranch);
+                    }
+                }
+                
+            }
+            void setChildBranchIsTypical(Guid branchID, bool isTypical)
+            {
+                if (scopeBranchHierarchy.ContainsKey(branchID))
+                { 
+                    foreach (Guid childID in scopeBranchHierarchy[branchID])
+                    {
+                        typicalDictionary.Add(childID, isTypical);
+                        setChildBranchIsTypical(childID, isTypical);
+                    }
+                }
+            }
+            void setSystemChildren(TECSystem item)
+            {
+                if (systemEquipment.ContainsKey(item.Guid))
+                    item.Equipment = new ObservableCollection<TECEquipment>(getRelatedReferences(systemEquipment[item.Guid], equipment));
+                if (systemControllers.ContainsKey(item.Guid))
+                    item.SetControllers(getRelatedReferences(systemControllers[item.Guid], controllers));
+                if (systemPanels.ContainsKey(item.Guid))
+                    item.Panels = new ObservableCollection<TECPanel>(getRelatedReferences(systemPanels[item.Guid], panels));
+                if (systemMisc.ContainsKey(item.Guid))
+                    item.MiscCosts = new ObservableCollection<TECMisc>(getRelatedReferences(systemMisc[item.Guid], misc));
+                if (systemScopeBranches.ContainsKey(item.Guid))
+                    item.ScopeBranches = new ObservableCollection<TECScopeBranch>(getRelatedReferences(systemScopeBranches[item.Guid], scopeBranches));
+                item.ScopeBranches.ForEach(branch => linkBranchHierarchy(branch));
+            }
         }
 
         private static TECTypical getEmptyTypicalFromRow(DataRow row)
@@ -603,6 +774,24 @@ namespace EstimatingUtilitiesLibrary.Database
             pointToAdd.Type = UtilitiesMethods.StringToEnum<IOType>(pointType);
             return pointToAdd;
         }
+        private static TECPoint getPointFromRow(DataRow row, Dictionary<Guid, bool> typicalDictionary)
+        {
+            Guid pointID = new Guid(row[PointTable.ID.Name].ToString());
+            bool isTypical = typicalDictionary.ContainsKey(pointID) ? typicalDictionary[pointID] : false;
+            TECPoint pointToAdd = new TECPoint(pointID, isTypical);
+            assignValuePropertiesFromTable(pointToAdd, new PointTable(), row);
+            string pointType = row[PointTable.Type.Name].ToString();
+            if (pointType == "BO")
+            {
+                pointType = "DO";
+            }
+            else if (pointType == "BI")
+            {
+                pointType = "DI";
+            }
+            pointToAdd.Type = UtilitiesMethods.StringToEnum<IOType>(pointType);
+            return pointToAdd;
+        }
         private static TECScopeBranch getScopeBranchFromRow(DataRow row, bool isTypical)
         {
             Guid scopeBranchID = new Guid(row[ScopeBranchTable.ID.Name].ToString());
@@ -628,6 +817,25 @@ namespace EstimatingUtilitiesLibrary.Database
 
             return panel;
         }
+        private static TECPanel getPanelFromRow(DataRow row, Dictionary<Guid, bool> typicalDictionary, Dictionary<Guid, TECPanelType> panelTypes)
+        {
+            Guid guid = new Guid(row[PanelTable.ID.Name].ToString());
+            TECPanelType type = null;
+            if (!panelTypes.ContainsKey(guid) && justUpdated)
+            {
+                type = tempPanelType;
+            }
+            else
+            {
+                type = panelTypes[guid];
+            }
+            bool isTypical = typicalDictionary.ContainsKey(guid) ? typicalDictionary[guid] : false;
+            TECPanel panel = new TECPanel(guid, type, isTypical);
+            assignValuePropertiesFromTable(panel, new PanelTable(), row);
+
+            return panel;
+        }
+
         private static TECController getControllerFromRow(DataRow row, bool isTypical, Dictionary<Guid, TECControllerType> controllerTypes)
         {
             Guid guid = new Guid(row[ControllerTable.ID.Name].ToString());
@@ -645,6 +853,24 @@ namespace EstimatingUtilitiesLibrary.Database
             controller.ChildrenConnections = getConnectionsInController(controller, isTypical);
             return controller;
         }
+        private static TECController getControllerFromRow(DataRow row, Dictionary<Guid, bool> typicalDictionary, Dictionary<Guid, TECControllerType> controllerTypes)
+        {
+            Guid guid = new Guid(row[ControllerTable.ID.Name].ToString());
+            TECControllerType type = null;
+            if (!controllerTypes.ContainsKey(guid) && justUpdated)
+            {
+                type = tempControllerType;
+            }
+            else
+            {
+                type = controllerTypes[guid];
+            }
+            bool isTypical = typicalDictionary.ContainsKey(guid) ? typicalDictionary[guid] : false;
+            TECController controller = new TECController(guid, type, isTypical);
+            assignValuePropertiesFromTable(controller, new ControllerTable(), row);
+            return controller;
+        }
+
         private static TECIO getIOFromRow(DataRow row)
         {
             Guid guid = new Guid(row[IOTable.ID.Name].ToString());
@@ -672,6 +898,15 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             Guid guid = new Guid(row[MiscTable.ID.Name].ToString());
             CostType type = UtilitiesMethods.StringToEnum<CostType>(row[MiscTable.Type.Name].ToString());
+            TECMisc cost = new TECMisc(guid, type, isTypical);
+            assignValuePropertiesFromTable(cost, new MiscTable(), row);
+            return cost;
+        }
+        private static TECMisc getMiscFromRow(DataRow row, Dictionary<Guid, bool> typicalDictionary)
+        {
+            Guid guid = new Guid(row[MiscTable.ID.Name].ToString());
+            CostType type = UtilitiesMethods.StringToEnum<CostType>(row[MiscTable.Type.Name].ToString());
+            bool isTypical = typicalDictionary.ContainsKey(guid) ? typicalDictionary[guid] : false;
             TECMisc cost = new TECMisc(guid, type, isTypical);
             assignValuePropertiesFromTable(cost, new MiscTable(), row);
             return cost;
@@ -793,10 +1028,7 @@ namespace EstimatingUtilitiesLibrary.Database
         #region Generic Database Query Methods
         private static Dictionary<Guid, List<T>> getOneToManyRelationships<T>(TableBase table, IEnumerable<T> references) where T : ITECObject
         {
-            if (table.PrimaryKeys.Count != 2)
-            {
-                throw new Exception("Table must have two primary keys");
-            }
+            if (table.PrimaryKeys.Count != 2) { throw new Exception("Table must have two primary keys"); }
             string parentField = table.PrimaryKeys[0].Name;
             string childField = table.PrimaryKeys[1].Name;
 
@@ -811,10 +1043,6 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 Guid parentID = new Guid(row[parentField].ToString());
                 Guid childID = new Guid(row[childField].ToString());
-                //if(references.Count(item => item.Guid == childID) == 0)
-                //{
-                //    continue;
-                //}
                 T reference = references.First(item => item.Guid == childID);
                 int quantity = 1;
                 if (qtyField != "")
@@ -830,6 +1058,52 @@ namespace EstimatingUtilitiesLibrary.Database
                     else
                     {
                         dictionary[parentID] = new List<T> { reference };
+                    }
+                }
+
+            }
+            return dictionary;
+        }
+        private static Dictionary<Guid, List<Guid>> getOneToManyRelationships(TableBase table) 
+        {
+            if (table.PrimaryKeys.Count != 2) { throw new Exception("Table must have two primary keys"); }
+            string parentField = table.PrimaryKeys[0].Name;
+            string childField = table.PrimaryKeys[1].Name;
+
+            string orderKey = table.IndexString;
+            string orderString = "";
+            if (orderKey != "")
+            {
+                orderString = string.Format(" order by {0}", orderKey);
+            }
+
+
+            string qtyField = getQuantityField(table);
+
+            string command = string.Format("select {0} from {1}{2}",
+                DatabaseHelper.AllFieldsInTableString(table),
+                table.NameString,
+                orderString);
+            DataTable data = SQLiteDB.GetDataFromCommand(command);
+            Dictionary<Guid, List<Guid>> dictionary = new Dictionary<Guid, List<Guid>>();
+            foreach (DataRow row in data.Rows)
+            {
+                Guid parentID = new Guid(row[parentField].ToString());
+                Guid childID = new Guid(row[childField].ToString());
+                int quantity = 1;
+                if (qtyField != "")
+                {
+                    quantity = row[qtyField].ToString().ToInt();
+                }
+                for (int x = 0; x < quantity; x++)
+                {
+                    if (dictionary.ContainsKey(parentID))
+                    {
+                        dictionary[parentID].Add(childID);
+                    }
+                    else
+                    {
+                        dictionary[parentID] = new List<Guid> { childID };
                     }
                 }
 
@@ -854,10 +1128,6 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 Guid parentID = new Guid(row[parentField].ToString());
                 Guid childID = new Guid(row[childField].ToString());
-                //if (references.Count(item => item.Guid == childID) == 0)
-                //{
-                //    continue;
-                //}
                 T outItem = references.First(item => item.Guid == childID);
                 dictionary[parentID] = outItem;
             }
@@ -865,12 +1135,9 @@ namespace EstimatingUtilitiesLibrary.Database
         }
         static private ObservableCollection<T> getObjectsFromTable<T>(TableBase table, Func<DataRow, T> dataHandler)
         {
-            ObservableCollection<T> items = new ObservableCollection<T>();
             string command = string.Format("select {0} from {1}", DatabaseHelper.AllFieldsInTableString(table), table.NameString);
             DataTable data = SQLiteDB.GetDataFromCommand(command);
-            foreach (DataRow row in data.Rows)
-            { items.Add(dataHandler(row)); }
-            return items;
+            return new ObservableCollection<T>(getObjectsFromData(table, data, dataHandler));
         }
         static private ObservableCollection<T> getObjectsFromTable<T>(TableBase table, Func<Guid, T> constructor)
         {
@@ -898,13 +1165,8 @@ namespace EstimatingUtilitiesLibrary.Database
         }
         static private ObservableCollection<T> getChildObjects<T>(TableBase relationTable, TableBase childTable, Guid parentID, Func<DataRow, T> dataHandler)
         {
-            ObservableCollection<T> children = new ObservableCollection<T>();
             DataTable data = getChildData(relationTable, childTable, parentID);
-            foreach (DataRow row in data.Rows)
-            {
-                children.Add(dataHandler(row));
-            }
-            return children;
+            return new ObservableCollection<T>(getObjectsFromData(childTable, data, dataHandler));
         }
         private static DataTable getChildData(TableBase relationTable, TableBase childTable, Guid parentID)
         {
@@ -951,6 +1213,20 @@ namespace EstimatingUtilitiesLibrary.Database
                 relationTable.PrimaryKeys[0].Name, parentID.ToString());
             return SQLiteDB.GetDataFromCommand(command);
         }
+        private static List<T> getObjectsFromData<T>(TableBase table, DataTable data, Func<DataRow, T> dataHandler)
+        {
+            List<T> objs = new List<T>();
+            foreach (DataRow row in data.Rows)
+            {
+                objs.Add(dataHandler(row));
+            }
+            return objs;
+        }
+        private static List<T> getObjectsFromData<T>(TableBase table, DataTable data, Func<Guid, T> constructor)
+        {
+            return getObjectsFromData(table, data, row => { return getObjectFromRow(row, table, constructor); });
+        }
+
         #endregion
 
         private static string getQuantityField(TableBase table)
@@ -979,6 +1255,22 @@ namespace EstimatingUtilitiesLibrary.Database
                 foreach (var item in rel.PropertyObjects.Objects.Where(x => !rel.LinkedObjects.Contains(x)))
                 {
                     list.AddRange(getAll<T>(item));
+                }
+            }
+            return list;
+        }
+        private static List<T> getRelatedReferences<T>(List<Guid> relationships, IEnumerable<T> references) where T: ITECObject
+        {
+            List<T> list = new List<T>();
+            foreach (Guid id in relationships)
+            {
+                foreach (T reference in references)
+                {
+                    if (reference.Guid == id)
+                    {
+                        list.Add(reference);
+                        break;
+                    }
                 }
             }
             return list;
