@@ -72,7 +72,7 @@ namespace EstimatingUtilitiesLibrary.Database
             List<IEndDevice> allEndDevices = new List<IEndDevice>(bid.Catalogs.Devices);
             allEndDevices.AddRange(bid.Catalogs.Valves);
             Dictionary<Guid, List<IEndDevice>> endDevices = getOneToManyRelationships(new SubScopeDeviceTable(), allEndDevices); Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes = getOneToOneRelationships(new ConnectionConduitTypeTable(), bid.Catalogs.ConduitTypes);
-            bid.Locations = getObjectsFromTable(new LocationTable(), id => { return new TECLocation(id); });
+            bid.Locations = getObjectsFromTable(new LocationTable(), id => new TECLocation(id)).toOC();
             Dictionary<Guid, TECLocation> locationDictionary = getOneToOneRelationships(new LocatedLocationTable(), bid.Locations);
             Dictionary<Guid, TECControllerType> controllerTypeDictionary = getOneToOneRelationships(new ControllerControllerTypeTable(), bid.Catalogs.ControllerTypes);
             Dictionary<Guid, TECPanelType> panelTypeDictionary = getOneToOneRelationships(new PanelPanelTypeTable(), bid.Catalogs.PanelTypes);
@@ -82,14 +82,14 @@ namespace EstimatingUtilitiesLibrary.Database
             bid.ExtraLabor = getObjectFromTable(new ExtraLaborTable(), id => { return new TECExtraLabor(id); }, new TECExtraLabor(bid.Guid));
             bid.Schedule = getSchedule(bid);
             bid.ScopeTree = getChildObjects(new BidScopeBranchTable(), new ScopeBranchTable(),
-                bid.Guid, data => { return getScopeBranchFromRow(data, false); });
+                bid.Guid, data => getScopeBranchFromRow(data, false)).toOC();
             //bid.Systems = getChildObjects(new BidSystemTable(), new SystemTable(),
             //    bid.Guid, data => { return getTypicalFromRow(data, controllerTypeDictionary, panelTypeDictionary); });
             bid.Systems = getScopeHierarchy(bid.Guid, controllerTypeDictionary, panelTypeDictionary);
-            bid.Notes = getObjectsFromTable(new NoteTable(), id => { return new TECLabeled(id); });
-            bid.Exclusions = getObjectsFromTable(new ExclusionTable(), id => { return new TECLabeled(id); });
+            bid.Notes = getObjectsFromTable(new NoteTable(), id => new TECLabeled(id)).toOC();
+            bid.Exclusions = getObjectsFromTable(new ExclusionTable(), id => new TECLabeled(id)).toOC();
             bid.SetControllers(getOrphanControllers(controllerTypeDictionary));
-            bid.MiscCosts = getChildObjects(new BidMiscTable(), new MiscTable(), bid.Guid, data => { return getMiscFromRow(data, false); });
+            bid.MiscCosts = getChildObjects(new BidMiscTable(), new MiscTable(), bid.Guid, data => getMiscFromRow(data, false)).toOC();
             bid.Panels = getOrphanPanels(panelTypeDictionary);
 
             List<TECController> allControllers = getAll<TECController>(bid);
@@ -147,18 +147,18 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<Guid, TECControllerType> controllerTypeDictionary = getOneToOneRelationships(new ControllerControllerTypeTable(), templates.Catalogs.ControllerTypes);
             Dictionary<Guid, TECPanelType> panelTypeDictionary = getOneToOneRelationships(new PanelPanelTypeTable(), templates.Catalogs.PanelTypes);
             templates.SystemTemplates = getChildObjects(new TemplatesSystemTable(), new SystemTable(),
-                templates.Guid, data => { return getSystemFromRow(data, controllerTypeDictionary, panelTypeDictionary); });
+                templates.Guid, data => getSystemFromRow(data, controllerTypeDictionary, panelTypeDictionary)).toOC();
             templates.EquipmentTemplates = getChildObjects(new TemplatesEquipmentTable(), new EquipmentTable(),
-                templates.Guid, data => { return getEquipmentFromRow(data, false); });
+                templates.Guid, data => getEquipmentFromRow(data, false)).toOC();
             templates.SubScopeTemplates = getChildObjects(new TemplatesSubScopeTable(), new SubScopeTable(),
-                templates.Guid, data => { return getSubScopeFromRow(data, false); });
+                templates.Guid, data => getSubScopeFromRow(data, false)).toOC();
             templates.MiscCostTemplates = getChildObjects(new TemplatesMiscCostTable(), new MiscTable(),
-                templates.Guid, data => { return getMiscFromRow(data, false); });
+                templates.Guid, data => getMiscFromRow(data, false)).toOC();
             templates.ControllerTemplates = getChildObjects(new TemplatesControllerTable(), new ControllerTable(),
-                templates.Guid, data => { return getControllerFromRow(data, false, controllerTypeDictionary); });
+                templates.Guid, data => getControllerFromRow(data, false, controllerTypeDictionary)).toOC();
             templates.PanelTemplates = getChildObjects(new TemplatesPanelTable(), new PanelTable(),
-                templates.Guid, data => { return getPanelFromRow(data, false, panelTypeDictionary); });
-            templates.Parameters = getObjectsFromTable(new ParametersTable(), id => { return new TECParameters(id); });
+                templates.Guid, data => getPanelFromRow(data, false, panelTypeDictionary)).toOC();
+            templates.Parameters = getObjectsFromTable(new ParametersTable(), id => new TECParameters(id)).toOC();
 
             List<TECController> allControllers = getAll<TECController>(templates);
             Dictionary<Guid, List<TECController>> panelControllerDictionary = getOneToManyRelationships(new PanelControllerTable(), allControllers);
@@ -210,7 +210,7 @@ namespace EstimatingUtilitiesLibrary.Database
             List<TECPoint> points = new List<TECPoint>();
             foreach (DataRow row in data.Rows)
             {
-                points.Add(getPointFromRow(row, false));
+                points.Add(getObjectFromRow(row, new PointTable(), id => new TECPoint(id, false)));
             }
 
             table = new SubScopePointTable();
@@ -243,13 +243,13 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 List<TECTag> allTags = new List<TECTag>();
                 tags[scope.Guid].ForEach(item => allTags.Add(item));
-                scope.Tags = new ObservableCollection<TECTag>(allTags);
+                scope.Tags = allTags.toOC();
             }
             if (costs.ContainsKey(scope.Guid))
             {
                 List<TECAssociatedCost> allCosts = new List<TECAssociatedCost>();
                 costs[scope.Guid].ForEach(item => allCosts.Add(item));
-                scope.AssociatedCosts = new ObservableCollection<TECAssociatedCost>(allCosts);
+                scope.AssociatedCosts = allCosts.toOC();
             }
         }
         private static void populateLocatedProperties(TECLocated located, Dictionary<Guid, TECLocation> locations)
@@ -272,7 +272,7 @@ namespace EstimatingUtilitiesLibrary.Database
                     newPoint.Type = point.Type;
                     allPoints.Add(newPoint);
                 }
-                subScope.Points = new ObservableCollection<TECPoint>(allPoints);
+                subScope.Points = allPoints.toOC();
             }
             if (devices.ContainsKey(subScope.Guid))
             {
@@ -281,7 +281,7 @@ namespace EstimatingUtilitiesLibrary.Database
                 {
                     allDevices.Add(device);
                 }
-                subScope.Devices = new ObservableCollection<IEndDevice>(allDevices);
+                subScope.Devices = allDevices.toOC();
             }
         }
         private static void populatePanelControllers(TECPanel panel, Dictionary<Guid, List<TECController>> controllers)
@@ -382,19 +382,19 @@ namespace EstimatingUtilitiesLibrary.Database
         static private TECCatalogs getCatalogs()
         {
             TECCatalogs catalogs = new TECCatalogs();
-            catalogs.Manufacturers = getObjectsFromTable(new ManufacturerTable(), id => { return new TECManufacturer(id); });
-            catalogs.ConnectionTypes = getObjectsFromTable(new ConnectionTypeTable(), id => { return new TECConnectionType(id); });
-            catalogs.ConduitTypes = getObjectsFromTable(new ConduitTypeTable(), id => { return new TECElectricalMaterial(id); });
+            catalogs.Manufacturers = getObjectsFromTable(new ManufacturerTable(), id => new TECManufacturer(id)).toOC();
+            catalogs.ConnectionTypes = getObjectsFromTable(new ConnectionTypeTable(), id => new TECConnectionType(id)).toOC();
+            catalogs.ConduitTypes = getObjectsFromTable(new ConduitTypeTable(), id => new TECElectricalMaterial(id)).toOC();
             Dictionary<Guid, TECManufacturer> hardwareManufacturer = getOneToOneRelationships(new HardwareManufacturerTable(), catalogs.Manufacturers);
             Dictionary<Guid, List<TECConnectionType>> deviceConnectionType = getOneToManyRelationships(new DeviceConnectionTypeTable(), catalogs.ConnectionTypes);
-            catalogs.Devices = getObjectsFromTable(new DeviceTable(), id => { return new TECDevice(id, deviceConnectionType.valueOrNew(id), hardwareManufacturer[id]); });
+            catalogs.Devices = getObjectsFromTable(new DeviceTable(), id => new TECDevice(id, deviceConnectionType.valueOrNew(id), hardwareManufacturer[id])).toOC();
             Dictionary<Guid, TECDevice> actuators = getOneToOneRelationships(new ValveActuatorTable(), catalogs.Devices);
-            catalogs.Valves = getObjectsFromTable(new ValveTable(), id => { return new TECValve(id, hardwareManufacturer[id], actuators[id]); });
-            catalogs.AssociatedCosts = getObjectsFromTable(new AssociatedCostTable(), getAssociatedCostFromRow);
-            catalogs.PanelTypes = getObjectsFromTable(new PanelTypeTable(), data => { return getPanelTypeFromRow(data, hardwareManufacturer); });
-            catalogs.IOModules = getObjectsFromTable(new IOModuleTable(), id => { return new TECIOModule(id, hardwareManufacturer[id]); });
-            catalogs.ControllerTypes = getObjectsFromTable(new ControllerTypeTable(), id => { return new TECControllerType(id, hardwareManufacturer[id]); });
-            catalogs.Tags = getObjectsFromTable(new TagTable(), id => { return new TECTag(id); });
+            catalogs.Valves = getObjectsFromTable(new ValveTable(), id => new TECValve(id, hardwareManufacturer[id], actuators[id])).toOC();
+            catalogs.AssociatedCosts = getObjectsFromTable(new AssociatedCostTable(), getAssociatedCostFromRow).toOC();
+            catalogs.PanelTypes = getObjectsFromTable(new PanelTypeTable(), data => getPanelTypeFromRow(data, hardwareManufacturer)).toOC();
+            catalogs.IOModules = getObjectsFromTable(new IOModuleTable(), id => new TECIOModule(id, hardwareManufacturer[id])).toOC();
+            catalogs.ControllerTypes = getObjectsFromTable(new ControllerTypeTable(), id => new TECControllerType(id, hardwareManufacturer[id])).toOC();
+            catalogs.Tags = getObjectsFromTable(new TagTable(), id => new TECTag(id)).toOC();
 
             List<TECIO> io = getObjectsFromTable(new IOTable(), getIOFromRow).ToList();
 
@@ -527,7 +527,7 @@ namespace EstimatingUtilitiesLibrary.Database
         private static ObservableCollection<TECTypical> getScopeHierarchy(Guid bidID, Dictionary<Guid, TECControllerType> controllerTypes, Dictionary<Guid, TECPanelType> panelTypes)
         {
             Dictionary<Guid, List<Guid>> bidTypicals = getOneToManyRelationships(new BidSystemTable());
-            List<Guid> typicalIDs = bidTypicals[bidID];
+            List<Guid> typicalIDs = bidTypicals.Count > 0 ? bidTypicals[bidID] : new List<Guid>();
             Dictionary<Guid, List<Guid>> typicalSystems = getOneToManyRelationships(new SystemHierarchyTable());
             Dictionary<Guid, List<Guid>> systemEquipment = getOneToManyRelationships(new SystemEquipmentTable());
             Dictionary<Guid, List<Guid>> equipmentSubScope = getOneToManyRelationships(new EquipmentSubScopeTable());
@@ -538,23 +538,15 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<Guid, List<Guid>> systemMisc = getOneToManyRelationships(new SystemMiscTable());
             Dictionary<Guid, List<Guid>> systemScopeBranches = getOneToManyRelationships(new SystemScopeBranchTable());
             Dictionary<Guid, List<Guid>> scopeBranchHierarchy = getOneToManyRelationships(new ScopeBranchHierarchyTable());
+            Dictionary<Guid, List<Guid>> networkChildren = getOneToManyRelationships(new NetworkConnectionChildrenTable());
+            Dictionary<Guid, Guid> subScopeConnectionChildren = getOneToOneRelationships(new SubScopeConnectionChildrenTable());
             
             DataTable allSystemData = SQLiteDB.GetDataFromTable(SystemTable.TableName);
-            var typicalRows = from row in allSystemData.AsEnumerable() where typicalSystems.ContainsKey(new Guid(row[SystemTable.ID.Name].ToString())) select row;
-            var systemRows = from row in allSystemData.AsEnumerable() where !typicalSystems.ContainsKey(new Guid(row[SystemTable.ID.Name].ToString())) select row;
-            DataTable typicalData = typicalRows.CopyToDataTable();
-            DataTable systemData = systemRows.CopyToDataTable();
-
-            DataTable equipmentData = SQLiteDB.GetDataFromTable(EquipmentTable.TableName);
-            DataTable subScopeData = SQLiteDB.GetDataFromTable(SubScopeTable.TableName);
-            DataTable pointData = SQLiteDB.GetDataFromTable(PointTable.TableName);
-            DataTable controllerData = SQLiteDB.GetDataFromTable(ControllerTable.TableName);
-            DataTable panelData = SQLiteDB.GetDataFromTable(PanelTable.TableName);
-            DataTable subScopeConnectionData = SQLiteDB.GetDataFromTable(SubScopeConnectionTable.TableName);
-            DataTable networkConnectionData = SQLiteDB.GetDataFromTable(SubScopeConnectionTable.TableName);
-            DataTable miscData = SQLiteDB.GetDataFromTable(MiscTable.TableName);
-            DataTable scopeBranchData = SQLiteDB.GetDataFromTable(ScopeBranchTable.TableName);
-
+            var typicalRows = from row in allSystemData.AsEnumerable() where typicalIDs.Contains(new Guid(row[SystemTable.ID.Name].ToString())) select row;
+            var systemRows = from row in allSystemData.AsEnumerable() where !typicalIDs.Contains(new Guid(row[SystemTable.ID.Name].ToString())) select row;
+            DataTable typicalData = typicalRows.Any() ? typicalRows.CopyToDataTable() : new DataTable();
+            DataTable systemData = systemRows.Any() ? systemRows.CopyToDataTable() : new DataTable();
+            
             Dictionary<Guid, bool> typicalDictionary = new Dictionary<Guid, bool>();
             foreach(Guid typID in typicalIDs)
             {
@@ -570,31 +562,46 @@ namespace EstimatingUtilitiesLibrary.Database
                 addSystemChildrenToTypicalDict(typID, true);
             }
 
-            List<TECPoint> points = getObjectsFromData(new PointTable(), pointData, row => { return getPointFromRow(row, typicalDictionary); });
-            List<TECSubScope> subScope = getObjectsFromData(new SubScopeTable(), subScopeData, id => { return new TECSubScope(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false); });
-            List<TECEquipment> equipment = getObjectsFromData(new EquipmentTable(), equipmentData, id => { return new TECEquipment(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false); });
-            List<TECMisc> misc = getObjectsFromData(new MiscTable(), miscData, row => { return getMiscFromRow(row, typicalDictionary); });
-            List<TECScopeBranch> scopeBranches = getObjectsFromData(new ScopeBranchTable(), scopeBranchData, id => { return new TECScopeBranch(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false); });
-            List<TECController> controllers = getObjectsFromData(new ControllerTable(), controllerData, row => { return getControllerFromRow(row, typicalDictionary, controllerTypes); });
-            List<TECPanel> panels = getObjectsFromData(new PanelTable(), panelData, row => { return getPanelFromRow(row, typicalDictionary, panelTypes); });
-            List<TECSubScopeConnection> subScopeConnections = getObjectsFromData(new SubScopeConnectionTable(), subScopeConnectionData, id => { return new TECSubScopeConnection(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false); });
-            List<TECNetworkConnection> networkConnections = getObjectsFromData(new NetworkConnectionTable(), networkConnectionData, id => { return new TECNetworkConnection(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false); });
+            List<TECPoint> points = getObjectsFromTable(new PointTable(), id => new TECPoint(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
+            List<TECSubScope> subScope = getObjectsFromTable(new SubScopeTable(), id => new TECSubScope(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
+            List<TECEquipment> equipment = getObjectsFromTable(new EquipmentTable(), id => new TECEquipment(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
+            List<TECMisc> misc = getObjectsFromTable(new MiscTable(), row => { return getMiscFromRow(row, typicalDictionary); });
+            List<TECScopeBranch> scopeBranches = getObjectsFromTable(new ScopeBranchTable(), id => new TECScopeBranch(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
+            List<TECController> controllers = getObjectsFromTable(new ControllerTable(), row => getControllerFromRow(row, typicalDictionary, controllerTypes));
+            List<TECPanel> panels = getObjectsFromTable(new PanelTable(), row => getPanelFromRow(row, typicalDictionary, panelTypes));
+            List<TECSubScopeConnection> subScopeConnections = getObjectsFromTable(new SubScopeConnectionTable(), id => new TECSubScopeConnection(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
+            List<TECNetworkConnection> networkConnections = getObjectsFromTable(new NetworkConnectionTable(), id => new TECNetworkConnection(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
             List<TECConnection> allConnections = new List<TECConnection>(subScopeConnections);
             allConnections.AddRange(networkConnections);
-            List<TECSystem> systems = getObjectsFromData(new SystemTable(), systemData, id => { return new TECSystem(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false); });
-            List<TECTypical> typicals = getObjectsFromData(new SystemTable(), typicalData, id => { return new TECTypical(id); });
+            List<TECSystem> systems = getObjectsFromData(new SystemTable(), systemData, id => new TECSystem(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
+            List<TECTypical> typicals = getObjectsFromData(new SystemTable(), typicalData, id => new TECTypical(id));
+            List<INetworkConnectable> connectables = new List<INetworkConnectable>(controllers);
+            connectables.AddRange(subScope);
 
+
+            foreach(TECNetworkConnection item in networkConnections.Where(x => networkChildren.ContainsKey(x.Guid)))
+            {
+                item.Children = getRelatedReferences(networkChildren[item.Guid], connectables).toOC();
+            }
+            foreach (TECSubScopeConnection item in subScopeConnections.Where(x => networkChildren.ContainsKey(x.Guid)))
+            {
+                item.SubScope = getRelatedReference(subScopeConnectionChildren[item.Guid], subScope);
+            }
             foreach (TECSubScope item in subScope.Where(x => subScopePoints.ContainsKey(x.Guid)))
             {
-                item.Points = new ObservableCollection<TECPoint>(getRelatedReferences(subScopePoints[item.Guid], points));
+                item.Points = getRelatedReferences(subScopePoints[item.Guid], points).toOC();
             }
             foreach(TECEquipment item in equipment.Where(x => equipmentSubScope.ContainsKey(x.Guid)))
             {
-                item.SubScope = new ObservableCollection<TECSubScope>(getRelatedReferences(equipmentSubScope[item.Guid], subScope));
+                item.SubScope = getRelatedReferences(equipmentSubScope[item.Guid], subScope).toOC();
             }
             foreach(TECController item in controllers.Where(x => controllerConnections.ContainsKey(x.Guid)))
             {
-                item.ChildrenConnections = new ObservableCollection<TECConnection>(getRelatedReferences(controllerConnections[item.Guid], allConnections));
+                item.ChildrenConnections = getRelatedReferences(controllerConnections[item.Guid], allConnections).toOC();
+                foreach(TECConnection conn in item.ChildrenConnections)
+                {
+                    conn.ParentController = item;
+                }
             }
             foreach(TECSystem item in systems)
             {
@@ -604,7 +611,7 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 setSystemChildren(item);
                 if (typicalSystems.ContainsKey(item.Guid)) 
-                    item.Instances = new ObservableCollection<TECSystem>(getRelatedReferences(typicalSystems[item.Guid], systems));
+                    item.Instances = getRelatedReferences(typicalSystems[item.Guid], systems).toOC();
             }
 
             return new ObservableCollection<TECTypical>(typicals);
@@ -665,7 +672,7 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 if (scopeBranchHierarchy.ContainsKey(branch.Guid))
                 {
-                    branch.Branches = new ObservableCollection<TECScopeBranch>(getRelatedReferences(scopeBranchHierarchy[branch.Guid], scopeBranches));
+                    branch.Branches = getRelatedReferences(scopeBranchHierarchy[branch.Guid], scopeBranches).toOC();
                     foreach (var subBranch in branch.Branches)
                     {
                         linkBranchHierarchy(subBranch);
@@ -687,27 +694,19 @@ namespace EstimatingUtilitiesLibrary.Database
             void setSystemChildren(TECSystem item)
             {
                 if (systemEquipment.ContainsKey(item.Guid))
-                    item.Equipment = new ObservableCollection<TECEquipment>(getRelatedReferences(systemEquipment[item.Guid], equipment));
+                    item.Equipment = getRelatedReferences(systemEquipment[item.Guid], equipment).toOC();
                 if (systemControllers.ContainsKey(item.Guid))
                     item.SetControllers(getRelatedReferences(systemControllers[item.Guid], controllers));
                 if (systemPanels.ContainsKey(item.Guid))
-                    item.Panels = new ObservableCollection<TECPanel>(getRelatedReferences(systemPanels[item.Guid], panels));
+                    item.Panels = getRelatedReferences(systemPanels[item.Guid], panels).toOC();
                 if (systemMisc.ContainsKey(item.Guid))
-                    item.MiscCosts = new ObservableCollection<TECMisc>(getRelatedReferences(systemMisc[item.Guid], misc));
+                    item.MiscCosts = getRelatedReferences(systemMisc[item.Guid], misc).toOC();
                 if (systemScopeBranches.ContainsKey(item.Guid))
-                    item.ScopeBranches = new ObservableCollection<TECScopeBranch>(getRelatedReferences(systemScopeBranches[item.Guid], scopeBranches));
+                    item.ScopeBranches = getRelatedReferences(systemScopeBranches[item.Guid], scopeBranches).toOC();
                 item.ScopeBranches.ForEach(branch => linkBranchHierarchy(branch));
             }
         }
-
-        private static TECTypical getEmptyTypicalFromRow(DataRow row)
-        {
-            Guid guid = new Guid(row[SystemTable.ID.Name].ToString());
-            TECTypical system = new TECTypical(guid);
-            assignValuePropertiesFromTable(system, new SystemTable(), row);
-            return system;
-        }
-
+        
         #region Data Handlers
         private static TECTypical getTypicalFromRow(DataRow row, Dictionary<Guid, TECControllerType> controllerTypes, Dictionary<Guid, TECPanelType> panelTypes)
         {
@@ -715,14 +714,14 @@ namespace EstimatingUtilitiesLibrary.Database
             TECTypical system = new TECTypical(guid);
 
             assignValuePropertiesFromTable(system, new SystemTable(), row);
-            system.Instances = getChildObjects(new SystemHierarchyTable(), new SystemTable(), guid, data => { return getSystemFromRow(data, controllerTypes, panelTypes); });
+            system.Instances = new ObservableCollection<TECSystem>( getChildObjects(new SystemHierarchyTable(), new SystemTable(), guid, data => getSystemFromRow(data, controllerTypes, panelTypes)));
 
-            var controllers = getChildObjects(new SystemControllerTable(), new ControllerTable(), guid, data => { return getControllerFromRow(data, true, controllerTypes); });
+            var controllers = getChildObjects(new SystemControllerTable(), new ControllerTable(), guid, data => getControllerFromRow(data, true, controllerTypes));
             system.SetControllers(controllers);
-            system.Equipment = getChildObjects(new SystemEquipmentTable(), new EquipmentTable(), guid, data => { return getEquipmentFromRow(data, true); });
-            system.Panels = getChildObjects(new SystemPanelTable(), new PanelTable(), guid, data => { return getPanelFromRow(data, true, panelTypes); });
-            system.MiscCosts = getChildObjects(new SystemMiscTable(), new MiscTable(), guid, data => { return getMiscFromRow(data, true); });
-            system.ScopeBranches = getChildObjects(new SystemScopeBranchTable(), new ScopeBranchTable(), guid, data => { return getScopeBranchFromRow(data, true); });
+            system.Equipment = new ObservableCollection<TECEquipment>( getChildObjects(new SystemEquipmentTable(), new EquipmentTable(), guid, data => getEquipmentFromRow(data, true)));
+            system.Panels = new ObservableCollection<TECPanel>( getChildObjects(new SystemPanelTable(), new PanelTable(), guid, data => getPanelFromRow(data, true, panelTypes)));
+            system.MiscCosts = new ObservableCollection<TECMisc>( getChildObjects(new SystemMiscTable(), new MiscTable(), guid, data => getMiscFromRow(data, true)));
+            system.ScopeBranches = new ObservableCollection<TECScopeBranch>( getChildObjects(new SystemScopeBranchTable(), new ScopeBranchTable(), guid, data => getScopeBranchFromRow(data, true)));
 
             return system;
         }
@@ -732,12 +731,12 @@ namespace EstimatingUtilitiesLibrary.Database
             TECSystem system = new TECSystem(guid, false);
 
             assignValuePropertiesFromTable(system, new SystemTable(), row);
-            var controllers = getChildObjects(new SystemControllerTable(), new ControllerTable(), guid, data => { return getControllerFromRow(data, false, controllerTypes); });
+            var controllers = getChildObjects(new SystemControllerTable(), new ControllerTable(), guid, data => getControllerFromRow(data, false, controllerTypes));
             system.SetControllers(controllers);
-            system.Equipment = getChildObjects(new SystemEquipmentTable(), new EquipmentTable(), guid, data => { return getEquipmentFromRow(data, false); });
-            system.Panels = getChildObjects(new SystemPanelTable(), new PanelTable(), guid, data => { return getPanelFromRow(data, false, panelTypes); });
-            system.MiscCosts = getChildObjects(new SystemMiscTable(), new MiscTable(), guid, data => { return getMiscFromRow(data, false); });
-            system.ScopeBranches = getChildObjects(new SystemScopeBranchTable(), new ScopeBranchTable(), guid, data => { return getScopeBranchFromRow(data, false); });
+            system.Equipment = new ObservableCollection<TECEquipment>(getChildObjects(new SystemEquipmentTable(), new EquipmentTable(), guid, data => getEquipmentFromRow(data, false)));
+            system.Panels = new ObservableCollection<TECPanel>(getChildObjects(new SystemPanelTable(), new PanelTable(), guid, data => getPanelFromRow(data, false, panelTypes)));
+            system.MiscCosts = new ObservableCollection<TECMisc>(getChildObjects(new SystemMiscTable(), new MiscTable(), guid, data => getMiscFromRow(data, false)));
+            system.ScopeBranches = new ObservableCollection<TECScopeBranch>(getChildObjects(new SystemScopeBranchTable(), new ScopeBranchTable(), guid, data => getScopeBranchFromRow(data, false)));
 
             return system;
         }
@@ -746,8 +745,8 @@ namespace EstimatingUtilitiesLibrary.Database
             Guid equipmentID = new Guid(row[EquipmentTable.ID.Name].ToString());
             TECEquipment equipmentToAdd = new TECEquipment(equipmentID, isTypical);
             assignValuePropertiesFromTable(equipmentToAdd, new EquipmentTable(), row);
-            equipmentToAdd.SubScope = getChildObjects(new EquipmentSubScopeTable(), new SubScopeTable(),
-                equipmentID, data => { return getSubScopeFromRow(data, isTypical); });
+            equipmentToAdd.SubScope = new ObservableCollection<TECSubScope>(getChildObjects(new EquipmentSubScopeTable(), new SubScopeTable(),
+                equipmentID, data => getSubScopeFromRow(data, isTypical)));
             return equipmentToAdd;
         }
         private static TECSubScope getSubScopeFromRow(DataRow row, bool isTypical)
@@ -757,47 +756,12 @@ namespace EstimatingUtilitiesLibrary.Database
             assignValuePropertiesFromTable(subScopeToAdd, new SubScopeTable(), row);
             return subScopeToAdd;
         }
-        private static TECPoint getPointFromRow(DataRow row, bool isTypical)
-        {
-            Guid pointID = new Guid(row[PointTable.ID.Name].ToString());
-            TECPoint pointToAdd = new TECPoint(pointID, isTypical);
-            assignValuePropertiesFromTable(pointToAdd, new PointTable(), row);
-            string pointType = row[PointTable.Type.Name].ToString();
-            if (pointType == "BO")
-            {
-                pointType = "DO";
-            }
-            else if (pointType == "BI")
-            {
-                pointType = "DI";
-            }
-            pointToAdd.Type = UtilitiesMethods.StringToEnum<IOType>(pointType);
-            return pointToAdd;
-        }
-        private static TECPoint getPointFromRow(DataRow row, Dictionary<Guid, bool> typicalDictionary)
-        {
-            Guid pointID = new Guid(row[PointTable.ID.Name].ToString());
-            bool isTypical = typicalDictionary.ContainsKey(pointID) ? typicalDictionary[pointID] : false;
-            TECPoint pointToAdd = new TECPoint(pointID, isTypical);
-            assignValuePropertiesFromTable(pointToAdd, new PointTable(), row);
-            string pointType = row[PointTable.Type.Name].ToString();
-            if (pointType == "BO")
-            {
-                pointType = "DO";
-            }
-            else if (pointType == "BI")
-            {
-                pointType = "DI";
-            }
-            pointToAdd.Type = UtilitiesMethods.StringToEnum<IOType>(pointType);
-            return pointToAdd;
-        }
         private static TECScopeBranch getScopeBranchFromRow(DataRow row, bool isTypical)
         {
             Guid scopeBranchID = new Guid(row[ScopeBranchTable.ID.Name].ToString());
             TECScopeBranch branch = new TECScopeBranch(scopeBranchID, isTypical);
             assignValuePropertiesFromTable(branch, new ScopeBranchTable(), row);
-            branch.Branches = getChildObjects(new ScopeBranchHierarchyTable(), new ScopeBranchTable(), scopeBranchID, data => { return getScopeBranchFromRow(data, isTypical); });
+            branch.Branches = new ObservableCollection<TECScopeBranch>(getChildObjects(new ScopeBranchHierarchyTable(), new ScopeBranchTable(), scopeBranchID, data => getScopeBranchFromRow(data, isTypical)));
             return branch;
         }
         private static TECPanel getPanelFromRow(DataRow row, bool isTypical, Dictionary<Guid, TECPanelType> panelTypes)
@@ -1018,7 +982,19 @@ namespace EstimatingUtilitiesLibrary.Database
                     {
                         string dueDateString = row[field.Name].ToString();
                         field.Property.SetValue(item, DateTime.ParseExact(dueDateString, DB_FMT, CultureInfo.InvariantCulture));
-
+                    }
+                    else if (field.Property.PropertyType == typeof(IOType))
+                    {
+                        string typeString = row[field.Name].ToString();
+                        if (typeString == "BO")
+                        {
+                            typeString = "DO";
+                        }
+                        else if (typeString == "BI")
+                        {
+                            typeString = "DI";
+                        }
+                        field.Property.SetValue(item, UtilitiesMethods.StringToEnum<IOType>(typeString));
                     }
                 }
             }
@@ -1133,13 +1109,35 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             return dictionary;
         }
-        static private ObservableCollection<T> getObjectsFromTable<T>(TableBase table, Func<DataRow, T> dataHandler)
+        private static Dictionary<Guid, Guid> getOneToOneRelationships(TableBase table)
+        {
+            if (table.PrimaryKeys.Count != 2)
+            {
+                throw new Exception("Table must have two primary keys");
+            }
+            string parentField = table.PrimaryKeys[0].Name;
+            string childField = table.PrimaryKeys[1].Name;
+
+            Dictionary<Guid, Guid> dictionary = new Dictionary<Guid, Guid>();
+            string command = string.Format("select {0} from {1}",
+                DatabaseHelper.AllFieldsInTableString(table),
+                table.NameString);
+            DataTable data = SQLiteDB.GetDataFromCommand(command);
+            foreach (DataRow row in data.Rows)
+            {
+                Guid parentID = new Guid(row[parentField].ToString());
+                Guid childID = new Guid(row[childField].ToString());
+                dictionary[parentID] = childID;
+            }
+            return dictionary;
+        }
+        static private List<T> getObjectsFromTable<T>(TableBase table, Func<DataRow, T> dataHandler)
         {
             string command = string.Format("select {0} from {1}", DatabaseHelper.AllFieldsInTableString(table), table.NameString);
             DataTable data = SQLiteDB.GetDataFromCommand(command);
-            return new ObservableCollection<T>(getObjectsFromData(table, data, dataHandler));
+            return new List<T>(getObjectsFromData(table, data, dataHandler));
         }
-        static private ObservableCollection<T> getObjectsFromTable<T>(TableBase table, Func<Guid, T> constructor)
+        static private List<T> getObjectsFromTable<T>(TableBase table, Func<Guid, T> constructor)
         {
             return getObjectsFromTable(table, data => { return getObjectFromRow(data, table, constructor); });
         }
@@ -1163,10 +1161,10 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             return getObjectFromTable(table, data => { return getObjectFromRow(data, table, constructor); }, defaultValue);
         }
-        static private ObservableCollection<T> getChildObjects<T>(TableBase relationTable, TableBase childTable, Guid parentID, Func<DataRow, T> dataHandler)
+        static private List<T> getChildObjects<T>(TableBase relationTable, TableBase childTable, Guid parentID, Func<DataRow, T> dataHandler)
         {
             DataTable data = getChildData(relationTable, childTable, parentID);
-            return new ObservableCollection<T>(getObjectsFromData(childTable, data, dataHandler));
+            return new List<T>(getObjectsFromData(childTable, data, dataHandler));
         }
         private static DataTable getChildData(TableBase relationTable, TableBase childTable, Guid parentID)
         {
@@ -1275,6 +1273,17 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             return list;
         }
+        private static T getRelatedReference<T>(Guid relationship, IEnumerable<T> references) where T: ITECObject
+        {
+            foreach (T reference in references)
+            {
+                if (reference.Guid == relationship)
+                {
+                    return reference;
+                }
+            }
+            return default(T);
+        }
     }
 
     internal static class HelperExtensions
@@ -1282,6 +1291,10 @@ namespace EstimatingUtilitiesLibrary.Database
         public static ObservableCollection<T> valueOrNew<T>(this Dictionary<Guid, List<T>> dictionary, Guid id)
         {
             return dictionary.ContainsKey(id) ? new ObservableCollection<T>(dictionary[id]) : new ObservableCollection<T>();
+        }
+        public static ObservableCollection<T> toOC<T>(this List<T> list)
+        {
+            return new ObservableCollection<T>(list);
         }
     }
 }
