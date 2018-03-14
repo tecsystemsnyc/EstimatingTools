@@ -20,7 +20,8 @@
                   SelectedItem="{Binding Selected}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
-                  CanUserDeleteRows="False">
+                  CanUserDeleteRows="False"
+                  CanUserSortColumns="True">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="" CellTemplate="{StaticResource ExpandDetails}" Width="30"/>
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40"/>

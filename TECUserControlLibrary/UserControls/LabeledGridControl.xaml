@@ -23,6 +23,7 @@
                   x:Name="TagsGrid"
                   IsReadOnly="{Binding ReadOnly}"
                   CanUserAddRows="False"
+                  CanUserSortColumns="True"
                   dd:DragDrop.DropHandler="{Binding DropHandler}">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Label}" Header="{Binding Data.LabelName, 

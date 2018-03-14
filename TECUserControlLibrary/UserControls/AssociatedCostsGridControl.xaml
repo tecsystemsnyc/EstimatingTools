@@ -21,6 +21,7 @@
                   SelectedItem="{Binding Selected}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
+                  CanUserSortColumns="True"
                   dd:DragDrop.DropHandler="{Binding DropHandler}"
                   IsReadOnly="{Binding ReadOnly}">
             <DataGrid.Columns>
