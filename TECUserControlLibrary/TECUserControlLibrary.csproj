@@ -254,6 +254,7 @@
     <Compile Include="ViewModels\ReplaceActuatorVM.cs" />
     <Compile Include="ViewModels\RiserVM.cs" />
     <Compile Include="ViewModels\ScheduleVM.cs" />
+    <Compile Include="ViewModels\ValveSelectionVM.cs" />
     <Compile Include="ViewModels\ValveSummaryVM.cs" />
     <Compile Include="ViewModels\WorkBoxVM.cs" />
     <Compile Include="Views\CatalogViews\AssociatedCostsCatalogView.xaml.cs">
@@ -554,6 +555,9 @@
     </Compile>
     <Compile Include="Views\UpdateConnectionView.xaml.cs">
       <DependentUpon>UpdateConnectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ValveSelectionView.xaml.cs">
+      <DependentUpon>ValveSelectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ValveSummaryView.xaml.cs">
       <DependentUpon>ValveSummaryView.xaml</DependentUpon>
@@ -1091,6 +1095,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UpdateConnectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ValveSelectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
