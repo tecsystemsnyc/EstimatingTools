@@ -12,8 +12,7 @@ namespace EstimatingLibrary
         #region Properties
         private ObservableCollection<TECIO> _io;
         private ObservableCollection<TECIOModule> _ioModules;
-
-
+        
         public ObservableCollection<TECIO> IO
         {
             get { return _io; }
