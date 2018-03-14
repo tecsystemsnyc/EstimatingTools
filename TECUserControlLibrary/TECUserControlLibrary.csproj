@@ -113,6 +113,7 @@
     <Compile Include="Interfaces\ISubScopeConnectionItem.cs" />
     <Compile Include="Models\SubScopeConnectionItem.cs" />
     <Compile Include="Models\SystemSummaryItem.cs" />
+    <Compile Include="Models\ValveScopeItem.cs" />
     <Compile Include="UserControls\AddEquipmentControl.xaml.cs">
       <DependentUpon>AddEquipmentControl.xaml</DependentUpon>
     </Compile>
@@ -131,6 +132,9 @@
     </Compile>
     <Compile Include="UserControls\ItemControls\TypicalControl.xaml.cs">
       <DependentUpon>TypicalControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ItemControls\ValveScopeItemControl.xaml.cs">
+      <DependentUpon>ValveScopeItemControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ListControls\BaseListControl.cs" />
     <Compile Include="UserControls\AddAssociatedCostsControl.xaml.cs">
@@ -186,6 +190,9 @@
     </Compile>
     <Compile Include="UserControls\ListControls\NetworkParentableListControl.xaml.cs">
       <DependentUpon>NetworkParentableListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ListControls\ValveScopeItemListControl.xaml.cs">
+      <DependentUpon>ValveScopeItemListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\PropertyControls\ConnectionPropertiesControl.xaml.cs">
       <DependentUpon>ConnectionPropertiesControl.xaml</DependentUpon>
@@ -645,6 +652,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\ItemControls\ValveScopeItemControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\ListControls\ControllerInPanelListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -662,6 +673,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ListControls\NetworkParentableListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ListControls\ValveScopeItemListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
