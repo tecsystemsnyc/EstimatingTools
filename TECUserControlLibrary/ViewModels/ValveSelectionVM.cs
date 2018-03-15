@@ -93,11 +93,14 @@ namespace TECUserControlLibrary.ViewModels
         private void resetCatalogExecute()
         {
             Results = new List<TECValve>(catalog);
+            SearchCv = "";
+            SearchStyle = "";
+            SearchSize = "";
         }
 
         private bool canResetCatalog()
         {
-            return true;
+            return Results.Count != catalog.Count;
         }
 
         private void searchCatalogExecute()

@@ -7,7 +7,7 @@
              xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              x:Name="valveSelectionView"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -35,9 +35,17 @@
                                                     SelectedItem="{Binding SelectedValve}"/>
         </Grid>
         <!--Valve Selection-->
-        <StackPanel Grid.Column="1" Background="{StaticResource SectionBackgroundBrush}">
+        <Grid  Grid.Column="1" Background="{StaticResource SectionBackgroundBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="75"/>
+                <RowDefinition Height="80"/>
+                <RowDefinition/>
+                <RowDefinition Height="30"/>
+
+            </Grid.RowDefinitions>
             <TextBlock Text="Current" FontWeight="DemiBold"/>
-            <Grid DataContext="{Binding SelectedValve.Valve}">
+            <Grid DataContext="{Binding SelectedValve.Valve}" Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -54,21 +62,21 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="{Binding Style, StringFormat=Style: {0}}"
-                           Grid.Column="0"/>
+                               Grid.Column="0"/>
                     <TextBlock Text="{Binding Cv, StringFormat=Cv: {0}}"
-                           Grid.Column="1"/>
+                               Grid.Column="1"/>
                     <TextBlock Text="{Binding Size, StringFormat=Size: {0} in.}"
-                           Grid.Column="2"/>
+                               Grid.Column="2"/>
                 </Grid>
-                
+
                 <TextBlock Text="{Binding Actuator.Name, StringFormat=Actuator: {0}}"
                            Grid.Row="2"/>
             </Grid>
-            <Grid>
+            <Grid Grid.Row="2">
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="40"/>
@@ -83,33 +91,36 @@
                 <TextBlock Text="Style:"
                            Grid.Row="1"
                            Margin="5,0,5,0"/>
-                <TextBox Text="{Binding SearchStyle}"
+                <TextBox Text="{Binding SearchStyle, UpdateSourceTrigger=PropertyChanged}"
                          Grid.Column="1"
                          Grid.Row="1"/>
                 <TextBlock Text="Cv:"
                            Grid.Column="2"
                            Grid.Row="1"
                            Margin="5,0,5,0"/>
-                <TextBox Text="{Binding SearchCv}"
+                <TextBox Text="{Binding SearchCv, UpdateSourceTrigger=PropertyChanged}"
                          Grid.Column="3"
                          Grid.Row="1"/>
                 <TextBlock Text="Size:"
                            Grid.Column="4"
                            Grid.Row="1"
                            Margin="5,0,5,0"/>
-                <TextBox Text="{Binding SearchSize}"
+                <TextBox Text="{Binding SearchSize, UpdateSourceTrigger=PropertyChanged}"
                          Grid.Column="5"
                          Grid.Row="1"/>
                 <Button Content="Search" Command="{Binding SearchCatalogCommand}"
-                    Grid.Row="2" Grid.ColumnSpan="3" Margin="2"/>
+                        Grid.Row="2" Grid.ColumnSpan="3" Margin="2"/>
                 <Button Content="Clear" Command="{Binding ResetCatalogCommand}"
-                    Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="3" Margin="2"/>
+                        Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="3" Margin="2"/>
             </Grid>
             <controls:ValveGridControl Source="{Binding Results}"
-                                       x:Name="catalogGrid"/>
+                                       x:Name="catalogGrid"
+                                       Grid.Row="3"/>
             <Button Content="Replace" Command="{Binding ReplaceValveCommand}"
                     CommandParameter="{Binding ElementName=catalogGrid, Path=Selected}"
-                    Margin="2"/>
-        </StackPanel>
+                    Margin="2"
+                    Grid.Row="4"/>
+        </Grid>
+
     </Grid>
 </UserControl>
