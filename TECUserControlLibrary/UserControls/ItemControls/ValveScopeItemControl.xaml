@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls.ItemControls"
              x:Name="valveScopeItemControl"
              mc:Ignorable="d" 
-             d:DesignHeight="90" d:DesignWidth="200">
+             d:DesignHeight="75" d:DesignWidth="200">
     <Grid DataContext="{Binding ElementName=valveScopeItemControl, Path=Valve}">
         <Border BorderThickness="1" BorderBrush="{StaticResource ItemBorderBrush}" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
             <StackPanel>
