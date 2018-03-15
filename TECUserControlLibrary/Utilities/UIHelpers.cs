@@ -595,7 +595,7 @@ namespace TECUserControlLibrary.Utilities
     public enum MaterialType { Device, ConnectionType, ConduitType, ControllerType,
         PanelType, AssociatedCost, IOModule, Valve, Manufacturer, Tag};
     public enum TypicalSystemIndex { Edit, Instances };
-    public enum SystemComponentIndex { Equipment, Controllers, Electrical, Network, Misc, Proposal };
+    public enum SystemComponentIndex { Equipment, Controllers, Electrical, Network, Misc, Valves, Proposal };
     public enum ProposalIndex { Scope, Systems, Notes }
     public enum SystemsSubIndex { Typical, Instance, Location}
     public enum ScopeTemplateIndex { System, Equipment, SubScope, Misc }

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
              x:Name="valveSelectionView"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -21,6 +22,8 @@
             <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="0,0,0,1" Margin="10,0,10,0">
                 <TextBlock Text="Valves" Style="{StaticResource ListHeader}"/>
             </Border>
+            <listControls:ValveScopeItemListControl Source="{Binding Valves}"
+                                                    Grid.Row="1"/>
         </Grid>
         <!--Valve Selection-->
         <StackPanel Grid.Column="1">
