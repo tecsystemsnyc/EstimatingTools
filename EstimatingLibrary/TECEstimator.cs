@@ -116,10 +116,7 @@ namespace EstimatingLibrary
 
         public double TECMaterialCost
         {
-            get
-            {
-                return getTECMaterialCost();
-            }
+            get { return getTECMaterialCost(); }
         }
         public double TECSoftwareCost
         {
@@ -141,14 +138,6 @@ namespace EstimatingLibrary
         public double Escalation
         {
             get { return getTECEscalation(); }
-        }
-        public double Overhead
-        {
-            get { return getTECOverhead(); }
-        }
-        public double Profit
-        {
-            get { return getTECProfit(); }
         }
         public double TECSubtotal
         {
@@ -200,10 +189,6 @@ namespace EstimatingLibrary
         public double ElectricalEscalation
         {
             get { return getSubcontractorEscalation(); }
-        }
-        public double ElectricalMarkup
-        {
-            get { return getSubcontractorMarkup(); }
         }
 
         public double SubcontractorCost
@@ -257,7 +242,12 @@ namespace EstimatingLibrary
 
         public double Markup
         {
-            get { return TotalPrice - TotalCost; }
+            get { return getMarkup(); }
+        }
+
+        private double getMarkup()
+        {
+            return TotalCost * parameters.Markup / 100;
         }
         #endregion
 
@@ -392,21 +382,7 @@ namespace EstimatingLibrary
             double years = duration / 52;
             return outCost * (Math.Pow((1 + rate), years) - 1);
         }
-
-        private double getTECOverhead()
-        {
-            return getTECCost() * parameters.Overhead / 100;
-        }
-
-        private double getTECProfit()
-        {
-            double outCost = 0;
-            outCost += getTECCost();
-            outCost += outCost * parameters.Overhead / 100;
-            return outCost * parameters.Profit / 100;
-             
-        }
-
+        
         /// <summary>
         /// Returns cost of all TEC material and labor with escalation and tax
         /// </summary>
@@ -427,8 +403,6 @@ namespace EstimatingLibrary
         {
             double outCost = 0;
             outCost += getTECCost();
-            outCost += outCost * parameters.Overhead / 100;
-            outCost += outCost * parameters.Profit / 100;
 
             return outCost;
         }
@@ -715,19 +689,14 @@ namespace EstimatingLibrary
             double years = duration / 52;
             return baseCost * (Math.Pow((1 + rate), years) - 1);
         }
-        private double getSubcontractorMarkup()
-        {
-            return getSubcontractorCost() * (parameters.SubcontractorMarkup / 100);
-        }
         /// <summary>
         /// Returns the electrical total with markup 
         /// </summary>
         private double getSubcontractorSubtotal()
         {
             double subContractorCost = getSubcontractorCost();
-            double subContractorMarkup = parameters.SubcontractorMarkup;
             double subcontractorEscalation = getSubcontractorEscalation();
-            double outCost = subContractorCost * (1 + (subContractorMarkup / 100)) + subcontractorEscalation;
+            double outCost = subContractorCost + subcontractorEscalation;
             return outCost;
         }
         /// <summary>
@@ -747,6 +716,7 @@ namespace EstimatingLibrary
 
             double outPrice = tecSubtotal + subcontractSubtotal;
             outPrice += getBondCost();
+            outPrice += getMarkup();
             
             return outPrice;
         }

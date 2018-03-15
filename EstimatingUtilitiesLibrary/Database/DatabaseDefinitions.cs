@@ -109,9 +109,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField Label = new TableField("Label", "TEXT", ParameterType.GetProperty("Label"), defaultValue: "Parameters");
 
         public static TableField Escalation = new TableField("Escalation", "REAL", ParameterType.GetProperty("Escalation"), defaultValue: "0.0");
-        public static TableField Overhead = new TableField("Overhead", "REAL", ParameterType.GetProperty("Overhead"), defaultValue: "10.0");
-        public static TableField Profit = new TableField("Profit", "REAL", ParameterType.GetProperty("Profit"), defaultValue: "20.0");
-        public static TableField SubcontractorMarkup = new TableField("SubcontractorMarkup", "REAL", ParameterType.GetProperty("SubcontractorMarkup"), defaultValue: "10.0");
+        public static TableField Markup = new TableField("Markup", "REAL", ParameterType.GetProperty("Markup"), defaultValue: "20.0");
         public static TableField SubcontractorEscalation = new TableField("SubcontractorEscalation", "REAL", ParameterType.GetProperty("SubcontractorEscalation"), defaultValue: "0.0");
         public static TableField Warranty = new TableField("Warranty", "REAL", ParameterType.GetProperty("Warranty"), defaultValue: "3.0");
         public static TableField Shipping = new TableField("Shipping", "REAL", ParameterType.GetProperty("Shipping"), defaultValue: "3.0");
@@ -172,9 +170,7 @@ namespace EstimatingUtilitiesLibrary.Database
             ID,
             Label,
             Escalation,
-            Overhead,
-            Profit,
-            SubcontractorMarkup,
+            Markup,
             SubcontractorEscalation,
             Warranty,
             Shipping,

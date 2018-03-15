@@ -305,9 +305,7 @@ namespace EstimatingLibrary
                 noteToAdd.Label = item;
                 Notes.Add(new TECLabeled(noteToAdd));
             }
-            _parameters.Overhead = 20;
-            _parameters.Profit = 20;
-            _parameters.SubcontractorMarkup = 20;
+            _parameters.Markup = 20;
         }
 
         #endregion //Constructors

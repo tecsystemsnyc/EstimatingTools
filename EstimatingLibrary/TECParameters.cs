@@ -7,9 +7,6 @@ namespace EstimatingLibrary
     {
         #region Properties
         private double _escalation;
-        private double _overhead;
-        private double _profit;
-        private double _subcontractorMarkup;
         private double _subcontractorEscalation;
         private double _warranty;
         private double _shipping;
@@ -17,6 +14,7 @@ namespace EstimatingLibrary
         private double _subcontractorWarranty;
         private double _subcontractorShipping;
         private double _bondRate;
+        private double _markup;
 
         private bool _isTaxExempt;
         private bool _requiresBond;
@@ -31,36 +29,6 @@ namespace EstimatingLibrary
                 var old = Escalation;
                 _escalation = value;
                 notifyCombinedChanged(Change.Edit, "Escalation", this, value, old);
-            }
-        }
-        public double Overhead
-        {
-            get { return _overhead; }
-            set
-            {
-                var old = Overhead;
-                _overhead = value;
-                notifyCombinedChanged(Change.Edit, "Overhead", this, value, old);
-            }
-        }
-        public double Profit
-        {
-            get { return _profit; }
-            set
-            {
-                var old = Profit;
-                _profit = value;
-                notifyCombinedChanged(Change.Edit, "Profit", this, value, old);
-            }
-        }
-        public double SubcontractorMarkup
-        {
-            get { return _subcontractorMarkup; }
-            set
-            {
-                var old = SubcontractorMarkup;
-                _subcontractorMarkup = value;
-                notifyCombinedChanged(Change.Edit, "SubcontractorMarkup", this, value, old);
             }
         }
         public double SubcontractorEscalation
@@ -131,6 +99,16 @@ namespace EstimatingLibrary
                 var old = BondRate;
                 _bondRate = value;
                 notifyCombinedChanged(Change.Edit, "BondRate", this, value, old);
+            }
+        }
+        public double Markup
+        {
+            get { return _markup; }
+            set
+            {
+                var old = Markup;
+                _markup = value;
+                notifyCombinedChanged(Change.Edit, "Markup", this, value, old);
             }
         }
 
@@ -582,9 +560,6 @@ namespace EstimatingLibrary
             _desiredConfidence = Confidence.NinetyFive;
 
             _escalation = 0;
-            _overhead = 10;
-            _profit = 20;
-            _subcontractorMarkup = 0;
             _subcontractorEscalation = 0;
             _warranty = 5.0;
             _shipping = 3.0;
@@ -630,9 +605,6 @@ namespace EstimatingLibrary
             _hasBMS = parametersSource.HasBMS;
 
             _escalation = parametersSource.Escalation;
-            _overhead = parametersSource.Overhead;
-            _profit = parametersSource.Profit;
-            _subcontractorMarkup = parametersSource.SubcontractorMarkup;
             _subcontractorEscalation = parametersSource.SubcontractorEscalation;
 
             _desiredConfidence = parametersSource.DesiredConfidence;
