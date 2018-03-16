@@ -307,7 +307,8 @@ namespace TECUserControlLibrary.Views
                 selectedValue == SystemComponentIndex.Misc ||
                 selectedValue == SystemComponentIndex.Proposal ||
                 selectedValue == SystemComponentIndex.Controllers ||
-                selectedValue == SystemComponentIndex.Network)
+                selectedValue == SystemComponentIndex.Network ||
+                selectedValue == SystemComponentIndex.Valves)
             {
                 Storyboard move = (Storyboard)FindResource("systemMove");
                 move.Begin();

@@ -82,6 +82,7 @@ namespace TECUserControlLibrary.Utilities
         public DataTemplate MiscTemplate { get; set; }
         public DataTemplate ConnectionTemplate { get; set; }
         public DataTemplate NetworkTemplate { get; set; }
+        public DataTemplate ValveTemplate { get; set; }
 
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
@@ -102,6 +103,8 @@ namespace TECUserControlLibrary.Utilities
                         return ConnectionTemplate;
                     case SystemComponentIndex.Network:
                         return NetworkTemplate;
+                    case SystemComponentIndex.Valves:
+                        return ValveTemplate;
                     default:
                         return EquipmentTemplate;
                 }

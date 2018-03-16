@@ -113,6 +113,7 @@
     <Compile Include="Interfaces\ISubScopeConnectionItem.cs" />
     <Compile Include="Models\SubScopeConnectionItem.cs" />
     <Compile Include="Models\SystemSummaryItem.cs" />
+    <Compile Include="Models\ValveScopeItem.cs" />
     <Compile Include="UserControls\AddEquipmentControl.xaml.cs">
       <DependentUpon>AddEquipmentControl.xaml</DependentUpon>
     </Compile>
@@ -131,6 +132,9 @@
     </Compile>
     <Compile Include="UserControls\ItemControls\TypicalControl.xaml.cs">
       <DependentUpon>TypicalControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ItemControls\ValveScopeItemControl.xaml.cs">
+      <DependentUpon>ValveScopeItemControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ListControls\BaseListControl.cs" />
     <Compile Include="UserControls\AddAssociatedCostsControl.xaml.cs">
@@ -186,6 +190,9 @@
     </Compile>
     <Compile Include="UserControls\ListControls\NetworkParentableListControl.xaml.cs">
       <DependentUpon>NetworkParentableListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ListControls\ValveScopeItemListControl.xaml.cs">
+      <DependentUpon>ValveScopeItemListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\PropertyControls\ConnectionPropertiesControl.xaml.cs">
       <DependentUpon>ConnectionPropertiesControl.xaml</DependentUpon>
@@ -254,6 +261,7 @@
     <Compile Include="ViewModels\ReplaceActuatorVM.cs" />
     <Compile Include="ViewModels\RiserVM.cs" />
     <Compile Include="ViewModels\ScheduleVM.cs" />
+    <Compile Include="ViewModels\ValveSelectionVM.cs" />
     <Compile Include="ViewModels\ValveSummaryVM.cs" />
     <Compile Include="ViewModels\WorkBoxVM.cs" />
     <Compile Include="Views\CatalogViews\AssociatedCostsCatalogView.xaml.cs">
@@ -555,6 +563,9 @@
     <Compile Include="Views\UpdateConnectionView.xaml.cs">
       <DependentUpon>UpdateConnectionView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ValveSelectionView.xaml.cs">
+      <DependentUpon>ValveSelectionView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ValveSummaryView.xaml.cs">
       <DependentUpon>ValveSummaryView.xaml</DependentUpon>
     </Compile>
@@ -641,6 +652,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\ItemControls\ValveScopeItemControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\ListControls\ControllerInPanelListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -658,6 +673,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ListControls\NetworkParentableListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ListControls\ValveScopeItemListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1091,6 +1110,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UpdateConnectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ValveSelectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

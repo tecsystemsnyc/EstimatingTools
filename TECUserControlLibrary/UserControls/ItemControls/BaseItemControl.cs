@@ -6,8 +6,6 @@ namespace TECUserControlLibrary.UserControls.ItemControls
 {
     public class BaseItemControl : UserControl
     {
-
-       
         public ICommand DeleteCommand
         {
             get { return (ICommand)GetValue(DeleteCommandProperty); }
