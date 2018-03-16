@@ -427,8 +427,14 @@ namespace EstimateBuilder.MVVM
         {
             return true;
         }
+        //Settings
+        protected override void settingsExecute()
+        {
+            EBSettingsWindow settingsWindow = new EBSettingsWindow();
+            settingsWindow.Show();
+        }
         #endregion
-        
+
         private string getStartUpFilePath()
         {
             string startUpFilePath = Properties.Settings.Default.StartUpFilePath;

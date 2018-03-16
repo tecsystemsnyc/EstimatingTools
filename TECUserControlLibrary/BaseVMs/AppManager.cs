@@ -139,6 +139,7 @@ namespace TECUserControlLibrary.BaseVMs
             MenuVM.SetWikiCommand(wikiExecute);
             MenuVM.SetReportBugCommand(reportBugExecute);
             MenuVM.SetOpenFileLocationCommand(openFileLocationExecute, canOpenFileLocation);
+            MenuVM.SetSettingsCommand(settingsExecute);
         }
         //New
         private void newExecute()
@@ -325,6 +326,8 @@ namespace TECUserControlLibrary.BaseVMs
         {
             return databaseManager != null;
         }
+        //Settings
+        protected abstract void settingsExecute();
         #endregion
 
         protected string getVersionNumber()

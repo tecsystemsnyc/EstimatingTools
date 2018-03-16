@@ -28,6 +28,7 @@ namespace EstimateBuilder.MVVM
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
             SimpleIoc.Default.Register<EstimateManager>();
+            SimpleIoc.Default.Register<EstimateSettingsVM>();
         }
 
         /// <summary>
@@ -41,6 +42,19 @@ namespace EstimateBuilder.MVVM
             get
             {
                 return ServiceLocator.Current.GetInstance<EstimateManager>();
+            }
+        }
+        /// <summary>
+        /// Gets the Main property.
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
+            "CA1822:MarkMembersAsStatic",
+            Justification = "This non-static member is needed for data binding purposes.")]
+        public EstimateSettingsVM Settings
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<EstimateSettingsVM>();
             }
         }
         public static void Cleanup()
