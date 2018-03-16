@@ -34,9 +34,7 @@ namespace TECUserControlLibrary.Views.AddViews
 
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(AddVM), typeof(AddBaseView), new PropertyMetadata(default(object)));
-
-
-
+        
         public bool IsTemplates
         {
             get { return (bool)GetValue(IsTemplatesProperty); }
@@ -46,9 +44,7 @@ namespace TECUserControlLibrary.Views.AddViews
         // Using a DependencyProperty as the backing store for IsTemplates.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IsTemplatesProperty =
             DependencyProperty.Register("IsTemplates", typeof(bool), typeof(AddBaseView), new PropertyMetadata(false));
-
-
-
+        
         protected void doneButton_Click(object sender, RoutedEventArgs e)
         {
             RaiseEvent(new RoutedEventArgs(DoneEvent, this));
