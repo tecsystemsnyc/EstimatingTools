@@ -118,8 +118,12 @@ namespace EstimatingLibrary
         {
             get
             {
-                return allCosts.GetCost(CostType.TEC);
+                return getTECMaterialCost();
             }
+        }
+        public double TECSoftwareCost
+        {
+            get { return getSoftwareCost(); }
         }
         public double TECShipping
         {
@@ -327,6 +331,17 @@ namespace EstimatingLibrary
         #endregion
 
         #region Calculate Derivatives
+        
+        private double getSoftwareCost()
+        {
+            return TotalPointNumber * 4.0;
+        }
+
+        private double getTECMaterialCost()
+        {
+            return TECSoftwareCost + allCosts.GetCost(CostType.TEC);
+        }
+
         private double getTECShipping()
         {
             return (TECMaterialCost * parameters.Shipping / 100);
@@ -367,7 +382,7 @@ namespace EstimatingLibrary
 
             return outTax;
         }
-
+        
         private double getTECEscalation()
         {
             double outCost = getTECLaborCost();
@@ -779,7 +794,9 @@ namespace EstimatingLibrary
         private void raiseFromPoints()
         {
             raisePropertyChanged("TotalPointNumber");
+            raisePropertyChanged("TECSoftwareCost");
             raiseTECLabor();
+            raiseMaterial();
         }
         private void raiseElectricalMaterial()
         {
