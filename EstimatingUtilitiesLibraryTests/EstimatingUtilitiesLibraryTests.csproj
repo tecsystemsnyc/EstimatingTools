@@ -78,6 +78,7 @@
     <Compile Include="LegacyDBTests.cs" />
     <Compile Include="LinkingTests.cs" />
     <Compile Include="LoadBidTests.cs" />
+    <Compile Include="LoadSpeedTests.cs" />
     <Compile Include="LoadTemplatesTests.cs" />
     <Compile Include="SaveNewTemplatesTests.cs" />
     <Compile Include="SaveBidTests.cs" />

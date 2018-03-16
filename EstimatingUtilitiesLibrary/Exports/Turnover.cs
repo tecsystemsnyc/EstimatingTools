@@ -393,7 +393,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.TECCost);
             worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
             worksheet.Cell(x, 2).DataType = XLCellValues.Number;
-            x++;
+            x += 2;
             worksheet.Cell(x, 1).Value = "Overhead";
             worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.Overhead);
             worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
@@ -439,7 +439,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             worksheet.Cell(x, 5).Value = String.Format("{0}", estimate.SubcontractorCost);
             worksheet.Cell(x, 5).Style.NumberFormat.Format = accountingFormat;
             worksheet.Cell(x, 5).DataType = XLCellValues.Number;
-            x++;
+            x += 2;
             worksheet.Cell(x, 4).Value = "Escalation";
             worksheet.Cell(x, 5).Value = String.Format("{0}", estimate.ElectricalEscalation);
             worksheet.Cell(x, 5).Style.NumberFormat.Format = accountingFormat;

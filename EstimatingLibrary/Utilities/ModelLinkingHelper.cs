@@ -941,7 +941,7 @@ namespace EstimatingLibrary.Utilities
         }
         #endregion
 
-        private static bool addRequiredIOModules(TECController controller)
+        internal static bool addRequiredIOModules(TECController controller)
         {
             //The IO needed by the points connected to the controller
             IOCollection necessaryIO = new IOCollection();

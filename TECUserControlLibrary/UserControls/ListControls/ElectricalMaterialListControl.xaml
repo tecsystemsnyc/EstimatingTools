@@ -29,6 +29,7 @@
                   dd:DragDrop.IsDropTarget="True"
                   dd:DragDrop.IsDragSource="{Binding ElementName=ElectricalMaterialList, Path=IsDragSource}"
                   AllowDrop="True"
+                  MouseDoubleClick="ListView_MouseDoubleClicked"
                   Drop="ListView_Dropped">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>

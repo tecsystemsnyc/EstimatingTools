@@ -9,6 +9,7 @@
              xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              xmlns:interfaces="clr-namespace:EstimatingLibrary.Interfaces;assembly=EstimatingLibrary"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d" 
              x:Name="networkView"
@@ -83,7 +84,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid>
@@ -119,10 +120,22 @@
                                Style="{StaticResource ListHeader}"/>
                         <listControls:ElectricalMaterialListControl Source="{Binding AllConnectionTypes}"
                                                                 SelectedItem="{Binding SelectedAllConnectionType}"
-                                                                Grid.Row="1"/>
+                                                                Grid.Row="1">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="DoubleClicked">
+                                    <i:InvokeCommandAction Command="{Binding AddConnectionTypeCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </listControls:ElectricalMaterialListControl>
                         <listControls:ElectricalMaterialListControl Source="{Binding ChosenConnectionTypes}"
                                                                 SelectedItem="{Binding SelectedChosenConnectionType}"
-                                                                Grid.Row="1" Grid.Column="2"/>
+                                                                Grid.Row="1" Grid.Column="2">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="DoubleClicked">
+                                    <i:InvokeCommandAction Command="{Binding RemoveConnectionTypeCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </listControls:ElectricalMaterialListControl>
                         <Grid Grid.Row="1"
                           Grid.Column="1">
                             <Grid.RowDefinitions>
@@ -195,6 +208,9 @@
                                                             DeleteCommand="{Binding RemoveChildCommand}"
                                                             DropHandler="{Binding}"
                                                             Grid.Row="1"/>
+                <TextBlock Text="Drag from the Children list to add to this connection." VerticalAlignment="Center" HorizontalAlignment="Center"
+                           Visibility="{Binding SelectedConnection.Children.Count, Converter={utilities:ZeroCountToVisibileConverter}}"
+                           Grid.RowSpan="2"/>
             </Grid>
         </Grid>
         <Grid Grid.Column="1" Background="{StaticResource SectionBackgroundBrush}"

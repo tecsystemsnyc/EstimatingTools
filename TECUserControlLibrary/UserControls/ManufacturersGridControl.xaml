@@ -20,7 +20,8 @@
                   AutoGenerateColumns="False"
                   x:Name="ManufacturersGrid"
                   CanUserAddRows="False"
-                  CanUserDeleteRows="False">
+                  CanUserDeleteRows="False"
+                  CanUserSortColumns="True">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Label}" Header="Manufacturer" Width="Auto"  MinWidth="80"/>
