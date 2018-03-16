@@ -252,6 +252,7 @@
     <Compile Include="ViewModels\CatalogVMs\TagsCatalogVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\ValvesCatalogVM.cs" />
     <Compile Include="ViewModels\BidPropertiesVM.cs" />
+    <Compile Include="ViewModels\ChangeControllerTypeVM.cs" />
     <Compile Include="ViewModels\ConnectableFilterVM.cs" />
     <Compile Include="ViewModels\ConnectOnAddVM.cs" />
     <Compile Include="ViewModels\DeleteEndDeviceVM.cs" />
@@ -296,6 +297,9 @@
     </Compile>
     <Compile Include="Views\BidPropertiesView.xaml.cs">
       <DependentUpon>BidPropertiesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ChangeControllerTypeView.xaml.cs">
+      <DependentUpon>ChangeControllerTypeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ConnectableFilterView.xaml.cs">
       <DependentUpon>ConnectableFilterView.xaml</DependentUpon>
@@ -777,6 +781,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\BidPropertiesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ChangeControllerTypeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
