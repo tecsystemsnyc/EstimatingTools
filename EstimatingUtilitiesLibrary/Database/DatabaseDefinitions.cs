@@ -1304,6 +1304,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
 
         public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
         public override List<Type> Types { get { return types; } }
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
@@ -1552,6 +1553,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
 
         public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
         public override List<Type> Types { get { return types; } }
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
@@ -1592,6 +1594,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
 
         public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
         public override List<Type> Types { get { return types; } }
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
@@ -1630,6 +1633,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
 
         public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
         public override List<Type> Types { get { return types; } }
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
@@ -1669,6 +1673,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
 
         public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
         public override List<Type> Types { get { return types; } }
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
@@ -1710,6 +1715,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
 
         public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
         public override List<Type> Types { get { return types; } }
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
@@ -1749,6 +1755,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
 
         public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
         public override List<Type> Types { get { return types; } }
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
@@ -2077,6 +2084,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
 
         public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
         public override List<Type> Types { get { return types; } }
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
@@ -2218,6 +2226,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
 
         public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
         public override List<Type> Types { get { return types; } }
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
@@ -2256,6 +2265,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
 
         public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
         public override List<Type> Types { get { return types; } }
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
@@ -2295,6 +2305,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
 
         public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
         public override List<Type> Types { get { return types; } }
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
@@ -2332,6 +2343,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
 
         public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
         public override List<Type> Types { get { return types; } }
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
@@ -2370,6 +2382,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
 
         public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
         public override List<Type> Types { get { return types; } }
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
@@ -2724,6 +2737,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
 
         public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
         public override List<Type> Types { get { return types; } }
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
@@ -2763,6 +2777,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
 
         public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
         public override List<Type> Types { get { return types; } }
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
@@ -3032,11 +3047,28 @@ namespace EstimatingUtilitiesLibrary.Database
     internal abstract class TableBase
     {
         public abstract string NameString { get; }
+        public virtual string IndexString { get { return ""; } }
         public abstract List<Type> Types { get; }
         public abstract List<string> PropertyNames { get; }
 
         public abstract List<TableField> PrimaryKeys { get; }
         public abstract List<TableField> Fields { get; }
+        public virtual string QuantityString
+        {
+            get
+            {
+                string qtyField = "";
+                foreach (TableField field in Fields)
+                {
+                    if (field.Property.DeclaringType == typeof(HelperProperties) && field.Property.Name == "Quantity")
+                    {
+                        qtyField = field.Name;
+                        break;
+                    }
+                }
+                return qtyField;
+            }
+        }
 
     }
     

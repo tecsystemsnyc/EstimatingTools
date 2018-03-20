@@ -1231,9 +1231,9 @@ namespace Tests
         {
             //Act
             TECPoint expectedPoint = new TECPoint(true);
-            expectedPoint.Type = IOType.BACnetIP;
+            expectedPoint.Type = IOType.DO;
             expectedPoint.Label = "New Point";
-            expectedPoint.Quantity = 84300;
+            expectedPoint.Quantity = 4;
 
             TECSubScope subScopeToModify = null;
             foreach (TECSystem system in bid.Systems)
@@ -1413,7 +1413,7 @@ namespace Tests
                 if (ssToModify != null)
                     break;
             }
-            expectedPoint.Quantity = 7463;
+            expectedPoint.Quantity = 3;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;

@@ -25,6 +25,7 @@ namespace TECUserControlLibrary.ViewModels
         private MiscCostsVM miscVM;
         private ControllersPanelsVM controllersPanelsVM;
         private NetworkVM networkVM;
+        private ValveSelectionVM valveVM;
 
         public ViewModelBase SelectedVM
         {
@@ -185,6 +186,15 @@ namespace TECUserControlLibrary.ViewModels
                 };
             }
         }
+        public ValveSelectionVM ValveVM
+        {
+            get { return valveVM; }
+            set
+            {
+                valveVM = value;
+                RaisePropertyChanged("ValveVM");
+            }
+        }
 
         public SystemHierarchyVM(TECScopeManager scopeManager, bool canEdit)
         {
@@ -307,6 +317,7 @@ namespace TECUserControlLibrary.ViewModels
                 MiscVM = new MiscCostsVM(value);
                 ControllersPanelsVM = new ControllersPanelsVM(value, scopeManager);
                 NetworkVM = NetworkVM.GetNetworkVMFromSystem(value, scopeManager.Catalogs);
+                ValveVM = new ValveSelectionVM(value, scopeManager.Catalogs.Valves);
             }
         }
 

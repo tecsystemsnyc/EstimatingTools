@@ -826,11 +826,9 @@ namespace Tests
             Dictionary<Guid, CostBatch> loadCostDictionary = new Dictionary<Guid, CostBatch>();
             addToCost(loadCostDictionary, loadedBid, loadedBid);
 
-            Assert.AreEqual(expectedTotalCost, loadedEstimate.TotalCost, delta);
-
-
             compareCosts(saveBid, loadedBid, saveCostDictionary, loadCostDictionary);
-
+            Assert.AreEqual(expectedTotalCost, loadedEstimate.TotalCost, delta);
+            
         }
 
         private void compareCosts(TECBid saveBid, TECBid LoadBid, 
@@ -847,8 +845,7 @@ namespace Tests
                     CostBatch saveCost = pair.Value;
                     CostBatch loadCost = loadCostDictionary[pair.Key];
                     TECObject item = TestHelper.ObjectWithGuid(pair.Key, LoadBid);
-                    Assert.IsTrue(compareCosts(saveCost, loadCost),
-                        "Loaded value not correct: " + item);
+                    Assert.IsTrue(compareCosts(saveCost, loadCost), "Loaded value not correct: " + item);
                 }
             }
         }

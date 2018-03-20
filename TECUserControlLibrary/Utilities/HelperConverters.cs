@@ -698,6 +698,7 @@ namespace TECUserControlLibrary.Utilities
                 case SystemComponentIndex.Proposal:
                 case SystemComponentIndex.Controllers:
                 case SystemComponentIndex.Network:
+                case SystemComponentIndex.Valves:
                     return 2;
                 default:
                     return 1;

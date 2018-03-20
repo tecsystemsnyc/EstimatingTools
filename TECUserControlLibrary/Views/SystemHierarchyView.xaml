@@ -290,13 +290,19 @@
                                                                    AddCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.AddScopeBranchCommand}"/>
                                 </Grid>
                             </DataTemplate>
+                            <DataTemplate x:Key="ValveTemplate">
+                                <Grid>
+                                    <local:ValveSelectionView ViewModel="{Binding ElementName=systemHierarchyView, Path=ViewModel.ValveVM}"/>
+                                </Grid>
+                            </DataTemplate>
                             <utilities:SystemComponentSelector x:Key="ComponentSelector"
                                                            EquipmentTemplate="{StaticResource EquipmentTemplate}"
                                                            ControllerTemplate="{StaticResource ControllerTemplate}"
                                                            ConnectionTemplate="{StaticResource ElectricalTemplate}"
                                                                NetworkTemplate="{StaticResource NetworkTemplate}"
                                                            MiscTemplate="{StaticResource MiscTemplate}"
-                                                           ProposalTemplate="{StaticResource ProposalTemplate}"/>
+                                                           ProposalTemplate="{StaticResource ProposalTemplate}"
+                                                               ValveTemplate="{StaticResource ValveTemplate}"/>
                         </ResourceDictionary>
                     </Grid.Resources>
                     <Grid.RowDefinitions>

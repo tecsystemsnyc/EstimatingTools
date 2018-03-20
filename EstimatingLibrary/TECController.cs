@@ -376,6 +376,19 @@ namespace EstimatingLibrary
                 subScope.Connection = null;
             }
         }
+        public void RemoveController(TECController controller)
+        {
+            foreach (TECConnection connection in ChildrenConnections)
+            {
+                if (connection is TECNetworkConnection netConnect)
+                {
+                    if (netConnect.Children.Contains(controller))
+                    {
+                        netConnect.RemoveINetworkConnectable(controller);
+                    }
+                }
+            }
+        }
         public void RemoveAllConnections()
         {
             RemoveAllChildConnections();
@@ -515,6 +528,32 @@ namespace EstimatingLibrary
             var outController = new TECController(this, this.IsTypical);
             ModelLinkingHelper.LinkScopeItem(outController, scopeManager);
             return outController;
+        }
+        public INetworkConnectable Copy(INetworkConnectable item, bool isTypical, Dictionary<Guid, Guid> guidDictionary)
+        {
+            return new TECController(item as TECController, isTypical, guidDictionary);
+        }
+        public bool CanChangeType(TECControllerType newType)
+        {
+            if (newType == null)
+                return false;
+            TECController possibleController = new TECController(newType, false);
+            IOCollection necessaryIO = this.getUsedIO();
+            IOCollection possibleIO = possibleController.getPotentialIO() + possibleController.getTotalIO();
+            return possibleIO.Contains(necessaryIO);
+        }
+        public void ChangeType(TECControllerType newType)
+        {
+            if (CanChangeType(newType))
+            {
+                this.IOModules.ObservablyClear();
+                this.Type = newType;
+                ModelLinkingHelper.addRequiredIOModules(this);
+            }
+            else
+            {
+                return;
+            }
         }
         
         protected override CostBatch getCosts()
@@ -669,10 +708,6 @@ namespace EstimatingLibrary
             return potentialIO;
         }
 
-        public INetworkConnectable Copy(INetworkConnectable item, bool isTypical, Dictionary<Guid, Guid> guidDictionary)
-        {
-            return new TECController(item as TECController, isTypical, guidDictionary);
-        }
         
         #endregion
     }

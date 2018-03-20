@@ -168,6 +168,7 @@ namespace TECUserControlLibrary.ViewModels
         public RelayCommand AddPanelCommand { get; private set; }
         public RelayCommand<TECController> DeleteControllerCommand { get; private set; }
         public RelayCommand<TECPanel> DeletePanelCommand { get; private set; }
+        public RelayCommand<TECController> ChangeTypeCommand { get; private set; }
 
         #region Delegates
         public Action<IDropInfo> DragHandler;
@@ -186,9 +187,25 @@ namespace TECUserControlLibrary.ViewModels
             AddPanelCommand = new RelayCommand(addPanelExecute, canAddPanel);
             DeleteControllerCommand = new RelayCommand<TECController>(deleteControllerExecute);
             DeletePanelCommand = new RelayCommand<TECPanel>(deletePanelExecute);
+            ChangeTypeCommand = new RelayCommand<TECController>(changeTypeExecute, canChangeType);
 
             Refresh(parent, controllers, panels);
         }
+
+        private void changeTypeExecute(TECController obj)
+        {
+            ObservableCollection<TECControllerType> types = Bid != null ? Bid.Catalogs.ControllerTypes : Templates.Catalogs.ControllerTypes;
+
+            SelectedVM = new ChangeControllerTypeVM(obj, types);
+        }
+
+        private bool canChangeType(TECController arg)
+        {
+            ObservableCollection<TECControllerType> types = Bid != null ? Bid.Catalogs.ControllerTypes : Templates.Catalogs.ControllerTypes;
+
+            return arg != null && types.Any(x => arg.CanChangeType(x));
+        }
+
         public ControllersPanelsVM(TECBid bid) : this(bid, bid.Controllers, bid.Panels)
         {
             PanelSelectionReadOnly = false;
@@ -410,17 +427,6 @@ namespace TECUserControlLibrary.ViewModels
             {
                 foreach (object item in e.OldItems)
                 {
-                    //if (item is ControllerInPanel)
-                    //{
-                    //    foreach (TECPanel panel in sourcePanels)
-                    //    {
-                    //        if (panel.Controllers.Contains((item as ControllerInPanel).Controller))
-                    //        {
-                    //            panel.Controllers.Remove((item as ControllerInPanel).Controller);
-                    //        }
-                    //    }
-                    //    sourceControllers.Remove((item as ControllerInPanel).Controller);
-                    //}
                     if (item is TECController)
                     {
                         removeController(item as TECController);

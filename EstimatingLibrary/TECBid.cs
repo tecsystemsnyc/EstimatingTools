@@ -34,8 +34,6 @@ namespace EstimatingLibrary
         #endregion
 
         #region Properties
-
-
         public string Name
         {
             get { return _name; }
@@ -322,6 +320,10 @@ namespace EstimatingLibrary
         {
             controller.RemoveAllConnections();
             _controllers.Remove(controller);
+            foreach(TECPanel panel in this.Panels)
+            {
+                if (panel.Controllers.Contains(controller)) { panel.Controllers.Remove(controller); }
+            }
             notifyCombinedChanged(Change.Remove, "Controllers", this, controller);
             CostChanged?.Invoke(-controller.CostBatch);
         }
@@ -385,11 +387,29 @@ namespace EstimatingLibrary
                     notifyCombinedChanged(Change.Remove, collectionName, this, item);
                     if (item is TECTypical typ)
                     {
-                        var sys = item as TECSystem;
                         if (typ.Instances.Count == 0)
                         {
                             costChanged = false;
                             pointChanged = false;
+                        }
+                        foreach(TECSystem instance in typ.Instances)
+                        {
+                            foreach(TECSubScope subScope in instance.GetAllSubScope())
+                            {
+                                TECController parentController = subScope.Connection?.ParentController;
+                                if(parentController != null && this.Controllers.Contains(parentController))
+                                {
+                                    parentController.RemoveSubScope(subScope);
+                                }
+                            }
+                            foreach(TECController controller in instance.Controllers)
+                            {
+                                TECController parentController = controller.ParentConnection?.ParentController;
+                                if(parentController != null && this.Controllers.Contains(parentController))
+                                {
+                                    parentController.RemoveController(controller);
+                                }
+                            }
                         }
                     }
                 }

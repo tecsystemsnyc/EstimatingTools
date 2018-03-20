@@ -15,64 +15,65 @@ namespace EstimatingLibraryTests
         [TestMethod]
         public void LinkNetworkConnections()
         {
-            //Arrange
-            Guid childGuid = Guid.NewGuid();
-            Guid subScopeGuid = Guid.NewGuid();
+            throw new NotImplementedException();
+            ////Arrange
+            //Guid childGuid = Guid.NewGuid();
+            //Guid subScopeGuid = Guid.NewGuid();
 
-            TECTemplates templates = new TECTemplates();
+            //TECTemplates templates = new TECTemplates();
 
-            TECManufacturer man = new TECManufacturer();
-            templates.Catalogs.Manufacturers.Add(man);
+            //TECManufacturer man = new TECManufacturer();
+            //templates.Catalogs.Manufacturers.Add(man);
 
-            TECControllerType type = new TECControllerType(man);
-            type.IO.Add(new TECIO(IOType.BACnetIP));
-            templates.Catalogs.ControllerTypes.Add(type);
+            //TECControllerType type = new TECControllerType(man);
+            //type.IO.Add(new TECIO(IOType.BACnetIP));
+            //templates.Catalogs.ControllerTypes.Add(type);
 
-            //Containing System
-            TECSystem sys = new TECSystem(false);
-            templates.SystemTemplates.Add(sys);
+            ////Containing System
+            //TECSystem sys = new TECSystem(false);
+            //templates.SystemTemplates.Add(sys);
 
-            //Parent Controller
-            TECController parentController = new TECController(type, false);
-            sys.AddController(parentController);
+            ////Parent Controller
+            //TECController parentController = new TECController(type, false);
+            //sys.AddController(parentController);
 
-            TECNetworkConnection netConnect = parentController.AddNetworkConnection(false, new List<TECConnectionType>(), IOType.BACnetIP);
+            //TECNetworkConnection netConnect = parentController.AddNetworkConnection(false, new List<TECConnectionType>(), IOType.BACnetIP);
 
-            //Daisy Controller
-            TECController fakeChildController = new TECController(childGuid, type, false);
-            netConnect.AddINetworkConnectable(fakeChildController);
+            ////Daisy Controller
+            //TECController fakeChildController = new TECController(childGuid, type, false);
+            //netConnect.AddINetworkConnectable(fakeChildController);
 
-            TECController realChildController = new TECController(childGuid, type, false);
-            sys.AddController(realChildController);
+            //TECController realChildController = new TECController(childGuid, type, false);
+            //sys.AddController(realChildController);
 
-            //Daisy SubScope
-            TECEquipment equip = new TECEquipment(false);
-            sys.Equipment.Add(equip);
+            ////Daisy SubScope
+            //TECEquipment equip = new TECEquipment(false);
+            //sys.Equipment.Add(equip);
 
-            TECPoint fakePoint = new TECPoint(false);
-            fakePoint.Type = IOType.BACnetIP;
-            fakePoint.Quantity = 1;
+            //TECPoint fakePoint = new TECPoint(false);
+            //fakePoint.Type = IOType.BACnetIP;
+            //fakePoint.Quantity = 1;
 
-            TECSubScope fakeSS = new TECSubScope(subScopeGuid, false);
-            fakeSS.AddPoint(fakePoint);
+            //TECSubScope fakeSS = new TECSubScope(subScopeGuid, false);
+            //fakeSS.AddPoint(fakePoint);
 
-            TECPoint realPoint = new TECPoint(false);
-            realPoint.Type = IOType.BACnetIP;
-            realPoint.Quantity = 1;
+            //TECPoint realPoint = new TECPoint(false);
+            //realPoint.Type = IOType.BACnetIP;
+            //realPoint.Quantity = 1;
 
-            TECSubScope realSS = new TECSubScope(subScopeGuid, false);
-            realSS.AddPoint(realPoint);
+            //TECSubScope realSS = new TECSubScope(subScopeGuid, false);
+            //realSS.AddPoint(realPoint);
 
-            netConnect.AddINetworkConnectable(fakeSS);
+            //netConnect.AddINetworkConnectable(fakeSS);
 
-            equip.SubScope.Add(realSS);
+            //equip.SubScope.Add(realSS);
 
-            //Act
-            ModelLinkingHelper.LinkTemplates(templates, new Dictionary<Guid, List<Guid>>());
+            ////Act
+            //ModelLinkingHelper.LinkTemplates(templates, new Dictionary<Guid, List<Guid>>());
 
-            //Assert
-            Assert.IsTrue(netConnect.Children.Contains(realSS), "SubScope wasn't linked to parent network connection properly.");
-            Assert.IsTrue(netConnect.Children.Contains(realChildController), "Controller wasn't linked to parent network connection properly.");
+            ////Assert
+            //Assert.IsTrue(netConnect.Children.Contains(realSS), "SubScope wasn't linked to parent network connection properly.");
+            //Assert.IsTrue(netConnect.Children.Contains(realChildController), "Controller wasn't linked to parent network connection properly.");
         }
     }
 }
