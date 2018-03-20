@@ -65,61 +65,32 @@ namespace EstimatingUtilitiesLibrary.Database
             TECBid bid = getObjectFromTable(new BidInfoTable(), id => { return new TECBid(id); }, new TECBid());
 
             getScopeManagerProperties(bid);
-
-            Dictionary<Guid, List<TECTag>> tagRelationships = getOneToManyRelationships(new ScopeTagTable(), bid.Catalogs.Tags);
-            Dictionary<Guid, List<TECAssociatedCost>> costRelationships = getOneToManyRelationships(new ScopeAssociatedCostTable(), bid.Catalogs.AssociatedCosts);
-            List<IEndDevice> allEndDevices = new List<IEndDevice>(bid.Catalogs.Devices);
-            allEndDevices.AddRange(bid.Catalogs.Valves);
-            Dictionary<Guid, List<IEndDevice>> endDevices = getOneToManyRelationships(new SubScopeDeviceTable(), allEndDevices); Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes = getOneToOneRelationships(new ConnectionConduitTypeTable(), bid.Catalogs.ConduitTypes);
             bid.Locations = getObjectsFromTable(new LocationTable(), id => new TECLocation(id)).toOC();
             Dictionary<Guid, TECLocation> locationDictionary = getOneToOneRelationships(new LocatedLocationTable(), bid.Locations);
-            Dictionary<Guid, TECControllerType> controllerTypeDictionary = getOneToOneRelationships(new ControllerControllerTypeTable(), bid.Catalogs.ControllerTypes);
-            Dictionary<Guid, TECPanelType> panelTypeDictionary = getOneToOneRelationships(new PanelPanelTypeTable(), bid.Catalogs.PanelTypes);
-            Dictionary<Guid, List<TECConnectionType>> connectionConnectionTypeRelationships = getOneToManyRelationships(new NetworkConnectionConnectionTypeTable(), bid.Catalogs.ConnectionTypes);
-
+            
             List<TECScopeBranch> branches = getObjectsFromTable(new ScopeBranchTable(), id => new TECScopeBranch(id, false));
             Dictionary<Guid, List<Guid>> branchHierarchy = getOneToManyRelationships(new ScopeBranchHierarchyTable());
-            
+            Dictionary<Guid, List<TECTag>> tagRelationships = getOneToManyRelationships(new ScopeTagTable(), bid.Catalogs.Tags);
+            Dictionary<Guid, List<TECAssociatedCost>> costRelationships = getOneToManyRelationships(new ScopeAssociatedCostTable(), bid.Catalogs.AssociatedCosts);
+
             bid.Parameters = getObjectFromTable(new ParametersTable(), id => { return new TECParameters(id); }, new TECParameters(bid.Guid));
             bid.ExtraLabor = getObjectFromTable(new ExtraLaborTable(), id => { return new TECExtraLabor(id); }, new TECExtraLabor(bid.Guid));
             bid.Schedule = getSchedule(bid);
             bid.ScopeTree = getChildObjects(new BidScopeBranchTable(), new ScopeBranchTable(), bid.Guid, id => new TECScopeBranch(id, false)).toOC();
             bid.ScopeTree.ForEach(item => linkBranchHierarchy(item, branches, branchHierarchy));
-            (var typicals, var controllers, var panels)  = getScopeHierarchy(bid.Guid, controllerTypeDictionary, panelTypeDictionary);
-            bid.Systems = typicals;
+            (var typicals, var controllers, var panels)  = getScopeHierarchy(bid.Guid, bid.Catalogs);
+            bid.Systems = typicals.toOC();
             bid.SetControllers(controllers);
-            bid.Panels = panels;
+            bid.Panels = panels.toOC();
             bid.Notes = getObjectsFromTable(new NoteTable(), id => new TECLabeled(id)).toOC();
             bid.Exclusions = getObjectsFromTable(new ExclusionTable(), id => new TECLabeled(id)).toOC();
-            bid.SetControllers(getOrphanControllers(controllerTypeDictionary));
             bid.MiscCosts = getChildObjects(new BidMiscTable(), new MiscTable(), bid.Guid, data => getMiscFromRow(data, false)).toOC();
-            bid.Panels = getOrphanPanels(panelTypeDictionary);
-
-            List<TECController> allControllers = getAll<TECController>(bid);
-
+            
             List<TECLocated> allLocated = getAll<TECLocated>(bid);
             allLocated.ForEach(item => populateLocatedProperties(item, locationDictionary));
             List<TECScope> allScope = getAll<TECScope>(bid);
             allScope.ForEach(item => populateScopeProperties(item, tagRelationships, costRelationships));
-            List<TECSubScope> allSubScope = getAll<TECSubScope>(bid);
-            allSubScope.ForEach(item => populateSubScopeChildren(item, endDevices));
-
-            List<INetworkConnectable> allNetworkConnectable = new List<INetworkConnectable>(allSubScope);
-            allNetworkConnectable.AddRange(allControllers);
-            Dictionary<Guid, List<INetworkConnectable>> networkChildrenRelationships = getOneToManyRelationships(new NetworkConnectionChildrenTable(), allNetworkConnectable);
-
-            Dictionary<Guid, TECSubScope> subScopeConnectionChildrenRelationships = getOneToOneRelationships(new SubScopeConnectionChildrenTable(), allSubScope);
             
-            List<TECSubScopeConnection> subScopeConnections = getAll<TECSubScopeConnection>(bid);
-            subScopeConnections.ForEach(item => { populateSubScopeConnectionProperties(item,
-                 subScopeConnectionChildrenRelationships, connectionConduitTypes); });
-            List<TECNetworkConnection> networkConnections = getAll<TECNetworkConnection>(bid);
-            networkConnections.ForEach(item => { populateNetworkConnectionProperties(item, networkChildrenRelationships,
-                    connectionConduitTypes, connectionConnectionTypeRelationships); });
-
-            Dictionary<Guid, List<TECIOModule>> controllerModuleRelationships = getOneToManyRelationships(new ControllerIOModuleTable(), bid.Catalogs.IOModules);
-            allControllers.ForEach(item => populateControllerIOModules(item, controllerModuleRelationships));
-
             var placeholderDict = getCharacteristicInstancesList();
             bool needsSave = ModelLinkingHelper.LinkBid(bid, placeholderDict);
 
@@ -152,11 +123,14 @@ namespace EstimatingUtilitiesLibrary.Database
             List<TECMisc> misc = getObjectsFromTable(new MiscTable(), data => getMiscFromRow(data, false));
             List<TECController> controllers = getObjectsFromTable(new ControllerTable(), data => getControllerFromRow(data, false, controllerTypeDictionary));
             List<TECPanel> panels = getObjectsFromTable(new PanelTable(), data => getPanelFromRow(data, false, panelTypeDictionary));
-            List<TECScopeBranch> scopeBranches = getObjectsFromTable(new ScopeBranchTable(), id => new TECScopeBranch(id, false));
             List<TECSubScopeConnection> subScopeConnections = getObjectsFromTable(new SubScopeConnectionTable(), id => new TECSubScopeConnection(id, false));
             List<TECNetworkConnection> networkConnections = getObjectsFromTable(new NetworkConnectionTable(), id => new TECNetworkConnection(id, false));
             List<TECConnection> connections = new List<TECConnection>(subScopeConnections);
             connections.AddRange(networkConnections);
+
+            Dictionary<Guid, List<Guid>> branchHierarchy = getOneToManyRelationships(new ScopeBranchHierarchyTable());
+            List<TECScopeBranch> scopeBranches = getObjectsFromTable(new ScopeBranchTable(), id => new TECScopeBranch(id, false));
+            scopeBranches.ForEach(x => linkBranchHierarchy(x, scopeBranches, branchHierarchy));
 
             templates.Parameters = getObjectsFromTable(new ParametersTable(), id => new TECParameters(id)).toOC();    
 
@@ -169,23 +143,23 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<Guid, List<TECPoint>> subScopePoint = getOneToManyRelationships(new SubScopePointTable(), points);
             Dictionary<Guid, List<TECConnection>> controllerConnection = getOneToManyRelationships(new ControllerConnectionTable(), connections);
             
-            subScope.ForEach(item => item.Points = subScopePoint.ContainsKey(item.Guid) ? subScopePoint[item.Guid].toOC() : new ObservableCollection<TECPoint>());
-            equipment.ForEach(item => item.SubScope = equipmentSubScope.ContainsKey(item.Guid) ? equipmentSubScope[item.Guid].toOC() : new ObservableCollection<TECSubScope>());
+            subScope.ForEach(item => item.Points = subScopePoint.valueOrNew(item.Guid));
+            equipment.ForEach(item => item.SubScope = equipmentSubScope.valueOrNew(item.Guid));
             foreach (TECSystem system in systems)
             {
-                system.Equipment = systemEquipment.ContainsKey(system.Guid) ? systemEquipment[system.Guid].toOC() : new ObservableCollection<TECEquipment>();
-                system.SetControllers(systemController.ContainsKey(system.Guid) ? systemController[system.Guid].toOC() : new ObservableCollection<TECController>());
-                system.Panels = systemPanels.ContainsKey(system.Guid) ? systemPanels[system.Guid].toOC() : new ObservableCollection<TECPanel>();
-                system.MiscCosts = systemMisc.ContainsKey(system.Guid) ? systemMisc[system.Guid].toOC() : new ObservableCollection<TECMisc>();
-                system.ScopeBranches = systemScopeBranch.ContainsKey(system.Guid) ? systemScopeBranch[system.Guid].toOC() : new ObservableCollection<TECScopeBranch>();
+                system.Equipment = systemEquipment.valueOrNew(system.Guid);
+                system.SetControllers(systemController.valueOrNew(system.Guid));
+                system.Panels = systemPanels.valueOrNew(system.Guid);
+                system.MiscCosts = systemMisc.valueOrNew(system.Guid);
+                system.ScopeBranches = systemScopeBranch.valueOrNew(system.Guid);
             }
-            controllers.ForEach(item => item.ChildrenConnections = controllerConnection.ContainsKey(item.Guid) ? controllerConnection[item.Guid].toOC() : new ObservableCollection<TECConnection>());
+            controllers.ForEach(item => item.ChildrenConnections = controllerConnection.valueOrNew(item.Guid));
             
             Dictionary<Guid, List<TECController>> panelControllerDictionary = getOneToManyRelationships(new PanelControllerTable(), controllers);
             controllers.ForEach(item => populateControllerIOModules(item, controllerModuleRelationships));
 
             subScope.ForEach(item => populateSubScopeChildren(item, endDevices));
-            panels.ForEach(item => item.Controllers = panelControllerDictionary.ContainsKey(item.Guid) ? panelControllerDictionary[item.Guid].toOC() : new ObservableCollection<TECController>());
+            panels.ForEach(item => item.Controllers = panelControllerDictionary.valueOrNew(item.Guid));
 
             List<INetworkConnectable> allNetworkConnectable = new List<INetworkConnectable>(subScope);
             allNetworkConnectable.AddRange(controllers);
@@ -290,6 +264,15 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 connectables[connection.Guid].ForEach(item => connection.Children.Add(item));
             }
+            if (connectionConnectionTypes.ContainsKey(connection.Guid))
+            {
+                connectionConnectionTypes[connection.Guid].ForEach(item => connection.ConnectionTypes.Add(item));
+            }
+            populateConnectionProperties(connection, connectionConduitTypes);
+        }
+        private static void populateNetworkConnectionProperties(TECNetworkConnection connection, Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes,
+            Dictionary<Guid, List<TECConnectionType>> connectionConnectionTypes)
+        {
             if (connectionConnectionTypes.ContainsKey(connection.Guid))
             {
                 connectionConnectionTypes[connection.Guid].ForEach(item => connection.ConnectionTypes.Add(item));
@@ -413,42 +396,6 @@ namespace EstimatingUtilitiesLibrary.Database
             TECSchedule schedule = new TECSchedule(guid, tables);
             return schedule;
         }
-        static private ObservableCollection<TECController> getOrphanControllers(Dictionary<Guid, TECControllerType> controllerTypes)
-        {
-            //Returns the controllers that are not in the ControlledScopeController table.
-            ObservableCollection<TECController> controllers = new ObservableCollection<TECController>();
-
-            string command = "select " + DatabaseHelper.AllFieldsInTableString(new ControllerTable()) + " from " + ControllerTable.TableName;
-            command += " where " + ControllerTable.ID.Name + " not in ";
-            command += "(select " + SystemControllerTable.ControllerID.Name;
-            command += " from " + SystemControllerTable.TableName + ")";
-
-            DataTable controllersDT = SQLiteDB.GetDataFromCommand(command);
-            foreach (DataRow row in controllersDT.Rows)
-            {
-                controllers.Add(getControllerFromRow(row, false, controllerTypes));
-            }
-
-            return controllers;
-        }
-        static private ObservableCollection<TECPanel> getOrphanPanels(Dictionary<Guid, TECPanelType> panelTypes)
-        {
-            //Returns the panels that are not in the ControlledScopePanel table.
-            ObservableCollection<TECPanel> panels = new ObservableCollection<TECPanel>();
-
-            string command = "select " + DatabaseHelper.AllFieldsInTableString(new PanelTable()) + " from " + PanelTable.TableName;
-            command += " where " + PanelTable.ID.Name + " not in ";
-            command += "(select " + SystemPanelTable.PanelID.Name;
-            command += " from " + SystemPanelTable.TableName + ")";
-
-            DataTable panelsDT = SQLiteDB.GetDataFromCommand(command);
-            foreach (DataRow row in panelsDT.Rows)
-            {
-                panels.Add(getPanelFromRow(row, false, panelTypes));
-            }
-
-            return panels;
-        }
 
         private static Dictionary<Guid, List<Guid>> getTemplateReferences()
         {
@@ -462,8 +409,7 @@ namespace EstimatingUtilitiesLibrary.Database
             return outDict;
         }
 
-        private static (ObservableCollection<TECTypical> typicals, ObservableCollection<TECController> controllers, ObservableCollection<TECPanel> panels) getScopeHierarchy(Guid bidID,
-            Dictionary<Guid, TECControllerType> controllerTypes, Dictionary<Guid, TECPanelType> panelTypes)
+        private static (List<TECTypical> typicals, List<TECController> controllers, List<TECPanel> panels) getScopeHierarchy(Guid bidID, TECCatalogs catalogs)
         {
             Dictionary<Guid, List<Guid>> bidTypicals = getOneToManyRelationships(new BidSystemTable());
             List<Guid> typicalIDs = bidTypicals.Count > 0 ? bidTypicals[bidID] : new List<Guid>();
@@ -479,7 +425,16 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<Guid, List<Guid>> scopeBranchHierarchy = getOneToManyRelationships(new ScopeBranchHierarchyTable());
             Dictionary<Guid, List<Guid>> networkChildren = getOneToManyRelationships(new NetworkConnectionChildrenTable());
             Dictionary<Guid, Guid> subScopeConnectionChildren = getOneToOneRelationships(new SubScopeConnectionChildrenTable());
-            
+
+            Dictionary<Guid, TECControllerType> controllerTypes = getOneToOneRelationships(new ControllerControllerTypeTable(), catalogs.ControllerTypes);
+            Dictionary<Guid, TECPanelType> panelTypes = getOneToOneRelationships(new PanelPanelTypeTable(), catalogs.PanelTypes);
+            Dictionary<Guid, List<TECIOModule>> controllerModuleRelationships = getOneToManyRelationships(new ControllerIOModuleTable(), catalogs.IOModules);
+            List<IEndDevice> allEndDevices = new List<IEndDevice>(catalogs.Devices);
+            allEndDevices.AddRange(catalogs.Valves);
+            Dictionary<Guid, List<IEndDevice>> endDevices = getOneToManyRelationships(new SubScopeDeviceTable(), allEndDevices);
+            Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes = getOneToOneRelationships(new ConnectionConduitTypeTable(), catalogs.ConduitTypes);
+            Dictionary<Guid, List<TECConnectionType>> connectionConnectionTypeRelationships = getOneToManyRelationships(new NetworkConnectionConnectionTypeTable(), catalogs.ConnectionTypes);
+
             DataTable allSystemData = SQLiteDB.GetDataFromTable(SystemTable.TableName);
             var typicalRows = from row in allSystemData.AsEnumerable() where typicalIDs.Contains(new Guid(row[SystemTable.ID.Name].ToString())) select row;
             var systemRows = from row in allSystemData.AsEnumerable() where !typicalIDs.Contains(new Guid(row[SystemTable.ID.Name].ToString())) select row;
@@ -516,14 +471,24 @@ namespace EstimatingUtilitiesLibrary.Database
             List<TECTypical> typicals = getObjectsFromData(new SystemTable(), typicalData, id => new TECTypical(id));
             List<INetworkConnectable> connectables = new List<INetworkConnectable>(controllers);
             connectables.AddRange(subScope);
-            
-            foreach(TECNetworkConnection item in networkConnections.Where(x => networkChildren.ContainsKey(x.Guid)))
+
+            Dictionary<Guid, List<TECController>> panelControllers = getOneToManyRelationships(new PanelControllerTable(), controllers);
+
+            controllers.ForEach(item => populateControllerIOModules(item, controllerModuleRelationships));
+            subScope.ForEach(item => populateSubScopeChildren(item, endDevices));
+
+            foreach (TECNetworkConnection item in networkConnections)
             {
-                item.Children = getRelatedReferences(networkChildren[item.Guid], connectables).toOC();
+                if (networkChildren.ContainsKey(item.Guid))
+                {
+                    item.Children = getRelatedReferences(networkChildren[item.Guid], connectables).toOC();
+                }
+                populateNetworkConnectionProperties(item, connectionConduitTypes, connectionConnectionTypeRelationships);
             }
-            foreach (TECSubScopeConnection item in subScopeConnections.Where(x => networkChildren.ContainsKey(x.Guid)))
+            foreach (TECSubScopeConnection item in subScopeConnections)
             {
                 item.SubScope = getRelatedReference(subScopeConnectionChildren[item.Guid], subScope);
+                populateConnectionProperties(item, connectionConduitTypes);
             }
             foreach (TECSubScope item in subScope.Where(x => subScopePoints.ContainsKey(x.Guid)))
             {
@@ -541,6 +506,7 @@ namespace EstimatingUtilitiesLibrary.Database
                     conn.ParentController = item;
                 }
             }
+            panels.ForEach(item => item.Controllers = panelControllers.valueOrNew(item.Guid));
             foreach(TECSystem item in systems)
             {
                 setSystemChildren(item);
@@ -552,11 +518,10 @@ namespace EstimatingUtilitiesLibrary.Database
                     item.Instances = getRelatedReferences(typicalSystems[item.Guid], systems).toOC();
             }
 
-            ObservableCollection<TECTypical> outTypicals = new ObservableCollection<TECTypical>(typicals);
-            ObservableCollection<TECController> outControllers = new ObservableCollection<TECController>(controllers.Where(x => !systemControllers.Any(pair => !pair.Value.Contains(x.Guid))));
-            ObservableCollection<TECPanel> outPanels = new ObservableCollection<TECPanel>(panels.Where(x => !systemPanels.Any(pair => !pair.Value.Contains(x.Guid))));
+            var outControllers = new List<TECController>(controllers.Where(x => !systemControllers.Any(pair => pair.Value.Contains(x.Guid))));
+            var outPanels = new List<TECPanel>(panels.Where(x => !systemPanels.Any(pair => pair.Value.Contains(x.Guid))));
 
-            return (outTypicals, outControllers, outPanels);
+            return (typicals, outControllers, outPanels);
 
             void addSystemChildrenToTypicalDict(Guid parentID, bool isTypical)
             {

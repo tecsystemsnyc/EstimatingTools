@@ -1317,12 +1317,6 @@ namespace EstimatingUtilitiesLibraryTests
             if (isBid)
             {
                 values = new List<string>();
-                values.Add("e503fdd4-f299-4618-8d54-6751c3b2bc25");
-                values.Add("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
-                values.Add("0");
-                addDataToTable(new NetworkConnectionChildrenTable(), values);
-
-                values = new List<string>();
                 values.Add("4f93907a-9aab-4ed5-8e55-43aab2af5ef8");
                 values.Add("f22913a6-e348-4a77-821f-80447621c6e0");
                 values.Add("0");
@@ -1333,10 +1327,22 @@ namespace EstimatingUtilitiesLibraryTests
                 values.Add("973e6100-31f7-40b0-bfe7-9d64630c1c56");
                 values.Add("0");
                 addDataToTable(new NetworkConnectionChildrenTable(), values);
-            
+
+                values = new List<string>();
+                values.Add("99aea45e-ebeb-4c1a-8407-1d1a3540ceeb");
+                values.Add("bf17527a-18ba-4765-a01e-8ab8de5664a3");
+                values.Add("0");
+                addDataToTable(new NetworkConnectionChildrenTable(), values);
+
                 values = new List<string>();
                 values.Add("99aea45e-ebeb-4c1a-8407-1d1a3540ceeb");
                 values.Add("7b6825df-57da-458a-a859-a9459c15907b");
+                values.Add("0");
+                addDataToTable(new NetworkConnectionChildrenTable(), values);
+
+                values = new List<string>();
+                values.Add("e503fdd4-f299-4618-8d54-6751c3b2bc25");
+                values.Add("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
                 values.Add("0");
                 addDataToTable(new NetworkConnectionChildrenTable(), values);
             }
