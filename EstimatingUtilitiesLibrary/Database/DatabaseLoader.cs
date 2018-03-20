@@ -1041,7 +1041,21 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             return getObjectsFromData(table, data, row => { return getObjectFromRow(row, table, constructor); });
         }
+        #endregion
 
+        #region Database Cleaning Methods
+        private static void removeRelationshipFragment(TableBase relationTable, TableBase objectTable, string objectKey)
+        {
+            if(objectTable.PrimaryKeys.Count != 1)
+            {
+                throw new Exception("Object table must have one primary key.");
+            }
+            string objectTableKey = objectTable.PrimaryKeys[0].Name;
+            string command = String.Format("delete from {0} where {1} in (select {1} from {0} where {1} not in (select {2} from {3}))",
+                relationTable.NameString, objectKey, objectTableKey, objectTable.NameString);
+
+            SQLiteDB.NonQueryCommand(command);
+        }
         #endregion
 
         private static string getQuantityField(TableBase table)
