@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EstimatingLibrary.Interfaces
 {
@@ -7,6 +8,30 @@ namespace EstimatingLibrary.Interfaces
     {
         SaveableMap PropertyObjects { get; }
         SaveableMap LinkedObjects { get; }
+    }
+
+    public static class RelatableExtensions
+    {
+        public static List<T> GetAll<T>(this IRelatable relatable)
+        {
+            List<T> list = new List<T>();
+            if (relatable is T typedObj)
+            {
+                list.Add(typedObj);
+            }
+            foreach (var item in relatable.PropertyObjects.Objects.Where(x => !relatable.LinkedObjects.Contains(x)))
+            {
+                if (item is IRelatable rel)
+                {
+                    list.AddRange(GetAll<T>(rel));
+                }
+                else if (item is T x)
+                {
+                    list.Add(x);
+                }
+            }
+            return list;
+        }
     }
 
     public class SaveableMap

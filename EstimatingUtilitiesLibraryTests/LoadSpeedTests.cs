@@ -67,13 +67,13 @@ namespace EstimatingUtilitiesLibraryTests
         public void TestLoadSpeed()
         {
 
-            SQLiteDatabase db = new SQLiteDatabase(path);
-            //db.NonQueryCommand("CREATE INDEX bid_system on BidSystem (BidID, SystemID, ScopeIndex);");
-            //db.NonQueryCommand("CREATE INDEX typical_system on SystemHierarchy (ParentID, ChildID, ScopeIndex);");
-            //db.NonQueryCommand("CREATE INDEX system_equipment on SystemEquipment (SystemID, EquipmentID, ScopeIndex);");
-            //db.NonQueryCommand("CREATE INDEX equipment_subScope on EquipmentSubScope (EquipmentID, SubScopeID, ScopeIndex);");
-            //db.NonQueryCommand("CREATE INDEX system_controller on SystemController (SystemID, ControllerID, ScopeIndex);");
-            //db.NonQueryCommand("CREATE INDEX subScope_device on SubScopeDevice (SubScopeID, DeviceID, ScopeIndex);");
+            //SQLiteDatabase db = new SQLiteDatabase(path);
+            ////db.NonQueryCommand("CREATE INDEX bid_system on BidSystem (BidID, SystemID, ScopeIndex);");
+            ////db.NonQueryCommand("CREATE INDEX typical_system on SystemHierarchy (ParentID, ChildID, ScopeIndex);");
+            ////db.NonQueryCommand("CREATE INDEX system_equipment on SystemEquipment (SystemID, EquipmentID, ScopeIndex);");
+            ////db.NonQueryCommand("CREATE INDEX equipment_subScope on EquipmentSubScope (EquipmentID, SubScopeID, ScopeIndex);");
+            ////db.NonQueryCommand("CREATE INDEX system_controller on SystemController (SystemID, ControllerID, ScopeIndex);");
+            ////db.NonQueryCommand("CREATE INDEX subScope_device on SubScopeDevice (SubScopeID, DeviceID, ScopeIndex);");
 
 
             Stopwatch watch = new Stopwatch();

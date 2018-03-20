@@ -376,6 +376,19 @@ namespace EstimatingLibrary
                 subScope.Connection = null;
             }
         }
+        public void RemoveController(TECController controller)
+        {
+            foreach (TECConnection connection in ChildrenConnections)
+            {
+                if (connection is TECNetworkConnection netConnect)
+                {
+                    if (netConnect.Children.Contains(controller))
+                    {
+                        netConnect.RemoveINetworkConnectable(controller);
+                    }
+                }
+            }
+        }
         public void RemoveAllConnections()
         {
             RemoveAllChildConnections();

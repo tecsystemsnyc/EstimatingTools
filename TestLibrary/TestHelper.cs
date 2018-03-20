@@ -173,7 +173,7 @@ namespace Tests
             subScope2.Points.Add(point2);
 
             //Connections
-            TECConnection testConnection = expectedController.AddSubScopeConnection(subScope1);
+            TECConnection testConnection = expectedController.AddSubScopeConnection(system1.GetInstancesFromTypical(subScope1)[0]);
             testConnection.ConduitType = bid.Catalogs.ConduitTypes[0];
             testConnection.Length = 42;
 
@@ -410,7 +410,6 @@ namespace Tests
             //Panels
             TECPanel panel = new TECPanel(panelType, false);
             panel.Name = "Test Panel";
-            panel.Controllers.Add(expectedController);
             panel.AssociatedCosts.Add(testAssociatedCost);
             panel.AssociatedCosts.Add(testAssociatedCost);
 
@@ -546,8 +545,12 @@ namespace Tests
             io.Quantity = 100;
             controllerType.IO.Add(io);
 
-            io = new TECIO(IOType.AI);
-            io.Quantity = 11;
+            io = new TECIO(IOType.UI);
+            io.Quantity = 100;
+            controllerType.IO.Add(io);
+
+            io = new TECIO(IOType.UO);
+            io.Quantity = 100;
             controllerType.IO.Add(io);
 
             outCatalogs.ControllerTypes.Add(controllerType);

@@ -118,7 +118,7 @@ namespace EstimatingLibrary
             _description = scope.Description;
             var tags = new ObservableCollection<TECTag>();
             foreach (TECTag tag in scope.Tags)
-            { tags.Add(tag as TECTag); }
+            { tags.Add(tag); }
             Tags = tags;
             var associatedCosts = new ObservableCollection<TECAssociatedCost>(scope.AssociatedCosts);
             AssociatedCosts = associatedCosts;
