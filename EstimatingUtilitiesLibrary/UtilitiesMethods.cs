@@ -282,4 +282,20 @@ namespace EstimatingUtilitiesLibrary
         }
 
     }
+
+    internal static class HelperExtensions
+    {
+        public static ObservableCollection<T> ValueOrNew<T>(this Dictionary<Guid, List<T>> dictionary, Guid id)
+        {
+            return dictionary.ContainsKey(id) ? new ObservableCollection<T>(dictionary[id]) : new ObservableCollection<T>();
+        }
+        public static T ValueOrDefault<T>(this Dictionary<Guid, T> dictionary, Guid id, T defaultValue)
+        {
+            return dictionary.ContainsKey(id) ? dictionary[id] : defaultValue;
+        }
+        public static ObservableCollection<T> ToOC<T>(this List<T> list)
+        {
+            return new ObservableCollection<T>(list);
+        }
+    }
 }

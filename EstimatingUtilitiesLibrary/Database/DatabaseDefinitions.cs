@@ -3057,6 +3057,22 @@ namespace EstimatingUtilitiesLibrary.Database
 
         public abstract List<TableField> PrimaryKeys { get; }
         public abstract List<TableField> Fields { get; }
+        public virtual string QuantityString
+        {
+            get
+            {
+                string qtyField = "";
+                foreach (TableField field in Fields)
+                {
+                    if (field.Property.DeclaringType == typeof(HelperProperties) && field.Property.Name == "Quantity")
+                    {
+                        qtyField = field.Name;
+                        break;
+                    }
+                }
+                return qtyField;
+            }
+        }
 
     }
     
