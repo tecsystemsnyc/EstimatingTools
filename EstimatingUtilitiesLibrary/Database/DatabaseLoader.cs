@@ -87,7 +87,7 @@ namespace EstimatingUtilitiesLibrary.Database
             bid.Schedule = getSchedule(bid);
             
             List<TECLocated> allLocated = bid.GetAll<TECLocated>();
-            allLocated.ForEach(item => populateLocatedProperties(item, locationDictionary));
+            allLocated.ForEach(item => locationDictionary.ValueOrDefault(item.Guid, null));
             List<TECScope> allScope = bid.GetAll<TECScope>();
             allScope.ForEach(item => populateScopeProperties(item, tagRelationships, costRelationships));
             
@@ -156,13 +156,11 @@ namespace EstimatingUtilitiesLibrary.Database
                 item.ChildrenConnections = controllerConnection.ValueOrNew(item.Guid);
                 item.ChildrenConnections.ForEach(x => x.ParentController = item);
             });
-
-
             
             Dictionary<Guid, List<TECController>> panelControllerDictionary = getOneToManyRelationships(new PanelControllerTable(), controllers);
-            controllers.ForEach(item => populateControllerIOModules(item, controllerModuleRelationships));
+            controllers.ForEach(item => controllerModuleRelationships.ValueOrNew(item.Guid));
 
-            subScope.ForEach(item => populateSubScopeChildren(item, endDevices));
+            subScope.ForEach(item => endDevices.ValueOrNew(item.Guid));
             panels.ForEach(item => item.Controllers = panelControllerDictionary.ValueOrNew(item.Guid));
 
             List<INetworkConnectable> allNetworkConnectable = new List<INetworkConnectable>(subScope);
@@ -272,8 +270,8 @@ namespace EstimatingUtilitiesLibrary.Database
 
             Dictionary<Guid, List<TECController>> panelControllers = getOneToManyRelationships(new PanelControllerTable(), controllers);
 
-            controllers.ForEach(item => populateControllerIOModules(item, controllerModuleRelationships));
-            subScope.ForEach(item => populateSubScopeChildren(item, endDevices));
+            controllers.ForEach(item => controllerModuleRelationships.ValueOrNew(item.Guid));
+            subScope.ForEach(item => endDevices.ValueOrNew(item.Guid));
 
             foreach (TECNetworkConnection item in networkConnections)
             {
@@ -288,7 +286,7 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 item.SubScope = getRelatedReference(subScopeConnectionChildren[item.Guid], subScope);
                 item.SubScope.Connection = item;
-                populateConnectionProperties(item, connectionConduitTypes);
+                item.ConduitType = connectionConduitTypes.ValueOrDefault(item.Guid, null);
             }
             foreach (TECSubScope item in subScope.Where(x => subScopePoints.ContainsKey(x.Guid)))
             {
@@ -426,10 +424,10 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<Guid, List<TECIO>> controllerTypeIORelationships = getOneToManyRelationships(new ControllerTypeIOTable(), io);
             Dictionary<Guid, List<TECIO>> moduleIORelationships = getOneToManyRelationships(new IOModuleIOTable(), io);
 
-            catalogs.IOModules.ForEach(item => populateIOModuleIO(item, moduleIORelationships));
+            catalogs.IOModules.ForEach(item => item.IO = moduleIORelationships.ValueOrNew(item.Guid));
             catalogs.ControllerTypes.ForEach(item => populateControllerTypeProperties(item, controllerTypeModuleRelationships, controllerTypeIORelationships));
-            catalogs.ConnectionTypes.ForEach(item => populateRatedCostInMaterial(item, ratedCostsRelationShips));
-            catalogs.ConduitTypes.ForEach(item => populateRatedCostInMaterial(item, ratedCostsRelationShips));
+            catalogs.ConnectionTypes.ForEach(item => ratedCostsRelationShips.ValueOrNew(item.Guid));
+            catalogs.ConduitTypes.ForEach(item => ratedCostsRelationShips.ValueOrNew(item.Guid));
 
             return catalogs;
         }
@@ -455,7 +453,31 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             return outDict;
         }
-        
+        private static TECSchedule getSchedule(TECBid bid)
+        {
+            var items = getObjectsFromTable(new ScheduleItemTable(), id => new TECScheduleItem(id));
+            var tableItems = getOneToManyRelationships(new ScheduleTableScheduleItemTable(), items);
+            var tables = getObjectsFromTable(new ScheduleTableTable(), id => new TECScheduleTable(id, tableItems.ValueOrNew(id)));
+            var scheduleTables = getOneToManyRelationships(new ScheduleScheduleTableTable(), tables);
+
+            DataTable DT = SQLiteDB.GetDataFromTable(ScheduleTable.TableName);
+            if (DT.Rows.Count > 1)
+            {
+                logger.Error("Multiple rows found in schedule table. Using first found.");
+            }
+            else if (DT.Rows.Count < 1)
+            {
+                logger.Error("Schedule not found in database. Creating a new schedule.");
+                return new TECSchedule();
+            }
+            TECSchedule schedule = getObjectFromRow(DT.Rows[0], new ScheduleTable(), id => new TECSchedule(id, scheduleTables.ValueOrNew(id)));
+
+            var itemScope = getOneToOneRelationships(new ScheduleItemScopeTable(), bid.GetAll<TECScope>());
+            items.ForEach(x => x.Scope = itemScope.ValueOrDefault(x.Guid, null));
+
+            return schedule;
+        }
+
         private static void populateScopeProperties(TECScope scope, Dictionary<Guid, List<TECTag>> tags, Dictionary<Guid, List<TECAssociatedCost>> costs)
         {
             if (tags.ContainsKey(scope.Guid))
@@ -471,44 +493,11 @@ namespace EstimatingUtilitiesLibrary.Database
                 scope.AssociatedCosts = allCosts.ToOC();
             }
         }
-        private static void populateLocatedProperties(TECLocated located, Dictionary<Guid, TECLocation> locations)
-        {
-            if (locations.ContainsKey(located.Guid))
-            {
-                located.Location = locations[located.Guid];
-            }
-        }
-        private static void populateSubScopeChildren(TECSubScope subScope, Dictionary<Guid, List<IEndDevice>> devices)
-        {
-            if (devices.ContainsKey(subScope.Guid))
-            {
-                List<IEndDevice> allDevices = new List<IEndDevice>();
-                foreach (IEndDevice device in devices[subScope.Guid])
-                {
-                    allDevices.Add(device);
-                }
-                subScope.Devices = allDevices.ToOC();
-            }
-        }
-        private static void populateControllerIOModules(TECController controller, Dictionary<Guid, List<TECIOModule>> modules)
-        {
-            if (modules.ContainsKey(controller.Guid))
-            {
-                modules[controller.Guid].ForEach(item => controller.IOModules.Add(item));
-            }
-        }
-        private static void populateRatedCostInMaterial(TECElectricalMaterial material, Dictionary<Guid, List<TECAssociatedCost>> ratedCosts)
-        {
-            if (ratedCosts.ContainsKey(material.Guid))
-            {
-                ratedCosts[material.Guid].ForEach(item => material.RatedCosts.Add(item));
-            }
-        }
         private static void populateSubScopeConnectionProperties(TECSubScopeConnection connection, Dictionary<Guid, TECSubScope> subScope, Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes)
         {
             connection.SubScope = subScope[connection.Guid];
             connection.SubScope.Connection = connection;
-            populateConnectionProperties(connection, connectionConduitTypes);
+            connection.ConduitType = connectionConduitTypes.ValueOrDefault(connection.Guid, null);
         }
         private static void populateNetworkConnectionProperties(TECNetworkConnection connection, Dictionary<Guid, List<INetworkConnectable>> connectables,
             Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes, Dictionary<Guid, List<TECConnectionType>> connectionConnectionTypes)
@@ -522,7 +511,7 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 connectionConnectionTypes[connection.Guid].ForEach(item => connection.ConnectionTypes.Add(item));
             }
-            populateConnectionProperties(connection, connectionConduitTypes);
+            connection.ConduitType = connectionConduitTypes.ValueOrDefault(connection.Guid, null);
         }
         private static void populateNetworkConnectionProperties(TECNetworkConnection connection, Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes,
             Dictionary<Guid, List<TECConnectionType>> connectionConnectionTypes)
@@ -531,21 +520,7 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 connectionConnectionTypes[connection.Guid].ForEach(item => connection.ConnectionTypes.Add(item));
             }
-            populateConnectionProperties(connection, connectionConduitTypes);
-        }
-        private static void populateConnectionProperties(TECConnection connection, Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes)
-        {
-            if (connectionConduitTypes.ContainsKey(connection.Guid))
-            {
-                connection.ConduitType = connectionConduitTypes[connection.Guid];
-            }
-        }
-        private static void populateIOModuleIO(TECIOModule module, Dictionary<Guid, List<TECIO>> moduleIORelationships)
-        {
-            if (moduleIORelationships.ContainsKey(module.Guid))
-            {
-                moduleIORelationships[module.Guid].ForEach(item => module.IO.Add(item));
-            }
+            connection.ConduitType = connectionConduitTypes.ValueOrDefault(connection.Guid, null);
         }
         private static void populateControllerTypeProperties(TECControllerType type, Dictionary<Guid, List<TECIOModule>> controllerTypeModuleRelationships, Dictionary<Guid, List<TECIO>> controllerTypeIORelationships)
         {
@@ -556,6 +531,17 @@ namespace EstimatingUtilitiesLibrary.Database
             if (controllerTypeIORelationships.ContainsKey(type.Guid))
             {
                 controllerTypeIORelationships[type.Guid].ForEach(item => type.IO.Add(item));
+            }
+        }
+        private static void linkBranchHierarchy(TECScopeBranch branch, IEnumerable<TECScopeBranch> branches, Dictionary<Guid, List<Guid>> scopeBranchHierarchy)
+        {
+            if (scopeBranchHierarchy.ContainsKey(branch.Guid))
+            {
+                branch.Branches = getRelatedReferences(scopeBranchHierarchy[branch.Guid], branches).ToOC();
+                foreach (var subBranch in branch.Branches)
+                {
+                    linkBranchHierarchy(subBranch, branches, scopeBranchHierarchy);
+                }
             }
         }
         
@@ -590,36 +576,13 @@ namespace EstimatingUtilitiesLibrary.Database
             tempPanelType = new TECPanelType(tempManufacturer);
         }
         
-
-
-        private static void linkBranchHierarchy(TECScopeBranch branch, IEnumerable<TECScopeBranch> branches, Dictionary<Guid, List<Guid>> scopeBranchHierarchy)
-        {
-            if (scopeBranchHierarchy.ContainsKey(branch.Guid))
-            {
-                branch.Branches = getRelatedReferences(scopeBranchHierarchy[branch.Guid], branches).ToOC();
-                foreach (var subBranch in branch.Branches)
-                {
-                    linkBranchHierarchy(subBranch, branches, scopeBranchHierarchy);
-                }
-            }
-        }
-        
         #region Data Handlers
         private static TECPanel getPanelFromRow(DataRow row, bool isTypical, Dictionary<Guid, TECPanelType> panelTypes)
         {
             Guid guid = new Guid(row[PanelTable.ID.Name].ToString());
-            TECPanelType type = null;
-            if (!panelTypes.ContainsKey(guid) && justUpdated)
-            {
-                type = tempPanelType;
-            }
-            else
-            {
-                type = panelTypes[guid];
-            }
+            TECPanelType type = justUpdated ? panelTypes.ValueOrDefault(guid, tempPanelType) : panelTypes[guid];
             TECPanel panel = new TECPanel(guid, type, isTypical);
             assignValuePropertiesFromTable(panel, new PanelTable(), row);
-
             return panel;
         }
         private static TECPanel getPanelFromRow(DataRow row, Dictionary<Guid, bool> typicalDictionary, Dictionary<Guid, TECPanelType> panelTypes)
@@ -632,15 +595,7 @@ namespace EstimatingUtilitiesLibrary.Database
         private static TECController getControllerFromRow(DataRow row, bool isTypical, Dictionary<Guid, TECControllerType> controllerTypes)
         {
             Guid guid = new Guid(row[ControllerTable.ID.Name].ToString());
-            TECControllerType type = null;
-            if (!controllerTypes.ContainsKey(guid) && justUpdated)
-            {
-                type = tempControllerType;
-            }
-            else
-            {
-                type = controllerTypes[guid];
-            }
+            TECControllerType type = justUpdated ? controllerTypes.ValueOrDefault(guid, tempControllerType) : controllerTypes[guid];
             TECController controller = new TECController(guid, type, isTypical);
             assignValuePropertiesFromTable(controller, new ControllerTable(), row);
             return controller;
@@ -676,30 +631,6 @@ namespace EstimatingUtilitiesLibrary.Database
             return getMiscFromRow(row, isTypical);
         }
 
-        private static TECSchedule getSchedule(TECBid bid)
-        {
-            var items = getObjectsFromTable(new ScheduleItemTable(), id => new TECScheduleItem(id));
-            var tableItems = getOneToManyRelationships(new ScheduleTableScheduleItemTable(), items);
-            var tables = getObjectsFromTable(new ScheduleTableTable(), id => new TECScheduleTable(id, tableItems.ValueOrNew(id)));
-            var scheduleTables = getOneToManyRelationships(new ScheduleScheduleTableTable(), tables);
-            
-            DataTable DT = SQLiteDB.GetDataFromTable(ScheduleTable.TableName);
-            if (DT.Rows.Count > 1)
-            {
-                logger.Error("Multiple rows found in schedule table. Using first found.");
-            }
-            else if (DT.Rows.Count < 1)
-            {
-                logger.Error("Schedule not found in database. Creating a new schedule.");
-                return new TECSchedule();
-            }
-            TECSchedule schedule = getObjectFromRow(DT.Rows[0], new ScheduleTable(), id => new TECSchedule(id, scheduleTables.ValueOrNew(id)));
-
-            var itemScope = getOneToOneRelationships(new ScheduleItemScopeTable(), bid.GetAll<TECScope>());
-            items.ForEach(x => x.Scope = itemScope.ValueOrDefault(x.Guid, null));
-
-            return schedule;
-        }
         private static TECAssociatedCost getAssociatedCostFromRow(DataRow row)
         {
             Guid guid = new Guid(row[AssociatedCostTable.ID.Name].ToString());
@@ -711,20 +642,7 @@ namespace EstimatingUtilitiesLibrary.Database
         private static TECPanelType getPanelTypeFromRow(DataRow row, Dictionary<Guid, TECManufacturer> manufacturers)
         {
             Guid guid = new Guid(row[PanelTypeTable.ID.Name].ToString());
-            TECManufacturer manufacturer = null;
-            if (manufacturers.ContainsKey(guid))
-            {
-                manufacturer = manufacturers[guid];
-
-            }
-            else if (justUpdated)
-            {
-                manufacturer = tempManufacturer;
-            }
-            else
-            {
-                throw new KeyNotFoundException();
-            }
+            TECManufacturer manufacturer = justUpdated ? manufacturers.ValueOrDefault(guid, tempManufacturer) : manufacturers[guid];
             TECPanelType panelType = new TECPanelType(guid, manufacturer);
             assignValuePropertiesFromTable(panelType, new PanelTypeTable(), row);
             return panelType;
@@ -801,66 +719,29 @@ namespace EstimatingUtilitiesLibrary.Database
         #endregion
 
         #region Generic Database Query Methods
-        private static Dictionary<Guid, List<T>> getOneToManyRelationships<T>(TableBase table, IEnumerable<T> references) where T : ITECObject
+        private static DataTable getRelationshipData(TableBase table)
         {
-            if (table.PrimaryKeys.Count != 2) { throw new Exception("Table must have two primary keys"); }
-            string parentField = table.PrimaryKeys[0].Name;
-            string childField = table.PrimaryKeys[1].Name;
-
-            string qtyField = table.QuantityString;
-
-            string command = string.Format("select {0} from {1}",
-                DatabaseHelper.AllFieldsInTableString(table),
-                table.NameString);
-            DataTable data = SQLiteDB.GetDataFromCommand(command);
-            Dictionary<Guid, List<T>> dictionary = new Dictionary<Guid, List<T>>();
-            foreach (DataRow row in data.Rows)
-            {
-                Guid parentID = new Guid(row[parentField].ToString());
-                Guid childID = new Guid(row[childField].ToString());
-                T reference = references.First(item => item.Guid == childID);
-                int quantity = 1;
-                if (qtyField != "")
-                {
-                    quantity = row[qtyField].ToString().ToInt();
-                }
-                for (int x = 0; x < quantity; x++)
-                {
-                    if (dictionary.ContainsKey(parentID))
-                    {
-                        dictionary[parentID].Add(reference);
-                    }
-                    else
-                    {
-                        dictionary[parentID] = new List<T> { reference };
-                    }
-                }
-
-            }
-            return dictionary;
-        }
-        private static Dictionary<Guid, List<Guid>> getOneToManyRelationships(TableBase table) 
-        {
-            if (table.PrimaryKeys.Count != 2) { throw new Exception("Table must have two primary keys"); }
-            string parentField = table.PrimaryKeys[0].Name;
-            string childField = table.PrimaryKeys[1].Name;
-
             string orderKey = table.IndexString;
-            string orderString = "";
-            if (orderKey != "")
-            {
-                orderString = string.Format(" order by {0}", orderKey);
-            }
-
-
-            string qtyField = table.QuantityString;
-
+            string orderString = orderKey != "" ? orderString = string.Format(" order by {0}", orderKey) : "";
             string command = string.Format("select {0} from {1}{2}",
                 DatabaseHelper.AllFieldsInTableString(table),
                 table.NameString,
                 orderString);
-            DataTable data = SQLiteDB.GetDataFromCommand(command);
-            Dictionary<Guid, List<Guid>> dictionary = new Dictionary<Guid, List<Guid>>();
+            return SQLiteDB.GetDataFromCommand(command);
+        }
+        private static (string, string) getRelationshipKeys(TableBase table)
+        {
+            if (table.PrimaryKeys.Count != 2)
+            {
+                throw new Exception("Table must have two primary keys");
+            }
+            return (table.PrimaryKeys[0].Name, table.PrimaryKeys[1].Name);
+        }
+        private static void relationshipIterator(TableBase table, Action<Guid, Guid> action)
+        {
+            (string parentField, string childField) = getRelationshipKeys(table);
+            string qtyField = table.QuantityString;
+            var data = getRelationshipData(table);
             foreach (DataRow row in data.Rows)
             {
                 Guid parentID = new Guid(row[parentField].ToString());
@@ -872,63 +753,69 @@ namespace EstimatingUtilitiesLibrary.Database
                 }
                 for (int x = 0; x < quantity; x++)
                 {
-                    if (dictionary.ContainsKey(parentID))
-                    {
-                        dictionary[parentID].Add(childID);
-                    }
-                    else
-                    {
-                        dictionary[parentID] = new List<Guid> { childID };
-                    }
+                    action(parentID, childID);
                 }
-
             }
+        }
+        private static Dictionary<Guid, List<T>> getOneToManyRelationships<T>(TableBase table, IEnumerable<T> references) where T : ITECObject
+        {
+            Dictionary<Guid, List<T>> dictionary = new Dictionary<Guid, List<T>>();
+            relationshipIterator(table, addPairToDictionary);
             return dictionary;
+
+            void addPairToDictionary(Guid parentID, Guid childID)
+            {
+                T reference = references.First(item => item.Guid == childID);
+                if (dictionary.ContainsKey(parentID))
+                {
+                    dictionary[parentID].Add(reference);
+                }
+                else
+                {
+                    dictionary[parentID] = new List<T> { reference };
+                }
+            }
+        }
+        private static Dictionary<Guid, List<Guid>> getOneToManyRelationships(TableBase table) 
+        {
+            Dictionary<Guid, List<Guid>> dictionary = new Dictionary<Guid, List<Guid>>();
+            relationshipIterator(table, addPairToDictionary);
+            return dictionary;
+
+            void addPairToDictionary(Guid parentID, Guid childID)
+            {
+                if (dictionary.ContainsKey(parentID))
+                {
+                    dictionary[parentID].Add(childID);
+                }
+                else
+                {
+                    dictionary[parentID] = new List<Guid> { childID };
+                }
+            }
         }
         private static Dictionary<Guid, T> getOneToOneRelationships<T>(TableBase table, IEnumerable<T> references) where T : ITECObject
         {
-            if (table.PrimaryKeys.Count != 2)
-            {
-                throw new Exception("Table must have two primary keys");
-            }
-            string parentField = table.PrimaryKeys[0].Name;
-            string childField = table.PrimaryKeys[1].Name;
-
             Dictionary<Guid, T> dictionary = new Dictionary<Guid, T>();
-            string command = string.Format("select {0} from {1}",
-                DatabaseHelper.AllFieldsInTableString(table),
-                table.NameString);
-            DataTable data = SQLiteDB.GetDataFromCommand(command);
-            foreach (DataRow row in data.Rows)
+            relationshipIterator(table, addPairToDictionary);
+            return dictionary;
+
+            void addPairToDictionary(Guid parentID, Guid childID)
             {
-                Guid parentID = new Guid(row[parentField].ToString());
-                Guid childID = new Guid(row[childField].ToString());
                 T outItem = references.First(item => item.Guid == childID);
                 dictionary[parentID] = outItem;
             }
-            return dictionary;
         }
         private static Dictionary<Guid, Guid> getOneToOneRelationships(TableBase table)
         {
-            if (table.PrimaryKeys.Count != 2)
-            {
-                throw new Exception("Table must have two primary keys");
-            }
-            string parentField = table.PrimaryKeys[0].Name;
-            string childField = table.PrimaryKeys[1].Name;
-
             Dictionary<Guid, Guid> dictionary = new Dictionary<Guid, Guid>();
-            string command = string.Format("select {0} from {1}",
-                DatabaseHelper.AllFieldsInTableString(table),
-                table.NameString);
-            DataTable data = SQLiteDB.GetDataFromCommand(command);
-            foreach (DataRow row in data.Rows)
+            relationshipIterator(table, addPairToDictionary);
+            return dictionary;
+
+            void addPairToDictionary(Guid parentID, Guid childID)
             {
-                Guid parentID = new Guid(row[parentField].ToString());
-                Guid childID = new Guid(row[childField].ToString());
                 dictionary[parentID] = childID;
             }
-            return dictionary;
         }
         static private List<T> getObjectsFromTable<T>(TableBase table, Func<DataRow, T> dataHandler)
         {
@@ -995,24 +882,6 @@ namespace EstimatingUtilitiesLibrary.Database
                 relationTable.PrimaryKeys[0].Name,
                 parentID.ToString(),
                 orderString);
-            return SQLiteDB.GetDataFromCommand(command);
-        }
-        private static DataTable getChildIDs(TableBase relationTable, Guid parentID)
-        {
-
-            if (relationTable.PrimaryKeys.Count != 2)
-            {
-                throw new Exception("Relation table must have primary keys for each object");
-            }
-            string fieldString = relationTable.PrimaryKeys[1].Name;
-            string quantityField = relationTable.QuantityString;
-            if (quantityField != "")
-            {
-                fieldString += ", " + quantityField;
-            }
-            string command = string.Format("select {0} from {1} where {2} = '{3}'",
-                fieldString, relationTable.NameString,
-                relationTable.PrimaryKeys[0].Name, parentID.ToString());
             return SQLiteDB.GetDataFromCommand(command);
         }
         private static List<T> getObjectsFromData<T>(TableBase table, DataTable data, Func<DataRow, T> dataHandler)
