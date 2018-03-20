@@ -87,7 +87,7 @@ namespace EstimatingUtilitiesLibrary.Database
             bid.Schedule = getSchedule(bid);
             
             List<TECLocated> allLocated = bid.GetAll<TECLocated>();
-            allLocated.ForEach(item => locationDictionary.ValueOrDefault(item.Guid, null));
+            allLocated.ForEach(item => item.Location = locationDictionary.ValueOrDefault(item.Guid, null));
             List<TECScope> allScope = bid.GetAll<TECScope>();
             allScope.ForEach(item => populateScopeProperties(item, tagRelationships, costRelationships));
             
@@ -158,9 +158,9 @@ namespace EstimatingUtilitiesLibrary.Database
             });
             
             Dictionary<Guid, List<TECController>> panelControllerDictionary = getOneToManyRelationships(new PanelControllerTable(), controllers);
-            controllers.ForEach(item => controllerModuleRelationships.ValueOrNew(item.Guid));
+            controllers.ForEach(item => item.IOModules = controllerModuleRelationships.ValueOrNew(item.Guid));
 
-            subScope.ForEach(item => endDevices.ValueOrNew(item.Guid));
+            subScope.ForEach(item => item.Devices = endDevices.ValueOrNew(item.Guid));
             panels.ForEach(item => item.Controllers = panelControllerDictionary.ValueOrNew(item.Guid));
 
             List<INetworkConnectable> allNetworkConnectable = new List<INetworkConnectable>(subScope);
@@ -270,8 +270,8 @@ namespace EstimatingUtilitiesLibrary.Database
 
             Dictionary<Guid, List<TECController>> panelControllers = getOneToManyRelationships(new PanelControllerTable(), controllers);
 
-            controllers.ForEach(item => controllerModuleRelationships.ValueOrNew(item.Guid));
-            subScope.ForEach(item => endDevices.ValueOrNew(item.Guid));
+            controllers.ForEach(item => item.IOModules = controllerModuleRelationships.ValueOrNew(item.Guid));
+            subScope.ForEach(item => item.Devices = endDevices.ValueOrNew(item.Guid));
 
             foreach (TECNetworkConnection item in networkConnections)
             {
@@ -426,8 +426,8 @@ namespace EstimatingUtilitiesLibrary.Database
 
             catalogs.IOModules.ForEach(item => item.IO = moduleIORelationships.ValueOrNew(item.Guid));
             catalogs.ControllerTypes.ForEach(item => populateControllerTypeProperties(item, controllerTypeModuleRelationships, controllerTypeIORelationships));
-            catalogs.ConnectionTypes.ForEach(item => ratedCostsRelationShips.ValueOrNew(item.Guid));
-            catalogs.ConduitTypes.ForEach(item => ratedCostsRelationShips.ValueOrNew(item.Guid));
+            catalogs.ConnectionTypes.ForEach(item => item.RatedCosts = ratedCostsRelationShips.ValueOrNew(item.Guid));
+            catalogs.ConduitTypes.ForEach(item => item.RatedCosts = ratedCostsRelationShips.ValueOrNew(item.Guid));
 
             return catalogs;
         }
