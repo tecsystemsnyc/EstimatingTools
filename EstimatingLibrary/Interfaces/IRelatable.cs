@@ -12,6 +12,12 @@ namespace EstimatingLibrary.Interfaces
 
     public static class RelatableExtensions
     {
+        /// <summary>
+        /// Returns all objects of type T which exist as a direct child
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="relatable"></param>
+        /// <returns></returns>
         public static List<T> GetAll<T>(this IRelatable relatable)
         {
             List<T> list = new List<T>();
@@ -19,7 +25,7 @@ namespace EstimatingLibrary.Interfaces
             {
                 list.Add(typedObj);
             }
-            foreach (var item in relatable.PropertyObjects.Objects.Where(x => !relatable.LinkedObjects.Contains(x)))
+            foreach (var item in relatable.GetDirectChildren())
             {
                 if (item is IRelatable rel)
                 {
@@ -31,6 +37,21 @@ namespace EstimatingLibrary.Interfaces
                 }
             }
             return list;
+        }
+        
+        public static List<TECObject> GetDirectChildren(this IRelatable relatable)
+        {
+            List<TECObject> list = new List<TECObject>();
+            foreach (var item in relatable.PropertyObjects.ChildList().Where(x => !relatable.LinkedObjects.Contains(x.PropertyName)))
+            {
+                list.Add(item.Child);
+            }
+            return list;
+        }
+
+        public static bool IsDirectChildProperty(this IRelatable relatable, string propertyName)
+        {
+            return !relatable.LinkedObjects.Contains(propertyName) && relatable.PropertyObjects.Contains(propertyName);
         }
     }
 
@@ -107,14 +128,18 @@ namespace EstimatingLibrary.Interfaces
                 }
             }
         }
-        public List<Tuple<string, TECObject>> ChildList()
+        /// <summary>
+        /// List of all child objects nd the name of their containing property
+        /// </summary>
+        /// <returns></returns>
+        public List<(string PropertyName, TECObject Child)> ChildList()
         {
-            List<Tuple<string, TECObject>> outList = new List<Tuple<string, TECObject>>();
+            List<(string propertyName, TECObject child)> outList = new List<(string propertyName, TECObject child)>();
             foreach(KeyValuePair<string, List<TECObject>> pair in nameDictionary)
             {
                 foreach(TECObject item in pair.Value)
                 {
-                    outList.Add(new Tuple<string, TECObject>(pair.Key, item));
+                    outList.Add((pair.Key, item));
                 }
             }
             return outList;

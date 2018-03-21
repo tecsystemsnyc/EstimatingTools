@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace EstimatingLibrary.Utilities
 {
@@ -62,13 +63,7 @@ namespace EstimatingLibrary.Utilities
             registerTECObject(item);
             if (item is IRelatable saveable)
             {
-                foreach (Tuple<string, TECObject> child in saveable.PropertyObjects.ChildList())
-                {
-                    if (!saveable.LinkedObjects.Contains(child.Item1))
-                    {
-                        register(child.Item2);
-                    }
-                }
+                saveable.GetDirectChildren().ForEach(register);
             }
         }
         private void registerTECObject(TECObject ob)
@@ -110,31 +105,30 @@ namespace EstimatingLibrary.Utilities
             {
                 if (e.Value is ITypicalable valueTyp)
                 {
-                    if (!valueTyp.IsTypical)
-                    {
-                        raiseInstanceChanged(e);
-                    } else
-                    {
-                        raiseTypicalConsituentChanged(e);
-                    }
+                    raiseIfTypical(valueTyp);
                 }
                 else
                 {
                     if (e.Sender is ITypicalable senderTyp)
                     {
-                        if (!senderTyp.IsTypical)
-                        {
-                            raiseInstanceChanged(e);
-                        }
-                        else
-                        {
-                            raiseTypicalConsituentChanged(e);
-                        }
+                        raiseIfTypical(senderTyp);
                     }
                     else
                     {
                         raiseInstanceChanged(e);
                     }
+                }
+            }
+
+            void raiseIfTypical(ITypicalable item)
+            {
+                if (!item.IsTypical)
+                {
+                    raiseInstanceChanged(e);
+                }
+                else
+                {
+                    raiseTypicalConsituentChanged(e);
                 }
             }
         }
@@ -178,12 +172,9 @@ namespace EstimatingLibrary.Utilities
             InstanceConstituentChanged?.Invoke(change, item);
             if(item is IRelatable parent)
             {
-                foreach(var child in parent.PropertyObjects.ChildList())
+                foreach(var child in parent.GetDirectChildren())
                 {
-                    if (!parent.LinkedObjects.Contains(child.Item1))
-                    {
-                        raiseConstituents(change, child.Item2);
-                    }
+                    raiseConstituents(change, child);
                 }
             }
         }
@@ -192,14 +183,8 @@ namespace EstimatingLibrary.Utilities
             TypicalConstituentChanged?.Invoke(change, item);
             if (item is IRelatable parent)
             {
-                foreach (var child in parent.PropertyObjects.ChildList())
-                {
-                    if (child is ITypicalable typ && typ.IsTypical &&
-                        !parent.LinkedObjects.Contains(child.Item1))
-                    {
-                        raiseTypicalConstituents(change, child.Item2);
-                    }
-                }
+                parent.GetDirectChildren().Where(x => x is ITypicalable typ && typ.IsTypical).
+                    ForEach(child => raiseTypicalConstituents(change, child));
             }
         }
         
