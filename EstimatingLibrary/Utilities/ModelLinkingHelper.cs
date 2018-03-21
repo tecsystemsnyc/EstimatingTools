@@ -30,8 +30,7 @@ namespace EstimatingLibrary.Utilities
                 typical.RefreshRegistration();
             }
             return needsSave;
-        }
-        
+        }        
         public static bool LinkLoadedTemplates(TECTemplates templates, Dictionary<Guid, List<Guid>> templateReferences)
         {
             bool needsSave = false;
@@ -40,7 +39,6 @@ namespace EstimatingLibrary.Utilities
 
             return needsSave;
         }
-
         public static void LinkSystem(TECSystem system, TECScopeManager scopeManager, Dictionary<Guid, Guid> guidDictionary)
         {
             linkSystemToCatalogs(system, scopeManager.Catalogs);
@@ -55,8 +53,68 @@ namespace EstimatingLibrary.Utilities
                 typical.RefreshRegistration();
             }
         }
+        
+        #region Linking Scope
+        public static void LinkScopeItem(TECSystem scope, TECBid bid)
+        {
+            linkScopeChildrenToCatalogs(scope, bid.Catalogs);
+            linkLocation(scope, bid.Locations);
+            if(scope is TECTypical typical)
+            {
+                foreach (TECSystem instance in typical.Instances)
+                {
+                    LinkScopeItem(instance, bid);
+                }
+            }
+            foreach (TECEquipment equip in scope.Equipment)
+            {
+                LinkScopeItem(equip, bid);
+            }
+        }
+        public static void LinkScopeItem(TECEquipment scope, TECBid bid)
+        {
+            linkScopeChildrenToCatalogs(scope, bid.Catalogs);
+            linkLocation(scope, bid.Locations);
+            foreach (TECSubScope ss in scope.SubScope)
+            {
+                LinkScopeItem(ss, bid);
+            }
+        }
+        public static void LinkScopeItem(TECSubScope scope, TECBid bid)
+        {
+            linkScopeChildrenToCatalogs(scope, bid.Catalogs);
+            linkLocation(scope, bid.Locations);
+            foreach (TECDevice dev in scope.Devices)
+            {
+                LinkScopeItem(dev, bid);
+            }
+        }
+        public static void LinkScopeItem(TECScope scope, TECScopeManager manager)
+        {
+            linkScopeChildrenToCatalogs(scope, manager.Catalogs);
+        }
+        #endregion
 
-        //Was LinkCharacteristicInstances()
+        /// <summary>
+        /// Links scope items in a bid to a catalog which is already linked
+        /// </summary>
+        /// <param name="bid"></param>
+        public static void LinkBidToCatalogs(TECBid bid)
+        {
+            foreach(TECSystem typical in bid.Systems)
+            {
+                linkSystemToCatalogs(typical, bid.Catalogs);
+            }
+            foreach(TECController controller in bid.Controllers)
+            {
+                linkControllerToCatalogs(controller, bid.Catalogs);
+            }
+            foreach(TECPanel panel in bid.Panels)
+            {
+                linkPanelToCatalogs(panel, bid.Catalogs);
+            }
+        }
+
         public static void LinkTypicalInstanceDictionary(ObservableListDictionary<TECObject> oldDictionary, TECTypical newTypical)
         {
             ObservableListDictionary<TECObject> newCharacteristicInstances = new ObservableListDictionary<TECObject>();
@@ -83,71 +141,6 @@ namespace EstimatingLibrary.Utilities
                 linkCharacteristicCollections(newTypical.ScopeBranches, instance.ScopeBranches, oldDictionary, newCharacteristicInstances);
             }
             newTypical.TypicalInstanceDictionary = newCharacteristicInstances;
-        }
-
-        #region Linking Scope
-        public static void LinkScopeItem(TECSystem scope, TECBid bid)
-        {
-            linkScopeChildrenToCatalogs(scope, bid.Catalogs);
-            linkLocation(scope, bid.Locations);
-            if(scope is TECTypical typical)
-            {
-                foreach (TECSystem instance in typical.Instances)
-                {
-                    LinkScopeItem(instance, bid);
-                }
-            }
-            foreach (TECEquipment equip in scope.Equipment)
-            {
-                LinkScopeItem(equip, bid);
-            }
-        }
-
-        public static void LinkScopeItem(TECEquipment scope, TECBid bid)
-        {
-            linkScopeChildrenToCatalogs(scope, bid.Catalogs);
-            linkLocation(scope, bid.Locations);
-            foreach (TECSubScope ss in scope.SubScope)
-            {
-                LinkScopeItem(ss, bid);
-            }
-        }
-
-        public static void LinkScopeItem(TECSubScope scope, TECBid bid)
-        {
-            linkScopeChildrenToCatalogs(scope, bid.Catalogs);
-            linkLocation(scope, bid.Locations);
-            foreach (TECDevice dev in scope.Devices)
-            {
-                LinkScopeItem(dev, bid);
-            }
-        }
-
-        public static void LinkScopeItem(TECScope scope, TECScopeManager manager)
-        {
-            linkScopeChildrenToCatalogs(scope, manager.Catalogs);
-        }
-        #endregion
-
-
-        /// <summary>
-        /// Links scope items in a bid to a catalog which is already linked
-        /// </summary>
-        /// <param name="bid"></param>
-        public static void LinkBidToCatalogs(TECBid bid)
-        {
-            foreach(TECSystem typical in bid.Systems)
-            {
-                linkSystemToCatalogs(typical, bid.Catalogs);
-            }
-            foreach(TECController controller in bid.Controllers)
-            {
-                linkControllerToCatalogs(controller, bid.Catalogs);
-            }
-            foreach(TECPanel panel in bid.Panels)
-            {
-                linkPanelToCatalogs(panel, bid.Catalogs);
-            }
         }
         #endregion
 
@@ -216,11 +209,11 @@ namespace EstimatingLibrary.Utilities
             linkScopeChildrenToCatalogs(panel, catalogs);
         }
 
-        private static void linkPanelsToControllers(ObservableCollection<TECPanel> panels, IEnumerable<TECController> controllers, Dictionary<Guid, Guid> guidDictionary = null)
+        private static void linkPanelsToControllers(IEnumerable<TECPanel> panels, IEnumerable<TECController> controllers, Dictionary<Guid, Guid> guidDictionary = null)
         {
             foreach (TECPanel panel in panels)
             {
-                ObservableCollection<TECController> controllersToLink = new ObservableCollection<TECController>();
+                List<TECController> controllersToLink = new List<TECController>();
                 foreach (TECController panelController in panel.Controllers)
                 {
                     foreach (TECController controller in controllers)
@@ -237,7 +230,7 @@ namespace EstimatingLibrary.Utilities
                         }
                     }
                 }
-                panel.Controllers = controllersToLink;
+                panel.Controllers = new ObservableCollection<TECController>(controllersToLink);
             }
         }
         private static void linkNetworkConnections(IEnumerable<TECController> controllers, IEnumerable<INetworkConnectable> children,
@@ -464,7 +457,7 @@ namespace EstimatingLibrary.Utilities
                 linkLocation(ss, locations);
             }
         }
-        static private void linkLocation(TECLocated scope, IEnumerable<TECLocation> locations)
+        private static void linkLocation(TECLocated scope, IEnumerable<TECLocation> locations)
         {
             if (scope.Location != null)
             {
@@ -483,8 +476,7 @@ namespace EstimatingLibrary.Utilities
                     throw new Exception("Location in scope not found.");
                 }
             }
-        }
-        
+        }        
         #endregion
 
         #region System Instance Reference Methods
@@ -614,7 +606,7 @@ namespace EstimatingLibrary.Utilities
             }
             scope.AssociatedCosts = costsToAssign;
         }
-        static private void linkTagsInScope(ObservableCollection<TECTag> tags, TECScope scope)
+        static private void linkTagsInScope(IEnumerable<TECTag> tags, TECScope scope)
         {
             ObservableCollection<TECTag> linkedTags = new ObservableCollection<TECTag>();
             foreach (TECTag tag in scope.Tags)

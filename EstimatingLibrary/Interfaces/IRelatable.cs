@@ -48,6 +48,11 @@ namespace EstimatingLibrary.Interfaces
             }
             return list;
         }
+
+        public static bool IsDirectChildProperty(this IRelatable relatable, string propertyName)
+        {
+            return !relatable.LinkedObjects.Contains(propertyName) && relatable.PropertyObjects.Contains(propertyName);
+        }
     }
 
     public class SaveableMap

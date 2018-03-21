@@ -37,9 +37,9 @@ namespace EstimatingUtilitiesLibrary.Database
         public static List<UpdateItem> ChildStack(Change change, IRelatable item, DBType type)
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
-            foreach (Tuple<string, TECObject> saveItem in item.PropertyObjects.ChildList())
+            foreach (var saveItem in item.PropertyObjects.ChildList())
             {
-                outStack.AddRange(addRemoveStack(change, saveItem.Item1, item as TECObject, saveItem.Item2, type));
+                outStack.AddRange(addRemoveStack(change, saveItem.PropertyName, item as TECObject, saveItem.Child, type));
             }
             if (item is TECTypical system)
             {
@@ -76,7 +76,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
             List<TableBase> tables;
-            if(sender is IRelatable parent && !parent.LinkedObjects.Contains(propertyName) && parent.PropertyObjects.Contains(propertyName))
+            if(sender is IRelatable parent && parent.IsDirectChildProperty(propertyName))
             {
                 tables = DatabaseHelper.GetTables(new List<TECObject>() { item }, propertyName, type);
                 outStack.AddRange(tableObjectStack(change, tables, item));
