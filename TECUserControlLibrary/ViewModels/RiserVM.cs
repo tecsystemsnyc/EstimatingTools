@@ -257,52 +257,51 @@ namespace TECUserControlLibrary.ViewModels
                     addSystem(system);
                 }
             }
+            Locations.CollectionChanged += Locations_CollectionChanged;
+        }
+
+        private void Locations_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if(e.Action == NotifyCollectionChangedAction.Move)
+            {
+                bid.Locations.Move(e.OldStartingIndex, e.NewStartingIndex);
+            }
         }
 
         public void DragOver(IDropInfo dropInfo)
         {
-            bool dataComplies = dropInfo.Data is TECLocated ||
-                (dropInfo.Data is IList sourceList && sourceList.Count > 0 && sourceList[0] is TECLocated);
-            bool targetComplies = Locations.Any(item => item.Scope == dropInfo.TargetCollection) ||
-                dropInfo.TargetCollection == Unlocated;
-            if (targetComplies && dataComplies)
+
+            UIHelpers.DragOver(dropInfo, dropCondition, null);
+
+            bool dropCondition(object data, Type sourceType, Type targetType)
             {
-                UIHelpers.SetDragAdorners(dropInfo);
+                bool dataComplies = sourceType == typeof(TECLocated);
+                bool targetComplies = Locations.Any(item => item.Scope == dropInfo.TargetCollection) ||
+                    dropInfo.TargetCollection == Unlocated;
+                bool isReorder = sourceType == typeof(LocationContainer) && targetType == typeof(LocationContainer);
+                return (dataComplies && targetComplies) || isReorder;
             }
+
         }
         public void Drop(IDropInfo dropInfo)
         {
-            if(dropInfo.TargetCollection == Unlocated)
+
+            UIHelpers.Drop(dropInfo, dropMethod, false);
+            object dropMethod(object dropped)
             {
-                if (dropInfo.Data is IList sourceList)
-                {
-                    foreach (TECLocated item in sourceList)
-                    {
-                        item.Location = null;
-                    }
-                }
-                else
+                if (dropInfo.TargetCollection == Unlocated)
                 {
                     ((TECLocated)dropInfo.Data).Location = null;
-                }
-            }
-            else
-            {
-                var container = Locations.First(item => item.Scope == dropInfo.TargetCollection);
-                if (dropInfo.Data is IList sourceList)
-                {
-                    foreach (TECLocated item in sourceList)
-                    {
-                        item.Location = container.Location;
-                    }
+
                 }
                 else
                 {
+                    var container = Locations.First(item => item.Scope == dropInfo.TargetCollection);
                     ((TECLocated)dropInfo.Data).Location = container.Location;
                 }
+                return true;
             }
             
-
         }
     }
 
@@ -409,6 +408,11 @@ namespace TECUserControlLibrary.ViewModels
                     break;
                 }
             }
+        }
+
+        public int IndexOf(LocationContainer container)
+        {
+            return locations.IndexOf(container);
         }
     }
 }

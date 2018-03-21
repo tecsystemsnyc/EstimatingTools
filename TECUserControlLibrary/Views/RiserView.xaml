@@ -135,12 +135,13 @@
                           VirtualizingPanel.ScrollUnit="Pixel"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                           dd:DragDrop.IsDropTarget="True"
+                          dd:DragDrop.IsDragSource="True"
                           dd:DragDrop.DropHandler="{Binding ElementName=riserView, Path=ViewModel}">
-                    <ListView.ItemContainerStyle>
+                    <!--<ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="Focusable" Value="false"/>
                         </Style>
-                    </ListView.ItemContainerStyle>
+                    </ListView.ItemContainerStyle>-->
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1">

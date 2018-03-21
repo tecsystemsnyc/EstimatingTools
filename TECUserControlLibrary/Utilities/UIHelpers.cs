@@ -130,10 +130,6 @@ namespace TECUserControlLibrary.Utilities
             Func<object, Type, Type, bool> dropCondition,
             Action failAction)
         {
-            if (dropInfo.TargetCollection == dropInfo.DragInfo.SourceCollection)
-            {
-                return;
-            }
             var sourceItem = dropInfo.Data;
             Type sourceType;
             if (sourceItem is IList sourceList && sourceList.Count > 0)
