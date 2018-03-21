@@ -2,6 +2,7 @@
 using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace EstimatingUtilitiesLibrary.Database
@@ -23,7 +24,34 @@ namespace EstimatingUtilitiesLibrary.Database
         }
         public List<UpdateItem> CleansedStack()
         {
-            return stack;
+            List<UpdateItem> outStack = new List<UpdateItem>();
+            Dictionary<(string, string), UpdateItem> editData = new Dictionary<(string, string), UpdateItem>();
+            foreach(var item in stack)
+            {
+                if(item.Change == Change.Add || item.Change == Change.Remove)
+                {
+                    outStack.Add(item);
+                }
+                else
+                {
+                    var key = (item.PrimaryKey.Item2, item.Table);
+                    if (!editData.ContainsKey(key))
+                    {
+                        editData[key] = item;
+                    } else
+                    {
+                        foreach(var pair in item.FieldData)
+                        {
+                            editData[key].FieldData[pair.Key] = pair.Value;
+                        }
+                    }
+                }
+            }
+            foreach(var pair in editData)
+            {
+                outStack.Add(pair.Value);
+            }
+            return outStack;
         }
 
         public static List<UpdateItem> AddStack(string propertyName, TECObject sender, TECObject item, DBType type)
@@ -95,7 +123,24 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
 
-            if(!(value is TECObject) && !(oldValue is TECObject))
+            if(value is IList listValue && oldValue is IList)
+            {
+                if(listValue.Count == 0)
+                {
+                    return new List<UpdateItem>();
+                }
+                var tables = DatabaseHelper.GetTables(new List<TECObject>() { sender, listValue[0] as TECObject }, propertyName, type);
+                foreach(var table in tables)
+                {
+                    List<(Dictionary<string, string> data, Tuple<string, string> keyData)> dataList = DatabaseHelper.PrepareIndexData(sender, propertyName, table, type);
+                    foreach(var item in dataList)
+                    {
+                        outStack.Add(new UpdateItem(Change.Edit, table.NameString, item.data, item.keyData));
+                    }
+                }
+                return outStack;
+            }
+            else if(!(value is TECObject) && !(oldValue is TECObject))
             {
                 List<TableBase> tables = DatabaseHelper.GetTables(sender, type);
                 foreach (TableBase table in tables)

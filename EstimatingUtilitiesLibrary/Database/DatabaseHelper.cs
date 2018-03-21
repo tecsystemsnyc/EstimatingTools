@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using NLog;
 using System;
 using System.Collections;
@@ -166,6 +167,24 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             return tables;
         }
+
+        internal static List<(Dictionary<string, string> data, Tuple<string, string> keyData)> PrepareIndexData(TECObject sender, string propertyName, TableBase table, DBType type)
+        {
+            List<(Dictionary<string, string> data, Tuple<string, string> keyData)> outData = new List<(Dictionary<string, string> data, Tuple<string, string> keyData)>();
+            var childCollection = sender.GetType().GetProperty(propertyName).GetValue(sender) as IList;
+
+            string indexField = table.IndexString;
+            string keyField = table.PrimaryKeys[1].Name;
+            foreach (var item in childCollection)
+            {
+                var data = new Dictionary<string, string>();
+                data[indexField] = childCollection.IndexOf(item).ToString();
+                var keyData = new Tuple<string, string>(keyField, ((ITECObject)item).Guid.ToString());
+                outData.Add((data, keyData));
+            }
+            return outData;
+        }
+
         public static List<TableBase> GetTables(TECObject item, DBType type = 0)
         {
             List<TableBase> tables = new List<TableBase>();
