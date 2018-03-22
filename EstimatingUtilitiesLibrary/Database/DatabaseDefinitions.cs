@@ -1314,6 +1314,48 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+    internal class BidLocationTable : TableBase
+    {
+        public static string TableName = "BidLocation";
+        public static Type BidType = typeof(TECBid);
+        public static Type LocationType = typeof(TECLocation);
+
+        public static TableField BidID = new TableField("BidID", "TEXT", BidType.GetProperty("Guid"));
+        public static TableField LocationID = new TableField("LocationID", "TEXT", LocationType.GetProperty("Guid"));
+
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "Locations", "0");
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            BidID,
+            LocationID
+        };
+
+        private List<Type> types = new List<Type>()
+        {
+            BidType,
+            LocationType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            BidID,
+            LocationID,
+            Index
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Locations"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+
     internal class HardwareManufacturerTable : TableBase
     {
         public static string TableName = "HardwareManufacturer";
@@ -2894,7 +2936,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new ValveActuatorTable(),
             new ScheduleScheduleTableTable(),
             new ScheduleTableScheduleItemTable(),
-            new ScheduleItemScopeTable()
+            new ScheduleItemScopeTable(),
+            new BidLocationTable()
             };
     }
 
@@ -3044,7 +3087,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new TemplateReferenceTable(),
             new ScheduleScheduleTableTable(),
             new ScheduleTableScheduleItemTable(),
-            new ScheduleItemScopeTable()
+            new ScheduleItemScopeTable(),
+            new BidLocationTable()
         };
     }
 

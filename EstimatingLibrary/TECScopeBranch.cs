@@ -69,6 +69,10 @@ namespace EstimatingLibrary
                     notifyCombinedChanged(Change.Remove, "Branches", this, item);
                 }
             }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
+            {
+                notifyCombinedChanged(Change.Edit, "Branches", this, sender, sender);
+            }
         }
 
         private SaveableMap propertyObjects()

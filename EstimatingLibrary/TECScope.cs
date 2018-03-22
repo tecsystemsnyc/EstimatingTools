@@ -146,6 +146,10 @@ namespace EstimatingLibrary
                 }
                 notifyCostChanged(new CostBatch(costs) * -1);
             }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
+            {
+                notifyCombinedChanged(Change.Edit, propertyName, this, sender, sender);
+            }
         }
         
         protected virtual void notifyCostChanged(CostBatch costs)

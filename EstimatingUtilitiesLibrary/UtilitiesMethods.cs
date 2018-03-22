@@ -297,5 +297,9 @@ namespace EstimatingUtilitiesLibrary
         {
             return new ObservableCollection<T>(list);
         }
+        public static Type ItemType<T>(this IEnumerable<T> ts)
+        {
+            return typeof(T);
+        }
     }
 }

@@ -443,7 +443,7 @@ namespace EstimatingLibrary
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                notifyTECChanged(Change.Edit, propertyName, this, sender);
+                notifyTECChanged(Change.Edit, propertyName, this, sender, sender);
             }
         }
         protected override void scopeCollectionChanged(object sender,

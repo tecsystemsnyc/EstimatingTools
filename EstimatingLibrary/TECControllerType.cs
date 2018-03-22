@@ -87,6 +87,10 @@ namespace EstimatingLibrary
                     }
                 }
             }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
+            {
+                notifyCombinedChanged(Change.Edit, propertyName, this, sender, sender);
+            }
         }
         
         public List<IOType> getUniqueIO()

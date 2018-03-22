@@ -187,7 +187,7 @@ namespace EstimatingLibrary
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                notifyCombinedChanged(Change.Edit, "Points", this, sender);
+                notifyCombinedChanged(Change.Edit, "Points", this, sender, sender);
             }
         }
         private void Devices_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -220,7 +220,7 @@ namespace EstimatingLibrary
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                notifyCombinedChanged(Change.Edit, "Devices", this, sender);
+                notifyCombinedChanged(Change.Edit, "Devices", this, sender, sender);
             }
         }
         #endregion

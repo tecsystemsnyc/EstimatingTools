@@ -708,11 +708,7 @@ namespace EstimatingUtilitiesLibraryTests
             Dictionary<string, string> data;
             Tuple<string, string> pk;
 
-            //Template Point name change
-            data = new Dictionary<string, string>();
-            pk = new Tuple<string, string>(PointTable.ID.Name, testPoint.Guid.ToString());
-            data[PointTable.Name.Name] = testPoint.Label;
-            expectedStack.Add(new UpdateItem(Change.Edit, PointTable.TableName, data, pk));
+            
 
             //Remove old reference point
             data = new Dictionary<string, string>();
@@ -741,11 +737,7 @@ namespace EstimatingUtilitiesLibraryTests
             expectedStack.Add(new UpdateItem(Change.Add, SubScopePointTable.TableName, data));
 
 
-            //Template Point type change
-            data = new Dictionary<string, string>();
-            pk = new Tuple<string, string>(PointTable.ID.Name, testPoint.Guid.ToString());
-            data[PointTable.Type.Name] = testPoint.Type.ToString();
-            expectedStack.Add(new UpdateItem(Change.Edit, PointTable.TableName, data, pk));
+            
 
             //Remove old reference point
             data = new Dictionary<string, string>();
@@ -773,11 +765,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopePointTable.Index.Name] = "0";
             expectedStack.Add(new UpdateItem(Change.Add, SubScopePointTable.TableName, data));
             
-            //Template Point quantity change
-            data = new Dictionary<string, string>();
-            pk = new Tuple<string, string>(PointTable.ID.Name, testPoint.Guid.ToString());
-            data[PointTable.Quantity.Name] = testPoint.Quantity.ToString();
-            expectedStack.Add(new UpdateItem(Change.Edit, PointTable.TableName, data, pk));
+            
 
             //Remove old reference point
             data = new Dictionary<string, string>();
@@ -804,7 +792,23 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopePointTable.PointID.Name] = quantitied.Guid.ToString();
             data[SubScopePointTable.Index.Name] = "0";
             expectedStack.Add(new UpdateItem(Change.Add, SubScopePointTable.TableName, data));
-            
+
+
+            //All edits are compiled at the end of the cleansed stack
+            //Template Point name change
+            data = new Dictionary<string, string>();
+            pk = new Tuple<string, string>(PointTable.ID.Name, testPoint.Guid.ToString());
+            data[PointTable.Name.Name] = testPoint.Label;
+
+            //Template Point type change
+            pk = new Tuple<string, string>(PointTable.ID.Name, testPoint.Guid.ToString());
+            data[PointTable.Type.Name] = testPoint.Type.ToString();
+
+            //Template Point quantity change
+            pk = new Tuple<string, string>(PointTable.ID.Name, testPoint.Guid.ToString());
+            data[PointTable.Quantity.Name] = testPoint.Quantity.ToString();
+            expectedStack.Add(new UpdateItem(Change.Edit, PointTable.TableName, data, pk));
+
             //Assert
             Assert.AreEqual(expectedStack.Count, stack.CleansedStack().Count, "Stack length is not what is expected.");
             SaveStackTests.CheckUpdateItems(expectedStack, stack);

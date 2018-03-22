@@ -145,6 +145,10 @@ namespace EstimatingLibrary
                     raisePropertyChanged("PossibleIO");
                 }
             }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
+            {
+                notifyCombinedChanged(Change.Edit, "Children", this, sender, sender);
+            }
         }
         private void ConnectionTypes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
@@ -165,6 +169,10 @@ namespace EstimatingLibrary
                     notifyCombinedChanged(Change.Remove, propertyName, this, type);
                     notifyCostChanged(-connectionTypeCost);
                 }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
+            {
+                notifyCombinedChanged(Change.Edit, propertyName, this, sender, sender);
             }
         }
         #endregion
