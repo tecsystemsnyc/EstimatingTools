@@ -6,9 +6,9 @@ using ClosedXML.Excel;
 
 namespace EstimatingUtilitiesLibrary.Exports
 {
-    public class Budget
+    internal static class Budget
     {
-        public static void GenerateReport(string filePath, TECBid bid, bool openOnComplete = true)
+        internal static void GenerateReport(string path, TECBid bid, bool openOnComplete = true)
         {
             XLWorkbook workbook = new XLWorkbook();
             IXLWorksheet worksheet = workbook.Worksheets.Add("Summary");
@@ -88,12 +88,12 @@ namespace EstimatingUtilitiesLibrary.Exports
             worksheet.Cell(x, 3).Style.NumberFormat.Format = "$ #,##0.00";
 
             worksheet.Columns().AdjustToContents();
-            workbook.SaveAs(filePath);
+            workbook.SaveAs(path);
 
 
             if (openOnComplete)
             {
-                System.Diagnostics.Process.Start(filePath);
+                System.Diagnostics.Process.Start(path);
             }
         }
     }

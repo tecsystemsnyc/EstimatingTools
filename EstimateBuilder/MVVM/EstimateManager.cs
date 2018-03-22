@@ -292,7 +292,7 @@ namespace EstimateBuilder.MVVM
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    Turnover.GenerateTurnoverExport(path, bid, estimate);
+                    Exporter.GenerateTurnover(path, bid, estimate);
                     logger.Info("Exported to turnover document.");
                 }
                 else
@@ -314,7 +314,7 @@ namespace EstimateBuilder.MVVM
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    PointsList.ExportPointsList(path, bid);
+                    Exporter.GeneratePointsList(path, bid);
                     logger.Info("Points saved to Excel.");
                 }
                 else
@@ -359,7 +359,7 @@ namespace EstimateBuilder.MVVM
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    Turnover.GenerateSummaryExport(path, bid, estimate);
+                    Exporter.GenerateTurnover(path, bid, estimate);
                     logger.Info("Exported to summary turnover document.");
                 }
                 else
@@ -381,7 +381,7 @@ namespace EstimateBuilder.MVVM
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    Budget.GenerateReport(path, bid);
+                    Exporter.GenerateBudget(path, bid);
                     logger.Info("Exported to budget document.");
                 }
                 else
@@ -403,7 +403,7 @@ namespace EstimateBuilder.MVVM
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    Turnover.GenerateBOM(path, bid);
+                    Exporter.GenerateBOM(path, bid);
                     logger.Info("Exported to BOM document.");
                 }
                 else

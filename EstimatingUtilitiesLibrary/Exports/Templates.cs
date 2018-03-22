@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace EstimatingUtilitiesLibrary.Exports
 {
-    public class Templates
+    internal class Templates
     {
-        public static void Export(string path, TECTemplates templates, bool openOnComplete = true)
+        internal static void Export(string path, TECTemplates templates, bool openOnComplete = true)
         {
             XLWorkbook workbook = new XLWorkbook();
             createDeviceSheet(workbook, templates);

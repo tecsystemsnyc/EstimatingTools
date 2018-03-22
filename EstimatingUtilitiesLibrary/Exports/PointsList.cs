@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace EstimatingUtilitiesLibrary.Exports
 {
-    public static class PointsList
+    internal static class PointsList
     {
-        public static void ExportPointsList(string path, TECBid bid, bool openOnComplete = true)
+        internal static void ExportPointsList(string path, TECBid bid, bool openOnComplete = true)
         {
-            XLWorkbook workbook = GeneratePointsList(bid);
+            XLWorkbook workbook = generatePointsList(bid);
             workbook.SaveAs(path);
             if (openOnComplete)
             {
@@ -21,7 +21,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             }
         }
 
-        public static XLWorkbook GeneratePointsList(TECBid bid)
+        private static XLWorkbook generatePointsList(TECBid bid)
         {
             XLWorkbook workbook = new XLWorkbook();
 

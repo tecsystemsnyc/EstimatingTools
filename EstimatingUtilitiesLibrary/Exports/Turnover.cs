@@ -13,13 +13,13 @@ using System.Linq;
 
 namespace EstimatingUtilitiesLibrary.Exports
 {
-    public static class Turnover
+    internal static class Turnover
     {
         const int MAX_SHEETNAME_CHARACTERS = 31;
 
         internal static string accountingFormat = "_($* #,##0.00_);_($* (#,##0.00);_($* \" - \"??_);_(@_)";
 
-        public static void GenerateTurnoverExport(string path, TECBid bid, TECEstimator estimate, bool openOnComplete = true)
+        internal static void GenerateTurnoverExport(string path, TECBid bid, TECEstimator estimate, bool openOnComplete = true)
         {
             XLWorkbook workbook = new XLWorkbook();
 
@@ -38,7 +38,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             }
         }
 
-        public static void GenerateSummaryExport(string path, TECBid bid, TECEstimator estimate, bool openOnComplete = true)
+        internal static void GenerateSummaryExport(string path, TECBid bid, TECEstimator estimate, bool openOnComplete = true)
         {
             using (WordprocessingDocument package = WordprocessingDocument.Create(path, 
                 DocumentFormat.OpenXml.WordprocessingDocumentType.Document))
@@ -62,7 +62,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             }
         }
 
-        public static void GenerateBOM(string path, TECBid bid, bool openOnComplete = true)
+        internal static void GenerateBOM(string path, TECBid bid, bool openOnComplete = true)
         {
             XLWorkbook workbook = new XLWorkbook();
             createBomSheets(workbook, bid);
