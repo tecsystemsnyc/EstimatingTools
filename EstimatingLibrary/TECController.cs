@@ -552,7 +552,7 @@ namespace EstimatingLibrary
             {
                 this.IOModules.ObservablyClear();
                 this.Type = newType;
-                ModelLinkingHelper.addRequiredIOModules(this);
+                ModelCleanser.addRequiredIOModules(this);
             }
             else
             {
