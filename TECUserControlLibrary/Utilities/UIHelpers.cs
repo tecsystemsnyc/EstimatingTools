@@ -15,7 +15,23 @@ using TECUserControlLibrary.Models;
 namespace TECUserControlLibrary.Utilities
 {
     public static class UIHelpers
-    {
+    {       
+        public static Type GetItemType(IEnumerable enumerable)
+        {
+            var args = enumerable.GetType().GetInterface("IEnumerable`1");
+            if(args == null)
+            {
+                return null;
+            }
+
+            if (args.GenericTypeArguments.Length > 0)
+            {
+                return args.GenericTypeArguments[0];
+            }else
+            {
+                return null;
+            }
+        }
 
         public static void StandardDragOver(IDropInfo dropInfo, Func<Type, bool> typeMeetsCondition = null)
         {
@@ -126,9 +142,7 @@ namespace TECUserControlLibrary.Utilities
         /// <param name="failAction">
         /// An Action invoked when the drop is determined to be illegal.
         /// </param>
-        public static void DragOver(IDropInfo dropInfo,
-            Func<object, Type, Type, bool> dropCondition,
-            Action failAction)
+        public static void DragOver(IDropInfo dropInfo, Func<object, Type, Type, bool> dropCondition, Action failAction)
         {
             var sourceItem = dropInfo.Data;
             Type sourceType;
@@ -136,12 +150,10 @@ namespace TECUserControlLibrary.Utilities
             { sourceType = sourceList[0].GetType(); }
             else
             { sourceType = sourceItem.GetType(); }
-
-            var targetCollection = dropInfo.TargetCollection;
-            var args = targetCollection.GetType().GetTypeInfo();
-            if (targetCollection.GetType().GetTypeInfo().GenericTypeArguments.Length > 0)
+            Type targetType = GetItemType(dropInfo.TargetCollection);
+            
+            if (targetType != null)
             {
-                Type targetType = targetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
                 bool sourceNotNull = sourceItem != null;
                 bool allowDrop = dropCondition(sourceItem, sourceType, targetType);
                 if(sourceItem is IList listItems)
@@ -179,7 +191,7 @@ namespace TECUserControlLibrary.Utilities
         public static void Drop(IDropInfo dropInfo, Func<object, object> dropObject, bool addObjectToCollection = true)
         {
             var sourceItem = dropInfo.Data;
-            Type targetType = dropInfo.TargetCollection.GetType().GetTypeInfo().GenericTypeArguments[0];
+            Type targetType = GetItemType(dropInfo.TargetCollection);
             if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
             {
                 if (sourceItem is IList)
@@ -230,14 +242,14 @@ namespace TECUserControlLibrary.Utilities
                         }
                     }
                 }
-                
+
             }
             else
             {
                 handleReorderDrop(dropInfo);
             }
         }
-        
+
         public static void SystemToTypicalDragOver(IDropInfo dropInfo)
         {
             var sourceItem = dropInfo.Data;
@@ -616,7 +628,5 @@ namespace TECUserControlLibrary.Utilities
     }
     public enum TypicalInstanceEnum { Typical, Instance }
     public enum MaterialSummaryIndex { Devices, Valves, Controllers, Panels, Wire, Conduit, Misc }
-
-
-
+    
 }

@@ -2020,6 +2020,24 @@ namespace Tests
             Assert.AreEqual(expectedLocation.Label, actualLocation.Label);
             Assert.AreEqual(actualLocation.Guid, actualSystem.Location.Guid);
         }
+
+        [TestMethod]
+        public void Save_Bid_Move_Location()
+        {
+            int initialIndex = 0;
+            int expectedIndex = 1;
+            TECLocation expectedLocation = bid.Locations[initialIndex];
+            bid.Locations.Move(initialIndex, expectedIndex);
+
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
+
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
+
+            TECLocation actualLocation = actualBid.Locations[expectedIndex];
+
+            //Assert
+            Assert.AreEqual(expectedLocation.Guid, actualLocation.Guid);
+        }
         #endregion Save Location
 
         #region Save Note

@@ -1324,7 +1324,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField LocationID = new TableField("LocationID", "TEXT", LocationType.GetProperty("Guid"));
 
         public static Type Helpers = typeof(HelperProperties);
-        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "MiscCosts", "0");
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "Locations", "0");
 
         private List<TableField> primaryKeys = new List<TableField>()
         {

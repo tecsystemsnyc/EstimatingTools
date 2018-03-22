@@ -316,9 +316,21 @@ namespace TECUserControlLibrary.ViewModels
             Scope = new ObservableCollection<TECLocated>(scope);
         }
     }
-    public class LocationList : IEnumerable<LocationContainer>, INotifyCollectionChanged
+    public class LocationList : IEnumerable<LocationContainer>, IList, INotifyCollectionChanged
     {
         ObservableCollection<LocationContainer> locations = new ObservableCollection<LocationContainer>();
+        
+        bool IList.IsReadOnly => ((IList)locations).IsReadOnly;
+
+        bool IList.IsFixedSize => ((IList)locations).IsFixedSize;
+
+        int ICollection.Count => ((IList)locations).Count;
+
+        object ICollection.SyncRoot => ((IList)locations).SyncRoot;
+
+        bool ICollection.IsSynchronized => ((IList)locations).IsSynchronized;
+
+        object IList.this[int index] { get => ((IList)locations)[index]; set => ((IList)locations)[index] = value; }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
@@ -410,9 +422,54 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        public void Move(int currentIndex, int finalIndex)
+        {
+            locations.Move(currentIndex, finalIndex);
+        }
+
         public int IndexOf(LocationContainer container)
         {
             return locations.IndexOf(container);
+        }
+        
+        int IList.Add(object value)
+        {
+            return ((IList)locations).Add(value);
+        }
+
+        bool IList.Contains(object value)
+        {
+            return ((IList)locations).Contains(value);
+        }
+
+        void IList.Clear()
+        {
+            ((IList)locations).Clear();
+        }
+
+        int IList.IndexOf(object value)
+        {
+            return ((IList)locations).IndexOf(value);
+        }
+
+        void IList.Insert(int index, object value)
+        {
+            ((IList)locations).Insert(index, value);
+        }
+
+        void IList.Remove(object value)
+        {
+            ((IList)locations).Remove(value);
+        }
+
+        void IList.RemoveAt(int index)
+        {
+            ((IList)locations).RemoveAt(index);
+        }
+
+        void ICollection.CopyTo(Array array, int index)
+        {
+            ((IList)locations).CopyTo(array, index);
         }
     }
 }
