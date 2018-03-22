@@ -4,6 +4,7 @@ using EstimatingLibrary.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EstimatingUtilitiesLibrary.Database
 {
@@ -130,7 +131,7 @@ namespace EstimatingUtilitiesLibrary.Database
                     return new List<UpdateItem>();
                 }
                 var tables = DatabaseHelper.GetTables(new List<TECObject>() { sender, listValue[0] as TECObject }, propertyName, type);
-                foreach(var table in tables)
+                foreach(var table in tables.Where(x => x.IndexString != ""))
                 {
                     List<(Dictionary<string, string> data, Tuple<string, string> keyData)> dataList = DatabaseHelper.PrepareIndexData(sender, propertyName, table, type);
                     foreach(var item in dataList)

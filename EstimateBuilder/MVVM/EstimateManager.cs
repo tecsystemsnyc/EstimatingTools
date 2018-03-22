@@ -149,7 +149,6 @@ namespace EstimateBuilder.MVVM
                 doStack = new DoStacker(watcher);
                 deltaStack = new DeltaStacker(watcher, bid);
                 bid.Catalogs.Fill(templates.Catalogs);
-                ModelLinkingHelper.LinkBidToCatalogs(bid);
 
                 estimate = new TECEstimator(bid, watcher);
 
