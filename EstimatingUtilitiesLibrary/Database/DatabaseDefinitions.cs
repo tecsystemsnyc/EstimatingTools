@@ -119,6 +119,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField SubcontractorWarranty = new TableField("SubcontractorWarranty", "REAL", ParameterType.GetProperty("SubcontractorWarranty"), defaultValue: "3.0");
         public static TableField SubcontractorShipping = new TableField("SubcontractorShipping", "REAL", ParameterType.GetProperty("SubcontractorShipping"), defaultValue: "3.0");
         public static TableField BondRate = new TableField("BondRate", "REAL", ParameterType.GetProperty("BondRate"), defaultValue: "1.5");
+        public static TableField OvertimeRatio = new TableField("OvertimeRatio", "REAL", ParameterType.GetProperty("OvertimeRatio"), defaultValue: "1.5");
 
         public static TableField IsTaxExempt = new TableField("IsTaxExempt", "INTEGER", ParameterType.GetProperty("IsTaxExempt"), defaultValue: "0");
         public static TableField RequiresBond = new TableField("RequiresBond", "INTEGER", ParameterType.GetProperty("RequiresBond"), defaultValue: "0");
@@ -182,6 +183,7 @@ namespace EstimatingUtilitiesLibrary.Database
             SubcontractorWarranty,
             SubcontractorShipping,
             BondRate,
+            OvertimeRatio,
             IsTaxExempt,
             RequiresBond,
             RequiresWrapUp,

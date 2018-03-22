@@ -55,20 +55,20 @@
                             <Grid Grid.Row="1" Grid.ColumnSpan="17">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="55"/>
+                                    <ColumnDefinition Width="50"/>
                                     <ColumnDefinition Width="60"/>
-                                    <ColumnDefinition Width="30"/>
-                                    <ColumnDefinition Width="60"/>
-                                    <ColumnDefinition Width="30"/>
-                                    <ColumnDefinition Width="60"/>
-                                    <ColumnDefinition Width="30"/>
                                     <ColumnDefinition Width="40"/>
-                                    <ColumnDefinition Width="30"/>
                                     <ColumnDefinition Width="60"/>
-                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="40"/>
                                     <ColumnDefinition Width="60"/>
-                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="40"/>
                                     <ColumnDefinition Width="70"/>
-                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="40"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="TEC: "/>
                                 <TextBlock Text="Tax Rate: " Grid.Column="1"/>
@@ -92,13 +92,15 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="100"/>
                                     <ColumnDefinition Width="60"/>
-                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="40"/>
                                     <ColumnDefinition Width="50"/>
-                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="40"/>
                                     <ColumnDefinition Width="60"/>
-                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="40"/>
                                     <ColumnDefinition Width="60"/>
-                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="90"/>
+                                    <ColumnDefinition Width="40"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="Subcontractor: "/>
                                 <TextBlock Text="Escalation: " Grid.Column="1"/>
@@ -109,6 +111,8 @@
                                 <TextBox Text="{Binding SubcontractorWarranty, StringFormat={}{0}%}" Grid.Column="6"/>
                                 <TextBlock Text="Shipping: " Grid.Column="7"/>
                                 <TextBox Text="{Binding SubcontractorShipping, StringFormat={}{0}%}" Grid.Column="8"/>
+                                <TextBlock Text="Overtime Ratio: " Grid.Column="9"/>
+                                <TextBox Text="{Binding OvertimeRatio, StringFormat={}{0}%}" Grid.Column="10"/>
                             </Grid>
                             
                             <!--TEC Labor-->
@@ -121,8 +125,8 @@
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
-                                        <ColumnDefinition Width="40"/>
-                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="50"/>
                                         <ColumnDefinition Width="50"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="Project Management" FontWeight="DemiBold" Grid.ColumnSpan="2"/>
@@ -143,8 +147,8 @@
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
-                                        <ColumnDefinition Width="40"/>
-                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="50"/>
                                         <ColumnDefinition Width="50"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="Engineering" FontWeight="DemiBold" Grid.ColumnSpan="2"/>
@@ -165,8 +169,8 @@
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
-                                        <ColumnDefinition Width="40"/>
-                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="50"/>
                                         <ColumnDefinition Width="50"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="Software" FontWeight="DemiBold" Grid.ColumnSpan="2"/>
@@ -186,8 +190,8 @@
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
-                                        <ColumnDefinition Width="40"/>
-                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="50"/>
                                         <ColumnDefinition Width="50"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="Graphics"  FontWeight="DemiBold" Grid.ColumnSpan="2"/>
@@ -207,8 +211,8 @@
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
-                                        <ColumnDefinition Width="40"/>
-                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="50"/>
                                         <ColumnDefinition Width="50"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="Commisioning" FontWeight="DemiBold" Grid.ColumnSpan="2"/>
@@ -224,7 +228,7 @@
                             <Grid Grid.Row="5" Grid.ColumnSpan="17">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="100"/>
-                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="40"/>
                                     <ColumnDefinition Width="50"/>
                                     <ColumnDefinition Width="70"/>
                                     <ColumnDefinition Width="50"/>
