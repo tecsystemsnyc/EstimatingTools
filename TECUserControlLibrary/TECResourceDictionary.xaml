@@ -193,5 +193,9 @@
         <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
+    <Style x:Key="ListHeaderBorder" TargetType="{x:Type Border}">
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource HeaderBrush}"/>
+    </Style>
 
 </ResourceDictionary>

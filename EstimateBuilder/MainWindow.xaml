@@ -102,6 +102,9 @@
                             <TabItem Header="Review">
                                 <controls:ReviewTabControl ViewModel="{Binding}"/>
                             </TabItem>
+                            <TabItem Header="Notes">
+                                <views:InternalNotesView ViewModel="{Binding InternalNotesVM}"/>
+                            </TabItem>
                         </TabControl>
                         <views:StatusBarView ViewModel="{Binding ElementName=mainWindow, Path=DataContext.StatusBarVM}"
                                                    Grid.Row="3" Grid.ColumnSpan="3"

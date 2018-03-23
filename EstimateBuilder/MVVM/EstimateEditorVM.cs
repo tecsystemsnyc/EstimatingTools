@@ -17,6 +17,7 @@ namespace EstimateBuilder.MVVM
         public RiserVM RiserVM { get; }
         public ScheduleVM ScheduleVM { get; }
         public BidPropertiesVM BidPropertiesVM { get; }
+        public InternalNotesVM InternalNotesVM { get; }
         
         public EstimateEditorVM(TECBid bid, TECTemplates templates, ChangeWatcher watcher, TECEstimator estimate)
         {
@@ -29,6 +30,7 @@ namespace EstimateBuilder.MVVM
             RiserVM = new RiserVM(bid, watcher);
             ScheduleVM = new ScheduleVM(bid, watcher);
             BidPropertiesVM = new BidPropertiesVM(bid);
+            InternalNotesVM = new InternalNotesVM(bid);
         }
     }
 }

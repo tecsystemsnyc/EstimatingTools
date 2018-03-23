@@ -31,6 +31,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECMisc> _miscCosts;
         private ObservableCollection<TECPanel> _panels;
         private TECSchedule _schedule;
+        private ObservableCollection<TECInternalNote> _internalNotes;
         #endregion
 
         #region Properties
@@ -224,7 +225,19 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "Panels", this, value, old);
             }
         }
-        
+        public ObservableCollection<TECInternalNote> InternalNotes
+        {
+            get { return _internalNotes; }
+            set
+            {
+                var old = InternalNotes;
+                InternalNotes.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "InternalNotes");
+                _internalNotes = value;
+                InternalNotes.CollectionChanged += (sender, args) => collectionChanged(sender, args, "InternalNotes");
+                notifyCombinedChanged(Change.Edit, "InternalNotes", this, value, old);
+            }
+        }
+
         public CostBatch CostBatch
         {
             get { return getCosts();  }
@@ -272,6 +285,7 @@ namespace EstimatingLibrary
             _extraLabor = new TECExtraLabor(this.Guid);
             _parameters = new TECParameters(this.Guid);
             _schedule = new TECSchedule();
+            _internalNotes = new ObservableCollection<TECInternalNote>();
 
             Systems.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Systems");
             ScopeTree.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ScopeTree");
@@ -280,6 +294,7 @@ namespace EstimatingLibrary
             Locations.CollectionChanged += locationsCollectionChanged;
             MiscCosts.CollectionChanged += (sender, args) => collectionChanged(sender, args, "MiscCosts");
             Panels.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Panels");
+            InternalNotes.CollectionChanged += (sender, args) => collectionChanged(sender, args, "InternalNotes");
 
         }
 
