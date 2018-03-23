@@ -211,6 +211,8 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("0");
             values.Add("0.05");
             values.Add("0.03");
+            values.Add("1.5");
+
             values.Add("0.0875");
             values.Add("0.05");
             values.Add("0.03");
@@ -237,6 +239,7 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("60");
             values.Add("30");
             values.Add("40");
+
             values.Add("0.25");
             values.Add("0");
             values.Add("1");
