@@ -318,12 +318,13 @@ namespace EstimatingUtilitiesLibraryTests
             Dictionary<string, string> data = new Dictionary<string, string>();
             data[InternalNoteTable.ID.Name] = note.Guid.ToString();
             data[InternalNoteTable.Label.Name] = note.Label.ToString();
+            data[InternalNoteTable.Body.Name] = note.Body.ToString();
 
             expectedItems.Add(new UpdateItem(Change.Add, InternalNoteTable.TableName, data));
 
             data = new Dictionary<string, string>();
-            data[BidInternalNoteTable.BidID.Name] = note.Guid.ToString();
-            data[BidInternalNoteTable.NoteID.Name] = note.Label.ToString();
+            data[BidInternalNoteTable.BidID.Name] = bid.Guid.ToString();
+            data[BidInternalNoteTable.NoteID.Name] = note.Guid.ToString();
             data[BidInternalNoteTable.Index.Name] = "0";
 
             expectedItems.Add(new UpdateItem(Change.Add, BidInternalNoteTable.TableName, data));
