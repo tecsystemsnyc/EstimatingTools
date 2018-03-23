@@ -2114,6 +2114,80 @@ namespace Tests
         }
         #endregion Save Note
 
+        #region Save Internal Note
+        [TestMethod]
+        public void Save_Bid_Add_InternalNote()
+        {
+            //Act
+            TECInternalNote expectedNote = new TECInternalNote();
+            expectedNote.Label = "New Note";
+            bid.Notes.Add(expectedNote);
+
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
+
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
+
+            TECLabeled actualNote = null;
+            foreach (TECLabeled note in actualBid.Notes)
+            {
+                if (note.Guid == expectedNote.Guid)
+                {
+                    actualNote = note;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedNote.Label, actualNote.Label);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Remove_InternalNote()
+        {
+            //Act
+            int oldNumNotes = bid.InternalNotes.Count;
+            TECInternalNote noteToRemove = bid.InternalNotes[0];
+            bid.InternalNotes.Remove(noteToRemove);
+
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
+
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
+
+            //Assert
+            foreach (TECInternalNote note in actualBid.InternalNotes)
+            {
+                if (note.Guid == noteToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual((oldNumNotes - 1), bid.InternalNotes.Count);
+        }
+
+        [TestMethod]
+        public void Save_Bid_InternalNote_Text()
+        {
+            //Act
+            TECInternalNote expectedNote = bid.InternalNotes[0];
+            expectedNote.Label = "Test Save Text";
+
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
+
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
+
+            TECInternalNote actualNote = null;
+            foreach (TECInternalNote note in actualBid.InternalNotes)
+            {
+                if (note.Guid == expectedNote.Guid)
+                {
+                    actualNote = note;
+                    break;
+                }
+            }
+
+            //Assert
+            Assert.AreEqual(expectedNote.Label, actualNote.Label);
+        }
+        #endregion Save Note
+
         #region Save Exclusion
 
         [TestMethod]

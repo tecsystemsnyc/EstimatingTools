@@ -487,6 +487,7 @@ namespace EstimatingLibrary
             saveList.AddRange(this.Panels, "Panels");
             saveList.AddRange(this.MiscCosts, "MiscCosts");
             saveList.AddRange(this.Locations, "Locations");
+            saveList.AddRange(this.InternalNotes, "InternalNotes");
             return saveList;
         }
 

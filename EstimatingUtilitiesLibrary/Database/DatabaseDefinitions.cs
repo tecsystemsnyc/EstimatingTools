@@ -2907,7 +2907,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static Type ObjectType = typeof(TECBid);
         public static Type ReferenceType = typeof(TECInternalNote);
 
-        public static TableField ItemID = new TableField("BidID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField BidID = new TableField("BidID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField NoteID = new TableField("NoteID", "TEXT", ReferenceType.GetProperty("Guid"));
 
         public static Type HelperType = typeof(HelperProperties);
@@ -2915,7 +2915,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
         private List<TableField> primaryKeys = new List<TableField>()
         {
-            ItemID,
+            BidID,
             NoteID
         };
         private List<Type> types = new List<Type>()
@@ -2925,7 +2925,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<TableField> fields = new List<TableField>()
         {
-            ItemID,
+            BidID,
             NoteID,
             Index
         };
@@ -2973,6 +2973,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new ScheduleTable(),
             new ScheduleTableTable(),
             new ScheduleItemTable(),
+            new InternalNoteTable(),
 
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -3014,7 +3015,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new ScheduleScheduleTableTable(),
             new ScheduleTableScheduleItemTable(),
             new ScheduleItemScopeTable(),
-            new BidLocationTable()
+            new BidLocationTable(),
+            new BidInternalNoteTable()
             };
     }
 
@@ -3118,6 +3120,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new ScheduleTable(),
             new ScheduleTableTable(),
             new ScheduleItemTable(),
+            new InternalNoteTable(),
 
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -3165,7 +3168,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new ScheduleScheduleTableTable(),
             new ScheduleTableScheduleItemTable(),
             new ScheduleItemScopeTable(),
-            new BidLocationTable()
+            new BidLocationTable(),
+            new BidInternalNoteTable()
         };
     }
 

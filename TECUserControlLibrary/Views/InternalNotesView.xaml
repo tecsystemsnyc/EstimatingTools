@@ -31,7 +31,7 @@
                 <TextBox Text="{Binding NewText, UpdateSourceTrigger=PropertyChanged}" Margin="2">
                     <TextBox.InputBindings>
                         <KeyBinding Key="Return" 
-                                Command="{Binding AddNewCommand}"/>
+                                    Command="{Binding AddNewCommand}"/>
                     </TextBox.InputBindings>
                 </TextBox>
                 <Button Content="Add" Command="{Binding AddNewCommand}" Grid.Column="1" Margin="2"/>
@@ -41,11 +41,13 @@
                       SelectedItem="{Binding SelectedNote}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
                             <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1">
+                            <Grid>
+
                                 <TextBlock Text="{Binding Label}"/>
-                            </Border>
-                        </Grid>
+                            </Grid>
+
+                        </Border>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
@@ -59,8 +61,8 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Label: " Foreground="Black"/>
                 <TextBox Text="{Binding Label}" 
-                     Foreground="Black"
-                     Grid.Column="1"/>
+                         Foreground="Black"
+                         Grid.Column="1"/>
             </Grid>
             <TextBlock Text="Body:" Foreground="Black" Margin="10,0,0,0" />
             <TextBox Text="{Binding Body}"
