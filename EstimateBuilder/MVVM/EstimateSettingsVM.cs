@@ -12,22 +12,33 @@ namespace EstimateBuilder.MVVM
 {
     public class EstimateSettingsVM : ViewModelBase
     {
+        private bool settingsChanged = false;
+
         public bool OpenOnExport
         {
             get { return Properties.Settings.Default.OpenFileOnExport; }
-            set { Properties.Settings.Default.OpenFileOnExport = value; }
+            set
+            {
+                Properties.Settings.Default.OpenFileOnExport = value;
+                settingsChanged = true;
+            }
         }
 
         public ICommand ApplyCommand { get; private set; }
 
         public EstimateSettingsVM()
         {
-            ApplyCommand = new RelayCommand(applySettingsExecute);
+            ApplyCommand = new RelayCommand(applySettingsExecute, applySettingsCanExecute);
         }
 
-        public void applySettingsExecute()
+        private void applySettingsExecute()
         {
             Properties.Settings.Default.Save();
+            settingsChanged = false;
+        }
+        private bool applySettingsCanExecute()
+        {
+            return settingsChanged;
         }
     }
 }
