@@ -14,6 +14,24 @@ namespace EstimateBuilder.MVVM
     {
         private bool settingsChanged = false;
 
+        public string DefaultBidDirectory
+        {
+            get { return Properties.Settings.Default.BidDirectory; }
+            set
+            {
+                Properties.Settings.Default.BidDirectory = value;
+                settingsChanged = true;
+            }
+        }
+        public string DefaultTemplatesDirectory
+        {
+            get { return Properties.Settings.Default.TemplatesDirectory; }
+            set
+            {
+                Properties.Settings.Default.TemplatesDirectory = value;
+                settingsChanged = true;
+            }
+        }
         public bool OpenOnExport
         {
             get { return Properties.Settings.Default.OpenFileOnExport; }

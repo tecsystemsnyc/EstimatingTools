@@ -26,24 +26,24 @@ namespace EstimateBuilder.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string TemplatesDirectory {
-            get {
-                return ((string)(this["TemplatesDirectory"]));
-            }
-            set {
-                this["TemplatesDirectory"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string BidDirectory {
             get {
                 return ((string)(this["BidDirectory"]));
             }
             set {
                 this["BidDirectory"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string TemplatesDirectory {
+            get {
+                return ((string)(this["TemplatesDirectory"]));
+            }
+            set {
+                this["TemplatesDirectory"] = value;
             }
         }
         

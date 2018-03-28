@@ -57,11 +57,11 @@ namespace EstimateBuilder.MVVM
         {
             get
             {
-                return Properties.Settings.Default.TemplatesDirectory;
+                return Properties.Settings.Default.BidDirectory;
             }
             set
             {
-                Properties.Settings.Default.TemplatesDirectory = value;
+                Properties.Settings.Default.BidDirectory = value;
                 Properties.Settings.Default.Save();
             }
         }
@@ -84,10 +84,10 @@ namespace EstimateBuilder.MVVM
         
         override protected string templatesFilePath
         {
-            get { return Properties.Settings.Default.BidDirectory; }
+            get { return Properties.Settings.Default.TemplatesDirectory; }
             set
             {
-                Properties.Settings.Default.BidDirectory = value;
+                Properties.Settings.Default.TemplatesDirectory = value;
                 Properties.Settings.Default.Save();
             }
         }
@@ -101,7 +101,7 @@ namespace EstimateBuilder.MVVM
         #endregion
 
         public EstimateManager() : base("Estimate Builder", 
-            new EstimateSplashVM(Properties.Settings.Default.BidDirectory, Properties.Settings.Default.TemplatesDirectory), new EstimateMenuVM())
+            new EstimateSplashVM(Properties.Settings.Default.TemplatesDirectory, Properties.Settings.Default.BidDirectory), new EstimateMenuVM())
         {
             splashVM.BidPath = getStartUpFilePath();
             splashVM.EditorStarted += userStartedEditorHandler;
