@@ -413,11 +413,11 @@ namespace TECUserControlLibrary.Utilities
             dropInfo.Effects = DragDropEffects.Copy;
         }
         #region Get Path Methods
-        public static string GetSavePath(FileDialogParameters fileParams, string defaultFileName, string defaultDirectory = "")
+        public static string GetSavePath(FileDialogParameters fileParams, string defaultFileName, string initialDirectory = "")
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.InitialDirectory = 
-                (defaultDirectory != "" ? defaultDirectory : Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+                (initialDirectory != "" ? initialDirectory : Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
             saveFileDialog.FileName = defaultFileName;
             saveFileDialog.Filter = fileParams.Filter;
             saveFileDialog.DefaultExt = fileParams.DefaultExtension;
@@ -430,11 +430,11 @@ namespace TECUserControlLibrary.Utilities
             }
             return savePath;
         }
-        public static string GetLoadPath(FileDialogParameters fileParams, string defaultDirectory = "")
+        public static string GetLoadPath(FileDialogParameters fileParams, string initialDirectory = "")
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory =
-                (defaultDirectory != "" ? defaultDirectory : Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+                (initialDirectory != "" ? initialDirectory : Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
             openFileDialog.Filter = fileParams.Filter;
             openFileDialog.DefaultExt = fileParams.DefaultExtension;
             openFileDialog.AddExtension = true;
