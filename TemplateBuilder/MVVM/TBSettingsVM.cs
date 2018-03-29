@@ -1,59 +1,42 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+﻿using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using TECUserControlLibrary.Interfaces;
 
-namespace EstimateBuilder.MVVM
+namespace TemplateBuilder.MVVM
 {
-    public class EstimateSettingsVM : ViewModelBase
+    public class TBSettingsVM
     {
         private bool settingsChanged = false;
 
-        public string DefaultBidDirectory
-        {
-            get { return EBSettings.BidDirectory; }
-            set
-            {
-                EBSettings.BidDirectory = value;
-                settingsChanged = true;
-            }
-        }
         public string DefaultTemplatesDirectory
         {
-            get { return EBSettings.TemplatesDirectory; }
+            get { return TBSettings.TemplatesDirectory; }
             set
             {
-                EBSettings.TemplatesDirectory = value;
+                TBSettings.TemplatesDirectory = value;
                 settingsChanged = true;
             }
         }
         public bool OpenOnExport
         {
-            get { return EBSettings.OpenFileOnExport; }
+            get { return TBSettings.OpenFileOnExport; }
             set
             {
-                EBSettings.OpenFileOnExport = value;
+                TBSettings.OpenFileOnExport = value;
                 settingsChanged = true;
             }
         }
 
-        public ICommand ChooseBidDirectoryCommand { get; }
         public ICommand ChooseTemplatesDirectoryCommand { get; }
         public ICommand ApplyCommand { get; }
 
-        public EstimateSettingsVM()
+        public TBSettingsVM()
         {
             ApplyCommand = new RelayCommand(applySettingsExecute, applySettingsCanExecute);
-        }
-
-        private void chooseBidDirectoryExecute()
-        {
-            throw new NotImplementedException();
         }
 
         private void chooseTemplatesDirectoryExecute()
@@ -63,7 +46,7 @@ namespace EstimateBuilder.MVVM
 
         private void applySettingsExecute()
         {
-            EBSettings.Save();
+            TBSettings.Save();
             settingsChanged = false;
         }
         private bool applySettingsCanExecute()

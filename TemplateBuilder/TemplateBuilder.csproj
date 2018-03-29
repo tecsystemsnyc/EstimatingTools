@@ -178,6 +178,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="MVVM\TBSettings.cs" />
+    <Compile Include="MVVM\TBSettingsVM.cs" />
+    <Compile Include="MVVM\TBSettingsWindow.xaml.cs">
+      <DependentUpon>TBSettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MVVM\TemplatesManager.cs" />
     <Compile Include="MVVM\TemplatesEditorVM.cs" />
     <Compile Include="MVVM\TemplatesSplashVM.cs" />
@@ -195,6 +199,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="MVVM\TBSettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

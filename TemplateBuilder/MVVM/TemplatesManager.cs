@@ -122,7 +122,8 @@ namespace TemplateBuilder.MVVM
         //Settings
         protected override void settingsExecute()
         {
-            throw new NotImplementedException();
+            TBSettingsWindow settingsWindow = new TBSettingsWindow();
+            settingsWindow.Show();
         }
         #endregion
 
