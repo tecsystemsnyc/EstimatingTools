@@ -4,16 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EstimateBuilder.MVVM
+namespace TemplateBuilder.MVVM
 {
-    internal static class EBSettings
+    internal static class TBSettings
     {
         #region Settings
-        public static string BidDirectory
-        {
-            get { return Properties.Settings.Default.BidDirectory; }
-            set { Properties.Settings.Default.BidDirectory = value; }
-        }
         public static string TemplatesDirectory
         {
             get { return Properties.Settings.Default.TemplatesDirectory; }
@@ -27,34 +22,6 @@ namespace EstimateBuilder.MVVM
         #endregion
 
         #region Recent Files
-        //Bid Files
-        public static string FirstRecentBid
-        {
-            get { return Properties.Settings.Default.FirstRecentBid; }
-            set { Properties.Settings.Default.FirstRecentBid = value; }
-        }
-        public static string SecondRecentBid
-        {
-            get { return Properties.Settings.Default.SecondRecentBid; }
-            set { Properties.Settings.Default.SecondRecentBid = value; }
-        }
-        public static string ThirdRecentBid
-        {
-            get { return Properties.Settings.Default.ThirdRecentBid; }
-            set { Properties.Settings.Default.ThirdRecentBid = value; }
-        }
-        public static string FourthRecentBid
-        {
-            get { return Properties.Settings.Default.FourthRecentBid; }
-            set { Properties.Settings.Default.FourthRecentBid = value; }
-        }
-        public static string FifthRecentBid
-        {
-            get { return Properties.Settings.Default.FifthRecentBid; }
-            set { Properties.Settings.Default.FifthRecentBid = value; }
-        }
-
-        //Template Files
         public static string FirstRecentTemplates
         {
             get { return Properties.Settings.Default.FirstRecentTemplates; }

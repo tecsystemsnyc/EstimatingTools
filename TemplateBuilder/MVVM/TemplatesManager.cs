@@ -14,6 +14,7 @@ namespace TemplateBuilder.MVVM
 {
     public class TemplatesManager : AppManager<TECTemplates>
     {
+        #region Fields and Properties
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         private TECTemplates templates;
@@ -38,18 +39,6 @@ namespace TemplateBuilder.MVVM
                 return FileDialogParameters.TemplatesFileParameters;
             }
         }
-        override protected string defaultDirectory
-        {
-            get
-            {
-                return Properties.Settings.Default.DefaultDirectory;
-            }
-            set
-            {
-                Properties.Settings.Default.DefaultDirectory = value;
-                Properties.Settings.Default.Save();
-            }
-        }
         override protected string defaultFileName
         {
             get
@@ -57,21 +46,14 @@ namespace TemplateBuilder.MVVM
                 return string.Format("Templates v{0}", Version);
             }
         }
-        protected override string templatesFilePath
+        override protected string defaultDirectory
         {
-            get
-            {
-                return Properties.Settings.Default.TemplatesFilePath;
-            }
-            set
-            {
-                Properties.Settings.Default.TemplatesFilePath = value;
-                Properties.Settings.Default.Save();
-            }
+            get { return TBSettings.TemplatesDirectory; }
         }
+        #endregion
 
         public TemplatesManager() : base("Template Builder",
-            new TemplatesSplashVM(Properties.Settings.Default.TemplatesFilePath, Properties.Settings.Default.DefaultDirectory), new TemplatesMenuVM())
+            new TemplatesSplashVM(TBSettings.FirstRecentTemplates, TBSettings.TemplatesDirectory), new TemplatesMenuVM())
         {
             string startUpFilePath = getStartUpFilePath();
             if (startUpFilePath != null && startUpFilePath != "")
@@ -123,7 +105,7 @@ namespace TemplateBuilder.MVVM
         private void exportTemplatesExecute()
         {
             string path = UIHelpers.GetSavePath(FileDialogParameters.ExcelFileParameters,
-                defaultFileName, defaultDirectory, workingFileDirectory);
+                defaultFileName, defaultDirectory);
             if (path != null)
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
@@ -137,8 +119,13 @@ namespace TemplateBuilder.MVVM
                 }
             }
         }
+        //Settings
+        protected override void settingsExecute()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
-        
+
         private string getStartUpFilePath()
         {
             string startUpFilePath = Properties.Settings.Default.StartUpFilePath;

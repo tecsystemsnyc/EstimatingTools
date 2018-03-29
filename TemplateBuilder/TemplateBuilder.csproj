@@ -177,6 +177,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MVVM\TBSettings.cs" />
     <Compile Include="MVVM\TemplatesManager.cs" />
     <Compile Include="MVVM\TemplatesEditorVM.cs" />
     <Compile Include="MVVM\TemplatesSplashVM.cs" />

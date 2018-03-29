@@ -2,6 +2,7 @@
 using NLog;
 using System;
 using System.Windows;
+using TemplateBuilder.MVVM;
 
 namespace TemplateBuilder
 {
@@ -28,6 +29,7 @@ namespace TemplateBuilder
                 && AppDomain.CurrentDomain.SetupInformation
                 .ActivationArguments.ActivationData.Length > 0)
             {
+                TBSettings.StartUpFilePath = "";
                 try
                 {
                     string fname = AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData[0];
@@ -36,13 +38,13 @@ namespace TemplateBuilder
                     Uri uri = new Uri(fname);
                     string startUpFilePath = uri.LocalPath;
                     logger.Debug("StartUp file path: {0}", startUpFilePath);
-                    TemplateBuilder.Properties.Settings.Default.StartUpFilePath = startUpFilePath;
-                    TemplateBuilder.Properties.Settings.Default.Save();
+                    TBSettings.StartUpFilePath = startUpFilePath;
                 }
                 catch (Exception)
                 {
                     logger.Error("Couldn't process startup arguments as a path.");
                 }
+                TBSettings.Save();
             }
             else
             {
