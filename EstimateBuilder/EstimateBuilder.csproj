@@ -173,6 +173,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MVVM\EBSettings.cs" />
     <Compile Include="MVVM\EBSettingsWindow.xaml.cs">
       <DependentUpon>EBSettingsWindow.xaml</DependentUpon>
     </Compile>

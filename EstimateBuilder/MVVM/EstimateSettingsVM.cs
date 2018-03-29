@@ -16,28 +16,28 @@ namespace EstimateBuilder.MVVM
 
         public string DefaultBidDirectory
         {
-            get { return Properties.Settings.Default.BidDirectory; }
+            get { return EBSettings.BidDirectory; }
             set
             {
-                Properties.Settings.Default.BidDirectory = value;
+                EBSettings.BidDirectory = value;
                 settingsChanged = true;
             }
         }
         public string DefaultTemplatesDirectory
         {
-            get { return Properties.Settings.Default.TemplatesDirectory; }
+            get { return EBSettings.TemplatesDirectory; }
             set
             {
-                Properties.Settings.Default.TemplatesDirectory = value;
+                EBSettings.TemplatesDirectory = value;
                 settingsChanged = true;
             }
         }
         public bool OpenOnExport
         {
-            get { return Properties.Settings.Default.OpenFileOnExport; }
+            get { return EBSettings.OpenFileOnExport; }
             set
             {
-                Properties.Settings.Default.OpenFileOnExport = value;
+                EBSettings.OpenFileOnExport = value;
                 settingsChanged = true;
             }
         }
@@ -51,7 +51,7 @@ namespace EstimateBuilder.MVVM
 
         private void applySettingsExecute()
         {
-            Properties.Settings.Default.Save();
+            EBSettings.Save();
             settingsChanged = false;
         }
         private bool applySettingsCanExecute()
