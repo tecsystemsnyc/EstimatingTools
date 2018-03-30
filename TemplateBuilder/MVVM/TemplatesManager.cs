@@ -70,7 +70,6 @@ namespace TemplateBuilder.MVVM
             buildTitleString(path, "TemplateBuilder");
             if(path != "")
             {
-                templatesFilePath = path;
                 databaseManager = new DatabaseManager<TECTemplates>(path);
                 databaseManager.LoadComplete += handleLoaded;
                 ViewEnabled = false;

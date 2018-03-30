@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
 using TECUserControlLibrary.Interfaces;
 
@@ -13,6 +14,7 @@ namespace EstimateBuilder.MVVM
     public class EstimateSettingsVM : ViewModelBase
     {
         private bool settingsChanged = false;
+        private readonly FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
 
         public string DefaultBidDirectory
         {
@@ -21,6 +23,7 @@ namespace EstimateBuilder.MVVM
             {
                 EBSettings.BidDirectory = value;
                 settingsChanged = true;
+                RaisePropertyChanged("DefaultBidDirectory");
             }
         }
         public string DefaultTemplatesDirectory
@@ -30,6 +33,7 @@ namespace EstimateBuilder.MVVM
             {
                 EBSettings.TemplatesDirectory = value;
                 settingsChanged = true;
+                RaisePropertyChanged("DefaultTemplatesDirectory");
             }
         }
         public bool OpenOnExport
@@ -48,17 +52,27 @@ namespace EstimateBuilder.MVVM
 
         public EstimateSettingsVM()
         {
+            ChooseBidDirectoryCommand = new RelayCommand(chooseBidDirectoryExecute);
+            ChooseTemplatesDirectoryCommand = new RelayCommand(chooseTemplatesDirectoryExecute);
             ApplyCommand = new RelayCommand(applySettingsExecute, applySettingsCanExecute);
         }
 
         private void chooseBidDirectoryExecute()
         {
-            throw new NotImplementedException();
+            DialogResult result = folderBrowserDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                DefaultBidDirectory = folderBrowserDialog.SelectedPath;
+            }
         }
 
         private void chooseTemplatesDirectoryExecute()
         {
-            throw new NotImplementedException();
+            DialogResult result = folderBrowserDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                DefaultTemplatesDirectory = folderBrowserDialog.SelectedPath;
+            }
         }
 
         private void applySettingsExecute()
