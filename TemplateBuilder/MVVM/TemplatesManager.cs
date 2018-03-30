@@ -141,5 +141,70 @@ namespace TemplateBuilder.MVVM
         {
             return new TECTemplates();
         }
+
+        private void updateRecentTemplatesSettings(string templatesPath)
+        {
+            if (templatesPath != null && templatesPath != "")
+            {
+                string first = TBSettings.FirstRecentTemplates;
+                string second = TBSettings.SecondRecentTemplates;
+                string third = TBSettings.ThirdRecentTemplates;
+                string fourth = TBSettings.FourthRecentTemplates;
+                string fifth = TBSettings.FifthRecentTemplates;
+
+                string limbo = templatesPath;
+
+                if (limbo == first)
+                {
+                    return;
+                }
+                else
+                {
+                    TBSettings.FirstRecentTemplates = limbo;
+                    limbo = first;
+                }
+
+                if (limbo == second)
+                {
+                    return;
+                }
+                else
+                {
+                    TBSettings.SecondRecentTemplates = limbo;
+                    limbo = second;
+                }
+
+                if (limbo == third)
+                {
+                    return;
+                }
+                else
+                {
+                    TBSettings.ThirdRecentTemplates = limbo;
+                    limbo = third;
+                }
+
+                if (limbo == fourth)
+                {
+                    return;
+                }
+                else
+                {
+                    TBSettings.FourthRecentTemplates = limbo;
+                    limbo = fourth;
+                }
+
+                if (limbo == fifth)
+                {
+                    return;
+                }
+                else
+                {
+                    TBSettings.FifthRecentTemplates = limbo;
+                }
+
+                TBSettings.Save();
+            }
+        }
     }
 }

@@ -96,6 +96,10 @@ namespace EstimateBuilder.MVVM
         {
             this.currentBidPath = bidFilePath;
             this.currentTemplatesPath = templatesFilePath;
+            
+            updateRecentBidSettings(bidFilePath);
+            updateRecentTemplatesSettings(templatesFilePath);
+
             buildTitleString(bidFilePath, "Estimate Builder");
             if(templatesFilePath != "")
             {
@@ -438,6 +442,135 @@ namespace EstimateBuilder.MVVM
                 outBid.Parameters = templates.Parameters[0];
             }
             return outBid;
+        }
+
+        private void updateRecentBidSettings(string bidPath)
+        {
+            if (bidPath != null && bidPath != "")
+            {
+                string first = EBSettings.FirstRecentBid;
+                string second = EBSettings.SecondRecentBid;
+                string third = EBSettings.ThirdRecentBid;
+                string fourth = EBSettings.FourthRecentBid;
+                string fifth = EBSettings.FifthRecentBid;
+
+                string limbo = bidPath;
+
+                if (limbo == first)
+                {
+                    return;
+                } 
+                else
+                {
+                    EBSettings.FirstRecentBid = limbo;
+                    limbo = first;
+                }
+
+                if (limbo == second)
+                {
+                    return;
+                }
+                else
+                {
+                    EBSettings.SecondRecentBid = limbo;
+                    limbo = second;
+                }
+
+                if (limbo == third)
+                {
+                    return;
+                }
+                else
+                {
+                    EBSettings.ThirdRecentBid = limbo;
+                    limbo = third;
+                }
+
+                if (limbo == fourth)
+                {
+                    return;
+                }
+                else
+                {
+                    EBSettings.FourthRecentBid = limbo;
+                    limbo = fourth;
+                }
+
+                if (limbo == fifth)
+                {
+                    return;
+                }
+                else
+                {
+                    EBSettings.FifthRecentBid = limbo;
+                }
+
+                EBSettings.Save();
+            }
+        }
+        private void updateRecentTemplatesSettings(string templatesPath)
+        {
+            if (templatesPath != null && templatesPath != "")
+            {
+                string first = EBSettings.FirstRecentTemplates;
+                string second = EBSettings.SecondRecentTemplates;
+                string third = EBSettings.ThirdRecentTemplates;
+                string fourth = EBSettings.FourthRecentTemplates;
+                string fifth = EBSettings.FifthRecentTemplates;
+
+                string limbo = templatesPath;
+
+                if (limbo == first)
+                {
+                    return;
+                }
+                else
+                {
+                    EBSettings.FirstRecentTemplates = limbo;
+                    limbo = first;
+                }
+
+                if (limbo == second)
+                {
+                    return;
+                }
+                else
+                {
+                    EBSettings.SecondRecentTemplates = limbo;
+                    limbo = second;
+                }
+
+                if (limbo == third)
+                {
+                    return;
+                }
+                else
+                {
+                    EBSettings.ThirdRecentTemplates = limbo;
+                    limbo = third;
+                }
+
+                if (limbo == fourth)
+                {
+                    return;
+                }
+                else
+                {
+                    EBSettings.FourthRecentTemplates = limbo;
+                    limbo = fourth;
+                }
+
+                if (limbo == fifth)
+                {
+                    return;
+                }
+                else
+                {
+                    EBSettings.FifthRecentTemplates = limbo;
+                }
+
+                EBSettings.Save();
+            }
         }
     }
 }
