@@ -104,13 +104,6 @@
             </Button>
         </Grid>
 
-        <TextBlock Grid.Row="5" Grid.ColumnSpan="4" 
-                   Text="{Binding LoadingText}"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   Foreground="Black"
-                   FontSize="20"/>
-
         <!--Borders-->
         <Border Grid.ColumnSpan="4" Grid.Row="1"
                 BorderThickness="0 0 0 1"

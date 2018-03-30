@@ -33,15 +33,6 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("SubtitleText");
             }
         }
-        public string HintText
-        {
-            get { return _hintText; }
-            set
-            {
-                _hintText = value;
-                RaisePropertyChanged("HintText");
-            }
-        }
         public string LoadingText
         {
             get { return _loadingText; }
