@@ -23,7 +23,7 @@
             <RowDefinition Height="80"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="40"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
@@ -89,8 +89,6 @@
             <TextBlock VerticalAlignment="Center">Select File...</TextBlock>
         </Button>
 
-        <TextBlock Text="{Binding HintText}" Grid.Row="3" Grid.Column="1"/>
-
         <Grid Grid.Row="4" Grid.ColumnSpan="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -103,7 +101,7 @@
                 <TextBlock VerticalAlignment="Center">Open Selected</TextBlock>
             </Button>
         </Grid>
-
+        
         <!--Borders-->
         <Border Grid.ColumnSpan="4" Grid.Row="1"
                 BorderThickness="0 0 0 1"
