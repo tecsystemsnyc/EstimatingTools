@@ -7,7 +7,7 @@
              xmlns:dd="urn:gong-wpf-dragdrop"
              x:Name="splashView"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="500">
+             d:DesignHeight="500" d:DesignWidth="800">
     <UserControl.Resources>
         <ResourceDictionary>
             <Style TargetType="TextBlock">
@@ -23,8 +23,9 @@
             <RowDefinition Height="80"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -33,7 +34,7 @@
             <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.ColumnSpan="3" Margin="5">
+        <Grid Grid.ColumnSpan="4" Margin="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="30"/>
@@ -89,7 +90,8 @@
             <TextBlock VerticalAlignment="Center">Select File...</TextBlock>
         </Button>
 
-        <Grid Grid.Row="4" Grid.ColumnSpan="4">
+        <!--Create and Open Buttons-->
+        <Grid Grid.Row="3" Grid.ColumnSpan="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -102,6 +104,60 @@
             </Button>
         </Grid>
         
+        <!--Loading-->
+        <TextBlock Grid.Row="4" Grid.ColumnSpan="4" 
+                   Text="{Binding LoadingText}"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Foreground="Black" FontSize="20"/>
+
+        <!--Recent Files-->
+        <Grid Grid.Row="5" Grid.ColumnSpan="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            
+            <!--Recent Bid Files-->
+            <Grid Visibility="{Binding ElementName=splashView, Path=BidVisibility}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                
+            </Grid>
+            
+            <!--Recent Templates Files-->
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <!--First-->
+                <TextBlock Text="{Binding }"
+            </Grid>
+        </Grid>
+
+        
+
         <!--Borders-->
         <Border Grid.ColumnSpan="4" Grid.Row="1"
                 BorderThickness="0 0 0 1"

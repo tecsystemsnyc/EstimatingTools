@@ -12,7 +12,6 @@ namespace TECUserControlLibrary.ViewModels
 
         private string _titleText;
         private string _subtitleText;
-        private string _hintText;
         private string _loadingText;
 
         public string TitleText

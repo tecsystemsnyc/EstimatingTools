@@ -45,6 +45,48 @@ namespace EstimateBuilder.MVVM
 
         public ICommand GetBidPathCommand { get; private set; }
         public ICommand ClearBidPathCommand { get; private set; }
+
+        public string FirstRecentBid
+        {
+            get { return EBSettings.FirstRecentBid; }
+        }
+        public string SecondRecentBid
+        {
+            get { return EBSettings.SecondRecentBid; }
+        }
+        public string ThirdRecentBid
+        {
+            get { return EBSettings.ThirdRecentBid; }
+        }
+        public string FourthRecentBid
+        {
+            get { return EBSettings.FourthRecentBid; }
+        }
+        public string FifthRecentBid
+        {
+            get { return EBSettings.FifthRecentBid; }
+        }
+
+        public string FirstRecentTemplates
+        {
+            get { return EBSettings.FirstRecentTemplates; }
+        }
+        public string SecondRecentTemplates
+        {
+            get { return EBSettings.SecondRecentTemplates; }
+        }
+        public string ThirdRecentTemplates
+        {
+            get { return EBSettings.ThirdRecentTemplates; }
+        }
+        public string FourthRecentTemplates
+        {
+            get { return EBSettings.FourthRecentTemplates; }
+        }
+        public string FifthRecentTemplates
+        {
+            get { return EBSettings.FifthRecentTemplates; }
+        }
         
         public event Action<string, string> EditorStarted;
 
