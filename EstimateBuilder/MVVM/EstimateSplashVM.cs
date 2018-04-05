@@ -19,7 +19,6 @@ namespace EstimateBuilder.MVVM
         private List<string> fileExtensions = new List<string> { ".edb", ".tdb" };
 
         private string _bidPath;
-        private string _templatesPath;
 
         public string BidPath
         {
@@ -28,18 +27,6 @@ namespace EstimateBuilder.MVVM
             {
                 _bidPath = value;
                 RaisePropertyChanged("BidPath");
-            }
-        }
-        public string TemplatesPath
-        {
-            get
-            {
-                return _templatesPath;
-            }
-            set
-            {
-                _templatesPath = value;
-                RaisePropertyChanged("TemplatesPath");
             }
         }
 
@@ -67,26 +54,28 @@ namespace EstimateBuilder.MVVM
             get { return EBSettings.FifthRecentBid; }
         }
 
-        public string FirstRecentTemplates
+        public override string FirstRecentTemplates
         {
             get { return EBSettings.FirstRecentTemplates; }
         }
-        public string SecondRecentTemplates
+        public override string SecondRecentTemplates
         {
             get { return EBSettings.SecondRecentTemplates; }
         }
-        public string ThirdRecentTemplates
+        public override string ThirdRecentTemplates
         {
             get { return EBSettings.ThirdRecentTemplates; }
         }
-        public string FourthRecentTemplates
+        public override string FourthRecentTemplates
         {
             get { return EBSettings.FourthRecentTemplates; }
         }
-        public string FifthRecentTemplates
+        public override string FifthRecentTemplates
         {
             get { return EBSettings.FifthRecentTemplates; }
         }
+
+        public ICommand ChooseRecentBidCommand { get; }
         
         public event Action<string, string> EditorStarted;
 
@@ -94,7 +83,7 @@ namespace EstimateBuilder.MVVM
             base(SPLASH_TITLE, SPLASH_SUBTITLE, defaultDirectory)
         {
             _bidPath = "";
-            _templatesPath = templatesPath;
+            TemplatesPath = templatesPath;
             
             GetBidPathCommand = new RelayCommand(getBidPathExecute);
             ClearBidPathCommand = new RelayCommand(clearBidPathExecute);
@@ -102,6 +91,8 @@ namespace EstimateBuilder.MVVM
             ClearTemplatesPathCommand = new RelayCommand(clearTemplatesPathExecute);
             OpenExistingCommand = new RelayCommand(openExistingExecute, openExistingCanExecute);
             CreateNewCommand = new RelayCommand(createNewExecute, createNewCanExecute);
+
+            ChooseRecentBidCommand = new RelayCommand<string>(chooseRecentBidExecute, chooseRecentCanExecute);
         }
         
         private void getBidPathExecute()
@@ -196,6 +187,11 @@ namespace EstimateBuilder.MVVM
         private bool createNewCanExecute()
         {
             return true;
+        }
+
+        private void chooseRecentBidExecute(string path)
+        {
+            BidPath = path;
         }
 
         public override void DragOver(IDropInfo dropInfo)
