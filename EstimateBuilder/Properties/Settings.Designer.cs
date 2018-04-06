@@ -12,7 +12,7 @@ namespace EstimateBuilder.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.3.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.6.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -26,24 +26,24 @@ namespace EstimateBuilder.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DefaultDirectory {
+        public string BidDirectory {
             get {
-                return ((string)(this["DefaultDirectory"]));
+                return ((string)(this["BidDirectory"]));
             }
             set {
-                this["DefaultDirectory"] = value;
+                this["BidDirectory"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string TemplatesFilePath {
+        public string TemplatesDirectory {
             get {
-                return ((string)(this["TemplatesFilePath"]));
+                return ((string)(this["TemplatesDirectory"]));
             }
             set {
-                this["TemplatesFilePath"] = value;
+                this["TemplatesDirectory"] = value;
             }
         }
         
@@ -56,6 +56,138 @@ namespace EstimateBuilder.Properties {
             }
             set {
                 this["StartUpFilePath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool OpenFileOnExport {
+            get {
+                return ((bool)(this["OpenFileOnExport"]));
+            }
+            set {
+                this["OpenFileOnExport"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FirstRecentBid {
+            get {
+                return ((string)(this["FirstRecentBid"]));
+            }
+            set {
+                this["FirstRecentBid"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SecondRecentBid {
+            get {
+                return ((string)(this["SecondRecentBid"]));
+            }
+            set {
+                this["SecondRecentBid"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ThirdRecentBid {
+            get {
+                return ((string)(this["ThirdRecentBid"]));
+            }
+            set {
+                this["ThirdRecentBid"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FourthRecentBid {
+            get {
+                return ((string)(this["FourthRecentBid"]));
+            }
+            set {
+                this["FourthRecentBid"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FifthRecentBid {
+            get {
+                return ((string)(this["FifthRecentBid"]));
+            }
+            set {
+                this["FifthRecentBid"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FirstRecentTemplates {
+            get {
+                return ((string)(this["FirstRecentTemplates"]));
+            }
+            set {
+                this["FirstRecentTemplates"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SecondRecentTemplates {
+            get {
+                return ((string)(this["SecondRecentTemplates"]));
+            }
+            set {
+                this["SecondRecentTemplates"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ThirdRecentTemplates {
+            get {
+                return ((string)(this["ThirdRecentTemplates"]));
+            }
+            set {
+                this["ThirdRecentTemplates"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FourthRecentTemplates {
+            get {
+                return ((string)(this["FourthRecentTemplates"]));
+            }
+            set {
+                this["FourthRecentTemplates"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FifthRecentTemplates {
+            get {
+                return ((string)(this["FifthRecentTemplates"]));
+            }
+            set {
+                this["FifthRecentTemplates"] = value;
             }
         }
     }

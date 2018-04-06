@@ -16,23 +16,29 @@ namespace TemplateBuilder.MVVM
         const string SPLASH_SUBTITLE = "Please select object templates or create new templates";
 
         private List<string> fileExtensions = new List<string> { ".tdb" };
-
-        private string _templatesPath;
-        
-        public string TemplatesPath
-        {
-            get
-            {
-                return _templatesPath;
-            }
-            set
-            {
-                _templatesPath = value;
-                RaisePropertyChanged("TemplatesPath");
-            }
-        }
         
         public event Action<string> EditorStarted;
+
+        public override string FirstRecentTemplates
+        {
+            get { return TBSettings.FirstRecentTemplates; }
+        }
+        public override string SecondRecentTemplates
+        {
+            get { return TBSettings.SecondRecentTemplates; }
+        }
+        public override string ThirdRecentTemplates
+        {
+            get { return TBSettings.ThirdRecentTemplates; }
+        }
+        public override string FourthRecentTemplates
+        {
+            get { return TBSettings.FourthRecentTemplates; }
+        }
+        public override string FifthRecentTemplates
+        {
+            get { return TBSettings.FifthRecentTemplates; }
+        }
 
         public TemplatesSplashVM(string templatesPath, string defaultDirectory) :
             base(SPLASH_TITLE, SPLASH_SUBTITLE, defaultDirectory)
@@ -47,7 +53,7 @@ namespace TemplateBuilder.MVVM
 
         private void getTemplatesPathExecute()
         {
-            string path = getPath(FileDialogParameters.TemplatesFileParameters, defaultDirectory);
+            string path = UIHelpers.GetLoadPath(FileDialogParameters.TemplatesFileParameters, defaultDirectory);
             if (path != null)
             {
                 TemplatesPath = path;

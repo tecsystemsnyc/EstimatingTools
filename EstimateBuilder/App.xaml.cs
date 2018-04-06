@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Threading;
+﻿using EstimateBuilder.MVVM;
+using GalaSoft.MvvmLight.Threading;
 using NLog;
 using System;
 using System.Windows;
@@ -28,6 +29,7 @@ namespace EstimateBuilder
                 && AppDomain.CurrentDomain.SetupInformation
                 .ActivationArguments.ActivationData.Length > 0)
             {
+                EBSettings.StartUpFilePath = "";
                 try
                 {
                     string fname = AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData[0];
@@ -36,13 +38,13 @@ namespace EstimateBuilder
                     Uri uri = new Uri(fname);
                     string startUpFilePath = uri.LocalPath;
                     logger.Debug("StartUp file path: {0}", startUpFilePath);
-                    EstimateBuilder.Properties.Settings.Default.StartUpFilePath = startUpFilePath;
-                    EstimateBuilder.Properties.Settings.Default.Save();
+                    EBSettings.StartUpFilePath = startUpFilePath;
                 }
                 catch (Exception)
                 {
                     logger.Error("Couldn't process startup arguments as a path.");
                 }
+                EBSettings.Save();
             }
             else
             {
