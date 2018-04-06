@@ -156,6 +156,7 @@ namespace TemplateBuilder.MVVM
 
                 if (limbo == first)
                 {
+                    TBSettings.Save();
                     return;
                 }
                 else
@@ -166,6 +167,7 @@ namespace TemplateBuilder.MVVM
 
                 if (limbo == second)
                 {
+                    TBSettings.Save();
                     return;
                 }
                 else
@@ -176,6 +178,7 @@ namespace TemplateBuilder.MVVM
 
                 if (limbo == third)
                 {
+                    TBSettings.Save();
                     return;
                 }
                 else
@@ -186,6 +189,7 @@ namespace TemplateBuilder.MVVM
 
                 if (limbo == fourth)
                 {
+                    TBSettings.Save();
                     return;
                 }
                 else
@@ -196,6 +200,7 @@ namespace TemplateBuilder.MVVM
 
                 if (limbo == fifth)
                 {
+                    TBSettings.Save();
                     return;
                 }
                 else
