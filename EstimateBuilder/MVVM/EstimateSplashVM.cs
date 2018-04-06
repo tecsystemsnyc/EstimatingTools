@@ -18,7 +18,9 @@ namespace EstimateBuilder.MVVM
 
         private List<string> fileExtensions = new List<string> { ".edb", ".tdb" };
 
-        private string _bidPath;
+        private string defaultTemplatesDirectory;
+
+        private string _bidPath = "";
 
         public string BidPath
         {
@@ -79,10 +81,11 @@ namespace EstimateBuilder.MVVM
         
         public event Action<string, string> EditorStarted;
 
-        public EstimateSplashVM(string templatesPath, string defaultDirectory) :
+        public EstimateSplashVM(string templatesPath, string defaultDirectory, string defaultTemplatesDirectory) :
             base(SPLASH_TITLE, SPLASH_SUBTITLE, defaultDirectory)
         {
-            _bidPath = "";
+            this.defaultTemplatesDirectory = defaultTemplatesDirectory; 
+
             TemplatesPath = templatesPath;
             
             GetBidPathCommand = new RelayCommand(getBidPathExecute);
@@ -109,7 +112,7 @@ namespace EstimateBuilder.MVVM
         }
         private void getTemplatesPathExecute()
         {
-            string path = getPath(FileDialogParameters.TemplatesFileParameters, defaultDirectory);
+            string path = getPath(FileDialogParameters.TemplatesFileParameters, defaultTemplatesDirectory);
             if(path != null)
             {
                 TemplatesPath = path;

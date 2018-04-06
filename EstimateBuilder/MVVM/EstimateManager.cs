@@ -83,7 +83,7 @@ namespace EstimateBuilder.MVVM
         #endregion
 
         public EstimateManager() : base("Estimate Builder", 
-            new EstimateSplashVM(templatesPath: EBSettings.FirstRecentTemplates, defaultDirectory: EBSettings.BidDirectory),
+            new EstimateSplashVM(templatesPath: EBSettings.FirstRecentTemplates, defaultDirectory: EBSettings.BidDirectory, defaultTemplatesDirectory: EBSettings.TemplatesDirectory),
             new EstimateMenuVM())
         {
             splashVM.BidPath = EBSettings.StartUpFilePath;
@@ -458,6 +458,7 @@ namespace EstimateBuilder.MVVM
 
                 if (limbo == first)
                 {
+                    EBSettings.Save();
                     return;
                 } 
                 else
@@ -468,6 +469,7 @@ namespace EstimateBuilder.MVVM
 
                 if (limbo == second)
                 {
+                    EBSettings.Save();
                     return;
                 }
                 else
@@ -478,6 +480,7 @@ namespace EstimateBuilder.MVVM
 
                 if (limbo == third)
                 {
+                    EBSettings.Save();
                     return;
                 }
                 else
@@ -488,6 +491,7 @@ namespace EstimateBuilder.MVVM
 
                 if (limbo == fourth)
                 {
+                    EBSettings.Save();
                     return;
                 }
                 else
@@ -498,6 +502,7 @@ namespace EstimateBuilder.MVVM
 
                 if (limbo == fifth)
                 {
+                    EBSettings.Save();
                     return;
                 }
                 else
@@ -522,6 +527,7 @@ namespace EstimateBuilder.MVVM
 
                 if (limbo == first)
                 {
+                    EBSettings.Save();
                     return;
                 }
                 else
@@ -532,6 +538,7 @@ namespace EstimateBuilder.MVVM
 
                 if (limbo == second)
                 {
+                    EBSettings.Save();
                     return;
                 }
                 else
@@ -542,6 +549,7 @@ namespace EstimateBuilder.MVVM
 
                 if (limbo == third)
                 {
+                    EBSettings.Save();
                     return;
                 }
                 else
@@ -552,6 +560,7 @@ namespace EstimateBuilder.MVVM
 
                 if (limbo == fourth)
                 {
+                    EBSettings.Save();
                     return;
                 }
                 else
@@ -562,6 +571,7 @@ namespace EstimateBuilder.MVVM
 
                 if (limbo == fifth)
                 {
+                    EBSettings.Save();
                     return;
                 }
                 else
