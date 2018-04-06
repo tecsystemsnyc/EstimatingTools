@@ -11,7 +11,7 @@ using TECUserControlLibrary.Interfaces;
 
 namespace EstimateBuilder.MVVM
 {
-    public class EstimateSettingsVM : ViewModelBase
+    public class EBSettingsVM : ViewModelBase
     {
         private bool settingsChanged = false;
         private readonly FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
@@ -50,7 +50,7 @@ namespace EstimateBuilder.MVVM
         public ICommand ChooseTemplatesDirectoryCommand { get; }
         public ICommand ApplyCommand { get; }
 
-        public EstimateSettingsVM()
+        public EBSettingsVM()
         {
             ChooseBidDirectoryCommand = new RelayCommand(chooseBidDirectoryExecute);
             ChooseTemplatesDirectoryCommand = new RelayCommand(chooseTemplatesDirectoryExecute);
