@@ -114,9 +114,7 @@ namespace TECUserControlLibrary.Views
         // Using a DependencyProperty as the backing store for FifthRecentBid.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty FifthRecentBidProperty =
             DependencyProperty.Register("FifthRecentBid", typeof(string), typeof(SplashView));
-
-
-
+        
         public ICommand ChooseRecentBidCommand
         {
             get { return (ICommand)GetValue(ChooseRecentBidCommandProperty); }
