@@ -140,7 +140,9 @@
 
                 <!--First-->
                 <TextBlock Text="{Binding FirstRecentBid}"
-                           Grid.Row="1"/>
+                           ToolTip="{Binding FirstRecentBid}"
+                           Grid.Row="1"
+                           VerticalAlignment="Center"/>
                 <Button Content="Select"
                         Command="{Binding ChooseRecentBidCommand}"
                         CommandParameter="{Binding FirstRecentBid}"
@@ -148,7 +150,9 @@
 
                 <!--Second-->
                 <TextBlock Text="{Binding SecondRecentBid}"
-                           Grid.Row="2"/>
+                           ToolTip="{Binding SecondRecentBid}"
+                           Grid.Row="2"
+                           VerticalAlignment="Center"/>
                 <Button Content="Select"
                         Command="{Binding ChooseRecentBidCommand}"
                         CommandParameter="{Binding SecondRecentBid}"
@@ -156,7 +160,9 @@
 
                 <!--Third-->
                 <TextBlock Text="{Binding ThirdRecentBid}"
-                           Grid.Row="3"/>
+                           ToolTip="{Binding ThirdRecentBid}"
+                           Grid.Row="3"
+                           VerticalAlignment="Center"/>
                 <Button Content="Select"
                         Command="{Binding ChooseRecentBidCommand}"
                         CommandParameter="{Binding ThirdRecentBid}"
@@ -164,7 +170,9 @@
 
                 <!--Fourth-->
                 <TextBlock Text="{Binding FourthRecentBid}"
-                           Grid.Row="4"/>
+                           ToolTip="{Binding FourthRecentBid}"
+                           Grid.Row="4"
+                           VerticalAlignment="Center"/>
                 <Button Content="Select"
                         Command="{Binding ChooseRecentBidCommand}"
                         CommandParameter="{Binding FourthRecentBid}"
@@ -172,12 +180,24 @@
 
                 <!--Fifth-->
                 <TextBlock Text="{Binding FifthRecentBid}"
-                           Grid.Row="5"/>
+                           ToolTip="{Binding FifthRecentBid}"
+                           Grid.Row="5"
+                           VerticalAlignment="Center"/>
                 <Button Content="Select"
                         Command="{Binding ChooseRecentBidCommand}"
                         CommandParameter="{Binding FifthRecentBid}"
                         Grid.Row="5" Grid.Column="1" Margin="5"/>
 
+                <Border Grid.Row="1" 
+                        BorderThickness="0 0 0 1" BorderBrush="Black"/>
+                <Border Grid.Row="2" 
+                        BorderThickness="0 0 0 1" BorderBrush="Black"/>
+                <Border Grid.Row="3" 
+                        BorderThickness="0 0 0 1" BorderBrush="Black"/>
+                <Border Grid.Row="4" 
+                        BorderThickness="0 0 0 1" BorderBrush="Black"/>
+                <Border Grid.Row="5" 
+                        BorderThickness="0 0 0 1" BorderBrush="Black"/>
             </Grid>
 
             <!--Recent Templates Files-->
@@ -201,7 +221,9 @@
 
                 <!--First-->
                 <TextBlock Text="{Binding FirstRecentTemplates}"
-                           Grid.Row="1"/>
+                           ToolTip="{Binding FirstRecentTemplates}"
+                           Grid.Row="1"
+                           VerticalAlignment="Center"/>
                 <Button Content="Select"
                         Command="{Binding ChooseRecentTemplatesCommand}"
                         CommandParameter="{Binding FirstRecentTemplates}"
@@ -209,7 +231,9 @@
 
                 <!--Second-->
                 <TextBlock Text="{Binding SecondRecentTemplates}"
-                           Grid.Row="2"/>
+                           ToolTip="{Binding SecondRecentTemplates}"
+                           Grid.Row="2"
+                           VerticalAlignment="Center"/>
                 <Button Content="Select"
                         Command="{Binding ChooseRecentTemplatesCommand}"
                         CommandParameter="{Binding SecondRecentTemplates}"
@@ -217,7 +241,9 @@
 
                 <!--Third-->
                 <TextBlock Text="{Binding ThirdRecentTemplates}"
-                           Grid.Row="3"/>
+                           ToolTip="{Binding ThirdRecentTemplates}"
+                           Grid.Row="3"
+                           VerticalAlignment="Center"/>
                 <Button Content="Select"
                         Command="{Binding ChooseRecentTemplatesCommand}"
                         CommandParameter="{Binding ThirdRecentTemplates}"
@@ -225,7 +251,9 @@
 
                 <!--Fourth-->
                 <TextBlock Text="{Binding FourthRecentTemplates}"
-                           Grid.Row="4"/>
+                           ToolTip="{Binding FourthRecentTemplates}"
+                           Grid.Row="4"
+                           VerticalAlignment="Center"/>
                 <Button Content="Select"
                         Command="{Binding ChooseRecentTemplatesCommand}"
                         CommandParameter="{Binding FourthRecentTemplates}"
@@ -233,11 +261,24 @@
 
                 <!--Fifth-->
                 <TextBlock Text="{Binding FifthRecentTemplates}"
-                           Grid.Row="5"/>
+                           ToolTip="{Binding FifthRecentTemplates}"
+                           Grid.Row="5"
+                           VerticalAlignment="Center"/>
                 <Button Content="Select"
                         Command="{Binding ChooseRecentTemplatesCommand}"
                         CommandParameter="{Binding FifthRecentTemplates}"
                         Grid.Row="5" Grid.Column="1" Margin="5"/>
+                
+                <Border Grid.Row="1" 
+                        BorderThickness="0 0 0 1" BorderBrush="Black"/>
+                <Border Grid.Row="2" 
+                        BorderThickness="0 0 0 1" BorderBrush="Black"/>
+                <Border Grid.Row="3" 
+                        BorderThickness="0 0 0 1" BorderBrush="Black"/>
+                <Border Grid.Row="4" 
+                        BorderThickness="0 0 0 1" BorderBrush="Black"/>
+                <Border Grid.Row="5" 
+                        BorderThickness="0 0 0 1" BorderBrush="Black"/>
             </Grid>
         </Grid>
         
