@@ -100,7 +100,7 @@ namespace EstimateBuilder.MVVM
         
         private void getBidPathExecute()
         {
-            string path = getPath(FileDialogParameters.EstimateFileParameters, defaultDirectory);
+            string path = UIHelpers.GetLoadPath(FileDialogParameters.EstimateFileParameters, defaultDirectory);
             if(path != null)
             {
                 BidPath = path;
@@ -112,7 +112,7 @@ namespace EstimateBuilder.MVVM
         }
         private void getTemplatesPathExecute()
         {
-            string path = getPath(FileDialogParameters.TemplatesFileParameters, defaultTemplatesDirectory);
+            string path = UIHelpers.GetLoadPath(FileDialogParameters.TemplatesFileParameters, defaultTemplatesDirectory);
             if(path != null)
             {
                 TemplatesPath = path;

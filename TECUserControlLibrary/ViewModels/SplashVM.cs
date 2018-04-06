@@ -78,25 +78,6 @@ namespace TECUserControlLibrary.ViewModels
 
             ChooseRecentTemplatesCommand = new RelayCommand<string>(chooseRecentTemplatesExecute, chooseRecentCanExecute);
         }
-        
-        protected string getPath(FileDialogParameters fileParams, string initialDirectory = null)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = fileParams.Filter;
-            openFileDialog.DefaultExt = fileParams.DefaultExtension;
-            openFileDialog.AddExtension = true;
-            
-            string savePath = null;
-            if (openFileDialog.ShowDialog() == true)
-            {
-                savePath = openFileDialog.FileName;
-                if(savePath == "")
-                {
-                    savePath = null;
-                }
-            }
-            return savePath;
-        }
 
         public abstract void DragOver(IDropInfo dropInfo);
         public abstract void Drop(IDropInfo dropInfo);

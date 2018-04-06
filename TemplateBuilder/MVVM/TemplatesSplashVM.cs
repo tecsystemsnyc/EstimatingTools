@@ -53,7 +53,7 @@ namespace TemplateBuilder.MVVM
 
         private void getTemplatesPathExecute()
         {
-            string path = getPath(FileDialogParameters.TemplatesFileParameters, defaultDirectory);
+            string path = UIHelpers.GetLoadPath(FileDialogParameters.TemplatesFileParameters, defaultDirectory);
             if (path != null)
             {
                 TemplatesPath = path;
