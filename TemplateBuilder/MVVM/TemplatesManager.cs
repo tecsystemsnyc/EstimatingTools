@@ -67,6 +67,7 @@ namespace TemplateBuilder.MVVM
 
         private void userStartedEditorHandler(string path)
         {
+            updateRecentTemplatesSettings(path);
             buildTitleString(path, "TemplateBuilder");
             if(path != "")
             {
