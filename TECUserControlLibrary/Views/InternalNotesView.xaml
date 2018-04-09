@@ -65,7 +65,7 @@
                          Grid.Column="1"/>
             </Grid>
             <TextBlock Text="Body:" Foreground="Black" Margin="10,0,0,0" />
-            <TextBox Text="{Binding Body}"
+            <TextBox Text="{Binding Body, UpdateSourceTrigger=PropertyChanged}"
                      TextWrapping="Wrap"
                      AcceptsReturn="True"
                      AcceptsTab="true"
@@ -77,7 +77,7 @@
         <Grid Grid.Column="1" 
               Visibility="{Binding SelectedNote, Converter={utilities:NullToVisibilityConverter}}"
               Background="{StaticResource SectionBackgroundBrush}">
-            <TextBlock Text="Select a note to edit." 
+            <TextBlock Text="Select a note to edit."
                        Foreground="Black"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"/>
