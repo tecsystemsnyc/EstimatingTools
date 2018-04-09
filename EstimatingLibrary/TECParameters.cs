@@ -14,6 +14,7 @@ namespace EstimatingLibrary
         private double _subcontractorWarranty;
         private double _subcontractorShipping;
         private double _bondRate;
+        private double _overtimeRatio;
         private double _markup;
 
         private bool _isTaxExempt;
@@ -99,6 +100,16 @@ namespace EstimatingLibrary
                 var old = BondRate;
                 _bondRate = value;
                 notifyCombinedChanged(Change.Edit, "BondRate", this, value, old);
+            }
+        }
+        public double OvertimeRatio
+        {
+            get { return _overtimeRatio; }
+            set
+            {
+                var old = OvertimeRatio;
+                _overtimeRatio = value;
+                notifyCombinedChanged(Change.Edit, "OvertimeRatio", this, value, old);
             }
         }
         public double Markup
@@ -449,7 +460,7 @@ namespace EstimatingLibrary
 
                 if (ElectricalIsOnOvertime)
                 {
-                    return (rate * 1.5);
+                    return (rate * OvertimeRatio);
                 }
                 else
                 {
@@ -500,7 +511,7 @@ namespace EstimatingLibrary
 
                 if (ElectricalIsOnOvertime)
                 {
-                    return (rate * 1.5);
+                    return (rate * OvertimeRatio);
                 }
                 else
                 {

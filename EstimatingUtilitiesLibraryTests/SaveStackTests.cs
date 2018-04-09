@@ -316,19 +316,28 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
             Dictionary<string, string> data = new Dictionary<string, string>();
             data[LocationTable.ID.Name] = location.Guid.ToString();
             data[LocationTable.Name.Name] = location.Name.ToString();
             data[LocationTable.Label.Name] = location.Label.ToString();
 
-            UpdateItem expectedItem = new UpdateItem(Change.Add, LocationTable.TableName, data);
-            int expectedCount = 1;
+            expectedItems.Add(new UpdateItem(Change.Add, LocationTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[BidLocationTable.BidID.Name] = bid.Guid.ToString();
+            data[BidLocationTable.LocationID.Name] = location.Guid.ToString();
+            data[BidLocationTable.Index.Name] = "0";
+            expectedItems.Add(new UpdateItem(Change.Add, BidLocationTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
 
             bid.Locations.Add(location);
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            CheckUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #endregion
@@ -2402,15 +2411,24 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
             Dictionary<string, string> data = new Dictionary<string, string>();
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+            
             data[LocationTable.ID.Name] = location.Guid.ToString();
-            UpdateItem expectedItem = new UpdateItem(Change.Remove, LocationTable.TableName, data);
-            int expectedCount = 1;
+            expectedItems.Add(new UpdateItem(Change.Remove, LocationTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[BidLocationTable.BidID.Name] = bid.Guid.ToString();
+            data[BidLocationTable.LocationID.Name] = location.Guid.ToString();
+
+            expectedItems.Add(new UpdateItem(Change.Remove, BidLocationTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
 
             bid.Locations.Remove(location);
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
-            CheckUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #endregion
@@ -4097,6 +4115,48 @@ namespace EstimatingUtilitiesLibraryTests
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
             CheckUpdateItems(expectedItems, stack);
 
+        }
+
+        [TestMethod]
+        public void Bid_MoveLocation()
+        {
+            TECBid bid = new TECBid();
+            ChangeWatcher watcher = new ChangeWatcher(bid);
+
+            TECLocation location1 = new TECLocation();
+            TECLocation location2 = new TECLocation();
+            TECLocation location3 = new TECLocation();
+            bid.Locations.Add(location1);
+            bid.Locations.Add(location2);
+            bid.Locations.Add(location3);
+
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
+            
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[BidLocationTable.Index.Name] = "0";
+            Tuple<string, string> keyData = new Tuple<string, string>(BidLocationTable.LocationID.Name, location2.Guid.ToString());
+            expectedItems.Add(new UpdateItem(Change.Edit, BidLocationTable.TableName, data, keyData));
+
+            data = new Dictionary<string, string>();
+            data[BidLocationTable.Index.Name] = "1";
+            keyData = new Tuple<string, string>(BidLocationTable.LocationID.Name, location1.Guid.ToString());
+            expectedItems.Add(new UpdateItem(Change.Edit, BidLocationTable.TableName, data, keyData));
+
+            data = new Dictionary<string, string>();
+            data[BidLocationTable.Index.Name] = "2";
+            keyData = new Tuple<string, string>(BidLocationTable.LocationID.Name, location3.Guid.ToString());
+            expectedItems.Add(new UpdateItem(Change.Edit, BidLocationTable.TableName, data, keyData));
+             
+            int expectedCount = expectedItems.Count;
+
+            bid.Locations.Move(0, 1);
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            CheckUpdateItems(expectedItems, stack);
+            
         }
         #endregion
         #region System

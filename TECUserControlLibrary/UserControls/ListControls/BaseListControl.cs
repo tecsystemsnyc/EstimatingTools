@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -128,9 +129,13 @@ namespace TECUserControlLibrary.UserControls.ListControls
         {
             //RaiseEvent(new RoutedEventArgs(SelectedEvent, this));
         }
-        protected void ListView_Dropped(object sender, RoutedEventArgs e)
+        protected void ListView_Dropped(object sender, DragEventArgs e)
         {
-            RaiseEvent(new RoutedEventArgs(DroppedEvent, this));
+            var data = e.Data.GetData("GongSolutions.Wpf.DragDrop");
+            if (!Source.Any(item => item == data))
+            {
+                RaiseEvent(new RoutedEventArgs(DroppedEvent, this));
+            }
         }
         protected void ItemControl_MouseUp(object sender, MouseButtonEventArgs e)
         {

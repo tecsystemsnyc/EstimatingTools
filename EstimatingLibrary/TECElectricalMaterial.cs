@@ -90,6 +90,10 @@ namespace EstimatingLibrary
                     notifyCombinedChanged(Change.Remove, propertyName, this, item);
                 }
             }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
+            {
+                notifyCombinedChanged(Change.Edit, propertyName, this, sender, sender);
+            }
         }
 
         public TECElectricalMaterial CatalogCopy()

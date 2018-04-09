@@ -146,6 +146,7 @@
     <Compile Include="EstimateSpreadsheetExporter.cs" />
     <Compile Include="Database\DatabaseHelper.cs" />
     <Compile Include="Exports\Budget.cs" />
+    <Compile Include="Exports\Exporter.cs" />
     <Compile Include="Exports\MaterialSummaryExport.cs" />
     <Compile Include="Exports\PointsList.cs" />
     <Compile Include="Exports\Templates.cs" />

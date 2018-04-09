@@ -65,9 +65,11 @@ namespace EstimatingUtilitiesLibrary.Database
             TECBid bid = getObjectFromTable(new BidInfoTable(), id => { return new TECBid(id); }, new TECBid());
 
             getScopeManagerProperties(bid);
-            bid.Locations = getObjectsFromTable(new LocationTable(), id => new TECLocation(id)).ToOC();
-            Dictionary<Guid, TECLocation> locationDictionary = getOneToOneRelationships(new LocatedLocationTable(), bid.Locations);
-            
+            List<TECLocation> locations = getObjectsFromTable(new LocationTable(), id => new TECLocation(id));
+            Dictionary<Guid, List<TECLocation>> bidLocations = getOneToManyRelationships(new BidLocationTable(), locations);
+            bid.Locations = bidLocations.ValueOrNew(bid.Guid);
+            Dictionary<Guid, TECLocation> locationDictionary = getOneToOneRelationships(new LocatedLocationTable(), locations);
+
             List<TECScopeBranch> branches = getObjectsFromTable(new ScopeBranchTable(), id => new TECScopeBranch(id, false));
             Dictionary<Guid, List<Guid>> branchHierarchy = getOneToManyRelationships(new ScopeBranchHierarchyTable());
             Dictionary<Guid, List<TECTag>> tagRelationships = getOneToManyRelationships(new ScopeTagTable(), bid.Catalogs.Tags);

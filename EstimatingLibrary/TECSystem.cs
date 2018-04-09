@@ -353,7 +353,7 @@ namespace EstimatingLibrary
             }
             else if (e.Action == NotifyCollectionChangedAction.Move)
             {
-                notifyTECChanged(Change.Edit, propertyName, this, sender);
+                notifyTECChanged(Change.Edit, propertyName, this, e.NewItems, e.OldItems);
             }
         }
 

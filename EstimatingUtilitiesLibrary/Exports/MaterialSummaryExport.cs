@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingUtilitiesLibrary.Exports
 {
-    public static class MaterialSummaryExport
+    internal static class MaterialSummaryExport
     {
         internal static void AddControllersSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Controllers")
         {

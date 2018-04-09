@@ -75,7 +75,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToControllerTypeIOModuleTable();
             addToControllerControllerTypeTable();
             addToControllerIOModuleTable();
-
+            addToBidLocationTable();
 
             SQLiteDB.NonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
@@ -211,6 +211,8 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("0");
             values.Add("0.05");
             values.Add("0.03");
+            values.Add("1.5");
+
             values.Add("0.0875");
             values.Add("0.05");
             values.Add("0.03");
@@ -237,6 +239,7 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("60");
             values.Add("30");
             values.Add("40");
+
             values.Add("0.25");
             values.Add("0");
             values.Add("1");
@@ -1608,6 +1611,14 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
             values.Add("2");
             addDataToTable(new ControllerIOModuleTable(), values);
+        }
+        private static void addToBidLocationTable()
+        {
+            List<string> values = new List<string>();
+            values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
+            values.Add("4175d04b-82b1-486b-b742-b2cc875405cb");
+            values.Add("0");
+            addDataToTable(new BidLocationTable(), values);
         }
 
         private static void addToTemplatesSystemTable()

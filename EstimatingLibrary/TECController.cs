@@ -517,6 +517,10 @@ namespace EstimatingLibrary
                     }
                 }
             }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
+            {
+                notifyCombinedChanged(Change.Edit, propertyName, this, sender, sender);
+            }
             if (propertyName == "ChildrenConnections")
             {
                 raisePropertyChanged("ChildNetworkConnections");
@@ -548,7 +552,7 @@ namespace EstimatingLibrary
             {
                 this.IOModules.ObservablyClear();
                 this.Type = newType;
-                ModelLinkingHelper.addRequiredIOModules(this);
+                ModelCleanser.addRequiredIOModules(this);
             }
             else
             {

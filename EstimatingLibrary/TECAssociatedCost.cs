@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECAssociatedCost : TECCost, ICatalog<TECAssociatedCost>
+    public class TECAssociatedCost : TECCost, ICatalog<TECAssociatedCost>, IDragDropable
     {
         //Constructors built to match TECCost. TECAssociated cost broken out to be own class that implements ICatalog
         public TECAssociatedCost(Guid guid, CostType type) : base(guid, type) { }
@@ -17,6 +17,11 @@ namespace EstimatingLibrary
         public TECAssociatedCost CatalogCopy()
         {
             return new TECAssociatedCost(this);
+        }
+
+        public object DragDropCopy(TECScopeManager scopeManager)
+        {
+            return this;
         }
     }
 }

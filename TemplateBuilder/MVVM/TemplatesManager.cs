@@ -128,7 +128,7 @@ namespace TemplateBuilder.MVVM
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    Templates.Export(path, templates);
+                    Exporter.GenerateTemplateSummary(path, templates);
                     logger.Info("Exported templates spreadsheet.");
                 }
                 else

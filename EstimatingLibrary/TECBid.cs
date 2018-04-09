@@ -418,7 +418,7 @@ namespace EstimatingLibrary
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                notifyCombinedChanged(Change.Edit, collectionName, this, e.NewItems, e.OldItems);
+                notifyCombinedChanged(Change.Edit, collectionName, this, sender, sender);
             }
         }
         private void locationsCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

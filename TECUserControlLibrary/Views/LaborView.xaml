@@ -282,6 +282,16 @@
                       Grid.Column="1"
                   SelectedIndex="0"/>
         </Grid>
+        <Grid Grid.Row="4" Margin="10,0,0,0"
+                  Grid.Column="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Overtime Ratio: "/>
+            <TextBox Text="{Binding Bid.Parameters.OvertimeRatio}"
+                     Grid.Column="1" Margin="2"/>
+        </Grid>
         
 
         <!--Confidence-->
