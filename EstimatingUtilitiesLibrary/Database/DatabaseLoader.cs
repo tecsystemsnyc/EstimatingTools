@@ -767,14 +767,17 @@ namespace EstimatingUtilitiesLibrary.Database
 
             void addPairToDictionary(Guid parentID, Guid childID)
             {
-                T reference = references.First(item => item.Guid == childID);
-                if (dictionary.ContainsKey(parentID))
+                if (references.Count(x => x.Guid == childID) > 0)
                 {
-                    dictionary[parentID].Add(reference);
-                }
-                else
-                {
-                    dictionary[parentID] = new List<T> { reference };
+                    T reference = references.First(item => item.Guid == childID);
+                    if (dictionary.ContainsKey(parentID))
+                    {
+                        dictionary[parentID].Add(reference);
+                    }
+                    else
+                    {
+                        dictionary[parentID] = new List<T> { reference };
+                    }
                 }
             }
         }
