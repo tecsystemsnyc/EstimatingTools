@@ -702,7 +702,10 @@ namespace EstimatingLibrary
         {
             return (ElectricalMaterialCost + ElectricalShipping + ElectricalWarranty);
         }
-
+        /// <summary>
+        /// Value of the escalation from subcontractor labor and material 
+        /// </summary>
+        /// <returns></returns>
         private double getSubcontractorEscalation()
         {
             double baseCost = SubcontractorCost;
@@ -768,9 +771,7 @@ namespace EstimatingLibrary
             
             return outPrice;
         }
-
         
-
         #region Metrics
         /// <summary>
         /// Returns the final price per point 
