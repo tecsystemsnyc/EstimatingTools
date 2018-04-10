@@ -104,10 +104,24 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
         {
             get { return getMiscTotal(); }
         }
+
+
+        private TECEstimator _extraLaborEstimate;
+
+        public TECEstimator ExtraLaborEstimate
+        {
+            get { return _extraLaborEstimate; }
+            set
+            {
+                _extraLaborEstimate = value;
+                RaisePropertyChanged("ExtraLaborEstimate");
+            }
+        }
         
         public SystemSummaryVM(TECBid bid, ChangeWatcher watcher)
         {
             this.bid = bid;
+            ExtraLaborEstimate = new TECEstimator(bid.ExtraLabor, bid.Parameters, bid.ExtraLabor, bid.Duration, new ChangeWatcher(bid.ExtraLabor));
             populateAll(bid);
             watcher.Changed += changed;
         }
