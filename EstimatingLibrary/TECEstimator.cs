@@ -268,16 +268,15 @@ namespace EstimatingLibrary
                 raiseAll();
             };
             getInitialValues(initalObject);
-            watcher.CostChanged += CostChanged;
-            watcher.PointChanged += PointChanged;
+            watcher.CostChanged += costChanged;
+            watcher.PointChanged += pointChanged;
         }
         
-        private void CostChanged(CostBatch change)
+        private void costChanged(CostBatch change)
         {
             addCost(change);
         }
-        
-        private void PointChanged(int pointNum)
+        private void pointChanged(int pointNum)
         {
             addPoints(pointNum);
         }
