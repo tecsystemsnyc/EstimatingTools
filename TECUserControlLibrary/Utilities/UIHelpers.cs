@@ -317,18 +317,11 @@ namespace TECUserControlLibrary.Utilities
             dropInfo.Effects = DragDropEffects.Copy;
         }
         #region Get Path Methods
-        public static string GetSavePath(FileDialogParameters fileParams, string defaultFileName, string defaultDirectory,
-            string initialDirectory = null)
+        public static string GetSavePath(FileDialogParameters fileParams, string defaultFileName, string initialDirectory = "")
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            if (initialDirectory != null)
-            {
-                saveFileDialog.InitialDirectory = initialDirectory;
-            }
-            else
-            {
-                saveFileDialog.InitialDirectory = defaultDirectory;
-            }
+            saveFileDialog.InitialDirectory = 
+                (initialDirectory != "" ? initialDirectory : Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
             saveFileDialog.FileName = defaultFileName;
             saveFileDialog.Filter = fileParams.Filter;
             saveFileDialog.DefaultExt = fileParams.DefaultExtension;
@@ -341,17 +334,11 @@ namespace TECUserControlLibrary.Utilities
             }
             return savePath;
         }
-        public static string GetLoadPath(FileDialogParameters fileParams, string defaultDirectory, string initialDirectory = null)
+        public static string GetLoadPath(FileDialogParameters fileParams, string initialDirectory = "")
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (initialDirectory != null)
-            {
-                openFileDialog.InitialDirectory = initialDirectory;
-            }
-            else
-            {
-                openFileDialog.InitialDirectory = defaultDirectory;
-            }
+            openFileDialog.InitialDirectory =
+                (initialDirectory != "" ? initialDirectory : Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
             openFileDialog.Filter = fileParams.Filter;
             openFileDialog.DefaultExt = fileParams.DefaultExtension;
             openFileDialog.AddExtension = true;

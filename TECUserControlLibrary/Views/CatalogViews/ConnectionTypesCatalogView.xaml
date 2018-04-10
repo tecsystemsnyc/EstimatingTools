@@ -6,8 +6,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views.CatalogViews"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="500">
     <Grid DataContext="{Binding ElementName=connectionTypesCatalogView, Path=VM}">
         <Grid.Resources>
             <Style TargetType="{x:Type TextBlock}">
@@ -19,52 +20,81 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="80"/>
-                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="80"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Name:" Margin="5,0,0,0"
-                           VerticalAlignment="Center"/>
+                       VerticalAlignment="Center"/>
             <TextBox  Grid.Column="1" Margin="2"
-                          Text="{Binding ConnectionTypeName}"/>
+                      Text="{Binding ConnectionTypeName}"/>
             <TextBlock Text="Cost:" Grid.Column="2" Margin="5,0,0,0"
-                           VerticalAlignment="Center"/>
+                       VerticalAlignment="Center"/>
             <TextBox  Grid.Column="3" Margin="2"
-                          Text="{Binding ConnectionTypeCost, StringFormat={}{0:C}}"/>
+                      Text="{Binding ConnectionTypeCost, StringFormat={}{0:C}}"/>
             <TextBlock Text="Labor:" Margin="5,0,0,0"
-                           VerticalAlignment="Center" Grid.Column="4"/>
+                       VerticalAlignment="Center" Grid.Column="4"/>
             <TextBox  Grid.Column="5" Margin="2"
-                          Text="{Binding ConnectionTypeLabor, StringFormat={}{0} ($/hr)}"/>
+                      Text="{Binding ConnectionTypeLabor, StringFormat={}{0} ($/hr)}"/>
         </Grid>
         <Grid Grid.Row="1" >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="135"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="80"/>
-                <ColumnDefinition Width="85"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="80"/>
-                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="(Marginal) Plenum Cost:" Grid.Column="0" Margin="5,0,0,0"
-                           VerticalAlignment="Center"/>
-            <TextBox  Grid.Column="1" Margin="2"
-                          Text="{Binding ConnectionTypePlenumCost, StringFormat={}{0:C}}"/>
-            <TextBlock Text="Plenum Labor:" Margin="5,0,0,0"
-                           VerticalAlignment="Center" Grid.Column="2"/>
+            <TextBlock Text="Has Plenum Rating:" Margin="5,0,0,0"
+                       VerticalAlignment="Center"/>
+            <CheckBox Name="HasPlenum" IsChecked="{Binding HasPlenum}"
+                      Grid.Column="1"/>
+            <TextBlock Text="Plenum Cost:" Grid.Column="2" Margin="5,0,0,0"
+                       VerticalAlignment="Center" 
+                       IsEnabled="{Binding ElementName=HasPlenum, Path=IsChecked}"/>
             <TextBox  Grid.Column="3" Margin="2"
-                          Text="{Binding ConnectionTypePlenumLabor, StringFormat={}{0} ($/hr)}"/>
-            <Button Grid.Column="4"
-                        Content="Add" Margin="2"
-                        Command="{Binding AddConnectionTypeCommand}"/>
+                      IsEnabled="{Binding ElementName=HasPlenum, Path=IsChecked}">
+                <TextBox.Text>
+                    <MultiBinding Converter="{utilities:BooleanChoiceConverter}"
+                                  StringFormat="{}{0:C}">
+                        <Binding ElementName="HasPlenum" Path="IsChecked"/>
+                        <Binding Path="ConnectionTypePlenumCost"/>
+                        <Binding Path="ConnectionTypeCost"/>
+                        <Binding Path="ConnectionTypePlenumCost"/>
+                    </MultiBinding>
+                </TextBox.Text>
+            </TextBox>
+            <TextBlock Text="Plenum Labor:" Margin="5,0,0,0"
+                       VerticalAlignment="Center" Grid.Column="4"
+                       IsEnabled="{Binding ElementName=HasPlenum, Path=IsChecked}"/>
+            <TextBox  Grid.Column="5" Margin="2"
+                      IsEnabled="{Binding ElementName=HasPlenum, Path=IsChecked}">
+                <TextBox.Text>
+                    <MultiBinding Converter="{utilities:BooleanChoiceConverter}"
+                                  StringFormat="{}{0} ($/hr)">
+                        <Binding ElementName="HasPlenum" Path="IsChecked"/>
+                        <Binding Path="ConnectionTypePlenumLabor"/>
+                        <Binding Path="ConnectionTypeLabor"/>
+                        <Binding Path="ConnectionTypePlenumLabor"/>
+                    </MultiBinding>
+                </TextBox.Text>
+            </TextBox>
         </Grid>
-        <controls:ElectricalMaterialGridControl Grid.Row="2" Margin="5"
-                                             ElectricalMaterialSource="{Binding Templates.Catalogs.ConnectionTypes}"
+        <Grid Grid.Row="2">
+            <Button Content="Add" Margin="2"
+                    Command="{Binding AddConnectionTypeCommand}"/>
+        </Grid>
+        <controls:ConnectionTypesGridControl Grid.Row="3" Margin="5"
+                                             ConnectionTypesSource="{Binding Templates.Catalogs.ConnectionTypes}"
                                              Selected="{Binding SelectedConnectionType}"
                                              DropHandler="{Binding}"/>
     </Grid>

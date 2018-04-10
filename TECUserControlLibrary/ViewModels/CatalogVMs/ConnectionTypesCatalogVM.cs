@@ -15,6 +15,7 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
         private string _connectionTypeName = "";
         private double _connectionTypeCost = 0;
         private double _connectionTypeLabor = 0;
+        private bool _hasPlenum = false;
         private double _connectionTypePlenumCost = 0;
         private double _connectionTypePlenumLabor = 0;
 
@@ -53,6 +54,18 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
                 {
                     _connectionTypeLabor = value;
                     RaisePropertyChanged("ConnectionTypeLabor");
+                }
+            }
+        }
+        public bool HasPlenum
+        {
+            get { return _hasPlenum; }
+            set
+            {
+                if (_hasPlenum != value)
+                {
+                    _hasPlenum = value;
+                    RaisePropertyChanged("HasPlenum");
                 }
             }
         }
@@ -108,8 +121,19 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
             connectionType.Name = ConnectionTypeName;
             connectionType.Cost = ConnectionTypeCost;
             connectionType.Labor = ConnectionTypeLabor;
-            connectionType.PlenumCost = ConnectionTypePlenumCost;
-            connectionType.PlenumLabor = ConnectionTypePlenumLabor;
+
+            if (HasPlenum)
+            {
+                //Setting marginal plenum cost and labor
+                connectionType.PlenumCost = (ConnectionTypePlenumCost - ConnectionTypeCost);
+                connectionType.PlenumLabor = (ConnectionTypePlenumLabor - ConnectionTypeLabor);
+            }
+            else
+            {
+                connectionType.PlenumCost = 0;
+                connectionType.PlenumLabor = 0;
+            }
+            
             this.Templates.Catalogs.ConnectionTypes.Add(connectionType);
 
             this.ConnectionTypeName = "";
