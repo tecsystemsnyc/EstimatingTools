@@ -121,11 +121,15 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
         public SystemSummaryVM(TECBid bid, ChangeWatcher watcher)
         {
             this.bid = bid;
-            ExtraLaborEstimate = new TECEstimator(bid.ExtraLabor, bid.Parameters, bid.ExtraLabor, bid.Duration, new ChangeWatcher(bid.ExtraLabor));
+            setupExtraLaborEstimate(bid);
             populateAll(bid);
             watcher.Changed += changed;
         }
-
+        
+        private void setupExtraLaborEstimate(TECBid bid)
+        {
+            ExtraLaborEstimate = new TECEstimator(new TECPoint(true), bid.Parameters, bid.ExtraLabor, bid.Duration, new ChangeWatcher(bid.ExtraLabor));
+        }
         private void populateAll(TECBid bid)
         {
             populateSystems(bid.Systems);
@@ -209,6 +213,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
                 if(e.PropertyName == "Duration")
                 {
                     populateAll(bid);
+                    setupExtraLaborEstimate(bid);
                 }
                 RaisePropertyChanged("RiserTotal");
                 RaisePropertyChanged("MiscTotal");
