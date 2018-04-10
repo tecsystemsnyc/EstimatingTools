@@ -2252,7 +2252,10 @@ namespace Tests
 
             system.Equipment.Add(equipment);
 
-            Assert.AreEqual(3, estimate.Escalation, 0.0001);
+            var expected = 100 * (parameters.Tax / 100 + parameters.Shipping / 100 + parameters.Warranty / 100 + 1);
+            expected *= 0.03;
+
+            Assert.AreEqual(expected, estimate.Escalation, 0.0001);
 
             checkRefresh(bid, estimate);
         }
@@ -2268,7 +2271,11 @@ namespace Tests
             misc.Cost = 100.00;
             bid.MiscCosts.Add(misc);
 
-            Assert.AreEqual(3, estimate.ElectricalEscalation, 0.0001);
+            var expected = 100 * (parameters.SubcontractorShipping/100 + 
+                parameters.SubcontractorWarranty/100 + 1);
+            expected *= 0.03;
+
+            Assert.AreEqual(expected, estimate.ElectricalEscalation, 0.0001);
 
             checkRefresh(bid, estimate);
         }

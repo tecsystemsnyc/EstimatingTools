@@ -29,7 +29,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
             {
                 _selectedSystem = value;
                 RaisePropertyChanged("SelectedSystem");
-                Selected = new ScopeSummaryItem(new TECSystem(value.Typical, false, bid), bid.Parameters, bid.Duration);
+                Selected = value != null ? new ScopeSummaryItem(new TECSystem(value.Typical, false, bid), bid.Parameters, bid.Duration) : null;
             }
         }
         public ScopeSummaryItem SelectedRiser
@@ -108,10 +108,15 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
         public SystemSummaryVM(TECBid bid, ChangeWatcher watcher)
         {
             this.bid = bid;
+            populateAll(bid);
+            watcher.Changed += changed;
+        }
+
+        private void populateAll(TECBid bid)
+        {
             populateSystems(bid.Systems);
             populateRiser(bid.Controllers, bid.Panels);
             populateMisc(bid.MiscCosts);
-            watcher.Changed += changed;
         }
 
         private void changed(TECChangedEventArgs e)
@@ -175,7 +180,8 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
                         };
                         Misc.Add(summaryItem);
                     }
-                } else if (e.Change == Change.Remove)
+                }
+                else if (e.Change == Change.Remove)
                 {
                     if (e.Value is TECController || e.Value is TECPanel)
                     {
@@ -185,6 +191,10 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
                     {
                         removeFromCollection(Misc, misc);
                     }
+                }
+                if(e.PropertyName == "Duration")
+                {
+                    populateAll(bid);
                 }
                 RaisePropertyChanged("RiserTotal");
                 RaisePropertyChanged("MiscTotal");

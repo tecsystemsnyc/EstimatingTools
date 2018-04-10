@@ -66,18 +66,14 @@ namespace Tests
         public void Load_Bid_Parameters()
         {
             double expectedEscalation = 10;
-            double expectedOverhead = 20;
-            double expectedProfit = 20;
-            double expectedSubcontractorMarkup = 20;
+            double expectedMarkup = 20;
             double expectedSubcontractorEscalation = 10;
             bool expectedIsTaxExempt = false;
             bool expectedRequiresBond = false;
             bool expectedRequiresWrapUp = false;
 
             Assert.AreEqual(expectedEscalation, actualBid.Parameters.Escalation, "Escalation didn't load properly.");
-            Assert.AreEqual(expectedOverhead, actualBid.Parameters.Overhead, "Overhead didn't load properly.");
-            Assert.AreEqual(expectedProfit, actualBid.Parameters.Profit, "Profit didn't load properly.");
-            Assert.AreEqual(expectedSubcontractorMarkup, actualBid.Parameters.SubcontractorMarkup, "Subcontractor markup didn't load properly.");
+            Assert.AreEqual(expectedMarkup, actualBid.Parameters.Markup, "Markup didn't load properly.");
             Assert.AreEqual(expectedSubcontractorEscalation, actualBid.Parameters.SubcontractorEscalation, "Subcontractor escalation didn't load properly.");
             Assert.AreEqual(expectedIsTaxExempt, actualBid.Parameters.IsTaxExempt, "Is tax exempt didn't load properly.");
             Assert.AreEqual(expectedRequiresBond, actualBid.Parameters.RequiresBond, "Requires bond didn't load properly.");
