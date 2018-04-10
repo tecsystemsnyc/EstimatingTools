@@ -121,7 +121,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
         public SystemSummaryVM(TECBid bid, ChangeWatcher watcher)
         {
             this.bid = bid;
-            ExtraLaborEstimate = new TECEstimator(bid.ExtraLabor, bid.Parameters, bid.ExtraLabor, bid.Duration, new ChangeWatcher(bid.ExtraLabor));
+            ExtraLaborEstimate = new TECEstimator(new TECPoint(true), bid.Parameters, bid.ExtraLabor, bid.Duration, new ChangeWatcher(bid.ExtraLabor));
             populateSystems(bid.Systems);
             populateRiser(bid.Controllers, bid.Panels);
             populateMisc(bid.MiscCosts);
