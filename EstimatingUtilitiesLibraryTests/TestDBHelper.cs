@@ -203,8 +203,6 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("TEST");
             values.Add("10");
             values.Add("20");
-            values.Add("20");
-            values.Add("20");
             values.Add("10");
             values.Add("0");
             values.Add("0");
