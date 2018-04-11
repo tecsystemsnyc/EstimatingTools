@@ -4118,6 +4118,76 @@ namespace EstimatingUtilitiesLibraryTests
         }
 
         [TestMethod]
+        public void Bid_SetParameters()
+        {
+            //Arrange
+            TECBid bid = new TECBid();
+            ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECParameters parameters = new TECParameters(bid.Guid);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
+            
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[ParametersTable.ID.Name] = parameters.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ParametersTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[ParametersTable.ID.Name] = parameters.Guid.ToString();
+            data[ParametersTable.Label.Name] = parameters.Label.ToString();
+            data[ParametersTable.Escalation.Name] = parameters.Escalation.ToString();
+            data[ParametersTable.Overhead.Name] = parameters.Overhead.ToString();
+            data[ParametersTable.Profit.Name] = parameters.Profit.ToString();
+            data[ParametersTable.SubcontractorMarkup.Name] = parameters.SubcontractorMarkup.ToString();
+            data[ParametersTable.SubcontractorEscalation.Name] = parameters.SubcontractorEscalation.ToString();
+            data[ParametersTable.Warranty.Name] = parameters.Warranty.ToString();
+            data[ParametersTable.Shipping.Name] = parameters.Shipping.ToString();
+            data[ParametersTable.Tax.Name] = parameters.Tax.ToString();
+            data[ParametersTable.SubcontractorWarranty.Name] = parameters.SubcontractorWarranty.ToString();
+            data[ParametersTable.SubcontractorShipping.Name] = parameters.SubcontractorShipping.ToString();
+            data[ParametersTable.BondRate.Name] = parameters.BondRate.ToString();
+            data[ParametersTable.IsTaxExempt.Name] = parameters.IsTaxExempt.ToInt().ToString();
+            data[ParametersTable.RequiresBond.Name] = parameters.RequiresBond.ToInt().ToString();
+            data[ParametersTable.RequiresWrapUp.Name] = parameters.RequiresWrapUp.ToInt().ToString();
+            data[ParametersTable.DesiredConfidence.Name] = parameters.DesiredConfidence.ToString();
+            data[ParametersTable.PMCoef.Name] = parameters.PMCoef.ToString();
+            data[ParametersTable.PMCoefStdError.Name] = parameters.PMCoefStdError.ToString();
+            data[ParametersTable.PMRate.Name] = parameters.PMRate.ToString();
+            data[ParametersTable.ENGCoef.Name] = parameters.ENGCoef.ToString();
+            data[ParametersTable.ENGCoefStdError.Name] = parameters.ENGCoefStdError.ToString();
+            data[ParametersTable.ENGRate.Name] = parameters.ENGRate.ToString();
+            data[ParametersTable.CommCoef.Name] = parameters.CommCoef.ToString();
+            data[ParametersTable.CommCoefStdError.Name] = parameters.CommCoefStdError.ToString();
+            data[ParametersTable.CommRate.Name] = parameters.CommRate.ToString();
+            data[ParametersTable.SoftCoef.Name] = parameters.SoftCoef.ToString();
+            data[ParametersTable.SoftCoefStdError.Name] = parameters.SoftCoefStdError.ToString();
+            data[ParametersTable.SoftRate.Name] = parameters.SoftRate.ToString();
+            data[ParametersTable.GraphCoef.Name] = parameters.GraphCoef.ToString();
+            data[ParametersTable.GraphCoefStdError.Name] = parameters.GraphCoefStdError.ToString();
+            data[ParametersTable.GraphRate.Name] = parameters.GraphRate.ToString();
+            data[ParametersTable.ElectricalRate.Name] = parameters.ElectricalRate.ToString();
+            data[ParametersTable.ElectricalSuperRate.Name] = parameters.ElectricalSuperRate.ToString();
+            data[ParametersTable.ElectricalNonUnionRate.Name] = parameters.ElectricalNonUnionRate.ToString();
+            data[ParametersTable.ElectricalSuperNonUnionRate.Name] = parameters.ElectricalSuperNonUnionRate.ToString();
+            data[ParametersTable.ElectricalSuperRatio.Name] = parameters.ElectricalSuperRatio.ToString();
+            data[ParametersTable.ElectricalIsOnOvertime.Name] = parameters.ElectricalIsOnOvertime.ToInt().ToString();
+            data[ParametersTable.ElectricalIsUnion.Name] = parameters.ElectricalIsUnion.ToInt().ToString();
+
+            expectedItems.Add(new UpdateItem(Change.Add, ParametersTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            bid.Parameters = parameters;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            CheckUpdateItems(expectedItems, stack);
+
+        }
+
+        [TestMethod]
         public void Bid_MoveLocation()
         {
             TECBid bid = new TECBid();
@@ -4184,6 +4254,92 @@ namespace EstimatingUtilitiesLibraryTests
             int expectedCount = expectedItems.Count;
 
             system.Name = edit;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            CheckUpdateItems(expectedItems, stack);
+
+        }
+
+        [TestMethod]
+        public void System_EditLocation()
+        {
+            //Arrange
+            TECBid bid = new TECBid();
+            ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECTypical system = new TECTypical();
+            bid.Systems.Add(system);
+            TECSystem instance = system.AddInstance(bid);
+            TECLocation originalLocation = new TECLocation();
+            TECLocation newLocation = new TECLocation();
+            bid.Locations.Add(originalLocation);
+            bid.Locations.Add(newLocation);
+
+            instance.Location = originalLocation;
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
+            
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[LocatedLocationTable.ScopeID.Name] = instance.Guid.ToString();
+            data[LocatedLocationTable.LocationID.Name] = originalLocation.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, LocatedLocationTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[LocatedLocationTable.ScopeID.Name] = instance.Guid.ToString();
+            data[LocatedLocationTable.LocationID.Name] = newLocation.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, LocatedLocationTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            instance.Location = newLocation;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            CheckUpdateItems(expectedItems, stack);
+
+        }
+        #endregion
+        #region Device
+        [TestMethod]
+        public void Device_EditManufacturer()
+        {
+            //Arrange
+            TECBid bid = new TECBid();
+            ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECTypical system = new TECTypical();
+            bid.Systems.Add(system);
+            TECEquipment equip = new TECEquipment(true);
+            system.Equipment.Add(equip);
+            TECSubScope subScope = new TECSubScope(true);
+            equip.SubScope.Add(subScope);
+            TECManufacturer originalManufacturer = new TECManufacturer();
+            TECManufacturer newManufacturer = new TECManufacturer();
+            bid.Catalogs.Manufacturers.Add(originalManufacturer);
+            bid.Catalogs.Manufacturers.Add(newManufacturer);
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), originalManufacturer);
+            subScope.Devices.Add(device);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[HardwareManufacturerTable.HardwareID.Name] = device.Guid.ToString();
+            data[HardwareManufacturerTable.ManufacturerID.Name] = originalManufacturer.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, HardwareManufacturerTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[HardwareManufacturerTable.HardwareID.Name] = device.Guid.ToString();
+            data[HardwareManufacturerTable.ManufacturerID.Name] = newManufacturer.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, HardwareManufacturerTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            device.Manufacturer = newManufacturer;
 
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);

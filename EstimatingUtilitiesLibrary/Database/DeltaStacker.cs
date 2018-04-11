@@ -158,15 +158,13 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             else
             {
-                if (oldValue != null)
+                if (oldValue != null && oldValue is TECObject oldObject)
                 {
-                    List<TableBase> tables = DatabaseHelper.GetTables(new List<TECObject>() { sender, oldValue as TECObject }, propertyName);
-                    outStack.AddRange(tableObjectStack(Change.Remove, tables, sender, oldValue as TECObject));
+                    outStack.AddRange(addRemoveStack(Change.Remove, propertyName, sender, oldObject, type));
                 }
-                if (value != null)
+                if (value != null && value is TECObject newObject)
                 {
-                    List<TableBase> tables = DatabaseHelper.GetTables(new List<TECObject>() { sender, value as TECObject }, propertyName);
-                    outStack.AddRange(tableObjectStack(Change.Add, tables, sender, value as TECObject));
+                    outStack.AddRange(addRemoveStack(Change.Add, propertyName, sender, newObject, type));
                 }
                 return outStack;
             }
