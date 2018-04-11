@@ -4138,9 +4138,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[ParametersTable.ID.Name] = parameters.Guid.ToString();
             data[ParametersTable.Label.Name] = parameters.Label.ToString();
             data[ParametersTable.Escalation.Name] = parameters.Escalation.ToString();
-            data[ParametersTable.Overhead.Name] = parameters.Overhead.ToString();
-            data[ParametersTable.Profit.Name] = parameters.Profit.ToString();
-            data[ParametersTable.SubcontractorMarkup.Name] = parameters.SubcontractorMarkup.ToString();
+            data[ParametersTable.Markup.Name] = parameters.Markup.ToString();
             data[ParametersTable.SubcontractorEscalation.Name] = parameters.SubcontractorEscalation.ToString();
             data[ParametersTable.Warranty.Name] = parameters.Warranty.ToString();
             data[ParametersTable.Shipping.Name] = parameters.Shipping.ToString();
@@ -4148,6 +4146,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[ParametersTable.SubcontractorWarranty.Name] = parameters.SubcontractorWarranty.ToString();
             data[ParametersTable.SubcontractorShipping.Name] = parameters.SubcontractorShipping.ToString();
             data[ParametersTable.BondRate.Name] = parameters.BondRate.ToString();
+            data[ParametersTable.OvertimeRatio.Name] = parameters.OvertimeRatio.ToString();
             data[ParametersTable.IsTaxExempt.Name] = parameters.IsTaxExempt.ToInt().ToString();
             data[ParametersTable.RequiresBond.Name] = parameters.RequiresBond.ToInt().ToString();
             data[ParametersTable.RequiresWrapUp.Name] = parameters.RequiresWrapUp.ToInt().ToString();

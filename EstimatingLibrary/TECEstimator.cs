@@ -245,28 +245,44 @@ namespace EstimatingLibrary
         
         #endregion
 
-        public TECEstimator(TECBid Bid, ChangeWatcher watcher) : this(Bid, Bid.Parameters, Bid.ExtraLabor, Bid.Duration, watcher) { }
-        public TECEstimator(TECObject initalObject, TECParameters parameters, TECExtraLabor extraLabor, Double duration, ChangeWatcher watcher) : base(Guid.NewGuid())
+        public TECEstimator(TECBid Bid, ChangeWatcher watcher) : this(Bid, Bid.Parameters, Bid.ExtraLabor, Bid.Duration, watcher)
         {
-            this.duration = duration;
-            initalObject.PropertyChanged += (sender, e) =>
+            Bid.PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName == "Duration")
                 {
                     this.duration = (sender as TECBid).Duration;
                     raiseAll();
                 }
+                else if (e.PropertyName == "Parameters")
+                {
+                    parameters.PropertyChanged -= memberObjectChanged;
+                    this.parameters = Bid.Parameters;
+                    raiseAll();
+                    parameters.PropertyChanged += memberObjectChanged;
+                }
+                else if (e.PropertyName == "ExtraLabor")
+                {
+                    extraLabor.PropertyChanged -= memberObjectChanged;
+                    this.extraLabor = Bid.ExtraLabor;
+                    raiseAll();
+                    extraLabor.PropertyChanged += memberObjectChanged;
+                }
             };
+        }
+
+        private void memberObjectChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            raiseAll();
+        }
+
+        public TECEstimator(TECObject initalObject, TECParameters parameters, TECExtraLabor extraLabor, Double duration, ChangeWatcher watcher) : base(Guid.NewGuid())
+        {
+            this.duration = duration;
             this.parameters = parameters;
-            parameters.PropertyChanged += (sender, e) =>
-            {
-                raiseAll();
-            };
+            parameters.PropertyChanged += memberObjectChanged;
             this.extraLabor = extraLabor;
-            extraLabor.PropertyChanged += (sender, e) =>
-            {
-                raiseAll();
-            };
+            extraLabor.PropertyChanged += memberObjectChanged;
             getInitialValues(initalObject);
             watcher.CostChanged += costChanged;
             watcher.PointChanged += pointChanged;
