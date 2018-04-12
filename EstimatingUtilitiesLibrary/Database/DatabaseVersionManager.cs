@@ -244,7 +244,7 @@ namespace EstimatingUtilitiesLibrary.Database
             return outString;
         }
 
-        private static TableMapList buildMap(DataTable dt, int originalVersion,
+        private static TableMapList buildMap(DataTable versionData, int originalVersion,
             int updateVersion, Dictionary<string, string> tempMap, List<string> currentTables)
         {
             string originalTableColumn = tableString(originalVersion);
@@ -253,7 +253,7 @@ namespace EstimatingUtilitiesLibrary.Database
             string updateFieldColumn = fieldString(updateVersion);
 
             TableMapList mapList = new TableMapList();
-            foreach(DataRow row in dt.Rows)
+            foreach(DataRow row in versionData.Rows)
             {
                 if (tempMap.ContainsKey(row[updateTableColumn].ToString()) && currentTables.Contains(row[originalTableColumn]))
                 {
