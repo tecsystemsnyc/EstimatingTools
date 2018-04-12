@@ -31,9 +31,10 @@
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <!--System List-->
-        <Grid Grid.Column="0" Grid.RowSpan="2">
+        <Grid Grid.Column="0" Grid.RowSpan="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
                 <RowDefinition/>
@@ -141,8 +142,21 @@
                        HorizontalAlignment="Right"
                        FontWeight="Bold"/>
         </Grid>
+        <!--Extra Labor-->
+        <Grid Grid.Column="1" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border BorderBrush="Gray" BorderThickness="0,1,0,0" Margin="5,0,5,0" Grid.ColumnSpan="2"/>
+            <TextBlock Text="{Binding ExtraLaborEstimate.TotalPrice, StringFormat=Extra Labor Total: {0:C}}"
+                       Grid.Column="1"
+                       HorizontalAlignment="Right"
+                       FontWeight="Bold"/>
+
+        </Grid>
         <!--Details-->
-        <Border Grid.Column="2" Grid.RowSpan="2" BorderBrush="DarkGray" BorderThickness="1,0,0,0" Margin="10,0,0,0">
+        <Border Grid.Column="2" Grid.RowSpan="3" BorderBrush="DarkGray" BorderThickness="1,0,0,0" Margin="10,0,0,0">
             <Grid>
                 <Grid Visibility="{Binding Selected, Converter={utilities:NullToVisibilityConverter}}">
                     <TextBlock Text="Select an item to view summary." 
