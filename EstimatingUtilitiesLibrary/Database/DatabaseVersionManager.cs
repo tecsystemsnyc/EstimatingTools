@@ -91,42 +91,33 @@ namespace EstimatingUtilitiesLibrary.Database
             TableMapList mapList = buildMap(dataTable, originalVersion, updateVersion, tempMap, currentTables);
             foreach(TableMap map in mapList)
             {
-                if(map.OriginalTableNames.Count == 1)
+                if (isSingleRow(map))
                 {
-                    migrateData(map.OriginalTableNames[0], DatabaseHelper.FieldsString(map.OriginalFields),
-                        map.UpdateTableName, DatabaseHelper.FieldsString(map.UpdateFields), db);
+                    DataTable dt = combinedTable(map, db);
+                    string insertColumns = DatabaseHelper.FieldsString(map.UpdateFields);
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        List<string> values = new List<string>();
+                        foreach (var field in map.OriginalFields)
+                        {
+                            values.Add(row[field].ToString());
+                        }
+                        string insertValues = DatabaseHelper.ValuesString(values);
+                        string command = String.Format("insert into {0} ({1}) values ({2})", map.UpdateTableName, insertColumns, insertValues);
+                        db.NonQueryCommand(command);
+                    }
+
                 }
-                else if (map.OriginalTableNames.Count > 1)
+                else
                 {
-                    if (isSingleRow(map))
+                    foreach (string table in map.OriginalTableNames)
                     {
-                        DataTable dt = combinedTable(map, db);
-                        string insertColumns = DatabaseHelper.FieldsString(map.UpdateFields);
-                        foreach (DataRow row in dt.Rows)
-                        {
-                            List<string> values = new List<string>();
-                            foreach(var field in map.OriginalFields)
-                            {
-                                values.Add(row[field].ToString());
-                            }
-                            string insertValues = DatabaseHelper.ValuesString(values);
-                            string command = String.Format("insert into {0} ({1}) values ({2})", map.UpdateTableName, insertColumns, insertValues);
-                            db.NonQueryCommand(command);
-                        }
-                        
+                        migrateData(table, DatabaseHelper.FieldsString(map.TableFieldsDictionary[table]),
+                        map.UpdateTableName, DatabaseHelper.FieldsString(map.UpdateFields), db);
                     }
-                    else
-                    {
-                        foreach(string table in map.OriginalTableNames)
-                        {
-                            migrateData(table, DatabaseHelper.FieldsString(map.TableFieldsDictionary[table]),
-                            map.UpdateTableName, DatabaseHelper.FieldsString(map.UpdateFields), db);
-                        }
-                    }
-                    
                 }
 
-                foreach(TableBase table in AllTables)
+                foreach (TableBase table in AllTables)
                 {
                     if(tempMap[table.NameString] == map.UpdateTableName)
                     {
