@@ -145,7 +145,8 @@ namespace EstimatingUtilitiesLibrary.Exports
                     worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                     worksheet.Cell(x, 2).Value = devices.Count(item => item == device);
                     worksheet.Cell(x, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                    worksheet.Cell(x, 3).Value = device.Manufacturer.Label;
+                    if (device is TECHardware hardware) { worksheet.Cell(x, 3).Value = hardware.Manufacturer.Label; }
+                    else{ worksheet.Cell(x, 3).Value = "NA"; }
                     worksheet.Cell(x, 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                     worksheet.Cell(x, 4).Value = device.Name;
                     worksheet.Cell(x, 4).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
