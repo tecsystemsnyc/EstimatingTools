@@ -58,7 +58,8 @@ namespace EstimateBuilder
             logger.Fatal("Unhandled exception: {0}", e.Exception.Message);
             logger.Fatal("Inner exception: {0}", e.Exception.InnerException?.Message);
             logger.Fatal("Stack trace: {0}", e.Exception.StackTrace);
-            MessageBox.Show("Fatal error occured, view logs for more information.", "Fatal Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show("Fatal error occured, view logs for more information.",
+                "Fatal Error!", MessageBoxButton.OK, MessageBoxImage.Error);
             System.Environment.Exit(0);
         }
     }
