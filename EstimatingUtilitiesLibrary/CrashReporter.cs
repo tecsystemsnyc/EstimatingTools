@@ -36,7 +36,7 @@ namespace EstimatingUtilitiesLibrary
 
             TextPart bodyText = new TextPart("plain")
             {
-                Text = string.Format("User Report: /n {0}", userReport)
+                Text = string.Format("User Report: \n {0}", userReport)
             };
 
             MimePart attatchment = new MimePart("text", "log")
@@ -44,7 +44,7 @@ namespace EstimatingUtilitiesLibrary
                 Content = new MimeContent(File.OpenRead(logPath)),
                 ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),
                 ContentTransferEncoding = ContentEncoding.Base64,
-                FileName = Path.GetFileName(logPath)
+                FileName = logPath
             };
 
             Multipart body = new Multipart("mixed");
