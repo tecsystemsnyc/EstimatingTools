@@ -9,25 +9,25 @@ namespace EstimatingUtilitiesLibrary
     /// <summary>
     /// Class to store one CSV row
     /// </summary>
-    public class CsvRow : List<string>
+    internal class CsvRow : List<string>
     {
-        public string LineText { get; set; }
+        internal string LineText { get; set; }
     }
 
     /// <summary>
     /// Class to write to a CSV
     /// </summary>
-    public class CSVWriter
+    internal class CSVWriter
     {
 
-        public string Path { get; set; }
+        internal string Path { get; set; }
 
-        public CSVWriter(String path)
+        internal CSVWriter(String path)
         {
             Path = path;
         }
 
-        public void WriteRow(StreamWriter writer, CsvRow row)
+        internal void WriteRow(StreamWriter writer, CsvRow row)
         {
             StringBuilder builder = new StringBuilder();
             bool firstColumn = true;
@@ -48,7 +48,7 @@ namespace EstimatingUtilitiesLibrary
             writer.WriteLine(row.LineText);
         }
 
-        public void BidPointsToCSV(TECBid bid)
+        internal void BidPointsToCSV(TECBid bid)
         {
             StreamWriter writer = new StreamWriter(Path);
             foreach (TECTypical system in bid.Systems)

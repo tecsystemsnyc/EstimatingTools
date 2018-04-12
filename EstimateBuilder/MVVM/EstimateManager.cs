@@ -259,13 +259,13 @@ namespace EstimateBuilder.MVVM
         private void exportProposalExecute()
         {
             string path = UIHelpers.GetSavePath(FileDialogParameters.WordDocumentFileParameters, 
-                defaultFileName, defaultDirectory);
+                Exporter.ProposalDefaultName(bid), defaultDirectory);
 
             if (path != null)
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    ScopeWordDocumentBuilder.CreateScopeWordDocument(bid, estimate, path, EBSettings.OpenFileOnExport);
+                    Exporter.GenerateProposal(path, bid, estimate, EBSettings.OpenFileOnExport);
                     logger.Info("Scope saved to document.");
                 }
                 else
@@ -282,12 +282,12 @@ namespace EstimateBuilder.MVVM
         private void exportTurnoverExecute()
         {
             string path = UIHelpers.GetSavePath(FileDialogParameters.ExcelFileParameters,
-                                        defaultFileName, defaultDirectory);
+                                        Exporter.TurnoverDefaultName(bid), defaultDirectory);
             if (path != null)
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    Exporter.GenerateTurnover(path, bid, estimate);
+                    Exporter.GenerateTurnover(path, bid, estimate, EBSettings.OpenFileOnExport);
                     logger.Info("Exported to turnover document.");
                 }
                 else
@@ -304,12 +304,12 @@ namespace EstimateBuilder.MVVM
         private void exportPointsListExcelExecute()
         {
             string path = UIHelpers.GetSavePath(FileDialogParameters.ExcelFileParameters,
-                            defaultFileName, defaultDirectory);
+                            Exporter.PointsListDefaultName(bid), defaultDirectory);
             if (path != null)
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    Exporter.GeneratePointsList(path, bid);
+                    Exporter.GeneratePointsList(path, bid, EBSettings.OpenFileOnExport);
                     logger.Info("Points saved to Excel.");
                 }
                 else
@@ -326,13 +326,12 @@ namespace EstimateBuilder.MVVM
         private void exportPointsListCSVExecute()
         {
             string path = UIHelpers.GetSavePath(FileDialogParameters.CSVFileParameters,
-                            defaultFileName, defaultDirectory);
+                            Exporter.PointsListDefaultName(bid), defaultDirectory);
             if (path != null)
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    CSVWriter writer = new CSVWriter(path);
-                    writer.BidPointsToCSV(bid);
+                    Exporter.GeneratePointsListCSV(path, bid, EBSettings.OpenFileOnExport);
                     logger.Info("Points saved to csv.");
                 }
                 else
@@ -349,7 +348,7 @@ namespace EstimateBuilder.MVVM
         private void exportSummaryExecute()
         {
             string path = UIHelpers.GetSavePath(FileDialogParameters.WordDocumentFileParameters,
-                                        defaultFileName, defaultDirectory);
+                                        Exporter.SummaryDefaultName(bid), defaultDirectory);
             if (path != null)
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
@@ -371,12 +370,12 @@ namespace EstimateBuilder.MVVM
         private void exportBudgetExecute()
         {
             string path = UIHelpers.GetSavePath(FileDialogParameters.ExcelFileParameters,
-                                        defaultFileName, defaultDirectory);
+                                        Exporter.BudgetDefaultName(bid), defaultDirectory);
             if (path != null)
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    Exporter.GenerateBudget(path, bid);
+                    Exporter.GenerateBudget(path, bid, EBSettings.OpenFileOnExport);
                     logger.Info("Exported to budget document.");
                 }
                 else
@@ -393,12 +392,12 @@ namespace EstimateBuilder.MVVM
         private void exportBOMExecute()
         {
             string path = UIHelpers.GetSavePath(FileDialogParameters.ExcelFileParameters,
-                                        defaultFileName, defaultDirectory);
+                                        Exporter.BOMDefaultName(bid), defaultDirectory);
             if (path != null)
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    Exporter.GenerateBOM(path, bid);
+                    Exporter.GenerateBOM(path, bid, EBSettings.OpenFileOnExport);
                     logger.Info("Exported to BOM document.");
                 }
                 else

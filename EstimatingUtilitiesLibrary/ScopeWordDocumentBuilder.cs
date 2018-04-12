@@ -22,12 +22,12 @@ using Wvml = DocumentFormat.OpenXml.Vml.Wordprocessing;
 
 namespace EstimatingUtilitiesLibrary
 {
-    static public class ScopeWordDocumentBuilder
+    static internal class ScopeWordDocumentBuilder
     {
         static private TECBid _bid;
         static private TECEstimator _estimate;
 
-        public static void CreateScopeWordDocument(TECBid bid, TECEstimator estimate, string path, bool openOnComplete = true)
+        internal static void CreateScopeWordDocument(TECBid bid, TECEstimator estimate, string path, bool openOnComplete = true)
         {
             _bid = bid;
             _estimate = estimate;

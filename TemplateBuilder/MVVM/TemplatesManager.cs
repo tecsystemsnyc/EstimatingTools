@@ -105,12 +105,12 @@ namespace TemplateBuilder.MVVM
         private void exportTemplatesExecute()
         {
             string path = UIHelpers.GetSavePath(FileDialogParameters.ExcelFileParameters,
-                defaultFileName, defaultDirectory);
+                Exporter.TemplateSummaryDefaultName(), defaultDirectory);
             if (path != null)
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    Exporter.GenerateTemplateSummary(path, templates);
+                    Exporter.GenerateTemplateSummary(path, templates, TBSettings.OpenFileOnExport);
                     logger.Info("Exported templates spreadsheet.");
                 }
                 else
