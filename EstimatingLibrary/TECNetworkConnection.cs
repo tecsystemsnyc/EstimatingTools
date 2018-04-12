@@ -24,7 +24,6 @@ namespace EstimatingLibrary
                 _children = value;
                 Children.CollectionChanged += Children_CollectionChanged;
                 notifyCombinedChanged(Change.Edit, "Children", this, value, old);
-                raisePropertyChanged("PossibleIO");
             }
         }
         public ObservableCollection<TECConnectionType> ConnectionTypes
@@ -66,41 +65,7 @@ namespace EstimatingLibrary
                 return io;
             }
         }
-
-        //---Derived---
-        public ObservableCollection<IOType> PossibleIO
-        {
-            get
-            {
-                ObservableCollection<IOType> IO = new ObservableCollection<IOType>();
-                if (ParentController != null)
-                {
-                    //Start off with all IO in the parent controller
-                    foreach (TECIO io in ParentController.AvailableNetworkIO.ListIO())
-                    {
-                        IO.Add(io.Type);
-                    }
-
-                    //If any IO aren't in children controllers, remove them.
-                    foreach (INetworkConnectable child in Children)
-                    {
-                        List<IOType> ioToRemove = new List<IOType>();
-                        foreach (IOType io in IO)
-                        {
-                            if (!child.AvailableNetworkIO.Contains(io))
-                            {
-                                ioToRemove.Add(io);
-                            }
-                        }
-                        foreach (IOType io in ioToRemove)
-                        {
-                            IO.Remove(io);
-                        }
-                    }
-                }
-                return IO;
-            }
-        }
+        
         #endregion
 
         #region Constructors
@@ -134,7 +99,6 @@ namespace EstimatingLibrary
                 foreach (object item in e.NewItems)
                 {
                     notifyCombinedChanged(Change.Add, "Children", this, item);
-                    raisePropertyChanged("PossibleIO");
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -142,7 +106,6 @@ namespace EstimatingLibrary
                 foreach (object item in e.OldItems)
                 {
                     notifyCombinedChanged(Change.Remove, "Children", this, item);
-                    raisePropertyChanged("PossibleIO");
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
