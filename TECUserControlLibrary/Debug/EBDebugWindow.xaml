@@ -33,5 +33,9 @@
                 Grid.Row="1" Grid.Column="1">
             <TextBlock VerticalAlignment="Center">Export DB CSV</TextBlock>
         </Button>
+        <Button Command="{DynamicResource SendTestEmailCommand}" Margin="5"
+                Grid.Row="2">
+            <TextBlock VerticalAlignment="Center">Test Crash Report</TextBlock>
+        </Button>
     </Grid>
 </Window>
