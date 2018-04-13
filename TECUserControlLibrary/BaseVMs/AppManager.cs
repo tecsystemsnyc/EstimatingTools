@@ -306,10 +306,7 @@ namespace TECUserControlLibrary.BaseVMs
             System.Diagnostics.Process.Start(WIKI_URL);
         }
         //Report Bug
-        private void reportBugExecute()
-        {
-            System.Diagnostics.Process.Start(BUG_REPORT_URL);
-        }
+        protected abstract void reportBugExecute();
         //Open File Location
         private void openFileLocationExecute()
         {

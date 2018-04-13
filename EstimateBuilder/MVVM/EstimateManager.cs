@@ -5,11 +5,13 @@ using EstimatingUtilitiesLibrary.Database;
 using EstimatingUtilitiesLibrary.Exports;
 using NLog;
 using System;
+using System.IO;
 using System.Windows;
 using TECUserControlLibrary.BaseVMs;
 using TECUserControlLibrary.Debug;
 using TECUserControlLibrary.Models;
 using TECUserControlLibrary.Utilities;
+using TECUserControlLibrary.Windows;
 
 namespace EstimateBuilder.MVVM
 {
@@ -428,8 +430,19 @@ namespace EstimateBuilder.MVVM
             EBSettingsWindow settingsWindow = new EBSettingsWindow();
             settingsWindow.Show();
         }
+        //Report Bug
+        protected override void reportBugExecute()
+        {
+            string reportPrompt = "Please describe the bug and how to reproduce it.";
+
+            string logDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "EstimateBuilder\\logs");
+            string logPath = UtilitiesMethods.GetMostRecentFilePathFromDirectoryPath(logDirectory);
+
+            BugReportWindow reportWindow = new BugReportWindow("Estimate Builder Bug", reportPrompt, logPath);
+            reportWindow.ShowDialog();
+        }
         #endregion
-        
+
         protected override TECBid getWorkingScope()
         {
             return bid;

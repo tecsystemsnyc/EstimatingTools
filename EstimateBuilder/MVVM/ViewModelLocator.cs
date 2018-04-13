@@ -11,6 +11,7 @@
 
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
+using TECUserControlLibrary.ViewModels;
 
 namespace EstimateBuilder.MVVM
 {
@@ -55,6 +56,7 @@ namespace EstimateBuilder.MVVM
                 return ServiceLocator.Current.GetInstance<EBSettingsVM>();
             }
         }
+
         public static void Cleanup()
         {
         }

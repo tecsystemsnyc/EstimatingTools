@@ -1,8 +1,10 @@
 ﻿using EstimatingLibrary;
+using EstimatingUtilitiesLibrary;
 using EstimatingUtilitiesLibrary.Database;
 using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
@@ -18,6 +20,7 @@ namespace TECUserControlLibrary.Debug
         private ICommand addTypical;
         private ICommand throwException;
         private ICommand exportDBCommand;
+        private ICommand sendTestEmailCommand;
 
         public EBDebugWindow(TECBid bid)
         {
@@ -33,6 +36,7 @@ namespace TECUserControlLibrary.Debug
             addTypical = new RelayCommand(addTypicalExecute);
             throwException = new RelayCommand(throwExceptionExecute);
             exportDBCommand = new RelayCommand(exportDBCVSExecute);
+            sendTestEmailCommand = new RelayCommand(sendTestEmailExecute);
         }
         
         private void addResources()
@@ -41,6 +45,7 @@ namespace TECUserControlLibrary.Debug
             this.Resources.Add("AddTypicalCommand", addTypical);
             this.Resources.Add("ThrowExceptionCommand", throwException);
             this.Resources.Add("ExportDBCommand", exportDBCommand);
+            this.Resources.Add("SendTestEmailCommand", sendTestEmailCommand);
         }
 
         private void testNetworkExecute()
@@ -87,7 +92,6 @@ namespace TECUserControlLibrary.Debug
             bid.Systems.Add(typical);
             typical.AddInstance(bid);
         }
-        
         private void addTypicalExecute()
         {
             TECTypical typical = new TECTypical();
@@ -156,15 +160,18 @@ namespace TECUserControlLibrary.Debug
             bid.Systems.Add(typical);
             typical.AddInstance(bid);
         }
-
         private void throwExceptionExecute()
         {
             throw new Exception("Test Exception.");
         }
-
         private void exportDBCVSExecute()
         {
             DatabaseManager<TECScopeManager>.ExportDef();
+        }
+        private void sendTestEmailExecute()
+        {
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "IncreaseContrastTeriostar.gif");
+            BugReporter.SendBugReport("Test", "Greg", "ghanson@tec-system.com", "My program crashed!", path);
         }
     }
 }
