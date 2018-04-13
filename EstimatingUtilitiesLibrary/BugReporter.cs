@@ -21,14 +21,19 @@ namespace EstimatingUtilitiesLibrary
         private const string domainName = "smtp.gmail.com";
         private const int port = 465;
 
-        public static bool SendBugReport(string reportType, string userName, string userEmail, string userReport, string logPath, IEnumerable<string> recievingEmails)
+        public static bool SendBugReport(string reportType, string userName, string userEmail, string userReport, string logPath)
         {
+            string emailsResource = Properties.Resources.BugReportEmails;
+
+            string[] emails = emailsResource.Split('\n');
+            
             //Create Message
             MimeMessage message = new MimeMessage();
             message.From.Add(new MailboxAddress(senderUsername));
-            foreach(string email in recievingEmails)
+            foreach(string email in emails)
             {
-                message.To.Add(new MailboxAddress(email));
+                string trimmedEmail = email.Trim('\r', '\n');
+                message.To.Add(new MailboxAddress(trimmedEmail));
             }
             message.Subject = string.Format("{0} Report", reportType);
 
@@ -48,7 +53,7 @@ namespace EstimatingUtilitiesLibrary
                     Content = new MimeContent(File.OpenRead(logPath)),
                     ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),
                     ContentTransferEncoding = ContentEncoding.Base64,
-                    FileName = logPath
+                    FileName = Path.GetFileName(logPath)
                 };
                 body.Add(attatchment);
             }

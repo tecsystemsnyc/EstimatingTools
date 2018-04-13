@@ -28,7 +28,12 @@
 
             <TextBlock Text="Description:"/>
             <TextBox Text="{Binding BugDescription}" 
-                     Margin="5" Grid.Row="1"/>
+                     Margin="5" Grid.Row="1"
+                     TextWrapping="Wrap"
+                     AcceptsReturn="True"
+                     AcceptsTab="true"
+                     SpellCheck.IsEnabled="True"
+                     VerticalContentAlignment="Top"/>
         </Grid>
         
         <!--User's name and email-->

@@ -2,6 +2,8 @@
 using GalaSoft.MvvmLight.Threading;
 using NLog;
 using System;
+using System.IO;
+using System.Linq;
 using System.Windows;
 using TECUserControlLibrary.Windows;
 
@@ -62,7 +64,13 @@ namespace EstimateBuilder
 
             string reportPrompt = "A crash has occured. Please describe to the best of your ability the actions leading up to the crash.";
 
-            BugReportWindow reportWindow = new BugReportWindow(reportPrompt);
+            string logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "EstimateBuilder\\logs");
+            DirectoryInfo logDirectory = new DirectoryInfo(logDirectoryPath);
+            FileInfo[] logFiles = logDirectory.GetFiles();
+            FileInfo mostRecent = logFiles.OrderByDescending(f => f.LastWriteTime).First();
+            string logFilePath = mostRecent.FullName;
+
+            BugReportWindow reportWindow = new BugReportWindow("Crash", reportPrompt, logFilePath);
             reportWindow.ShowDialog();
 
             //MessageBox.Show("Fatal error occured, view logs for more information.",

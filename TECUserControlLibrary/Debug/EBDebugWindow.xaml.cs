@@ -170,11 +170,8 @@ namespace TECUserControlLibrary.Debug
         }
         private void sendTestEmailExecute()
         {
-            List<string> recievingEmails = new List<string>();
-            recievingEmails.Add("ghanson@tec-system.com");
-            recievingEmails.Add("dtaylor@tec-system.com");
             string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "IncreaseContrastTeriostar.gif");
-            BugReporter.SendBugReport("Crash", "Greg", "ghanson@tec-system.com", "My program crashed!", path, recievingEmails);
+            BugReporter.SendBugReport("Test", "Greg", "ghanson@tec-system.com", "My program crashed!", path);
         }
     }
 }

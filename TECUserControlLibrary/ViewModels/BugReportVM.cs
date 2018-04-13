@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using EstimatingUtilitiesLibrary;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,9 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class BugReportVM : ViewModelBase
     {
+        private readonly string reportType;
+        private readonly string logPath;
+
         private string _bugDescription = "";
         private string _userName = "";
         private string _userEmail = "";
@@ -47,8 +51,11 @@ namespace TECUserControlLibrary.ViewModels
 
         public ICommand SubmitReportCommand { get; }
 
-        public BugReportVM(string prompt)
+        public BugReportVM(string reportType, string prompt, string logPath)
         {
+            this.reportType = reportType;
+            this.logPath = logPath;
+
             UserPrompt = prompt;
 
             SubmitReportCommand = new RelayCommand(submitReportExecute);
@@ -56,7 +63,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void submitReportExecute()
         {
-
+            BugReporter.SendBugReport(reportType, UserName, UserEmail, BugDescription, logPath);
         }
     }
 }
