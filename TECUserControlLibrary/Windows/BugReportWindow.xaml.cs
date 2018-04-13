@@ -15,30 +15,23 @@ using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.Windows
 {
-    /// <summary>
-    /// Interaction logic for CrashReportWindow.xaml
-    /// </summary>
-    public partial class CrashReportWindow : Window
+    public partial class BugReportWindow : Window
     {
-
-
-        public CrashReportVM VM
+        public BugReportVM VM
         {
-            get { return (CrashReportVM)GetValue(VMProperty); }
+            get { return (BugReportVM)GetValue(VMProperty); }
             set { SetValue(VMProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for VM.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty VMProperty =
-            DependencyProperty.Register("VM", typeof(CrashReportVM), typeof(CrashReportWindow));
-
-
-
-        public CrashReportWindow()
+            DependencyProperty.Register("VM", typeof(BugReportVM), typeof(BugReportWindow));
+        
+        public BugReportWindow()
         {
             InitializeComponent();
 
-            VM = new CrashReportVM();
+            VM = new BugReportVM();
         }
     }
 }

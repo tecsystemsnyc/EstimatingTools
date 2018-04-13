@@ -1,13 +1,13 @@
-﻿<Window x:Class="TECUserControlLibrary.Windows.CrashReportWindow"
-        x:Name="crashReportWindow"
+﻿<Window x:Class="TECUserControlLibrary.Windows.BugReportWindow"
+        x:Name="bugReportWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TECUserControlLibrary.Windows"
         mc:Ignorable="d"
-        Title="CrashReportWindow" Height="300" Width="600">
-    <Grid DataContext="{Binding ElementName=crashReportWindow, Path=VM}">
+        Title="BugReportWindow" Height="300" Width="600">
+    <Grid DataContext="{Binding ElementName=bugReportWindow, Path=VM}">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
