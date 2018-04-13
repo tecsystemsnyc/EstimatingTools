@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TECUserControlLibrary.Windows"
         mc:Ignorable="d"
-        Title="BugReportWindow" Height="300" Width="600">
+        Title="Report Bug" Height="300" Width="600">
     <Grid DataContext="{Binding ElementName=bugReportWindow, Path=VM}">
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
 
         <!--User Prompt-->
-        <TextBlock Text="A crash has occured. Please describe to the best of your ability the actions leading up to the crash."
+        <TextBlock Text="{Binding UserPrompt}"
                    HorizontalAlignment="Center"/>
 
         <!--Crash Description-->
@@ -26,8 +26,9 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="Crash Description:"/>
-            <TextBox Margin="5" Grid.Row="1"/>
+            <TextBlock Text="Description:"/>
+            <TextBox Text="{Binding BugDescription}" 
+                     Margin="5" Grid.Row="1"/>
         </Grid>
         
         <!--User's name and email-->
@@ -43,7 +44,8 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Name:"/>
-                <TextBox Margin="5" Grid.Column="1"/>
+                <TextBox Text="{Binding UserName}"
+                         Margin="5" Grid.Column="1"/>
             </Grid>
 
             <Grid Grid.Column="1">
@@ -52,11 +54,14 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Email:"/>
-                <TextBox Margin="5" Grid.Column="1"/>
+                <TextBox Text="{Binding UserEmail}"
+                         Margin="5" Grid.Column="1"/>
             </Grid>
         </Grid>
         
         <!--Submit Button-->
-        <Button Content="Submit" Grid.Row="3" Height="50" Width="200" Margin="5"/>
+        <Button Content="Submit" 
+                Command="{Binding SubmitReportCommand}"
+                Grid.Row="3" Height="50" Width="200" Margin="5"/>
     </Grid>
 </Window>

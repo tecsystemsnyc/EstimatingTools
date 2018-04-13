@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingUtilitiesLibrary
 {
-    public static class CrashReporter
+    public static class BugReporter
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -21,9 +21,7 @@ namespace EstimatingUtilitiesLibrary
         private const string domainName = "smtp.gmail.com";
         private const int port = 465;
 
-        private const string subjectLine = "Crash Report";
-
-        public static bool SendCrashReport(string logPath, string userReport, IEnumerable<string> recievingEmails)
+        public static bool SendBugReport(string reportType, string userName, string userEmail, string userReport, string logPath, IEnumerable<string> recievingEmails)
         {
             //Create Message
             MimeMessage message = new MimeMessage();
@@ -32,24 +30,28 @@ namespace EstimatingUtilitiesLibrary
             {
                 message.To.Add(new MailboxAddress(email));
             }
-            message.Subject = subjectLine;
+            message.Subject = string.Format("{0} Report", reportType);
+
+            Multipart body = new Multipart("mixed");
+            message.Body = body;
 
             TextPart bodyText = new TextPart("plain")
             {
-                Text = string.Format("User Report: \n {0}", userReport)
+                Text = string.Format("{0} Report from {1}. Email: {2} \n Description:\n {3}", reportType, userName, userEmail, userReport)
             };
-
-            MimePart attatchment = new MimePart("text", "log")
-            {
-                Content = new MimeContent(File.OpenRead(logPath)),
-                ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),
-                ContentTransferEncoding = ContentEncoding.Base64,
-                FileName = logPath
-            };
-
-            Multipart body = new Multipart("mixed");
             body.Add(bodyText);
-            body.Add(attatchment);
+
+            if (logPath != "" && File.Exists(logPath))
+            {
+                MimePart attatchment = new MimePart("text", "log")
+                {
+                    Content = new MimeContent(File.OpenRead(logPath)),
+                    ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),
+                    ContentTransferEncoding = ContentEncoding.Base64,
+                    FileName = logPath
+                };
+                body.Add(attatchment);
+            }
 
             message.Body = body;
 

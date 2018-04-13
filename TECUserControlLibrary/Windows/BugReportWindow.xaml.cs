@@ -27,11 +27,11 @@ namespace TECUserControlLibrary.Windows
         public static readonly DependencyProperty VMProperty =
             DependencyProperty.Register("VM", typeof(BugReportVM), typeof(BugReportWindow));
         
-        public BugReportWindow()
+        public BugReportWindow(string prompt)
         {
             InitializeComponent();
 
-            VM = new BugReportVM();
+            VM = new BugReportVM(prompt);
         }
     }
 }

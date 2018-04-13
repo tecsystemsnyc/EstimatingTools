@@ -174,7 +174,7 @@ namespace TECUserControlLibrary.Debug
             recievingEmails.Add("ghanson@tec-system.com");
             recievingEmails.Add("dtaylor@tec-system.com");
             string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "IncreaseContrastTeriostar.gif");
-            CrashReporter.SendCrashReport(path, "HI. My Program Crashed. -Greg", recievingEmails);
+            BugReporter.SendBugReport("Crash", "Greg", "ghanson@tec-system.com", "My program crashed!", path, recievingEmails);
         }
     }
 }

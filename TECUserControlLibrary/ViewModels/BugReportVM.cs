@@ -43,10 +43,14 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        public string UserPrompt { get; }
+
         public ICommand SubmitReportCommand { get; }
 
-        public BugReportVM()
+        public BugReportVM(string prompt)
         {
+            UserPrompt = prompt;
+
             SubmitReportCommand = new RelayCommand(submitReportExecute);
         }
 

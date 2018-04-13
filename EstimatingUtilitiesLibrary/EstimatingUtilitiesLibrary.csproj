@@ -142,7 +142,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CrashReporter.cs" />
+    <Compile Include="BugReporter.cs" />
     <Compile Include="CSVReader.cs" />
     <Compile Include="CSVWriter.cs" />
     <Compile Include="Database\DatabaseGenerator.cs" />

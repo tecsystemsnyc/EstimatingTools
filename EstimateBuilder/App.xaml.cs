@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.Threading;
 using NLog;
 using System;
 using System.Windows;
+using TECUserControlLibrary.Windows;
 
 namespace EstimateBuilder
 {
@@ -15,9 +16,9 @@ namespace EstimateBuilder
 
         public App() : base()
         {
-#if !DEBUG
+//#if !DEBUG
             this.Dispatcher.UnhandledException += logUnhandledException;
-#endif
+//#endif
             DispatcherHelper.Initialize();
         }
 
@@ -58,8 +59,15 @@ namespace EstimateBuilder
             logger.Fatal("Unhandled exception: {0}", e.Exception.Message);
             logger.Fatal("Inner exception: {0}", e.Exception.InnerException?.Message);
             logger.Fatal("Stack trace: {0}", e.Exception.StackTrace);
-            MessageBox.Show("Fatal error occured, view logs for more information.",
-                "Fatal Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+
+            string reportPrompt = "A crash has occured. Please describe to the best of your ability the actions leading up to the crash.";
+
+            BugReportWindow reportWindow = new BugReportWindow(reportPrompt);
+            reportWindow.ShowDialog();
+
+            //MessageBox.Show("Fatal error occured, view logs for more information.",
+            //    "Fatal Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+
             System.Environment.Exit(0);
         }
     }
