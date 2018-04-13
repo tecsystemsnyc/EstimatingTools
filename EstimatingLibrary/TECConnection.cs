@@ -91,13 +91,9 @@ namespace EstimatingLibrary
         }
 
         public bool IsTypical { get; private set; }
+        abstract public List<TECConnectionType> ConnectionTypes { get; }
+        abstract public IOCollection IO { get; }
 
-        public abstract IOCollection IO { get; }
-
-        public List<TECIO> IOList
-        {
-            get { return IO.ListIO(); }
-        }
         #endregion //Properties
 
         public event Action<CostBatch> CostChanged;
@@ -164,7 +160,5 @@ namespace EstimatingLibrary
             }
             return relatedList;
         }
-
-        abstract public ObservableCollection<TECConnectionType> GetConnectionTypes();
     }
 }

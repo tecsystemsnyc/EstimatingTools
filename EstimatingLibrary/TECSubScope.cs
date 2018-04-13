@@ -54,32 +54,10 @@ namespace EstimatingLibrary
                 raisePropertyChanged("Connection");
             }
         }
-        public TECNetworkConnection ParentConnection
-        {
-            get
-            {
-                if(Connection is TECNetworkConnection netConn)
-                {
-                    return netConn;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            set
-            {
-                Connection = value;
-            }
-        }
         
         public ObservableCollection<TECConnectionType> ConnectionTypes
         {
             get { return getConnectionTypes(); }
-        }
-        public List<TECElectricalMaterial> AvailableConnections
-        {
-            get { return getAvailableConnectionTypes(); }
         }
         public int PointNumber
         {
@@ -92,38 +70,33 @@ namespace EstimatingLibrary
         public bool IsTypical { get; private set; }
 
         //Derived
-        public List<TECIO> AllNetworkIOList
-        {
-            get { return getNetworkIO().ListIO(); }
-        }
-        public IOCollection AvailableNetworkIO
-        {
-            get { return getNetworkIO(); }
-        }
-        public IOCollection IO
-        {
-            get
-            {
-                IOCollection ssIO = new IOCollection();
-                foreach (TECPoint point in Points)
-                {
-                    for (int i = 0; i < point.Quantity; i++)
-                    {
-                        ssIO.AddIO(point.Type);
-                    }
-                }
-                return ssIO;
-            }
-        }
-        public bool IsNetwork
-        {
-            get { return isNetwork(); }
-        }
         public bool IsConnected
         {
             get
             {
                 return Connection != null;
+            }
+        }
+
+        IOCollection INetworkConnectable.AvailableProtocols
+        {
+            get
+            {
+                IOCollection protocols = new IOCollection();
+                foreach(TECProtocolAdapter adapter in Devices.Where(x => x is TECProtocolAdapter))
+                {
+                    protocols.Add(new TECIO(adapter.Protocol));
+                }
+                return protocols;
+            }
+        }
+
+        TECNetworkConnection INetworkConnectable.ParentConnection
+        {
+            get { return Connection as TECNetworkConnection; }
+            set
+            {
+                Connection = value;
             }
         }
         #endregion //Properties
@@ -226,25 +199,6 @@ namespace EstimatingLibrary
         #endregion
 
         #region Methods
-        public List<IOType> PossibleIOTypes()
-        {
-            List<IOType> resultList = new List<IOType>();
-            if (this.Points.Count == 0)
-            {
-                resultList.AddRange(TECIO.NetworkIO);
-                resultList.AddRange(TECIO.PointIO);
-            }
-            else if (this.IsNetwork)
-            {
-                IOType type = this.Points[0].Type;
-                resultList.Add(type);
-            }
-            else
-            {
-                resultList.AddRange(TECIO.PointIO);
-            }
-            return resultList;
-        }
 
         public object DragDropCopy(TECScopeManager scopeManager)
         {
@@ -253,36 +207,9 @@ namespace EstimatingLibrary
             return outScope;
         }
         
-        public bool CanAddPoint(TECPoint point)
-        {
-            if(Points.Count == 0)
-            {
-                return true;
-            }
-            IOCollection networkIO = getNetworkIO();
-            if(TECIO.NetworkIO.Contains(point.Type) && networkIO.Contains(point.Type))
-            {
-                return true;
-            }
-            else if (TECIO.PointIO.Contains(point.Type) && networkIO.ListIO().Count == 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
         public void AddPoint(TECPoint point)
         {
-            if (CanAddPoint(point))
-            {
-                Points.Add(point);
-            }
-            else
-            {
-                throw new InvalidOperationException("Point incompatible with SubScope.");
-            }
+            Points.Add(point);
         }
         public void RemovePoint(TECPoint point)
         {
@@ -291,15 +218,16 @@ namespace EstimatingLibrary
 
         public bool CanConnectToNetwork(TECNetworkConnection netConnect)
         {
-            if (!this.IsNetwork) return false;
+            throw new NotImplementedException();
+            //if (!this.IsNetwork) return false;
 
-            IOCollection thisIO = new IOCollection(getNetworkIO());
-            IOCollection netConnectIO = netConnect.IO;
-            bool ioMatches = IOCollection.IOTypesMatch(thisIO, netConnectIO);
+            //IOCollection thisIO = new IOCollection(getNetworkIO());
+            //IOCollection netConnectIO = netConnect.IO;
+            //bool ioMatches = IOCollection.IOTypesMatch(thisIO, netConnectIO);
 
-            bool connectionTypesMatch = (this.ConnectionTypes.Matches(netConnect.ConnectionTypes));
+            //bool connectionTypesMatch = (this.ConnectionTypes.Matches(netConnect.ConnectionTypes));
 
-            return (ioMatches && connectionTypesMatch);
+            //return (ioMatches && connectionTypesMatch);
         }
 
         private ObservableCollection<TECConnectionType> getConnectionTypes()
@@ -313,17 +241,6 @@ namespace EstimatingLibrary
                 }
             }
             return outTypes;
-        }
-        
-        private List<TECElectricalMaterial> getAvailableConnectionTypes()
-        {
-            var availableConnections = new List<TECElectricalMaterial>();
-            foreach (TECElectricalMaterial conType in this.ConnectionTypes)
-            {
-                availableConnections.Add(conType);
-            }
-
-            return availableConnections;
         }
         
         private int getPointNumber()
@@ -340,17 +257,6 @@ namespace EstimatingLibrary
         {
             Points.CollectionChanged += PointsCollectionChanged;
             Devices.CollectionChanged += Devices_CollectionChanged;
-        }
-        private bool isNetwork()
-        {
-            if(IO.ListIO().Count != 1)
-            {
-                return false;
-            }
-            else
-            {
-                return TECIO.NetworkIO.Contains(Points[0].Type);
-            }
         }
 
         protected override CostBatch getCosts()
@@ -407,18 +313,6 @@ namespace EstimatingLibrary
             {
                 PointChanged?.Invoke(numPoints);
             }
-        }
-        private IOCollection getNetworkIO()
-        {
-            IOCollection collection = new IOCollection();
-            foreach (TECPoint point in Points.Where(point => TECIO.NetworkIO.Contains(point.Type)))
-            {
-                for (int i = 0; i < point.Quantity; i++)
-                {
-                    collection.AddIO(point.Type);
-                }
-            }
-            return collection;
         }
 
         public INetworkConnectable Copy(INetworkConnectable item, bool isTypical, Dictionary<Guid, Guid> guidDictionary)

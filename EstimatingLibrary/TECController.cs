@@ -12,10 +12,10 @@ namespace EstimatingLibrary
         #region Properties
         //---Stored---
         private TECNetworkConnection _parentConnection;
-        private ObservableCollection<TECConnection> _childrenConnections;
+        private ObservableCollection<TECConnection> _childrenConnections = new ObservableCollection<TECConnection>();
         private TECControllerType _type;
         private bool _isServer;
-        private ObservableCollection<TECIOModule> _ioModules;
+        private ObservableCollection<TECIOModule> _ioModules = new ObservableCollection<TECIOModule>();
         
         public TECNetworkConnection ParentConnection
         {
@@ -82,13 +82,9 @@ namespace EstimatingLibrary
         }
 
         //---Derived---
-        public List<TECIO> AllNetworkIOList
+        public IOCollection AvailableProtocols
         {
-            get { return getTotalNetworkIO().ListIO(); }
-        }
-        public IOCollection AvailableNetworkIO
-        {
-            get { return getAvailableNetworkIO(); }
+            get { return AvailableIO.Protocols; }
         }
         public IEnumerable<TECNetworkConnection> ChildNetworkConnections
         {
@@ -97,22 +93,32 @@ namespace EstimatingLibrary
                 return getNetworkConnections();
             }
         }
-        public IOCollection TotalIO
-        {
-            get { return getTotalIO(); }
-        }
-        public IOCollection AvailableIO
-        {
-            get { return getAvailableIO(); }
-        }
-
-        public bool IsNetwork
+        public IOCollection IO
         {
             get
             {
-                return AllNetworkIOList.Count > 0;
+                IOCollection allIO = new IOCollection(this.Type.IO);
+                List<TECIO> moduleIO = new List<TECIO>();
+                this.IOModules.ForEach(x => moduleIO.AddRange(x.IO));
+                allIO.Add(moduleIO);
+                return allIO;
             }
         }
+        public IOCollection UsedIO
+        {
+            get
+            {
+                return ChildrenConnections.Aggregate(new IOCollection(), (total, next) => total += next.IO);
+            }
+        }
+        public IOCollection AvailableIO
+        {
+            get { return IO - UsedIO; }
+        }
+
+        public IOCollection AvailableProtocols => throw new NotImplementedException();
+
+
         #endregion
 
         #region Constructors
@@ -631,67 +637,7 @@ namespace EstimatingLibrary
         {
             collectionChanged(sender, e, "IOModules");
         }
-
-        private IOCollection getTotalIO()
-        {
-            IOCollection totalIO = new IOCollection(this.Type.IO);
-            foreach(TECIOModule module in this.IOModules)
-            {
-                totalIO.AddIO(module.IO);
-            }
-            return totalIO;
-        }
-        private IOCollection getTotalNetworkIO()
-        {
-            IOCollection networkIO = getTotalIO();
-            foreach(TECIO io in networkIO.ListIO())
-            {
-                if (!TECIO.NetworkIO.Contains(io.Type))
-                {
-                    networkIO.RemoveIO(io);
-                }
-            }
-            return networkIO;
-        }
-        private IOCollection getUsedIO()
-        {
-            IOCollection usedIO = new IOCollection();
-            foreach(TECConnection connection in ChildrenConnections)
-            {
-                usedIO += connection.IO;
-            }
-            return usedIO;
-        }
-        private IOCollection getUsedNetworkIO()
-        {
-            IOCollection usedIO = getUsedIO();
-            foreach(TECIO io in usedIO.ListIO())
-            {
-                if (!TECIO.NetworkIO.Contains(io.Type))
-                {
-                    usedIO.RemoveIO(io);
-                }
-            }
-            return usedIO;
-        }
-        private IOCollection getAvailableIO()
-        {
-            IOCollection totalIO = getTotalIO();
-            IOCollection usedIO = getUsedIO();
-            return (totalIO - usedIO);
-        }
-        private IOCollection getAvailableNetworkIO()
-        {
-            IOCollection availableIO = getAvailableIO();
-            foreach(TECIO io in availableIO.ListIO())
-            {
-                if (!TECIO.NetworkIO.Contains(io.Type))
-                {
-                    availableIO.RemoveIO(io);
-                }
-            }
-            return availableIO;
-        }
+        
         private IOCollection getPotentialIO()
         {
             IOCollection potentialIO = new IOCollection();

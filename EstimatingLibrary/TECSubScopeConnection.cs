@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,11 +24,11 @@ namespace EstimatingLibrary
         }
 
         //---Derived---
-        public ObservableCollection<TECConnectionType> ConnectionTypes
+        public override List<TECConnectionType> ConnectionTypes
         {
             get
             {
-                var outConnectionTypes = new ObservableCollection<TECConnectionType>();
+                var outConnectionTypes = new List<TECConnectionType>();
                 if (SubScope != null)
                 {
                     foreach (IEndDevice dev in SubScope.Devices)
@@ -38,23 +39,17 @@ namespace EstimatingLibrary
                         }
                     }
                 }
-
                 return outConnectionTypes;
             }
         }
+
         public override IOCollection IO
         {
             get
             {
-                IOCollection io = new IOCollection();
-                foreach(TECPoint point in SubScope.Points)
-                {
-                    for(int i = 0; i < point.Quantity; i++)
-                    {
-                        io.AddIO(point.Type);
-                    }
-                }
-                return io;
+                List<TECIO> allIO = new List<TECIO>();
+                SubScope.Points.ForEach(x => allIO.Add(new TECIO(x.Type)));
+                return new IOCollection(allIO);
             }
         }
         #endregion
@@ -91,10 +86,6 @@ namespace EstimatingLibrary
             saveList.AddRange(base.linkedObjects());
             saveList.Add(this.SubScope, "SubScope");
             return saveList;
-        }
-        public override ObservableCollection<TECConnectionType> GetConnectionTypes()
-        {
-            return ConnectionTypes;
         }
         #endregion
     }

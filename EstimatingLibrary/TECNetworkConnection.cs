@@ -10,7 +10,7 @@ namespace EstimatingLibrary
     {
         #region Properties
         //---Stored---
-        private ObservableCollection<INetworkConnectable> _children;
+        private ObservableCollection<INetworkConnectable> _children = new ObservableCollection<INetworkConnectable>();
         private TECProtocol _protocol;
 
         public ObservableCollection<INetworkConnectable> Children
@@ -35,29 +35,29 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "Protocol", this, value, old);
             }
         }
-
+        
+        public override List<TECConnectionType> ConnectionTypes
+        {
+            get { return new List<TECConnectionType>(Protocol.ConnectionTypes); }
+        }
         public override IOCollection IO
         {
             get
             {
-                IOCollection io = new IOCollection();
-                io.AddIO(IOType);
-                return io;
+                return new IOCollection(new List<TECIO> { Protocol.ToIO() });
             }
         }
-        
         #endregion
 
         #region Constructors
         public TECNetworkConnection(Guid guid, bool isTypical) : base(guid, isTypical)
         {
-            instantiateCollections();
+            Children.CollectionChanged += Children_CollectionChanged;
         }
         public TECNetworkConnection(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
         public TECNetworkConnection(TECNetworkConnection connectionSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, isTypical, guidDictionary)
         {
-            instantiateCollections();
-
+            Children.CollectionChanged += Children_CollectionChanged;
             foreach (INetworkConnectable item in connectionSource.Children)
             {
                 _children.Add(item.Copy(item, isTypical, guidDictionary));
@@ -93,7 +93,7 @@ namespace EstimatingLibrary
         #region Methods
         public bool CanAddINetworkConnectable(INetworkConnectable connectable)
         {
-            return (connectable.CanConnectToNetwork(this));
+            return connectable.AvailableProtocols.Contains(this.Protocol.ToIO());
         }
         public void AddINetworkConnectable(INetworkConnectable connectable)
         {
@@ -130,6 +130,7 @@ namespace EstimatingLibrary
                 objects.Add(netconnect as TECObject);
             }
             saveList.AddRange(objects, "Children");
+            saveList.Add(Protocol, "Protocol");
             return saveList;
         }
         protected override SaveableMap linkedObjects()
@@ -142,18 +143,10 @@ namespace EstimatingLibrary
                 objects.Add(netconnect as TECObject);
             }
             saveList.AddRange(objects, "Children");
+            saveList.Add(Protocol, "Protocol");
             return saveList;
         }
-        public override ObservableCollection<TECConnectionType> GetConnectionTypes()
-        {
-            return Protocol.ConnectionTypes;
-        }
-
-        private void instantiateCollections()
-        {
-            _children = new ObservableCollection<INetworkConnectable>();
-            Children.CollectionChanged += Children_CollectionChanged;
-        }
+        
         #endregion 
 
     }

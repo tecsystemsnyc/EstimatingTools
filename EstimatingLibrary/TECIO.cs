@@ -57,9 +57,14 @@ namespace EstimatingLibrary
             get { return _type; }
             set
             {
+                if(value is IOType.Protocol)
+                {
+                    throw new Exception("Type cannot be set to Protocol explicitly.");
+                }
                 var old = Type;
                 _type = value;
                 notifyCombinedChanged(Change.Edit, "Type", this, value, old);
+                Protocol = null;
             }
         }
 
@@ -72,6 +77,10 @@ namespace EstimatingLibrary
                 var old = Protocol;
                 _protocol = value;
                 notifyCombinedChanged(Change.Edit, "Protocol", this, value, old);
+                if(value != null)
+                {
+                    setTypeToProtocol();
+                }
             }
         }
         
@@ -85,6 +94,13 @@ namespace EstimatingLibrary
                 _quantity = value;
                 notifyCombinedChanged(Change.Edit, "Quantity", this, value, old);
             }
+        }
+
+        private void setTypeToProtocol()
+        {
+            var old = Type;
+            _type = IOType.Protocol;
+            notifyCombinedChanged(Change.Edit, "Type", this, Type, old);
         }
 
         #endregion
@@ -113,40 +129,46 @@ namespace EstimatingLibrary
         private Dictionary<IOType, TECIO> ioDictionary = new Dictionary<IOType, TECIO>();
         private Dictionary<TECProtocol, TECIO> protocolDictionary = new Dictionary<TECProtocol, TECIO>();
 
-        public IOCollection() { }
-        public IOCollection(IEnumerable<TECIO> io) : this()
+        public IOCollection Protocols
         {
-            AddIO(io);
-        }
-        public IOCollection(IOCollection collection) : this()
-        {
-            foreach(TECIO io in collection.ListIO())
+            get
             {
-                AddIO(io);
+                return new IOCollection(protocolDictionary.Values);
+            }
+        }
+        public IOCollection PointIO
+        {
+            get
+            {
+                return new IOCollection(ioDictionary.Values);
             }
         }
 
-        public List<TECIO> ListIO()
+        public IOCollection() { }
+        public IOCollection(IEnumerable<TECIO> io) : this()
+        {
+            Add(io);
+        }
+        public IOCollection(IOCollection collection) : this()
+        {
+            Add(collection.ListIO());
+        }
+
+        public List<TECIO> ToList()
         {
             List<TECIO> list = new List<TECIO>();
             list.AddRange(ioDictionary.Values);
             list.AddRange(protocolDictionary.Values);
             return list;
         }
-        public bool Contains(IOType type)
-        {
-            if (ioDictionary.ContainsKey(type))
-            {
-                return true;
-            }
-            else
-            {
-                return ioDictionary.ContainsKey(TECIO.GetUniversalType(type));
-            }
-        }
+        
         public bool Contains(TECIO io)
         {
-            if(io.Protocol != null)
+            if (TECIO.UniversalIO.Contains(io.Type))
+            {
+                return ioDictionary.ContainsKey(io.Type) ? ioDictionary[io.Type].Quantity >= io.Quantity : false;
+            }
+            else if (io.Protocol != null)
             {
                 return protocolDictionary.ContainsKey(io.Protocol) ? protocolDictionary[io.Protocol].Quantity >= io.Quantity : false;
             }
@@ -159,7 +181,7 @@ namespace EstimatingLibrary
             }
             else
             {
-                return false;
+                throw new Exception("IO condition not recognized.");
             }
         }
         public bool Contains(IEnumerable<TECIO> io)
@@ -172,7 +194,7 @@ namespace EstimatingLibrary
             {
                 if (thisCollection.Contains(ioToCheck))
                 {
-                    thisCollection.RemoveIO(ioToCheck);
+                    thisCollection.Remove(ioToCheck);
                 }
                 else
                 {
@@ -185,53 +207,85 @@ namespace EstimatingLibrary
         {
             return (this.Contains(io.ListIO()));
         }
-        public void AddIO(IOType type)
+        public void Add(TECIO io)
         {
-            if(type == IOType.Protocol)
+            if(io.Type == IOType.Protocol)
             {
-                throw new Exception("Cannot add .Protocol as IOType");
-            }
-            if (ioDictionary.ContainsKey(type))
-            {
-                ioDictionary[type].Quantity++;
+                if (protocolDictionary.ContainsKey(io.Protocol))
+                {
+                    protocolDictionary[io.Protocol].Quantity += io.Quantity;
+                }
+                else
+                {
+                    protocolDictionary.Add(io.Protocol, new TECIO(io));
+                }
             }
             else
             {
-                TECIO io = new TECIO(type);
-                ioDictionary.Add(type, io);
+                if (ioDictionary.ContainsKey(io.Type))
+                {
+                    ioDictionary[io.Type].Quantity += io.Quantity;
+                }
+                else
+                {
+                    ioDictionary.Add(io.Type, new TECIO(io));
+                }
             }
+            
         }
-        public void AddIO(TECProtocol protocol)
-        {
-            if (protocolDictionary.ContainsKey(protocol))
-            {
-                protocolDictionary[protocol].Quantity++;
-            }
-            else
-            {
-                TECIO io = new TECIO(protocol);
-                protocolDictionary.Add(protocol, io);
-            }
-        }
-        public void AddIO(TECIO io)
-        {
-            if (ioDictionary.ContainsKey(io.Type))
-            {
-                ioDictionary[io.Type].Quantity += io.Quantity;
-            }
-            else
-            {
-                ioDictionary.Add(io.Type, new TECIO(io));
-            }
-        }
-        public void AddIO(IEnumerable<TECIO> ioList)
+        public void Add(IEnumerable<TECIO> ioList)
         {
             foreach(TECIO io in ioList)
             {
-                AddIO(io);
+                Add(io);
             }
         }
-        public void RemoveIO(IOType type)
+        public void Remove(TECIO io)
+        {
+            if(io.Type == IOType.Protocol)
+            {
+                for(int x = 0; x < io.Quantity; x++)
+                {
+                    remove(io.Protocol);
+                }
+            }
+            else
+            {
+                for(int x = 0; x < io.Quantity; x++)
+                {
+                    remove(io.Type);
+                }
+            }
+        }
+        public void Remove(IEnumerable<TECIO> ioList)
+        {
+            if (this.Contains(ioList))
+            {
+                foreach (TECIO io in ioList)
+                {
+                    Remove(io);
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("IOCollection does not contain enough IO.");
+            }
+        }
+
+        public static IOCollection operator +(IOCollection left, IOCollection right)
+        {
+            IOCollection newCollection = new IOCollection(left);
+            newCollection.Add(right.ListIO());
+            return newCollection;
+        }
+        public static IOCollection operator -(IOCollection left, IOCollection right)
+        {
+            IOCollection newCollection = new IOCollection(left);
+            newCollection.Remove(right.ListIO());
+            return newCollection;
+        }
+        
+        private void remove(IOType type)
         {
             if (type == IOType.Protocol)
             {
@@ -271,7 +325,7 @@ namespace EstimatingLibrary
                 }
             }
         }
-        public void RemoveIO(TECProtocol protocol)
+        private void remove(TECProtocol protocol)
         {
             if (protocolDictionary.ContainsKey(protocol))
             {
@@ -286,63 +340,6 @@ namespace EstimatingLibrary
             {
                 throw new InvalidOperationException("IOCollection does not contain Protocol.");
             }
-        }
-        public void RemoveIO(TECIO io)
-        {
-            if(io.Type == IOType.Protocol)
-            {
-                for(int x = 0; x < io.Quantity; x++)
-                {
-                    RemoveIO(io.Protocol);
-                }
-            }
-            else
-            {
-                for(int x = 0; x < io.Quantity; x++)
-                {
-                    RemoveIO(io.Type);
-                }
-            }
-        }
-        public void RemoveIO(IEnumerable<TECIO> ioList)
-        {
-            if (this.Contains(ioList))
-            {
-                foreach (TECIO io in ioList)
-                {
-                    RemoveIO(io);
-                }
-            }
-            else
-            {
-                throw new InvalidOperationException("IOCollection does not contain enough IO.");
-            }
-        }
-
-        public static IOCollection operator +(IOCollection left, IOCollection right)
-        {
-            IOCollection newCollection = new IOCollection(left);
-            newCollection.AddIO(right.ListIO());
-            return newCollection;
-        }
-        public static IOCollection operator -(IOCollection left, IOCollection right)
-        {
-            IOCollection newCollection = new IOCollection(left);
-            newCollection.RemoveIO(right.ListIO());
-            return newCollection;
-        }
-
-        public static bool IOTypesMatch(IOCollection collection1, IOCollection collection2)
-        {
-            foreach(KeyValuePair<IOType, TECIO> pair in collection1.ioDictionary)
-            {
-                if (!collection2.Contains(pair.Key)) return false;
-            }
-            foreach(KeyValuePair<IOType, TECIO> pair in collection2.ioDictionary)
-            {
-                if (!collection1.Contains(pair.Key)) return false;
-            }
-            return true;
         }
     }
 }
