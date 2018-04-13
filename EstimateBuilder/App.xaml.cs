@@ -1,4 +1,5 @@
 ﻿using EstimateBuilder.MVVM;
+using EstimatingUtilitiesLibrary;
 using GalaSoft.MvvmLight.Threading;
 using NLog;
 using System;
@@ -18,9 +19,9 @@ namespace EstimateBuilder
 
         public App() : base()
         {
-//#if !DEBUG
+#if !DEBUG
             this.Dispatcher.UnhandledException += logUnhandledException;
-//#endif
+#endif
             DispatcherHelper.Initialize();
         }
 
@@ -64,13 +65,10 @@ namespace EstimateBuilder
 
             string reportPrompt = "A crash has occured. Please describe to the best of your ability the actions leading up to the crash.";
 
-            string logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "EstimateBuilder\\logs");
-            DirectoryInfo logDirectory = new DirectoryInfo(logDirectoryPath);
-            FileInfo[] logFiles = logDirectory.GetFiles();
-            FileInfo mostRecent = logFiles.OrderByDescending(f => f.LastWriteTime).First();
-            string logFilePath = mostRecent.FullName;
+            string logDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "EstimateBuilder\\logs");
+            string logPath = UtilitiesMethods.GetMostRecentFilePathFromDirectoryPath(logDirectory);
 
-            BugReportWindow reportWindow = new BugReportWindow("Crash", reportPrompt, logFilePath);
+            BugReportWindow reportWindow = new BugReportWindow("Estimate Builder Crash", reportPrompt, logPath);
             reportWindow.ShowDialog();
 
             //MessageBox.Show("Fatal error occured, view logs for more information.",
