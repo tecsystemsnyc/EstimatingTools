@@ -42,7 +42,7 @@ namespace EstimatingUtilitiesLibrary
 
             TextPart bodyText = new TextPart("plain")
             {
-                Text = string.Format("{0} Report from {1}. Email: {2} \n Description:\n {3}", reportType, userName, userEmail, userReport)
+                Text = string.Format("{0} Report from {1}. \n Email: {2} \n\n Description:\n {3}", reportType, userName, userEmail, userReport)
             };
             body.Add(bodyText);
 

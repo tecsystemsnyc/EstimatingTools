@@ -67,6 +67,7 @@
         <!--Submit Button-->
         <Button Content="Submit" 
                 Command="{Binding SubmitReportCommand}"
+                Click="SubmitClicked"
                 Grid.Row="3" Height="50" Width="200" Margin="5"/>
     </Grid>
 </Window>

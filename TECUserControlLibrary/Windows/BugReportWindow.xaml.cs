@@ -33,5 +33,10 @@ namespace TECUserControlLibrary.Windows
 
             VM = new BugReportVM(reportType, prompt, logPath);
         }
+
+        private void SubmitClicked(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }
