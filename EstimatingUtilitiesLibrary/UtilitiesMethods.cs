@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Media.Imaging;
 
@@ -281,6 +282,18 @@ namespace EstimatingUtilitiesLibrary
             return false;
         }
 
+
+        public static string GetMostRecentFilePathFromDirectoryPath(string directoryPath)
+        {
+            DirectoryInfo directory = new DirectoryInfo(directoryPath);
+            FileInfo[] files = directory.GetFiles();
+            if (files.Length < 1)
+            {
+                return "";
+            }
+            FileInfo mostRecent = files.OrderByDescending(f => f.LastWriteTime).First();
+            return mostRecent.FullName;
+        }
     }
 
     internal static class HelperExtensions

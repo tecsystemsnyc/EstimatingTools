@@ -32,8 +32,8 @@
     <PublisherName>TEC Systems</PublisherName>
     <SuiteName>Estimating Tools</SuiteName>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>86</ApplicationRevision>
-    <ApplicationVersion>1.7.15.%2a</ApplicationVersion>
+    <ApplicationRevision>87</ApplicationRevision>
+    <ApplicationVersion>1.7.16.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -86,7 +86,7 @@
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>C53568748C738E8C52DB1C8D3B2D878CF90D2D91</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>AC75D0B67086EC2FA49661AFA1F0E598BC0028AB</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>
