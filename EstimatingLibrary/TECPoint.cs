@@ -16,7 +16,7 @@ namespace EstimatingLibrary
             get { return _type; }
             set
             {
-                if (TECIO.PointIO.Contains(value) || TECIO.NetworkIO.Contains(value))
+                if (TECIO.PointIO.Contains(value))
                 {
                     var old = Type;
                     _type = value;

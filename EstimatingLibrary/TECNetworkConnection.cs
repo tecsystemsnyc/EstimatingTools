@@ -11,8 +11,7 @@ namespace EstimatingLibrary
         #region Properties
         //---Stored---
         private ObservableCollection<INetworkConnectable> _children;
-        private ObservableCollection<TECConnectionType> _connectionTypes;
-        private IOType _ioType;
+        private TECProtocol _protocol;
 
         public ObservableCollection<INetworkConnectable> Children
         {
@@ -26,33 +25,14 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "Children", this, value, old);
             }
         }
-        public ObservableCollection<TECConnectionType> ConnectionTypes
+        public TECProtocol Protocol
         {
-            get { return _connectionTypes; }
+            get { return _protocol; }
             set
             {
-                if (ConnectionTypes != null)
-                {
-                    ConnectionTypes.CollectionChanged -= (sender, args) =>
-                    ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
-                }
-                var old = ConnectionTypes;
-                _connectionTypes = value; if (ConnectionTypes != null)
-                {
-                    ConnectionTypes.CollectionChanged += (sender, args) =>
-                    ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
-                }
-                notifyCombinedChanged(Change.Edit, "ConnectionTypes", this, value, old);
-            }
-        }
-        public IOType IOType
-        {
-            get { return _ioType; }
-            set
-            {
-                var old = IOType;
-                _ioType = value;
-                notifyCombinedChanged(Change.Edit, "IOType", this, value, old);
+                var old = Protocol;
+                _protocol = value;
+                notifyCombinedChanged(Change.Edit, "Protocol", this, value, old);
             }
         }
 
@@ -82,12 +62,7 @@ namespace EstimatingLibrary
             {
                 _children.Add(item.Copy(item, isTypical, guidDictionary));
             }
-            foreach(TECConnectionType type in connectionSource.ConnectionTypes)
-            {
-                _connectionTypes.Add(type);
-            }
-
-            _ioType = connectionSource.IOType;
+            _protocol = connectionSource.Protocol;
         }
         #endregion
 
@@ -111,31 +86,6 @@ namespace EstimatingLibrary
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
                 notifyCombinedChanged(Change.Edit, "Children", this, sender, sender);
-            }
-        }
-        private void ConnectionTypes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
-        {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach (TECElectricalMaterial type in e.NewItems)
-                {
-                    CostBatch connectionTypeCost = type.GetCosts(this.Length);
-                    notifyCombinedChanged(Change.Add, propertyName, this, type);
-                    notifyCostChanged(connectionTypeCost);
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (TECElectricalMaterial type in e.OldItems)
-                {
-                    CostBatch connectionTypeCost = type.GetCosts(this.Length);
-                    notifyCombinedChanged(Change.Remove, propertyName, this, type);
-                    notifyCostChanged(-connectionTypeCost);
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
-            {
-                notifyCombinedChanged(Change.Edit, propertyName, this, sender, sender);
             }
         }
         #endregion
@@ -196,16 +146,13 @@ namespace EstimatingLibrary
         }
         public override ObservableCollection<TECConnectionType> GetConnectionTypes()
         {
-            return ConnectionTypes;
+            return Protocol.ConnectionTypes;
         }
 
         private void instantiateCollections()
         {
             _children = new ObservableCollection<INetworkConnectable>();
-            _connectionTypes = new ObservableCollection<TECConnectionType>();
             Children.CollectionChanged += Children_CollectionChanged;
-            ConnectionTypes.CollectionChanged += (sender, args) =>
-                    ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
         }
         #endregion 
 
