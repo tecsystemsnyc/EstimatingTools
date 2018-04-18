@@ -251,6 +251,7 @@
     <Compile Include="ViewModels\ChangeControllerTypeVM.cs" />
     <Compile Include="ViewModels\ConnectableFilterVM.cs" />
     <Compile Include="ViewModels\ConnectOnAddVM.cs" />
+    <Compile Include="ViewModels\BugReportVM.cs" />
     <Compile Include="ViewModels\DeleteEndDeviceVM.cs" />
     <Compile Include="ViewModels\EquipmentHierarchyVM.cs" />
     <Compile Include="ViewModels\GlobalConnectionsVM.cs" />
@@ -567,6 +568,9 @@
     </Compile>
     <Compile Include="Views\WorkBoxView.xaml.cs">
       <DependentUpon>WorkBoxView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\BugReportWindow.xaml.cs">
+      <DependentUpon>BugReportWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Debug\EBDebugWindow.xaml">
       <SubType>Designer</SubType>
@@ -1114,6 +1118,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\WorkBoxView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\BugReportWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

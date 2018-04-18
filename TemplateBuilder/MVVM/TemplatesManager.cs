@@ -6,9 +6,11 @@ using EstimatingUtilitiesLibrary.Exports;
 using NLog;
 using System;
 using System.Deployment.Application;
+using System.IO;
 using TECUserControlLibrary.BaseVMs;
 using TECUserControlLibrary.Models;
 using TECUserControlLibrary.Utilities;
+using TECUserControlLibrary.Windows;
 
 namespace TemplateBuilder.MVVM
 {
@@ -124,6 +126,17 @@ namespace TemplateBuilder.MVVM
         {
             TBSettingsWindow settingsWindow = new TBSettingsWindow();
             settingsWindow.Show();
+        }
+        //Report Bug
+        protected override void reportBugExecute()
+        {
+            string reportPrompt = "Please describe the bug and how to reproduce it.";
+
+            string logDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TemplateBuilder\\logs");
+            string logPath = UtilitiesMethods.GetMostRecentFilePathFromDirectoryPath(logDirectory);
+
+            BugReportWindow reportWindow = new BugReportWindow("Template Builder Bug", reportPrompt, logPath);
+            reportWindow.ShowDialog();
         }
         #endregion
 
