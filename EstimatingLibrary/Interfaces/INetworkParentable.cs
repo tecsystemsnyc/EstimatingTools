@@ -10,8 +10,8 @@ namespace EstimatingLibrary.Interfaces
         
         IEnumerable<TECNetworkConnection> ChildNetworkConnections { get; }
 
-        bool CanAddNetworkConnection(IOType ioType);
-        TECNetworkConnection AddNetworkConnection(bool isTypical, IEnumerable<TECConnectionType> connectionTypes, IOType ioType);
+        bool CanAddNetworkConnection(TECProtocol protocol);
+        TECNetworkConnection AddNetworkConnection(TECProtocol protocol);
         void RemoveNetworkConnection(TECNetworkConnection connection);
         
     }

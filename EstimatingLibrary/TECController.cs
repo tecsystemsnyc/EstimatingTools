@@ -82,10 +82,6 @@ namespace EstimatingLibrary
         }
 
         //---Derived---
-        public IOCollection AvailableProtocols
-        {
-            get { return AvailableIO.Protocols; }
-        }
         public IEnumerable<TECNetworkConnection> ChildNetworkConnections
         {
             get
@@ -115,10 +111,11 @@ namespace EstimatingLibrary
         {
             get { return IO - UsedIO; }
         }
-
-        public IOCollection AvailableProtocols => throw new NotImplementedException();
-
-
+        public IOCollection AvailableProtocols
+        {
+            get { return AvailableIO.Protocols; }
+        }
+        
         #endregion
 
         #region Constructors
@@ -163,12 +160,11 @@ namespace EstimatingLibrary
         #endregion
 
         #region Connection Methods
-        public bool CanAddNetworkConnection(IOType ioType)
+        public bool CanAddNetworkConnection(TECProtocol protocol)
         {
-            return (AvailableNetworkIO.Contains(ioType));
+            return (AvailableIO.Contains(new TECIO(protocol)));
         }
-        public TECNetworkConnection AddNetworkConnection(bool isTypical, 
-            IEnumerable<TECConnectionType> connectionTypes, IOType ioType)
+        public TECNetworkConnection AddNetworkConnection(TECProtocol protocol)
         {
             if (CanAddNetworkConnection(ioType))
             {
@@ -208,10 +204,8 @@ namespace EstimatingLibrary
         
         private bool canTakeIO(IOCollection collection)
         {
-            IOCollection availableIO = getAvailableIO();
-            IOCollection potentialIO = getPotentialIO();
-            bool hasIO = availableIO.Contains(collection);
-            bool canHasIO = potentialIO.Contains(collection);
+            bool hasIO = AvailableIO.Contains(collection);
+            bool canHasIO = getPotentialIO().Contains(collection);
             return hasIO || canHasIO;
         }
         public bool CanConnectSubScope(TECSubScope subScope)
@@ -645,14 +639,14 @@ namespace EstimatingLibrary
             {
                 foreach(TECIO io in module.IO)
                 {
-                    potentialIO.AddIO(io);
+                    potentialIO.Add(io);
                 }
             }
             foreach(TECIOModule module in IOModules)
             {
                 foreach(TECIO io in module.IO)
                 {
-                    potentialIO.RemoveIO(io);
+                    potentialIO.Remove(io);
                 }
             }
             return potentialIO;
