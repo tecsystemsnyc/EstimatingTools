@@ -210,40 +210,12 @@ namespace EstimatingLibrary
                 
             }
         }
-
-        public bool CanAddNetworkConnection(TECProtocol protocol)
-        {
-            return (AvailableProtocols.Contains(new TECIO(protocol)));
-        }
-        public TECNetworkConnection AddNetworkConnection(TECProtocol protocol)
-        {
-            TECNetworkConnection netConnect = new TECNetworkConnection(this, protocol, this.IsTypical);
-            addChildConnection(netConnect);
-            return netConnect;
-        }
-        public void RemoveNetworkConnection(TECNetworkConnection connection)
-        {
-            if (this.ChildrenConnections.Contains(connection))
-            {
-                List<IConnectable> children = new List<IConnectable>(connection.Children);
-                foreach (IConnectable child in children)
-                {
-                    connection.RemoveChild(child);
-                }
-                removeChildConnection(connection);
-            }
-            else
-            {
-                throw new InvalidOperationException("Network connection doesn't exist in controller.");
-            }
-        }
-
         /// <summary>
         /// Removes the connectable from controller and parent connection.
         /// </summary>
         /// <param name="connectable">Child</param>
         /// <returns>Parent network connnection if applicable</returns>
-        public TECNetworkConnection RemoveConnectable(IConnectable connectable)
+        public TECNetworkConnection Disconnect(IConnectable connectable)
         {
             TECConnection connectionToRemove = null;
             foreach (TECConnection connection in ChildrenConnections)
@@ -273,10 +245,38 @@ namespace EstimatingLibrary
             }
             return null;
         }
+
+        public bool CanAddNetworkConnection(TECProtocol protocol)
+        {
+            return (AvailableProtocols.Contains(new TECIO(protocol)));
+        }
+        public TECNetworkConnection AddNetworkConnection(TECProtocol protocol)
+        {
+            TECNetworkConnection netConnect = new TECNetworkConnection(this, protocol, this.IsTypical);
+            addChildConnection(netConnect);
+            return netConnect;
+        }
+        public void RemoveNetworkConnection(TECNetworkConnection connection)
+        {
+            if (this.ChildrenConnections.Contains(connection))
+            {
+                List<IConnectable> children = new List<IConnectable>(connection.Children);
+                foreach (IConnectable child in children)
+                {
+                    connection.RemoveChild(child);
+                }
+                removeChildConnection(connection);
+            }
+            else
+            {
+                throw new InvalidOperationException("Network connection doesn't exist in controller.");
+            }
+        }
+
         /// <summary>
         /// Disconnects all connections in this controller including parent connection.
         /// </summary>
-        public void Disconnect()
+        public void DisconnectAll()
         {
             //Remove network connections
             RemoveAllChildNetworkConnections();
@@ -289,7 +289,7 @@ namespace EstimatingLibrary
             }
             foreach (IConnectable connectable in connectables)
             {
-                RemoveConnectable(connectable);
+                Disconnect(connectable);
             }
 
             //Remove parent connection
