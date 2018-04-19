@@ -528,7 +528,7 @@ namespace EstimatingUtilitiesLibrary.Exports
 
             foreach(TECConnection connection in connections)
             {
-                foreach(TECElectricalMaterial type in connection.GetConnectionTypes())
+                foreach(TECElectricalMaterial type in connection.ConnectionTypes)
                 {
                     if (dictionary.ContainsKey(type))
                     {
@@ -687,7 +687,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             List<TECCost> costs = new List<TECCost>();
             foreach(TECConnection connection in connections)
             {
-                foreach(TECElectricalMaterial mat in connection.GetConnectionTypes())
+                foreach(TECElectricalMaterial mat in connection.ConnectionTypes)
                 {
                     costs.AddRange(mat.AssociatedCosts);
                 }
@@ -720,7 +720,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             List<Tuple<TECCost, double>> costs = new List<Tuple<TECCost, double>>();
             foreach (TECConnection connection in connections)
             {
-                foreach(TECElectricalMaterial mat in connection.GetConnectionTypes())
+                foreach(TECElectricalMaterial mat in connection.ConnectionTypes)
                 {
                     foreach(TECCost rated in mat.RatedCosts)
                     {
