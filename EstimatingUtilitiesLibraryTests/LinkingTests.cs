@@ -552,7 +552,7 @@ namespace Tests
                     var subScopeConnection = connection as TECHardwiredConnection;
                     if(subScopeConnection != null)
                     {
-                        Assert.IsTrue(TestHelper.IsInBid(subScopeConnection.SubScope, bid));
+                        Assert.IsTrue(TestHelper.IsInBid(subScopeConnection.Child as TECSubScope, bid));
                     }
                 }
             }
@@ -565,7 +565,7 @@ namespace Tests
                         var subScopeConnection = connection as TECHardwiredConnection;
                         if (subScopeConnection != null)
                         {
-                            Assert.IsTrue(TestHelper.IsInBid(subScopeConnection.SubScope, bid));
+                            Assert.IsTrue(TestHelper.IsInBid(subScopeConnection.Child as TECSubScope, bid));
                         }
                     }
                 }
@@ -578,7 +578,7 @@ namespace Tests
                             var subScopeConnection = connection as TECHardwiredConnection;
                             if (subScopeConnection != null)
                             {
-                                Assert.IsTrue(TestHelper.IsInBid(subScopeConnection.SubScope, bid));
+                                Assert.IsTrue(TestHelper.IsInBid(subScopeConnection.Child as TECSubScope, bid));
                             }
                         }
                     }
@@ -622,7 +622,7 @@ namespace Tests
                         var subScopeConnection = connection as TECHardwiredConnection;
                         if (subScopeConnection != null)
                         {
-                            Assert.IsTrue(typical.GetAllSubScope().Contains(subScopeConnection.SubScope));
+                            Assert.IsTrue(typical.GetAllSubScope().Contains(subScopeConnection.Child as TECSubScope));
                         }
                     }
                 }

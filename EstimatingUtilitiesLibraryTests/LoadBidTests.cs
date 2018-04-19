@@ -901,7 +901,7 @@ namespace Tests
 
             Assert.AreEqual(expectedParentControllerGuid, actualSSConnect.ParentController.Guid, "Parent controller didn't load properly in subscope connection.");
             Assert.AreEqual(expectedConduitTypeGuid, actualSSConnect.ConduitType.Guid, "Conduit type didn't load properly in subscope connection.");
-            Assert.AreEqual(expectedSubScopeGuid, actualSSConnect.SubScope.Guid, "Subscope didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedSubScopeGuid, actualSSConnect.Child.Guid, "Subscope didn't load properly in subscope connection.");
         }
 
         [TestMethod]
@@ -946,7 +946,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedLength, actualConnection.Length, "Length didn't load properly in subscope connection.");
             Assert.AreEqual(expectedConduitLength, actualConnection.ConduitLength, "ConduitLength didn't load properly in subscope connection.");
-            Assert.AreEqual(expectedSubScopeGuid, actualConnection.SubScope.Guid, "Subscope didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedSubScopeGuid, actualConnection.Child.Guid, "Subscope didn't load properly in subscope connection.");
             Assert.AreEqual(expectedControllerGuid, actualConnection.ParentController.Guid, "Parent controller didn't load properly in subscope connection.");
             Assert.AreEqual(expectedConduitTypeGuid, actualConnection.ConduitType.Guid, "Conduit type didn't load properly in subscope connection.");
             Assert.IsFalse(actualConnection.IsTypical, "Loaded as typical.");
@@ -1606,7 +1606,7 @@ namespace Tests
         {
             //Arrange
             Guid expectedGuid = new Guid("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
-            IOType expectedType = IOType.BACnetIP;
+            IOType expectedType = IOType.AI;
             int expectedQty = 2;
 
             Guid expectedModuleGuid = new Guid("b346378d-dc72-4dda-b275-bbe03022dd12");
@@ -1634,7 +1634,7 @@ namespace Tests
         {
             //Arrange
             Guid expectedGuid = new Guid("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
-            IOType expectedType = IOType.BACnetIP;
+            IOType expectedType = IOType.AI;
             int expectedLabor = 2;
 
             Guid expectedModuleGuid = new Guid("b346378d-dc72-4dda-b275-bbe03022dd12");
@@ -1665,7 +1665,7 @@ namespace Tests
         {
             //Arrange
             Guid expectedGuid = new Guid("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
-            IOType expectedType = IOType.BACnetIP;
+            IOType expectedType = IOType.AI;
             int expectedLabor = 2;
 
             Guid expectedModuleGuid = new Guid("b346378d-dc72-4dda-b275-bbe03022dd12");
