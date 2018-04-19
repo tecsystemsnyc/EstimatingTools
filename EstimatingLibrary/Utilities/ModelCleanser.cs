@@ -43,7 +43,7 @@ namespace EstimatingLibrary.Utilities
                             }
                             if (!moduleFound)
                             {
-                                controller.Disconnect();
+                                controller.DisconnectAll();
                                 MessageBox.Show(string.Format("The controller type of the controller '{0}' is incompatible with the connected points. Please review the controller's connections.",
                                                                     controller.Name));
 

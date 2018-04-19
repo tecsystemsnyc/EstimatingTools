@@ -193,7 +193,7 @@ namespace EstimatingLibrary
         }
         public void RemoveController(TECController controller)
         {
-            controller.Disconnect();
+            controller.DisconnectAll();
             _controllers.Remove(controller);
             foreach(TECPanel panel in this.Panels)
             {
@@ -373,7 +373,7 @@ namespace EstimatingLibrary
             TECController controller = removed.Connection?.ParentController;
             if(controller != null)
             {
-                controller.RemoveConnectable(removed);
+                controller.Disconnect(removed);
             }
         }
         #endregion

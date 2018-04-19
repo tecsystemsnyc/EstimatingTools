@@ -8,16 +8,18 @@ namespace EstimatingLibrary
 {
     public class TECCatalogs : TECObject, IRelatable
     {
-        private ObservableCollection<TECConnectionType> _connectionTypes;
-        private ObservableCollection<TECElectricalMaterial> _conduitTypes;
-        private ObservableCollection<TECAssociatedCost> _associatedCosts;
-        private ObservableCollection<TECPanelType> _panelTypes;
-        private ObservableCollection<TECControllerType> _controllerTypes;
-        private ObservableCollection<TECIOModule> _ioModules;
-        private ObservableCollection<TECDevice> _devices;
-        private ObservableCollection<TECValve> _valves;
-        private ObservableCollection<TECManufacturer> _manufacturers;
-        private ObservableCollection<TECTag> _tags;
+        private ObservableCollection<TECConnectionType> _connectionTypes = new ObservableCollection<TECConnectionType>();
+        private ObservableCollection<TECElectricalMaterial> _conduitTypes = new ObservableCollection<TECElectricalMaterial>();
+        private ObservableCollection<TECAssociatedCost> _associatedCosts = new ObservableCollection<TECAssociatedCost>();
+        private ObservableCollection<TECPanelType> _panelTypes = new ObservableCollection<TECPanelType>();
+        private ObservableCollection<TECControllerType> _controllerTypes = new ObservableCollection<TECControllerType>();
+        private ObservableCollection<TECIOModule> _ioModules = new ObservableCollection<TECIOModule>();
+        private ObservableCollection<TECDevice> _devices = new ObservableCollection<TECDevice>();
+        private ObservableCollection<TECValve> _valves = new ObservableCollection<TECValve>();
+        private ObservableCollection<TECManufacturer> _manufacturers = new ObservableCollection<TECManufacturer>();
+        private ObservableCollection<TECTag> _tags = new ObservableCollection<TECTag>();
+        private ObservableCollection<TECProtocol> _protocols = new ObservableCollection<TECProtocol>();
+        private ObservableCollection<TECProtocolAdapter> _protocolAdapters = new ObservableCollection<TECProtocolAdapter>();
 
         public ObservableCollection<TECIOModule> IOModules
         {
@@ -25,7 +27,6 @@ namespace EstimatingLibrary
             set
             {
                 var old = IOModules;
-                IOModules.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "IOModules");
                 _ioModules = value;
                 IOModules.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "IOModules");
                 notifyCombinedChanged(Change.Edit, "IOModules", this, value, old);
@@ -37,7 +38,6 @@ namespace EstimatingLibrary
             set
             {
                 var old = Devices;
-                Devices.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "Devices");
                 _devices = value;
                 Devices.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Devices");
                 notifyCombinedChanged(Change.Edit, "Devices", this, value, old);
@@ -49,7 +49,6 @@ namespace EstimatingLibrary
             set
             {
                 var old = Valves;
-                Valves.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "Valves");
                 _valves = value;
                 Valves.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Valves");
                 notifyCombinedChanged(Change.Edit, "Valves", this, value, old);
@@ -61,7 +60,6 @@ namespace EstimatingLibrary
             set
             {
                 var old = Manufacturers;
-                Manufacturers.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "Manufacturers");
                 _manufacturers = value;
                 Manufacturers.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Manufacturers");
                 notifyCombinedChanged(Change.Edit, "Manufacturers", this, value, old);
@@ -73,7 +71,6 @@ namespace EstimatingLibrary
             set
             {
                 var old = PanelTypes;
-                PanelTypes.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "PanelTypes");
                 _panelTypes = value;
                 PanelTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "PanelTypes");
                 notifyCombinedChanged(Change.Edit, "PanelTypes", this, value, old);
@@ -86,7 +83,6 @@ namespace EstimatingLibrary
             set
             {
                 var old = ControllerTypes;
-                PanelTypes.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "ControllerTypes");
                 _controllerTypes = value;
                 ControllerTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ControllerTypes");
                 notifyCombinedChanged(Change.Edit, "ControllerTypes", this, value, old);
@@ -98,7 +94,6 @@ namespace EstimatingLibrary
             set
             {
                 var old = ConnectionTypes;
-                ConnectionTypes.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "ConnectionTypes");
                 _connectionTypes = value;
                 ConnectionTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ConnectionTypes");
                 notifyCombinedChanged(Change.Edit, "ConnectionTypes", this, value, old);
@@ -110,7 +105,6 @@ namespace EstimatingLibrary
             set
             {
                 var old = ConduitTypes;
-                ConduitTypes.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "ConduitTypes");
                 _conduitTypes = value;
                 ConduitTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ConduitTypes");
                 notifyCombinedChanged(Change.Edit, "ConduitTypes", this, value, old);
@@ -122,8 +116,6 @@ namespace EstimatingLibrary
             set
             {
                 var old = AssociatedCosts;
-                AssociatedCosts.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "AssociatedCosts");
-                AssociatedCosts.CollectionChanged -= ScopeChildren_CollectionChanged;
                 _associatedCosts = value;
                 AssociatedCosts.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "AssociatedCosts");
                 AssociatedCosts.CollectionChanged += ScopeChildren_CollectionChanged;
@@ -136,12 +128,32 @@ namespace EstimatingLibrary
             set
             {
                 var old = Tags;
-                Tags.CollectionChanged -= (sender, e) => CollectionChanged(sender, e, "Tags");
-                Tags.CollectionChanged -= ScopeChildren_CollectionChanged;
                 _tags = value;
                 Tags.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Tags");
                 Tags.CollectionChanged += ScopeChildren_CollectionChanged;
                 notifyCombinedChanged(Change.Edit, "Tags", this, value, old);
+            }
+        }
+        public ObservableCollection<TECProtocol> Protocols
+        {
+            get { return _protocols; }
+            set
+            {
+                var old = Protocols;
+                _protocols = value;
+                Protocols.CollectionChanged += (sender, e) => CollectionChanged(sender, e,  "Protocols");
+                notifyCombinedChanged(Change.Edit, "Protocols", this, value, old);
+            }
+        }
+        public ObservableCollection<TECProtocolAdapter> ProtocolAdapters
+        {
+            get { return _protocolAdapters; }
+            set
+            {
+                var old = ProtocolAdapters;
+                _protocolAdapters = value;
+                ProtocolAdapters.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ProtocolAdapters");
+                notifyCombinedChanged(Change.Edit, "ProtocolAdapters", this, value, old);
             }
         }
 
@@ -158,24 +170,9 @@ namespace EstimatingLibrary
 
         public TECCatalogs() : base(Guid.NewGuid())
         {
-            instantiateCOllections();
-        }
-
-        private void instantiateCOllections()
-        {
-            _conduitTypes = new ObservableCollection<TECElectricalMaterial>();
-            _connectionTypes = new ObservableCollection<TECConnectionType>();
-            _associatedCosts = new ObservableCollection<TECAssociatedCost>();
-            _panelTypes = new ObservableCollection<TECPanelType>();
-            _controllerTypes = new ObservableCollection<TECControllerType>();
-            _ioModules = new ObservableCollection<TECIOModule>();
-            _devices = new ObservableCollection<TECDevice>();
-            _valves = new ObservableCollection<TECValve>();
-            _manufacturers = new ObservableCollection<TECManufacturer>();
-            _tags = new ObservableCollection<TECTag>();
-
             registerInitialCollectionChanges();
         }
+        
         private void registerInitialCollectionChanges()
         {
             ConduitTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ConduitTypes");
@@ -188,6 +185,8 @@ namespace EstimatingLibrary
             Valves.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Valves");
             Manufacturers.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Manufacturers");
             Tags.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Tags");
+            Protocols.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Protocols");
+            ProtocolAdapters.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ProtocolAdapters");
 
             AssociatedCosts.CollectionChanged += ScopeChildren_CollectionChanged;
             Tags.CollectionChanged += ScopeChildren_CollectionChanged;
@@ -238,6 +237,8 @@ namespace EstimatingLibrary
             saveList.AddRange(this.ConduitTypes, "ConduitTypes");
             saveList.AddRange(this.AssociatedCosts, "AssociatedCosts");
             saveList.AddRange(this.Tags, "Tags");
+            saveList.AddRange(this.Protocols, "Protocols");
+            saveList.AddRange(this.ProtocolAdapters, "ProtocolAdapters");
             return saveList;
         }
         private SaveableMap linkedObjects()
@@ -258,7 +259,8 @@ namespace EstimatingLibrary
             unionizeScope(this.Valves, catalogToAdd.Valves);
             unionizeScope(this.Manufacturers, catalogToAdd.Manufacturers);
             unionizeScope(this.Tags, catalogToAdd.Tags);
-            
+            unionizeScope(this.Protocols, catalogToAdd.Protocols);
+            unionizeScope(this.ProtocolAdapters, catalogToAdd.ProtocolAdapters);
         }
         private static void unionizeScope<T>(IList<T> bidItems, IList<T> templateItems) where T : TECObject
         {
@@ -296,6 +298,8 @@ namespace EstimatingLibrary
             fillScope(this.Valves, catalogToAdd.Valves);
             fillScope(this.Manufacturers, catalogToAdd.Manufacturers);
             fillScope(this.Tags, catalogToAdd.Tags);
+            fillScope(this.Protocols, catalogToAdd.Protocols);
+            fillScope(this.ProtocolAdapters, catalogToAdd.ProtocolAdapters);
         }
         private static void fillScope<T>(IList<T> bidItems, IList<T> templateItems) where T : TECObject
         {

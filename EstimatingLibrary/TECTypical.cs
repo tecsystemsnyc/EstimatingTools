@@ -473,7 +473,7 @@ namespace EstimatingLibrary
             {
                 if (subScope.Connection != null && !instance.Controllers.Contains(subScope.Connection.ParentController))
                 {
-                    subScope.Connection.ParentController.RemoveConnectable(subScope);
+                    subScope.Connection.ParentController.Disconnect(subScope);
                 }
             }
             removeFromDictionary(Panels, instance.Panels);
