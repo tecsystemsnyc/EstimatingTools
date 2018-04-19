@@ -48,11 +48,6 @@ namespace EstimatingLibrary
         public TECConnection Connection
         {
             get { return _connection; }
-            set
-            {
-                _connection = value;
-                raisePropertyChanged("Connection");
-            }
         }
         
         public ObservableCollection<TECConnectionType> ConnectionTypes
@@ -77,28 +72,7 @@ namespace EstimatingLibrary
                 return Connection != null;
             }
         }
-
-        IOCollection IConnectable.AvailableProtocols
-        {
-            get
-            {
-                IOCollection protocols = new IOCollection();
-                foreach(TECProtocolAdapter adapter in Devices.Where(x => x is TECProtocolAdapter))
-                {
-                    protocols.Add(new TECIO(adapter.Protocol));
-                }
-                return protocols;
-            }
-        }
-
-        TECNetworkConnection IConnectable.ParentConnection
-        {
-            get { return Connection as TECNetworkConnection; }
-            set
-            {
-                Connection = value;
-            }
-        }
+        
         #endregion //Properties
 
         #region Constructors
@@ -319,6 +293,73 @@ namespace EstimatingLibrary
         {
             return new TECSubScope(this, isTypical, guidDictionary);
         }
+        #endregion
+
+        #region IConnectable
+        IOCollection IConnectable.AvailableProtocols
+        {
+            get
+            {
+                IOCollection protocols = new IOCollection();
+                foreach (TECProtocolAdapter adapter in Devices.Where(x => x is TECProtocolAdapter))
+                {
+                    protocols.Add(new TECIO(adapter.Protocol));
+                }
+                return protocols;
+            }
+        }
+        IOCollection IConnectable.HardwiredIO
+        {
+            get
+            {
+                if (!((IConnectable)this).IsNetwork)
+                {
+                    return this.Points.ToIOCollection();
+                }
+                else
+                {
+                    return new IOCollection();
+                }
+            }
+        }
+        bool IConnectable.IsNetwork
+        {
+            get { return (((IConnectable)this).AvailableProtocols.ToList().Count() > 0); }
+        }
+        List<TECConnectionType> IConnectable.RequiredConnectionTypes
+        {
+            get
+            {
+                if (!((IConnectable)this).IsNetwork)
+                {
+                    return this.ConnectionTypes.ToList();
+                }else
+                {
+                    return new List<TECConnectionType>();
+                }
+            }
+        }
+
+        bool IConnectable.CanSetParentConnection(TECConnection connection)
+        {
+            if (((IConnectable)this).IsNetwork)
+            {
+                return connection is TECNetworkConnection;
+            } else
+            {
+                return connection is TECHardwiredConnection;
+            }
+        }
+        void IConnectable.SetParentConnection(TECConnection connection)
+        {
+            _connection = connection;
+            raisePropertyChanged("Connection");
+        }
+        TECConnection IConnectable.GetParentConnection()
+        {
+            return this.Connection;
+        }
+
         #endregion
     }
 }

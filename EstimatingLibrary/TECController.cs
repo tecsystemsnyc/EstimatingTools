@@ -20,14 +20,6 @@ namespace EstimatingLibrary
         public TECNetworkConnection ParentConnection
         {
             get { return _parentConnection; }
-            set
-            {
-                if (ParentConnection != value)
-                {
-                    _parentConnection = value;
-                    raisePropertyChanged("ParentConnection");
-                }
-            }
         }
         public ObservableCollection<TECConnection> ChildrenConnections
         {
@@ -574,7 +566,8 @@ namespace EstimatingLibrary
         {
             if (connection is TECNetworkConnection networkConnection)
             {
-                this.ParentConnection = networkConnection;
+                _parentConnection = networkConnection;
+                raisePropertyChanged("ParentConnection");
             }
             else
             {

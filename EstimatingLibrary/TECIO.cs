@@ -383,5 +383,17 @@ namespace EstimatingLibrary
         {
             return new IOCollection(new List<TECIO>() { io });
         }
+
+        public static IOCollection ToIOCollection(this IEnumerable<TECPoint> points)
+        {
+            IOCollection collection = new IOCollection();
+            foreach (TECPoint point in points)
+            {
+                TECIO toAdd = new TECIO(point.Type);
+                toAdd.Quantity = point.Quantity;
+                collection.Add(toAdd);
+            }
+            return collection;
+        }
     }
 }
