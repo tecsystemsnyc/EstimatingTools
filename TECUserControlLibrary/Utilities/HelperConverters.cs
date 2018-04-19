@@ -816,7 +816,7 @@ namespace TECUserControlLibrary.Utilities
         {
             if (value is IOCollection collection)
             {
-                return collection.ListIO();
+                return collection.ToList();
             }
             else
             {

@@ -21,10 +21,8 @@ namespace TECUserControlLibrary.ViewModels
         private TECPoint selectedPoint;
         private TECController selectedController;
         private TECPanel selectedPanel;
-        private SystemConnectionsVM connectionsVM;
         private MiscCostsVM miscVM;
         private ControllersPanelsVM controllersPanelsVM;
-        private NetworkVM networkVM;
         private ValveSelectionVM valveVM;
 
         public ViewModelBase SelectedVM
@@ -129,24 +127,7 @@ namespace TECUserControlLibrary.ViewModels
         public RelayCommand<TECPoint> DeletePointCommand { get; private set; }
         public RelayCommand<TECController> DeleteControllerCommand { get; private set; }
         public RelayCommand<TECPanel> DeletePanelCommand { get; private set; }
-
-        public SystemConnectionsVM ConnectionsVM
-        {
-            get { return connectionsVM; }
-            set
-            {
-                connectionsVM = value;
-                RaisePropertyChanged("ConnectionsVM");
-                connectionsVM.UpdateVM += updateVM =>
-                {
-                    SelectedVM = updateVM;
-                };
-                connectionsVM.Selected += item =>
-                {
-                    Selected?.Invoke(item as TECObject);
-                };
-            }
-        }
+        
         public MiscCostsVM MiscVM
         {
             get { return miscVM; }
@@ -168,19 +149,6 @@ namespace TECUserControlLibrary.ViewModels
                 controllersPanelsVM = value;
                 RaisePropertyChanged("ControllersPanelsVM");
                 controllersPanelsVM.SelectionChanged += item =>
-                {
-                    Selected?.Invoke(item as TECObject);
-                };
-            }
-        }
-        public NetworkVM NetworkVM
-        {
-            get { return networkVM; }
-            set
-            {
-                networkVM = value;
-                RaisePropertyChanged("NetworkVM");
-                NetworkVM.Selected += item =>
                 {
                     Selected?.Invoke(item as TECObject);
                 };
@@ -316,10 +284,8 @@ namespace TECUserControlLibrary.ViewModels
         {
             if (value != null)
             {
-                ConnectionsVM = new SystemConnectionsVM(value, catalogs.ConduitTypes);
                 MiscVM = new MiscCostsVM(value);
                 ControllersPanelsVM = new ControllersPanelsVM(value, scopeManager);
-                NetworkVM = NetworkVM.GetNetworkVMFromSystem(value, scopeManager.Catalogs);
                 ValveVM = new ValveSelectionVM(value, scopeManager.Catalogs.Valves);
             }
         }
@@ -472,7 +438,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void deleteControllerExecute(TECController obj)
         {
-            obj.RemoveAllConnections();
+            obj.DisconnectAll();
             SelectedSystem.RemoveController(obj);
         }
         private bool canDeleteController(TECController arg)

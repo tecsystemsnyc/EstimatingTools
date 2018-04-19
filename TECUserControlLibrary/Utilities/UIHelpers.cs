@@ -407,12 +407,7 @@ namespace TECUserControlLibrary.Utilities
             new Tuple<string, IOType>("DI", IOType.DI),
             new Tuple<string, IOType>("DO", IOType.DO),
             new Tuple<string, IOType>("UI", IOType.UI),
-            new Tuple<string, IOType>("UO", IOType.UO),
-            new Tuple<string, IOType>("BACnetIP", IOType.BACnetIP),
-            new Tuple<string, IOType>("BACnetMSTP", IOType.BACnetMSTP),
-            new Tuple<string, IOType>("LonWorks", IOType.LonWorks),
-            new Tuple<string, IOType>("ModbusRTU", IOType.ModbusRTU),
-            new Tuple<string, IOType>("ModbusTCP", IOType.ModbusTCP)
+            new Tuple<string, IOType>("UO", IOType.UO)
         };
 
         public static List<Tuple<string, ScopeTemplateIndex>> ScopeTemplateSelectorList = new List<Tuple<string, ScopeTemplateIndex>>

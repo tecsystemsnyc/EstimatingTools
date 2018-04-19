@@ -118,8 +118,8 @@ namespace TECUserControlLibrary.Models
 
         private void populateIO()
         {
-            IO = Controller.TotalIO.ListIO();
-            AvailableIO = Controller.AvailableIO.ListIO();
+            IO = Controller.IO.ToList();
+            AvailableIO = Controller.AvailableIO.ToList();
         }
         private void populateModules()
         {
