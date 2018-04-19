@@ -26,7 +26,7 @@ namespace EstimatingLibraryTests
             //templates.Catalogs.Manufacturers.Add(man);
 
             //TECControllerType type = new TECControllerType(man);
-            //type.IO.Add(new TECIO(IOType.BACnetIP));
+            //type.IO.Add(new TECIO(IOType.AI));
             //templates.Catalogs.ControllerTypes.Add(type);
 
             ////Containing System
@@ -37,7 +37,7 @@ namespace EstimatingLibraryTests
             //TECController parentController = new TECController(type, false);
             //sys.AddController(parentController);
 
-            //TECNetworkConnection netConnect = parentController.AddNetworkConnection(false, new List<TECConnectionType>(), IOType.BACnetIP);
+            //TECNetworkConnection netConnect = parentController.AddNetworkConnection(false, new List<TECConnectionType>(), IOType.AI);
 
             ////Daisy Controller
             //TECController fakeChildController = new TECController(childGuid, type, false);
@@ -51,14 +51,14 @@ namespace EstimatingLibraryTests
             //sys.Equipment.Add(equip);
 
             //TECPoint fakePoint = new TECPoint(false);
-            //fakePoint.Type = IOType.BACnetIP;
+            //fakePoint.Type = IOType.AI;
             //fakePoint.Quantity = 1;
 
             //TECSubScope fakeSS = new TECSubScope(subScopeGuid, false);
             //fakeSS.AddPoint(fakePoint);
 
             //TECPoint realPoint = new TECPoint(false);
-            //realPoint.Type = IOType.BACnetIP;
+            //realPoint.Type = IOType.AI;
             //realPoint.Quantity = 1;
 
             //TECSubScope realSS = new TECSubScope(subScopeGuid, false);

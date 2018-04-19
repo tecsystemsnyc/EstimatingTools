@@ -392,7 +392,7 @@ namespace TECUserControlLibrary.ViewModels
             if (!connection.IsTypical)
             {
                 CostBatch deltas = new CostBatch();
-                foreach (TECElectricalMaterial connectionType in connection.GetConnectionTypes())
+                foreach (TECElectricalMaterial connectionType in connection.ConnectionTypes)
                 {
                     deltas += (WireSummaryVM.AddRun(connectionType, connection.Length));
                 }
@@ -511,7 +511,7 @@ namespace TECUserControlLibrary.ViewModels
         private CostBatch removeConnection(TECConnection connection)
         {
             CostBatch deltas = new CostBatch();
-            foreach (TECElectricalMaterial connectionType in connection.GetConnectionTypes())
+            foreach (TECElectricalMaterial connectionType in connection.ConnectionTypes)
             {
                 deltas += (WireSummaryVM.RemoveRun(connectionType, connection.Length));
             }
@@ -684,7 +684,7 @@ namespace TECUserControlLibrary.ViewModels
                     if (args.PropertyName == "Length")
                     {
                         double deltaLength = (double)args.Value - (double)args.OldValue;
-                        foreach (TECElectricalMaterial connectionType in connection.GetConnectionTypes())
+                        foreach (TECElectricalMaterial connectionType in connection.ConnectionTypes)
                         {
                             updateTotals(WireSummaryVM.AddLength(connectionType, deltaLength));
                         }

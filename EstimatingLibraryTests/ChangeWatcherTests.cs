@@ -750,8 +750,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            TECNetworkConnection netConnect = parentController.AddNetworkConnection(false,
-                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
+            TECNetworkConnection netConnect = parentController.AddNetworkConnection(bid.Catalogs.Protocols[0]);
 
             //Assert
             checkRaised(true, true, false, true);
@@ -779,8 +778,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            TECNetworkConnection netConnect = instanceController.AddNetworkConnection(false,
-                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
+            TECNetworkConnection netConnect = instanceController.AddNetworkConnection(bid.Catalogs.Protocols[0]);
 
             //Assert
             checkRaised(true, true, false, true);
@@ -804,8 +802,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            TECNetworkConnection netConnect = typicalController.AddNetworkConnection(true,
-                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
+            TECNetworkConnection netConnect = typicalController.AddNetworkConnection(bid.Catalogs.Protocols[0]);
 
             //Assert
             checkRaised(false, false, false, false);
@@ -831,7 +828,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            TECHardwiredConnection connection = controller.AddSubScopeConnection(instanceSubScope);
+            TECConnection connection = controller.Connect(instanceSubScope);
 
             //Assert
             checkRaised(true, true, false, true);
@@ -857,7 +854,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            TECHardwiredConnection connection = controller.AddSubScopeConnection(subScope);
+            TECConnection connection = controller.Connect(subScope);
 
             //Assert
             checkRaised(false, false, false, false);
@@ -881,7 +878,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            TECHardwiredConnection connection = controller.AddSubScopeConnection(subScope);
+            TECConnection connection = controller.Connect(subScope);
 
             //Assert
             checkRaised(false, false, false, false);
@@ -907,7 +904,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            TECHardwiredConnection connection = instanceController.AddSubScopeConnection(instanceSubScope);
+            TECConnection connection = instanceController.Connect(instanceSubScope);
 
             //Assert
             checkRaised(true, true, false, true);
@@ -930,14 +927,13 @@ namespace Tests
             TECController daisyController = new TECController(type, false);
 
             TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
-            TECNetworkConnection netConnect = parentController.AddNetworkConnection(false,
-                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
-            netConnect.AddINetworkConnectable(childController);
+            TECNetworkConnection netConnect = parentController.AddNetworkConnection(bid.Catalogs.Protocols[0]);
+            netConnect.AddChild(childController);
 
             resetRaised();
 
             //Act
-            netConnect.AddINetworkConnectable(daisyController);
+            netConnect.AddChild(daisyController);
 
             //Assert
             checkRaised(true, false, false, false);
@@ -950,7 +946,7 @@ namespace Tests
             //Arrange
             TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.AddController(controller);
-            TECNetworkConnection connection = controller.AddNetworkConnection(false, new List<TECConnectionType>(), IOType.BACnetIP);
+            TECNetworkConnection connection = controller.AddNetworkConnection(bid.Catalogs.Protocols[0]);
             TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
             connection.Length = 10;
 
@@ -1665,9 +1661,8 @@ namespace Tests
 
             TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
 
-            TECNetworkConnection netConnect = parentController.AddNetworkConnection(false,
-                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
-            netConnect.AddINetworkConnectable(childController);
+            TECNetworkConnection netConnect = parentController.AddNetworkConnection(bid.Catalogs.Protocols[0]);
+            netConnect.AddChild(childController);
 
             resetRaised();
 
@@ -1697,9 +1692,8 @@ namespace Tests
 
             TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
 
-            TECNetworkConnection netConnect = parentController.AddNetworkConnection(false,
-                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
-            netConnect.AddINetworkConnectable(childController);
+            TECNetworkConnection netConnect = parentController.AddNetworkConnection(bid.Catalogs.Protocols[0]);
+            netConnect.AddChild(childController);
             netConnect.Length = 10;
 
             resetRaised();
@@ -1729,12 +1723,12 @@ namespace Tests
 
             TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.AddController(controller);
-            TECHardwiredConnection connection = controller.AddSubScopeConnection(instanceSubScope);
+            TECConnection connection = controller.Connect(instanceSubScope);
             connection.Length = 10;
             resetRaised();
 
             //Act
-            controller.RemoveSubScope(instanceSubScope);
+            controller.Disconnect(instanceSubScope);
 
             //Assert
             checkRaised(true, true, false, true);
@@ -1756,12 +1750,12 @@ namespace Tests
 
             TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
             system.AddController(controller);
-            TECHardwiredConnection connection = controller.AddSubScopeConnection(subScope);
+            TECConnection connection = controller.Connect(subScope);
             connection.Length = 10;
             resetRaised();
 
             //Act
-            controller.RemoveSubScope(subScope);
+            controller.Disconnect(subScope);
 
             //Assert
             checkRaised(false, false, false, false);
@@ -1781,12 +1775,12 @@ namespace Tests
 
             TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.AddController(controller);
-            TECHardwiredConnection connection = controller.AddSubScopeConnection(subScope);
+            TECConnection connection = controller.Connect(subScope);
             connection.Length = 10;
             resetRaised();
 
             //Act
-            controller.RemoveSubScope(subScope);
+            controller.Disconnect(subScope);
 
             //Assert
             checkRaised(false, false, false, false);
@@ -1808,12 +1802,12 @@ namespace Tests
             TECSystem instance = system.AddInstance(bid);
             TECSubScope instanceSubScope = instance.Equipment[0].SubScope[0];
             TECController instanceController = instance.Controllers[0];
-            TECHardwiredConnection connection = instanceController.AddSubScopeConnection(instanceSubScope);
+            TECConnection connection = instanceController.Connect(instanceSubScope);
             connection.Length = 10;
             resetRaised();
 
             //Act
-            instanceController.RemoveSubScope(instanceSubScope);
+            instanceController.Disconnect(instanceSubScope);
 
             //Assert
             checkRaised(true, true, false, true);
@@ -1836,15 +1830,14 @@ namespace Tests
             TECController daisyController = new TECController(type, false);
 
             TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
-            TECNetworkConnection netConnect = parentController.AddNetworkConnection(false,
-                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
-            netConnect.AddINetworkConnectable(childController);
-            netConnect.AddINetworkConnectable(daisyController);
+            TECNetworkConnection netConnect = parentController.AddNetworkConnection(bid.Catalogs.Protocols[0]);
+            netConnect.AddChild(childController);
+            netConnect.AddChild(daisyController);
 
             resetRaised();
 
             //Act
-            netConnect.RemoveINetworkConnectable(daisyController);
+            netConnect.RemoveChild(daisyController);
 
             //Assert
             checkRaised(true, false, false, false);
@@ -1858,8 +1851,7 @@ namespace Tests
             TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.AddController(controller);
             TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
-            TECNetworkConnection connection = controller.AddNetworkConnection(false,
-                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
+            TECNetworkConnection connection = controller.AddNetworkConnection(bid.Catalogs.Protocols[0]);
             connection.Length = 10;
 
             resetRaised();
@@ -1944,9 +1936,8 @@ namespace Tests
             TECController child = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.AddController(controller);
             bid.AddController(child);
-            TECNetworkConnection connection = controller.AddNetworkConnection(false,
-                new List<TECConnectionType>() { bid.Catalogs.ConnectionTypes[0] }, IOType.BACnetIP);
-            connection.AddINetworkConnectable(child);
+            TECNetworkConnection connection = controller.AddNetworkConnection(bid.Catalogs.Protocols[0]);
+            connection.AddChild(child);
             connection.Length = original;
 
             resetRaised();
@@ -1971,9 +1962,8 @@ namespace Tests
             TECController child = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.AddController(controller);
             bid.AddController(child);
-            TECNetworkConnection connection = controller.AddNetworkConnection(false,
-                new List<TECConnectionType>() { bid.Catalogs.ConnectionTypes[0] }, IOType.BACnetIP);
-            connection.AddINetworkConnectable(child);
+            TECNetworkConnection connection = controller.AddNetworkConnection(bid.Catalogs.Protocols[0]);
+            connection.AddChild(child);
             connection.ConduitType = original;
             resetRaised();
 
@@ -2309,7 +2299,7 @@ namespace Tests
             TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes[0];
 
             bid.Systems.Add(typical);
-            TECConnection connection = controller.AddSubScopeConnection(ss);
+            TECConnection connection = controller.Connect(ss);
             connection.Length = 16.46;
             connection.ConduitLength = 81.64;
 
@@ -2340,7 +2330,7 @@ namespace Tests
             TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes[0];
 
             bid.Systems.Add(typical);
-            TECConnection connection = controller.AddSubScopeConnection(ss);
+            TECConnection connection = controller.Connect(ss);
             connection.Length = 16.43;
             connection.ConduitLength = 74.13;
 
@@ -2627,7 +2617,7 @@ namespace Tests
             TECController typController = new TECController(bid.Catalogs.ControllerTypes[0], true);
             typical.AddController(typController);
 
-            typController.AddSubScopeConnection(typSS);
+            typController.Connect(typSS);
 
             TECSystem instance = typical.AddInstance(bid);
             TECConnection ssConnect = instance.Equipment[0].SubScope[0].Connection;

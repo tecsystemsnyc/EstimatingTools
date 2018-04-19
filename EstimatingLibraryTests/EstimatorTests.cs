@@ -595,7 +595,7 @@ namespace Tests
             
             subScope.Devices.Add(device);
 
-            var connection = controller.AddSubScopeConnection(subScope);
+            var connection = controller.Connect(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -655,7 +655,7 @@ namespace Tests
 
             subScope.Devices.Add(device);
 
-            var connection = controller.AddSubScopeConnection(subScope);
+            var connection = controller.Connect(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -725,7 +725,7 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
             
-            var connection = controller.AddSubScopeConnection(subScope);
+            var connection = controller.Connect(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -737,7 +737,7 @@ namespace Tests
                 {
                     foreach(TECSubScope instanceSubScope in instance.GetAllSubScope())
                     {
-                        var instanceConnection = instanceController.AddSubScopeConnection(instanceSubScope);
+                        var instanceConnection = instanceController.Connect(instanceSubScope);
                         instanceConnection.Length = 10;
                         instanceConnection.ConduitLength = 5;
                         instanceConnection.ConduitType = conduitType;
@@ -807,7 +807,7 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            var connection = controller.AddSubScopeConnection(subScope);
+            var connection = controller.Connect(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -825,7 +825,7 @@ namespace Tests
                 }
             }
 
-            controller.RemoveSubScope(subScope);
+            controller.Disconnect(subScope);
 
             //Assert
             assertNoCostOrLabor(estimate);
@@ -884,7 +884,7 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            var connection = controller.AddSubScopeConnection(subScope);
+            var connection = controller.Connect(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -896,7 +896,7 @@ namespace Tests
                 {
                     foreach (TECSubScope instanceSubScope in instance.GetAllSubScope())
                     {
-                        var instanceConnection = instanceController.AddSubScopeConnection(instanceSubScope);
+                        var instanceConnection = instanceController.Connect(instanceSubScope);
                         instanceConnection.Length = 10;
                         instanceConnection.ConduitLength = 5;
                         instanceConnection.ConduitType = conduitType;
@@ -913,7 +913,7 @@ namespace Tests
                 {
                     foreach (TECSubScope instanceSubScope in instance.GetAllSubScope())
                     {
-                        var instanceConnection = instanceController.AddSubScopeConnection(instanceSubScope);
+                        var instanceConnection = instanceController.Connect(instanceSubScope);
                         instanceConnection.Length += 1;
                         instanceConnection.ConduitLength += 1;
                     }
@@ -972,7 +972,7 @@ namespace Tests
             subScope.Devices.Add(device);
             bid.Systems.Add(system);
 
-            var connection = controller.AddSubScopeConnection(subScope);
+            var connection = controller.Connect(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -1028,12 +1028,12 @@ namespace Tests
             equipment.SubScope.Add(subScope);
             subScope.Devices.Add(device);
             bid.Systems.Add(system);
-            var connection = controller.AddSubScopeConnection(subScope);
+            var connection = controller.Connect(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
             
-            controller.RemoveSubScope(subScope);
+            controller.Disconnect(subScope);
 
             //Assert
             assertNoCostOrLabor(estimate);
@@ -1084,7 +1084,7 @@ namespace Tests
             subScope.Devices.Add(device);
             bid.Systems.Add(system);
 
-            var connection = controller.AddSubScopeConnection(subScope);
+            var connection = controller.Connect(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -1559,7 +1559,7 @@ namespace Tests
             var estimate = new TECEstimator(bid, watcher);
             var manufacturer = new TECManufacturer();
 
-            TECIO io = new TECIO(IOType.BACnetIP);
+            TECIO io = new TECIO(IOType.AI);
             var controllerType = new TECControllerType(manufacturer);
             controllerType.IO.Add(io);
 
@@ -1577,10 +1577,9 @@ namespace Tests
             bid.AddController(controller1);
             bid.AddController(controller2);
 
-            var connection = controller1.AddNetworkConnection(false,
-                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
+            var connection = controller1.AddNetworkConnection(bid.Catalogs.Protocols[0]);
 
-            connection.AddINetworkConnectable(controller2);
+            connection.AddChild(controller2);
             connection.Length = 50;
             connection.ConduitLength = 50;
             connection.ConduitType = conduitType;
@@ -1600,7 +1599,7 @@ namespace Tests
             var manufacturer = new TECManufacturer();
             var controllerType = new TECControllerType(manufacturer);
 
-            TECIO io = new TECIO(IOType.BACnetIP);
+            TECIO io = new TECIO(IOType.AI);
             controllerType.IO.Add(io);
 
             var connectionType = new TECConnectionType();
@@ -1613,13 +1612,12 @@ namespace Tests
             bid.AddController(controller1);
             bid.AddController(controller2);
 
-            var connection = controller1.AddNetworkConnection(false,
-                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
+            var connection = controller1.AddNetworkConnection(bid.Catalogs.Protocols[0]);
 
-            connection.AddINetworkConnectable(controller2);
+            connection.AddChild(controller2);
             connection.Length = 50;
 
-            connection.RemoveINetworkConnectable(controller2);
+            connection.RemoveChild(controller2);
 
             controller1.RemoveNetworkConnection(connection);
 
@@ -1637,7 +1635,7 @@ namespace Tests
             
             var manufacturer = new TECManufacturer();
 
-            TECIO io = new TECIO(IOType.BACnetIP);
+            TECIO io = new TECIO(IOType.AI);
             var controllerType = new TECControllerType(manufacturer);
             controllerType.IO.Add(io);
 
@@ -1655,10 +1653,9 @@ namespace Tests
             bid.AddController(controller1);
             bid.AddController(controller2);
 
-            var connection = controller1.AddNetworkConnection(false,
-                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
+            var connection = controller1.AddNetworkConnection(bid.Catalogs.Protocols[0]);
 
-            connection.AddINetworkConnectable(controller2);
+            connection.AddChild(controller2);
             connection.Length = 50;
             connection.ConduitLength = 50;
             connection.ConduitType = conduitType;
@@ -1685,7 +1682,7 @@ namespace Tests
             bid.Systems.Add(system);
             var controllerType = new TECControllerType(manufacturer);
 
-            TECIO io = new TECIO(IOType.BACnetIP);
+            TECIO io = new TECIO(IOType.AI);
             controllerType.IO.Add(io);
 
             var connectionType = new TECConnectionType();
@@ -1700,10 +1697,9 @@ namespace Tests
             system.AddInstance(bid);
             var instanceController = system.Instances[0].Controllers[0];
 
-            var connection = controller1.AddNetworkConnection(false,
-                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
+            var connection = controller1.AddNetworkConnection(bid.Catalogs.Protocols[0]);
 
-            connection.AddINetworkConnectable(instanceController);
+            connection.AddChild(instanceController);
             connection.Length = 50;
 
             Assert.AreEqual(50, estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
@@ -1723,7 +1719,7 @@ namespace Tests
             bid.Systems.Add(system);
             var controllerType = new TECControllerType(manufacturer);
 
-            TECIO io = new TECIO(IOType.BACnetIP);
+            TECIO io = new TECIO(IOType.AI);
             controllerType.IO.Add(io);
 
             var connectionType = new TECConnectionType();
@@ -1738,13 +1734,12 @@ namespace Tests
             system.AddInstance(bid);
             var instanceController = system.Instances[0].Controllers[0];
 
-            var connection = controller1.AddNetworkConnection(false,
-                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
+            var connection = controller1.AddNetworkConnection(bid.Catalogs.Protocols[0]);
 
-            connection.AddINetworkConnectable(instanceController);
+            connection.AddChild(instanceController);
             connection.Length = 50;
 
-            connection.RemoveINetworkConnectable(instanceController);
+            connection.RemoveChild(instanceController);
 
             controller1.RemoveNetworkConnection(connection);
 
@@ -1764,7 +1759,7 @@ namespace Tests
             bid.Systems.Add(system);
             var controllerType = new TECControllerType(manufacturer);
 
-            TECIO io = new TECIO(IOType.BACnetIP);
+            TECIO io = new TECIO(IOType.AI);
             controllerType.IO.Add(io);
 
             var connectionType = new TECConnectionType();
@@ -1779,10 +1774,9 @@ namespace Tests
             system.AddInstance(bid);
             var instanceController = system.Instances[0].Controllers[0];
 
-            var connection = controller1.AddNetworkConnection(false,
-                new List<TECConnectionType>() { connectionType }, IOType.BACnetIP);
+            var connection = controller1.AddNetworkConnection(bid.Catalogs.Protocols[0]);
 
-            connection.AddINetworkConnectable(instanceController);
+            connection.AddChild(instanceController);
             connection.Length = 50;
             
             var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
@@ -2069,7 +2063,7 @@ namespace Tests
 
             subScope.Devices.Add(device);
 
-            var connection = controller.AddSubScopeConnection(subScope);
+            var connection = controller.Connect(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -2126,7 +2120,7 @@ namespace Tests
 
             subScope.Devices.Add(device);
 
-            var connection = controller.AddSubScopeConnection(subScope);
+            var connection = controller.Connect(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -2160,7 +2154,7 @@ namespace Tests
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
-            TECHardwiredConnection ssConnect = controller.AddSubScopeConnection(subScope);
+            TECConnection ssConnect = controller.Connect(subScope);
             ssConnect.Length = 50;
 
             typical.Instances.Remove(instance);
@@ -2214,7 +2208,7 @@ namespace Tests
 
             subScope.Devices.Add(device);
 
-            var connection = controller.AddSubScopeConnection(subScope);
+            var connection = controller.Connect(subScope);
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;

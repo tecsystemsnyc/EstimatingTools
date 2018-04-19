@@ -52,7 +52,7 @@ namespace TECUserControlLibrary.Debug
         {
             TECControllerType type = new TECControllerType(bid.Catalogs.Manufacturers[0]);
             type.Name = "Controller Type";
-            type.IO = new System.Collections.ObjectModel.ObservableCollection<TECIO>() { new TECIO(IOType.BACnetIP) };
+            type.IO = new System.Collections.ObjectModel.ObservableCollection<TECIO>() { new TECIO(IOType.AI) };
 
             bid.Catalogs.ControllerTypes.Add(type);
 
@@ -73,9 +73,9 @@ namespace TECUserControlLibrary.Debug
 
             bid.AddController(emptyController);
 
-            TECNetworkConnection connection = controller.AddNetworkConnection(false, new List<TECConnectionType>() { bid.Catalogs.ConnectionTypes[0], bid.Catalogs.ConnectionTypes[1] }, IOType.BACnetIP);
+            TECNetworkConnection connection = controller.AddNetworkConnection(bid.Catalogs.Protocols[0]);
 
-            connection.AddINetworkConnectable(child);
+            connection.AddChild(child);
 
             TECTypical typical = new TECTypical();
             TECEquipment equip = new TECEquipment(true);
@@ -83,7 +83,7 @@ namespace TECUserControlLibrary.Debug
             ss.Name = "Test Subscope";
             ss.Devices.Add(bid.Catalogs.Devices[0]);
             TECPoint point = new TECPoint(true);
-            point.Type = IOType.BACnetIP;
+            point.Type = IOType.AI;
             point.Quantity = 1;
             ss.Points.Add(point);
             equip.SubScope.Add(ss);
@@ -102,7 +102,7 @@ namespace TECUserControlLibrary.Debug
             ss.Name = "Test Subscope";
             ss.Devices.Add(bid.Catalogs.Devices[0]);
             TECPoint point = new TECPoint(true);
-            point.Type = IOType.BACnetIP;
+            point.Type = IOType.AI;
             point.Quantity = 1;
             ss.Points.Add(point);
             equipment.SubScope.Add(ss);
@@ -141,7 +141,7 @@ namespace TECUserControlLibrary.Debug
             TECController otherController = new TECController(controllerType, true);
             otherController.Name = "Other Controller";
             typical.AddController(otherController);
-            TECConnection connection = controller.AddSubScopeConnection(connected);
+            TECConnection connection = controller.Connect(connected);
             connection.Length = 10;
             connection.ConduitLength = 20;
             connection.ConduitType = bid.Catalogs.ConduitTypes[1];

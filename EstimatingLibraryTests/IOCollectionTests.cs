@@ -405,7 +405,7 @@ namespace EstimatingLibraryTests
             };
             IOCollection collection = new IOCollection(io);
 
-            collection.AddIO(IOType.AI);
+            collection.Add(IOType.AI);
 
             Assert.AreEqual(6, collection.IONumber(IOType.AI));
         }
@@ -433,7 +433,7 @@ namespace EstimatingLibraryTests
             TECIO toAdd = new TECIO(IOType.AI);
             toAdd.Quantity = 2;
 
-            collection.AddIO(toAdd);
+            collection.Add(toAdd);
 
             Assert.AreEqual(7, collection.IONumber(IOType.AI));
         }
@@ -452,8 +452,8 @@ namespace EstimatingLibraryTests
             IOCollection secondCollection = new IOCollection(io);
 
             IOCollection resultCollection = new IOCollection();
-            resultCollection.AddIO(firstColletion.ListIO());
-            resultCollection.AddIO(secondCollection.ListIO());
+            resultCollection.Add(firstColletion.ToList());
+            resultCollection.Add(secondCollection.ToList());
 
             Assert.IsTrue(resultCollection.Contains(IOType.AI));
             Assert.AreEqual(2, resultCollection.IONumber(IOType.AI));
@@ -490,7 +490,7 @@ namespace EstimatingLibraryTests
             };
             IOCollection collection = new IOCollection(io);
 
-            collection.RemoveIO(IOType.AI);
+            collection.Remove(IOType.AI);
 
             Assert.AreEqual(4, collection.IONumber(IOType.AI));
         }
@@ -505,7 +505,7 @@ namespace EstimatingLibraryTests
             };
             IOCollection collection = new IOCollection(io);
 
-            collection.RemoveIO(IOType.AI);
+            collection.Remove(IOType.AI);
 
             Assert.AreEqual(4, collection.IONumber(IOType.UI));
         }
@@ -533,7 +533,7 @@ namespace EstimatingLibraryTests
             TECIO toRemove = new TECIO(IOType.AI);
             toRemove.Quantity = 2;
 
-            collection.RemoveIO(toRemove);
+            collection.Remove(toRemove);
 
             Assert.AreEqual(3, collection.IONumber(IOType.AI));
         }
@@ -551,7 +551,7 @@ namespace EstimatingLibraryTests
             TECIO toRemove = new TECIO(IOType.DI);
             toRemove.Quantity = 2;
 
-            collection.RemoveIO(toRemove);
+            collection.Remove(toRemove);
 
             Assert.AreEqual(3, collection.IONumber(IOType.UI));
         }
@@ -581,7 +581,7 @@ namespace EstimatingLibraryTests
             IOCollection secondCollection = new IOCollection(otherIO);
 
             IOCollection resultCollection = new IOCollection(secondCollection);
-            resultCollection.RemoveIO(firstColletion.ListIO());
+            resultCollection.Remove(firstColletion.ToList());
 
             Assert.IsTrue(resultCollection.Contains(IOType.AI));
             Assert.AreEqual(1, resultCollection.IONumber(IOType.AI));
@@ -620,7 +620,7 @@ namespace EstimatingLibraryTests
             IOCollection secondCollection = new IOCollection(otherIO);
 
             IOCollection resultCollection = new IOCollection(secondCollection);
-            resultCollection.RemoveIO(firstColletion.ListIO());
+            resultCollection.Remove(firstColletion.ToList());
 
             Assert.IsTrue(resultCollection.Contains(IOType.UI));
             Assert.AreEqual(2, resultCollection.IONumber(IOType.UI));
@@ -637,7 +637,7 @@ namespace EstimatingLibraryTests
         public static int IONumber(this IOCollection collection, IOType type)
         {
             int ioNum = 0;
-            foreach (TECIO io in collection.ListIO())
+            foreach (TECIO io in collection.ToList())
             {
                 if (io.Type == type)
                 {

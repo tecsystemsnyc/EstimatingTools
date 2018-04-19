@@ -315,7 +315,7 @@ namespace TECUserControlLibrary.ViewModels
             addControllerMethod = templates.ControllerTemplates.Add;
             addPanelMethod = templates.PanelTemplates.Add;
             deleteControllerMethod = controller => {
-                controller.RemoveAllConnections();
+                controller.DisconnectAll();
                 templates.ControllerTemplates.Remove(controller);
             };
             deletePanelMethod = panel => { templates.PanelTemplates.Remove(panel); };

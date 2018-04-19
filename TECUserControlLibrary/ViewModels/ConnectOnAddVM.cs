@@ -156,7 +156,7 @@ namespace TECUserControlLibrary.ViewModels
         
         private void connectControllerToSubScope(TECController controller, TECSubScope finalToConnect)
         {
-            TECConnection connection = controller.AddSubScope(finalToConnect, true);
+            TECConnection connection = controller.Connect(finalToConnect);
             setConnectionProperties(connection);
         }
         public bool CanConnect()

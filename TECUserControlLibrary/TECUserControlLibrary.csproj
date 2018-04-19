@@ -191,9 +191,6 @@
     <Compile Include="UserControls\ListControls\ControllerListControl.xaml.cs">
       <DependentUpon>ControllerListControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ListControls\NetworkParentableListControl.xaml.cs">
-      <DependentUpon>NetworkParentableListControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\ListControls\ValveScopeItemListControl.xaml.cs">
       <DependentUpon>ValveScopeItemListControl.xaml</DependentUpon>
     </Compile>
@@ -241,7 +238,6 @@
     </Compile>
     <Compile Include="Utilities\QuantityCollection.cs" />
     <Compile Include="Utilities\SearchUtilities.cs" />
-    <Compile Include="ViewModels\AddNetworkConnectionVM.cs" />
     <Compile Include="ViewModels\AddVMs\AddVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\AssociatedCostsCatalogVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\CatalogVMBase.cs" />
@@ -256,13 +252,10 @@
     <Compile Include="ViewModels\CatalogVMs\ValvesCatalogVM.cs" />
     <Compile Include="ViewModels\BidPropertiesVM.cs" />
     <Compile Include="ViewModels\ChangeControllerTypeVM.cs" />
-    <Compile Include="ViewModels\ConnectableFilterVM.cs" />
     <Compile Include="ViewModels\ConnectOnAddVM.cs" />
     <Compile Include="ViewModels\BugReportVM.cs" />
     <Compile Include="ViewModels\DeleteEndDeviceVM.cs" />
     <Compile Include="ViewModels\EquipmentHierarchyVM.cs" />
-    <Compile Include="ViewModels\GlobalConnectionsVM.cs" />
-    <Compile Include="ViewModels\NetworkVM.cs" />
     <Compile Include="ViewModels\ReplaceActuatorVM.cs" />
     <Compile Include="ViewModels\RiserVM.cs" />
     <Compile Include="ViewModels\ScheduleVM.cs" />
@@ -388,9 +381,7 @@
     <Compile Include="ViewModels\SummaryVMs\ItemizedSummaryVM.cs" />
     <Compile Include="ViewModels\SummaryVMs\SystemSummaryVM.cs" />
     <Compile Include="ViewModels\SystemHierarchyVM.cs" />
-    <Compile Include="ViewModels\SystemConnectionsVM.cs" />
     <Compile Include="ViewModels\TypicalHierarchyVM.cs" />
-    <Compile Include="ViewModels\UpdateConnectionVM.cs" />
     <Compile Include="Views\AddViews\AddBaseView.cs" />
     <Compile Include="Views\AddViews\AddControllerView.xaml.cs">
       <DependentUpon>AddControllerView.xaml</DependentUpon>
@@ -684,10 +675,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\ListControls\ControllerListControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\ListControls\NetworkParentableListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
