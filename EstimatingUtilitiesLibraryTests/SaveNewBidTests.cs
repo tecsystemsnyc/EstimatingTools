@@ -626,7 +626,7 @@ namespace Tests
             Assert.AreEqual(expectedConnection.ConduitType.Guid, actualConnection.ConduitType.Guid);
             Assert.AreEqual(expectedConnection.Length, actualConnection.Length);
             Assert.AreEqual(expectedConnection.ParentController.Guid, actualConnection.ParentController.Guid);
-            Assert.AreEqual(expectedConnection.SubScope.Guid, actualConnection.SubScope.Guid);
+            Assert.AreEqual(expectedConnection.Child.Guid, actualConnection.Child.Guid);
             Assert.IsTrue(compareCosts(expectedConnection.CostBatch, actualConnection.CostBatch));
             //Assert.IsFalse(actualConnection.IsTypical);
 

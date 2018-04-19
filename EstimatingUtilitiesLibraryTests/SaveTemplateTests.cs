@@ -1978,7 +1978,7 @@ namespace Tests
             var scopeController = new TECController(templates.Catalogs.ControllerTypes[0], false);
             scopeController.Name = "Test Scope Controller";
             expectedScope.AddController(scopeController);
-            scopeController.AddSubScopeConnection(scopeEquipment.SubScope[0]);
+            scopeController.Connect(scopeEquipment.SubScope[0]);
 
             var scopePanel = new TECPanel(templates.Catalogs.PanelTypes[0], false);
             scopePanel.Name = "Test Scope Name";
@@ -2015,7 +2015,7 @@ namespace Tests
             Assert.AreEqual(expectedScope.Controllers.Count, actualScope.Controllers.Count);
             Assert.AreEqual(expectedScope.Controllers[0].ChildrenConnections.Count, actualScope.Controllers[0].ChildrenConnections.Count);
             Assert.AreEqual(expectedScope.Panels.Count, actualScope.Panels.Count);
-            Assert.IsTrue(actualSSConnection.SubScope == actualScope.Equipment[0].SubScope[0]);
+            Assert.IsTrue(actualSSConnection.Child == actualScope.Equipment[0].SubScope[0]);
         }
 
         [TestMethod]
