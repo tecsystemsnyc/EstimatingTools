@@ -11,7 +11,7 @@ namespace EstimatingLibrary
     public class TECProtocol : TECObject, IRelatable
     {
         private String _name = "";
-        private ObservableCollection<TECConnectionType> _connectionTypes = new ObservableCollection<TECConnectionType>();
+        private ObservableCollection<TECConnectionType> _connectionTypes;
 
         public String Name
         {
@@ -64,11 +64,12 @@ namespace EstimatingLibrary
             }
         }
 
-        public TECProtocol(Guid guid) : base(guid)
+        public TECProtocol(Guid guid, IEnumerable<TECConnectionType> connectionTypes) : base(guid)
         {
+            _connectionTypes = new ObservableCollection<TECConnectionType>(connectionTypes);
             ConnectionTypes.CollectionChanged += connectionTypes_CollectionChanged;
         }
-        public TECProtocol() : this(Guid.NewGuid()) { }
+        public TECProtocol(IEnumerable<TECConnectionType> connectionTypes) : this(Guid.NewGuid(), connectionTypes) { }
 
         public TECIO ToIO()
         {
