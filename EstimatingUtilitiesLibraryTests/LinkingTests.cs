@@ -549,7 +549,7 @@ namespace Tests
             {
                 foreach(TECConnection connection in controller.ChildrenConnections)
                 {
-                    var subScopeConnection = connection as TECHardwriredConnection;
+                    var subScopeConnection = connection as TECHardwiredConnection;
                     if(subScopeConnection != null)
                     {
                         Assert.IsTrue(TestHelper.IsInBid(subScopeConnection.SubScope, bid));
@@ -562,7 +562,7 @@ namespace Tests
                 {
                     foreach (TECConnection connection in controller.ChildrenConnections)
                     {
-                        var subScopeConnection = connection as TECHardwriredConnection;
+                        var subScopeConnection = connection as TECHardwiredConnection;
                         if (subScopeConnection != null)
                         {
                             Assert.IsTrue(TestHelper.IsInBid(subScopeConnection.SubScope, bid));
@@ -575,7 +575,7 @@ namespace Tests
                     {
                         foreach (TECConnection connection in controller.ChildrenConnections)
                         {
-                            var subScopeConnection = connection as TECHardwriredConnection;
+                            var subScopeConnection = connection as TECHardwiredConnection;
                             if (subScopeConnection != null)
                             {
                                 Assert.IsTrue(TestHelper.IsInBid(subScopeConnection.SubScope, bid));
@@ -619,7 +619,7 @@ namespace Tests
                 {
                     foreach (TECConnection connection in controller.ChildrenConnections)
                     {
-                        var subScopeConnection = connection as TECHardwriredConnection;
+                        var subScopeConnection = connection as TECHardwiredConnection;
                         if (subScopeConnection != null)
                         {
                             Assert.IsTrue(typical.GetAllSubScope().Contains(subScopeConnection.SubScope));

@@ -1998,8 +1998,8 @@ namespace Tests
                 }
             }
 
-            TECHardwriredConnection actualSSConnection = null;
-            foreach (TECHardwriredConnection ssConnect in actualScope.Controllers[0].ChildrenConnections)
+            TECHardwiredConnection actualSSConnection = null;
+            foreach (TECHardwiredConnection ssConnect in actualScope.Controllers[0].ChildrenConnections)
             {
                 if (ssConnect.Guid == scopeController.ChildrenConnections[0].Guid)
                 {

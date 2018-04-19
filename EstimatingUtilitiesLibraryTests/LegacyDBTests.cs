@@ -877,7 +877,7 @@ namespace EstimatingUtilitiesLibraryTests
             Guid expectedConduitTypeGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
             Guid expectedSubScopeGuid = new Guid("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
 
-            TECHardwriredConnection actualSSConnect = null;
+            TECHardwiredConnection actualSSConnect = null;
             foreach (TECSystem typical in actualBid.Systems)
             {
                 foreach (TECController controller in typical.Controllers)
@@ -886,7 +886,7 @@ namespace EstimatingUtilitiesLibraryTests
                     {
                         if (connection.Guid == expectedGuid)
                         {
-                            actualSSConnect = (connection as TECHardwriredConnection);
+                            actualSSConnect = (connection as TECHardwiredConnection);
                             break;
                         }
                     }
@@ -915,7 +915,7 @@ namespace EstimatingUtilitiesLibraryTests
             Guid expectedControllerGuid = new Guid("f22913a6-e348-4a77-821f-80447621c6e0");
             Guid expectedConduitTypeGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
 
-            TECHardwriredConnection actualConnection = null;
+            TECHardwiredConnection actualConnection = null;
             foreach (TECTypical typical in actualBid.Systems)
             {
                 foreach (TECSystem system in typical.Instances)
@@ -926,7 +926,7 @@ namespace EstimatingUtilitiesLibraryTests
                         {
                             if (connection.Guid == expectedGuid)
                             {
-                                actualConnection = connection as TECHardwriredConnection;
+                                actualConnection = connection as TECHardwiredConnection;
                                 break;
                             }
                         }

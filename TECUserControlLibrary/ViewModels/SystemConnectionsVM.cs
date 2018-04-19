@@ -446,7 +446,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 foreach (TECConnection connection in controller.ChildrenConnections)
                 {
-                    if (connection is TECHardwriredConnection ssConnect)
+                    if (connection is TECHardwiredConnection ssConnect)
                     {
                         addNewConnectedSubScope(ssConnect.SubScope);
                     }

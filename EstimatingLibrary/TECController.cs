@@ -115,7 +115,6 @@ namespace EstimatingLibrary
         {
             get { return AvailableIO.Protocols; }
         }
-        
         #endregion
 
         #region Constructors
@@ -138,9 +137,9 @@ namespace EstimatingLibrary
             copyPropertiesFromLocated(controllerSource);
             foreach (TECConnection connection in controllerSource.ChildrenConnections)
             {
-                if (connection is TECHardwriredConnection)
+                if (connection is TECHardwiredConnection)
                 {
-                    TECHardwriredConnection connectionToAdd = new TECHardwriredConnection(connection as TECHardwriredConnection, this, isTypical, guidDictionary);
+                    TECHardwiredConnection connectionToAdd = new TECHardwiredConnection(connection as TECHardwiredConnection, this, isTypical, guidDictionary);
                     _childrenConnections.Add(connectionToAdd);
                 }
                 else if (connection is TECNetworkConnection)
@@ -187,7 +186,7 @@ namespace EstimatingLibrary
             }
             else
             {
-                TECHardwriredConnection connection = new TECHardwriredConnection(connectable, this, this.IsTypical);
+                TECHardwiredConnection connection = new TECHardwiredConnection(connectable, this, this.IsTypical);
                 addChildConnection(connection);
                 return connection;
             }
@@ -220,174 +219,32 @@ namespace EstimatingLibrary
             }
         }
         
-        private bool canTakeIO(IOCollection collection)
+        public void RemoveConnectable(IConnectable connectable)
         {
-            bool hasIO = AvailableIO.Contains(collection);
-            bool canHasIO = getPotentialIO().Contains(collection);
-            return hasIO || canHasIO;
-        }
-        public bool CanConnectSubScope(IEnumerable<TECSubScope> subScope)
-        {
-            IOCollection collection = new IOCollection();
-            foreach(TECSubScope item in subScope)
+            TECConnection connectionToRemove = null;
+            foreach(TECConnection connection in ChildrenConnections)
             {
-                collection += item.IO;
-            }
-            return canTakeIO(collection);
-        }
-        public TECConnection AddSubScope(TECSubScope subScope, bool attemptConnectionToExisting)
-        {
-            if (subScope.IsNetwork)
-            {
-                return AddSubScopeToNetwork(subScope, attemptConnectionToExisting);
-            } else
-            {
-                return AddSubScopeConnection(subScope);
-            }
-        }
-        public TECHardwriredConnection AddSubScopeConnection(TECSubScope subScope)
-        {
-            if (CanConnectSubScope(subScope))
-            {
-                bool connectionIsTypical = (this.IsTypical || subScope.IsTypical);
-                if (!subScope.IsNetwork)
+                if (connection is TECHardwiredConnection hardwiredConnection)
                 {
-                    if (getAvailableIO().Contains(subScope.IO))
+                    if (hardwiredConnection.Child == connectable)
                     {
-                        return addConnection(subScope, connectionIsTypical);
-                    }
-                    else if(getPotentialIO().Contains(subScope.IO))
-                    {
-                        foreach(TECIO io in subScope.IO.ListIO())
-                        {
-                            for (int i = 0; i < io.Quantity; i++)
-                            {
-                                bool foundIO = false;
-                                if (!AvailableIO.Contains(io.Type))
-                                {
-                                    foreach (TECIOModule module in Type.IOModules)
-                                    {
-                                        if (this.IOModules.Count(item => { return item == module; }) <
-                                        Type.IOModules.Count(item => { return item == module; }))
-                                        {
-                                            if (new IOCollection(module.IO).Contains(io.Type))
-                                            {
-                                                this.IOModules.Add(module);
-                                                if (getAvailableIO().Contains(subScope.IO))
-                                                {
-                                                    return addConnection(subScope, connectionIsTypical);
-                                                }
-                                                foundIO = true;
-                                                break;
-                                                
-                                            }
-                                        }
-                                    }
-                                    if (foundIO)
-                                    {
-                                        break;
-                                    }
-                                }
-                                
-                            }
-                        }
-                        
-                        foreach (TECIOModule module in Type.IOModules)
-                        {
-                            if (this.IOModules.Count(item => { return item == module; }) <
-                                Type.IOModules.Count(item => { return item == module; }))
-                            {
-                                this.IOModules.Add(module);
-                            }
-                        }
-                        return addConnection(subScope, connectionIsTypical);
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("Attempted to connect subscope which could not be connected.");
-
-                    }
-                }
-                else
-                {
-                    throw new InvalidOperationException("Can't connect network subscope without a known connection.");
-                }
-            }
-            else
-            {
-                throw new InvalidOperationException("Subscope incompatible.");
-            }
-
-            TECHardwriredConnection addConnection(TECSubScope toConnect, bool isTypical)
-            {
-                TECHardwriredConnection connection = new TECHardwriredConnection(isTypical);
-                connection.ParentController = this;
-                connection.SubScope = subScope;
-                subScope.Connection = connection;
-                addChildConnection(connection);
-
-                return connection;
-            }
-        }
-        public TECNetworkConnection AddSubScopeToNetwork(TECSubScope subScope,
-            bool attemptConnectionToExisting)
-        {
-            if (!subScope.IsNetwork)
-            {
-                throw new Exception("Connectable must be networkcompatible");
-            }
-
-            IOType ioType = subScope.AvailableNetworkIO.ListIO()[0].Type;
-
-            bool compatibleConnectionExists = false;
-            TECNetworkConnection outConnection = null;
-            if (attemptConnectionToExisting)
-            {
-                foreach (TECNetworkConnection netConnect in this.ChildNetworkConnections)
-                {
-                    if (netConnect.CanAddINetworkConnectable(subScope))
-                    {
-                        compatibleConnectionExists = true;
-                        netConnect.AddINetworkConnectable(subScope);
-                        outConnection = netConnect;
-                        break;
-                    }
-                }
-            }
-            if (!compatibleConnectionExists)
-            {
-                TECNetworkConnection newConnection = this.AddNetworkConnection(this.IsTypical, subScope.ConnectionTypes, ioType);
-                newConnection.AddINetworkConnectable(subScope);
-                outConnection = newConnection;
-            }
-            return outConnection;
-        }
-
-        public void RemoveSubScope(TECSubScope subScope)
-        {
-            TECHardwriredConnection connectionToRemove = null;
-            foreach (TECConnection connection in ChildrenConnections)
-            {
-                if (connection is TECHardwriredConnection)
-                {
-                    var subConnect = connection as TECHardwriredConnection;
-                    if (subConnect.SubScope == subScope)
-                    {
-                        connectionToRemove = subConnect;
+                        connectionToRemove = hardwiredConnection;
                     }
                 }
                 else if (connection is TECNetworkConnection netConnect)
                 {
-                    if (netConnect.Children.Contains(subScope))
+                    if (netConnect.Children.Contains(connectable))
                     {
-                        netConnect.RemoveINetworkConnectable(subScope);
+                        netConnect.RemoveChild(connectable);
+                        //Remove netconnect if empty?
                     }
                 }
             }
             if (connectionToRemove != null)
             {
                 removeChildConnection(connectionToRemove);
-                subScope.Connection = null;
+                //Add remove parent connection?
+                connectable.SetParentConnection(null);
             }
         }
         public void RemoveController(TECController controller)
@@ -434,16 +291,16 @@ namespace EstimatingLibrary
         public void RemoveAllChildSubScopeConnections()
         {
             ObservableCollection<TECConnection> connectionsToRemove = new ObservableCollection<TECConnection>();
-            foreach (TECHardwriredConnection connection in ChildrenConnections.Where(item => item is TECHardwriredConnection))
+            foreach (TECHardwiredConnection connection in ChildrenConnections.Where(item => item is TECHardwiredConnection))
             {
                 connectionsToRemove.Add(connection);
             }
-            foreach (TECHardwriredConnection connectToRemove in connectionsToRemove)
+            foreach (TECHardwiredConnection connectToRemove in connectionsToRemove)
             {
-                if (connectToRemove is TECHardwriredConnection)
+                if (connectToRemove is TECHardwiredConnection)
                 {
-                    (connectToRemove as TECHardwriredConnection).SubScope.Connection = null;
-                    (connectToRemove as TECHardwriredConnection).SubScope = null;
+                    (connectToRemove as TECHardwiredConnection).SubScope.Connection = null;
+                    (connectToRemove as TECHardwiredConnection).SubScope = null;
                     connectToRemove.ParentController = null;
                 }
                 else
@@ -665,8 +522,6 @@ namespace EstimatingLibrary
             }
             return potentialIO;
         }
-
-        
         #endregion
     }
 }

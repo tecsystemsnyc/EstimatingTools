@@ -268,29 +268,29 @@ namespace EstimatingLibrary.Utilities
             {
                 foreach (TECController controller in controllers)
                 {
-                    List<TECHardwriredConnection> newConnections = new List<TECHardwriredConnection>();
-                    List<TECHardwriredConnection> oldConnections = new List<TECHardwriredConnection>();
+                    List<TECHardwiredConnection> newConnections = new List<TECHardwiredConnection>();
+                    List<TECHardwiredConnection> oldConnections = new List<TECHardwiredConnection>();
                     foreach (TECConnection connection in controller.ChildrenConnections)
                     {
                         
-                        if (connection is TECHardwriredConnection)
+                        if (connection is TECHardwiredConnection)
                         {
-                            TECHardwriredConnection ssConnect = connection as TECHardwriredConnection;
+                            TECHardwiredConnection ssConnect = connection as TECHardwiredConnection;
                             bool isCopy = (guidDictionary != null && guidDictionary[ssConnect.SubScope.Guid] == guidDictionary[subScope.Guid]);
                             if (ssConnect.SubScope.Guid == subScope.Guid || isCopy)
                             {
-                                TECHardwriredConnection linkedConnection = new TECHardwriredConnection(ssConnect, subScope, subScope.IsTypical || controller.IsTypical);
+                                TECHardwiredConnection linkedConnection = new TECHardwiredConnection(ssConnect, subScope, subScope.IsTypical || controller.IsTypical);
                                 newConnections.Add(linkedConnection);
                                 oldConnections.Add(ssConnect);
                                 linkedConnection.ParentController = controller;
                             }
                         }
                     }
-                    foreach(TECHardwriredConnection conn in newConnections)
+                    foreach(TECHardwiredConnection conn in newConnections)
                     {
                         controller.ChildrenConnections.Add(conn);
                     }
-                    foreach(TECHardwriredConnection conn in oldConnections)
+                    foreach(TECHardwiredConnection conn in oldConnections)
                     {
                         controller.ChildrenConnections.Remove(conn);
                     }

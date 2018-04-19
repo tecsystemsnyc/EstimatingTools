@@ -124,7 +124,7 @@ namespace EstimatingUtilitiesLibrary.Database
             List<TECMisc> misc = getObjectsFromTable(new MiscTable(), data => getMiscFromRow(data, false));
             List<TECController> controllers = getObjectsFromTable(new ControllerTable(), data => getControllerFromRow(data, false, controllerTypeDictionary));
             List<TECPanel> panels = getObjectsFromTable(new PanelTable(), data => getPanelFromRow(data, false, panelTypeDictionary));
-            List<TECHardwriredConnection> subScopeConnections = getObjectsFromTable(new SubScopeConnectionTable(), id => new TECHardwriredConnection(id, false));
+            List<TECHardwiredConnection> subScopeConnections = getObjectsFromTable(new SubScopeConnectionTable(), id => new TECHardwiredConnection(id, false));
             List<TECNetworkConnection> networkConnections = getObjectsFromTable(new NetworkConnectionTable(), id => new TECNetworkConnection(id, false));
             List<TECConnection> connections = new List<TECConnection>(subScopeConnections);
             connections.AddRange(networkConnections);
@@ -261,7 +261,7 @@ namespace EstimatingUtilitiesLibrary.Database
             List<TECScopeBranch> scopeBranches = getObjectsFromTable(new ScopeBranchTable(), id => new TECScopeBranch(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
             List<TECController> controllers = getObjectsFromTable(new ControllerTable(), row => getControllerFromRow(row, typicalDictionary, controllerTypes));
             List<TECPanel> panels = getObjectsFromTable(new PanelTable(), row => getPanelFromRow(row, typicalDictionary, panelTypes));
-            List<TECHardwriredConnection> subScopeConnections = getObjectsFromTable(new SubScopeConnectionTable(), id => new TECHardwriredConnection(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
+            List<TECHardwiredConnection> subScopeConnections = getObjectsFromTable(new SubScopeConnectionTable(), id => new TECHardwiredConnection(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
             List<TECNetworkConnection> networkConnections = getObjectsFromTable(new NetworkConnectionTable(), id => new TECNetworkConnection(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
             List<TECConnection> allConnections = new List<TECConnection>(subScopeConnections);
             allConnections.AddRange(networkConnections);
@@ -284,7 +284,7 @@ namespace EstimatingUtilitiesLibrary.Database
                 }
                 populateNetworkConnectionProperties(item, connectionConduitTypes, connectionConnectionTypeRelationships);
             }
-            foreach (TECHardwriredConnection item in subScopeConnections)
+            foreach (TECHardwiredConnection item in subScopeConnections)
             {
                 item.SubScope = getRelatedReference(subScopeConnectionChildren[item.Guid], subScope);
                 item.SubScope.Connection = item;
@@ -495,7 +495,7 @@ namespace EstimatingUtilitiesLibrary.Database
                 scope.AssociatedCosts = allCosts.ToOC();
             }
         }
-        private static void populateSubScopeConnectionProperties(TECHardwriredConnection connection, Dictionary<Guid, TECSubScope> subScope, Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes)
+        private static void populateSubScopeConnectionProperties(TECHardwiredConnection connection, Dictionary<Guid, TECSubScope> subScope, Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes)
         {
             connection.SubScope = subScope[connection.Guid];
             connection.SubScope.Connection = connection;

@@ -491,7 +491,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
     internal class SubScopeConnectionTable : TableBase
     {
         public static new string TableName = "TECSubScopeConnection";
-        public static Type ObjectType = typeof(TECHardwriredConnection);
+        public static Type ObjectType = typeof(TECHardwiredConnection);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Length = new TableField("Length", "REAL", ObjectType.GetProperty("Length"));
@@ -1206,7 +1206,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
     internal class SubScopeConnectionChildrenTable : TableBase
     {
         public static new string TableName = "TECSubScopeConnectionChild";
-        public static Type ConnectionType = typeof(TECHardwriredConnection);
+        public static Type ConnectionType = typeof(TECHardwiredConnection);
         public static Type ChildType = typeof(TECSubScope);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ConnectionType.GetProperty("Guid"));

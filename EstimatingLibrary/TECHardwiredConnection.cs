@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
 {
-    public class TECHardwriredConnection : TECConnection
+    public class TECHardwiredConnection : TECConnection
     {
         #region Properties
         public IConnectable Child { get; }
@@ -30,19 +30,19 @@ namespace EstimatingLibrary
         #endregion
 
         #region Constructors
-        public TECHardwriredConnection(Guid guid, IConnectable child, TECController controller, bool isTypical) : base(guid, controller, isTypical)
+        public TECHardwiredConnection(Guid guid, IConnectable child, TECController controller, bool isTypical) : base(guid, controller, isTypical)
         {
             Child = child;
             child.SetParentConnection(this);
         }
-        public TECHardwriredConnection(IConnectable child, TECController parent, bool isTypical) : this(Guid.NewGuid(), child, parent, isTypical) { }
-        public TECHardwriredConnection(TECHardwriredConnection connectionSource, TECController parent, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) 
+        public TECHardwiredConnection(IConnectable child, TECController parent, bool isTypical) : this(Guid.NewGuid(), child, parent, isTypical) { }
+        public TECHardwiredConnection(TECHardwiredConnection connectionSource, TECController parent, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) 
             : base(connectionSource, parent, isTypical, guidDictionary)
         {
             Child = connectionSource.Child.Copy(parent, isTypical, guidDictionary);
             Child.SetParentConnection(this);
         }
-        public TECHardwriredConnection(TECHardwriredConnection linkingSource, IConnectable child, bool isTypical) : base(linkingSource, linkingSource.ParentController, isTypical)
+        public TECHardwiredConnection(TECHardwiredConnection linkingSource, IConnectable child, bool isTypical) : base(linkingSource, linkingSource.ParentController, isTypical)
         {
             Child = child;
             child.SetParentConnection(this);

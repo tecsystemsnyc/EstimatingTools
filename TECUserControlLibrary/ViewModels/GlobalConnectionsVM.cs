@@ -18,7 +18,7 @@ namespace TECUserControlLibrary.ViewModels
     public class GlobalConnectionsVM : ViewModelBase, IDropTarget
     {
         private readonly TECBid bid;
-        private Dictionary<TECHardwriredConnection, SubScopeConnectionItem> subScopeConnectionDictionary;
+        private Dictionary<TECHardwiredConnection, SubScopeConnectionItem> subScopeConnectionDictionary;
         private TECElectricalMaterial noneConduit;
 
         private TECController _selectedController;
@@ -153,7 +153,7 @@ namespace TECUserControlLibrary.ViewModels
         public GlobalConnectionsVM(TECBid bid, ChangeWatcher watcher)
         {
             this.bid = bid;
-            subScopeConnectionDictionary = new Dictionary<TECHardwriredConnection, SubScopeConnectionItem>();
+            subScopeConnectionDictionary = new Dictionary<TECHardwiredConnection, SubScopeConnectionItem>();
             noneConduit = new TECElectricalMaterial();
             noneConduit.Name = "None";
 
@@ -294,8 +294,8 @@ namespace TECUserControlLibrary.ViewModels
 
             if (SelectedController != null)
             {
-                foreach (TECHardwriredConnection ssConnect in SelectedController.ChildrenConnections.Where(
-                (connection) => connection is TECHardwriredConnection))
+                foreach (TECHardwiredConnection ssConnect in SelectedController.ChildrenConnections.Where(
+                (connection) => connection is TECHardwiredConnection))
                 {
                     TECEquipment parent = ssConnect.SubScope.FindParentEquipment(bid);
                     addSubScopeConnectionItem(ssConnect);
@@ -403,7 +403,7 @@ namespace TECUserControlLibrary.ViewModels
                         refresh = true;
                     }
                 }
-                else if (obj is TECHardwriredConnection ssConnect && sender == SelectedController)
+                else if (obj is TECHardwiredConnection ssConnect && sender == SelectedController)
                 {
                     if (UnconnectedSubScope.Contains(ssConnect.SubScope))
                     {
@@ -446,7 +446,7 @@ namespace TECUserControlLibrary.ViewModels
                         SelectedUnconnectedSubScope = null;
                     }
                 }
-                else if (obj is TECHardwriredConnection ssConnect)
+                else if (obj is TECHardwiredConnection ssConnect)
                 {
                     if (subScopeConnectionDictionary.ContainsKey(ssConnect) &&
                         ConnectedSubScope.Contains(subScopeConnectionDictionary[ssConnect]))
@@ -465,7 +465,7 @@ namespace TECUserControlLibrary.ViewModels
             ssConnect.SubScope.Connection.ParentController.RemoveSubScope(ssConnect.SubScope);
         }
 
-        private void addSubScopeConnectionItem(TECHardwriredConnection ssConnect)
+        private void addSubScopeConnectionItem(TECHardwiredConnection ssConnect)
         {
             SubScopeConnectionItem newItem = new SubScopeConnectionItem(ssConnect.SubScope, noneConduit, 
                 ssConnect.SubScope.FindParentEquipment(bid).FindParentSystem(bid), 
@@ -477,7 +477,7 @@ namespace TECUserControlLibrary.ViewModels
             }
 
         }
-        private void removeSubScopeConnectionItem(TECHardwriredConnection ssConnect)
+        private void removeSubScopeConnectionItem(TECHardwiredConnection ssConnect)
         {
             ConnectedSubScope.Remove(subScopeConnectionDictionary[ssConnect]);
             subScopeConnectionDictionary.Remove(ssConnect);

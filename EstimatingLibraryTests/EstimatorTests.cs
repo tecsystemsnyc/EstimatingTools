@@ -2160,7 +2160,7 @@ namespace Tests
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
-            TECHardwriredConnection ssConnect = controller.AddSubScopeConnection(subScope);
+            TECHardwiredConnection ssConnect = controller.AddSubScopeConnection(subScope);
             ssConnect.Length = 50;
 
             typical.Instances.Remove(instance);
