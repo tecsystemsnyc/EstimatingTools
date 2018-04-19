@@ -21,6 +21,8 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "IO", this, value, old);
             }
         }
+
+        public IOCollection IOCollection { get { return new IOCollection(IO); } }
         
         public TECIOModule(Guid guid, TECManufacturer manufacturer) : base(guid, manufacturer, COST_TYPE)
         {
@@ -62,11 +64,6 @@ namespace EstimatingLibrary
         public TECIOModule CatalogCopy()
         {
             return new TECIOModule(this);
-        }
-
-        public IOCollection IOCollection()
-        {
-            return new IOCollection(IO);
         }
     }
 }

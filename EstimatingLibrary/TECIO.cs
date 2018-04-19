@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -285,8 +286,30 @@ namespace EstimatingLibrary
         public static IOCollection operator -(IOCollection left, IOCollection right)
         {
             IOCollection newCollection = new IOCollection(left);
-            newCollection.Remove(right.ListIO());
+            newCollection.Remove(right.ToList());
             return newCollection;
+        }
+
+        /// <summary>
+        /// Gives the intersection of the left and right IOCollections
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns>The intersection</returns>
+        public static IOCollection operator |(IOCollection left, IOCollection right)
+        {
+            IOCollection intersection = new IOCollection();
+            foreach(TECIO leftIO in left.ToList())
+            {
+                foreach(TECIO rightIO in right.ToList())
+                {
+                    if (leftIO.Type == rightIO.Type)
+                    {
+                        intersection.Add(leftIO.Quantity < rightIO.Quantity ? leftIO : rightIO); 
+                    }
+                }
+            }
+            return intersection;
         }
         
         private void remove(IOType type)
@@ -344,6 +367,21 @@ namespace EstimatingLibrary
             {
                 throw new InvalidOperationException("IOCollection does not contain Protocol.");
             }
+        }
+    }
+
+    public static class IOCollectionExtensions
+    {
+        public static IOCollection ToIOCollection(this IEnumerable<TECIOModule> modules)
+        {
+            IOCollection io = new IOCollection();
+            modules.ForEach(mod => io.Add(mod.IO));
+            return io;
+        }
+
+        public static IOCollection ToIOCollection(this TECIO io)
+        {
+            return new IOCollection(new List<TECIO>() { io });
         }
     }
 }

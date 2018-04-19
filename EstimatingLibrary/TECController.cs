@@ -170,19 +170,52 @@ namespace EstimatingLibrary
                 {
                     if (this.AvailableProtocols.Contains(io))
                     {
-                        TECNetworkConnection connection = new TECNetworkConnection(this, io.Protocol, this.IsTypical);
-                        connection.AddChild(connectable);
-                        addChildConnection(connection);
-                        return connection;
+                        return constructNetworkConnection(io.Protocol);
                     }
                 }
+
+                foreach(TECIO io in connectable.AvailableProtocols.ToList())
+                {
+                    if (this.getPotentialIO().Contains(io))
+                    {
+                        List<TECIOModule> newModules = getModulesForIO(io.ToIOCollection());
+                        newModules.ForEach(module => this.IOModules.Add(module));
+
+                        return constructNetworkConnection(io.Protocol);
+                    }
+                }
+
+                TECNetworkConnection constructNetworkConnection(TECProtocol protocol)
+                {
+                    TECNetworkConnection connection = new TECNetworkConnection(this, protocol, this.IsTypical);
+                    connection.AddChild(connectable);
+                    addChildConnection(connection);
+                    return connection;
+                }
+
                 throw new Exception("No matching protocols");
             }
             else
             {
-                TECHardwiredConnection connection = new TECHardwiredConnection(connectable, this, this.IsTypical);
-                addChildConnection(connection);
-                return connection;
+                if (this.AvailableIO.Contains(connectable.HardwiredIO))
+                {
+                    return constructHardwiredConnection();
+                }
+                else
+                {
+                    List<TECIOModule> newModules = getModulesForIO(connectable.HardwiredIO);
+                    newModules.ForEach(module => this.IOModules.Add(module));
+
+                    return constructHardwiredConnection();
+                }
+
+                TECHardwiredConnection constructHardwiredConnection()
+                {
+                    TECHardwiredConnection connection = new TECHardwiredConnection(connectable, this, this.IsTypical);
+                    addChildConnection(connection);
+                    return connection;
+                }
+                
             }
         }
 
@@ -294,6 +327,66 @@ namespace EstimatingLibrary
                 throw new InvalidOperationException("Controller can't accept IOModule.");
             }
         }
+
+        private List<TECIOModule> getPotentialModules()
+        {
+            List<TECIOModule> modules = new List<TECIOModule>(this.Type.IOModules);
+            foreach(TECIOModule module in this.IOModules)
+            {
+                modules.Remove(module);
+            }
+            return modules;
+        }
+        /// <summary>
+        /// Gets nessessary modules from potential modules to handle io.
+        /// </summary>
+        /// <param name="io"></param>
+        /// <returns>Nessessary modules. Returns empty list if no collection of modules exists.</returns>
+        private List<TECIOModule> getModulesForIO(IOCollection io)
+        {
+            IOCollection nessessaryIO = io - (io | AvailableIO);
+
+            List<TECIOModule> potentialModules = getPotentialModules();
+
+            //Check that any singular module can cover the nessessary io
+            foreach(TECIOModule module in potentialModules)
+            {
+                if (module.IOCollection.Contains(io)) return new List<TECIOModule>() { module };
+            }
+            
+            //List of modules to return
+            List<TECIOModule> returnModules = new List<TECIOModule>();
+            foreach(TECIO type in io.ToList())
+            {
+                TECIO singularIO = new TECIO(type);
+                singularIO.Quantity = 1;
+
+                //List of remaining potential modules after return modules is considered
+                List<TECIOModule> newPotentialModules = new List<TECIOModule>(potentialModules);
+                foreach(TECIOModule module in returnModules)
+                {
+                    newPotentialModules.Remove(module);
+                }
+
+                //Add the first module that contains the IOType we're checking
+                foreach(TECIOModule module in newPotentialModules)
+                {
+                    if (module.IOCollection.Contains(singularIO))
+                    {
+                        returnModules.Add(module);
+                        break;
+                    }
+                }
+
+                //If return modules satisfies our IO, return them
+                if (returnModules.ToIOCollection().Contains(io))
+                {
+                    return returnModules;
+                }
+            }
+
+            return new List<TECIOModule>();
+        }
         #endregion
 
         #region Methods
@@ -345,11 +438,10 @@ namespace EstimatingLibrary
         }
         public bool CanChangeType(TECControllerType newType)
         {
-            if (newType == null)
-                return false;
+            if (newType == null) return false;
             TECController possibleController = new TECController(newType, false);
-            IOCollection necessaryIO = this.getUsedIO();
-            IOCollection possibleIO = possibleController.getPotentialIO() + possibleController.getTotalIO();
+            IOCollection necessaryIO = this.UsedIO;
+            IOCollection possibleIO = possibleController.getPotentialIO() + possibleController.AvailableIO;
             return possibleIO.Contains(necessaryIO);
         }
         public void ChangeType(TECControllerType newType)
