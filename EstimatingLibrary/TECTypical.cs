@@ -3,6 +3,7 @@ using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reflection;
 
 namespace EstimatingLibrary
@@ -200,9 +201,9 @@ namespace EstimatingLibrary
             foreach (TECController instance in this.TypicalInstanceDictionary.GetInstances(controller))
             {
                 instance.RemoveAllChildNetworkConnections();
-                foreach (TECNetworkConnection connection in controller.ChildNetworkConnections)
+                foreach (TECNetworkConnection connection in controller.ChildrenConnections.Where(connection => connection is TECNetworkConnection))
                 {
-                    TECNetworkConnection instanceConnection = instance.AddNetworkConnection(false, connection.ConnectionTypes, connection.IOType);
+                    TECNetworkConnection instanceConnection = instance.AddNetworkConnection(connection.Protocol);
                     instanceConnection.Length = connection.Length;
                     instanceConnection.ConduitType = connection.ConduitType;
                     instanceConnection.ConduitLength = connection.ConduitLength;
@@ -216,7 +217,7 @@ namespace EstimatingLibrary
                                 {
                                     if (system.Controllers.Contains(instanceChild))
                                     {
-                                        instanceConnection.AddINetworkConnectable(instanceChild);
+                                        instanceConnection.AddChild(instanceChild);
                                     }
                                 }
                             }
@@ -229,7 +230,7 @@ namespace EstimatingLibrary
                                 {
                                     if (system.GetAllSubScope().Contains(instanceChild))
                                     {
-                                        instanceConnection.AddINetworkConnectable(instanceChild);
+                                        instanceConnection.AddChild(instanceChild);
                                     }
                                 }
                             }
@@ -260,7 +261,7 @@ namespace EstimatingLibrary
             }
 
             List<TECConnection> outConnections = new List<TECConnection>();
-            outConnections.Add(typicalController.AddSubScope(typicalSubScope, true));
+            outConnections.Add(typicalController.Connect(typicalSubScope));
 
             foreach (TECController instanceController
                     in this.TypicalInstanceDictionary.GetInstances(typicalController))
@@ -274,7 +275,7 @@ namespace EstimatingLibrary
                         if (instance.Controllers.Contains(instanceController) &&
                             instance.GetAllSubScope().Contains(instanceSubScope))
                         {
-                            outConnections.Add(instanceController.AddSubScope(instanceSubScope, true));
+                            outConnections.Add(instanceController.Connect(instanceSubScope));
                             found = true;
                             break;
                         }
@@ -472,7 +473,7 @@ namespace EstimatingLibrary
             {
                 if (subScope.Connection != null && !instance.Controllers.Contains(subScope.Connection.ParentController))
                 {
-                    subScope.Connection.ParentController.RemoveSubScope(subScope);
+                    subScope.Connection.ParentController.RemoveConnectable(subScope);
                 }
             }
             removeFromDictionary(Panels, instance.Panels);
