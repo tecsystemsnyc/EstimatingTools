@@ -253,6 +253,10 @@ namespace EstimatingLibrary
                 Add(io);
             }
         }
+        public void Remove(IOType type)
+        {
+            this.Remove(new TECIO(type));
+        }
         public void Remove(TECIO io)
         {
             if(io.Type == IOType.Protocol)
