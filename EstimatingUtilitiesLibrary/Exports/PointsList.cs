@@ -69,7 +69,7 @@ namespace EstimatingUtilitiesLibrary.Exports
                             foreach (TECPoint point in ss.Points)
                             {
                                 xlRow.Cell("E").Value = point.Label;
-                                if (TECIO.NetworkIO.Contains(point.Type))
+                                if (point.Type == IOType.Protocol)
                                 {
                                     xlRow.Cell("F").Value = "Serial";
                                 }
