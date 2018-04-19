@@ -43,7 +43,7 @@ namespace EstimatingLibrary.Utilities
         {
             linkSystemToCatalogs(system, scopeManager.Catalogs);
             linkSubScopeConnections(system.Controllers, system.GetAllSubScope(), guidDictionary);
-            List<INetworkConnectable> allChildren = new List<INetworkConnectable>();
+            List<IConnectable> allChildren = new List<IConnectable>();
             allChildren.AddRange(system.Controllers);
             allChildren.AddRange(system.GetAllSubScope());
             linkNetworkConnections(system.Controllers, allChildren, guidDictionary);
@@ -233,7 +233,7 @@ namespace EstimatingLibrary.Utilities
                 panel.Controllers = new ObservableCollection<TECController>(controllersToLink);
             }
         }
-        private static void linkNetworkConnections(IEnumerable<TECController> controllers, IEnumerable<INetworkConnectable> children,
+        private static void linkNetworkConnections(IEnumerable<TECController> controllers, IEnumerable<IConnectable> children,
             Dictionary<Guid, Guid> guidDictionary = null)
         {
             foreach (TECController controller in controllers)
@@ -243,10 +243,10 @@ namespace EstimatingLibrary.Utilities
                     if (connection is TECNetworkConnection)
                     {
                         TECNetworkConnection netConnect = connection as TECNetworkConnection;
-                        ObservableCollection<INetworkConnectable> controllersToAdd = new ObservableCollection<INetworkConnectable>();
-                        foreach (INetworkConnectable child in netConnect.Children)
+                        ObservableCollection<IConnectable> controllersToAdd = new ObservableCollection<IConnectable>();
+                        foreach (IConnectable child in netConnect.Children)
                         {
-                            foreach (INetworkConnectable item in children)
+                            foreach (IConnectable item in children)
                             {
                                 bool isCopy = (guidDictionary != null && guidDictionary[child.Guid] == guidDictionary[item.Guid]);
                                 if (child.Guid == item.Guid || isCopy)
@@ -268,30 +268,29 @@ namespace EstimatingLibrary.Utilities
             {
                 foreach (TECController controller in controllers)
                 {
-                    List<TECSubScopeConnection> newConnections = new List<TECSubScopeConnection>();
-                    List<TECSubScopeConnection> oldConnections = new List<TECSubScopeConnection>();
+                    List<TECHardwriredConnection> newConnections = new List<TECHardwriredConnection>();
+                    List<TECHardwriredConnection> oldConnections = new List<TECHardwriredConnection>();
                     foreach (TECConnection connection in controller.ChildrenConnections)
                     {
                         
-                        if (connection is TECSubScopeConnection)
+                        if (connection is TECHardwriredConnection)
                         {
-                            TECSubScopeConnection ssConnect = connection as TECSubScopeConnection;
+                            TECHardwriredConnection ssConnect = connection as TECHardwriredConnection;
                             bool isCopy = (guidDictionary != null && guidDictionary[ssConnect.SubScope.Guid] == guidDictionary[subScope.Guid]);
                             if (ssConnect.SubScope.Guid == subScope.Guid || isCopy)
                             {
-                                TECSubScopeConnection linkedConnection = new TECSubScopeConnection(ssConnect, subScope, subScope.IsTypical || controller.IsTypical);
-                                subScope.Connection = linkedConnection;
+                                TECHardwriredConnection linkedConnection = new TECHardwriredConnection(ssConnect, subScope, subScope.IsTypical || controller.IsTypical);
                                 newConnections.Add(linkedConnection);
                                 oldConnections.Add(ssConnect);
                                 linkedConnection.ParentController = controller;
                             }
                         }
                     }
-                    foreach(TECSubScopeConnection conn in newConnections)
+                    foreach(TECHardwriredConnection conn in newConnections)
                     {
                         controller.ChildrenConnections.Add(conn);
                     }
-                    foreach(TECSubScopeConnection conn in oldConnections)
+                    foreach(TECHardwriredConnection conn in oldConnections)
                     {
                         controller.ChildrenConnections.Remove(conn);
                     }

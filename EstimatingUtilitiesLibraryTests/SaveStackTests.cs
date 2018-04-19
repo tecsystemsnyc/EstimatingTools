@@ -1949,7 +1949,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            TECSubScopeConnection connection = controller.AddSubScopeConnection(subScope);
+            TECHardwriredConnection connection = controller.AddSubScopeConnection(subScope);
 
             Dictionary<string, string> data;
 
@@ -2002,7 +2002,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            TECSubScopeConnection connection = controller.AddSubScopeConnection(instanceSubScope);
+            TECHardwriredConnection connection = controller.AddSubScopeConnection(instanceSubScope);
 
             Dictionary<string, string> data;
 
@@ -2053,7 +2053,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            TECSubScopeConnection connection = controller.AddSubScopeConnection(subScope);
+            TECHardwriredConnection connection = controller.AddSubScopeConnection(subScope);
 
             Dictionary<string, string> data;
 
@@ -2108,8 +2108,8 @@ namespace EstimatingUtilitiesLibraryTests
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            TECSubScopeConnection connection = controller.AddSubScopeConnection(subScope);
-            TECSubScopeConnection instanceConnection = instanceController.AddSubScopeConnection(instanceSubScope);
+            TECHardwriredConnection connection = controller.AddSubScopeConnection(subScope);
+            TECHardwriredConnection instanceConnection = instanceController.AddSubScopeConnection(instanceSubScope);
             Dictionary<string, string> data;
             
             data = new Dictionary<string, string>();
@@ -3880,7 +3880,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
             bid.Systems.Add(typical);
-            TECSubScopeConnection connection = controller.AddSubScopeConnection(subScope);
+            TECHardwriredConnection connection = controller.AddSubScopeConnection(subScope);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -3931,7 +3931,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.Systems.Add(typical);
             TECSystem system = typical.AddInstance(bid);
             TECSubScope instanceSubScope = system.Equipment[0].SubScope[0];
-            TECSubScopeConnection connection = controller.AddSubScopeConnection(instanceSubScope);
+            TECHardwriredConnection connection = controller.AddSubScopeConnection(instanceSubScope);
 
 
             //Act
@@ -3982,7 +3982,7 @@ namespace EstimatingUtilitiesLibraryTests
             equipment.SubScope.Add(subScope);
             bid.Systems.Add(typical);
 
-            TECSubScopeConnection connection = controller.AddSubScopeConnection(subScope);
+            TECHardwriredConnection connection = controller.AddSubScopeConnection(subScope);
 
 
             //Act
@@ -4037,8 +4037,8 @@ namespace EstimatingUtilitiesLibraryTests
             TECSubScope instanceSubScope = system.Equipment[0].SubScope[0];
             TECController instanceController = system.Controllers[0];
 
-            TECSubScopeConnection connection = controller.AddSubScopeConnection(subScope);
-            TECSubScopeConnection instanceConnection = instanceController.AddSubScopeConnection(instanceSubScope);
+            TECHardwriredConnection connection = controller.AddSubScopeConnection(subScope);
+            TECHardwriredConnection instanceConnection = instanceController.AddSubScopeConnection(instanceSubScope);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);

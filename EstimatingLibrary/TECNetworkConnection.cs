@@ -10,10 +10,9 @@ namespace EstimatingLibrary
     {
         #region Properties
         //---Stored---
-        private ObservableCollection<INetworkConnectable> _children = new ObservableCollection<INetworkConnectable>();
-        private TECProtocol _protocol;
+        private ObservableCollection<IConnectable> _children = new ObservableCollection<IConnectable>();
 
-        public ObservableCollection<INetworkConnectable> Children
+        public ObservableCollection<IConnectable> Children
         {
             get { return _children; }
             set
@@ -25,16 +24,7 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "Children", this, value, old);
             }
         }
-        public TECProtocol Protocol
-        {
-            get { return _protocol; }
-            set
-            {
-                var old = Protocol;
-                _protocol = value;
-                notifyCombinedChanged(Change.Edit, "Protocol", this, value, old);
-            }
-        }
+        public TECProtocol Protocol { get; }
         
         public override List<TECConnectionType> ConnectionTypes
         {
@@ -50,19 +40,23 @@ namespace EstimatingLibrary
         #endregion
 
         #region Constructors
-        public TECNetworkConnection(Guid guid, bool isTypical) : base(guid, isTypical)
+        public TECNetworkConnection(Guid guid, TECController parent, TECProtocol protocol, bool isTypical) : base(guid, parent, isTypical)
         {
+            Protocol = protocol;
             Children.CollectionChanged += Children_CollectionChanged;
         }
-        public TECNetworkConnection(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
-        public TECNetworkConnection(TECNetworkConnection connectionSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, isTypical, guidDictionary)
+        public TECNetworkConnection(TECController parent, TECProtocol protocol, bool isTypical) : this(Guid.NewGuid(), parent, protocol, isTypical) { }
+        public TECNetworkConnection(TECNetworkConnection connectionSource, TECController parent, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) 
+            : base(connectionSource, parent, isTypical, guidDictionary)
         {
             Children.CollectionChanged += Children_CollectionChanged;
-            foreach (INetworkConnectable item in connectionSource.Children)
+            foreach (IConnectable item in connectionSource.Children)
             {
-                _children.Add(item.Copy(item, isTypical, guidDictionary));
+                IConnectable newChild = item.Copy(isTypical, guidDictionary);
+                newChild.SetParentConnection(this);
+                _children.Add(newChild);
             }
-            _protocol = connectionSource.Protocol;
+            Protocol = connectionSource.Protocol;
         }
         #endregion
 
@@ -91,15 +85,15 @@ namespace EstimatingLibrary
         #endregion
 
         #region Methods
-        public bool CanAddINetworkConnectable(INetworkConnectable connectable)
+        public bool CanAddChild(IConnectable connectable)
         {
             return connectable.AvailableProtocols.Contains(this.Protocol.ToIO());
         }
-        public void AddINetworkConnectable(INetworkConnectable connectable)
+        public void AddChild(IConnectable connectable)
         {
-            if (CanAddINetworkConnectable(connectable))
+            if (CanAddChild(connectable))
             {
-                connectable.ParentConnection = this;
+                connectable.SetParentConnection(this);
                 Children.Add(connectable);
             }
             else
@@ -107,12 +101,12 @@ namespace EstimatingLibrary
                 throw new InvalidOperationException("Connectable not compatible with Network Connection.");
             }
         }
-        public void RemoveINetworkConnectable(INetworkConnectable connectable)
+        public void RemoveChild(IConnectable connectable)
         {
             if (Children.Contains(connectable))
             {
                 Children.Remove(connectable);
-                connectable.ParentConnection = null;
+                connectable.SetParentConnection(null);
             }
             else
             {
@@ -125,7 +119,7 @@ namespace EstimatingLibrary
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.propertyObjects());
             List<TECObject> objects = new List<TECObject>();
-            foreach(INetworkConnectable netconnect in Children)
+            foreach(IConnectable netconnect in Children)
             {
                 objects.Add(netconnect as TECObject);
             }
@@ -138,7 +132,7 @@ namespace EstimatingLibrary
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.linkedObjects());
             List<TECObject> objects = new List<TECObject>();
-            foreach (INetworkConnectable netconnect in Children)
+            foreach (IConnectable netconnect in Children)
             {
                 objects.Add(netconnect as TECObject);
             }

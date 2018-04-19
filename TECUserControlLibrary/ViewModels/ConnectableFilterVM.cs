@@ -15,7 +15,7 @@ using TECUserControlLibrary.Utilities;
 namespace TECUserControlLibrary.ViewModels
 {
     public class ConnectableFilterVM<T> : ViewModelBase, IConnectableFilterVM 
-        where T : ITECObject, INetworkConnectable
+        where T : ITECObject, IConnectable
     {
         private readonly ReadOnlyObservableCollection<T> allConnectables;
 

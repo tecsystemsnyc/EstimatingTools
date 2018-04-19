@@ -206,7 +206,7 @@ namespace EstimatingLibrary
                     instanceConnection.Length = connection.Length;
                     instanceConnection.ConduitType = connection.ConduitType;
                     instanceConnection.ConduitLength = connection.ConduitLength;
-                    foreach (INetworkConnectable child in connection.Children)
+                    foreach (IConnectable child in connection.Children)
                     {
                         if (child is TECController childController)
                         {

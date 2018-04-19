@@ -759,7 +759,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class SubScopeConnectionTable : TableBase
     {
         public static string TableName = "SubScopeConnection";
-        public static Type ObjectType = typeof(TECSubScopeConnection);
+        public static Type ObjectType = typeof(TECHardwriredConnection);
 
         public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Length = new TableField("Length", "REAL", ObjectType.GetProperty("Length"));
@@ -2099,7 +2099,7 @@ namespace EstimatingUtilitiesLibrary.Database
     {
         public static string TableName = "NetworkConnectionChildren";
         public static Type ConnectionType = typeof(TECNetworkConnection);
-        public static Type ChildType = typeof(INetworkConnectable);
+        public static Type ChildType = typeof(IConnectable);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ConnectionType.GetProperty("Guid"));
         public static TableField ChildID = new TableField("ChildID", "TEXT", ChildType.GetProperty("Guid"));
@@ -2137,7 +2137,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class SubScopeConnectionChildrenTable : TableBase
     {
         public static string TableName = "SubScopeConnectionChild";
-        public static Type ConnectionType = typeof(TECSubScopeConnection);
+        public static Type ConnectionType = typeof(TECHardwriredConnection);
         public static Type ChildType = typeof(TECSubScope);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ConnectionType.GetProperty("Guid"));

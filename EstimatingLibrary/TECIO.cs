@@ -161,6 +161,10 @@ namespace EstimatingLibrary
             list.AddRange(protocolDictionary.Values);
             return list;
         }
+        public int TypeCount()
+        {
+            return this.ToList().Count();
+        }
         
         public bool Contains(TECIO io)
         {

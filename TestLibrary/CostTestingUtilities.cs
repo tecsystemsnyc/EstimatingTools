@@ -153,9 +153,9 @@ namespace Tests
         static public Total CalculateTotal(TECConnection connection, CostType type)
         {
             Total total = new Total();
-            if (connection is TECSubScopeConnection)
+            if (connection is TECHardwriredConnection)
             {
-                foreach (TECElectricalMaterial conType in (connection as TECSubScopeConnection).ConnectionTypes)
+                foreach (TECElectricalMaterial conType in (connection as TECHardwriredConnection).ConnectionTypes)
                 {
                     total += CalculateTotal(conType, type) * connection.Length;
                     total += CalculateTotal(conType as TECScope, type);

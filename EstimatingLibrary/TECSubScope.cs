@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace EstimatingLibrary
 {
-    public class TECSubScope : TECLocated, INotifyPointChanged, IDragDropable, ITypicalable, INetworkConnectable
+    public class TECSubScope : TECLocated, INotifyPointChanged, IDragDropable, ITypicalable, IConnectable
     {
         #region Properties
         private ObservableCollection<IEndDevice> _devices;
@@ -78,7 +78,7 @@ namespace EstimatingLibrary
             }
         }
 
-        IOCollection INetworkConnectable.AvailableProtocols
+        IOCollection IConnectable.AvailableProtocols
         {
             get
             {
@@ -91,7 +91,7 @@ namespace EstimatingLibrary
             }
         }
 
-        TECNetworkConnection INetworkConnectable.ParentConnection
+        TECNetworkConnection IConnectable.ParentConnection
         {
             get { return Connection as TECNetworkConnection; }
             set
@@ -315,9 +315,9 @@ namespace EstimatingLibrary
             }
         }
 
-        public INetworkConnectable Copy(INetworkConnectable item, bool isTypical, Dictionary<Guid, Guid> guidDictionary)
+        public IConnectable Copy(bool isTypical, Dictionary<Guid, Guid> guidDictionary)
         {
-            return new TECSubScope(item as TECSubScope, isTypical, guidDictionary);
+            return new TECSubScope(this, isTypical, guidDictionary);
         }
         #endregion
     }

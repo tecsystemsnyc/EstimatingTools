@@ -24,9 +24,9 @@ namespace TECUserControlLibrary.ViewModels
         private readonly Func<INetworkParentable, bool> updateCanExecute;
 
         private readonly ObservableCollection<INetworkParentable> allParentables;
-        private readonly ObservableCollection<INetworkConnectable> allConnectables;
+        private readonly ObservableCollection<IConnectable> allConnectables;
         private INetworkParentable _selectedParentable;
-        private INetworkConnectable _selectedConnectable;
+        private IConnectable _selectedConnectable;
         private AddNetworkConnectionVM _addNetConnectVM;
         private TECNetworkConnection _selectedConnection;
         private TECCatalogs _catalogs;
@@ -37,7 +37,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             get { return ParentableFilterVM.FilteredConnectables; }
         }
-        public ObservableCollection<INetworkConnectable> FilteredConnectables
+        public ObservableCollection<IConnectable> FilteredConnectables
         {
             get { return ConnectableFilterVM.FilteredConnectables; }
         }
@@ -65,7 +65,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-        public INetworkConnectable SelectedConnectable
+        public IConnectable SelectedConnectable
         {
             get { return _selectedConnectable; }
             set
@@ -114,7 +114,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             get;
         }
-        public ConnectableFilterVM<INetworkConnectable> ConnectableFilterVM
+        public ConnectableFilterVM<IConnectable> ConnectableFilterVM
         {
             get;
         }
@@ -144,11 +144,11 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         public RelayCommand<TECNetworkConnection> RemoveConnectionCommand { get; private set; }
-        public RelayCommand<INetworkConnectable> RemoveChildCommand { get; private set; }
+        public RelayCommand<IConnectable> RemoveChildCommand { get; private set; }
         #endregion
 
         private NetworkVM(
-            IEnumerable<INetworkConnectable> connectables,
+            IEnumerable<IConnectable> connectables,
             TECCatalogs catalogs,
             Action<INetworkParentable> updateExecute = null,
             Func<INetworkParentable, bool> updateCanExecute = null)
@@ -157,8 +157,8 @@ namespace TECUserControlLibrary.ViewModels
             this.updateCanExecute = updateCanExecute;
             this.Catalogs = catalogs;
             this.allParentables = new ObservableCollection<INetworkParentable>();
-            this.allConnectables = new ObservableCollection<INetworkConnectable>(connectables.Where(item => item.IsNetwork));
-            foreach(INetworkConnectable connectable in connectables)
+            this.allConnectables = new ObservableCollection<IConnectable>(connectables.Where(item => item.IsNetwork));
+            foreach(IConnectable connectable in connectables)
             {
                 if (connectable is INetworkParentable parentable && parentable.IsNetwork)
                 {
@@ -166,9 +166,9 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
             ParentableFilterVM = new ConnectableFilterVM<INetworkParentable>(allParentables);
-            ConnectableFilterVM = new ConnectableFilterVM<INetworkConnectable>(allConnectables);
+            ConnectableFilterVM = new ConnectableFilterVM<IConnectable>(allConnectables);
             RemoveConnectionCommand = new RelayCommand<TECNetworkConnection>(removeConnectionExecute);
-            RemoveChildCommand = new RelayCommand<INetworkConnectable>(removeChildExecute);
+            RemoveChildCommand = new RelayCommand<IConnectable>(removeChildExecute);
         }
         
         public event Action<TECObject> Selected;
@@ -180,7 +180,7 @@ namespace TECUserControlLibrary.ViewModels
             UIHelpers.DragOver(dropInfo, (sourceItem, sourceType, targetType) =>
             {
                 bool targetIsChildren = dropInfo.TargetCollection == SelectedConnection?.Children;
-                if (sourceItem is INetworkConnectable connectable && targetIsChildren)
+                if (sourceItem is IConnectable connectable && targetIsChildren)
                 {
                     if (SelectedConnection.CanAddINetworkConnectable(connectable) && connectable.ParentConnection == null)
                     {
@@ -201,7 +201,7 @@ namespace TECUserControlLibrary.ViewModels
             UIHelpers.Drop(dropInfo,
                 (item) =>
                 {
-                    if (item is INetworkConnectable connectable)
+                    if (item is IConnectable connectable)
                     {
                         SelectedConnection.AddINetworkConnectable(connectable);
                         ConnectableFilterVM.Refilter();
@@ -225,7 +225,7 @@ namespace TECUserControlLibrary.ViewModels
                 //Looks for INetworkConnectable children of item
                 if(e.Value is TECObject item && isProperty(e.Sender, e.PropertyName, item))
                 {
-                    foreach(INetworkConnectable connectable in getConnectables(item))
+                    foreach(IConnectable connectable in getConnectables(item))
                     {
                         if(e.Change == Change.Add && connectable.IsNetwork)
                         {
@@ -247,7 +247,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
 
                 //Looks to see if sender IsNetwork changed
-                if (e.Sender is INetworkConnectable connectableSender)
+                if (e.Sender is IConnectable connectableSender)
                 {
                     INetworkParentable parentableSender = connectableSender as INetworkParentable;
                     if (connectableSender.IsNetwork)
@@ -291,10 +291,10 @@ namespace TECUserControlLibrary.ViewModels
             return false;
         }
 
-        private List<INetworkConnectable> getConnectables(TECObject item)
+        private List<IConnectable> getConnectables(TECObject item)
         {
-            List<INetworkConnectable> connectables = new List<INetworkConnectable>();
-            if(item is INetworkConnectable connectable)
+            List<IConnectable> connectables = new List<IConnectable>();
+            if(item is IConnectable connectable)
             {
                 connectables.Add(connectable);
             }
@@ -321,7 +321,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private void removeChildExecute(INetworkConnectable obj)
+        private void removeChildExecute(IConnectable obj)
         {
             SelectedConnection.RemoveINetworkConnectable(obj);
             refilter();            
@@ -334,7 +334,7 @@ namespace TECUserControlLibrary.ViewModels
         #region Static Constructors
         public static NetworkVM GetNetworkVMFromBid(TECBid bid, ChangeWatcher watcher)
         {
-            List<INetworkConnectable> connectables = new List<INetworkConnectable>();
+            List<IConnectable> connectables = new List<IConnectable>();
             connectables.AddRange(bid.GetAllInstanceControllers());
             connectables.AddRange(bid.GetAllInstanceSubScope());
 
@@ -345,7 +345,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public static NetworkVM GetNetworkVMFromTypical(TECTypical typ, TECCatalogs catalogs)
         {
-            List<INetworkConnectable> connectables = new List<INetworkConnectable>();
+            List<IConnectable> connectables = new List<IConnectable>();
             connectables.AddRange(typ.Controllers);
             connectables.AddRange(typ.GetAllSubScope());
 
@@ -371,7 +371,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else
             {
-                List<INetworkConnectable> connectables = new List<INetworkConnectable>();
+                List<IConnectable> connectables = new List<IConnectable>();
                 connectables.AddRange(sys.Controllers);
                 connectables.AddRange(sys.GetAllSubScope());
 

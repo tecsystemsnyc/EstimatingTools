@@ -644,7 +644,7 @@ namespace Tests
             Guid expectedConduitTypeGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
             Guid expectedSubScopeGuid = new Guid("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
 
-            TECSubScopeConnection actualSSConnect = null;
+            TECHardwriredConnection actualSSConnect = null;
             foreach (TECSystem typical in actualTemplates.SystemTemplates)
             {
                 foreach (TECController controller in typical.Controllers)
@@ -653,7 +653,7 @@ namespace Tests
                     {
                         if (connection.Guid == expectedGuid)
                         {
-                            actualSSConnect = (connection as TECSubScopeConnection);
+                            actualSSConnect = (connection as TECHardwriredConnection);
                             break;
                         }
                     }

@@ -12,7 +12,6 @@ namespace EstimatingLibrary
         #region Properties
         protected double _length;
         protected double _conduitLength;
-        protected TECController _parentController;
         protected TECElectricalMaterial _conduitType;
         protected bool _isPlenum;
 
@@ -41,15 +40,7 @@ namespace EstimatingLibrary
                 notifyCostChanged(current - previous);
             }
         }
-        public TECController ParentController
-        {
-            get { return _parentController; }
-            set
-            {
-                _parentController = value;
-                raisePropertyChanged("ParentController");
-            }
-        }
+        public TECController ParentController { get; }
         public TECElectricalMaterial ConduitType
         {
             get { return _conduitType; }
@@ -99,14 +90,15 @@ namespace EstimatingLibrary
         public event Action<CostBatch> CostChanged;
 
         #region Constructors 
-        public TECConnection(Guid guid, bool isTypical) : base(guid)
+        public TECConnection(Guid guid, TECController parent, bool isTypical) : base(guid)
         {
             IsTypical = isTypical;
+            ParentController = parent;
             _length = 0;
             _conduitLength = 0;
         }
-        public TECConnection(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
-        public TECConnection(TECConnection connectionSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : this(isTypical)
+        public TECConnection(TECController parent, bool isTypical) : this(Guid.NewGuid(), parent, isTypical) { }
+        public TECConnection(TECConnection connectionSource, TECController parent, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : this(parent, isTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = connectionSource.Guid; }
@@ -130,10 +122,6 @@ namespace EstimatingLibrary
         protected virtual CostBatch getCosts()
         {
             CostBatch costs = new CostBatch();
-            foreach (TECConnectionType connectionType in GetConnectionTypes())
-            {
-                costs += connectionType.GetCosts(Length, IsPlenum);
-            }
             if (ConduitType != null)
             {
                 costs += ConduitType.GetCosts(ConduitLength);
@@ -143,7 +131,6 @@ namespace EstimatingLibrary
         protected virtual SaveableMap propertyObjects()
         {
             SaveableMap saveList = new SaveableMap();
-            saveList.AddRange(this.GetConnectionTypes(), "ConnectionTypes");
             if(this.ConduitType != null)
             {
                 saveList.Add(this.ConduitType, "ConduitType");
@@ -153,7 +140,6 @@ namespace EstimatingLibrary
         protected virtual SaveableMap linkedObjects()
         {
             SaveableMap relatedList = new SaveableMap();
-            relatedList.AddRange(this.GetConnectionTypes(), "ConnectionTypes");
             if (this.ConduitType != null)
             {
                 relatedList.Add(this.ConduitType, "ConduitType");

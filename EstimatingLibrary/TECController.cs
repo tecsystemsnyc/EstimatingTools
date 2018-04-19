@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace EstimatingLibrary
 {
-    public class TECController : TECLocated, IDragDropable, ITypicalable, INetworkConnectable, INetworkParentable
+    public class TECController : TECLocated, IDragDropable, ITypicalable, IConnectable
     {
         #region Properties
         //---Stored---
@@ -138,17 +138,15 @@ namespace EstimatingLibrary
             copyPropertiesFromLocated(controllerSource);
             foreach (TECConnection connection in controllerSource.ChildrenConnections)
             {
-                if (connection is TECSubScopeConnection)
+                if (connection is TECHardwriredConnection)
                 {
-                    TECSubScopeConnection connectionToAdd = new TECSubScopeConnection(connection as TECSubScopeConnection, isTypical, guidDictionary);
-                    connectionToAdd.ParentController = this;
+                    TECHardwriredConnection connectionToAdd = new TECHardwriredConnection(connection as TECHardwriredConnection, this, isTypical, guidDictionary);
                     _childrenConnections.Add(connectionToAdd);
                 }
                 else if (connection is TECNetworkConnection)
                 {
 
-                    TECNetworkConnection connectionToAdd = new TECNetworkConnection(connection as TECNetworkConnection, isTypical, guidDictionary);
-                    connectionToAdd.ParentController = this;
+                    TECNetworkConnection connectionToAdd = new TECNetworkConnection(connection as TECNetworkConnection, this, isTypical, guidDictionary);
                     _childrenConnections.Add(connectionToAdd);
                 }
             }
@@ -160,34 +158,59 @@ namespace EstimatingLibrary
         #endregion
 
         #region Connection Methods
-        public bool CanAddNetworkConnection(TECProtocol protocol)
+        public bool CanConnect(IConnectable connectable)
         {
-            return (AvailableIO.Contains(new TECIO(protocol)));
-        }
-        public TECNetworkConnection AddNetworkConnection(TECProtocol protocol)
-        {
-            if (CanAddNetworkConnection(ioType))
+            if(connectable.IsNetwork)
             {
-                TECNetworkConnection netConnect = new TECNetworkConnection(isTypical);
-                netConnect.ParentController = this;
-                netConnect.ConnectionTypes = new ObservableCollection<TECConnectionType>(connectionTypes);
-                netConnect.IOType = ioType;
-                addChildConnection(netConnect);
-                return netConnect;
+                return this.AvailableProtocols.Contains(connectable.AvailableProtocols);
             }
             else
             {
-                throw new InvalidOperationException("Network connection incompatible with controller.");
+                return this.AvailableIO.Contains(connectable.HardwiredIO);
             }
+        }
+        public TECConnection Connect(IConnectable connectable)
+        {
+            if (connectable.IsNetwork)
+            {
+                foreach(TECIO io in connectable.AvailableProtocols.ToList())
+                {
+                    if (this.AvailableProtocols.Contains(io))
+                    {
+                        TECNetworkConnection connection = new TECNetworkConnection(this, io.Protocol, this.IsTypical);
+                        connection.AddChild(connectable);
+                        addChildConnection(connection);
+                        return connection;
+                    }   
+                }
+                throw new Exception("No matching protocols");
+            }
+            else
+            {
+                TECHardwriredConnection connection = new TECHardwriredConnection(connectable, this, this.IsTypical);
+                addChildConnection(connection);
+                return connection;
+            }
+        }
+        
+        public bool CanAddNetworkConnection(TECProtocol protocol)
+        {
+            return (AvailableProtocols.Contains(new TECIO(protocol)));
+        }
+        public TECNetworkConnection AddNetworkConnection(TECProtocol protocol)
+        {
+            TECNetworkConnection netConnect = new TECNetworkConnection(this, protocol, this.IsTypical);
+            addChildConnection(netConnect);
+            return netConnect;
         }
         public void RemoveNetworkConnection(TECNetworkConnection connection)
         {
             if (this.ChildrenConnections.Contains(connection))
             {
-                List<INetworkConnectable> children = new List<INetworkConnectable>(connection.Children);
-                foreach(INetworkConnectable child in children)
+                List<IConnectable> children = new List<IConnectable>(connection.Children);
+                foreach(IConnectable child in children)
                 {
-                    connection.RemoveINetworkConnectable(child);
+                    connection.RemoveChild(child);
                 }
                 removeChildConnection(connection);
             }
@@ -196,21 +219,12 @@ namespace EstimatingLibrary
                 throw new InvalidOperationException("Network connection doesn't exist in controller.");
             }
         }
-
-        public bool CanConnectToNetwork(TECNetworkConnection netConnect)
-        {
-            return (AvailableNetworkIO.Contains(netConnect.IOType));
-        }
         
         private bool canTakeIO(IOCollection collection)
         {
             bool hasIO = AvailableIO.Contains(collection);
             bool canHasIO = getPotentialIO().Contains(collection);
             return hasIO || canHasIO;
-        }
-        public bool CanConnectSubScope(TECSubScope subScope)
-        {
-            return canTakeIO(subScope.IO);
         }
         public bool CanConnectSubScope(IEnumerable<TECSubScope> subScope)
         {
@@ -231,7 +245,7 @@ namespace EstimatingLibrary
                 return AddSubScopeConnection(subScope);
             }
         }
-        public TECSubScopeConnection AddSubScopeConnection(TECSubScope subScope)
+        public TECHardwriredConnection AddSubScopeConnection(TECSubScope subScope)
         {
             if (CanConnectSubScope(subScope))
             {
@@ -304,9 +318,9 @@ namespace EstimatingLibrary
                 throw new InvalidOperationException("Subscope incompatible.");
             }
 
-            TECSubScopeConnection addConnection(TECSubScope toConnect, bool isTypical)
+            TECHardwriredConnection addConnection(TECSubScope toConnect, bool isTypical)
             {
-                TECSubScopeConnection connection = new TECSubScopeConnection(isTypical);
+                TECHardwriredConnection connection = new TECHardwriredConnection(isTypical);
                 connection.ParentController = this;
                 connection.SubScope = subScope;
                 subScope.Connection = connection;
@@ -351,12 +365,12 @@ namespace EstimatingLibrary
 
         public void RemoveSubScope(TECSubScope subScope)
         {
-            TECSubScopeConnection connectionToRemove = null;
+            TECHardwriredConnection connectionToRemove = null;
             foreach (TECConnection connection in ChildrenConnections)
             {
-                if (connection is TECSubScopeConnection)
+                if (connection is TECHardwriredConnection)
                 {
-                    var subConnect = connection as TECSubScopeConnection;
+                    var subConnect = connection as TECHardwriredConnection;
                     if (subConnect.SubScope == subScope)
                     {
                         connectionToRemove = subConnect;
@@ -420,16 +434,16 @@ namespace EstimatingLibrary
         public void RemoveAllChildSubScopeConnections()
         {
             ObservableCollection<TECConnection> connectionsToRemove = new ObservableCollection<TECConnection>();
-            foreach (TECSubScopeConnection connection in ChildrenConnections.Where(item => item is TECSubScopeConnection))
+            foreach (TECHardwriredConnection connection in ChildrenConnections.Where(item => item is TECHardwriredConnection))
             {
                 connectionsToRemove.Add(connection);
             }
-            foreach (TECSubScopeConnection connectToRemove in connectionsToRemove)
+            foreach (TECHardwriredConnection connectToRemove in connectionsToRemove)
             {
-                if (connectToRemove is TECSubScopeConnection)
+                if (connectToRemove is TECHardwriredConnection)
                 {
-                    (connectToRemove as TECSubScopeConnection).SubScope.Connection = null;
-                    (connectToRemove as TECSubScopeConnection).SubScope = null;
+                    (connectToRemove as TECHardwriredConnection).SubScope.Connection = null;
+                    (connectToRemove as TECHardwriredConnection).SubScope = null;
                     connectToRemove.ParentController = null;
                 }
                 else
@@ -533,9 +547,9 @@ namespace EstimatingLibrary
             ModelLinkingHelper.LinkScopeItem(outController, scopeManager);
             return outController;
         }
-        public INetworkConnectable Copy(INetworkConnectable item, bool isTypical, Dictionary<Guid, Guid> guidDictionary)
+        public IConnectable Copy(bool isTypical, Dictionary<Guid, Guid> guidDictionary)
         {
-            return new TECController(item as TECController, isTypical, guidDictionary);
+            return new TECController(this, isTypical, guidDictionary);
         }
         public bool CanChangeType(TECControllerType newType)
         {

@@ -601,15 +601,15 @@ namespace Tests
         {
             //Arrange
             TECController expectedConnectedController = null;
-            TECSubScopeConnection expectedConnection = null;
+            TECHardwriredConnection expectedConnection = null;
             foreach (TECController controller in expectedBid.Controllers)
             {
                 foreach (TECConnection connection in controller.ChildrenConnections)
                 {
-                    if (connection is TECSubScopeConnection)
+                    if (connection is TECHardwriredConnection)
                     {
                         expectedConnectedController = controller;
-                        expectedConnection = connection as TECSubScopeConnection;
+                        expectedConnection = connection as TECHardwriredConnection;
                         break;
                     }
                 }
@@ -619,7 +619,7 @@ namespace Tests
                 }
             }
             TECController actualConnectedController = TestHelper.FindControllerInController(actualBid.Controllers, expectedConnectedController);
-            TECSubScopeConnection actualConnection = TestHelper.FindConnectionInController(actualConnectedController, expectedConnection) as TECSubScopeConnection;
+            TECHardwriredConnection actualConnection = TestHelper.FindConnectionInController(actualConnectedController, expectedConnection) as TECHardwriredConnection;
 
             //Assert
             Assert.AreEqual(expectedConnection.Guid, actualConnection.Guid);

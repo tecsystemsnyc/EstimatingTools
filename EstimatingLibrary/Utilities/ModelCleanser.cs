@@ -15,8 +15,8 @@ namespace EstimatingLibrary.Utilities
             IOCollection necessaryIO = new IOCollection();
             bool needsSave = false;
 
-            foreach (TECSubScopeConnection ssConnect in
-                controller.ChildrenConnections.Where(con => con is TECSubScopeConnection))
+            foreach (TECHardwriredConnection ssConnect in
+                controller.ChildrenConnections.Where(con => con is TECHardwriredConnection))
             {
                 foreach (TECIO io in ssConnect.SubScope.IO.ListIO())
                 {
