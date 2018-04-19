@@ -198,10 +198,6 @@ namespace EstimatingLibrary.Utilities
         private static void linkConnectionToCatalogs(TECConnection connection, TECCatalogs catalogs)
         {
             linkConnectionToConduitType(connection, catalogs.ConduitTypes);
-            TECNetworkConnection netConnect = connection as TECNetworkConnection;if (netConnect != null)
-            {
-                linkNetworkConnectionToConnectionType(netConnect, catalogs.ConnectionTypes);
-            }
         }
         private static void linkPanelToCatalogs(TECPanel panel, TECCatalogs catalogs)
         {
@@ -252,7 +248,7 @@ namespace EstimatingLibrary.Utilities
                                 if (child.Guid == item.Guid || isCopy)
                                 {
                                     controllersToAdd.Add(item);
-                                    item.ParentConnection = netConnect;
+                                    item.SetParentConnection(netConnect);
                                 }
                             }
                         }
@@ -276,13 +272,12 @@ namespace EstimatingLibrary.Utilities
                         if (connection is TECHardwiredConnection)
                         {
                             TECHardwiredConnection ssConnect = connection as TECHardwiredConnection;
-                            bool isCopy = (guidDictionary != null && guidDictionary[ssConnect.SubScope.Guid] == guidDictionary[subScope.Guid]);
-                            if (ssConnect.SubScope.Guid == subScope.Guid || isCopy)
+                            bool isCopy = (guidDictionary != null && guidDictionary[ssConnect.Child.Guid] == guidDictionary[subScope.Guid]);
+                            if (ssConnect.Child.Guid == subScope.Guid || isCopy)
                             {
                                 TECHardwiredConnection linkedConnection = new TECHardwiredConnection(ssConnect, subScope, subScope.IsTypical || controller.IsTypical);
                                 newConnections.Add(linkedConnection);
                                 oldConnections.Add(ssConnect);
-                                linkedConnection.ParentController = controller;
                             }
                         }
                     }
@@ -316,21 +311,6 @@ namespace EstimatingLibrary.Utilities
         {
             linkAssociatedCostsInScope(catalogs.AssociatedCosts, scope);
             linkTagsInScope(catalogs.Tags, scope);
-        }
-        private static void linkNetworkConnectionToConnectionType(TECNetworkConnection netConnect, IEnumerable<TECConnectionType> connectionTypes)
-        {
-            ObservableCollection<TECConnectionType> linkedTypes = new ObservableCollection<TECConnectionType>();
-            foreach (TECConnectionType type in connectionTypes)
-            {
-                foreach(TECConnectionType connType in netConnect.ConnectionTypes)
-                {
-                    if (connType.Guid == type.Guid)
-                    {
-                        linkedTypes.Add(type);
-                    }
-                }
-            }
-            netConnect.ConnectionTypes = linkedTypes;
         }
         private static void linkPanelToPanelType(TECPanel panel, IEnumerable<TECPanelType> panelTypes)
         {

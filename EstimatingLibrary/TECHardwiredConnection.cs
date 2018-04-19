@@ -39,7 +39,7 @@ namespace EstimatingLibrary
         public TECHardwiredConnection(TECHardwiredConnection connectionSource, TECController parent, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) 
             : base(connectionSource, parent, isTypical, guidDictionary)
         {
-            Child = connectionSource.Child.Copy(parent, isTypical, guidDictionary);
+            Child = connectionSource.Child.Copy(isTypical, guidDictionary);
             Child.SetParentConnection(this);
         }
         public TECHardwiredConnection(TECHardwiredConnection linkingSource, IConnectable child, bool isTypical) : base(linkingSource, linkingSource.ParentController, isTypical)

@@ -152,7 +152,7 @@ namespace EstimatingLibrary
         }
         public IOCollection(IOCollection collection) : this()
         {
-            Add(collection.ListIO());
+            Add(collection.ToList());
         }
 
         public List<TECIO> ToList()
@@ -167,6 +167,10 @@ namespace EstimatingLibrary
             return this.ToList().Count();
         }
         
+        public bool Contains(IOType type)
+        {
+            return this.Contains(new TECIO(type));
+        }
         public bool Contains(TECIO io)
         {
             if (TECIO.UniversalIO.Contains(io.Type))
@@ -195,7 +199,7 @@ namespace EstimatingLibrary
             IOCollection thisCollection = new IOCollection(this);
             IOCollection ioCollection = new IOCollection(io);
 
-            foreach (TECIO ioToCheck in ioCollection.ListIO())
+            foreach (TECIO ioToCheck in ioCollection.ToList())
             {
                 if (thisCollection.Contains(ioToCheck))
                 {
@@ -210,7 +214,11 @@ namespace EstimatingLibrary
         }
         public bool Contains(IOCollection io)
         {
-            return (this.Contains(io.ListIO()));
+            return (this.Contains(io.ToList()));
+        }
+        public void Add(IOType type)
+        {
+            this.Add(new TECIO(type));
         }
         public void Add(TECIO io)
         {
@@ -244,6 +252,10 @@ namespace EstimatingLibrary
             {
                 Add(io);
             }
+        }
+        public void Remove(IOType type)
+        {
+            this.Remove(new TECIO(type));
         }
         public void Remove(TECIO io)
         {
@@ -280,7 +292,7 @@ namespace EstimatingLibrary
         public static IOCollection operator +(IOCollection left, IOCollection right)
         {
             IOCollection newCollection = new IOCollection(left);
-            newCollection.Add(right.ListIO());
+            newCollection.Add(right.ToList());
             return newCollection;
         }
         public static IOCollection operator -(IOCollection left, IOCollection right)

@@ -318,7 +318,7 @@ namespace EstimatingLibrary
         }
         public void RemoveController(TECController controller)
         {
-            controller.RemoveAllConnections();
+            controller.Disconnect();
             _controllers.Remove(controller);
             foreach(TECPanel panel in this.Panels)
             {
@@ -399,7 +399,7 @@ namespace EstimatingLibrary
                                 TECController parentController = subScope.Connection?.ParentController;
                                 if(parentController != null && this.Controllers.Contains(parentController))
                                 {
-                                    parentController.RemoveSubScope(subScope);
+                                    parentController.RemoveConnectable(subScope);
                                 }
                             }
                             foreach(TECController controller in instance.Controllers)
@@ -407,7 +407,7 @@ namespace EstimatingLibrary
                                 TECController parentController = controller.ParentConnection?.ParentController;
                                 if(parentController != null && this.Controllers.Contains(parentController))
                                 {
-                                    parentController.RemoveController(controller);
+                                    parentController.RemoveConnectable(controller);
                                 }
                             }
                         }
