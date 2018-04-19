@@ -314,7 +314,7 @@ namespace Tests
             sysSS.Description = "Child SubScope";
             sysSS.AssociatedCosts.Add(testAssociatedCost);
             TECPoint sysPoint = new TECPoint(false);
-            sysPoint.Type = IOType.BACnetIP;
+            sysPoint.Type = IOType.AI;
             sysPoint.Label = "System Point";
 
             sysSS.Points.Add(sysPoint);
@@ -369,7 +369,7 @@ namespace Tests
             expectedControllerType.Price = 42.6;
             TECIO ioToAdd = new TECIO(IOType.AI);
             ioToAdd.Quantity = 5;
-            TECIO otherIO = new TECIO(IOType.BACnetMSTP);
+            TECIO otherIO = new TECIO(IOType.UI);
             otherIO.Quantity = 3;
             expectedControllerType.IO.Add(ioToAdd);
             expectedControllerType.IO.Add(otherIO);
@@ -541,7 +541,7 @@ namespace Tests
             controllerType.Labor = 61.34;
             AssignSecondaryProperties(controllerType, outCatalogs);
 
-            TECIO io = new TECIO(IOType.BACnetIP);
+            TECIO io = new TECIO(IOType.AI);
             io.Quantity = 100;
             controllerType.IO.Add(io);
 
@@ -745,7 +745,7 @@ namespace Tests
         {
             foreach(TECSubScope subscope in equipment.SubScope)
             {
-                controller.AddSubScopeConnection(subscope);
+                controller.Connect(subscope);
             }
         }
 
