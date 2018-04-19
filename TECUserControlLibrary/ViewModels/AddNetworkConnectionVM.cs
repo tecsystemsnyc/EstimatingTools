@@ -56,7 +56,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public INetworkParentable Parentable { get; }
+        public TECController Parentable { get; }
 
         public ObservableCollection<TECConnectionType> AllConnectionTypes { get; }
         public ObservableCollection<TECConnectionType> ChosenConnectionTypes { get; }
@@ -67,7 +67,7 @@ namespace TECUserControlLibrary.ViewModels
         public ICommand AddConnectionCommand { get; }
         #endregion
 
-        public AddNetworkConnectionVM(INetworkParentable parentable, IEnumerable<TECConnectionType> allConnectionTypes)
+        public AddNetworkConnectionVM(TECController parentable, IEnumerable<TECConnectionType> allConnectionTypes)
         {
             Parentable = parentable;
             AllConnectionTypes = new ObservableCollection<TECConnectionType>(allConnectionTypes);

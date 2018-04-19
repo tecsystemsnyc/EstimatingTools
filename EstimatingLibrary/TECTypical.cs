@@ -195,9 +195,9 @@ namespace EstimatingLibrary
             return (newSystem);
         }
 
-        public void UpdateInstanceNetworkInController(INetworkParentable controller)
+        public void UpdateInstanceNetworkInController(TECController controller)
         {
-            foreach (TECController instance in this.TypicalInstanceDictionary.GetInstances(controller as TECObject))
+            foreach (TECController instance in this.TypicalInstanceDictionary.GetInstances(controller))
             {
                 instance.RemoveAllChildNetworkConnections();
                 foreach (TECNetworkConnection connection in controller.ChildNetworkConnections)
@@ -238,7 +238,7 @@ namespace EstimatingLibrary
                 }
             }
         }
-        public bool CanUpdateInstanceNetworkInController(INetworkParentable controller)
+        public bool CanUpdateInstanceNetworkInController(TECController controller)
         {
             bool canExecute =
                     (controller != null) &&

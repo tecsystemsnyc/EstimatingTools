@@ -40,7 +40,7 @@ namespace TECUserControlLibrary.Utilities
 
     public class CostBatchInterfaceSelector : InterfaceDataTemplateSelector<INotifyCostChanged> { }
     public class PointInterfaceSelector : InterfaceDataTemplateSelector<INotifyPointChanged> { }
-    public class NetworkParentableSelector : InterfaceDataTemplateSelector<INetworkParentable> { }
+    public class NetworkParentableSelector : InterfaceDataTemplateSelector<TECController> { }
     public class EndDeviceSelector : InterfaceDataTemplateSelector<IEndDevice> { }
 
     public class ScopeTemplateSelector : DataTemplateSelector

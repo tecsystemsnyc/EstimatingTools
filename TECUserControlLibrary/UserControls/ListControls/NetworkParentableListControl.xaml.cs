@@ -19,7 +19,7 @@ namespace TECUserControlLibrary.UserControls.ListControls
     /// <summary>
     /// Interaction logic for NetworkParentableListControl.xaml
     /// </summary>
-    public partial class NetworkParentableListControl : BaseListControl<INetworkParentable>
+    public partial class NetworkParentableListControl : BaseListControl<TECController>
     {
         public NetworkParentableListControl()
         {
