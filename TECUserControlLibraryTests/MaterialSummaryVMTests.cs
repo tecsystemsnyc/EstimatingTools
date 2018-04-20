@@ -450,13 +450,13 @@ namespace Tests
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
             //Act
-            TECConnection connection = controller.AddSubScopeConnection(typSS);
+            TECConnection connection = controller.Connect(typSS);
             connection.Length = 50;
             connection.ConduitLength = 50;
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];
 
             TECSystem instance = typical.AddInstance(bid);
-            TECConnection instanceConnection = controller.AddSubScopeConnection(instance.GetAllSubScope()[0]);
+            TECConnection instanceConnection = controller.Connect(instance.GetAllSubScope()[0]);
             instanceConnection.Length = 50;
             instanceConnection.ConduitLength = 50;
             instanceConnection.ConduitType = bid.Catalogs.ConduitTypes[0];
@@ -921,7 +921,7 @@ namespace Tests
             
             TECSystem instance = typical.AddInstance(bid);
 
-            TECConnection connection = controller.AddSubScopeConnection(instance.GetAllSubScope()[0]);
+            TECConnection connection = controller.Connect(instance.GetAllSubScope()[0]);
             connection.Length = 50;
             connection.ConduitLength = 50;
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];
@@ -941,7 +941,7 @@ namespace Tests
             Total totalElec = new Total(connection.CostBatch.GetCost(CostType.Electrical), connection.CostBatch.GetLabor(CostType.Electrical));
 
             //Act
-            controller.RemoveSubScope(instance.GetAllSubScope()[0]);
+            controller.Disconnect(instance.GetAllSubScope()[0]);
 
             //Assert
             Assert.AreEqual(matVM.TotalTECCost, initialTecCost - totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
@@ -982,7 +982,7 @@ namespace Tests
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
             //Act
-            TECConnection connection = controller.AddSubScopeConnection(ss);
+            TECConnection connection = controller.Connect(ss);
             connection.Length = 100;
             connection.ConduitLength = 100;
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];
