@@ -41,7 +41,7 @@ namespace EstimatingLibraryTests
             TECController controller = new TECController(type, false);
             TECController childController = new TECController(type, false);
 
-            TECProtocol protocol = new TECProtocol();
+            TECProtocol protocol = new TECProtocol(new List<TECConnectionType> { });
 
             TECNetworkConnection connection = controller.AddNetworkConnection(protocol);
             connection.AddChild(childController);
@@ -59,7 +59,7 @@ namespace EstimatingLibraryTests
             TECController controller = new TECController(type, false);
             TECController childController = new TECController(type, false);
 
-            TECProtocol protocol = new TECProtocol();
+            TECProtocol protocol = new TECProtocol(new List<TECConnectionType> { });
 
             TECNetworkConnection connection = controller.AddNetworkConnection(protocol);
             connection.AddChild(childController);
@@ -79,7 +79,7 @@ namespace EstimatingLibraryTests
             TECController controller = new TECController(type, false);
             TECController childController = new TECController(type, false);
 
-            TECProtocol protocol = new TECProtocol();
+            TECProtocol protocol = new TECProtocol(new List<TECConnectionType> { });
 
             TECNetworkConnection connection = controller.AddNetworkConnection(protocol);
             connection.AddChild(childController);
@@ -101,7 +101,7 @@ namespace EstimatingLibraryTests
             TECController childController = new TECController(type, false);
             TECController childestController = new TECController(type, false);
 
-            TECProtocol protocol = new TECProtocol();
+            TECProtocol protocol = new TECProtocol(new List<TECConnectionType> { });
 
             TECNetworkConnection connection = controller.AddNetworkConnection(protocol);
             connection.AddChild(childController);
