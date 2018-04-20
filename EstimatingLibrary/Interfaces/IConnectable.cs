@@ -3,8 +3,10 @@ using System.Collections.Generic;
 
 namespace EstimatingLibrary.Interfaces
 {
-    public interface IConnectable : ITECObject
+    public interface IConnectable : ITECScope
     {
+        Guid Guid { get; }
+
         IOCollection AvailableProtocols { get; }
         IOCollection HardwiredIO { get; }
         bool IsNetwork { get; }

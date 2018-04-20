@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.Views
 {
@@ -20,6 +21,20 @@ namespace TECUserControlLibrary.Views
     /// </summary>
     public partial class ConnectionsView : UserControl
     {
+
+
+        public ConnectionsVM VM
+        {
+            get { return (ConnectionsVM)GetValue(VMProperty); }
+            set { SetValue(VMProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for VM.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty VMProperty =
+            DependencyProperty.Register("VM", typeof(ConnectionsVM), typeof(ConnectionsView));
+
+
+
         public ConnectionsView()
         {
             InitializeComponent();
