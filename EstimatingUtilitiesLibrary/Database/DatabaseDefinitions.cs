@@ -2644,7 +2644,7 @@ namespace EstimatingUtilitiesLibrary.Database
     }
     internal class IOProtocolTable : TableBase
     {
-        public static string TableName = "ProtocolAdapterProtocol";
+        public static string TableName = "IOProtocol";
         public static Type IOType = typeof(TECIO);
         public static Type ProtocolType = typeof(TECProtocol);
 
