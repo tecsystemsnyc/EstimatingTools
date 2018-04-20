@@ -163,7 +163,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     foreach (TECSubScope ss in equip.SubScope)
                     {
-                        if (ss.IsNetwork && ss.Connection != null)
+                        if (((IConnectable)ss).IsNetwork && ss.Connection != null)
                         {
                             hasNetworkConnection = true;
                             break;

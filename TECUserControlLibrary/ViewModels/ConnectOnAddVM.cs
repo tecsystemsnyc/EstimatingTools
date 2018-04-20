@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using System;
@@ -93,24 +94,12 @@ namespace TECUserControlLibrary.ViewModels
             {
                 bool allCompatible = true;
 
-                foreach(TECSubScope ss in toConnect)
+                foreach(IConnectable connectable in toConnect)
                 {
-                    if (ss.IsNetwork)
+                    if (!controller.CanConnect(connectable))
                     {
-                        IOType ioType = ss.IO.ListIO()[0].Type;
-                        if (!controller.TotalIO.Contains(ioType))
-                        {
-                            allCompatible = false;
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        if (!controller.CanConnectSubScope(ss))
-                        {
-                            allCompatible = false;
-                            break;
-                        }
+                        allCompatible = false;
+                        break;
                     }
                 }
 

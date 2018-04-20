@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
@@ -32,7 +33,19 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             isTypical = parentSubScope.IsTypical;
             toAdd = new TECPoint(parentSubScope.IsTypical);
             ToAdd.Quantity = 1;
-            PossibleTypes = parentSubScope.PossibleIOTypes();
+
+            //Set the IOTypes that the user can use for the new Point.
+            //Old: PossibleTypes = parentSubScope.PossibleIOTypes();
+            //New:
+            if (((IConnectable)parentSubScope).IsNetwork)
+            {
+                PossibleTypes = new List<IOType>();
+            }
+            else
+            {
+                PossibleTypes = TECIO.PointIO;
+            }
+            
             if(PossibleTypes.Count > 0)
             {
                 ToAdd.Type = PossibleTypes[0];
@@ -52,7 +65,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 TECIO proposedIO = new TECIO(ToAdd.Type);
                 proposedIO.Quantity = ToAdd.Quantity;
                 bool containsIO = connection.ParentController.AvailableIO.Contains(proposedIO);
-                bool isNetworkIO = connection is TECNetworkConnection netConnect && netConnect.IOType == ToAdd.Type;
+                bool isNetworkIO = connection is TECNetworkConnection netConnect && netConnect.Protocol.ToIO().Type == ToAdd.Type;
                 return containsIO || isNetworkIO;
             }
         }

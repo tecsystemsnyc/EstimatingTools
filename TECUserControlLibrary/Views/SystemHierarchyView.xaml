@@ -267,16 +267,15 @@
                                 </Grid>
                             </DataTemplate>
                             <DataTemplate x:Key="ElectricalTemplate">
+                                <!--To Do: Figure out Electrical Tab for System View. Combined with Network?-->
                                 <Grid DataContext="{Binding ElementName=systemHierarchyView, Path=DataContext}">
-                                    <local:SystemConnectionsView 
-                                        ViewModel="{Binding ElementName=systemHierarchyView, Path=ViewModel.ConnectionsVM}"
-                                        IsTypical="{Binding ElementName=systemHierarchyView, Path=IsTypical}"/>
+                                    <TextBlock Text="New Electrical View will go here"/>
                                 </Grid>
                             </DataTemplate>
                             <DataTemplate x:Key="NetworkTemplate">
+                                <!--To Do: Figure out Network Tab for System View. Combined with Electrical?-->
                                 <Grid DataContext="{Binding ElementName=systemHierarchyView, Path=DataContext}">
-                                    <local:NetworkView 
-                                        ViewModel="{Binding ElementName=systemHierarchyView, Path=ViewModel.NetworkVM}"/>
+                                    <TextBlock Text="New Network View will go here"/>
                                 </Grid>
                             </DataTemplate>
                             <DataTemplate x:Key="MiscTemplate">
@@ -485,9 +484,7 @@
                         <DataTemplate DataType="{x:Type addVMs:AddInstanceVM}">
                             <addViews:AddInstanceView ViewModel="{Binding}"/>
                         </DataTemplate>
-                        <DataTemplate DataType="{x:Type vms:UpdateConnectionVM}">
-                            <local:UpdateConnectionView ViewModel="{Binding}"/>
-                        </DataTemplate>
+                        <!--TODO: UpdateConnectionsView/VM-->
                     </ContentPresenter.Resources>
                 </ContentPresenter>
             </Border>

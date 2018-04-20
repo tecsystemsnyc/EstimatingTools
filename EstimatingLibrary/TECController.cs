@@ -544,7 +544,7 @@ namespace EstimatingLibrary
         }
         #endregion
 
-        #region IConnectable Implementation
+        #region IConnectable
         IOCollection IConnectable.HardwiredIO
         {
             get { return new IOCollection(); }
