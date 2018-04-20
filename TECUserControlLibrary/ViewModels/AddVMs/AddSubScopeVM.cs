@@ -221,7 +221,16 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         }
         private void setTypes()
         {
-            PossibleTypes = ToAdd.PossibleIOTypes();
+            //Old: PossibleTypes = ToAdd.PossibleIOTypes();
+            //New:
+            if (((IConnectable)ToAdd).IsNetwork)
+            {
+                PossibleTypes = new List<IOType>();
+            }
+            else
+            {
+                PossibleTypes = TECIO.PointIO;
+            }
             RaisePropertyChanged("PossibleTypes");
         }
         

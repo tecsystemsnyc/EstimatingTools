@@ -408,9 +408,6 @@
       <DependentUpon>AddSystemView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\BaseView.cs" />
-    <Compile Include="Views\GlobalConnectionsView.xaml.cs">
-      <DependentUpon>GlobalConnectionsView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\HardwareSummaryView.xaml.cs">
       <DependentUpon>HardwareSummaryView.xaml</DependentUpon>
     </Compile>
@@ -451,9 +448,6 @@
     </Compile>
     <Compile Include="Views\MiscCostsView.xaml.cs">
       <DependentUpon>MiscCostsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\NetworkView.xaml.cs">
-      <DependentUpon>NetworkView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ParametersView.xaml.cs">
       <DependentUpon>ParametersView.xaml</DependentUpon>
@@ -525,9 +519,6 @@
     <Compile Include="Views\SummaryViews\SystemSummaryView.xaml.cs">
       <DependentUpon>SystemSummaryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SystemConnectionsView.xaml.cs">
-      <DependentUpon>SystemConnectionsView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\SystemHierarchyView.xaml.cs">
       <DependentUpon>SystemHierarchyView.xaml</DependentUpon>
     </Compile>
@@ -558,9 +549,6 @@
     <Compile Include="Utilities\VisibilityModel.cs" />
     <Compile Include="Views\UnconnectedSubScopeView.xaml.cs">
       <DependentUpon>UnconnectedSubScopeView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UpdateConnectionView.xaml.cs">
-      <DependentUpon>UpdateConnectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ValveSelectionView.xaml.cs">
       <DependentUpon>ValveSelectionView.xaml</DependentUpon>
@@ -902,10 +890,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\GlobalConnectionsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\HardwareSummaryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -955,10 +939,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MiscCostsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\NetworkView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1038,10 +1018,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SystemConnectionsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\SystemHierarchyView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1112,10 +1088,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UnconnectedSubScopeView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UpdateConnectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

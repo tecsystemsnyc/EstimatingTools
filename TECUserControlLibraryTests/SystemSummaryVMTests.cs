@@ -92,7 +92,7 @@ namespace TECUserControlLibraryTests
             ss.Name = "Test Subscope";
             ss.Devices.Add(bid.Catalogs.Devices[0]);
             TECPoint point = new TECPoint(true);
-            point.Type = IOType.BACnetIP;
+            point.Type = IOType.AI;
             point.Quantity = 1;
             ss.Points.Add(point);
             equipment.SubScope.Add(ss);
@@ -131,7 +131,7 @@ namespace TECUserControlLibraryTests
             TECController otherController = new TECController(controllerType, true);
             otherController.Name = "Other Controller";
             typical.AddController(otherController);
-            TECConnection connection = controller.AddSubScopeConnection(connected);
+            TECConnection connection = controller.Connect(connected);
             connection.Length = 10;
             connection.ConduitLength = 20;
             connection.ConduitType = bid.Catalogs.ConduitTypes[1];
