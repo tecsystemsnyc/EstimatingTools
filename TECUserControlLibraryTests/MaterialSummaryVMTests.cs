@@ -934,9 +934,6 @@ namespace Tests
             double initialElecCost = matVM.TotalElecCost;
             double initialElecLabor = matVM.TotalElecLabor;
 
-            //Total totalTEC = CalculateTotal(connection, CostType.TEC);
-            //Total totalElec = CalculateTotal(connection, CostType.Electrical);
-
             Total totalTEC = new Total(connection.CostBatch.GetCost(CostType.TEC), connection.CostBatch.GetLabor(CostType.TEC));
             Total totalElec = new Total(connection.CostBatch.GetCost(CostType.Electrical), connection.CostBatch.GetLabor(CostType.Electrical));
 
