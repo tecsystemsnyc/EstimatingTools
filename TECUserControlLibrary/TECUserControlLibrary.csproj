@@ -301,6 +301,9 @@
     <Compile Include="Views\ConnectableFilterView.xaml.cs">
       <DependentUpon>ConnectableFilterView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ConnectionsView.xaml.cs">
+      <DependentUpon>ConnectionsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ConnectOnAddView.xaml.cs">
       <DependentUpon>ConnectOnAddView.xaml</DependentUpon>
     </Compile>
@@ -775,6 +778,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ConnectableFilterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ConnectionsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
