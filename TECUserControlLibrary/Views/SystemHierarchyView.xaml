@@ -144,16 +144,6 @@
                     <BeginStoryboard Storyboard="{StaticResource equipmentMove}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="local:UpdateConnectionView.Updated">
-                <EventTrigger.Actions>
-                    <BeginStoryboard Storyboard="{StaticResource modalOut}"/>
-                </EventTrigger.Actions>
-            </EventTrigger>
-            <EventTrigger RoutedEvent="local:SystemConnectionsView.Update">
-                <EventTrigger.Actions>
-                    <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
-                </EventTrigger.Actions>
-            </EventTrigger>
         </Grid.Triggers>
         <Grid DataContext="{Binding ElementName=systemHierarchyView}" x:Name="mainGrid">
             <Grid.ColumnDefinitions>
@@ -207,10 +197,11 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
+                <!--Is Enabled was bound to ViewModel.ConnectionsVM.CanLeave-->
                 <Button x:Name="systemBack" 
                         Visibility="{Binding SystemWidth, Converter={utilities:WidthDoubleToVisibilityConverter}}"
                         Click="systemBack_Click" Margin="2"
-                        IsEnabled="{Binding ElementName=systemHierarchyView, Path=ViewModel.ConnectionsVM.CanLeave}">
+                        IsEnabled="True">
                     <Button.Content>
                         &lt;-
                     </Button.Content>
