@@ -115,6 +115,10 @@ namespace TECUserControlLibrary.ViewModels
         {
             this.toConnect = new List<TECSubScope>(toConnect);
             ParentControllers = getCompatibleControllers(parent);
+            if (!ParentControllers.Contains(SelectedController))
+            {
+                SelectedController = null;
+            }
             RaisePropertyChanged("ParentControllers");
         }
         public void ExecuteConnection(IEnumerable<TECSubScope> finalToConnect)
