@@ -16,6 +16,7 @@ namespace EstimatingUtilitiesLibrary.Database
     {
         //FMT is used by DateTime to convert back and forth between the DateTime type and string
         private const string DB_FMT = "O";
+        static private List<String> deprecatedPointTypes = new List<string>() { "BACnetMSTP", "BACnetIP", "LonWorks", "ModbusTCP", "ModbusRTU" };
 
         static private Logger logger = LogManager.GetCurrentClassLogger();
         static private SQLiteDatabase SQLiteDB;
@@ -24,6 +25,10 @@ namespace EstimatingUtilitiesLibrary.Database
         static private TECManufacturer tempManufacturer;
         static private TECPanelType tempPanelType;
         static private TECControllerType tempControllerType;
+        static private TECProtocol tempProtocol;
+        static private TECConnectionType tempConnectionType;
+        static private TECProtocolAdapter tempProtocolAdapter;
+        static private Dictionary<String, List<TECPoint>> networkPoints;
 
         public static (TECScopeManager scopeManager, bool needsSaveNew) Load(string path, bool versionUpdated = false)
         {
@@ -175,8 +180,8 @@ namespace EstimatingUtilitiesLibrary.Database
             panels.ForEach(item => item.Controllers = panelControllerDictionary.ValueOrNew(item.Guid));
             
             subScopeConnections.ForEach(item => { populateSubScopeConnectionProperties(item, connectionConduitTypes); });
-            networkConnections.ForEach(item => { populateNetworkConnectionProperties(item,
-                networkChildrenRelationships, connectionConduitTypes, connectionConnectionTypeRelationships); });
+            networkConnections.ForEach(item => { populateNetworkConnectionProperties(item, networkChildrenRelationships, 
+                connectionConduitTypes); });
 
             Dictionary<Guid, List<Guid>> systemTemplates = getOneToManyRelationships(new TemplatesSystemTable());
             Dictionary<Guid, List<Guid>> equipmentTemplates = getOneToManyRelationships(new TemplatesEquipmentTable());
@@ -208,6 +213,9 @@ namespace EstimatingUtilitiesLibrary.Database
                 scopeManager.Catalogs.Manufacturers.Add(tempManufacturer);
                 scopeManager.Catalogs.PanelTypes.Add(tempPanelType);
                 scopeManager.Catalogs.ControllerTypes.Add(tempControllerType);
+                scopeManager.Catalogs.ConnectionTypes.Add(tempConnectionType);
+                scopeManager.Catalogs.ProtocolAdapters.Add(tempProtocolAdapter);
+                scopeManager.Catalogs.Protocols.Add(tempProtocol);
             }
         }
         private static (List<TECTypical> typicals, List<TECController> controllers, List<TECPanel> panels) getScopeHierarchy(Guid bidID, TECCatalogs catalogs)
@@ -294,7 +302,7 @@ namespace EstimatingUtilitiesLibrary.Database
                 {
                     item.Children = getRelatedReferences(networkChildren[item.Guid], connectables).ToOC();
                 }
-                populateNetworkConnectionProperties(item, connectionConduitTypes, connectionConnectionTypeRelationships);
+                item.ConduitType = connectionConduitTypes.ValueOrDefault(item.Guid, null);
             }
             foreach (TECHardwiredConnection item in subScopeConnections)
             {
@@ -514,25 +522,12 @@ namespace EstimatingUtilitiesLibrary.Database
             connection.ConduitType = connectionConduitTypes.ValueOrDefault(connection.Guid, null);
         }
         private static void populateNetworkConnectionProperties(TECNetworkConnection connection, Dictionary<Guid, List<IConnectable>> connectables,
-            Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes, Dictionary<Guid, List<TECConnectionType>> connectionConnectionTypes)
+            Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes)
         {
             if (connectables.ContainsKey(connection.Guid))
             {
                 connectables[connection.Guid].ForEach(item => connection.Children.Add(item));
                 connectables[connection.Guid].ForEach(item => item.SetParentConnection(connection));
-            }
-            if (connectionConnectionTypes.ContainsKey(connection.Guid))
-            {
-                connectionConnectionTypes[connection.Guid].ForEach(item => connection.ConnectionTypes.Add(item));
-            }
-            connection.ConduitType = connectionConduitTypes.ValueOrDefault(connection.Guid, null);
-        }
-        private static void populateNetworkConnectionProperties(TECNetworkConnection connection, Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes,
-            Dictionary<Guid, List<TECConnectionType>> connectionConnectionTypes)
-        {
-            if (connectionConnectionTypes.ContainsKey(connection.Guid))
-            {
-                connectionConnectionTypes[connection.Guid].ForEach(item => connection.ConnectionTypes.Add(item));
             }
             connection.ConduitType = connectionConduitTypes.ValueOrDefault(connection.Guid, null);
         }
@@ -573,6 +568,15 @@ namespace EstimatingUtilitiesLibrary.Database
             tempControllerType.IO.Add(output);
 
             tempPanelType = new TECPanelType(tempManufacturer);
+
+            tempConnectionType = new TECConnectionType();
+            tempProtocol = new TECProtocol(new List<TECConnectionType>() { tempConnectionType });
+            tempProtocol.Name = "TEMPORARY";
+
+            tempProtocolAdapter = new TECProtocolAdapter(tempManufacturer, tempProtocol);
+
+            networkPoints = new Dictionary<string, List<TECPoint>>();
+
         }
         
         #region Data Handlers

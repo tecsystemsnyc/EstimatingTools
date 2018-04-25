@@ -15,7 +15,7 @@
             <RowDefinition/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="{Binding Device.Name, StringFormat=Delete {0}}"
+        <TextBlock Text="{Binding EndDevice.Name, StringFormat=Delete {0}}"
                    Style="{StaticResource ListHeader}"/>
         <TextBlock Text="Compatible Replacements:"
                    Grid.Row="1"

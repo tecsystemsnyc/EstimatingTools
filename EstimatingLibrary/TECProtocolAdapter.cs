@@ -29,10 +29,12 @@ namespace EstimatingLibrary
             }
         }
 
+        #region Derived
         public ObservableCollection<TECConnectionType> ConnectionTypes
         {
             get { return Protocol.ConnectionTypes; }
         }
+        #endregion
 
         public TECProtocolAdapter(Guid guid, TECManufacturer manufacturer, TECProtocol protocol) : base(guid, manufacturer, COST_TYPE)
         {

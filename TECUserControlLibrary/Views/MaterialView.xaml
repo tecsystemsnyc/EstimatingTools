@@ -56,6 +56,11 @@
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
+            <EventTrigger RoutedEvent="catalogViews:ProtocolAdaptersCatalogView.StartModal">
+                <EventTrigger.Actions>
+                    <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
+                </EventTrigger.Actions>
+            </EventTrigger>
             <EventTrigger RoutedEvent="views:DeleteEndDeviceView.Done">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalOut}"/>
@@ -117,6 +122,16 @@
                         <catalogViews:IOModulesCatalogView
                             VM="{Binding ElementName=materialView, Path=ViewModel.IOModuleVM}"/>
                     </DataTemplate>
+                    <!--Protocols-->
+                    <DataTemplate x:Key="ProtocolTemplate">
+                        <catalogViews:ProtocolsCatalogView
+                            VM="{Binding ElementName=materialView, Path=ViewModel.ProtocolVM}"/>
+                    </DataTemplate>
+                    <!--Protocol Adapters-->
+                    <DataTemplate x:Key="ProtocolAdapterTemplate">
+                        <catalogViews:ProtocolAdaptersCatalogView
+                            VM="{Binding ElementName=materialView, Path=ViewModel.ProtocolAdapterVM}"/>
+                    </DataTemplate>
                     <!--Manufacturers-->
                     <DataTemplate x:Key="ManufacturerTemplate">
                         <catalogViews:ManufacturersCatalogView
@@ -137,7 +152,9 @@
                                                     IOModuleTemplate="{StaticResource IOModuleTemplate}"
                                                     ValveTemplate="{StaticResource ValveTemplate}"
                                                     ManufacturerTemplate="{StaticResource ManufacturerTemplate}"
-                                                    TagTemplate="{StaticResource TagTemplate}"/>
+                                                    TagTemplate="{StaticResource TagTemplate}"
+                                                    ProtocolTemplate="{StaticResource ProtocolTemplate}"
+                                                    ProtocolAdapterTemplate="{StaticResource ProtocolAdapterTemplate}"/>
                 </ResourceDictionary>
             </Grid.Resources>
             <ComboBox x:Name="MaterialComboBox" ItemsSource="{Binding Source={x:Static utilities:UIHelpers.MaterialSelectorList}}"

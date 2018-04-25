@@ -368,6 +368,8 @@ namespace TECUserControlLibrary.Utilities
             new Tuple<string, MaterialType>("Associated Costs", MaterialType.AssociatedCost),
             new Tuple<string, MaterialType>("IO Modules", MaterialType.IOModule),
             new Tuple<string, MaterialType>("Valves", MaterialType.Valve),
+            new Tuple<string, MaterialType>("Protocols", MaterialType.Protocol),
+            new Tuple<string, MaterialType>("Protocol Adapters", MaterialType.ProtocolAdapater),
             new Tuple<string, MaterialType>("Manufacturer", MaterialType.Manufacturer),
             new Tuple<string, MaterialType>("Tag", MaterialType.Tag)
         };
@@ -397,7 +399,11 @@ namespace TECUserControlLibrary.Utilities
             new Tuple<string, AllSearchableObjects>("Tags", AllSearchableObjects.Tags),
             new Tuple<string, AllSearchableObjects>("Controller Types", AllSearchableObjects.ControllerTypes),
             new Tuple<string, AllSearchableObjects>("Panel Types", AllSearchableObjects.PanelTypes),
-            new Tuple<string, AllSearchableObjects>("IO Modules", AllSearchableObjects.IOModules)
+            new Tuple<string, AllSearchableObjects>("IO Modules", AllSearchableObjects.IOModules),
+            new Tuple<string, AllSearchableObjects>("Protocols", AllSearchableObjects.Protocols),
+            new Tuple<string, AllSearchableObjects>("ProtocolAdapaters", AllSearchableObjects.ProtocolAdapaters)
+
+
         };
 
         public static List<Tuple<string, IOType>> IOSelectorList = new List<Tuple<string, IOType>>
@@ -479,7 +485,7 @@ namespace TECUserControlLibrary.Utilities
     public enum ScopeCollectionIndex { None, System, Equipment, SubScope, Devices, Tags, Manufacturers, AddDevices, AddControllers, Controllers, AssociatedCosts, Panels, AddPanel, MiscCosts, MiscWiring };
     public enum LocationScopeType { System, Equipment, SubScope };
     public enum MaterialType { Device, ConnectionType, ConduitType, ControllerType,
-        PanelType, AssociatedCost, IOModule, Valve, Manufacturer, Tag};
+        PanelType, AssociatedCost, IOModule, Protocol, ProtocolAdapater, Valve, Manufacturer, Tag};
     public enum TypicalSystemIndex { Edit, Instances };
     public enum SystemComponentIndex { Equipment, Controllers, Electrical, Network, Misc, Valves, Proposal };
     public enum ProposalIndex { Scope, Systems, Notes }
@@ -502,7 +508,9 @@ namespace TECUserControlLibrary.Utilities
         AssociatedCosts,
         Wires,
         Conduits,
-        IOModules
+        IOModules,
+        Protocols,
+        ProtocolAdapaters
     }
     public enum TypicalInstanceEnum { Typical, Instance }
     public enum MaterialSummaryIndex { Devices, Valves, Controllers, Panels, Wire, Conduit, Misc }
