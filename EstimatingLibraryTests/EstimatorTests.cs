@@ -412,7 +412,8 @@ namespace Tests
         {
             var bid = new TECBid();
             bid.Parameters = parameters;
-            var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
+            var watcher = new ChangeWatcher(bid);
+            var estimate = new TECEstimator(bid, watcher);
             bid.Catalogs = TestHelper.CreateTestCatalogs();
             var system = TestHelper.CreateTestTypical(bid.Catalogs);
             bid.Systems.Add(system);

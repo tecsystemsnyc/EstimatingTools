@@ -62,7 +62,8 @@ namespace EstimatingUtilitiesLibrary.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to DTaylor@tec-system.com
-        ///GHanson@tec-system.com.
+        ///GHanson@tec-system.com
+        ///tecestimating+qhs3hufh9un7pg08xt7z@boards.trello.com.
         /// </summary>
         internal static string BugReportEmails {
             get {
