@@ -35,6 +35,7 @@ namespace TECUserControlLibrary.ViewModels
             };
             PropertiesVM = new PropertiesVM(bid.Catalogs, bid);
             WorkBoxVM = new WorkBoxVM(bid);
+            ConnectionsVM = new ConnectionsVM(bid);
             DGTabIndex = GridIndex.Systems;
             TemplatesVisibility = Visibility.Visible;
         }
@@ -72,6 +73,7 @@ namespace TECUserControlLibrary.ViewModels
         public TypicalHierarchyVM InstanceEditVM { get; set; }
         public PropertiesVM PropertiesVM { get; }
         public WorkBoxVM WorkBoxVM { get; }
+        public ConnectionsVM ConnectionsVM { get; }
         #endregion
 
         #region Interface Properties

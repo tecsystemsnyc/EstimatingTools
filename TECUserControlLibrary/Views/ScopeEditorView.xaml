@@ -133,7 +133,7 @@
                     <views:ControllersPanelsView ViewModel="{Binding ControllersPanelsTab}"/>
                 </TabItem>
                 <TabItem Header="Connections">
-                    <TextBlock Text="This is where the new combined connections view will go."/>
+                    <views:ConnectionsView VM="{Binding ConnectionsVM}"/>
                 </TabItem>
                 <TabItem Header="Misc.">
                     <views:MiscCostsView ViewModel="{Binding MiscVM}"

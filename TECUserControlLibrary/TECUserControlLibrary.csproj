@@ -109,6 +109,7 @@
     <Compile Include="Models\ControllerTypePropertiesItem.cs" />
     <Compile Include="Models\IOModulePropertiesItem.cs" />
     <Compile Include="Models\NetworkConnectionVM.cs" />
+    <Compile Include="Models\ScopeGroup.cs" />
     <Compile Include="Models\ScopeSummaryItem.cs" />
     <Compile Include="Interfaces\ISubScopeConnectionItem.cs" />
     <Compile Include="Models\SubScopeConnectionItem.cs" />
@@ -233,6 +234,9 @@
     <Compile Include="UserControls\PropertyControls\ValvePropertiesControl.xaml.cs">
       <DependentUpon>ValvePropertiesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ScopeGroupControl.xaml.cs">
+      <DependentUpon>ScopeGroupControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ValveGridControl.xaml.cs">
       <DependentUpon>ValveGridControl.xaml</DependentUpon>
     </Compile>
@@ -252,6 +256,7 @@
     <Compile Include="ViewModels\CatalogVMs\ValvesCatalogVM.cs" />
     <Compile Include="ViewModels\BidPropertiesVM.cs" />
     <Compile Include="ViewModels\ChangeControllerTypeVM.cs" />
+    <Compile Include="ViewModels\ConnectionsVM.cs" />
     <Compile Include="ViewModels\ConnectOnAddVM.cs" />
     <Compile Include="ViewModels\BugReportVM.cs" />
     <Compile Include="ViewModels\DeleteEndDeviceVM.cs" />
@@ -722,6 +727,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\PropertyControls\ValvePropertiesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ScopeGroupControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
