@@ -547,7 +547,7 @@ namespace Tests
             controllerType.IO.Add(io);
 
             io = new TECIO(IOType.AI);
-            io.Quantity = 11;
+            io.Quantity = 109;
             controllerType.IO.Add(io);
 
             outCatalogs.ControllerTypes.Add(controllerType);
@@ -590,7 +590,7 @@ namespace Tests
             outScope.Panels.Add(panel);
             var equipment = CreateTestEquipment(true, catalogs);
             outScope.Equipment.Add(equipment);
-
+            
             var controller = CreateTestController(true, catalogs);
             outScope.AddController(controller);
 
@@ -644,6 +644,7 @@ namespace Tests
             var device = catalogs.Devices[0];
             var point = new TECPoint(isTypical);
             point.Type = IOType.AI;
+            point.Quantity = 3;
 
             var subScope = new TECSubScope(isTypical);
             subScope.Tags.Add(catalogs.Tags[0]);
@@ -655,6 +656,7 @@ namespace Tests
         {
             TECPoint point = new TECPoint(isTypical);
             point.Type = (IOType)Enum.GetNames(typeof(IOType)).Length;
+            point.Quantity = 2;
             return point;
         }
         public static TECEquipment CreateTestEquipment(bool isTypical, TECCatalogs catalogs)

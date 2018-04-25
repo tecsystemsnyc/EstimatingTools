@@ -395,7 +395,7 @@ namespace EstimatingLibrary
                         }
                     }
                 }
-                if (pointChanged) PointChanged?.Invoke(pointNumber);
+                if (pointChanged) PointChanged?.Invoke(pointNumber * -1);
                 if (costChanged) CostChanged?.Invoke(costs * -1);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
