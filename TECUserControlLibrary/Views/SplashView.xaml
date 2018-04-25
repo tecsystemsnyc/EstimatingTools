@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:dd="urn:gong-wpf-dragdrop"
              x:Name="splashView"
              mc:Ignorable="d" 
@@ -54,7 +55,7 @@
                    VerticalAlignment="Center"
                    HorizontalAlignment="Left"
                    Margin="5"/>
-        <TextBlock Text="{Binding TemplatesPath}"
+        <TextBlock Text="{Binding TemplatesPath, Converter={utilities:FullPathToNameConverter}}"
                    ToolTip="{Binding TemplatesPath}"
                    Grid.Column="1" Grid.Row="1" Margin="5"
                    VerticalAlignment="Center"/>
@@ -75,7 +76,7 @@
                    HorizontalAlignment="Left"
                    Margin="5"
                    Grid.Row="2" Visibility="{Binding ElementName=splashView, Path=BidVisibility}"/>
-        <TextBlock Text="{Binding ElementName=splashView, Path=BidPath}" Margin="5"
+        <TextBlock Text="{Binding ElementName=splashView, Path=BidPath, Converter={utilities:FullPathToNameConverter}}" Margin="5"
                    Grid.Column="1" ToolTip="{Binding ElementName=splashView, Path=BidPath}" 
                    VerticalAlignment="Center"
                    Grid.Row="2" Visibility="{Binding ElementName=splashView, Path=BidVisibility}"/>
@@ -139,7 +140,7 @@
                            HorizontalAlignment="Center"/>
 
                 <!--First-->
-                <TextBlock Text="{Binding FirstRecentBid}"
+                <TextBlock Text="{Binding FirstRecentBid, Converter={utilities:FullPathToNameConverter}}"
                            ToolTip="{Binding FirstRecentBid}"
                            Grid.Row="1"
                            VerticalAlignment="Center"/>
@@ -149,7 +150,7 @@
                         Grid.Row="1" Grid.Column="1" Margin="5"/>
 
                 <!--Second-->
-                <TextBlock Text="{Binding SecondRecentBid}"
+                <TextBlock Text="{Binding SecondRecentBid, Converter={utilities:FullPathToNameConverter}}"
                            ToolTip="{Binding SecondRecentBid}"
                            Grid.Row="2"
                            VerticalAlignment="Center"/>
@@ -159,7 +160,7 @@
                         Grid.Row="2" Grid.Column="1" Margin="5"/>
 
                 <!--Third-->
-                <TextBlock Text="{Binding ThirdRecentBid}"
+                <TextBlock Text="{Binding ThirdRecentBid, Converter={utilities:FullPathToNameConverter}}"
                            ToolTip="{Binding ThirdRecentBid}"
                            Grid.Row="3"
                            VerticalAlignment="Center"/>
@@ -169,7 +170,7 @@
                         Grid.Row="3" Grid.Column="1" Margin="5"/>
 
                 <!--Fourth-->
-                <TextBlock Text="{Binding FourthRecentBid}"
+                <TextBlock Text="{Binding FourthRecentBid, Converter={utilities:FullPathToNameConverter}}"
                            ToolTip="{Binding FourthRecentBid}"
                            Grid.Row="4"
                            VerticalAlignment="Center"/>
@@ -179,7 +180,7 @@
                         Grid.Row="4" Grid.Column="1" Margin="5"/>
 
                 <!--Fifth-->
-                <TextBlock Text="{Binding FifthRecentBid}"
+                <TextBlock Text="{Binding FifthRecentBid, Converter={utilities:FullPathToNameConverter}}"
                            ToolTip="{Binding FifthRecentBid}"
                            Grid.Row="5"
                            VerticalAlignment="Center"/>
@@ -220,7 +221,7 @@
                            HorizontalAlignment="Center"/>
 
                 <!--First-->
-                <TextBlock Text="{Binding FirstRecentTemplates}"
+                <TextBlock Text="{Binding FirstRecentTemplates, Converter={utilities:FullPathToNameConverter}}"
                            ToolTip="{Binding FirstRecentTemplates}"
                            Grid.Row="1"
                            VerticalAlignment="Center"/>
@@ -230,7 +231,7 @@
                         Grid.Row="1" Grid.Column="1" Margin="5"/>
 
                 <!--Second-->
-                <TextBlock Text="{Binding SecondRecentTemplates}"
+                <TextBlock Text="{Binding SecondRecentTemplates, Converter={utilities:FullPathToNameConverter}}"
                            ToolTip="{Binding SecondRecentTemplates}"
                            Grid.Row="2"
                            VerticalAlignment="Center"/>
@@ -240,7 +241,7 @@
                         Grid.Row="2" Grid.Column="1" Margin="5"/>
 
                 <!--Third-->
-                <TextBlock Text="{Binding ThirdRecentTemplates}"
+                <TextBlock Text="{Binding ThirdRecentTemplates, Converter={utilities:FullPathToNameConverter}}"
                            ToolTip="{Binding ThirdRecentTemplates}"
                            Grid.Row="3"
                            VerticalAlignment="Center"/>
@@ -250,7 +251,7 @@
                         Grid.Row="3" Grid.Column="1" Margin="5"/>
 
                 <!--Fourth-->
-                <TextBlock Text="{Binding FourthRecentTemplates}"
+                <TextBlock Text="{Binding FourthRecentTemplates, Converter={utilities:FullPathToNameConverter}}"
                            ToolTip="{Binding FourthRecentTemplates}"
                            Grid.Row="4"
                            VerticalAlignment="Center"/>
@@ -260,7 +261,7 @@
                         Grid.Row="4" Grid.Column="1" Margin="5"/>
 
                 <!--Fifth-->
-                <TextBlock Text="{Binding FifthRecentTemplates}"
+                <TextBlock Text="{Binding FifthRecentTemplates, Converter={utilities:FullPathToNameConverter}}"
                            ToolTip="{Binding FifthRecentTemplates}"
                            Grid.Row="5"
                            VerticalAlignment="Center"/>

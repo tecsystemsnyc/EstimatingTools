@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Windows;
 using System.Windows.Data;
 
@@ -860,7 +861,34 @@ namespace TECUserControlLibrary.Utilities
         #endregion
     }
 
-    
+    public class FullPathToNameConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value is string path)
+            {
+                return Path.GetFileNameWithoutExtension(path);
+            }
+            else if (value == null)
+            {
+                return "";
+            }
+            else
+            {
+                throw new Exception("Value must be string");
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
+
 
     public class EmptyStringToCollapsedConverter : BaseConverter, IValueConverter
     {
