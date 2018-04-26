@@ -8,14 +8,23 @@
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <ListView ItemsSource="{Binding ElementName=scopeGroupControl, Path=ItemsSource}">
+    <ListView ItemsSource="{Binding ElementName=scopeGroupControl, Path=ItemsSource}"
+              HorizontalContentAlignment="Stretch">
         <ListView.ItemTemplate>
             <DataTemplate>
                 <Grid>
-                    <Expander Header="{Binding Name}" Visibility="{Binding ChildrenGroups.Count, Converter={utilities:CountVisibilityConverter}}">
-                        <local:ScopeGroupControl ItemsSource="{Binding ChildrenGroups}"/>
+                    <Expander Visibility="{Binding ChildrenGroups.Count, Converter={utilities:CountVisibilityConverter}}">
+                        <Expander.Header>
+                            <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="0,0,0,1">
+                                <TextBlock Text="{Binding Name}"/>
+                            </Border>
+                        </Expander.Header>
+                        <local:ScopeGroupControl ItemsSource="{Binding ChildrenGroups}" Margin="30,0,0,0"/>
                     </Expander>
-                    <TextBlock Text="{Binding Name}" Visibility="{Binding ChildrenGroups.Count, Converter={utilities:ZeroCountToVisibileConverter}}"/>
+                    <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="0,0,0,1"
+                             Visibility="{Binding ChildrenGroups.Count, Converter={utilities:ZeroCountToVisibileConverter}}">
+                        <TextBlock Text="{Binding Name}"/>
+                    </Border>
                 </Grid>
             </DataTemplate>
         </ListView.ItemTemplate>
