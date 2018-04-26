@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TECUserControlLibrary.Models;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.UserControls
 {
@@ -32,21 +33,34 @@ namespace TECUserControlLibrary.UserControls
         public static readonly DependencyProperty ItemsSourceProperty =
             DependencyProperty.Register("ItemsSource", typeof(IEnumerable<ScopeGroup>), typeof(ScopeGroupControl));
         
-        public ITECScope SelectedItem
+        public ScopeGroup SelectedItem
         {
-            get { return (ITECScope)GetValue(SelectedItemProperty); }
+            get { return (ScopeGroup)GetValue(SelectedItemProperty); }
             set { SetValue(SelectedItemProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for SelectedItem.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SelectedItemProperty =
-            DependencyProperty.Register("SelectedItem", typeof(ITECScope), typeof(ScopeGroupControl));
-
-
+            DependencyProperty.Register("SelectedItem", typeof(ScopeGroup),
+                typeof(ScopeGroupControl), new FrameworkPropertyMetadata(null)
+                {
+                    BindsTwoWayByDefault = true,
+                    DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+                });
 
         public ScopeGroupControl()
         {
             InitializeComponent();
+        }
+
+        protected void ScopeGroupControl_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            var item = this.SelectedItem;
+            ListView child = UIHelpers.FindVisualChild<ListView>(this);
+            if (child != null && child.SelectedItems.Count == 1)
+            {
+                this.SelectedItem = null;
+                this.SelectedItem = item;
+            }
         }
     }
 }

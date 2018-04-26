@@ -38,7 +38,7 @@ namespace EstimatingLibrary.Interfaces
             }
             return list;
         }
-        
+
         public static List<TECObject> GetDirectChildren(this IRelatable relatable)
         {
             List<TECObject> list = new List<TECObject>();
@@ -53,6 +53,7 @@ namespace EstimatingLibrary.Interfaces
         {
             return !relatable.LinkedObjects.Contains(propertyName) && relatable.PropertyObjects.Contains(propertyName);
         }
+        
     }
 
     public class SaveableMap

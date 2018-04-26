@@ -21,7 +21,8 @@
             <!--Header-->
             <TextBlock Text="Controllers"/>
             <!--Controllers List-->
-            <controls:ScopeGroupControl ItemsSource="{Binding Controllers}"/>
+            <controls:ScopeGroupControl ItemsSource="{Binding Controllers}"
+                                        SelectedItem="{Binding SelectedController}"/>
             <!--Filters Grid-->
             <Grid>
                 <TextBlock Text="Filters"/>
@@ -32,7 +33,7 @@
         <StackPanel Grid.Column="1">
             <!--Controller Info-->
             <Grid>
-                <TextBlock Text="Controller"/>    
+                <TextBlock Text="Controller"/>
             </Grid>
             <!--Connections List-->
             <ListView>
@@ -55,7 +56,8 @@
             <!--Header-->
             <TextBlock Text="Connectables"/>
             <!--Connectables List-->
-            <controls:ScopeGroupControl ItemsSource="{Binding Connectables}"/>
+            <controls:ScopeGroupControl ItemsSource="{Binding Connectables}"
+                                        SelectedItem="{Binding SelectedConnectable}"/>
             <!--Filter-->
             <TextBlock Text="Filters"/>
         </StackPanel>
