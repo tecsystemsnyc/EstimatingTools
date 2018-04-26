@@ -39,9 +39,9 @@ namespace EstimatingLibrary.Interfaces
             return list;
         }
         
-        public static List<TECObject> GetDirectChildren(this IRelatable relatable)
+        public static List<ITECObject> GetDirectChildren(this IRelatable relatable)
         {
-            List<TECObject> list = new List<TECObject>();
+            List<ITECObject> list = new List<ITECObject>();
             foreach (var item in relatable.PropertyObjects.ChildList().Where(x => !relatable.LinkedObjects.Contains(x.PropertyName)))
             {
                 list.Add(item.Child);
@@ -53,17 +53,36 @@ namespace EstimatingLibrary.Interfaces
         {
             return !relatable.LinkedObjects.Contains(propertyName) && relatable.PropertyObjects.Contains(propertyName);
         }
+
+        public static bool IsDirectDescendant(this IRelatable relatable, ITECObject item)
+        {
+            List<ITECObject> directChildren = relatable.GetDirectChildren();
+            if (directChildren.Contains(item))
+            {
+                return true;
+            }
+
+            foreach(ITECObject child in directChildren)
+            {
+                if (child is IRelatable relatableChild && relatableChild.IsDirectDescendant(item))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 
     public class SaveableMap
     {
-        public List<TECObject> Objects;
+        public List<ITECObject> Objects;
         public List<string> PropertyNames;
         Dictionary<string, List<TECObject>> nameDictionary;
 
         public SaveableMap()
         {
-            Objects = new List<TECObject>();
+            Objects = new List<ITECObject>();
             PropertyNames = new List<string>();
             nameDictionary = new Dictionary<string, List<TECObject>>();
         }
