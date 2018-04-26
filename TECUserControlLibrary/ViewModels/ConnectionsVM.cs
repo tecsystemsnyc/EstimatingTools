@@ -226,8 +226,9 @@ namespace TECUserControlLibrary.ViewModels
         
         private void fillGroups(IEnumerable<ScopeGroup> groups, IConnectable connectable)
         {
-            foreach(ScopeGroup group in groups)
+            foreach (ScopeGroup group in groups)
             {
+            }
 
         }
 
