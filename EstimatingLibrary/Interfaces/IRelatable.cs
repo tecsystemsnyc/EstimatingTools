@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace EstimatingLibrary.Interfaces
 {
-    public interface IRelatable
+    public interface IRelatable : ITECObject
     {
         SaveableMap PropertyObjects { get; }
         SaveableMap LinkedObjects { get; }
@@ -71,6 +71,34 @@ namespace EstimatingLibrary.Interfaces
             }
 
             return false;
+        }
+
+        public static List<ITECObject> GetObjectPath(this IRelatable parent, ITECObject descendant)
+        {
+            List<ITECObject> path = new List<ITECObject>();
+
+            if (!parent.IsDirectDescendant(descendant))
+            {
+                return path;
+            }
+
+            path.Add(parent);
+
+            foreach(ITECObject child in parent.GetDirectChildren())
+            {
+                if (child == descendant)
+                {
+                    path.Add(child);
+                    return path;
+                }
+                else if (child is IRelatable childRelatable && childRelatable.IsDirectDescendant(descendant))
+                {
+                    path.AddRange(childRelatable.GetObjectPath(descendant));
+                    return path;
+                }
+            }
+
+            throw new Exception("Parent shown as having the direct descendant, but path to direct descendant not found.");
         }
     }
 

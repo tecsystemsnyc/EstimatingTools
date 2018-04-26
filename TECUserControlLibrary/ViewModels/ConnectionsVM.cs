@@ -18,6 +18,7 @@ namespace TECUserControlLibrary.ViewModels
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         private readonly IRelatable root;
+        private readonly Func<ITECObject, bool> filterPredicate;
 
         private readonly List<TECController> allControllers;
         private readonly List<IConnectable> allConnectables;
@@ -52,12 +53,13 @@ namespace TECUserControlLibrary.ViewModels
         /// <param name="root"></param>
         /// <param name="watcher"></param>
         /// <param name="includeFilter">Predicate for "where" clause of direct children of root.</param>
-        public ConnectionsVM(IRelatable root, ChangeWatcher watcher, Func<ITECObject, bool> includeFilter = null)
+        public ConnectionsVM(IRelatable root, ChangeWatcher watcher, Func<ITECObject, bool> filterPredicate = null)
         {
-            if (includeFilter == null)
+            if (filterPredicate == null)
             {
-                includeFilter = item => true;
+                filterPredicate = item => true;
             }
+            this.filterPredicate = filterPredicate;
 
             this.root = root;
 
@@ -66,7 +68,7 @@ namespace TECUserControlLibrary.ViewModels
             this.Controllers = new ObservableCollection<ScopeGroup>();
             this.Connectables = new ObservableCollection<ScopeGroup>();
 
-            foreach(ITECObject obj in root.GetDirectChildren().Where(includeFilter))
+            foreach(ITECObject obj in root.GetDirectChildren().Where(filterPredicate))
             {
                 if (obj is TECScope scope)
                 {
@@ -148,6 +150,7 @@ namespace TECUserControlLibrary.ViewModels
             return null;
         }
         
+        
         private void parentChanged(TECChangedEventArgs obj)
         {
             if (obj.Value is IConnectable connectable)
@@ -198,10 +201,20 @@ namespace TECUserControlLibrary.ViewModels
         
         private void fillGroups(IEnumerable<ScopeGroup> groups, IConnectable connectable)
         {
-            foreach(ScopeGroup group in groups)
+            if (!root.IsDirectDescendant(connectable))
             {
-
+                throw new Exception("New connectable doesn't exist in root object.");
             }
+
+            foreach(ITECObject obj in root.GetDirectChildren())
+            {
+                //Continue here Greg
+                //Write GetObjectPath() test
+            }
+
+            List<ITECObject> path;
         }
+
+
     }
 }
