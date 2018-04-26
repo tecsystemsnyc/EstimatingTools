@@ -21,9 +21,30 @@ namespace TECUserControlLibrary.ViewModels
 
         private readonly List<TECController> allControllers;
         private readonly List<IConnectable> allConnectables;
+        private ScopeGroup _selectedController;
+        private ScopeGroup _selectedConnectable;
 
         public ObservableCollection<ScopeGroup> Controllers { get; }
         public ObservableCollection<ScopeGroup> Connectables { get; }
+        
+        public ScopeGroup SelectedController
+        {
+            get { return _selectedController; }
+            set
+            {
+                _selectedController = value;
+                RaisePropertyChanged("SelectedController");
+            }
+        }
+        public ScopeGroup SelectedConnectable
+        {
+            get { return _selectedConnectable; }
+            set
+            {
+                _selectedConnectable = value;
+                RaisePropertyChanged("SelectedConnectable");
+            }
+        }
 
         /// <summary>
         /// 

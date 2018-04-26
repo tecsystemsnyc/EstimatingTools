@@ -9,7 +9,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <ListView ItemsSource="{Binding ElementName=scopeGroupControl, Path=ItemsSource}"
-              HorizontalContentAlignment="Stretch">
+              HorizontalContentAlignment="Stretch"
+              SelectedItem="{Binding ElementName=scopeGroupControl, Path=SelectedItem}"
+              MouseUp="ScopeGroupControl_MouseUp">
         <ListView.ItemTemplate>
             <DataTemplate>
                 <Grid>
