@@ -3,6 +3,7 @@ using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GongSolutions.Wpf.DragDrop;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,7 +17,9 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class ConnectionsVM : ViewModelBase, IDropTarget
     {
-        private readonly IRelatable parent;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
+        private readonly IRelatable root;
 
         private readonly List<TECController> allControllers;
         private readonly List<IConnectable> allConnectables;
@@ -71,16 +74,27 @@ namespace TECUserControlLibrary.ViewModels
 
         public event Action<TECObject> Selected;
 
-        public ConnectionsVM(IRelatable parent, ChangeWatcher watcher)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="root"></param>
+        /// <param name="watcher"></param>
+        /// <param name="includeFilter">Predicate for "where" clause of direct children of root.</param>
+        public ConnectionsVM(IRelatable root, ChangeWatcher watcher, Func<ITECObject, bool> includeFilter = null)
         {
-            this.parent = parent;
+            if (includeFilter == null)
+            {
+                includeFilter = item => true;
+            }
+
+            this.root = root;
 
             watcher.InstanceChanged += parentChanged;
 
             this.Controllers = new ObservableCollection<ScopeGroup>();
             this.Connectables = new ObservableCollection<ScopeGroup>();
 
-            foreach(TECObject obj in parent.GetDirectChildren())
+            foreach(ITECObject obj in root.GetDirectChildren().Where(includeFilter))
             {
                 if (obj is TECScope scope)
                 {
@@ -143,24 +157,77 @@ namespace TECUserControlLibrary.ViewModels
             }
             return (connectablesGroup, controllersGroup);
         }
-
-        private void parentChanged(TECChangedEventArgs obj)
+        private static ScopeGroup findGroup(ITECScope scope, IEnumerable<ScopeGroup> groups)
         {
-            if (obj.Change == Change.Add)
+            foreach(ScopeGroup group in groups)
             {
-                if (obj.Value is IConnectable connectable)
+                if (group.Scope == scope)
                 {
+                    return group;
+                }
 
+                ScopeGroup childGroup = findGroup(scope, group.ChildrenGroups);
+                if (childGroup != null)
+                {
+                    return childGroup;
                 }
             }
-            else if (obj.Change == Change.Remove)
-            {
 
+            return null;
+        }
+        
+        private void parentChanged(TECChangedEventArgs obj)
+        {
+            if (obj.Value is IConnectable connectable)
+            {
+                if (obj.Change == Change.Add)
+                {
+                    if (obj.Sender is ITECScope scopeSender)
+                    {
+                        addConnectable(connectable, scopeSender);
+                    }
+                    else
+                    {
+                        logger.Error("Connectable added to {0}, Guid: {1}. Parent is not ITECScope.",
+                            obj.Sender.GetType(), obj.Sender.Guid);
+                    }
+                }
+                else if (obj.Change == Change.Remove)
+                {
+                    if (obj.Sender is ITECScope scopeSender)
+                    {
+                        removeConnectable(connectable, scopeSender);
+                    }
+                    else
+                    {
+                        logger.Error("Connectable removed from {0}, Guid: {1}. Parent is not ITECScope.",
+                            obj.Sender.GetType(), obj.Sender.Guid);
+                    }
+                }
             }
         }
 
-        private void addConnectable(IConnectable connectable, TECScope parent)
+        private void addConnectable(IConnectable connectable, ITECScope parent)
         {
+            ScopeGroup parentConnectableGroup = findGroup(parent, this.Connectables);
+            if (parentConnectableGroup != null)
+            {
+                parentConnectableGroup.Add(connectable);
+            }
+            else
+            {
+                fillGroups(this.Connectables, connectable);
+            }
+        }
+        private void removeConnectable(IConnectable connectable, ITECScope parent)
+        {
+
+        }
+        
+        private void fillGroups(IEnumerable<ScopeGroup> groups, IConnectable connectable)
+        {
+            foreach(ScopeGroup group in groups)
+            {
 
         }
 

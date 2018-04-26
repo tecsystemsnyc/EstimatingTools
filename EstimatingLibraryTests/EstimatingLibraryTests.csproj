@@ -62,6 +62,7 @@
     <Compile Include="CostChangedTests.cs" />
     <Compile Include="EquipmentModelTests.cs" />
     <Compile Include="EstimatorTests.cs" />
+    <Compile Include="Interfaces\RelatableExtensionsTests.cs" />
     <Compile Include="IOCollectionTests.cs" />
     <Compile Include="SystemModelTests.cs" />
     <Compile Include="TemplatesLinkingTests.cs" />

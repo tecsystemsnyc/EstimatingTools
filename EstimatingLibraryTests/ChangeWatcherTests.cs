@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -20,7 +21,7 @@ namespace Tests
         private TECChangedEventArgs instanceChangedArgs;
         private CostBatch costDelta;
         private int? pointDelta;
-        private List<Tuple<Change, TECObject>> instanceConstituentChangedArgs;
+        private List<Tuple<Change, ITECObject>> instanceConstituentChangedArgs;
 
         private bool changedRaised;
         private bool instanceChangedRaised;
@@ -37,7 +38,7 @@ namespace Tests
             templates = TestHelper.CreateTestTemplates();
             tcw = new ChangeWatcher(templates);
 
-            instanceConstituentChangedArgs = new List<Tuple<Change, TECObject>>();
+            instanceConstituentChangedArgs = new List<Tuple<Change, ITECObject>>();
 
             resetRaised();
 
@@ -63,7 +64,7 @@ namespace Tests
             };
             cw.InstanceConstituentChanged += (changeType, obj) =>
             {
-                instanceConstituentChangedArgs.Add(new Tuple<Change, TECObject>(changeType, obj));
+                instanceConstituentChangedArgs.Add(new Tuple<Change, ITECObject>(changeType, obj));
                 instanceConstituentChangedRaised = true;
             };
             
@@ -2894,7 +2895,7 @@ namespace Tests
             instanceChangedArgs = null;
             costDelta = null;
             pointDelta = null;
-            instanceConstituentChangedArgs = new List<Tuple<Change, TECObject>>();
+            instanceConstituentChangedArgs = new List<Tuple<Change, ITECObject>>();
         }
 
         #region Check Methods
@@ -2939,7 +2940,7 @@ namespace Tests
             }
         }
 
-        private void checkChangedArgs(Change change, string propertyName, TECObject sender, object value, object oldValue = null)
+        private void checkChangedArgs(Change change, string propertyName, ITECObject sender, object value, object oldValue = null)
         {
             Assert.AreEqual(change, changedArgs.Change, "Change type is wrong.");
             Assert.AreEqual(propertyName, changedArgs.PropertyName, "PropertyName is wrong.");
@@ -2951,7 +2952,7 @@ namespace Tests
                 Assert.AreEqual(oldValue, changedArgs.OldValue, "OldValue is wrong.");
             }
         }
-        private void checkInstanceChangedArgs(Change change, string propertyName, TECObject sender, object value, object oldValue = null)
+        private void checkInstanceChangedArgs(Change change, string propertyName, ITECObject sender, object value, object oldValue = null)
         {
             checkChangedArgs(change, propertyName, sender, value, oldValue);
 
@@ -2979,10 +2980,10 @@ namespace Tests
             Assert.AreEqual(points, pointDelta, "ChangeWatcher point delta is wrong.");
         }
 
-        private void checkConstituentArgs(Change changeType, TECObject obj)
+        private void checkConstituentArgs(Change changeType, ITECObject obj)
         {
             bool argsMatch = false;
-            foreach(Tuple<Change, TECObject> args in instanceConstituentChangedArgs)
+            foreach(Tuple<Change, ITECObject> args in instanceConstituentChangedArgs)
             {
                 if (args.Item1 == changeType && args.Item2 == obj)
                 {
