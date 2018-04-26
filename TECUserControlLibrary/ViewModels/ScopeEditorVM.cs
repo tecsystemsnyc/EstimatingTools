@@ -36,6 +36,10 @@ namespace TECUserControlLibrary.ViewModels
             PropertiesVM = new PropertiesVM(bid.Catalogs, bid);
             WorkBoxVM = new WorkBoxVM(bid);
             ConnectionsVM = new ConnectionsVM(bid, watcher);
+            ConnectionsVM.Selected += item =>
+            {
+                Selected = item;
+            };
             DGTabIndex = GridIndex.Systems;
             TemplatesVisibility = Visibility.Visible;
         }

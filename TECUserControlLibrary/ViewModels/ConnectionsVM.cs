@@ -2,6 +2,7 @@
 using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
+using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,39 +10,66 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TECUserControlLibrary.Models;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class ConnectionsVM : ViewModelBase
+    public class ConnectionsVM : ViewModelBase, IDropTarget
     {
         private readonly IRelatable parent;
 
         private readonly List<TECController> allControllers;
         private readonly List<IConnectable> allConnectables;
-        private ScopeGroup _selectedController;
-        private ScopeGroup _selectedConnectable;
+        private ScopeGroup _selectedControllerGroup;
+        private ScopeGroup _selectedConnectableGroup;
+        private TECConnection _selectedConnection;
 
         public ObservableCollection<ScopeGroup> Controllers { get; }
         public ObservableCollection<ScopeGroup> Connectables { get; }
         
-        public ScopeGroup SelectedController
+        public ScopeGroup SelectedControllerGroup
         {
-            get { return _selectedController; }
+            get { return _selectedControllerGroup; }
             set
             {
-                _selectedController = value;
+                _selectedControllerGroup = value;
+                RaisePropertyChanged("SelectedControllerGroup");
                 RaisePropertyChanged("SelectedController");
+                Selected?.Invoke(value?.Scope as TECObject);
             }
         }
-        public ScopeGroup SelectedConnectable
+        public ScopeGroup SelectedConnectableGroup
         {
-            get { return _selectedConnectable; }
+            get { return _selectedConnectableGroup; }
             set
             {
-                _selectedConnectable = value;
+                _selectedConnectableGroup = value;
+                RaisePropertyChanged("SelectedConnectableGroup");
                 RaisePropertyChanged("SelectedConnectable");
+                Selected?.Invoke(value?.Scope as TECObject);
             }
         }
+
+        public TECController SelectedController
+        {
+            get { return SelectedControllerGroup?.Scope as TECController; }
+        }
+        public IConnectable SelectedConnectable
+        {
+            get { return SelectedConnectableGroup?.Scope as IConnectable; }
+        }
+        public TECConnection SelectedConnection
+        {
+            get { return _selectedConnection; }
+            set
+            {
+                _selectedConnection = value;
+                RaisePropertyChanged("SelectedConnection");
+                Selected?.Invoke(value as TECObject);
+            }
+        }
+
+        public event Action<TECObject> Selected;
 
         public ConnectionsVM(IRelatable parent, ChangeWatcher watcher)
         {
@@ -134,6 +162,22 @@ namespace TECUserControlLibrary.ViewModels
         private void addConnectable(IConnectable connectable, TECScope parent)
         {
 
+        }
+
+        public void DragOver(IDropInfo dropInfo)
+        {
+            if(dropInfo.Data is ScopeGroup group && SelectedController != null)
+            {
+                if(SelectedController.CanConnect(group.Scope as IConnectable))
+                {
+                    UIHelpers.SetDragAdorners(dropInfo);
+                }
+            }
+        }
+
+        public void Drop(IDropInfo dropInfo)
+        {
+            SelectedController.Connect(((ScopeGroup)dropInfo.Data).Scope as IConnectable);
         }
     }
 }

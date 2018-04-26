@@ -46,6 +46,29 @@ namespace TECUserControlLibrary.UserControls
                     BindsTwoWayByDefault = true,
                     DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
                 });
+        
+        public bool IsDropTarget
+        {
+            get { return (bool)GetValue(IsDropTargetProperty); }
+            set { SetValue(IsDropTargetProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsDropTarget.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsDropTargetProperty =
+            DependencyProperty.Register("IsDropTarget", typeof(bool), typeof(ScopeGroupControl), new PropertyMetadata(true));
+
+
+        public bool IsDragSource
+        {
+            get { return (bool)GetValue(IsDragSourceProperty); }
+            set { SetValue(IsDragSourceProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsDragSource.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsDragSourceProperty =
+            DependencyProperty.Register("IsDragSource", typeof(bool), typeof(ScopeGroupControl), new PropertyMetadata(true));
+
+
 
         public ScopeGroupControl()
         {

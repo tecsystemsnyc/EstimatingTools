@@ -144,8 +144,12 @@ namespace EstimatingLibrary
         #region Connection Methods
         public bool CanConnect(IConnectable connectable)
         {
+            if(connectable.GetParentConnection() != null) { return false; }
+
             //Determines relevant IO based on if the connectable is networkable
             IOCollection connectableIO = connectable.IsNetwork ? connectable.AvailableProtocols : connectable.HardwiredIO;
+
+            if(connectableIO.TypeCount() == 0) { return false; }
 
             //Collection of current IO and IO from potential modules
             IOCollection possibleIO = this.AvailableIO + getPotentialIO();
