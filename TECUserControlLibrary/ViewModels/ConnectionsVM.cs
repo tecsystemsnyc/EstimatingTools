@@ -14,45 +14,88 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class ConnectionsVM : ViewModelBase
     {
+        private readonly IRelatable parent;
+
         private readonly List<TECController> allControllers;
         private readonly List<IConnectable> allConnectables;
 
         public ObservableCollection<ScopeGroup> Controllers { get; }
         public ObservableCollection<ScopeGroup> Connectables { get; }
 
-        public ConnectionsVM(TECBid bid)
+        public ConnectionsVM(IRelatable parent, ChangeWatcher watcher)
         {
+            this.parent = parent;
+
             this.Controllers = new ObservableCollection<ScopeGroup>();
             this.Connectables = new ObservableCollection<ScopeGroup>();
 
-            foreach(TECController controller in bid.Controllers)
+            foreach(TECObject obj in parent.GetDirectChildren())
             {
-                this.Controllers.Add(new ScopeGroup(controller));
-                this.Connectables.Add(new ScopeGroup(controller));
-            }
-
-            foreach(TECSystem sys in bid.Systems)
-            {
-                ScopeGroup systemControllerGroup = new ScopeGroup(sys.Name);
-                ScopeGroup systemConnectableGroup = new ScopeGroup(sys.Name);
-                foreach (TECController controller in sys.Controllers)
+                if (obj is TECScope scope)
                 {
-                    systemControllerGroup.Add(controller);
-                    systemConnectableGroup.Add(controller);
+                    var childGroups = getGroups(scope);
+                    if (childGroups.controllersGroup != null)
+                    {
+                        this.Controllers.Add(childGroups.controllersGroup);
+                    }
+                    if (childGroups.connectablesGroup != null)
+                    {
+                        this.Connectables.Add(childGroups.connectablesGroup);
+                    }
                 }
-                foreach (TECEquipment equip in sys.Equipment)
-                {
-                    ScopeGroup equipConnectableGroup = new ScopeGroup(equip.Name);
-                    equip.SubScope.ForEach(ss => equipConnectableGroup.Add(ss));
-                    systemConnectableGroup.Add(equipConnectableGroup);
-                }
-                this.Controllers.Add(systemControllerGroup);
-                this.Connectables.Add(systemConnectableGroup);
             }
         }
-        public ConnectionsVM(TECSystem system)
+
+        public void AddConnectable(IConnectable connectable, ITECScope parent)
         {
 
+        }
+        
+        /// <summary>
+        /// Gets ScopeGroups constructed from the scope passed in which contain connectables and controllers.
+        /// </summary>
+        /// <param name="scope"></param>
+        /// <returns>ScopeGroups condensed to only groups that contain connectables and controllers respectively.</returns>
+        private static (ScopeGroup connectablesGroup, ScopeGroup controllersGroup) getGroups(TECScope scope)
+        {
+            ScopeGroup connectablesGroup = null;
+            ScopeGroup controllersGroup = null;
+
+            if (scope is IConnectable)
+            {
+                connectablesGroup = new ScopeGroup(scope);
+                if (scope is TECController)
+                {
+                    controllersGroup = new ScopeGroup(scope);
+                }
+            }
+            else if (scope is IRelatable relatable)
+            {
+                foreach(TECObject child in relatable.GetDirectChildren())
+                {
+                    if (child is TECScope childScope)
+                    {
+                        var childGroup = getGroups(childScope);
+                        if (childGroup.connectablesGroup != null)
+                        {
+                            if (connectablesGroup == null)
+                            {
+                                connectablesGroup = new ScopeGroup(scope);
+                            }
+                            connectablesGroup.Add(childGroup.connectablesGroup);
+                            if (childGroup.controllersGroup != null)
+                            {
+                                if (controllersGroup == null)
+                                {
+                                    controllersGroup = new ScopeGroup(scope);
+                                }
+                                controllersGroup.Add(childGroup.controllersGroup);
+                            }
+                        }
+                    }
+                }
+            }
+            return (connectablesGroup, controllersGroup);
         }
     }
 }
