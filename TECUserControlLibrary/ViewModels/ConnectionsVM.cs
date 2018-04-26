@@ -26,6 +26,8 @@ namespace TECUserControlLibrary.ViewModels
         {
             this.parent = parent;
 
+            watcher.InstanceChanged += parentChanged;
+
             this.Controllers = new ObservableCollection<ScopeGroup>();
             this.Connectables = new ObservableCollection<ScopeGroup>();
 
@@ -46,11 +48,6 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public void AddConnectable(IConnectable connectable, ITECScope parent)
-        {
-
-        }
-        
         /// <summary>
         /// Gets ScopeGroups constructed from the scope passed in which contain connectables and controllers.
         /// </summary>
@@ -96,6 +93,26 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
             return (connectablesGroup, controllersGroup);
+        }
+
+        private void parentChanged(TECChangedEventArgs obj)
+        {
+            if (obj.Change == Change.Add)
+            {
+                if (obj.Value is IConnectable connectable)
+                {
+
+                }
+            }
+            else if (obj.Change == Change.Remove)
+            {
+
+            }
+        }
+
+        private void addConnectable(IConnectable connectable, TECScope parent)
+        {
+
         }
     }
 }
