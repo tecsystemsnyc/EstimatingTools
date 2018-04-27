@@ -58,5 +58,24 @@ namespace TECUserControlLibrary.Models
                 return true;
             }
         }
+
+        public ScopeGroup GetGroup(ITECScope scope)
+        {
+            if (this.Scope == scope)
+            {
+                return this;
+            }
+
+            foreach (ScopeGroup group in this.ChildrenGroups)
+            {
+                ScopeGroup childGroup = group.GetGroup(scope);
+                if (childGroup != null)
+                {
+                    return childGroup;
+                }
+            }
+
+            return null;
+        }
     }
 }
