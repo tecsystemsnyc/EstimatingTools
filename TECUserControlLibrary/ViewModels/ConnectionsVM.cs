@@ -245,7 +245,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (obj.Sender is ITECScope scopeSender)
                     {
-                        addConnectable(connectable, scopeSender);
+                        addConnectable(connectable, scopeSender, filterPredicate);
                     }
                     else
                     {
@@ -257,7 +257,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (obj.Sender is ITECScope scopeSender)
                     {
-                        removeConnectable(connectable, scopeSender);
+                        removeConnectable(connectable, scopeSender, filterPredicate);
                     }
                     else
                     {
@@ -268,20 +268,14 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private void addConnectable(IConnectable connectable, ITECScope parent)
+        private void addConnectable(IConnectable connectable,  Func<ITECObject, bool> predicate)
         {
-            ScopeGroup parentConnectableGroup = this.rootConnectableGroup.GetGroup(parent);
-            if (parentConnectableGroup != null)
-            {
-                parentConnectableGroup.Add(connectable);
-            }
-            else
-            {
-                fillGroups(this.Connectables, connectable);
-            }
+            if (!predicate(connectable)) return;
+            fillGroups(this.Connectables, connectable);
         }
-        private void removeConnectable(IConnectable connectable, ITECScope parent)
+        private void removeConnectable(IConnectable connectable, ITECScope parent, Func<ITECObject, bool> predicate)
         {
+            if (!predicate(connectable)) return;
             ScopeGroup parentGroup = this.rootConnectableGroup.GetGroup(parent);
             parentGroup.Remove(connectable);
 

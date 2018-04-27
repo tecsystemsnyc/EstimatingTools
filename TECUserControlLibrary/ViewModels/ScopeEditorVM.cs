@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GongSolutions.Wpf.DragDrop;
@@ -35,7 +36,20 @@ namespace TECUserControlLibrary.ViewModels
             };
             PropertiesVM = new PropertiesVM(bid.Catalogs, bid);
             WorkBoxVM = new WorkBoxVM(bid);
-            ConnectionsVM = new ConnectionsVM(bid, watcher, bid.Catalogs);
+            ConnectionsVM = new ConnectionsVM(bid, watcher, bid.Catalogs, filterPredicate);
+
+            bool filterPredicate(ITECObject obj)
+            {
+                if (obj is ITypicalable typable)
+                {
+                    return (typable is TECTypical || !typable.IsTypical);
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
             ConnectionsVM.Selected += item =>
             {
                 Selected = item;
