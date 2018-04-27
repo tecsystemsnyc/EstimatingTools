@@ -23,14 +23,14 @@
                                 <TextBlock Text="{Binding Name}"/>
                             </Border>
                         </Expander.Header>
-                        <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="1,0,0,0" Margin="20,0,0,0">
+                        <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="1,0,0,0" Margin="10,0,0,0">
                             <local:ScopeGroupControl ItemsSource="{Binding ChildrenGroups}"
                                                      SelectedItem="{Binding ElementName=scopeGroupControl, Path=SelectedItem}"
                                                      IsDropTarget="{Binding ElementName=scopeGroupControl, Path=IsDropTarget}"
                                                      IsDragSource="{Binding ElementName=scopeGroupControl, Path=IsDragSource}"/>
                         </Border>
                     </Expander>
-                    <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="0,0,0,1"
+                    <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="0,0,0,1" Margin="25,0,0,0"
                             Visibility="{Binding ChildrenGroups.Count, Converter={utilities:ZeroCountToVisibileConverter}}">
                         <TextBlock Text="{Binding Name}"/>
                     </Border>

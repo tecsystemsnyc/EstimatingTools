@@ -193,5 +193,10 @@
         <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
+    <Style x:Key="HeaderBorder" TargetType="{x:Type Border}">
+        <Setter Property="BorderBrush" Value="{StaticResource ItemBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="Margin" Value="10,0,10,0"/>
+    </Style>
 
 </ResourceDictionary>

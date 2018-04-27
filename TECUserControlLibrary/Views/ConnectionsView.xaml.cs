@@ -40,5 +40,6 @@ namespace TECUserControlLibrary.Views
         {
             InitializeComponent();
         }
+        
     }
 }
