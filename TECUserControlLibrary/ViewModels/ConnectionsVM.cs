@@ -27,6 +27,10 @@ namespace TECUserControlLibrary.ViewModels
         private ScopeGroup _selectedControllerGroup;
         private ScopeGroup _selectedConnectableGroup;
         private TECConnection _selectedConnection;
+        private Double _defaultWireLength = 50.0;
+        private Double _defaultConduitLength = 30.0;
+        private TECElectricalMaterial _defaultConduitType;
+        private bool _defaultPlenum = false;
 
         public ObservableCollection<ScopeGroup> Controllers { get; }
         public ObservableCollection<ScopeGroup> Connectables { get; }
@@ -73,6 +77,44 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        public Double DefaultWireLength
+        {
+            get { return _defaultWireLength; }
+            set
+            {
+                _defaultWireLength = value;
+                RaisePropertyChanged("DefaultWireLength");
+            }
+        }
+        public Double DefaultConduitLength
+        {
+            get { return _defaultConduitLength; }
+            set
+            {
+                _defaultConduitLength = value;
+                RaisePropertyChanged("DefaultConduitLength");
+            }
+        }
+        public TECElectricalMaterial DefaultConduitType
+        {
+            get { return _defaultConduitType; }
+            set
+            {
+                _defaultConduitType = value;
+                RaisePropertyChanged("DefaultConduitType");
+            }
+        }
+        public bool DefaultPlenum
+        {
+            get { return _defaultPlenum; }
+            set
+            {
+                _defaultPlenum = value;
+                RaisePropertyChanged("DefaultPlenum");
+            }
+        }
+        public TECCatalogs Catalogs { get; }
+        
         public event Action<TECObject> Selected;
 
         /// <summary>
@@ -81,7 +123,7 @@ namespace TECUserControlLibrary.ViewModels
         /// <param name="root"></param>
         /// <param name="watcher"></param>
         /// <param name="includeFilter">Predicate for "where" clause of direct children of root.</param>
-        public ConnectionsVM(IRelatable root, ChangeWatcher watcher, Func<ITECObject, bool> filterPredicate = null)
+        public ConnectionsVM(IRelatable root, ChangeWatcher watcher, TECCatalogs catalogs, Func<ITECObject, bool> filterPredicate = null)
         {
             if (filterPredicate == null)
             {
@@ -90,6 +132,11 @@ namespace TECUserControlLibrary.ViewModels
             this.filterPredicate = filterPredicate;
 
             this.root = root;
+            this.Catalogs = catalogs;
+            if(this.Catalogs.ConduitTypes.Count > 0)
+            {
+                this.DefaultConduitType = this.Catalogs.ConduitTypes[0];
+            }
 
             watcher.InstanceChanged += parentChanged;
 
@@ -178,7 +225,6 @@ namespace TECUserControlLibrary.ViewModels
             return null;
         }
         
-        
         private void parentChanged(TECChangedEventArgs obj)
         {
             if (obj.Value is IConnectable connectable)
@@ -256,7 +302,11 @@ namespace TECUserControlLibrary.ViewModels
 
         public void Drop(IDropInfo dropInfo)
         {
-            SelectedController.Connect(((ScopeGroup)dropInfo.Data).Scope as IConnectable);
+            var connection = SelectedController.Connect(((ScopeGroup)dropInfo.Data).Scope as IConnectable);
+            connection.Length = this.DefaultWireLength;
+            connection.ConduitType = this.DefaultConduitType;
+            connection.ConduitLength = this.DefaultConduitLength;
+            connection.IsPlenum = this.DefaultPlenum;
         }
 
 

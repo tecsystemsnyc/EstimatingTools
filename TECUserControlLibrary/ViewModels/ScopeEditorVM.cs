@@ -35,7 +35,7 @@ namespace TECUserControlLibrary.ViewModels
             };
             PropertiesVM = new PropertiesVM(bid.Catalogs, bid);
             WorkBoxVM = new WorkBoxVM(bid);
-            ConnectionsVM = new ConnectionsVM(bid, watcher);
+            ConnectionsVM = new ConnectionsVM(bid, watcher, bid.Catalogs);
             ConnectionsVM.Selected += item =>
             {
                 Selected = item;
