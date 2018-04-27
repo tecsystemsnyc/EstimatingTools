@@ -159,28 +159,29 @@ namespace TECUserControlLibrary.ViewModels
 
             foreach(ITECObject child in root.GetDirectChildren())
             {
-                populate(child);
+                repopulate(child, addConnectable);
             }
         }
 
-        private void populate(ITECObject child)
+        private void repopulate(ITECObject child, Action<ScopeGroup, IConnectable> action)
         {
             if(child is IConnectable connectable)
             {
-                addConnectable(this.rootConnectableGroup, connectable);
+                action(this.rootConnectableGroup, connectable);
                 if (connectable is TECController)
                 {
-                    addConnectable(this.rootControllersGroup, connectable);
+                    action(this.rootControllersGroup, connectable);
                 }
             }
             else if (child is IRelatable relatable)
             {
                 foreach (ITECObject nextChild in relatable.GetDirectChildren().Where(filterPredicate))
                 {
-                    populate(nextChild);
+                    repopulate(nextChild, action);
                 }
             }
         }
+
         private static bool containsConnectable(ScopeGroup group)
         {
             if (group.Scope is IConnectable)
@@ -204,49 +205,16 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (obj.Change == Change.Add)
                 {
-                    populate(tecObj);
+                    repopulate(tecObj, addConnectable);
                 }
-                //else if (obj.Change == Change.Remove)
-                //{
-                //    if (obj.Sender is ITECScope scopeSender)
-                //    {
-                //        removeConnectable(connectable, scopeSender);
-                //    }
-                //    else
-                //    {
-                //        logger.Error("Connectable removed from {0}, Guid: {1}. Parent is not ITECScope.",
-                //            obj.Sender.GetType(), obj.Sender.Guid);
-                //    }
-                //}
-            }
-        }
-        
-        private void removeConnectable(IConnectable connectable, ITECScope parent)
-        {
-            if (!filterPredicate(connectable)) return;
-            ScopeGroup parentGroup = this.rootConnectableGroup.GetGroup(parent);
-            parentGroup.Remove(connectable);
-
-            List<ITECObject> parentPath = root.GetObjectPath(parent);
-
-            ScopeGroup currentGroup = this.rootConnectableGroup;
-            for(int i = 1; i < parentPath.Count; i++)
-            {
-                if (parentPath[i] is ITECScope scope)
+                else if (obj.Change == Change.Remove)
                 {
-                    ScopeGroup nextGroup = currentGroup.ChildrenGroups.First(group => group.Scope == parentPath[i + 1]);
-                    if (!containsConnectable(nextGroup))
-                    {
-                        currentGroup.Remove(nextGroup);
-                        return;
-                    }
-                    else
-                    {
-                        currentGroup = nextGroup;
-                    }
+                    repopulate(tecObj, removeConnectable);
                 }
             }
         }
+
+        
 
         private void addConnectable(ScopeGroup rootGroup, IConnectable connectable)
         {
@@ -280,8 +248,7 @@ namespace TECUserControlLibrary.ViewModels
                     return;
                 }
             }
-
-
+            
             ScopeGroup currentGroup = lastGroup;
             for(int i = lastIndex + 1; i < path.Count; i++)
             {
@@ -290,6 +257,28 @@ namespace TECUserControlLibrary.ViewModels
                     ScopeGroup newGroup = new ScopeGroup(scope);
                     currentGroup.Add(newGroup);
                     currentGroup = newGroup;
+                }
+                else
+                {
+                    logger.Error("Object in path to connectable isn't ITECScope, cannot build group hierarchy.");
+                    return;
+                }
+            }
+        }
+        private void removeConnectable(ScopeGroup rootGroup, IConnectable connectable)
+        {
+            if (!filterPredicate(connectable)) return;
+            List<ITECObject> path = this.root.GetObjectPath(connectable);
+
+            ScopeGroup currentGroup = rootGroup.GetGroup(connectable);
+            for(int i = path.Count -1; i > 0; i--)
+            {
+                if (path[i - 1] is ITECScope parentScope)
+                {
+                    ScopeGroup parentGroup = rootGroup.GetGroup(parentScope);
+                    parentGroup.Remove(currentGroup);
+                    if (containsConnectable(parentGroup)) return;
+                    currentGroup = parentGroup;
                 }
                 else
                 {
