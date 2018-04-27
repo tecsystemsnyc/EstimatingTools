@@ -33,10 +33,6 @@ namespace TECUserControlLibrary.ViewModels
         private Double _defaultConduitLength = 30.0;
         private TECElectricalMaterial _defaultConduitType;
         private bool _defaultPlenum = false;
-
-        public ObservableCollection<ScopeGroup> Controllers { get; }
-        public ObservableCollection<ScopeGroup> Connectables { get; }
-        
         
         public ObservableCollection<ScopeGroup> Connectables
         {
