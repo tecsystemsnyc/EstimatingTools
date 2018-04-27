@@ -174,6 +174,21 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        private void populate(IRelatable parent, ITECObject child)
+        {
+            if(child is IConnectable connectable)
+            {
+                addConnectable(parent, connectable);
+            }
+            else if (child is IRelatable relatable)
+            {
+                foreach (ITECObject nextChild in relatable.GetDirectChildren().Where(filterPredicate))
+                {
+                    populate(relatable, nextChild);
+                }
+            }
+        }
+
         /// <summary>
         /// Gets ScopeGroups constructed from the scope passed in which contain connectables and controllers.
         /// </summary>
@@ -236,7 +251,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             return false;
         }
-
+        
         private void parentChanged(TECChangedEventArgs obj)
         {
             if (obj.Value is IConnectable connectable)
