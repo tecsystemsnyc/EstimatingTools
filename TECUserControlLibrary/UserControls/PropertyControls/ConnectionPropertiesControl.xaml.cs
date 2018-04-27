@@ -21,8 +21,6 @@ namespace TECUserControlLibrary.UserControls.PropertyControls
     /// </summary>
     public partial class ConnectionPropertiesControl : UserControl
     {
-
-
         public TECConnection Selected
         {
             get { return (TECConnection)GetValue(SelectedProperty); }
@@ -33,6 +31,15 @@ namespace TECUserControlLibrary.UserControls.PropertyControls
         public static readonly DependencyProperty SelectedProperty =
             DependencyProperty.Register("Selected", typeof(TECConnection), typeof(ConnectionPropertiesControl));
 
+        public IEnumerable<TECElectricalMaterial> ConduitTypes
+        {
+            get { return (IEnumerable<TECElectricalMaterial>)GetValue(ConduitTypesProperty); }
+            set { SetValue(ConduitTypesProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ConduitTypes.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ConduitTypesProperty =
+            DependencyProperty.Register("ConduitTypes", typeof(IEnumerable<TECElectricalMaterial>), typeof(ConnectionPropertiesControl));
 
 
         public ConnectionPropertiesControl()
