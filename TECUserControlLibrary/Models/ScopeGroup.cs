@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using GalaSoft.MvvmLight;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,9 +9,21 @@ using System.Threading.Tasks;
 
 namespace TECUserControlLibrary.Models
 {
-    public class ScopeGroup
+    public class ScopeGroup : ViewModelBase
     {
-        public string Name { get; }
+        private string _name;
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                if (_name != value)
+                {
+                    _name = value;
+                    RaisePropertyChanged("Name");
+                }
+            }
+        }
 
         public ITECScope Scope { get; }
         public ObservableCollection<ScopeGroup> ChildrenGroups { get; }
@@ -24,6 +37,13 @@ namespace TECUserControlLibrary.Models
         public ScopeGroup(ITECScope scope) : this(scope.Name)
         {
             this.Scope = scope;
+            this.Scope.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == "Name")
+                {
+                    Name = scope.Name;
+                }
+            };
         }
 
         public void Add(ITECScope child)
