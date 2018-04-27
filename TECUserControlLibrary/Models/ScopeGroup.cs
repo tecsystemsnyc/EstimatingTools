@@ -58,6 +58,10 @@ namespace TECUserControlLibrary.Models
                 return true;
             }
         }
+        public bool Remove(ScopeGroup child)
+        {
+            return this.ChildrenGroups.Remove(child);
+        }
 
         public ScopeGroup GetGroup(ITECScope scope)
         {

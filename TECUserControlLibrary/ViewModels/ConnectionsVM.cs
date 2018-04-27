@@ -20,6 +20,8 @@ namespace TECUserControlLibrary.ViewModels
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         private readonly T root;
+        private readonly ScopeGroup rootConnectableGroup;
+        private readonly ScopeGroup rootControllersGroup;
         private readonly Func<ITECObject, bool> filterPredicate;
 
         private readonly List<TECController> allControllers;
@@ -27,10 +29,22 @@ namespace TECUserControlLibrary.ViewModels
         private ScopeGroup _selectedControllerGroup;
         private ScopeGroup _selectedConnectableGroup;
         private TECConnection _selectedConnection;
-
-        public ObservableCollection<ScopeGroup> Controllers { get; }
-        public ObservableCollection<ScopeGroup> Connectables { get; }
         
+        public ObservableCollection<ScopeGroup> Connectables
+        {
+            get
+            {
+                return rootConnectableGroup.ChildrenGroups;
+            }
+        }
+        public ObservableCollection<ScopeGroup> Controllers
+        {
+            get
+            {
+                return rootControllersGroup.ChildrenGroups;
+            }
+        }
+
         public ScopeGroup SelectedControllerGroup
         {
             get { return _selectedControllerGroup; }
@@ -93,8 +107,8 @@ namespace TECUserControlLibrary.ViewModels
 
             watcher.InstanceChanged += parentChanged;
 
-            this.Controllers = new ObservableCollection<ScopeGroup>();
-            this.Connectables = new ObservableCollection<ScopeGroup>();
+            this.rootConnectableGroup = new ScopeGroup(root);
+            this.rootControllersGroup = new ScopeGroup(root);
 
             foreach(ITECObject obj in root.GetDirectChildren().Where(filterPredicate))
             {
@@ -118,7 +132,7 @@ namespace TECUserControlLibrary.ViewModels
         /// </summary>
         /// <param name="scope"></param>
         /// <returns>ScopeGroups condensed to only groups that contain connectables and controllers respectively.</returns>
-        private static (ScopeGroup connectablesGroup, ScopeGroup controllersGroup) getGroups(TECScope scope)
+        private static (ScopeGroup connectablesGroup, ScopeGroup controllersGroup) getGroups(ITECScope scope)
         {
             ScopeGroup connectablesGroup = null;
             ScopeGroup controllersGroup = null;
@@ -159,26 +173,23 @@ namespace TECUserControlLibrary.ViewModels
             }
             return (connectablesGroup, controllersGroup);
         }
-        private static ScopeGroup findGroup(ITECScope scope, IEnumerable<ScopeGroup> groups)
+        private static bool containsConnectable(ScopeGroup group)
         {
-            foreach(ScopeGroup group in groups)
+            if (group.Scope is IConnectable)
             {
-                if (group.Scope == scope)
+                return true;
+            }
+            
+            foreach(ScopeGroup childGroup in group.ChildrenGroups)
+            {
+                if (containsConnectable(childGroup))
                 {
-                    return group;
-                }
-
-                ScopeGroup childGroup = findGroup(scope, group.ChildrenGroups);
-                if (childGroup != null)
-                {
-                    return childGroup;
+                    return true;
                 }
             }
-
-            return null;
+            return false;
         }
-        
-        
+
         private void parentChanged(TECChangedEventArgs obj)
         {
             if (obj.Value is IConnectable connectable)
@@ -212,7 +223,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addConnectable(IConnectable connectable, ITECScope parent)
         {
-            ScopeGroup parentConnectableGroup = findGroup(parent, this.Connectables);
+            ScopeGroup parentConnectableGroup = this.rootConnectableGroup.GetGroup(parent);
             if (parentConnectableGroup != null)
             {
                 parentConnectableGroup.Add(connectable);
@@ -224,7 +235,28 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void removeConnectable(IConnectable connectable, ITECScope parent)
         {
+            ScopeGroup parentGroup = this.rootConnectableGroup.GetGroup(parent);
+            parentGroup.Remove(connectable);
 
+            List<ITECObject> parentPath = root.GetObjectPath(parent);
+
+            ScopeGroup currentGroup = this.rootConnectableGroup;
+            for(int i = 1; i < parentPath.Count; i++)
+            {
+                if (parentPath[i] is ITECScope scope)
+                {
+                    ScopeGroup nextGroup = currentGroup.ChildrenGroups.First(group => group.Scope == parentPath[i + 1]);
+                    if (!containsConnectable(nextGroup))
+                    {
+                        currentGroup.Remove(nextGroup);
+                        return;
+                    }
+                    else
+                    {
+                        currentGroup = nextGroup;
+                    }
+                }
+            }
         }
 
         private void fillGroups(IEnumerable<ScopeGroup> groups, IConnectable connectable)
@@ -234,11 +266,11 @@ namespace TECUserControlLibrary.ViewModels
                 throw new Exception("New connectable doesn't exist in root object.");
             }
 
-            List<ITECObject> path = root.GetObjectPath(connectable);
+            List<ITECObject> path = this.root.GetObjectPath(connectable);
 
             //Optimization Idea: Use FindGroup on each ITECObject in path in reverse until finding one. Fill from there.
 
-            ScopeGroup currentGroup = new ScopeGroup(root);
+            ScopeGroup currentGroup = new ScopeGroup(this.root);
             groups.ForEach(group => currentGroup.Add(group));
 
             int nextIndex = 1;
@@ -263,9 +295,6 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     else
                     {
-                        //Should we enforce all ITECObject in path are ITECScope?
-                        throw new Exception("Object in path to connectable isn't ITECScope, cannot build group hierarchy.");
-
                         logger.Error("Object in path to connectable isn't ITECScope, cannot build group hierarchy.");
                         return;
                     }
