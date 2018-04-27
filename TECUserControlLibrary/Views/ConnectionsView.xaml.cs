@@ -24,15 +24,15 @@ namespace TECUserControlLibrary.Views
     {
 
 
-        public ViewModelBase VM
+        public ConnectionsVM VM
         {
-            get { return (ViewModelBase)GetValue(VMProperty); }
+            get { return (ConnectionsVM)GetValue(VMProperty); }
             set { SetValue(VMProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for VM.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty VMProperty =
-            DependencyProperty.Register("VM", typeof(ViewModelBase), typeof(ConnectionsView));
+            DependencyProperty.Register("VM", typeof(ConnectionsVM), typeof(ConnectionsView));
 
 
 

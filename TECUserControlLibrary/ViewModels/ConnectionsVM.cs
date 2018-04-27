@@ -15,11 +15,11 @@ using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class ConnectionsVM<T> : ViewModelBase, IDropTarget where T : IRelatable, ITECScope
+    public class ConnectionsVM : ViewModelBase, IDropTarget
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        private readonly T root;
+        private readonly IRelatable root;
         private readonly ScopeGroup rootConnectableGroup;
         private readonly ScopeGroup rootControllersGroup;
         private readonly Func<ITECObject, bool> filterPredicate;
@@ -95,7 +95,7 @@ namespace TECUserControlLibrary.ViewModels
         /// <param name="root"></param>
         /// <param name="watcher"></param>
         /// <param name="includeFilter">Predicate for "where" clause of direct children of root.</param>
-        public ConnectionsVM(T root, ChangeWatcher watcher, Func<ITECObject, bool> filterPredicate = null)
+        public ConnectionsVM(IRelatable root, ChangeWatcher watcher, Func<ITECObject, bool> filterPredicate = null)
         {
             if (filterPredicate == null)
             {
@@ -107,8 +107,8 @@ namespace TECUserControlLibrary.ViewModels
 
             watcher.InstanceChanged += parentChanged;
 
-            this.rootConnectableGroup = new ScopeGroup(root);
-            this.rootControllersGroup = new ScopeGroup(root);
+            this.rootConnectableGroup = new ScopeGroup("root");
+            this.rootControllersGroup = new ScopeGroup("root");
 
             foreach(ITECObject obj in root.GetDirectChildren().Where(filterPredicate))
             {
@@ -270,7 +270,7 @@ namespace TECUserControlLibrary.ViewModels
 
             //Optimization Idea: Use FindGroup on each ITECObject in path in reverse until finding one. Fill from there.
 
-            ScopeGroup currentGroup = new ScopeGroup(this.root);
+            ScopeGroup currentGroup = new ScopeGroup("root");
             groups.ForEach(group => currentGroup.Add(group));
 
             int nextIndex = 1;
