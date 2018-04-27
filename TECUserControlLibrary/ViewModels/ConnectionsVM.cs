@@ -152,7 +152,8 @@ namespace TECUserControlLibrary.ViewModels
                 this.DefaultConduitType = this.Catalogs.ConduitTypes[0];
             }
 
-            watcher.InstanceChanged += parentChanged;
+            //FIND A SOLUTION!!!!! Changed raises typical subscope. Instance changed doesn't raise TECTypical
+            watcher.Changed += parentChanged;
 
             this.rootConnectableGroup = new ScopeGroup("root");
             this.rootControllersGroup = new ScopeGroup("root");
@@ -213,9 +214,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-
         
-
         private void addConnectable(ScopeGroup rootGroup, IConnectable connectable)
         {
             if (!filterPredicate(connectable)) return;
@@ -268,22 +267,21 @@ namespace TECUserControlLibrary.ViewModels
         private void removeConnectable(ScopeGroup rootGroup, IConnectable connectable)
         {
             if (!filterPredicate(connectable)) return;
-            List<ITECObject> path = this.root.GetObjectPath(connectable);
+            List<ScopeGroup> path = rootGroup.GetPath(connectable);
 
-            ScopeGroup currentGroup = rootGroup.GetGroup(connectable);
-            for(int i = path.Count -1; i > 0; i--)
+            path[path.Count - 2].Remove(path.Last());
+
+            ScopeGroup parentGroup = rootGroup;
+            for(int i = 1; i < path.Count; i++)
             {
-                if (path[i - 1] is ITECScope parentScope)
+                if (!containsConnectable(path[i]))
                 {
-                    ScopeGroup parentGroup = rootGroup.GetGroup(parentScope);
-                    parentGroup.Remove(currentGroup);
-                    if (containsConnectable(parentGroup)) return;
-                    currentGroup = parentGroup;
+                    parentGroup.Remove(path[i]);
+                    return;
                 }
                 else
                 {
-                    logger.Error("Object in path to connectable isn't ITECScope, cannot build group hierarchy.");
-                    return;
+                    parentGroup = path[i];
                 }
             }
         }

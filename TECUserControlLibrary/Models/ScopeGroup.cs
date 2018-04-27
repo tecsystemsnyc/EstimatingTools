@@ -101,5 +101,27 @@ namespace TECUserControlLibrary.Models
 
             return null;
         }
+        public List<ScopeGroup> GetPath(ITECScope scope)
+        {
+            List<ScopeGroup> path = new List<ScopeGroup>();
+            if (this.Scope == scope)
+            {
+                path.Add(this);
+                return path;
+            }
+
+            foreach(ScopeGroup childGroup in this.ChildrenGroups)
+            {
+                List<ScopeGroup> childPath = childGroup.GetPath(scope);
+                if (childPath.Count > 0)
+                {
+                    path.Add(this);
+                    path.AddRange(childPath);
+                    return path;
+                }
+            }
+
+            return path;
+        }
     }
 }
