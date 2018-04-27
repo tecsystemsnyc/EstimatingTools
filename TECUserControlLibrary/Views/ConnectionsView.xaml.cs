@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,15 +24,15 @@ namespace TECUserControlLibrary.Views
     {
 
 
-        public ConnectionsVM VM
+        public ViewModelBase VM
         {
-            get { return (ConnectionsVM)GetValue(VMProperty); }
+            get { return (ViewModelBase)GetValue(VMProperty); }
             set { SetValue(VMProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for VM.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty VMProperty =
-            DependencyProperty.Register("VM", typeof(ConnectionsVM), typeof(ConnectionsView));
+            DependencyProperty.Register("VM", typeof(ViewModelBase), typeof(ConnectionsView));
 
 
 

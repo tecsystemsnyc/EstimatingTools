@@ -15,11 +15,13 @@ using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class ConnectionsVM : ViewModelBase, IDropTarget
+    public class ConnectionsVM<T> : ViewModelBase, IDropTarget where T : IRelatable, ITECScope
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        private readonly IRelatable root;
+        private readonly T root;
+        private readonly ScopeGroup rootConnectableGroup;
+        private readonly ScopeGroup rootControllersGroup;
         private readonly Func<ITECObject, bool> filterPredicate;
 
         private readonly List<TECController> allControllers;
@@ -35,6 +37,22 @@ namespace TECUserControlLibrary.ViewModels
         public ObservableCollection<ScopeGroup> Controllers { get; }
         public ObservableCollection<ScopeGroup> Connectables { get; }
         
+        
+        public ObservableCollection<ScopeGroup> Connectables
+        {
+            get
+            {
+                return rootConnectableGroup.ChildrenGroups;
+            }
+        }
+        public ObservableCollection<ScopeGroup> Controllers
+        {
+            get
+            {
+                return rootControllersGroup.ChildrenGroups;
+            }
+        }
+
         public ScopeGroup SelectedControllerGroup
         {
             get { return _selectedControllerGroup; }
@@ -123,7 +141,7 @@ namespace TECUserControlLibrary.ViewModels
         /// <param name="root"></param>
         /// <param name="watcher"></param>
         /// <param name="includeFilter">Predicate for "where" clause of direct children of root.</param>
-        public ConnectionsVM(IRelatable root, ChangeWatcher watcher, TECCatalogs catalogs, Func<ITECObject, bool> filterPredicate = null)
+        public ConnectionsVM(T root, ChangeWatcher watcher, TECCatalogs catalogs, Func<ITECObject, bool> filterPredicate = null)
         {
             if (filterPredicate == null)
             {
@@ -140,8 +158,8 @@ namespace TECUserControlLibrary.ViewModels
 
             watcher.InstanceChanged += parentChanged;
 
-            this.Controllers = new ObservableCollection<ScopeGroup>();
-            this.Connectables = new ObservableCollection<ScopeGroup>();
+            this.rootConnectableGroup = new ScopeGroup(root);
+            this.rootControllersGroup = new ScopeGroup(root);
 
             foreach(ITECObject obj in root.GetDirectChildren().Where(filterPredicate))
             {
@@ -165,7 +183,7 @@ namespace TECUserControlLibrary.ViewModels
         /// </summary>
         /// <param name="scope"></param>
         /// <returns>ScopeGroups condensed to only groups that contain connectables and controllers respectively.</returns>
-        private static (ScopeGroup connectablesGroup, ScopeGroup controllersGroup) getGroups(TECScope scope)
+        private static (ScopeGroup connectablesGroup, ScopeGroup controllersGroup) getGroups(ITECScope scope)
         {
             ScopeGroup connectablesGroup = null;
             ScopeGroup controllersGroup = null;
@@ -206,25 +224,23 @@ namespace TECUserControlLibrary.ViewModels
             }
             return (connectablesGroup, controllersGroup);
         }
-        private static ScopeGroup findGroup(ITECScope scope, IEnumerable<ScopeGroup> groups)
+        private static bool containsConnectable(ScopeGroup group)
         {
-            foreach(ScopeGroup group in groups)
+            if (group.Scope is IConnectable)
             {
-                if (group.Scope == scope)
+                return true;
+            }
+            
+            foreach(ScopeGroup childGroup in group.ChildrenGroups)
+            {
+                if (containsConnectable(childGroup))
                 {
-                    return group;
-                }
-
-                ScopeGroup childGroup = findGroup(scope, group.ChildrenGroups);
-                if (childGroup != null)
-                {
-                    return childGroup;
+                    return true;
                 }
             }
-
-            return null;
+            return false;
         }
-        
+
         private void parentChanged(TECChangedEventArgs obj)
         {
             if (obj.Value is IConnectable connectable)
@@ -258,7 +274,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addConnectable(IConnectable connectable, ITECScope parent)
         {
-            ScopeGroup parentConnectableGroup = findGroup(parent, this.Connectables);
+            ScopeGroup parentConnectableGroup = this.rootConnectableGroup.GetGroup(parent);
             if (parentConnectableGroup != null)
             {
                 parentConnectableGroup.Add(connectable);
@@ -270,7 +286,28 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void removeConnectable(IConnectable connectable, ITECScope parent)
         {
+            ScopeGroup parentGroup = this.rootConnectableGroup.GetGroup(parent);
+            parentGroup.Remove(connectable);
 
+            List<ITECObject> parentPath = root.GetObjectPath(parent);
+
+            ScopeGroup currentGroup = this.rootConnectableGroup;
+            for(int i = 1; i < parentPath.Count; i++)
+            {
+                if (parentPath[i] is ITECScope scope)
+                {
+                    ScopeGroup nextGroup = currentGroup.ChildrenGroups.First(group => group.Scope == parentPath[i + 1]);
+                    if (!containsConnectable(nextGroup))
+                    {
+                        currentGroup.Remove(nextGroup);
+                        return;
+                    }
+                    else
+                    {
+                        currentGroup = nextGroup;
+                    }
+                }
+            }
         }
 
         private void fillGroups(IEnumerable<ScopeGroup> groups, IConnectable connectable)
@@ -280,13 +317,41 @@ namespace TECUserControlLibrary.ViewModels
                 throw new Exception("New connectable doesn't exist in root object.");
             }
 
-            foreach (ITECObject obj in root.GetDirectChildren())
-            {
-                //Continue here Greg
-                //Write GetObjectPath() test
-            }
+            List<ITECObject> path = this.root.GetObjectPath(connectable);
 
-            List<ITECObject> path;
+            //Optimization Idea: Use FindGroup on each ITECObject in path in reverse until finding one. Fill from there.
+
+            ScopeGroup currentGroup = new ScopeGroup(this.root);
+            groups.ForEach(group => currentGroup.Add(group));
+
+            int nextIndex = 1;
+            while (currentGroup.Scope != connectable)
+            {
+                bool scopeFound = false;
+                foreach(ScopeGroup group in currentGroup.ChildrenGroups)
+                {
+                    if (group.Scope == path[nextIndex])
+                    {
+                        currentGroup = group;
+                        scopeFound = true;
+                        break;
+                    }
+                }
+
+                if (!scopeFound)
+                {
+                    if (path[nextIndex] is ITECScope nextScope)
+                    {
+                        currentGroup.Add(nextScope);
+                    }
+                    else
+                    {
+                        logger.Error("Object in path to connectable isn't ITECScope, cannot build group hierarchy.");
+                        return;
+                    }
+                }
+                nextIndex++;
+            }
         }
 
         public void DragOver(IDropInfo dropInfo)
@@ -299,7 +364,6 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-
         public void Drop(IDropInfo dropInfo)
         {
             var connection = SelectedController.Connect(((ScopeGroup)dropInfo.Data).Scope as IConnectable);
