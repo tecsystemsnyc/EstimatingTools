@@ -15,11 +15,11 @@ using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class ConnectionsVM : ViewModelBase, IDropTarget
+    public class ConnectionsVM<T> : ViewModelBase, IDropTarget where T : IRelatable, ITECScope
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        private readonly IRelatable root;
+        private readonly T root;
         private readonly Func<ITECObject, bool> filterPredicate;
 
         private readonly List<TECController> allControllers;
@@ -81,7 +81,7 @@ namespace TECUserControlLibrary.ViewModels
         /// <param name="root"></param>
         /// <param name="watcher"></param>
         /// <param name="includeFilter">Predicate for "where" clause of direct children of root.</param>
-        public ConnectionsVM(IRelatable root, ChangeWatcher watcher, Func<ITECObject, bool> filterPredicate = null)
+        public ConnectionsVM(T root, ChangeWatcher watcher, Func<ITECObject, bool> filterPredicate = null)
         {
             if (filterPredicate == null)
             {
@@ -234,13 +234,44 @@ namespace TECUserControlLibrary.ViewModels
                 throw new Exception("New connectable doesn't exist in root object.");
             }
 
-            foreach (ITECObject obj in root.GetDirectChildren())
-            {
-                //Continue here Greg
-                //Write GetObjectPath() test
-            }
+            List<ITECObject> path = root.GetObjectPath(connectable);
 
-            List<ITECObject> path;
+            //Optimization Idea: Use FindGroup on each ITECObject in path in reverse until finding one. Fill from there.
+
+            ScopeGroup currentGroup = new ScopeGroup(root);
+            groups.ForEach(group => currentGroup.Add(group));
+
+            int nextIndex = 1;
+            while (currentGroup.Scope != connectable)
+            {
+                bool scopeFound = false;
+                foreach(ScopeGroup group in currentGroup.ChildrenGroups)
+                {
+                    if (group.Scope == path[nextIndex])
+                    {
+                        currentGroup = group;
+                        scopeFound = true;
+                        break;
+                    }
+                }
+
+                if (!scopeFound)
+                {
+                    if (path[nextIndex] is ITECScope nextScope)
+                    {
+                        currentGroup.Add(nextScope);
+                    }
+                    else
+                    {
+                        //Should we enforce all ITECObject in path are ITECScope?
+                        throw new Exception("Object in path to connectable isn't ITECScope, cannot build group hierarchy.");
+
+                        logger.Error("Object in path to connectable isn't ITECScope, cannot build group hierarchy.");
+                        return;
+                    }
+                }
+                nextIndex++;
+            }
         }
 
         public void DragOver(IDropInfo dropInfo)
@@ -253,7 +284,6 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-
         public void Drop(IDropInfo dropInfo)
         {
             SelectedController.Connect(((ScopeGroup)dropInfo.Data).Scope as IConnectable);
