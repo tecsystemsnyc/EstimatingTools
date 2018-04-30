@@ -303,11 +303,10 @@ namespace TECUserControlLibrary.Views
                 pList.SelectedItem = null;
             }
             SystemComponentIndex selectedValue = (SystemComponentIndex)comboBox.SelectedValue;
-            if (selectedValue == SystemComponentIndex.Electrical ||
+            if (selectedValue == SystemComponentIndex.Connections ||
                 selectedValue == SystemComponentIndex.Misc ||
                 selectedValue == SystemComponentIndex.Proposal ||
                 selectedValue == SystemComponentIndex.Controllers ||
-                selectedValue == SystemComponentIndex.Network ||
                 selectedValue == SystemComponentIndex.Valves)
             {
                 Storyboard move = (Storyboard)FindResource("systemMove");

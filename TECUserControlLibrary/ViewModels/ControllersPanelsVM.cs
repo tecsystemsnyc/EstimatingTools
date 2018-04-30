@@ -174,7 +174,7 @@ namespace TECUserControlLibrary.ViewModels
         public Action<IDropInfo> DragHandler;
         public Action<IDropInfo> DropHandler;
 
-        public Action<Object> SelectionChanged;
+        public Action<TECObject> SelectionChanged;
         #endregion
 
         #endregion

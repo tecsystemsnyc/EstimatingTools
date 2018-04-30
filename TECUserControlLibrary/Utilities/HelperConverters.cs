@@ -694,11 +694,10 @@ namespace TECUserControlLibrary.Utilities
             SystemComponentIndex index = (SystemComponentIndex)value;
             switch(index)
             {
-                case SystemComponentIndex.Electrical:
+                case SystemComponentIndex.Connections:
                 case SystemComponentIndex.Misc:
                 case SystemComponentIndex.Proposal:
                 case SystemComponentIndex.Controllers:
-                case SystemComponentIndex.Network:
                 case SystemComponentIndex.Valves:
                     return 2;
                 default:

@@ -74,7 +74,7 @@
                 </DataTemplate>
                 <DataTemplate x:Key="connection">
                     <pControls:ConnectionPropertiesControl Selected="{Binding}"
-                                                           ConduitTypes="{Binding ElementName=propertiesView, Path=ViewModel.Catalog.ConduitTypes}"/>
+                                                           ConduitTypes="{Binding ElementName=propertiesView, Path=ViewModel.Catalogs.ConduitTypes}"/>
                 </DataTemplate>
                 <DataTemplate x:Key="electricalMaterial">
                     <pControls:ElectricalMaterialPropertiesControl Selected="{Binding}"

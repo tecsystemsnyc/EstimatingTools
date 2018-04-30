@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
@@ -24,6 +25,7 @@ namespace TECUserControlLibrary.ViewModels
         private MiscCostsVM miscVM;
         private ControllersPanelsVM controllersPanelsVM;
         private ValveSelectionVM valveVM;
+        private ConnectionsVM _connectionsVM;
 
         public ViewModelBase SelectedVM
         {
@@ -135,10 +137,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 miscVM = value;
                 RaisePropertyChanged("MiscVM");
-                miscVM.SelectionChanged += misc =>
-                {
-                    Selected?.Invoke(misc as TECObject);
-                };
+                miscVM.SelectionChanged += raiseSelected;
             }
         }
         public ControllersPanelsVM ControllersPanelsVM
@@ -148,10 +147,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 controllersPanelsVM = value;
                 RaisePropertyChanged("ControllersPanelsVM");
-                controllersPanelsVM.SelectionChanged += item =>
-                {
-                    Selected?.Invoke(item as TECObject);
-                };
+                controllersPanelsVM.SelectionChanged += raiseSelected;
             }
         }
         public ValveSelectionVM ValveVM
@@ -161,6 +157,16 @@ namespace TECUserControlLibrary.ViewModels
             {
                 valveVM = value;
                 RaisePropertyChanged("ValveVM");
+            }
+        }
+        public ConnectionsVM ConnectionsVM
+        {
+            get { return _connectionsVM; }
+            set
+            {
+                _connectionsVM = value;
+                RaisePropertyChanged("ConnectionsVM");
+                _connectionsVM.Selected += raiseSelected;
             }
         }
 
@@ -287,9 +293,25 @@ namespace TECUserControlLibrary.ViewModels
                 MiscVM = new MiscCostsVM(value);
                 ControllersPanelsVM = new ControllersPanelsVM(value, scopeManager);
                 ValveVM = new ValveSelectionVM(value, scopeManager.Catalogs.Valves);
+                ConnectionsVM = new ConnectionsVM(value, new ChangeWatcher(value), catalogs, connectionFilter);
+
+                bool connectionFilter(ITECObject obj)
+                {
+                    if(obj is ITypicalable typ && typ.IsTypical == value.IsTypical)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
             }
         }
-
+        private void raiseSelected(TECObject item)
+        {
+            Selected?.Invoke(item);
+        }
         private void backExecute(object obj)
         {
             if(obj is TECEquipment)

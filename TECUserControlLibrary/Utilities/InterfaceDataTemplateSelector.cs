@@ -81,7 +81,6 @@ namespace TECUserControlLibrary.Utilities
         public DataTemplate ControllerTemplate { get; set; }
         public DataTemplate MiscTemplate { get; set; }
         public DataTemplate ConnectionTemplate { get; set; }
-        public DataTemplate NetworkTemplate { get; set; }
         public DataTemplate ValveTemplate { get; set; }
 
 
@@ -99,10 +98,8 @@ namespace TECUserControlLibrary.Utilities
                         return ProposalTemplate;
                     case SystemComponentIndex.Controllers:
                         return ControllerTemplate;
-                    case SystemComponentIndex.Electrical:
+                    case SystemComponentIndex.Connections:
                         return ConnectionTemplate;
-                    case SystemComponentIndex.Network:
-                        return NetworkTemplate;
                     case SystemComponentIndex.Valves:
                         return ValveTemplate;
                     default:

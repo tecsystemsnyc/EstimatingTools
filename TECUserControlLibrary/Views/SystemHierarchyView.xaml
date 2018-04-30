@@ -257,17 +257,8 @@
                                     
                                 </Grid>
                             </DataTemplate>
-                            <DataTemplate x:Key="ElectricalTemplate">
-                                <!--To Do: Figure out Electrical Tab for System View. Combined with Network?-->
-                                <Grid DataContext="{Binding ElementName=systemHierarchyView, Path=DataContext}">
-                                    <TextBlock Text="New Electrical View will go here"/>
-                                </Grid>
-                            </DataTemplate>
-                            <DataTemplate x:Key="NetworkTemplate">
-                                <!--To Do: Figure out Network Tab for System View. Combined with Electrical?-->
-                                <Grid DataContext="{Binding ElementName=systemHierarchyView, Path=DataContext}">
-                                    <TextBlock Text="New Network View will go here"/>
-                                </Grid>
+                            <DataTemplate x:Key="ConnectionsTemplate">
+                                <local:ConnectionsView VM="{Binding ElementName=systemHierarchyView, Path=ViewModel.ConnectionsVM}"/>
                             </DataTemplate>
                             <DataTemplate x:Key="MiscTemplate">
                                 <local:MiscCostsView ViewModel="{Binding ElementName=systemHierarchyView, Path=ViewModel.MiscVM}"
@@ -288,8 +279,7 @@
                             <utilities:SystemComponentSelector x:Key="ComponentSelector"
                                                                EquipmentTemplate="{StaticResource EquipmentTemplate}"
                                                                ControllerTemplate="{StaticResource ControllerTemplate}"
-                                                               ConnectionTemplate="{StaticResource ElectricalTemplate}"
-                                                               NetworkTemplate="{StaticResource NetworkTemplate}"
+                                                               ConnectionTemplate="{StaticResource ConnectionsTemplate}"
                                                                MiscTemplate="{StaticResource MiscTemplate}"
                                                                ProposalTemplate="{StaticResource ProposalTemplate}"
                                                                ValveTemplate="{StaticResource ValveTemplate}"/>
