@@ -152,8 +152,7 @@ namespace TECUserControlLibrary.ViewModels
                 this.DefaultConduitType = this.Catalogs.ConduitTypes[0];
             }
 
-            //FIND A SOLUTION!!!!! Changed raises typical subscope. Instance changed doesn't raise TECTypical
-            watcher.Changed += parentChanged;
+            watcher.ScopeChanged += parentChanged;
 
             this.rootConnectableGroup = new ScopeGroup("root");
             this.rootControllersGroup = new ScopeGroup("root");
@@ -218,9 +217,11 @@ namespace TECUserControlLibrary.ViewModels
         private void addConnectable(ScopeGroup rootGroup, IConnectable connectable)
         {
             if (!filterPredicate(connectable)) return;
+            bool isDescendant = root.IsDirectDescendant(connectable);
             if (!root.IsDirectDescendant(connectable))
             {
-                throw new Exception("New connectable doesn't exist in root object.");
+                logger.Error("New connectable doesn't exist in root object.");
+                return;
             }
 
             List<ITECObject> path = this.root.GetObjectPath(connectable);

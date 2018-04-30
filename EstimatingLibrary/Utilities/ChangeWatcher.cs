@@ -27,6 +27,10 @@ namespace EstimatingLibrary.Utilities
         /// </summary>
         public event Action<TECChangedEventArgs> Changed;
         /// <summary>
+        /// Adds, removes, edit raised from models, omitting property exceptions and catalogs
+        /// </summary>
+        public event Action<TECChangedEventArgs> ScopeChanged;
+        /// <summary>
         /// All Changed events where the object is not typical
         /// </summary>
         public event Action<TECChangedEventArgs> InstanceChanged;
@@ -103,6 +107,7 @@ namespace EstimatingLibrary.Utilities
 
             if (!propertyExceptions.Contains(e.PropertyName) && !(e.Sender is TECCatalogs))
             {
+                raiseScopeChanged(e);
                 if (e.Value is ITypicalable valueTyp)
                 {
                     raiseIfTypical(valueTyp);
@@ -149,6 +154,10 @@ namespace EstimatingLibrary.Utilities
         private void raiseChanged(TECChangedEventArgs e)
         {
             Changed?.Invoke(e);
+        }
+        private void raiseScopeChanged(TECChangedEventArgs e)
+        {
+            ScopeChanged?.Invoke(e);
         }
         private void raiseCostChanged(ITECObject sender, CostBatch obj)
         {
