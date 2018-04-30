@@ -15,6 +15,15 @@
                 <Setter Property="Foreground" Value="Black"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
             </Style>
+            <Style TargetType="TextBlock" x:Key="buttonTextStyle">
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="false">
+                        <Setter Property="Foreground" Value="Gray"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
             <Style TargetType="TextBlock" x:Key="fileTextStyle">
                 <Setter Property="Foreground" Value="Black"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
@@ -68,12 +77,12 @@
         <Button Grid.Column="2" Grid.Row="1"
                 Margin="5"
                 Command="{Binding ClearTemplatesPathCommand}">
-            <TextBlock VerticalAlignment="Center">Clear</TextBlock>
+            <TextBlock Style="{StaticResource buttonTextStyle}">Clear</TextBlock>
         </Button>
         <Button Grid.Column="3" Grid.Row="1"
                 Margin="5"
                 Command="{Binding GetTemplatesPathCommand}">
-            <TextBlock VerticalAlignment="Center">Select File...</TextBlock>
+            <TextBlock Style="{StaticResource buttonTextStyle}">Select File...</TextBlock>
         </Button>
 
         <!--Bid Path Setting-->
@@ -90,11 +99,11 @@
                 Margin="5"
                 Command="{Binding ElementName=splashView, Path=ClearBidPathCommand}"
                 Visibility="{Binding ElementName=splashView, Path=BidVisibility}">
-            <TextBlock VerticalAlignment="Center">Clear</TextBlock>
+            <TextBlock Style="{StaticResource buttonTextStyle}">Clear</TextBlock>
         </Button>
         <Button Grid.Column="3" Margin="5" Command="{Binding ElementName=splashView, Path=GetBidPathCommand}"
                 Grid.Row="2" Visibility="{Binding ElementName=splashView, Path=BidVisibility}">
-            <TextBlock VerticalAlignment="Center">Select File...</TextBlock>
+            <TextBlock Style="{StaticResource buttonTextStyle}">Select File...</TextBlock>
         </Button>
 
         <!--Create and Open Buttons-->
@@ -103,11 +112,12 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Margin="5" Command="{Binding CreateNewCommand}">
-                <TextBlock VerticalAlignment="Center">Create New</TextBlock>
+            <Button Grid.Column="0" Margin="5" Command="{Binding CreateNewCommand}"
+                    Foreground="Red">
+                <TextBlock Style="{StaticResource buttonTextStyle}">Create New</TextBlock>
             </Button>
             <Button Grid.Column="1" Margin="5" Command="{Binding OpenExistingCommand}">
-                <TextBlock VerticalAlignment="Center">Open Selected</TextBlock>
+                <TextBlock Style="{StaticResource buttonTextStyle}">Open Selected</TextBlock>
             </Button>
         </Grid>
         
@@ -130,7 +140,7 @@
                   DataContext="{Binding ElementName=splashView}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="60"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -216,7 +226,7 @@
             <Grid Grid.Column="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="60"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
