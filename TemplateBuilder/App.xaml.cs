@@ -51,6 +51,9 @@ namespace TemplateBuilder
             }
             else
             {
+                TBSettings.StartUpFilePath = "";
+                TBSettings.Save();
+
                 logger.Debug("No startup arguments passed.");
             }
             base.OnStartup(e);

@@ -52,6 +52,9 @@ namespace EstimateBuilder
             }
             else
             {
+                EBSettings.StartUpFilePath = "";
+                EBSettings.Save();
+
                 logger.Debug("No startup arguments passed.");
             }
             base.OnStartup(e);
