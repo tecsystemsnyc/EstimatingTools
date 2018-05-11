@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 
-namespace EstimatingLibrary
+namespace EstimatingLibrary.Interfaces
 {
     public interface ITECScope : ITECObject
     {

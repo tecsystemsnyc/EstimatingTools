@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using GalaSoft.MvvmLight;
 using System;
 using System.Collections.Generic;
