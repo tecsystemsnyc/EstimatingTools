@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
@@ -61,14 +62,6 @@ namespace EstimatingLibrary
                 var old = _style;
                 _style = value;
                 notifyCombinedChanged(Change.Edit, "Style", this, _style, old);
-            }
-        }
-        
-        public ObservableCollection<TECConnectionType> ConnectionTypes
-        {
-            get
-            {
-                return Actuator.ConnectionTypes;
             }
         }
 
@@ -133,6 +126,14 @@ namespace EstimatingLibrary
         public TECValve CatalogCopy()
         {
             return new TECValve(this);
+        }
+
+        List<IProtocol> IEndDevice.ConnectionMethods
+        {
+            get
+            {
+                return ((IEndDevice)Actuator).ConnectionMethods;
+            }
         }
     }
 }

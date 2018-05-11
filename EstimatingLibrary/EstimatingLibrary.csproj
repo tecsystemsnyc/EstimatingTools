@@ -121,7 +121,6 @@
     <Compile Include="TECExtraLabor.cs" />
     <Compile Include="TECHardwiredProtocol.cs" />
     <Compile Include="TECProtocol.cs" />
-    <Compile Include="TECProtocolAdapter.cs" />
     <Compile Include="TECSchedule.cs" />
     <Compile Include="TECScheduleItem.cs" />
     <Compile Include="TECScheduleTable.cs" />
