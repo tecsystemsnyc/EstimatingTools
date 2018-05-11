@@ -117,7 +117,7 @@ namespace EstimatingLibrary
                 int pointNumber = 0;
                 foreach (TECPoint item in e.NewItems)
                 {
-                    pointNumber += item.PointNumber;
+                    pointNumber += item.Quantity;
                     notifyCombinedChanged(Change.Add, "Points", this, item);
                 }
                 notifyPointChanged(pointNumber);
@@ -127,7 +127,7 @@ namespace EstimatingLibrary
                 int pointNumber = 0;
                 foreach (TECPoint item in e.OldItems)
                 {
-                    pointNumber += item.PointNumber;
+                    pointNumber += item.Quantity;
                     notifyCombinedChanged(Change.Remove, "Points", this, item);
                 }
                 notifyPointChanged(pointNumber * -1);
@@ -222,7 +222,7 @@ namespace EstimatingLibrary
             var totalPoints = 0;
             foreach (TECPoint point in Points)
             {
-                totalPoints += point.PointNumber;
+                totalPoints += point.Quantity;
             }
             return totalPoints;
         }
