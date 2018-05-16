@@ -467,9 +467,14 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addSubScopeConnectionItem(TECSubScopeConnection ssConnect)
         {
-            SubScopeConnectionItem newItem = new SubScopeConnectionItem(ssConnect.SubScope, noneConduit, 
-                ssConnect.SubScope.FindParentEquipment(bid).FindParentSystem(bid), 
-                ssConnect.SubScope.FindParentEquipment(bid));
+            var parentEquipment = ssConnect.SubScope.FindParentEquipment(bid);
+            var parentSystem = parentEquipment.FindParentSystem(bid);
+            if (parentSystem == null) { parentSystem = new TECSystem(false); parentSystem.Name = "ERROR"; }
+            if (parentEquipment == null) { parentEquipment = new TECEquipment(false); parentEquipment.Name = "ERROR"; }
+
+            SubScopeConnectionItem newItem = new SubScopeConnectionItem(ssConnect.SubScope, noneConduit,
+                parentSystem,
+                parentEquipment);
             if(!subScopeConnectionDictionary.ContainsKey(ssConnect))
             {
                 subScopeConnectionDictionary.Add(ssConnect, newItem);
