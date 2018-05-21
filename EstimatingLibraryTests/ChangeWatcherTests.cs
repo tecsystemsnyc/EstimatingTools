@@ -734,7 +734,7 @@ namespace Tests
             //Assert
             checkRaised(true, false, true, true);
             checkInstanceChangedArgs(Change.Add, "Points", ss, point);
-            checkPointDelta(point.PointNumber);
+            checkPointDelta(point.Quantity);
             checkConstituentArgs(Change.Add, point);
         }
 
@@ -1645,7 +1645,7 @@ namespace Tests
             //Assert
             checkRaised(true, false, true, true);
             checkInstanceChangedArgs(Change.Remove, "Points", ss, point);
-            checkPointDelta(point.PointNumber * -1);
+            checkPointDelta(point.Quantity * -1);
             checkConstituentArgs(Change.Remove, point);
         }
 
