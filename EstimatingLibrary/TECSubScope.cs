@@ -301,9 +301,9 @@ namespace EstimatingLibrary
             get
             {
                 IOCollection protocols = new IOCollection();
-                foreach (TECProtocolAdapter adapter in Devices.Where(x => x is TECProtocolAdapter))
+                foreach (TECDevice device in Devices)
                 {
-                    protocols.Add(new TECIO(adapter.Protocol));
+                    protocols.Add(new TECIO(device.Protocol));
                 }
                 return protocols;
             }

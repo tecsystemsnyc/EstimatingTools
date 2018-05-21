@@ -19,7 +19,6 @@ namespace EstimatingLibrary
         private ObservableCollection<TECManufacturer> _manufacturers = new ObservableCollection<TECManufacturer>();
         private ObservableCollection<TECTag> _tags = new ObservableCollection<TECTag>();
         private ObservableCollection<TECProtocol> _protocols = new ObservableCollection<TECProtocol>();
-        private ObservableCollection<TECProtocolAdapter> _protocolAdapters = new ObservableCollection<TECProtocolAdapter>();
 
         public ObservableCollection<TECIOModule> IOModules
         {
@@ -145,17 +144,6 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "Protocols", this, value, old);
             }
         }
-        public ObservableCollection<TECProtocolAdapter> ProtocolAdapters
-        {
-            get { return _protocolAdapters; }
-            set
-            {
-                var old = ProtocolAdapters;
-                _protocolAdapters = value;
-                ProtocolAdapters.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ProtocolAdapters");
-                notifyCombinedChanged(Change.Edit, "ProtocolAdapters", this, value, old);
-            }
-        }
 
         public SaveableMap PropertyObjects
         {
@@ -186,7 +174,6 @@ namespace EstimatingLibrary
             Manufacturers.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Manufacturers");
             Tags.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Tags");
             Protocols.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Protocols");
-            ProtocolAdapters.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ProtocolAdapters");
 
             AssociatedCosts.CollectionChanged += ScopeChildren_CollectionChanged;
             Tags.CollectionChanged += ScopeChildren_CollectionChanged;
@@ -238,7 +225,6 @@ namespace EstimatingLibrary
             saveList.AddRange(this.AssociatedCosts, "AssociatedCosts");
             saveList.AddRange(this.Tags, "Tags");
             saveList.AddRange(this.Protocols, "Protocols");
-            saveList.AddRange(this.ProtocolAdapters, "ProtocolAdapters");
             return saveList;
         }
         private SaveableMap linkedObjects()
@@ -260,10 +246,9 @@ namespace EstimatingLibrary
             unionizeScope(this.Manufacturers, catalogToAdd.Manufacturers);
             unionizeScope(this.Tags, catalogToAdd.Tags);
             unionizeScope(this.Protocols, catalogToAdd.Protocols);
-            unionizeScope(this.ProtocolAdapters, catalogToAdd.ProtocolAdapters);
         }
         private static void unionizeScope<T>(IList<T> bidItems, IList<T> templateItems) where T : TECObject
-        {
+        {                       
             List<T> itemsToRemove = new List<T>();
 
             foreach (T templateItem in templateItems)
@@ -299,7 +284,6 @@ namespace EstimatingLibrary
             fillScope(this.Manufacturers, catalogToAdd.Manufacturers);
             fillScope(this.Tags, catalogToAdd.Tags);
             fillScope(this.Protocols, catalogToAdd.Protocols);
-            fillScope(this.ProtocolAdapters, catalogToAdd.ProtocolAdapters);
         }
         private static void fillScope<T>(IList<T> bidItems, IList<T> templateItems) where T : TECObject
         {
