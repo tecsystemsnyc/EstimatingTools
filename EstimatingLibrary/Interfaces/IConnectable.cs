@@ -6,11 +6,10 @@ namespace EstimatingLibrary.Interfaces
     public interface IConnectable : ITECScope
     {
         Guid Guid { get; }
-
-        IOCollection AvailableProtocols { get; }
+        
+        List<IProtocol> AvailableProtocols { get; }
         IOCollection HardwiredIO { get; }
         bool IsNetwork { get; }
-        List<TECConnectionType> RequiredConnectionTypes { get; }
 
         IConnectable Copy(bool isTypical, Dictionary<Guid, Guid> guidDictionary);
         bool CanSetParentConnection(TECConnection connection);

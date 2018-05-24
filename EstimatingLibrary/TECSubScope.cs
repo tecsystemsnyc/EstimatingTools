@@ -49,11 +49,6 @@ namespace EstimatingLibrary
         {
             get { return _connection; }
         }
-        
-        public ObservableCollection<TECConnectionType> ConnectionTypes
-        {
-            get { return getConnectionTypes(); }
-        }
         public int PointNumber
         {
             get
@@ -193,28 +188,6 @@ namespace EstimatingLibrary
         public bool CanConnectToNetwork(TECNetworkConnection netConnect)
         {
             throw new NotImplementedException();
-            //if (!this.IsNetwork) return false;
-
-            //IOCollection thisIO = new IOCollection(getNetworkIO());
-            //IOCollection netConnectIO = netConnect.IO;
-            //bool ioMatches = IOCollection.IOTypesMatch(thisIO, netConnectIO);
-
-            //bool connectionTypesMatch = (this.ConnectionTypes.Matches(netConnect.ConnectionTypes));
-
-            //return (ioMatches && connectionTypesMatch);
-        }
-
-        private ObservableCollection<TECConnectionType> getConnectionTypes()
-        {
-            var outTypes = new ObservableCollection<TECConnectionType>();
-            foreach (IEndDevice device in Devices)
-            {
-                foreach(TECConnectionType type in device.ConnectionTypes)
-                {
-                    outTypes.Add(type);
-                }
-            }
-            return outTypes;
         }
         
         private int getPointNumber()
@@ -296,14 +269,35 @@ namespace EstimatingLibrary
         #endregion
 
         #region IConnectable
-        IOCollection IConnectable.AvailableProtocols
+        /// <summary>
+        /// Returns the intersect of connection methods in this TECSubScope's devices.
+        /// </summary>
+        List<IProtocol> IConnectable.AvailableProtocols
         {
             get
             {
-                IOCollection protocols = new IOCollection();
-                foreach (TECDevice device in Devices)
+                List<IProtocol> protocols = new List<IProtocol>();
+                foreach(IEndDevice endDev in this.Devices)
                 {
-                    protocols.Add(new TECIO(device.Protocol));
+                    if (protocols.Count <= 0)
+                    {
+                        protocols.AddRange(endDev.ConnectionMethods);
+                    }
+                    else
+                    {
+                        List<IProtocol> toRemove = new List<IProtocol>();
+                        foreach(IProtocol protocol in protocols)
+                        {
+                            if (!endDev.ConnectionMethods.Contains(protocol))
+                            {
+                                toRemove.Add(protocol);
+                            }
+                        }
+                        foreach(IProtocol protocol in toRemove)
+                        {
+                            protocols.Remove(protocol);
+                        }
+                    }
                 }
                 return protocols;
             }
@@ -326,20 +320,6 @@ namespace EstimatingLibrary
         {
             get { return (((IConnectable)this).AvailableProtocols.ToList().Count() > 0); }
         }
-        List<TECConnectionType> IConnectable.RequiredConnectionTypes
-        {
-            get
-            {
-                if (!((IConnectable)this).IsNetwork)
-                {
-                    return this.ConnectionTypes.ToList();
-                }else
-                {
-                    return new List<TECConnectionType>();
-                }
-            }
-        }
-
         bool IConnectable.CanSetParentConnection(TECConnection connection)
         {
             if (((IConnectable)this).IsNetwork)
