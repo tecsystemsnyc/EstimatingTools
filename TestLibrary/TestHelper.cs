@@ -173,7 +173,7 @@ namespace Tests
             subScope2.Points.Add(point2);
 
             //Connections
-            TECConnection testConnection = expectedController.Connect(system1.GetInstancesFromTypical(subScope1)[0]);
+            IControllerConnection testConnection = expectedController.Connect(system1.GetInstancesFromTypical(subScope1)[0]);
             testConnection.ConduitType = bid.Catalogs.ConduitTypes[0];
             testConnection.Length = 42;
 
@@ -815,9 +815,9 @@ namespace Tests
             }
             return null;
         }
-        public static TECConnection FindConnectionInController(TECController controller, TECConnection reference)
+        public static IControllerConnection FindConnectionInController(TECController controller, IControllerConnection reference)
         {
-            foreach(TECConnection connection in controller.ChildrenConnections)
+            foreach(IControllerConnection connection in controller.ChildrenConnections)
             {
                 if(connection.Guid == reference.Guid)
                 {
@@ -969,7 +969,7 @@ namespace Tests
                     {
                         return controller;
                     }
-                    foreach (TECConnection connection in controller.ChildrenConnections)
+                    foreach (IControllerConnection connection in controller.ChildrenConnections)
                     {
                         if (connection.Guid == guid)
                         {
@@ -1024,7 +1024,7 @@ namespace Tests
                         {
                             return controller;
                         }
-                        foreach (TECConnection connection in controller.ChildrenConnections)
+                        foreach (IControllerConnection connection in controller.ChildrenConnections)
                         {
                             if (connection.Guid == guid)
                             {
@@ -1054,7 +1054,7 @@ namespace Tests
                 {
                     return controller;
                 }
-                foreach(TECConnection connection in controller.ChildrenConnections)
+                foreach(IControllerConnection connection in controller.ChildrenConnections)
                 {
                     if(connection.Guid == guid)
                     {

@@ -356,7 +356,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 deltas += (ControllerSummaryVM.AddCost(cost));
             }
-            foreach(TECConnection connection in controller.ChildrenConnections)
+            foreach(IControllerConnection connection in controller.ChildrenConnections)
             {
                 deltas += (addConnection(connection));
             }
@@ -387,7 +387,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             return deltas;
         }
-        private CostBatch addConnection(TECConnection connection)
+        private CostBatch addConnection(IControllerConnection connection)
         {
             if (!connection.IsTypical)
             {
@@ -477,7 +477,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 deltas += (ControllerSummaryVM.RemoveCost(cost));
             }
-            foreach(TECConnection connection in controller.ChildrenConnections)
+            foreach(IControllerConnection connection in controller.ChildrenConnections)
             {
                 deltas += (removeConnection(connection));
             }
@@ -508,7 +508,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             return deltas;
         }
-        private CostBatch removeConnection(TECConnection connection)
+        private CostBatch removeConnection(IControllerConnection connection)
         {
             CostBatch deltas = new CostBatch();
             foreach (TECElectricalMaterial connectionType in connection.ConnectionTypes)
@@ -563,7 +563,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     updateTotals(addPanel(panel));
                 }
-                else if (args.Value is TECConnection connection)
+                else if (args.Value is IControllerConnection connection)
                 {
                     updateTotals(addConnection(connection));
                 }
@@ -632,7 +632,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     updateTotals(removePanel(panel));
                 }
-                else if (args.Value is TECConnection connection)
+                else if (args.Value is IControllerConnection connection)
                 {
                     updateTotals(removeConnection(connection));
                 }
@@ -679,7 +679,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (args.Change == Change.Edit)
             {
-                if (args.Sender is TECConnection connection)
+                if (args.Sender is IControllerConnection connection)
                 {
                     if (args.PropertyName == "Length")
                     {

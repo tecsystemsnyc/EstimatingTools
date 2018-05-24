@@ -817,7 +817,7 @@ namespace Tests
             {
                 foreach (TECController instanceController in instance.Controllers)
                 {
-                    foreach (TECConnection instanceConnection in instanceController.ChildrenConnections)
+                    foreach (IControllerConnection instanceConnection in instanceController.ChildrenConnections)
                     {
                         instanceConnection.Length = 10;
                         instanceConnection.ConduitLength = 5;
@@ -2155,7 +2155,7 @@ namespace Tests
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
-            TECConnection ssConnect = controller.Connect(subScope);
+            IControllerConnection ssConnect = controller.Connect(subScope);
             ssConnect.Length = 50;
 
             typical.Instances.Remove(instance);

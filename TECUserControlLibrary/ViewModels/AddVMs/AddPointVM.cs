@@ -55,7 +55,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
 
         private bool addCanExecute()
         {
-            TECConnection connection = parent.Connection;
+            IControllerConnection connection = parent.Connection;
             if(connection == null)
             {
                 return true;

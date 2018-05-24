@@ -12,7 +12,7 @@ namespace EstimatingLibrary
         #region Properties
         //---Stored---
         private TECNetworkConnection _parentConnection;
-        private ObservableCollection<TECConnection> _childrenConnections = new ObservableCollection<TECConnection>();
+        private ObservableCollection<IControllerConnection> _childrenConnections = new ObservableCollection<IControllerConnection>();
         private TECControllerType _type;
         private bool _isServer;
         private ObservableCollection<TECIOModule> _ioModules = new ObservableCollection<TECIOModule>();
@@ -21,7 +21,7 @@ namespace EstimatingLibrary
         {
             get { return _parentConnection; }
         }
-        public ObservableCollection<TECConnection> ChildrenConnections
+        public ObservableCollection<IControllerConnection> ChildrenConnections
         {
             get { return _childrenConnections; }
             set
@@ -108,7 +108,7 @@ namespace EstimatingLibrary
             _isServer = false;
             IsTypical = isTypical;
             _type = type;
-            _childrenConnections = new ObservableCollection<TECConnection>();
+            _childrenConnections = new ObservableCollection<IControllerConnection>();
             _ioModules = new ObservableCollection<TECIOModule>();
             ChildrenConnections.CollectionChanged += handleChildrenChanged;
             IOModules.CollectionChanged += handleModulesChanged;
@@ -120,7 +120,7 @@ namespace EstimatingLibrary
             if (guidDictionary != null)
             { guidDictionary[_guid] = controllerSource.Guid; }
             copyPropertiesFromLocated(controllerSource);
-            foreach (TECConnection connection in controllerSource.ChildrenConnections)
+            foreach (IControllerConnection connection in controllerSource.ChildrenConnections)
             {
                 if (connection is TECHardwiredConnection)
                 {
@@ -168,7 +168,7 @@ namespace EstimatingLibrary
         {
             return CompatibleProtocols(connectable).Count > 0;
         }
-        public TECConnection Connect(IConnectable connectable, IProtocol protocol)
+        public IControllerConnection Connect(IConnectable connectable, IProtocol protocol)
         {
             //TO DO: Connect
             throw new NotImplementedException();
@@ -180,8 +180,8 @@ namespace EstimatingLibrary
         /// <returns>Parent network connnection if applicable</returns>
         public TECNetworkConnection Disconnect(IConnectable connectable)
         {
-            TECConnection connectionToRemove = null;
-            foreach (TECConnection connection in ChildrenConnections)
+            IControllerConnection connectionToRemove = null;
+            foreach (IControllerConnection connection in ChildrenConnections)
             {
                 if (connection is TECHardwiredConnection hardwiredConnection)
                 {
@@ -211,7 +211,7 @@ namespace EstimatingLibrary
 
         public bool CanAddNetworkConnection(TECProtocol protocol)
         {
-            return (AvailableProtocols.Contains(new TECIO(protocol)));
+            return AvailableProtocols.Contains(protocol);
         }
         public TECNetworkConnection AddNetworkConnection(TECProtocol protocol)
         {
@@ -260,7 +260,7 @@ namespace EstimatingLibrary
         }
         public void RemoveAllChildNetworkConnections()
         {
-            List<TECConnection> networkConnections = new List<TECConnection>(ChildrenConnections.Where(connection => connection is TECNetworkConnection));
+            List<IControllerConnection> networkConnections = new List<IControllerConnection>(ChildrenConnections.Where(connection => connection is TECNetworkConnection));
             networkConnections.ForEach(netConnect => RemoveNetworkConnection(netConnect as TECNetworkConnection));
         }
         #endregion
@@ -354,7 +354,7 @@ namespace EstimatingLibrary
                 foreach (object item in e.NewItems)
                 {
                     notifyCombinedChanged(Change.Add, propertyName, this, item);
-                    if (item is INotifyCostChanged cost && !(item is TECConnection) && !this.IsTypical)
+                    if (item is INotifyCostChanged cost && !(item is IControllerConnection) && !this.IsTypical)
                     {
                         notifyCostChanged(cost.CostBatch);
                     }
@@ -365,7 +365,7 @@ namespace EstimatingLibrary
                 foreach (object item in e.OldItems)
                 {
                     notifyCombinedChanged(Change.Remove, propertyName, this, item);
-                    if (item is INotifyCostChanged cost && !(item is TECConnection) && !this.IsTypical)
+                    if (item is INotifyCostChanged cost && !(item is IControllerConnection) && !this.IsTypical)
                     {
                         notifyCostChanged(cost.CostBatch * -1);
                     }
@@ -419,7 +419,7 @@ namespace EstimatingLibrary
             {
                 CostBatch costs = base.getCosts();
                 costs += Type.CostBatch;
-                foreach (TECConnection connection in
+                foreach (IControllerConnection connection in
                     ChildrenConnections.Where(connection => !connection.IsTypical))
                 {
                     costs += connection.CostBatch;
@@ -460,7 +460,7 @@ namespace EstimatingLibrary
             }
         }
 
-        private void addChildConnection(TECConnection connection)
+        private void addChildConnection(IControllerConnection connection)
         {
             ChildrenConnections.Add(connection);
             if (!connection.IsTypical && !this.IsTypical)
@@ -468,7 +468,7 @@ namespace EstimatingLibrary
                 notifyCostChanged(connection.CostBatch);
             }
         }
-        private void removeChildConnection(TECConnection connection)
+        private void removeChildConnection(IControllerConnection connection)
         {
             ChildrenConnections.Remove(connection);
             if (!connection.IsTypical && !this.IsTypical)
@@ -519,11 +519,11 @@ namespace EstimatingLibrary
         {
             get { return new IOCollection(); }
         }
-        TECConnection IConnectable.GetParentConnection()
+        IControllerConnection IConnectable.GetParentConnection()
         {
             return this.ParentConnection;
         }
-        void IConnectable.SetParentConnection(TECConnection connection)
+        void IConnectable.SetParentConnection(IControllerConnection connection)
         {
             if (connection is TECNetworkConnection networkConnection)
             {
@@ -535,7 +535,7 @@ namespace EstimatingLibrary
                 throw new Exception("Controller must have network parent connection.");
             }
         }
-        bool IConnectable.CanSetParentConnection(TECConnection connection)
+        bool IConnectable.CanSetParentConnection(IControllerConnection connection)
         {
             return (connection is TECNetworkConnection);
         }

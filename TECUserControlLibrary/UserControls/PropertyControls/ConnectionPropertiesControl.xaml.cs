@@ -21,15 +21,15 @@ namespace TECUserControlLibrary.UserControls.PropertyControls
     /// </summary>
     public partial class ConnectionPropertiesControl : UserControl
     {
-        public TECConnection Selected
+        public IControllerConnection Selected
         {
-            get { return (TECConnection)GetValue(SelectedProperty); }
+            get { return (IControllerConnection)GetValue(SelectedProperty); }
             set { SetValue(SelectedProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for Selected.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SelectedProperty =
-            DependencyProperty.Register("Selected", typeof(TECConnection), typeof(ConnectionPropertiesControl));
+            DependencyProperty.Register("Selected", typeof(IControllerConnection), typeof(ConnectionPropertiesControl));
 
         public IEnumerable<TECElectricalMaterial> ConduitTypes
         {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECInterlockConnection : TECConnection, ITECScope
+    public class TECInterlockConnection : IControllerConnection, ITECScope
     {
     }
 }

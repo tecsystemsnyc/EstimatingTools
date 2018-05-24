@@ -882,7 +882,7 @@ namespace EstimatingUtilitiesLibraryTests
             {
                 foreach (TECController controller in typical.Controllers)
                 {
-                    foreach (TECConnection connection in controller.ChildrenConnections)
+                    foreach (IControllerConnection connection in controller.ChildrenConnections)
                     {
                         if (connection.Guid == expectedGuid)
                         {
@@ -922,7 +922,7 @@ namespace EstimatingUtilitiesLibraryTests
                 {
                     foreach (TECController controller in system.Controllers)
                     {
-                        foreach (TECConnection connection in controller.ChildrenConnections)
+                        foreach (IControllerConnection connection in controller.ChildrenConnections)
                         {
                             if (connection.Guid == expectedGuid)
                             {
@@ -966,7 +966,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECNetworkConnection actualNetConnect = null;
             foreach (TECController controller in actualBid.Controllers)
             {
-                foreach (TECConnection connection in controller.ChildrenConnections)
+                foreach (IControllerConnection connection in controller.ChildrenConnections)
                 {
                     if (connection.Guid == expectedGuid)
                     {
@@ -1021,7 +1021,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECNetworkConnection actualNetConnect = null;
             foreach (TECController controller in actualBid.Controllers)
             {
-                foreach (TECConnection connection in controller.ChildrenConnections)
+                foreach (IControllerConnection connection in controller.ChildrenConnections)
                 {
                     if (connection.Guid == expectedGuid)
                     {
@@ -1079,7 +1079,7 @@ namespace EstimatingUtilitiesLibraryTests
                 {
                     foreach (TECController controller in instance.Controllers)
                     {
-                        foreach (TECConnection connection in controller.ChildrenConnections)
+                        foreach (IControllerConnection connection in controller.ChildrenConnections)
                         {
                             if (connection.Guid == expectedGuid)
                             {
@@ -1139,7 +1139,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECNetworkConnection actualNetConnect = null;
             foreach (TECController controller in actualBid.Controllers)
             {
-                foreach (TECConnection connection in controller.ChildrenConnections)
+                foreach (IControllerConnection connection in controller.ChildrenConnections)
                 {
                     if (connection.Guid == expectedGuid)
                     {
@@ -1218,7 +1218,7 @@ namespace EstimatingUtilitiesLibraryTests
             //}
 
             bool hasConnection = false;
-            foreach (TECConnection conn in actualController.ChildrenConnections)
+            foreach (IControllerConnection conn in actualController.ChildrenConnections)
             {
                 if (conn.Guid == expectedConnectionGuid)
                 {
@@ -1270,7 +1270,7 @@ namespace EstimatingUtilitiesLibraryTests
             //}
 
             bool hasConnection = false;
-            foreach (TECConnection conn in actualController.ChildrenConnections)
+            foreach (IControllerConnection conn in actualController.ChildrenConnections)
             {
                 if (conn.Guid == expectedConnectionGuid)
                 {
@@ -1326,7 +1326,7 @@ namespace EstimatingUtilitiesLibraryTests
             //}
 
             bool hasConnection = false;
-            foreach (TECConnection conn in actualController.ChildrenConnections)
+            foreach (IControllerConnection conn in actualController.ChildrenConnections)
             {
                 if (conn.Guid == expectedConnectionGuid)
                 {

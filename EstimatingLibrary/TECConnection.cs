@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 namespace EstimatingLibrary
 {
 
-    public abstract class TECConnection : TECObject, INotifyCostChanged, IRelatable, ITypicalable
+    public abstract class IControllerConnection : TECObject, INotifyCostChanged, IRelatable, ITypicalable
     {
         #region Properties
         protected double _length = 0;
@@ -88,13 +88,13 @@ namespace EstimatingLibrary
         public event Action<CostBatch> CostChanged;
 
         #region Constructors 
-        public TECConnection(Guid guid, IProtocol protocol, bool isTypical) : base(guid)
+        public IControllerConnection(Guid guid, IProtocol protocol, bool isTypical) : base(guid)
         {
             this.IsTypical = isTypical;
             this.Protocol = protocol;
         }
-        public TECConnection(IProtocol protocol, bool isTypical) : this(Guid.NewGuid(), protocol, isTypical) { }
-        public TECConnection(TECConnection connectionSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : this(connectionSource.Protocol, isTypical)
+        public IControllerConnection(IProtocol protocol, bool isTypical) : this(Guid.NewGuid(), protocol, isTypical) { }
+        public IControllerConnection(IControllerConnection connectionSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : this(connectionSource.Protocol, isTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = connectionSource.Guid; }

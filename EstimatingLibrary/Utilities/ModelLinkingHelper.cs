@@ -189,13 +189,13 @@ namespace EstimatingLibrary.Utilities
         private static void linkControllerToCatalogs(TECController controller, TECCatalogs catalogs)
         {
             linkControllerToControllerType(controller, catalogs.ControllerTypes);
-            foreach(TECConnection connection in controller.ChildrenConnections)
+            foreach(IControllerConnection connection in controller.ChildrenConnections)
             {
                 linkConnectionToCatalogs(connection, catalogs);
             }
             linkScopeChildrenToCatalogs(controller, catalogs);
         }
-        private static void linkConnectionToCatalogs(TECConnection connection, TECCatalogs catalogs)
+        private static void linkConnectionToCatalogs(IControllerConnection connection, TECCatalogs catalogs)
         {
             linkConnectionToConduitType(connection, catalogs.ConduitTypes);
         }
@@ -234,7 +234,7 @@ namespace EstimatingLibrary.Utilities
         {
             foreach (TECController controller in controllers)
             {
-                foreach (TECConnection connection in controller.ChildrenConnections)
+                foreach (IControllerConnection connection in controller.ChildrenConnections)
                 {
                     if (connection is TECNetworkConnection)
                     {
@@ -266,7 +266,7 @@ namespace EstimatingLibrary.Utilities
                 {
                     List<TECHardwiredConnection> newConnections = new List<TECHardwiredConnection>();
                     List<TECHardwiredConnection> oldConnections = new List<TECHardwiredConnection>();
-                    foreach (TECConnection connection in controller.ChildrenConnections)
+                    foreach (IControllerConnection connection in controller.ChildrenConnections)
                     {
                         
                         if (connection is TECHardwiredConnection)
@@ -293,7 +293,7 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        private static void linkConnectionToConduitType(TECConnection connection, IEnumerable<TECElectricalMaterial> conduitTypes)
+        private static void linkConnectionToConduitType(IControllerConnection connection, IEnumerable<TECElectricalMaterial> conduitTypes)
         {
             if (connection.ConduitType != null)
             {

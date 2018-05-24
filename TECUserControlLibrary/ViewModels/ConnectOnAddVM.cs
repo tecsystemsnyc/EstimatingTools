@@ -134,8 +134,8 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (parent is TECTypical typical)
                 {
-                    List<TECConnection> connections = typical.CreateTypicalAndInstanceConnections(SelectedController, finalToConnect);
-                    foreach (TECConnection conn in connections)
+                    List<IControllerConnection> connections = typical.CreateTypicalAndInstanceConnections(SelectedController, finalToConnect);
+                    foreach (IControllerConnection conn in connections)
                     {
                         setConnectionProperties(conn);
                     }
@@ -149,7 +149,7 @@ namespace TECUserControlLibrary.ViewModels
         
         private void connectControllerToSubScope(TECController controller, TECSubScope finalToConnect)
         {
-            TECConnection connection = controller.Connect(finalToConnect);
+            IControllerConnection connection = controller.Connect(finalToConnect);
             setConnectionProperties(connection);
         }
         public bool CanConnect()
@@ -164,7 +164,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private void setConnectionProperties(TECConnection connection)
+        private void setConnectionProperties(IControllerConnection connection)
         {
             connection.Length += Length;
             connection.ConduitLength += ConduitLength;

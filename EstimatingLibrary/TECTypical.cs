@@ -249,7 +249,7 @@ namespace EstimatingLibrary
             return canExecute;
         }
 
-        public List<TECConnection> CreateTypicalAndInstanceConnections(TECController typicalController, TECSubScope typicalSubScope)
+        public List<IControllerConnection> CreateTypicalAndInstanceConnections(TECController typicalController, TECSubScope typicalSubScope)
         {
             if (!this.GetAllSubScope().Contains(typicalSubScope))
             {
@@ -260,7 +260,7 @@ namespace EstimatingLibrary
                 throw new Exception("Controller does not exist in typical.");
             }
 
-            List<TECConnection> outConnections = new List<TECConnection>();
+            List<IControllerConnection> outConnections = new List<IControllerConnection>();
             outConnections.Add(typicalController.Connect(typicalSubScope));
 
             foreach (TECController instanceController

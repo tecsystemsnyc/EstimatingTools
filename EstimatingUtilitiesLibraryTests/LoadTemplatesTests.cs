@@ -649,7 +649,7 @@ namespace Tests
             {
                 foreach (TECController controller in typical.Controllers)
                 {
-                    foreach (TECConnection connection in controller.ChildrenConnections)
+                    foreach (IControllerConnection connection in controller.ChildrenConnections)
                     {
                         if (connection.Guid == expectedGuid)
                         {
