@@ -316,10 +316,6 @@ namespace EstimatingLibrary
                 }
             }
         }
-        bool IConnectable.IsNetwork
-        {
-            get { return (((IConnectable)this).AvailableProtocols.ToList().Count() > 0); }
-        }
         bool IConnectable.CanSetParentConnection(TECConnection connection)
         {
             if (((IConnectable)this).IsNetwork)
