@@ -13,7 +13,7 @@ namespace EstimatingLibrary
         #region Properties
         private ObservableCollection<IEndDevice> _devices;
         private ObservableCollection<TECPoint> _points;
-        private TECConnection _connection;
+        private ObservableCollection<TECInterlockConnection> _interlocks;
 
         public ObservableCollection<IEndDevice> Devices
         {
@@ -45,20 +45,6 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "Points", this, value, old);
             }
         }
-        public TECConnection Connection
-        {
-            get { return _connection; }
-        }
-        public int PointNumber
-        {
-            get
-            {
-                return getPointNumber();
-            }
-        }
-
-        private ObservableCollection<TECInterlockConnection> _interlocks;
-
         public ObservableCollection<TECInterlockConnection> Interlocks
         {
             get { return _interlocks; }
@@ -66,6 +52,14 @@ namespace EstimatingLibrary
             {
                 _interlocks = value;
                 RaisePropertyChanged("Interlocks");
+            }
+        }
+        public TECConnection Connection { get; private set; }
+        public int PointNumber
+        {
+            get
+            {
+                return getPointNumber();
             }
         }
         
@@ -340,7 +334,7 @@ namespace EstimatingLibrary
         }
         void IConnectable.SetParentConnection(TECConnection connection)
         {
-            _connection = connection;
+            Connection = connection;
             raisePropertyChanged("Connection");
         }
         TECConnection IConnectable.GetParentConnection()
