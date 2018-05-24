@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace EstimatingLibrary
 {
-    public class TECSubScope : TECLocated, INotifyPointChanged, IDragDropable, ITypicalable, IConnectable
+    public class TECSubScope : TECLocated, INotifyPointChanged, IDragDropable, ITypicalable, IConnectable, IInterlockable
     {
         #region Properties
         private ObservableCollection<IEndDevice> _devices;
@@ -54,6 +54,18 @@ namespace EstimatingLibrary
             get
             {
                 return getPointNumber();
+            }
+        }
+
+        private ObservableCollection<TECInterlockConnection> _interlocks;
+
+        public ObservableCollection<TECInterlockConnection> Interlocks
+        {
+            get { return _interlocks; }
+            set
+            {
+                _interlocks = value;
+                RaisePropertyChanged("Interlocks");
             }
         }
         
