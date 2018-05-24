@@ -40,7 +40,6 @@ namespace EstimatingLibrary
                 notifyCostChanged(current - previous);
             }
         }
-        public TECController ParentController { get; }
         public TECElectricalMaterial ConduitType
         {
             get { return _conduitType; }
@@ -83,21 +82,19 @@ namespace EstimatingLibrary
 
         public bool IsTypical { get; private set; }
         public IProtocol Protocol { get; }
-        abstract public IOCollection IO { get; }
 
         #endregion //Properties
 
         public event Action<CostBatch> CostChanged;
 
         #region Constructors 
-        public TECConnection(Guid guid, TECController parent, IProtocol protocol, bool isTypical) : base(guid)
+        public TECConnection(Guid guid, IProtocol protocol, bool isTypical) : base(guid)
         {
             this.IsTypical = isTypical;
-            this.ParentController = parent;
             this.Protocol = protocol;
         }
-        public TECConnection(TECController parent, IProtocol protocol, bool isTypical) : this(Guid.NewGuid(), parent, protocol, isTypical) { }
-        public TECConnection(TECConnection connectionSource, TECController parent, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : this(parent, connectionSource.Protocol, isTypical)
+        public TECConnection(IProtocol protocol, bool isTypical) : this(Guid.NewGuid(), protocol, isTypical) { }
+        public TECConnection(TECConnection connectionSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : this(connectionSource.Protocol, isTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = connectionSource.Guid; }
@@ -110,7 +107,7 @@ namespace EstimatingLibrary
         }
         #endregion //Constructors
 
-        public void notifyCostChanged(CostBatch costs)
+        protected void notifyCostChanged(CostBatch costs)
         {
             if (!IsTypical)
             {
@@ -121,6 +118,10 @@ namespace EstimatingLibrary
         protected virtual CostBatch getCosts()
         {
             CostBatch costs = new CostBatch();
+            foreach (TECConnectionType connectionType in this.Protocol.ConnectionTypes)
+            {
+                costs += connectionType.GetCosts(Length, IsPlenum);
+            }
             if (ConduitType != null)
             {
                 costs += ConduitType.GetCosts(ConduitLength);

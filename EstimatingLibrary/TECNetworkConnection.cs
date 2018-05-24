@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
 {
-    public class TECNetworkConnection : TECConnection
+    public class TECNetworkConnection : TECConnection, IControllerConnection
     {
         #region Properties
         //---Stored---
