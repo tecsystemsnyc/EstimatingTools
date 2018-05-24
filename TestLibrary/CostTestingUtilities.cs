@@ -135,7 +135,7 @@ namespace Tests
             Total total = new Total();
             total += CalculateTotal(controller as TECScope, type);
             total += CalculateTotal(controller.Type as TECHardware, type);
-            foreach (TECConnection connection in controller.ChildrenConnections)
+            foreach (IControllerConnection connection in controller.ChildrenConnections)
             {
                 total += CalculateTotal(connection, type);
             }
@@ -150,7 +150,7 @@ namespace Tests
             return total;
         }
 
-        static public Total CalculateTotal(TECConnection connection, CostType type)
+        static public Total CalculateTotal(IControllerConnection connection, CostType type)
         {
             Total total = new Total();
             if (connection is TECHardwiredConnection)

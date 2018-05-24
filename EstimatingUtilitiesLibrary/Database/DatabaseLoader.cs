@@ -141,7 +141,7 @@ namespace EstimatingUtilitiesLibrary.Database
             
             List<TECHardwiredConnection> subScopeConnections = getObjectsFromTable(new SubScopeConnectionTable(), id => new TECHardwiredConnection(id, subScopeConnectionChildrenRelationships[id], connectionParents[id], false));
             List<TECNetworkConnection> networkConnections = getObjectsFromTable(new NetworkConnectionTable(), id => new TECNetworkConnection(id, connectionParents[id], connectionProtocol[id], false));
-            List<TECConnection> connections = new List<TECConnection>(subScopeConnections);
+            List<IControllerConnection> connections = new List<IControllerConnection>(subScopeConnections);
             connections.AddRange(networkConnections);
 
             Dictionary<Guid, List<Guid>> branchHierarchy = getOneToManyRelationships(new ScopeBranchHierarchyTable());
@@ -157,7 +157,7 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<Guid, List<TECScopeBranch>> systemScopeBranch = getOneToManyRelationships(new SystemScopeBranchTable(), scopeBranches);
             Dictionary<Guid, List<TECSubScope>> equipmentSubScope = getOneToManyRelationships(new EquipmentSubScopeTable(), subScope);
             Dictionary<Guid, List<TECPoint>> subScopePoint = getOneToManyRelationships(new SubScopePointTable(), points);
-            Dictionary<Guid, List<TECConnection>> controllerConnection = getOneToManyRelationships(new ControllerConnectionTable(), connections);
+            Dictionary<Guid, List<IControllerConnection>> controllerConnection = getOneToManyRelationships(new ControllerConnectionTable(), connections);
             
             subScope.ForEach(item => item.Points = subScopePoint.ValueOrNew(item.Guid));
             equipment.ForEach(item => item.SubScope = equipmentSubScope.ValueOrNew(item.Guid));
@@ -285,7 +285,7 @@ namespace EstimatingUtilitiesLibrary.Database
                 id => new TECHardwiredConnection(id, subScopeConnectionChildrenRelationships[id], connectionParents[id], typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
             List<TECNetworkConnection> networkConnections = getObjectsFromTable(new NetworkConnectionTable(), 
                 id => new TECNetworkConnection(id, connectionParents[id], connectionProtocols[id], typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
-            List<TECConnection> allConnections = new List<TECConnection>(subScopeConnections);
+            List<IControllerConnection> allConnections = new List<IControllerConnection>(subScopeConnections);
             allConnections.AddRange(networkConnections);
             List<TECSystem> systems = getObjectsFromData(new SystemTable(), systemData, id => new TECSystem(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
             List<TECTypical> typicals = getObjectsFromData(new SystemTable(), typicalData, id => new TECTypical(id));

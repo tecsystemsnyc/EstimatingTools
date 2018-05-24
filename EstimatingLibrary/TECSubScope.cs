@@ -62,7 +62,7 @@ namespace EstimatingLibrary
         }
 
 
-        public TECConnection Connection { get; private set; }
+        public IControllerConnection Connection { get; private set; }
         public int PointNumber
         {
             get
@@ -316,32 +316,19 @@ namespace EstimatingLibrary
         {
             get
             {
-                if (!((IConnectable)this).IsNetwork)
-                {
-                    return this.Points.ToIOCollection();
-                }
-                else
-                {
-                    return new IOCollection();
-                }
+                return this.Points.ToIOCollection();
             }
         }
-        bool IConnectable.CanSetParentConnection(TECConnection connection)
+        bool IConnectable.CanSetParentConnection(IControllerConnection connection)
         {
-            if (((IConnectable)this).IsNetwork)
-            {
-                return connection is TECNetworkConnection;
-            } else
-            {
-                return connection is TECHardwiredConnection;
-            }
+            return ((IConnectable)this).AvailableProtocols.Contains(connection.Protocol);            
         }
-        void IConnectable.SetParentConnection(TECConnection connection)
+        void IConnectable.SetParentConnection(IControllerConnection connection)
         {
             Connection = connection;
             raisePropertyChanged("Connection");
         }
-        TECConnection IConnectable.GetParentConnection()
+        IControllerConnection IConnectable.GetParentConnection()
         {
             return this.Connection;
         }

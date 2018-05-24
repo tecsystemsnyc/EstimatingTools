@@ -1756,7 +1756,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            TECConnection connection = controller.Connect(child);
+            IControllerConnection connection = controller.Connect(child);
 
             Dictionary<string, string> data;
 
@@ -1817,7 +1817,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            TECConnection connection = controller.Connect(instanceController);
+            IControllerConnection connection = controller.Connect(instanceController);
 
             Dictionary<string, string> data;
 
@@ -1883,7 +1883,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            TECConnection connection = instanceController.Connect(otherInstanceController);
+            IControllerConnection connection = instanceController.Connect(otherInstanceController);
 
             Dictionary<string, string> data;
 
@@ -1942,7 +1942,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            TECConnection connection = controller.Connect(subScope);
+            IControllerConnection connection = controller.Connect(subScope);
 
             Dictionary<string, string> data;
 
@@ -1995,7 +1995,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            TECConnection connection = controller.Connect(instanceSubScope);
+            IControllerConnection connection = controller.Connect(instanceSubScope);
 
             Dictionary<string, string> data;
 
@@ -2046,7 +2046,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            TECConnection connection = controller.Connect(subScope);
+            IControllerConnection connection = controller.Connect(subScope);
 
             Dictionary<string, string> data;
 
@@ -2101,8 +2101,8 @@ namespace EstimatingUtilitiesLibraryTests
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            TECConnection connection = controller.Connect(subScope);
-            TECConnection instanceConnection = instanceController.Connect(instanceSubScope);
+            IControllerConnection connection = controller.Connect(subScope);
+            IControllerConnection instanceConnection = instanceController.Connect(instanceSubScope);
             Dictionary<string, string> data;
             
             data = new Dictionary<string, string>();
@@ -3695,7 +3695,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.AddController(child);
 
             TECConnectionType connectionType = new TECConnectionType();
-            TECConnection connection = controller.Connect(child);
+            IControllerConnection connection = controller.Connect(child);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -3752,7 +3752,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECController instanceController = system.Controllers[0];
 
             TECConnectionType connectionType = new TECConnectionType();
-            TECConnection connection = controller.Connect(instanceController);
+            IControllerConnection connection = controller.Connect(instanceController);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -3813,7 +3813,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECController otherInstanceController = otherSystem.Controllers[0];
 
             TECConnectionType connectionType = new TECConnectionType();
-            TECConnection connection = instanceController.Connect(otherInstanceController);
+            IControllerConnection connection = instanceController.Connect(otherInstanceController);
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
 
@@ -3867,7 +3867,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
             bid.Systems.Add(typical);
-            TECConnection connection = controller.Connect(subScope);
+            IControllerConnection connection = controller.Connect(subScope);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -3918,7 +3918,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.Systems.Add(typical);
             TECSystem system = typical.AddInstance(bid);
             TECSubScope instanceSubScope = system.Equipment[0].SubScope[0];
-            TECConnection connection = controller.Connect(instanceSubScope);
+            IControllerConnection connection = controller.Connect(instanceSubScope);
 
 
             //Act
@@ -3969,7 +3969,7 @@ namespace EstimatingUtilitiesLibraryTests
             equipment.SubScope.Add(subScope);
             bid.Systems.Add(typical);
 
-            TECConnection connection = controller.Connect(subScope);
+            IControllerConnection connection = controller.Connect(subScope);
 
 
             //Act
@@ -4024,8 +4024,8 @@ namespace EstimatingUtilitiesLibraryTests
             TECSubScope instanceSubScope = system.Equipment[0].SubScope[0];
             TECController instanceController = system.Controllers[0];
 
-            TECConnection connection = controller.Connect(subScope);
-            TECConnection instanceConnection = instanceController.Connect(instanceSubScope);
+            IControllerConnection connection = controller.Connect(subScope);
+            IControllerConnection instanceConnection = instanceController.Connect(instanceSubScope);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);

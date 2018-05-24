@@ -32,7 +32,7 @@ namespace TECUserControlLibrary.Utilities
     public class MiscSelector : InterfaceDataTemplateSelector<TECMisc> { }
     public class IOModuleSelector : InterfaceDataTemplateSelector<TECIOModule> { }
     public class ControllerTypeSelector : InterfaceDataTemplateSelector<TECControllerType> { }
-    public class ConnectionSelector : InterfaceDataTemplateSelector<TECConnection> { }
+    public class ConnectionSelector : InterfaceDataTemplateSelector<IControllerConnection> { }
     public class ElectricalMaterialSelector : InterfaceDataTemplateSelector<TECElectricalMaterial> { }
     public class ConnectionTypeSelector : InterfaceDataTemplateSelector<TECConnectionType> { }
     public class ValveSelector : InterfaceDataTemplateSelector<TECValve> { }

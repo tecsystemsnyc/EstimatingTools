@@ -790,7 +790,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
     {
         public static new string TableName = "TECControllerTECConection";
         public static Type ObjectType = typeof(TECController);
-        public static Type ReferenceType = typeof(TECConnection);
+        public static Type ReferenceType = typeof(IControllerConnection);
 
         public static TableField ControllerID = new TableField("ControllerID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ReferenceType.GetProperty("Guid"));
@@ -1148,7 +1148,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
     internal class ConnectionConduitTypeTable : TableBase
     {
         public static new string TableName = "TECConnectionTECConduitType";
-        public static Type ObjectType = typeof(TECConnection);
+        public static Type ObjectType = typeof(IControllerConnection);
         public static Type ReferenceType = typeof(Object);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));

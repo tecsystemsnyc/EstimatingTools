@@ -141,7 +141,7 @@ namespace TECUserControlLibrary.Debug
             TECController otherController = new TECController(controllerType, true);
             otherController.Name = "Other Controller";
             typical.AddController(otherController);
-            TECConnection connection = controller.Connect(connected);
+            IControllerConnection connection = controller.Connect(connected);
             connection.Length = 10;
             connection.ConduitLength = 20;
             connection.ConduitType = bid.Catalogs.ConduitTypes[1];

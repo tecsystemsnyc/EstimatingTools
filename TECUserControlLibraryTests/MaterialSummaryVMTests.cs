@@ -450,13 +450,13 @@ namespace Tests
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
             //Act
-            TECConnection connection = controller.Connect(typSS);
+            IControllerConnection connection = controller.Connect(typSS);
             connection.Length = 50;
             connection.ConduitLength = 50;
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];
 
             TECSystem instance = typical.AddInstance(bid);
-            TECConnection instanceConnection = controller.Connect(instance.GetAllSubScope()[0]);
+            IControllerConnection instanceConnection = controller.Connect(instance.GetAllSubScope()[0]);
             instanceConnection.Length = 50;
             instanceConnection.ConduitLength = 50;
             instanceConnection.ConduitType = bid.Catalogs.ConduitTypes[0];
@@ -921,7 +921,7 @@ namespace Tests
             
             TECSystem instance = typical.AddInstance(bid);
 
-            TECConnection connection = controller.Connect(instance.GetAllSubScope()[0]);
+            IControllerConnection connection = controller.Connect(instance.GetAllSubScope()[0]);
             connection.Length = 50;
             connection.ConduitLength = 50;
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];
@@ -979,7 +979,7 @@ namespace Tests
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
             //Act
-            TECConnection connection = controller.Connect(ss);
+            IControllerConnection connection = controller.Connect(ss);
             connection.Length = 100;
             connection.ConduitLength = 100;
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];

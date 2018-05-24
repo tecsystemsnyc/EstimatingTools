@@ -519,7 +519,7 @@ namespace Tests
                 {
                     foreach (TECController controller in instance.Controllers)
                     {
-                        foreach (TECConnection connection in controller.ChildrenConnections)
+                        foreach (IControllerConnection connection in controller.ChildrenConnections)
                         {
                             Assert.IsTrue(bid.Catalogs.ConduitTypes.Contains(connection.ConduitType) || connection.ConduitType == null);
                         }
@@ -527,7 +527,7 @@ namespace Tests
                 }
                 foreach (TECController controller in typical.Controllers)
                 {
-                    foreach (TECConnection connection in controller.ChildrenConnections)
+                    foreach (IControllerConnection connection in controller.ChildrenConnections)
                     {
                         Assert.IsTrue(bid.Catalogs.ConduitTypes.Contains(connection.ConduitType) || connection.ConduitType == null);
                     }
@@ -535,7 +535,7 @@ namespace Tests
             }
             foreach (TECController controller in bid.Controllers)
             {
-                foreach (TECConnection connection in controller.ChildrenConnections)
+                foreach (IControllerConnection connection in controller.ChildrenConnections)
                 {
                     Assert.IsTrue(bid.Catalogs.ConduitTypes.Contains(connection.ConduitType) || connection.ConduitType == null);
                 }
@@ -547,7 +547,7 @@ namespace Tests
         {
             foreach(TECController controller in bid.Controllers)
             {
-                foreach(TECConnection connection in controller.ChildrenConnections)
+                foreach(IControllerConnection connection in controller.ChildrenConnections)
                 {
                     var subScopeConnection = connection as TECHardwiredConnection;
                     if(subScopeConnection != null)
@@ -560,7 +560,7 @@ namespace Tests
             {
                 foreach (TECController controller in typical.Controllers)
                 {
-                    foreach (TECConnection connection in controller.ChildrenConnections)
+                    foreach (IControllerConnection connection in controller.ChildrenConnections)
                     {
                         var subScopeConnection = connection as TECHardwiredConnection;
                         if (subScopeConnection != null)
@@ -573,7 +573,7 @@ namespace Tests
                 {
                     foreach (TECController controller in instance.Controllers)
                     {
-                        foreach (TECConnection connection in controller.ChildrenConnections)
+                        foreach (IControllerConnection connection in controller.ChildrenConnections)
                         {
                             var subScopeConnection = connection as TECHardwiredConnection;
                             if (subScopeConnection != null)
@@ -595,7 +595,7 @@ namespace Tests
             {
                 foreach (TECController controller in typical.Controllers)
                 {
-                    foreach (TECConnection connection in controller.ChildrenConnections)
+                    foreach (IControllerConnection connection in controller.ChildrenConnections)
                     {
                         Assert.IsTrue(templates.Catalogs.ConduitTypes.Contains(connection.ConduitType) || connection.ConduitType == null);
                     }
@@ -603,7 +603,7 @@ namespace Tests
             }
             foreach (TECController controller in templates.ControllerTemplates)
             {
-                foreach (TECConnection connection in controller.ChildrenConnections)
+                foreach (IControllerConnection connection in controller.ChildrenConnections)
                 {
                     Assert.IsTrue(templates.Catalogs.ConduitTypes.Contains(connection.ConduitType) || connection.ConduitType == null);
                 }
@@ -617,7 +617,7 @@ namespace Tests
             {
                 foreach (TECController controller in typical.Controllers)
                 {
-                    foreach (TECConnection connection in controller.ChildrenConnections)
+                    foreach (IControllerConnection connection in controller.ChildrenConnections)
                     {
                         var subScopeConnection = connection as TECHardwiredConnection;
                         if (subScopeConnection != null)
@@ -651,7 +651,7 @@ namespace Tests
 
             foreach (TECController controller in allControllers)
             {
-                foreach (TECConnection connection in controller.ChildrenConnections)
+                foreach (IControllerConnection connection in controller.ChildrenConnections)
                 {
                     TECNetworkConnection netConnect = connection as TECNetworkConnection;
                     if (netConnect != null)

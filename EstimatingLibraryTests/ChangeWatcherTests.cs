@@ -829,7 +829,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            TECConnection connection = controller.Connect(instanceSubScope);
+            IControllerConnection connection = controller.Connect(instanceSubScope);
 
             //Assert
             checkRaised(true, true, false, true);
@@ -855,7 +855,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            TECConnection connection = controller.Connect(subScope);
+            IControllerConnection connection = controller.Connect(subScope);
 
             //Assert
             checkRaised(false, false, false, false);
@@ -879,7 +879,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            TECConnection connection = controller.Connect(subScope);
+            IControllerConnection connection = controller.Connect(subScope);
 
             //Assert
             checkRaised(false, false, false, false);
@@ -905,7 +905,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            TECConnection connection = instanceController.Connect(instanceSubScope);
+            IControllerConnection connection = instanceController.Connect(instanceSubScope);
 
             //Assert
             checkRaised(true, true, false, true);
@@ -1724,7 +1724,7 @@ namespace Tests
 
             TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.AddController(controller);
-            TECConnection connection = controller.Connect(instanceSubScope);
+            IControllerConnection connection = controller.Connect(instanceSubScope);
             connection.Length = 10;
             resetRaised();
 
@@ -1751,7 +1751,7 @@ namespace Tests
 
             TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
             system.AddController(controller);
-            TECConnection connection = controller.Connect(subScope);
+            IControllerConnection connection = controller.Connect(subScope);
             connection.Length = 10;
             resetRaised();
 
@@ -1776,7 +1776,7 @@ namespace Tests
 
             TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.AddController(controller);
-            TECConnection connection = controller.Connect(subScope);
+            IControllerConnection connection = controller.Connect(subScope);
             connection.Length = 10;
             resetRaised();
 
@@ -1803,7 +1803,7 @@ namespace Tests
             TECSystem instance = system.AddInstance(bid);
             TECSubScope instanceSubScope = instance.Equipment[0].SubScope[0];
             TECController instanceController = instance.Controllers[0];
-            TECConnection connection = instanceController.Connect(instanceSubScope);
+            IControllerConnection connection = instanceController.Connect(instanceSubScope);
             connection.Length = 10;
             resetRaised();
 
@@ -2300,7 +2300,7 @@ namespace Tests
             TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes[0];
 
             bid.Systems.Add(typical);
-            TECConnection connection = controller.Connect(ss);
+            IControllerConnection connection = controller.Connect(ss);
             connection.Length = 16.46;
             connection.ConduitLength = 81.64;
 
@@ -2331,7 +2331,7 @@ namespace Tests
             TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes[0];
 
             bid.Systems.Add(typical);
-            TECConnection connection = controller.Connect(ss);
+            IControllerConnection connection = controller.Connect(ss);
             connection.Length = 16.43;
             connection.ConduitLength = 74.13;
 
@@ -2621,7 +2621,7 @@ namespace Tests
             typController.Connect(typSS);
 
             TECSystem instance = typical.AddInstance(bid);
-            TECConnection ssConnect = instance.Equipment[0].SubScope[0].Connection;
+            IControllerConnection ssConnect = instance.Equipment[0].SubScope[0].Connection;
             ssConnect.Length = 134.12;
             ssConnect.ConduitLength = 91.15;
 

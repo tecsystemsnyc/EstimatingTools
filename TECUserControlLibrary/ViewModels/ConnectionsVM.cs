@@ -28,7 +28,7 @@ namespace TECUserControlLibrary.ViewModels
         private readonly List<IConnectable> allConnectables;
         private ScopeGroup _selectedControllerGroup;
         private ScopeGroup _selectedConnectableGroup;
-        private TECConnection _selectedConnection;
+        private IControllerConnection _selectedConnection;
         private Double _defaultWireLength = 50.0;
         private Double _defaultConduitLength = 30.0;
         private TECElectricalMaterial _defaultConduitType;
@@ -80,7 +80,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             get { return SelectedConnectableGroup?.Scope as IConnectable; }
         }
-        public TECConnection SelectedConnection
+        public IControllerConnection SelectedConnection
         {
             get { return _selectedConnection; }
             set

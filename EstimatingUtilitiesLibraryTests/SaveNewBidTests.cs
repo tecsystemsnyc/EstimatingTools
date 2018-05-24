@@ -604,7 +604,7 @@ namespace Tests
             TECHardwiredConnection expectedConnection = null;
             foreach (TECController controller in expectedBid.Controllers)
             {
-                foreach (TECConnection connection in controller.ChildrenConnections)
+                foreach (IControllerConnection connection in controller.ChildrenConnections)
                 {
                     if (connection is TECHardwiredConnection)
                     {

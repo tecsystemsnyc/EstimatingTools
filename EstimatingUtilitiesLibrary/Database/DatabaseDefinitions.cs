@@ -1603,7 +1603,7 @@ namespace EstimatingUtilitiesLibrary.Database
     {
         public static string TableName = "ControllerConnection";
         public static Type ObjectType = typeof(TECController);
-        public static Type ReferenceType = typeof(TECConnection);
+        public static Type ReferenceType = typeof(IControllerConnection);
 
         public static TableField ControllerID = new TableField("ControllerID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ReferenceType.GetProperty("Guid"));
@@ -2097,7 +2097,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class ConnectionConduitTypeTable : TableBase
     {
         public static string TableName = "ConnectionConduitType";
-        public static Type ObjectType = typeof(TECConnection);
+        public static Type ObjectType = typeof(IControllerConnection);
         public static Type ReferenceType = typeof(TECElectricalMaterial);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));
