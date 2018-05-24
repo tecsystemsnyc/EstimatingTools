@@ -13,7 +13,7 @@ namespace EstimatingLibrary
         #region Properties
         private ObservableCollection<IEndDevice> _devices;
         private ObservableCollection<TECPoint> _points;
-        private TECConnection _connection;
+        private ObservableCollection<TECInterlockConnection> _interlocks;
 
         public ObservableCollection<IEndDevice> Devices
         {
@@ -45,27 +45,29 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "Points", this, value, old);
             }
         }
-        public TECConnection Connection
-        {
-            get { return _connection; }
-        }
-        public int PointNumber
-        {
-            get
-            {
-                return getPointNumber();
-            }
-        }
-
-        private ObservableCollection<TECInterlockConnection> _interlocks;
-
         public ObservableCollection<TECInterlockConnection> Interlocks
         {
             get { return _interlocks; }
             set
             {
+                if (Points != null)
+                {
+                    Interlocks.CollectionChanged -= InterlocksCollectionChanged;
+                }
+                var old = Interlocks;
                 _interlocks = value;
-                RaisePropertyChanged("Interlocks");
+                Points.CollectionChanged += InterlocksCollectionChanged;
+                notifyCombinedChanged(Change.Edit, "Interlocks", this, value, old);
+            }
+        }
+
+
+        public TECConnection Connection { get; private set; }
+        public int PointNumber
+        {
+            get
+            {
+                return getPointNumber();
             }
         }
         
@@ -118,65 +120,67 @@ namespace EstimatingLibrary
         #region Event Handlers
         private void PointsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            raisePropertyChanged("PointNumber");
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                int pointNumber = 0;
-                foreach (TECPoint item in e.NewItems)
-                {
-                    pointNumber += item.Quantity;
-                    notifyCombinedChanged(Change.Add, "Points", this, item);
-                }
-                notifyPointChanged(pointNumber);
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                int pointNumber = 0;
-                foreach (TECPoint item in e.OldItems)
-                {
-                    pointNumber += item.Quantity;
-                    notifyCombinedChanged(Change.Remove, "Points", this, item);
-                }
-                notifyPointChanged(pointNumber * -1);
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
-            {
-                notifyCombinedChanged(Change.Edit, "Points", this, sender, sender);
-            }
+            collectionChanged(sender, e, "Points");
         }
         private void Devices_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            collectionChanged(sender, e, "Devices");
+        }
+        private void InterlocksCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            collectionChanged(sender, e, "Interlocks");
+        }
+
+        private void collectionChanged(object sender, NotifyCollectionChangedEventArgs e, string propertyName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 CostBatch costs = new CostBatch();
-                foreach (IEndDevice item in e.NewItems)
+                int pointNumber = 0;
+
+                foreach (TECObject item in e.NewItems)
                 {
-                    notifyCombinedChanged(Change.Add, "Devices", this, item);
-                    if(item is INotifyCostChanged costly)
+                    if(item is INotifyCostChanged cost)
                     {
-                        costs += costly.CostBatch;
+                        costs += cost.CostBatch;
                     }
+                    if(item is INotifyPointChanged pointed)
+                    {
+                        pointNumber += pointed.PointNumber;
+                    }
+                    
+                    notifyCombinedChanged(Change.Add, propertyName, this, item);
                 }
                 notifyCostChanged(costs);
+                notifyPointChanged(pointNumber);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 CostBatch costs = new CostBatch();
-                foreach (IEndDevice item in e.OldItems)
+                int pointNumber = 0;
+
+                foreach (TECObject item in e.NewItems)
                 {
-                    notifyCombinedChanged(Change.Remove, "Devices", this, item);
-                    if (item is INotifyCostChanged costly)
+                    if (item is INotifyCostChanged cost)
                     {
-                        costs += costly.CostBatch;
+                        costs += cost.CostBatch;
                     }
+                    if (item is INotifyPointChanged pointed)
+                    {
+                        pointNumber += pointed.PointNumber;
+                    }
+
+                    notifyCombinedChanged(Change.Remove, propertyName, this, item);
                 }
                 notifyCostChanged(costs * -1);
+                notifyPointChanged(pointNumber * -1);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
-                notifyCombinedChanged(Change.Edit, "Devices", this, sender, sender);
+                notifyCombinedChanged(Change.Edit, propertyName, this, sender, sender);
             }
         }
+
         #endregion
 
         #region Methods
@@ -210,12 +214,6 @@ namespace EstimatingLibrary
                 totalPoints += point.Quantity;
             }
             return totalPoints;
-        }
-
-        private void reSubscribeToCollections()
-        {
-            Points.CollectionChanged += PointsCollectionChanged;
-            Devices.CollectionChanged += Devices_CollectionChanged;
         }
 
         protected override CostBatch getCosts()
@@ -340,7 +338,7 @@ namespace EstimatingLibrary
         }
         void IConnectable.SetParentConnection(TECConnection connection)
         {
-            _connection = connection;
+            Connection = connection;
             raisePropertyChanged("Connection");
         }
         TECConnection IConnectable.GetParentConnection()
