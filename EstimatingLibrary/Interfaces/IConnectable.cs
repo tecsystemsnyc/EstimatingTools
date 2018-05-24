@@ -17,8 +17,8 @@ namespace EstimatingLibrary.Interfaces
         IOCollection HardwiredIO { get; }
 
         IConnectable Copy(bool isTypical, Dictionary<Guid, Guid> guidDictionary);
-        bool CanSetParentConnection(EstimatingLibrary.IControllerConnection connection);
-        void SetParentConnection(EstimatingLibrary.IControllerConnection connection);
+        bool CanSetParentConnection(IControllerConnection connection);
+        void SetParentConnection(IControllerConnection connection);
         IControllerConnection GetParentConnection();
     }
 }
