@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary.Interfaces
 {
-    interface IControllerConnection
+    public interface IControllerConnection : IConnection
     {
         TECController ParentController { get; }
-        IOCollection HardwiredIO { get; }
+        /// <summary>
+        /// The IO that will take up space on the controller, be it Protocol connection types or BMS Points.
+        /// </summary>
+        IOCollection IO { get; }
     }
 }
