@@ -96,7 +96,7 @@ namespace EstimatingLibrary
         {
             get { return IO - UsedIO; }
         }
-        public IOCollection AvailableProtocols
+        public List<IProtocol> AvailableProtocols
         {
             get { return AvailableIO.Protocols; }
         }
@@ -142,77 +142,36 @@ namespace EstimatingLibrary
         #endregion
 
         #region Connection Methods
+        /// <summary>
+        /// Returns the list of Protocols that can be used in both this controller and the connectable
+        /// </summary>
+        public List<IProtocol> CompatibleProtocols(IConnectable connectable)
+        {
+            List<IProtocol> compatProtocols = new List<IProtocol>();
+            foreach(IProtocol protocol in connectable.AvailableProtocols)
+            {
+                if (protocol is TECHardwiredProtocol)
+                {
+                    if (this.AvailableIO.Contains(connectable.HardwiredIO))
+                    {
+                        compatProtocols.Add(protocol);
+                    }
+                }
+                else if (this.AvailableProtocols.Contains(protocol))
+                {
+                    compatProtocols.Add(protocol);
+                }
+            }  
+            return compatProtocols;
+        }
         public bool CanConnect(IConnectable connectable)
         {
-            if(connectable.GetParentConnection() != null) { return false; }
-
-            //Determines relevant IO based on if the connectable is networkable
-            IOCollection connectableIO = connectable.IsNetwork ? connectable.AvailableProtocols : connectable.HardwiredIO;
-
-            if(connectableIO.TypeCount() == 0) { return false; }
-
-            //Collection of current IO and IO from potential modules
-            IOCollection possibleIO = this.AvailableIO + getPotentialIO();
-
-            return possibleIO.Contains(connectableIO);
+            return CompatibleProtocols(connectable).Count > 0;
         }
-        public TECConnection Connect(IConnectable connectable)
+        public TECConnection Connect(IConnectable connectable, IProtocol protocol)
         {
-            //TO DO: Potential Modules
-
-            if (connectable.IsNetwork)
-            {
-                foreach (TECIO io in connectable.AvailableProtocols.ToList())
-                {
-                    if (this.AvailableProtocols.Contains(io))
-                    {
-                        return constructNetworkConnection(io.Protocol);
-                    }
-                }
-
-                foreach(TECIO io in connectable.AvailableProtocols.ToList())
-                {
-                    if (this.getPotentialIO().Contains(io))
-                    {
-                        List<TECIOModule> newModules = getModulesForIO(io.ToIOCollection());
-                        newModules.ForEach(module => this.IOModules.Add(module));
-
-                        return constructNetworkConnection(io.Protocol);
-                    }
-                }
-
-                TECNetworkConnection constructNetworkConnection(TECProtocol protocol)
-                {
-                    TECNetworkConnection connection = new TECNetworkConnection(this, protocol, this.IsTypical);
-                    connection.AddChild(connectable);
-                    addChildConnection(connection);
-                    return connection;
-                }
-
-                throw new Exception("No matching protocols");
-            }
-            else
-            {
-                if (this.AvailableIO.Contains(connectable.HardwiredIO))
-                {
-                    return constructHardwiredConnection();
-                }
-                else
-                {
-                    List<TECIOModule> newModules = getModulesForIO(connectable.HardwiredIO);
-                    newModules.ForEach(module => this.IOModules.Add(module));
-
-                    return constructHardwiredConnection();
-                }
-
-                TECHardwiredConnection constructHardwiredConnection()
-                {
-                    TECHardwiredConnection connection = new TECHardwiredConnection(connectable, this, this.IsTypical);
-                    addChildConnection(connection);
-                    return connection;
-                }
-                
-            }
+            //TO DO: Connect
+            throw new NotImplementedException();
         }
         /// <summary>
         /// Removes the connectable from controller and parent connection.
@@ -549,19 +508,17 @@ namespace EstimatingLibrary
         #endregion
 
         #region IConnectable
+        List<IProtocol> IConnectable.AvailableProtocols
+        {
+            get
+            {
+                return this.AvailableProtocols;
+            }
+        }
         IOCollection IConnectable.HardwiredIO
         {
             get { return new IOCollection(); }
         }
-        bool IConnectable.IsNetwork
-        {
-            get { return true; }
-        }
-        List<TECConnectionType> IConnectable.RequiredConnectionTypes
-        {
-            get { return new List<TECConnectionType>(); }
-        }
-
         TECConnection IConnectable.GetParentConnection()
         {
             return this.ParentConnection;

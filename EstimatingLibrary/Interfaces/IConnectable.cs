@@ -7,9 +7,14 @@ namespace EstimatingLibrary.Interfaces
     {
         Guid Guid { get; }
         
+        /// <summary>
+        /// Protocols that can be used to connect to this connectable.
+        /// </summary>
         List<IProtocol> AvailableProtocols { get; }
+        /// <summary>
+        /// List of BMS points 
+        /// </summary>
         IOCollection HardwiredIO { get; }
-        bool IsNetwork { get; }
 
         IConnectable Copy(bool isTypical, Dictionary<Guid, Guid> guidDictionary);
         bool CanSetParentConnection(TECConnection connection);

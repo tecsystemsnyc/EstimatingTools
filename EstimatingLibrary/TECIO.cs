@@ -1,4 +1,5 @@
-﻿using EstimatingLibrary.Utilities;
+﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -128,13 +129,22 @@ namespace EstimatingLibrary
     public class IOCollection
     {
         private Dictionary<IOType, TECIO> ioDictionary = new Dictionary<IOType, TECIO>();
-        private Dictionary<TECProtocol, TECIO> protocolDictionary = new Dictionary<TECProtocol, TECIO>();
+        private Dictionary<IProtocol, TECIO> protocolDictionary = new Dictionary<IProtocol, TECIO>();
 
-        public IOCollection Protocols
+        public List<IProtocol> Protocols
         {
             get
             {
-                return new IOCollection(protocolDictionary.Values);
+                List<IProtocol> protocols = new List<IProtocol>();
+                foreach(TECIO io in this.protocolDictionary.Values)
+                {
+                    if (io.Protocol == null) throw new Exception("TECIO exists in protocol dictionary that doesn't have protocol.");
+                    for(int i = 0; i < io.Quantity; i++)
+                    {
+                        protocols.Add(io.Protocol);
+                    }
+                }
+                return protocols;
             }
         }
         public IOCollection PointIO

@@ -10,10 +10,10 @@ namespace EstimatingLibrary
     public abstract class TECConnection : TECObject, INotifyCostChanged, IRelatable, ITypicalable
     {
         #region Properties
-        protected double _length;
-        protected double _conduitLength;
+        protected double _length = 0;
+        protected double _conduitLength = 0;
         protected TECElectricalMaterial _conduitType;
-        protected bool _isPlenum;
+        protected bool _isPlenum = false;
 
         public double Length
         {
@@ -82,7 +82,7 @@ namespace EstimatingLibrary
         }
 
         public bool IsTypical { get; private set; }
-        abstract public List<TECConnectionType> ConnectionTypes { get; }
+        public IProtocol Protocol { get; }
         abstract public IOCollection IO { get; }
 
         #endregion //Properties
@@ -90,15 +90,14 @@ namespace EstimatingLibrary
         public event Action<CostBatch> CostChanged;
 
         #region Constructors 
-        public TECConnection(Guid guid, TECController parent, bool isTypical) : base(guid)
+        public TECConnection(Guid guid, TECController parent, IProtocol protocol, bool isTypical) : base(guid)
         {
-            IsTypical = isTypical;
-            ParentController = parent;
-            _length = 0;
-            _conduitLength = 0;
+            this.IsTypical = isTypical;
+            this.ParentController = parent;
+            this.Protocol = protocol;
         }
-        public TECConnection(TECController parent, bool isTypical) : this(Guid.NewGuid(), parent, isTypical) { }
-        public TECConnection(TECConnection connectionSource, TECController parent, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : this(parent, isTypical)
+        public TECConnection(TECController parent, IProtocol protocol, bool isTypical) : this(Guid.NewGuid(), parent, protocol, isTypical) { }
+        public TECConnection(TECConnection connectionSource, TECController parent, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : this(parent, connectionSource.Protocol, isTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = connectionSource.Guid; }
