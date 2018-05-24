@@ -11,6 +11,7 @@ namespace EstimatingLibrary
         #region Properties
         //---Stored---
         private ObservableCollection<IConnectable> _children = new ObservableCollection<IConnectable>();
+        private TECController _parentController;
 
         public ObservableCollection<IConnectable> Children
         {
@@ -24,30 +25,35 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "Children", this, value, old);
             }
         }
-        public TECProtocol Protocol { get; }
-        
-        public override List<TECConnectionType> ConnectionTypes
+        public TECController ParentController
         {
-            get { return new List<TECConnectionType>(Protocol.ConnectionTypes); }
+            get { return _parentController; }
+            set
+            {
+                _parentController = value;
+                raisePropertyChanged("ParentController");
+            }
         }
-        public override IOCollection IO
+
+        public IOCollection IO
         {
             get
             {
                 return new IOCollection(new List<TECIO> { Protocol.ToIO() });
             }
         }
+
         #endregion
 
         #region Constructors
-        public TECNetworkConnection(Guid guid, TECController parent, TECProtocol protocol, bool isTypical) : base(guid, parent, isTypical)
+        public TECNetworkConnection(Guid guid, TECController parent, TECProtocol protocol, bool isTypical) : base(guid, protocol, isTypical)
         {
-            Protocol = protocol;
+            ParentController = parent;
             Children.CollectionChanged += Children_CollectionChanged;
         }
         public TECNetworkConnection(TECController parent, TECProtocol protocol, bool isTypical) : this(Guid.NewGuid(), parent, protocol, isTypical) { }
         public TECNetworkConnection(TECNetworkConnection connectionSource, TECController parent, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) 
-            : base(connectionSource, parent, isTypical, guidDictionary)
+            : base(connectionSource, isTypical, guidDictionary)
         {
             Children.CollectionChanged += Children_CollectionChanged;
             foreach (IConnectable item in connectionSource.Children)
@@ -56,7 +62,7 @@ namespace EstimatingLibrary
                 newChild.SetParentConnection(this);
                 _children.Add(newChild);
             }
-            Protocol = connectionSource.Protocol;
+            ParentController = parent;
         }
         #endregion
 
