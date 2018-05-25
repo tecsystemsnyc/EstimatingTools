@@ -12,6 +12,7 @@ namespace EstimatingLibrary
         //---Stored---
         private ObservableCollection<IConnectable> _children = new ObservableCollection<IConnectable>();
         private TECController _parentController;
+        private TECProtocol protocol;
 
         public ObservableCollection<IConnectable> Children
         {
@@ -42,13 +43,16 @@ namespace EstimatingLibrary
                 return new IOCollection(new List<TECIO> { Protocol.ToIO() });
             }
         }
-        
+
+        public override IProtocol Protocol => protocol;
+
         #endregion
 
         #region Constructors
-        public TECNetworkConnection(Guid guid, TECController parent, TECProtocol protocol, bool isTypical) : base(guid, protocol, isTypical)
+        public TECNetworkConnection(Guid guid, TECController parent, TECProtocol protocol, bool isTypical) : base(guid, isTypical)
         {
             ParentController = parent;
+            this.protocol = protocol;
             Children.CollectionChanged += Children_CollectionChanged;
         }
         public TECNetworkConnection(TECController parent, TECProtocol protocol, bool isTypical) : this(Guid.NewGuid(), parent, protocol, isTypical) { }
@@ -63,6 +67,7 @@ namespace EstimatingLibrary
                 _children.Add(newChild);
             }
             ParentController = parent;
+            this.protocol = connectionSource.protocol;
         }
         #endregion
 
@@ -93,7 +98,7 @@ namespace EstimatingLibrary
         #region Methods
         public bool CanAddChild(IConnectable connectable)
         {
-            return connectable.AvailableProtocols.Contains(this.Protocol.ToIO());
+            return connectable.AvailableProtocols.Contains(this.Protocol);
         }
         public void AddChild(IConnectable connectable)
         {
@@ -130,6 +135,7 @@ namespace EstimatingLibrary
                 objects.Add(netconnect as TECObject);
             }
             saveList.AddRange(objects, "Children");
+            saveList.Add(protocol, "Protocol");
             return saveList;
         }
         protected override SaveableMap linkedObjects()
@@ -142,6 +148,7 @@ namespace EstimatingLibrary
                 objects.Add(netconnect as TECObject);
             }
             saveList.AddRange(objects, "Children");
+            saveList.Add(protocol, "Protocol");
             return saveList;
         }
         
