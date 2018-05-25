@@ -309,10 +309,13 @@ namespace EstimatingUtilitiesLibrary.Exports
             int x = startRow;
             int y = startColumn;
             string connectionString = "";
-            foreach(TECConnectionType type in endDevice.ConnectionTypes.Distinct())
+            foreach(IProtocol protocol in endDevice.ConnectionMethods)
             {
-                connectionString += String.Format("({0} Qty. {1})", type.Name,
-                        endDevice.ConnectionTypes.Count(item => item == type));
+                foreach (TECConnectionType type in protocol.ConnectionTypes.Distinct())
+                {
+                    connectionString += String.Format("({0} Qty. {1})", type.Name,
+                            protocol.ConnectionTypes.Count(item => item == type));
+                }
             }
             worksheet.Cell(x, y).Value = connectionString;
             return (x + 1, y + 1);

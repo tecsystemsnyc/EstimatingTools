@@ -13,7 +13,7 @@ namespace EstimatingLibrary
         #region Fields
         private ObservableCollection<TECSystem> _instances;
 
-        private ObservableListDictionary<TECObject> _typicalInstanceDictionary;
+        private ObservableListDictionary<ITECObject> _typicalInstanceDictionary;
 
         private ChangeWatcher watcher;
         #endregion
@@ -23,7 +23,7 @@ namespace EstimatingLibrary
         {
             _instances = new ObservableCollection<TECSystem>();
 
-            TypicalInstanceDictionary = new ObservableListDictionary<TECObject>();
+            TypicalInstanceDictionary = new ObservableListDictionary<ITECObject>();
 
             _instances.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Instances");
 
@@ -34,7 +34,7 @@ namespace EstimatingLibrary
         public TECTypical() : this(Guid.NewGuid()) { }
 
         public TECTypical(TECTypical source, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableListDictionary<TECObject> characteristicReference = null) : this()
+            ObservableListDictionary<ITECObject> characteristicReference = null) : this()
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = source.Guid; }
@@ -126,7 +126,7 @@ namespace EstimatingLibrary
             }
         }
 
-        public ObservableListDictionary<TECObject> TypicalInstanceDictionary
+        public ObservableListDictionary<ITECObject> TypicalInstanceDictionary
         {
             get
             {
@@ -326,11 +326,11 @@ namespace EstimatingLibrary
             return saveList;
         }
 
-        private void typicalInstanceDictionary_CollectionChanged(Tuple<Change, TECObject, TECObject> obj)
+        private void typicalInstanceDictionary_CollectionChanged(Tuple<Change, ITECObject, ITECObject> obj)
         {
             notifyTECChanged(obj.Item1, "TypicalInstanceDictionary", obj.Item2, obj.Item3);
         }
-        private void removeFromDictionary(IEnumerable<TECObject> typicalList, IEnumerable<TECObject> instanceList)
+        private void removeFromDictionary(IEnumerable<ITECObject> typicalList, IEnumerable<ITECObject> instanceList)
         {
             foreach (TECObject typical in typicalList)
             {
@@ -516,7 +516,7 @@ namespace EstimatingLibrary
             }
         }
 
-        private void handleAdd(TECObject value, TECObject sender)
+        private void handleAdd(ITECObject value, ITECObject sender)
         {
             if (value is TECController && sender is TECTypical)
             {
@@ -670,7 +670,7 @@ namespace EstimatingLibrary
                 }
             }
         }
-        private void handleRemove(TECObject value, TECObject sender)
+        private void handleRemove(ITECObject value, ITECObject sender)
         {
             if (value is TECController && sender is TECTypical)
             {

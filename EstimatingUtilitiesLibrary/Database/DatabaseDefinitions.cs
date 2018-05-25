@@ -1263,44 +1263,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> Fields { get { return fields; } }
 
     }
-
-    internal class ProtocolAdapterTable : TableBase
-    {
-        public static string TableName = "ProtocolAdapter";
-        public static Type ObjectType = typeof(TECProtocolAdapter);
-
-        public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
-        public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
-        public static TableField Price = new TableField("Price", "REAL", ObjectType.GetProperty("Price"));
-
-        private List<TableField> primaryKeys = new List<TableField>() {
-            ID
-            };
-        private List<Type> types = new List<Type>()
-        {
-            ObjectType
-        };
-        private List<TableField> fields = new List<TableField>()
-        {
-            ID,
-            Name,
-            Description,
-            Price
-        };
-        private List<string> propertyNames = new List<string>()
-        {
-            "ProtocolAdapters"
-        };
-
-        public override string NameString { get { return TableName; } }
-        public override List<Type> Types { get { return types; } }
-        public override List<string> PropertyNames { get { return propertyNames; } }
-        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
-        public override List<TableField> Fields { get { return fields; } }
-
-    }
-
+    
     #endregion
 
     #region Relationship Tables
@@ -2608,40 +2571,6 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
-    internal class ProtocolAdapterProtocolTable : TableBase
-    {
-        public static string TableName = "ProtocolAdapterProtocol";
-        public static Type AdapterType = typeof(TECProtocolAdapter);
-        public static Type ProtocolType = typeof(TECProtocol);
-
-        public static TableField AdapterID = new TableField("AdapterID", "TEXT", AdapterType.GetProperty("Guid"));
-        public static TableField ProtocolID = new TableField("ProtocolID", "TEXT", ProtocolType.GetProperty("Guid"));
-
-        private List<TableField> primaryKeys = new List<TableField>() {
-            AdapterID,
-            ProtocolID
-            };
-        private List<Type> types = new List<Type>()
-        {
-            AdapterType,
-            ProtocolType
-        };
-        private List<TableField> fields = new List<TableField>()
-        {
-            AdapterID,
-            ProtocolID
-        };
-        private List<string> propertyNames = new List<string>()
-        {
-            "Protocol"
-        };
-
-        public override string NameString { get { return TableName; } }
-        public override List<Type> Types { get { return types; } }
-        public override List<string> PropertyNames { get { return propertyNames; } }
-        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
-        public override List<TableField> Fields { get { return fields; } }
-    }
     internal class IOProtocolTable : TableBase
     {
         public static string TableName = "IOProtocol";
@@ -3105,7 +3034,6 @@ namespace EstimatingUtilitiesLibrary.Database
             new ScheduleTableTable(),
             new ScheduleItemTable(),
             new ProtocolTable(),
-            new ProtocolAdapterTable(),
 
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -3150,7 +3078,6 @@ namespace EstimatingUtilitiesLibrary.Database
             new BidLocationTable(),
             new NetworkConnectionProtocolTable(),
             new ProtocolConnectionTypeTable(),
-            new ProtocolAdapterProtocolTable(),
             new IOProtocolTable()
             };
     }
@@ -3180,7 +3107,6 @@ namespace EstimatingUtilitiesLibrary.Database
             new ControllerTypeTable(),
             new ValveTable(),
             new ProtocolTable(),
-            new ProtocolAdapterTable(),
 
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -3223,7 +3149,6 @@ namespace EstimatingUtilitiesLibrary.Database
             new TemplateReferenceTable(),
             new NetworkConnectionProtocolTable(),
             new ProtocolConnectionTypeTable(),
-            new ProtocolAdapterProtocolTable(),
             new IOProtocolTable()
         };
     }
@@ -3262,7 +3187,6 @@ namespace EstimatingUtilitiesLibrary.Database
             new ScheduleTableTable(),
             new ScheduleItemTable(),
             new ProtocolTable(),
-            new ProtocolAdapterTable(),
 
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -3313,7 +3237,6 @@ namespace EstimatingUtilitiesLibrary.Database
             new BidLocationTable(),
             new NetworkConnectionProtocolTable(),
             new ProtocolConnectionTypeTable(),
-            new ProtocolAdapterProtocolTable(),
             new IOProtocolTable()
         };
     }

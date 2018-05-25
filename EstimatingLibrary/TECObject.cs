@@ -22,14 +22,14 @@ namespace EstimatingLibrary
         public event PropertyChangedEventHandler PropertyChanged;
         public event Action<TECChangedEventArgs> TECChanged;
 
-        protected void notifyTECChanged(Change change, string propertyName, TECObject sender,
+        protected void notifyTECChanged(Change change, string propertyName, ITECObject sender,
             object value, object oldValue = null)
         {
             TECChangedEventArgs args = new TECChangedEventArgs(change, propertyName, sender, value, oldValue);
             TECChanged?.Invoke(args);
         }
 
-        protected void notifyCombinedChanged(Change change, string propertyName, TECObject sender,
+        protected void notifyCombinedChanged(Change change, string propertyName, ITECObject sender,
             object value, object oldValue = null)
         {
             TECChangedEventArgs args = new TECChangedEventArgs(change, propertyName, sender, value, oldValue);

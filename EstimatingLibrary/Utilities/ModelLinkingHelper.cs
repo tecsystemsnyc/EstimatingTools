@@ -115,9 +115,9 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        public static void LinkTypicalInstanceDictionary(ObservableListDictionary<TECObject> oldDictionary, TECTypical newTypical)
+        public static void LinkTypicalInstanceDictionary(ObservableListDictionary<ITECObject > oldDictionary, TECTypical newTypical)
         {
-            ObservableListDictionary<TECObject> newCharacteristicInstances = new ObservableListDictionary<TECObject>();
+            ObservableListDictionary<ITECObject > newCharacteristicInstances = new ObservableListDictionary<ITECObject >();
             foreach (TECSystem instance in newTypical.Instances)
             {
                 linkCharacteristicCollections(newTypical.Equipment, instance.Equipment, oldDictionary, newCharacteristicInstances);
@@ -398,7 +398,7 @@ namespace EstimatingLibrary.Utilities
             }
 
         }
-        private static List<T> findReferences<T>(T template, IEnumerable<T> referenceList, Dictionary<Guid, List<Guid>> templateReferences) where T : TECObject
+        private static List<T> findReferences<T>(T template, IEnumerable<T> referenceList, Dictionary<Guid, List<Guid>> templateReferences) where T : ITECObject 
         {
             List<T> references = new List<T>();
             foreach (T item in referenceList)
@@ -467,18 +467,18 @@ namespace EstimatingLibrary.Utilities
         /// <param name="oldCharacteristicInstances">A previosuly linked scope dictionary, from the original system before copying</param>
         /// <param name="newCharacteristicInstances">The scope dictionary that must be linked</param>
         static private void linkCharacteristicCollections(IList characteristic, IList instances,
-            ObservableListDictionary<TECObject> oldCharacteristicInstances,
-            ObservableListDictionary<TECObject> newCharacteristicInstances)
+            ObservableListDictionary<ITECObject > oldCharacteristicInstances,
+            ObservableListDictionary<ITECObject > newCharacteristicInstances)
         {
             foreach (var item in oldCharacteristicInstances.GetFullDictionary())
             {
-                foreach (TECObject charItem in characteristic)
+                foreach (ITECObject  charItem in characteristic)
                 {
                     if (item.Key.Guid == charItem.Guid)
                     {
                         foreach (var sub in item.Value)
                         {
-                            foreach (TECObject subInstance in instances)
+                            foreach (ITECObject  subInstance in instances)
                             {
                                 if (subInstance.Guid == sub.Guid)
                                 {
@@ -548,11 +548,11 @@ namespace EstimatingLibrary.Utilities
         /// <param name="instances"></param>
         /// <param name="referenceDict"></param>
         /// <param name="characteristicList"></param>
-        private static void linkCharacteristicWithInstances(TECObject characteristic, IList instances,
+        private static void linkCharacteristicWithInstances(ITECObject  characteristic, IList instances,
             Dictionary<Guid, List<Guid>> referenceDict,
-            ObservableListDictionary<TECObject> characteristicList)
+            ObservableListDictionary<ITECObject > characteristicList)
         {
-            foreach (TECObject item in instances)
+            foreach (ITECObject  item in instances)
             {
                 if (referenceDict[characteristic.Guid].Contains(item.Guid))
                 {
