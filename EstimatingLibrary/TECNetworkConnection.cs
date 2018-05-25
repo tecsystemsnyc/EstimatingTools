@@ -39,6 +39,7 @@ namespace EstimatingLibrary
         public IOCollection IO => protocol.ToIOCollection();
 
         public override IProtocol Protocol => protocol;
+        public TECProtocol NetworkProtocol => protocol;
 
         #endregion
 

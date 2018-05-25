@@ -55,6 +55,7 @@ namespace EstimatingLibrary
             ConnectionTypes = linkingSource.ConnectionTypes;
             child.SetParentConnection(this);
             _guid = linkingSource.Guid;
+            
         }
         #endregion Constructors
 

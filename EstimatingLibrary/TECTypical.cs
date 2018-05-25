@@ -203,7 +203,7 @@ namespace EstimatingLibrary
                 instance.RemoveAllChildNetworkConnections();
                 foreach (TECNetworkConnection connection in controller.ChildrenConnections.Where(connection => connection is TECNetworkConnection))
                 {
-                    TECNetworkConnection instanceConnection = instance.AddNetworkConnection(connection.Protocol);
+                    TECNetworkConnection instanceConnection = instance.AddNetworkConnection(connection.NetworkProtocol);
                     instanceConnection.Length = connection.Length;
                     instanceConnection.ConduitType = connection.ConduitType;
                     instanceConnection.ConduitLength = connection.ConduitLength;
@@ -249,7 +249,7 @@ namespace EstimatingLibrary
             return canExecute;
         }
 
-        public List<IControllerConnection> CreateTypicalAndInstanceConnections(TECController typicalController, TECSubScope typicalSubScope)
+        public List<IControllerConnection> CreateTypicalAndInstanceConnections(TECController typicalController, TECSubScope typicalSubScope, IProtocol protocol)
         {
             if (!this.GetAllSubScope().Contains(typicalSubScope))
             {
@@ -261,7 +261,7 @@ namespace EstimatingLibrary
             }
 
             List<IControllerConnection> outConnections = new List<IControllerConnection>();
-            outConnections.Add(typicalController.Connect(typicalSubScope));
+            outConnections.Add(typicalController.Connect(typicalSubScope, protocol));
 
             foreach (TECController instanceController
                     in this.TypicalInstanceDictionary.GetInstances(typicalController))
@@ -275,7 +275,7 @@ namespace EstimatingLibrary
                         if (instance.Controllers.Contains(instanceController) &&
                             instance.GetAllSubScope().Contains(instanceSubScope))
                         {
-                            outConnections.Add(instanceController.Connect(instanceSubScope));
+                            outConnections.Add(instanceController.Connect(instanceSubScope, protocol));
                             found = true;
                             break;
                         }
