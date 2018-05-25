@@ -106,16 +106,16 @@ namespace EstimatingLibrary.Interfaces
     {
         public List<ITECObject> Objects;
         public List<string> PropertyNames;
-        Dictionary<string, List<TECObject>> nameDictionary;
+        Dictionary<string, List<ITECObject>> nameDictionary;
 
         public SaveableMap()
         {
             Objects = new List<ITECObject>();
             PropertyNames = new List<string>();
-            nameDictionary = new Dictionary<string, List<TECObject>>();
+            nameDictionary = new Dictionary<string, List<ITECObject>>();
         }
 
-        public bool Contains(TECObject item)
+        public bool Contains(ITECObject item)
         {
             return Objects.Contains(item);
         }
@@ -127,7 +127,7 @@ namespace EstimatingLibrary.Interfaces
         {
             return parent.GetType().GetProperty(propertyName).GetValue(parent);
         }
-        public void Add(TECObject item, string name)
+        public void Add(ITECObject item, string name)
         {
             Objects.Add(item);
             this.Add(name);
@@ -137,7 +137,7 @@ namespace EstimatingLibrary.Interfaces
         {
             PropertyNames.Add(name);
         }
-        public void AddRange(IEnumerable<TECObject> items, string name)
+        public void AddRange(IEnumerable<ITECObject> items, string name)
         {
             Objects.AddRange(items);
             this.Add(name);
@@ -153,7 +153,7 @@ namespace EstimatingLibrary.Interfaces
         }
         public void AddRange(SaveableMap map)
         {
-            foreach(KeyValuePair<string, List<TECObject>> pair in map.nameDictionary)
+            foreach(KeyValuePair<string, List<ITECObject>> pair in map.nameDictionary)
             {
                 if (nameDictionary.ContainsKey(pair.Key))
                 {
@@ -179,10 +179,10 @@ namespace EstimatingLibrary.Interfaces
         /// List of all child objects nd the name of their containing property
         /// </summary>
         /// <returns></returns>
-        public List<(string PropertyName, TECObject Child)> ChildList()
+        public List<(string PropertyName, ITECObject Child)> ChildList()
         {
-            List<(string propertyName, TECObject child)> outList = new List<(string propertyName, TECObject child)>();
-            foreach(KeyValuePair<string, List<TECObject>> pair in nameDictionary)
+            List<(string propertyName, ITECObject child)> outList = new List<(string propertyName, ITECObject child)>();
+            foreach(KeyValuePair<string, List<ITECObject>> pair in nameDictionary)
             {
                 foreach(TECObject item in pair.Value)
                 {
@@ -192,11 +192,11 @@ namespace EstimatingLibrary.Interfaces
             return outList;
         }
 
-        private void addToDictionary(string name, TECObject item)
+        private void addToDictionary(string name, ITECObject item)
         {
             if (!nameDictionary.ContainsKey(name))
             {
-                nameDictionary[name] = new List<TECObject>() { item };
+                nameDictionary[name] = new List<ITECObject>() { item };
             }
             else
             {
