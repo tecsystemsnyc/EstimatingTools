@@ -2,7 +2,7 @@
 
 namespace EstimatingLibrary.Interfaces
 {
-    public interface IConnection
+    public interface IConnection : ITECObject
     {
         double ConduitLength { get; set; }
         TECElectricalMaterial ConduitType { get; set; }
