@@ -43,7 +43,6 @@ namespace EstimatingLibrary
             }
         }
         
-
         #endregion
 
         #region Constructors
