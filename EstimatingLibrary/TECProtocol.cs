@@ -92,5 +92,12 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "ConnectionTypes", this, sender, sender);
             }
         }
+
+        #region IProtocol
+        List<TECConnectionType> IProtocol.ConnectionTypes
+        {
+            get { return new List<TECConnectionType>(this.ConnectionTypes); }
+        }
+        #endregion
     }
 }

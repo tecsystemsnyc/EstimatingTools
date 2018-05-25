@@ -20,5 +20,11 @@ namespace EstimatingLibrary
             this.ConnectionTypes = new ObservableCollection<TECConnectionType>(connectionTypes);
         }
 
+        #region IProtocol
+        List<TECConnectionType> IProtocol.ConnectionTypes
+        {
+            get { return new List<TECConnectionType>(this.ConnectionTypes); }
+        }
+        #endregion
     }
 }

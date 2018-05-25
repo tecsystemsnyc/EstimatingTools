@@ -10,6 +10,6 @@ namespace EstimatingLibrary.Interfaces
     public interface IProtocol
     {
         String Name { get; }
-        ObservableCollection<TECConnectionType> ConnectionTypes { get; }
+        List<TECConnectionType> ConnectionTypes { get; }
     }
 }
