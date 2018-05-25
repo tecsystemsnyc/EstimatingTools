@@ -9,42 +9,50 @@ namespace EstimatingLibrary
     public class TECHardwiredConnection : TECConnection, IControllerConnection
     {
         #region Properties
+        private TECController _parentController;
+
         public IConnectable Child { get; }
 
-        //---Derived---
-        public override List<TECConnectionType> ConnectionTypes
+        public List<TECConnectionType> ConnectionTypes { get; }
+
+        public TECController ParentController
         {
-            get
+            get { return _parentController; }
+            set
             {
-                return Child.RequiredConnectionTypes;
+                _parentController = value;
+                raisePropertyChanged("ParentController");
             }
         }
 
-        public override IOCollection IO
-        {
-            get
-            {
-                return Child.HardwiredIO;
-            }
-        }
+        public IOCollection IO => Child.HardwiredIO;
+        public override IProtocol Protocol => new TECHardwiredProtocol(ConnectionTypes);
+
+
         #endregion
 
         #region Constructors
-        public TECHardwiredConnection(Guid guid, IConnectable child, TECController controller, bool isTypical) : base(guid, controller, isTypical)
+        public TECHardwiredConnection(Guid guid, IConnectable child, TECController controller, TECHardwiredProtocol protocol, bool isTypical) : base(guid, isTypical)
         {
             Child = child;
+            ConnectionTypes = new List<TECConnectionType>(protocol.ConnectionTypes);
+            ParentController = controller;
             child.SetParentConnection(this);
         }
-        public TECHardwiredConnection(IConnectable child, TECController parent, bool isTypical) : this(Guid.NewGuid(), child, parent, isTypical) { }
+        public TECHardwiredConnection(IConnectable child, TECController parent, TECHardwiredProtocol protocol, bool isTypical) : this(Guid.NewGuid(), child, parent, protocol, isTypical) { }
         public TECHardwiredConnection(TECHardwiredConnection connectionSource, TECController parent, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) 
-            : base(connectionSource, parent, isTypical, guidDictionary)
+            : base(connectionSource, isTypical, guidDictionary)
         {
             Child = connectionSource.Child.Copy(isTypical, guidDictionary);
+            ParentController = parent;
+            ConnectionTypes = new List<TECConnectionType>(connectionSource.ConnectionTypes);
             Child.SetParentConnection(this);
         }
-        public TECHardwiredConnection(TECHardwiredConnection linkingSource, IConnectable child, bool isTypical) : base(linkingSource, linkingSource.ParentController, isTypical)
+        public TECHardwiredConnection(TECHardwiredConnection linkingSource, IConnectable child, bool isTypical) : base(linkingSource, isTypical)
         {
             Child = child;
+            ParentController = linkingSource.ParentController;
+            ConnectionTypes = linkingSource.ConnectionTypes;
             child.SetParentConnection(this);
             _guid = linkingSource.Guid;
         }
@@ -55,14 +63,16 @@ namespace EstimatingLibrary
         {
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.propertyObjects());
-            saveList.Add(this.Child as TECObject, "Child");
+            saveList.Add(this.Child, "Child");
+            saveList.AddRange(this.ConnectionTypes, "ConnectionTypes");
             return saveList;
         }
         protected override SaveableMap linkedObjects()
         {
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.linkedObjects());
-            saveList.Add(this.Child as TECObject, "Child");
+            saveList.Add(this.Child, "Child");
+            saveList.AddRange(this.ConnectionTypes, "ConnectionTypes");
             return saveList;
         }
         #endregion
