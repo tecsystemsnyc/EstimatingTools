@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary.Interfaces
 {
-    public interface IControllerConnection : IConnection
+    public interface IControllerConnection : IConnection, ITypicalable, INotifyCostChanged
     {
         TECController ParentController { get; }
         /// <summary>
