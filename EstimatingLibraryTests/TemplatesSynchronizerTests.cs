@@ -158,7 +158,9 @@ namespace EstimatingLibraryTests
             templates.EquipmentTemplates.Add(equip);
             equip.SubScope.Add(refSS);
 
-            TECDevice dev = new TECDevice(new List<TECConnectionType>(), new TECManufacturer());
+            TECDevice dev = new TECDevice(new List<TECConnectionType>(),
+                new List<TECProtocol>(),
+                new TECManufacturer());
             templates.Catalogs.Devices.Add(dev);
 
             TECPoint point = new TECPoint(false);
@@ -206,7 +208,9 @@ namespace EstimatingLibraryTests
             templates.EquipmentTemplates.Add(equip);
             equip.SubScope.Add(refSS);
 
-            TECDevice dev = new TECDevice(new List<TECConnectionType>(), new TECManufacturer());
+            TECDevice dev = new TECDevice(new List<TECConnectionType>(),
+                new List<TECProtocol>(),
+                new TECManufacturer());
             templates.Catalogs.Devices.Add(dev);
 
             TECPoint point = new TECPoint(false);
@@ -253,7 +257,9 @@ namespace EstimatingLibraryTests
             templates.SystemTemplates.Add(sys);
             sys.Equipment.Add(refEquip);
 
-            TECDevice dev = new TECDevice(new List<TECConnectionType>(), new TECManufacturer());
+            TECDevice dev = new TECDevice(new List<TECConnectionType>(),
+                new List<TECProtocol>(),
+                new TECManufacturer());
             templates.Catalogs.Devices.Add(dev);
 
             TECPoint point = new TECPoint(false);
@@ -319,7 +325,9 @@ namespace EstimatingLibraryTests
             templates.SystemTemplates.Add(sys);
             sys.Equipment.Add(refEquip);
 
-            TECDevice dev = new TECDevice(new List<TECConnectionType>(), new TECManufacturer());
+            TECDevice dev = new TECDevice(new List<TECConnectionType>(),
+                new List<TECProtocol>(),
+                new TECManufacturer());
             templates.Catalogs.Devices.Add(dev);
 
             TECPoint point = new TECPoint(false);
