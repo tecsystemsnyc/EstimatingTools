@@ -417,5 +417,10 @@ namespace EstimatingLibrary
             }
             return collection;
         }
+
+        public static IOCollection ToIOCollection(this TECProtocol protocol)
+        {
+            return new IOCollection(new List<TECIO> { new TECIO(protocol) });
+        }
     }
 }

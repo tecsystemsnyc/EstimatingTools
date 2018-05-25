@@ -36,13 +36,7 @@ namespace EstimatingLibrary
             }
         }
 
-        public IOCollection IO
-        {
-            get
-            {
-                return new IOCollection(new List<TECIO> { Protocol.ToIO() });
-            }
-        }
+        public IOCollection IO => protocol.ToIOCollection();
 
         public override IProtocol Protocol => protocol;
 
