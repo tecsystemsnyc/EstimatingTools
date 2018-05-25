@@ -146,5 +146,10 @@ namespace EstimatingLibrary
             }
             return relatedList;
         }
+
+
+        #region IControllerConnection
+
+        #endregion
     }
 }

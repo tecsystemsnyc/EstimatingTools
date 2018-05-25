@@ -42,6 +42,7 @@ namespace EstimatingLibrary
                 return new IOCollection(new List<TECIO> { Protocol.ToIO() });
             }
         }
+        
 
         #endregion
 
@@ -130,7 +131,6 @@ namespace EstimatingLibrary
                 objects.Add(netconnect as TECObject);
             }
             saveList.AddRange(objects, "Children");
-            saveList.Add(Protocol, "Protocol");
             return saveList;
         }
         protected override SaveableMap linkedObjects()
@@ -143,7 +143,6 @@ namespace EstimatingLibrary
                 objects.Add(netconnect as TECObject);
             }
             saveList.AddRange(objects, "Children");
-            saveList.Add(Protocol, "Protocol");
             return saveList;
         }
         

@@ -70,11 +70,6 @@ namespace EstimatingLibrary
             ConnectionTypes.CollectionChanged += connectionTypes_CollectionChanged;
         }
         public TECProtocol(IEnumerable<TECConnectionType> connectionTypes) : this(Guid.NewGuid(), connectionTypes) { }
-
-        public TECIO ToIO()
-        {
-            return new TECIO(this);
-        }
         
         private void connectionTypes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
