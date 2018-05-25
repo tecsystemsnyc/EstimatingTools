@@ -100,6 +100,7 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
         }
 
         public ObservableCollection<TECConnectionType> DeviceConnectionTypes { get; }
+        public ObservableCollection<TECProtocol> DeviceProtocols { get; }
         
         public ICommand AddDeviceCommand { get; }
         public ICommand DeleteDeviceCommand { get; }
@@ -107,6 +108,7 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
         public DevicesCatalogVM(TECTemplates templates, ReferenceDropper dropHandler) : base(templates, dropHandler)
         {
             this.DeviceConnectionTypes = new ObservableCollection<TECConnectionType>();
+            this.DeviceProtocols = new ObservableCollection<TECProtocol>();
 
             this.AddDeviceCommand = new RelayCommand(addDeviceExecute, canAddDevice);
             this.DeleteDeviceCommand = new RelayCommand(deleteDeviceExecute, canDeleteDevice);
@@ -114,7 +116,7 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
 
         private void addDeviceExecute()
         {
-            TECDevice toAdd = new TECDevice(DeviceConnectionTypes, DeviceManufacturer);
+            TECDevice toAdd = new TECDevice(DeviceConnectionTypes, DeviceProtocols, DeviceManufacturer);
             toAdd.Name = this.DeviceName;
             toAdd.Description = this.DeviceDescription;
             toAdd.Price = this.DeviceListPrice;
@@ -127,6 +129,7 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
             this.DeviceListPrice = 0;
             this.DeviceLabor = 0;
             this.DeviceConnectionTypes.ObservablyClear();
+            this.DeviceProtocols.ObservablyClear();
             this.DeviceManufacturer = null;
         }
         private bool canAddDevice()

@@ -252,7 +252,6 @@
     <Compile Include="ViewModels\CatalogVMs\IOModulesCatalogVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\ManufacturersCatalogVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\PanelTypesCatalogVM.cs" />
-    <Compile Include="ViewModels\CatalogVMs\ProtocolAdapaterCatalogVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\ProtocolsCatalogVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\TagsCatalogVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\ValvesCatalogVM.cs" />
@@ -292,9 +291,6 @@
     </Compile>
     <Compile Include="Views\CatalogViews\PanelTypesCatalogView.xaml.cs">
       <DependentUpon>PanelTypesCatalogView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\CatalogViews\ProtocolAdaptersCatalogView.xaml.cs">
-      <DependentUpon>ProtocolAdaptersCatalogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CatalogViews\ProtocolsCatalogView.xaml.cs">
       <DependentUpon>ProtocolsCatalogView.xaml</DependentUpon>
@@ -775,10 +771,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CatalogViews\PanelTypesCatalogView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\CatalogViews\ProtocolAdaptersCatalogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

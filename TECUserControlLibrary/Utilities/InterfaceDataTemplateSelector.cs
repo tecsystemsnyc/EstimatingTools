@@ -151,7 +151,6 @@ namespace TECUserControlLibrary.Utilities
         public DataTemplate ManufacturerTemplate { get; set; }
         public DataTemplate TagTemplate { get; set; }
         public DataTemplate ProtocolTemplate { get; set; }
-        public DataTemplate ProtocolAdapterTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
@@ -177,8 +176,6 @@ namespace TECUserControlLibrary.Utilities
                         return ValveTemplate;
                     case MaterialType.Protocol:
                         return ProtocolTemplate;
-                    case MaterialType.ProtocolAdapater:
-                        return ProtocolAdapterTemplate;
                     case MaterialType.Manufacturer:
                         return ManufacturerTemplate;
                     case MaterialType.Tag:

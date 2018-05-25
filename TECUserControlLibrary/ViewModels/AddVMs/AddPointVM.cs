@@ -35,18 +35,9 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             ToAdd.Quantity = 1;
 
             //Set the IOTypes that the user can use for the new Point.
-            //Old: PossibleTypes = parentSubScope.PossibleIOTypes();
-            //New:
-            if (((IConnectable)parentSubScope).IsNetwork)
-            {
-                PossibleTypes = new List<IOType>();
-            }
-            else
-            {
-                PossibleTypes = TECIO.PointIO;
-            }
-            
-            if(PossibleTypes.Count > 0)
+            PossibleTypes = TECIO.PointIO;
+
+            if (PossibleTypes.Count > 0)
             {
                 ToAdd.Type = PossibleTypes[0];
             }
@@ -65,7 +56,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 TECIO proposedIO = new TECIO(ToAdd.Type);
                 proposedIO.Quantity = ToAdd.Quantity;
                 bool containsIO = connection.ParentController.AvailableIO.Contains(proposedIO);
-                bool isNetworkIO = connection is TECNetworkConnection netConnect && netConnect.Protocol.ToIO().Type == ToAdd.Type;
+                bool isNetworkIO = connection is TECNetworkConnection netConnect;
                 return containsIO || isNetworkIO;
             }
         }
