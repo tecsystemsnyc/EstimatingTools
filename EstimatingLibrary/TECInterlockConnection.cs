@@ -10,11 +10,11 @@ namespace EstimatingLibrary
 {
     public class TECInterlockConnection : TECScope, IConnection, INotifyCostChanged, IRelatable
     {
-        private readonly TECConnection connection;
+        private readonly ConnectionWrapper connection;
         
         public TECInterlockConnection(Guid guid, IProtocol protocol, bool isTypical) : base(guid)
         {
-            this.connection = new TECConnection(guid, protocol, isTypical);
+            this.connection = new ConnectionWrapper(guid, protocol, isTypical);
             subscribeToConnection();
         }
 
@@ -22,7 +22,7 @@ namespace EstimatingLibrary
         { }
         public TECInterlockConnection(TECInterlockConnection source, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : base(source.Guid)
         {
-            this.connection = new TECConnection(source.connection, isTypical, guidDictionary);
+            this.connection = new ConnectionWrapper(source.connection, isTypical, guidDictionary);
             subscribeToConnection();
         }
 
@@ -67,5 +67,25 @@ namespace EstimatingLibrary
             return saveList;
         }
         #endregion
+
+        private class ConnectionWrapper : TECConnection
+        {
+            public override IProtocol Protocol { get; }
+
+            public ConnectionWrapper(IProtocol protocol, bool isTypical) : base(isTypical)
+            {
+                this.Protocol = protocol;
+            }
+
+            public ConnectionWrapper(Guid guid, IProtocol protocol, bool isTypical) : base(guid, isTypical)
+            {
+                this.Protocol = protocol;
+            }
+
+            public ConnectionWrapper(TECConnection connectionSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, isTypical, guidDictionary)
+            {
+                this.Protocol = connectionSource.Protocol;
+            }
+        }
     }
 }
