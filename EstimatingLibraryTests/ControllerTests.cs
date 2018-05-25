@@ -1,6 +1,8 @@
 ﻿using EstimatingLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using System.Linq;
+using Tests;
 
 namespace EstimatingLibraryTests
 {
@@ -10,10 +12,13 @@ namespace EstimatingLibraryTests
         [TestMethod]
         public void Controller_AddSubScope()
         {
+            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
             TECController controller = new TECController(new TECControllerType(new TECManufacturer()), false);
             TECSubScope subScope = new TECSubScope(false);
+            TECDevice dev = catalogs.Devices.First();
+            subScope.Devices.Add(dev);
 
-            controller.Connect(subScope);
+            controller.Connect(subScope, dev.PossibleProtocols.First());
 
             Assert.AreEqual(1, controller.ChildrenConnections.Count, "Connection not added to controller");
             Assert.AreNotEqual(null, subScope.Connection, "Connection not added to subscope");
@@ -22,10 +27,13 @@ namespace EstimatingLibraryTests
         [TestMethod]
         public void Controller_RemoveSubScope()
         {
+            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
             TECController controller = new TECController(new TECControllerType(new TECManufacturer()), false);
             TECSubScope subScope = new TECSubScope(false);
+            TECDevice dev = catalogs.Devices.First();
+            subScope.Devices.Add(dev);
 
-            controller.Connect(subScope);
+            controller.Connect(subScope, dev.PossibleProtocols.First());
             controller.Disconnect(subScope);
 
             Assert.AreEqual(0, controller.ChildrenConnections.Count, "Connection not removed from controller");

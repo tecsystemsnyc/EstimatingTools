@@ -4,6 +4,7 @@ using EstimatingLibrary.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using static Tests.CostTestingUtilities;
 
 namespace Tests
@@ -817,6 +818,8 @@ namespace Tests
             TECTypical system = new TECTypical();
             TECEquipment equipment = new TECEquipment(true);
             TECSubScope subScope = new TECSubScope(true);
+            TECDevice dev = bid.Catalogs.Devices.First();
+            subScope.Devices.Add(dev);
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
@@ -829,7 +832,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            IControllerConnection connection = controller.Connect(instanceSubScope);
+            IControllerConnection connection = controller.Connect(instanceSubScope, dev.PossibleProtocols.First());
 
             //Assert
             checkRaised(true, true, false, true);
@@ -845,6 +848,8 @@ namespace Tests
             TECTypical system = new TECTypical();
             TECEquipment equipment = new TECEquipment(true);
             TECSubScope subScope = new TECSubScope(true);
+            TECDevice dev = bid.Catalogs.Devices.First();
+            subScope.Devices.Add(dev);
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
@@ -855,7 +860,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            IControllerConnection connection = controller.Connect(subScope);
+            IControllerConnection connection = controller.Connect(subScope, dev.PossibleProtocols.First());
 
             //Assert
             checkRaised(false, false, false, false);
@@ -869,6 +874,8 @@ namespace Tests
             TECTypical system = new TECTypical();
             TECEquipment equipment = new TECEquipment(true);
             TECSubScope subScope = new TECSubScope(true);
+            TECDevice dev = bid.Catalogs.Devices.First();
+            subScope.Devices.Add(dev);
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
@@ -879,7 +886,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            IControllerConnection connection = controller.Connect(subScope);
+            IControllerConnection connection = controller.Connect(subScope, dev.PossibleProtocols.First());
 
             //Assert
             checkRaised(false, false, false, false);
@@ -893,6 +900,7 @@ namespace Tests
             TECTypical system = new TECTypical();
             TECEquipment equipment = new TECEquipment(true);
             TECSubScope subScope = new TECSubScope(true);
+            TECDevice dev = bid.Catalogs.Devices.First();
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
@@ -905,7 +913,7 @@ namespace Tests
             resetRaised();
 
             //Act
-            IControllerConnection connection = instanceController.Connect(instanceSubScope);
+            IControllerConnection connection = instanceController.Connect(instanceSubScope, dev.PossibleProtocols.First());
 
             //Assert
             checkRaised(true, true, false, true);
@@ -939,29 +947,6 @@ namespace Tests
             //Assert
             checkRaised(true, false, false, false);
             checkInstanceChangedArgs(Change.Add, "Children", netConnect, daisyController);
-        }
-
-        [TestMethod]
-        public void AddConnectionTypeToNetworkConnection()
-        {
-            //Arrange
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
-            bid.AddController(controller);
-            TECNetworkConnection connection = controller.AddNetworkConnection(bid.Catalogs.Protocols[0]);
-            TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
-            connection.Length = 10;
-
-            CostBatch connectionTypeCosts = connectionType.GetCosts(10);
-
-            resetRaised();
-
-            //Act
-            connection.ConnectionTypes.Add(connectionType);
-
-            //Assert
-            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false, instanceConstituentChanged: false);
-            checkChangedArgs(Change.Add, "ConnectionTypes", connection, connectionType);
-            checkCostDelta(connectionTypeCosts);
         }
         #endregion
 
@@ -1716,6 +1701,8 @@ namespace Tests
             TECTypical system = new TECTypical();
             TECEquipment equipment = new TECEquipment(true);
             TECSubScope subScope = new TECSubScope(true);
+            TECDevice dev = bid.Catalogs.Devices.First();
+            subScope.Devices.Add(dev);
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
@@ -1724,7 +1711,7 @@ namespace Tests
 
             TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.AddController(controller);
-            IControllerConnection connection = controller.Connect(instanceSubScope);
+            IControllerConnection connection = controller.Connect(instanceSubScope, dev.PossibleProtocols.First());
             connection.Length = 10;
             resetRaised();
 
@@ -1745,13 +1732,15 @@ namespace Tests
             TECTypical system = new TECTypical();
             TECEquipment equipment = new TECEquipment(true);
             TECSubScope subScope = new TECSubScope(true);
+            TECDevice dev = bid.Catalogs.Devices.First();
+            subScope.Devices.Add(dev);
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
 
             TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
             system.AddController(controller);
-            IControllerConnection connection = controller.Connect(subScope);
+            IControllerConnection connection = controller.Connect(subScope, dev.PossibleProtocols.First());
             connection.Length = 10;
             resetRaised();
 
@@ -1770,13 +1759,15 @@ namespace Tests
             TECTypical system = new TECTypical();
             TECEquipment equipment = new TECEquipment(true);
             TECSubScope subScope = new TECSubScope(true);
+            TECDevice dev = bid.Catalogs.Devices.First();
+            subScope.Devices.Add(dev);
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
 
             TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
             bid.AddController(controller);
-            IControllerConnection connection = controller.Connect(subScope);
+            IControllerConnection connection = controller.Connect(subScope, dev.PossibleProtocols.First());
             connection.Length = 10;
             resetRaised();
 
@@ -1795,6 +1786,8 @@ namespace Tests
             TECTypical system = new TECTypical();
             TECEquipment equipment = new TECEquipment(true);
             TECSubScope subScope = new TECSubScope(true);
+            TECDevice dev = bid.Catalogs.Devices.First();
+            subScope.Devices.Add(dev);
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], true);
@@ -1803,7 +1796,7 @@ namespace Tests
             TECSystem instance = system.AddInstance(bid);
             TECSubScope instanceSubScope = instance.Equipment[0].SubScope[0];
             TECController instanceController = instance.Controllers[0];
-            IControllerConnection connection = instanceController.Connect(instanceSubScope);
+            IControllerConnection connection = instanceController.Connect(instanceSubScope, dev.PossibleProtocols.First());
             connection.Length = 10;
             resetRaised();
 
@@ -1843,27 +1836,6 @@ namespace Tests
             //Assert
             checkRaised(true, false, false, false);
             checkInstanceChangedArgs(Change.Remove, "Children", netConnect, daisyController);
-        }
-
-        [TestMethod]
-        public void RemoveConnectionTypeFromNetworkConnection()
-        {
-            //Arrange
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
-            bid.AddController(controller);
-            TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
-            TECNetworkConnection connection = controller.AddNetworkConnection(bid.Catalogs.Protocols[0]);
-            connection.Length = 10;
-
-            resetRaised();
-
-            //Act
-            connection.ConnectionTypes.Remove(connectionType);
-
-            //Assert
-            checkRaised(instanceChanged: true, costChanged: true, pointChanged: false, instanceConstituentChanged: false);
-            checkInstanceChangedArgs(Change.Remove, "ConnectionTypes", connection, connectionType);
-            checkCostDelta(-connectionType.GetCosts(10));
         }
         #endregion
 
@@ -2300,7 +2272,7 @@ namespace Tests
             TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes[0];
 
             bid.Systems.Add(typical);
-            IControllerConnection connection = controller.Connect(ss);
+            IControllerConnection connection = controller.Connect(ss, dev.PossibleProtocols.First());
             connection.Length = 16.46;
             connection.ConduitLength = 81.64;
 
@@ -2331,7 +2303,7 @@ namespace Tests
             TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes[0];
 
             bid.Systems.Add(typical);
-            IControllerConnection connection = controller.Connect(ss);
+            IControllerConnection connection = controller.Connect(ss, dev.PossibleProtocols.First());
             connection.Length = 16.43;
             connection.ConduitLength = 74.13;
 
@@ -2618,7 +2590,7 @@ namespace Tests
             TECController typController = new TECController(bid.Catalogs.ControllerTypes[0], true);
             typical.AddController(typController);
 
-            typController.Connect(typSS);
+            typController.Connect(typSS, typDev.PossibleProtocols.First());
 
             TECSystem instance = typical.AddInstance(bid);
             IControllerConnection ssConnect = instance.Equipment[0].SubScope[0].Connection;
