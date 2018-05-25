@@ -1,5 +1,7 @@
 ﻿using EstimatingLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Tests
 {
@@ -73,17 +75,21 @@ namespace Tests
         public void AddRemoveSystemInstanceWithBidConnection()
         {
             var bid = new TECBid();
+            bid.Catalogs = TestHelper.CreateTestCatalogs();
             var bidController = new TECController(new TECControllerType(new TECManufacturer()), false);
             bid.AddController(bidController);
 
             var system = new TECTypical();
             var equipment = new TECEquipment(true);
             var subScope = new TECSubScope(true);
+            var dev = bid.Catalogs.Devices.First();
+            subScope.Devices.Add(dev);
             system.Equipment.Add(equipment);
             equipment.SubScope.Add(subScope);
-            bidController.Connect(subScope);
+            bidController.Connect(subScope, dev.PossibleProtocols.First());
             var instance = system.AddInstance(bid);
-            bidController.Connect(instance.GetAllSubScope()[0]);
+            var instanceSubScope = instance.GetAllSubScope().First();
+            bidController.Connect(instanceSubScope, instanceSubScope.Devices.First().ConnectionMethods.First());
             
             Assert.AreEqual(2, bidController.ChildrenConnections.Count, "Connection not added");
 
@@ -97,12 +103,15 @@ namespace Tests
         {
             //Arrange
             TECBid bid = new TECBid();
+            bid.Catalogs = TestHelper.CreateTestCatalogs();
             TECController controller = new TECController(new TECControllerType(new TECManufacturer()), false);
             bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
             TECEquipment equip = new TECEquipment(true);
             TECSubScope ss = new TECSubScope(true);
+            TECDevice dev = bid.Catalogs.Devices.First();
+            ss.Devices.Add(dev);
             typical.Equipment.Add(equip);
             equip.SubScope.Add(ss);
             bid.Systems.Add(typical);
@@ -110,7 +119,7 @@ namespace Tests
             TECSystem instance = typical.AddInstance(bid);
             TECSubScope instanceSS = instance.Equipment[0].SubScope[0];
 
-            controller.Connect(ss);
+            controller.Connect(ss, dev.PossibleProtocols.First());
 
             //Act
             controller.Disconnect(ss);
@@ -130,7 +139,7 @@ namespace Tests
             TECEquipment equipment = system.Equipment[0];
             TECSubScope subScope = new TECSubScope(false);
             equipment.SubScope.Add(subScope);
-            controller.Connect(subScope);
+            controller.Connect(subScope, new TECProtocol(new List<TECConnectionType> { bid.Catalogs.ConnectionTypes.First() }));
             bid.Systems.Add(system);
             TECSystem instance = system.AddInstance(bid);
             
