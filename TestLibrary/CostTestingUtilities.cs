@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 
 namespace Tests
 {
@@ -168,7 +169,7 @@ namespace Tests
             else if (connection is TECNetworkConnection netConn)
             {
                 
-                foreach(TECElectricalMaterial connType in netConn.ConnectionTypes)
+                foreach(TECElectricalMaterial connType in netConn.Protocol.ConnectionTypes)
                 {
                     total += CalculateTotal(connType, type) * connection.Length;
                     total += CalculateTotal(connType as TECScope, type);
