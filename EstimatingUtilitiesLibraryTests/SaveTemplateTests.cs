@@ -1,10 +1,13 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary.Database;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 
 namespace Tests
 {
@@ -725,6 +728,7 @@ namespace Tests
             types.Add(templates.Catalogs.ConnectionTypes[0]);
             TECDevice expectedDevice = new TECDevice(Guid.NewGuid(), 
                 types,
+                new List<TECProtocol>(),
                 templates.Catalogs.Manufacturers[0]);
             expectedDevice.Name = "New Device";
             expectedDevice.Description = "New Device desc";
@@ -750,7 +754,7 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
             Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost, DELTA);
-            Assert.AreEqual(expectedDevice.ConnectionTypes[0].Name, actualDevice.ConnectionTypes[0].Name);
+            Assert.AreEqual(expectedDevice.HardwiredConnectionTypes[0].Name, actualDevice.HardwiredConnectionTypes[0].Name);
         }
 
         [TestMethod]
@@ -853,7 +857,7 @@ namespace Tests
             var testConnectionType = new TECConnectionType();
             testConnectionType.Name = "Test Add Connection Type Device";
             templates.Catalogs.ConnectionTypes.Add(testConnectionType);
-            expectedDevice.ConnectionTypes.Add(testConnectionType);
+            expectedDevice.HardwiredConnectionTypes.Add(testConnectionType);
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
@@ -868,10 +872,10 @@ namespace Tests
             }
 
             //Assert
-            foreach(TECElectricalMaterial expectedConnectionType in expectedDevice.ConnectionTypes)
+            foreach(TECElectricalMaterial expectedConnectionType in expectedDevice.HardwiredConnectionTypes)
             {
                 bool found = false;
-                foreach(TECElectricalMaterial actualConnectionType in actualDevice.ConnectionTypes)
+                foreach(TECElectricalMaterial actualConnectionType in actualDevice.HardwiredConnectionTypes)
                 {
                     if (expectedConnectionType.Guid == actualConnectionType.Guid)
                     {
@@ -1978,7 +1982,7 @@ namespace Tests
             var scopeController = new TECController(templates.Catalogs.ControllerTypes[0], false);
             scopeController.Name = "Test Scope Controller";
             expectedScope.AddController(scopeController);
-            scopeController.Connect(scopeEquipment.SubScope[0]);
+            scopeController.Connect(scopeEquipment.SubScope[0], (scopeEquipment.SubScope[0] as IConnectable).AvailableProtocols.First());
 
             var scopePanel = new TECPanel(templates.Catalogs.PanelTypes[0], false);
             scopePanel.Name = "Test Scope Name";

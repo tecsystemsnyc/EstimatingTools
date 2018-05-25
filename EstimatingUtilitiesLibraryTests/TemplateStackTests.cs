@@ -4,6 +4,7 @@ using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Tests
@@ -147,7 +148,7 @@ namespace Tests
             }
             ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
             types.Add(Template.Catalogs.ConnectionTypes[0]);
-            TECDevice edit = new TECDevice(types,
+            TECDevice edit = new TECDevice(types, new List<TECProtocol>(),
                 Template.Catalogs.Manufacturers[0]);
 
             //Act
@@ -619,17 +620,17 @@ namespace Tests
             //Arrange
             var Template = TestHelper.CreateTestTemplates();
             var device = Template.Catalogs.Devices[0];
-            int expected = device.ConnectionTypes.Count;
+            int expected = device.HardwiredConnectionTypes.Count;
             TECConnectionType edit = Template.Catalogs.ConnectionTypes[0];
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            device.ConnectionTypes.Add(edit);
+            device.HardwiredConnectionTypes.Add(edit);
             //Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            int actual = device.ConnectionTypes.Count;
+            int actual = device.HardwiredConnectionTypes.Count;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -900,7 +901,7 @@ namespace Tests
             var Template = TestHelper.CreateTestTemplates();
             ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
             types.Add(Template.Catalogs.ConnectionTypes[0]);
-            TECDevice edit = new TECDevice(types,
+            TECDevice edit = new TECDevice(types, new List<TECProtocol>(),
                 Template.Catalogs.Manufacturers[0]);
 
             //Act
@@ -1162,7 +1163,7 @@ namespace Tests
             var Template = TestHelper.CreateTestTemplates();
             ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
             types.Add(Template.Catalogs.ConnectionTypes[0]);
-            TECDevice edit = new TECDevice(types,
+            TECDevice edit = new TECDevice(types, new List<TECProtocol>(),
                 Template.Catalogs.Manufacturers[0]);
 
             //Act

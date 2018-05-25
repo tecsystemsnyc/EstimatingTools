@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibraryTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -283,7 +284,7 @@ namespace Tests
             }
 
             bool foundConnectionType = false;
-            foreach (TECElectricalMaterial connectType in actualDevice.ConnectionTypes)
+            foreach (TECElectricalMaterial connectType in actualDevice.HardwiredConnectionTypes)
             {
                 if (connectType.Guid == connectionTypeGuid)
                 {
