@@ -392,7 +392,7 @@ namespace TECUserControlLibrary.ViewModels
             if (!connection.IsTypical)
             {
                 CostBatch deltas = new CostBatch();
-                foreach (TECElectricalMaterial connectionType in connection.ConnectionTypes)
+                foreach (TECElectricalMaterial connectionType in connection.Protocol.ConnectionTypes)
                 {
                     deltas += (WireSummaryVM.AddRun(connectionType, connection.Length));
                 }
@@ -511,7 +511,7 @@ namespace TECUserControlLibrary.ViewModels
         private CostBatch removeConnection(IControllerConnection connection)
         {
             CostBatch deltas = new CostBatch();
-            foreach (TECElectricalMaterial connectionType in connection.ConnectionTypes)
+            foreach (TECElectricalMaterial connectionType in connection.Protocol.ConnectionTypes)
             {
                 deltas += (WireSummaryVM.RemoveRun(connectionType, connection.Length));
             }

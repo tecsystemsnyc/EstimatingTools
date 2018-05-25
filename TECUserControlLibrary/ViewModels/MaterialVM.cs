@@ -63,7 +63,6 @@ namespace TECUserControlLibrary.ViewModels
         public TagsCatalogVM TagVM { get; }
         public MiscCostsVM MiscVM { get; }
         public ProtocolsCatalogVM ProtocolVM { get; }
-        public ProtocolAdapaterCatalogVM ProtocolAdapterVM { get; }
 
         private ViewModelBase _modalVM;
         public ViewModelBase ModalVM
@@ -97,7 +96,6 @@ namespace TECUserControlLibrary.ViewModels
             subscribeToVM(ManufacturerVM = new ManufacturersCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(TagVM = new TagsCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(MiscVM = new MiscCostsVM(templates));
-            subscribeToVM(ProtocolAdapterVM = new ProtocolAdapaterCatalogVM(templates, ReferenceDropHandler));
             subscribeToVM(ProtocolVM = new ProtocolsCatalogVM(templates, ReferenceDropHandler));
         }
         

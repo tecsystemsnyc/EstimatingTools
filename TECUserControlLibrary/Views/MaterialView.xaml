@@ -127,11 +127,6 @@
                         <catalogViews:ProtocolsCatalogView
                             VM="{Binding ElementName=materialView, Path=ViewModel.ProtocolVM}"/>
                     </DataTemplate>
-                    <!--Protocol Adapters-->
-                    <DataTemplate x:Key="ProtocolAdapterTemplate">
-                        <catalogViews:ProtocolAdaptersCatalogView
-                            VM="{Binding ElementName=materialView, Path=ViewModel.ProtocolAdapterVM}"/>
-                    </DataTemplate>
                     <!--Manufacturers-->
                     <DataTemplate x:Key="ManufacturerTemplate">
                         <catalogViews:ManufacturersCatalogView
@@ -153,8 +148,7 @@
                                                     ValveTemplate="{StaticResource ValveTemplate}"
                                                     ManufacturerTemplate="{StaticResource ManufacturerTemplate}"
                                                     TagTemplate="{StaticResource TagTemplate}"
-                                                    ProtocolTemplate="{StaticResource ProtocolTemplate}"
-                                                    ProtocolAdapterTemplate="{StaticResource ProtocolAdapterTemplate}"/>
+                                                    ProtocolTemplate="{StaticResource ProtocolTemplate}"/>
                 </ResourceDictionary>
             </Grid.Resources>
             <ComboBox x:Name="MaterialComboBox" ItemsSource="{Binding Source={x:Static utilities:UIHelpers.MaterialSelectorList}}"
