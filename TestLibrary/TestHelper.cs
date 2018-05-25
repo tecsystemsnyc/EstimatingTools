@@ -4,6 +4,7 @@ using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Tests
 {
@@ -174,7 +175,7 @@ namespace Tests
             subScope2.Points.Add(point2);
 
             //Connections
-            IControllerConnection testConnection = expectedController.Connect(system1.GetInstancesFromTypical(subScope1)[0]);
+            IControllerConnection testConnection = expectedController.Connect(system1.GetInstancesFromTypical(subScope1)[0], (subScope1 as IConnectable).AvailableProtocols.First());
             testConnection.ConduitType = bid.Catalogs.ConduitTypes[0];
             testConnection.Length = 42;
 
@@ -284,14 +285,14 @@ namespace Tests
             //Devices
             ObservableCollection<TECConnectionType> contypes2 = new ObservableCollection<TECConnectionType>();
             contypes2.Add(testDevConnType);
-            TECDevice testDev = new TECDevice(Guid.NewGuid(), contypes2, testDevMan);
+            TECDevice testDev = new TECDevice(Guid.NewGuid(), contypes2, new List<TECProtocol>(), testDevMan);
             testDev.Name = "Test Device";
             testDev.Description = "Device Description";
             testDev.Price = 20.3;
 
             ObservableCollection<TECConnectionType> contypes3 = new ObservableCollection<TECConnectionType>();
             contypes3.Add(childDevConnType);
-            TECDevice childDev = new TECDevice(Guid.NewGuid(), contypes3, childDevMan);
+            TECDevice childDev = new TECDevice(Guid.NewGuid(), contypes3, new List<TECProtocol>(), childDevMan);
             childDev.Name = "Child Device";
             childDev.Description = "Child Device Description";
             childDev.Price = 54.1;
@@ -519,7 +520,7 @@ namespace Tests
             //Devices
             ObservableCollection<TECConnectionType> contypes4 = new ObservableCollection<TECConnectionType>();
             contypes4.Add(connectionType1);
-            TECDevice device1 = new TECDevice(Guid.NewGuid(), contypes4, manufacturer1);
+            TECDevice device1 = new TECDevice(Guid.NewGuid(), contypes4, new List<TECProtocol>(), manufacturer1);
             device1.Name = "Device 1";
             device1.Description = "Description 1";
             device1.Price = 64.96;
@@ -574,7 +575,8 @@ namespace Tests
             outCatalogs.PanelTypes.Add(otherPanelType);
 
             //Valves
-            TECDevice actuator = new TECDevice(new ObservableCollection<TECConnectionType>() { connectionType1 },
+            TECDevice actuator = new TECDevice(new ObservableCollection<TECConnectionType>() { connectionType1 }, 
+                new List<TECProtocol>(),
                 manufacturer1);
             actuator.Name = "actuator";
             outCatalogs.Devices.Add(actuator);
@@ -629,7 +631,7 @@ namespace Tests
                 assCosts.Add(catalogs.AssociatedCosts[0]);
             }
 
-            TECDevice device = new TECDevice(connectionTypes, manufacturer);
+            TECDevice device = new TECDevice(connectionTypes, new List<TECProtocol>(), manufacturer);
             device.Price = cost;
             device.AssociatedCosts = assCosts;
             device.Tags.Add(catalogs.Tags[0]);
@@ -748,7 +750,7 @@ namespace Tests
         {
             foreach(TECSubScope subscope in equipment.SubScope)
             {
-                controller.Connect(subscope);
+                controller.Connect(subscope, (subscope as IConnectable).AvailableProtocols.First());
             }
         }
 
@@ -923,7 +925,7 @@ namespace Tests
             return false;
         }
 
-        public static TECObject ObjectWithGuid(Guid guid, TECBid bid)
+        public static ITECObject ObjectWithGuid(Guid guid, TECBid bid)
         {
             if(bid.Guid == guid)
             {
