@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
 using EstimatingUtilitiesLibrary.Database;
@@ -6,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace EstimatingUtilitiesLibraryTests
 {
@@ -911,7 +913,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
-            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             subScope.Devices.Add(device);
 
             Dictionary < string, string> data = new Dictionary<string, string>();
@@ -943,7 +945,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             ChangeWatcher watcher = new ChangeWatcher(bid);
             DeltaStacker stack = new DeltaStacker(watcher, bid);
-            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             subScope.Devices.Add(device);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
@@ -978,7 +980,7 @@ namespace EstimatingUtilitiesLibraryTests
             system.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
-            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             bid.Catalogs.Devices.Add(device);
             subScope.Devices.Add(device);
 
@@ -1060,7 +1062,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
-            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             TECValve valve = new TECValve(new TECManufacturer(), device);
             subScope.Devices.Add(valve);
 
@@ -1093,7 +1095,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             ChangeWatcher watcher = new ChangeWatcher(bid);
             DeltaStacker stack = new DeltaStacker(watcher, bid);
-            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             TECValve valve = new TECValve(new TECManufacturer(), device);
             subScope.Devices.Add(valve);
 
@@ -1129,7 +1131,7 @@ namespace EstimatingUtilitiesLibraryTests
             system.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
-            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             TECValve valve = new TECValve(new TECManufacturer(), device);
             bid.Catalogs.Devices.Add(device);
             bid.Catalogs.Valves.Add(valve);
@@ -1745,9 +1747,9 @@ namespace EstimatingUtilitiesLibraryTests
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
-            TECController child = new TECController(type, false);
+            IConnectable child = new TECController(type, false);
             bid.AddController(controller);
-            bid.AddController(child);
+            bid.AddController(child as TECController);
 
             TECConnectionType connectionType = new TECConnectionType();
 
@@ -1756,7 +1758,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            IControllerConnection connection = controller.Connect(child);
+            IControllerConnection connection = controller.Connect(child, child.AvailableProtocols.First());
 
             Dictionary<string, string> data;
 
@@ -1817,7 +1819,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            IControllerConnection connection = controller.Connect(instanceController);
+            IControllerConnection connection = controller.Connect(instanceController, (instanceController as IConnectable).AvailableProtocols.First());
 
             Dictionary<string, string> data;
 
@@ -1883,7 +1885,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            IControllerConnection connection = instanceController.Connect(otherInstanceController);
+            IControllerConnection connection = instanceController.Connect(otherInstanceController, otherInstanceController.AvailableProtocols.First());
 
             Dictionary<string, string> data;
 
@@ -1942,7 +1944,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            IControllerConnection connection = controller.Connect(subScope);
+            IControllerConnection connection = controller.Connect(subScope, (subScope as IConnectable).AvailableProtocols.First());
 
             Dictionary<string, string> data;
 
@@ -1995,7 +1997,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            IControllerConnection connection = controller.Connect(instanceSubScope);
+            IControllerConnection connection = controller.Connect(instanceSubScope, (instanceSubScope as IConnectable).AvailableProtocols.First());
 
             Dictionary<string, string> data;
 
@@ -2046,7 +2048,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            IControllerConnection connection = controller.Connect(subScope);
+            IControllerConnection connection = controller.Connect(subScope, (subScope as IConnectable).AvailableProtocols.First());
 
             Dictionary<string, string> data;
 
@@ -2101,8 +2103,8 @@ namespace EstimatingUtilitiesLibraryTests
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            IControllerConnection connection = controller.Connect(subScope);
-            IControllerConnection instanceConnection = instanceController.Connect(instanceSubScope);
+            IControllerConnection connection = controller.Connect(subScope, (subScope as IConnectable).AvailableProtocols.First());
+            IControllerConnection instanceConnection = instanceController.Connect(instanceSubScope, (instanceSubScope as IConnectable).AvailableProtocols.First());
             Dictionary<string, string> data;
             
             data = new Dictionary<string, string>();
@@ -2934,7 +2936,7 @@ namespace EstimatingUtilitiesLibraryTests
             system.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
-            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             subScope.Devices.Add(device);
 
             //Act
@@ -2964,7 +2966,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
             TECSystem instance = system.AddInstance(bid);
-            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             bid.Catalogs.Devices.Add(device);
             subScope.Devices.Add(device);
 
@@ -3000,7 +3002,7 @@ namespace EstimatingUtilitiesLibraryTests
             system.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
-            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             bid.Catalogs.Devices.Add(device);
             subScope.Devices.Add(device);
             TECSystem instance = system.AddInstance(bid);
@@ -3068,7 +3070,7 @@ namespace EstimatingUtilitiesLibraryTests
             system.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
-            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             TECValve valve = new TECValve(new TECManufacturer(), device);
             subScope.Devices.Add(valve);
 
@@ -3099,7 +3101,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
             TECSystem instance = system.AddInstance(bid);
-            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             TECValve valve = new TECValve(new TECManufacturer(), device);
             bid.Catalogs.Devices.Add(device);
             bid.Catalogs.Valves.Add(valve);
@@ -3137,7 +3139,7 @@ namespace EstimatingUtilitiesLibraryTests
             system.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
-            TECDevice device = new TECDevice(new ObservableCollection<TECConnectionType>(), new TECManufacturer());
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             TECValve valve = new TECValve(new TECManufacturer(), device);
             bid.Catalogs.Devices.Add(device);
             bid.Catalogs.Valves.Add(valve);
@@ -3695,7 +3697,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.AddController(child);
 
             TECConnectionType connectionType = new TECConnectionType();
-            IControllerConnection connection = controller.Connect(child);
+            IControllerConnection connection = controller.Connect(child, child.AvailableProtocols.First());
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -3752,7 +3754,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECController instanceController = system.Controllers[0];
 
             TECConnectionType connectionType = new TECConnectionType();
-            IControllerConnection connection = controller.Connect(instanceController);
+            IControllerConnection connection = controller.Connect(instanceController, instanceController.AvailableProtocols.First());
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -3813,7 +3815,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECController otherInstanceController = otherSystem.Controllers[0];
 
             TECConnectionType connectionType = new TECConnectionType();
-            IControllerConnection connection = instanceController.Connect(otherInstanceController);
+            IControllerConnection connection = instanceController.Connect(otherInstanceController, otherInstanceController.AvailableProtocols.First());
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
 
@@ -3867,7 +3869,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
             bid.Systems.Add(typical);
-            IControllerConnection connection = controller.Connect(subScope);
+            IControllerConnection connection = controller.Connect(subScope, (subScope as IConnectable).AvailableProtocols.First());
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -3918,7 +3920,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.Systems.Add(typical);
             TECSystem system = typical.AddInstance(bid);
             TECSubScope instanceSubScope = system.Equipment[0].SubScope[0];
-            IControllerConnection connection = controller.Connect(instanceSubScope);
+            IControllerConnection connection = controller.Connect(instanceSubScope, (instanceSubScope as IConnectable).AvailableProtocols.First());
 
 
             //Act
@@ -3969,7 +3971,7 @@ namespace EstimatingUtilitiesLibraryTests
             equipment.SubScope.Add(subScope);
             bid.Systems.Add(typical);
 
-            IControllerConnection connection = controller.Connect(subScope);
+            IControllerConnection connection = controller.Connect(subScope, (subScope as IConnectable).AvailableProtocols.First());
 
 
             //Act
@@ -4024,8 +4026,8 @@ namespace EstimatingUtilitiesLibraryTests
             TECSubScope instanceSubScope = system.Equipment[0].SubScope[0];
             TECController instanceController = system.Controllers[0];
 
-            IControllerConnection connection = controller.Connect(subScope);
-            IControllerConnection instanceConnection = instanceController.Connect(instanceSubScope);
+            IControllerConnection connection = controller.Connect(subScope, (subScope as IConnectable).AvailableProtocols.First());
+            IControllerConnection instanceConnection = instanceController.Connect(instanceSubScope, (instanceSubScope as IConnectable).AvailableProtocols.First());
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -4305,7 +4307,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECManufacturer newManufacturer = new TECManufacturer();
             bid.Catalogs.Manufacturers.Add(originalManufacturer);
             bid.Catalogs.Manufacturers.Add(newManufacturer);
-            TECDevice device = new TECDevice(new List<TECConnectionType>(), originalManufacturer);
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), originalManufacturer);
             subScope.Devices.Add(device);
 
             //Act

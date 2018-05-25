@@ -33,7 +33,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECManufacturer testMan = new TECManufacturer();
             templates.Catalogs.Manufacturers.Add(testMan);
 
-            TECDevice testDevice = new TECDevice(new List<TECConnectionType>(), testMan);
+            TECDevice testDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), testMan);
             templates.Catalogs.Devices.Add(testDevice);
 
             TECPoint testPoint = new TECPoint(false);
@@ -145,7 +145,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECManufacturer testMan = new TECManufacturer();
             templates.Catalogs.Manufacturers.Add(testMan);
 
-            TECDevice testDevice = new TECDevice(new List<TECConnectionType>(), testMan);
+            TECDevice testDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), testMan);
             templates.Catalogs.Devices.Add(testDevice);
 
             TECPoint testPoint = new TECPoint(false);
@@ -437,7 +437,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECManufacturer testMan = new TECManufacturer();
             templates.Catalogs.Manufacturers.Add(testMan);
 
-            TECDevice testDevice = new TECDevice(new List<TECConnectionType>(), testMan);
+            TECDevice testDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), testMan);
             templates.Catalogs.Devices.Add(testDevice);
 
             TECSubScope templateSS = new TECSubScope(false);
@@ -492,7 +492,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECManufacturer testMan = new TECManufacturer();
             templates.Catalogs.Manufacturers.Add(testMan);
 
-            TECDevice testDevice = new TECDevice(new List<TECConnectionType>(), testMan);
+            TECDevice testDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), testMan);
             templates.Catalogs.Devices.Add(testDevice);
 
             TECSubScope templateSS = new TECSubScope(false);

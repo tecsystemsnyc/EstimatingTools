@@ -606,7 +606,7 @@ namespace Tests
             }
 
             bool foundConnectionType = false;
-            foreach(TECElectricalMaterial connectType in actualDevice.ConnectionTypes)
+            foreach(TECElectricalMaterial connectType in actualDevice.HardwiredConnectionTypes)
             {
                 if (connectType.Guid == connectionTypeGuid)
                 {
@@ -989,7 +989,7 @@ namespace Tests
             }
 
             bool foundConnectionType = false;
-            foreach (TECElectricalMaterial type in actualNetConnect.ConnectionTypes)
+            foreach (TECElectricalMaterial type in actualNetConnect.Protocol.ConnectionTypes)
             {
                 if (type.Guid == expectedConnectionTypeGuid)
                 {
@@ -1044,7 +1044,7 @@ namespace Tests
             }
 
             bool foundConnectionType = false;
-            foreach (TECElectricalMaterial type in actualNetConnect.ConnectionTypes)
+            foreach (TECElectricalMaterial type in actualNetConnect.Protocol.ConnectionTypes)
             {
                 if (type.Guid == expectedConnectionTypeGuid)
                 {
@@ -1106,7 +1106,7 @@ namespace Tests
             }
 
             bool foundConnectionType = false;
-            foreach (TECElectricalMaterial type in actualNetConnect.ConnectionTypes)
+            foreach (TECElectricalMaterial type in actualNetConnect.Protocol.ConnectionTypes)
             {
                 if (type.Guid == expectedConnectionTypeGuid)
                 {
@@ -1166,7 +1166,7 @@ namespace Tests
             }
 
             bool foundConnectionType = false;
-            foreach(TECElectricalMaterial type in actualNetConnect.ConnectionTypes)
+            foreach(TECElectricalMaterial type in actualNetConnect.Protocol.ConnectionTypes)
             {
                 if(type.Guid == expectedConnectionTypeGuid)
                 {

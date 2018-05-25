@@ -4,6 +4,7 @@ using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Tests
@@ -728,7 +729,7 @@ namespace Tests
             }
             ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
             types.Add(Bid.Catalogs.ConnectionTypes[0]);
-            TECDevice edit = new TECDevice(types, Bid.Catalogs.Manufacturers[0]);
+            TECDevice edit = new TECDevice(types, new List<TECProtocol>(), Bid.Catalogs.Manufacturers[0]);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -1532,7 +1533,7 @@ namespace Tests
             var Bid = TestHelper.CreateTestBid();
             ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
             types.Add(Bid.Catalogs.ConnectionTypes[0]);
-            TECDevice edit = new TECDevice(types, Bid.Catalogs.Manufacturers[0]);
+            TECDevice edit = new TECDevice(types, new List<TECProtocol>(), Bid.Catalogs.Manufacturers[0]);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);

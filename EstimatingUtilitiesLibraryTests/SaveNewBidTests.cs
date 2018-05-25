@@ -473,10 +473,10 @@ namespace Tests
             Assert.AreEqual(expectedQuantity, actualQuantity);
             Assert.AreEqual(expectedDevice.Price, actualDevice.Price);
 
-            foreach (TECElectricalMaterial expectedConnectionType in expectedDevice.ConnectionTypes)
+            foreach (TECElectricalMaterial expectedConnectionType in expectedDevice.HardwiredConnectionTypes)
             {
                 bool found = false;
-                foreach (TECElectricalMaterial actualConnectionType in actualDevice.ConnectionTypes)
+                foreach (TECElectricalMaterial actualConnectionType in actualDevice.HardwiredConnectionTypes)
                 {
                     if (actualConnectionType.Guid == expectedConnectionType.Guid)
                     {
@@ -837,14 +837,14 @@ namespace Tests
             foreach(KeyValuePair<Guid, CostBatch> pair in saveCostDictionary.Reverse()){
                 if (!loadCostDictionary.ContainsKey(pair.Key))
                 {
-                    TECObject lost = TestHelper.ObjectWithGuid(pair.Key, saveBid);
+                    ITECObject lost = TestHelper.ObjectWithGuid(pair.Key, saveBid);
                     Assert.Fail("Guid not found with cost: " + lost.Guid);
                 }
                 else
                 {
                     CostBatch saveCost = pair.Value;
                     CostBatch loadCost = loadCostDictionary[pair.Key];
-                    TECObject item = TestHelper.ObjectWithGuid(pair.Key, LoadBid);
+                    ITECObject item = TestHelper.ObjectWithGuid(pair.Key, LoadBid);
                     Assert.IsTrue(compareCosts(saveCost, loadCost), "Loaded value not correct: " + item);
                 }
             }
@@ -873,7 +873,6 @@ namespace Tests
                     {
                         addToCost(costDictionary, child, referenceBid);
                     }
-
                 }
             }
         } 

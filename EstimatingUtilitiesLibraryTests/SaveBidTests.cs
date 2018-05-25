@@ -980,7 +980,7 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
             Assert.AreEqual(expectedQuantity, actualQuantity);
             Assert.AreEqual(expectedDevice.Price, actualDevice.Price);
-            Assert.AreEqual(expectedDevice.ConnectionTypes.Count, actualDevice.ConnectionTypes.Count);
+            Assert.AreEqual(expectedDevice.HardwiredConnectionTypes.Count, actualDevice.HardwiredConnectionTypes.Count);
         }
 
         [TestMethod]

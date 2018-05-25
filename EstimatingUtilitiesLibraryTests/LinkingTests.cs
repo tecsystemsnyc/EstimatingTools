@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibraryTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -51,7 +52,7 @@ namespace Tests
         {
             foreach(TECDevice device in bid.Catalogs.Devices)
             {
-                foreach(TECConnectionType connectionType in device.ConnectionTypes)
+                foreach(TECConnectionType connectionType in device.HardwiredConnectionTypes)
                 {
                     if (!bid.Catalogs.ConnectionTypes.Contains(connectionType))
                     {
@@ -218,7 +219,7 @@ namespace Tests
         {
             foreach(TECTypical typical in bid.Systems)
             {
-                ObservableListDictionary<TECObject> list = typical.TypicalInstanceDictionary;
+                ObservableListDictionary<ITECObject> list = typical.TypicalInstanceDictionary;
                 int scopeFound = 0;
                 foreach(TECEquipment equip in typical.Equipment)
                 {
@@ -269,7 +270,7 @@ namespace Tests
         {
             foreach(TECTypical typical in bid.Systems)
             {
-                ObservableListDictionary<TECObject> list = typical.TypicalInstanceDictionary;
+                ObservableListDictionary<ITECObject> list = typical.TypicalInstanceDictionary;
                 foreach (TECSystem instance in typical.Instances)
                 {
                     int scopeFound = 0;
