@@ -54,7 +54,7 @@ namespace EstimatingLibrary
 
         //Copy Constructor
         public TECEquipment(TECEquipment equipmentSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableListDictionary<TECObject> characteristicReference = null, TemplateSynchronizer<TECSubScope> ssSynchronizer = null) : this(isTypical)
+            ObservableListDictionary<ITECObject> characteristicReference = null, TemplateSynchronizer<TECSubScope> ssSynchronizer = null) : this(isTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = equipmentSource.Guid; }

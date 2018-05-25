@@ -432,7 +432,6 @@ namespace EstimatingUtilitiesLibrary.Database
             catalogs.Tags = getObjectsFromTable(new TagTable(), id => new TECTag(id)).ToOC();
             Dictionary<Guid, List<TECConnectionType>> protocolConnectionType = getOneToManyRelationships(new ProtocolConnectionTypeTable(), catalogs.ConnectionTypes);
             catalogs.Protocols = getObjectsFromTable(new ProtocolTable(), id => new TECProtocol(id, protocolConnectionType[id])).ToOC();
-            Dictionary<Guid, TECProtocol> adapterProtocols = getOneToOneRelationships(new ProtocolAdapterProtocolTable(), catalogs.Protocols);
 
             List<TECIO> io = getObjectsFromTable(new IOTable(), getIOFromRow).ToList();
             Dictionary<Guid, TECProtocol> ioProtocol = getOneToOneRelationships(new IOProtocolTable(), catalogs.Protocols);

@@ -242,7 +242,7 @@ namespace EstimatingUtilitiesLibrary
             cell.DataType = new EnumValue<CellValues>(CellValues.String);
 
             double length = 0;
-            foreach (TECElectricalMaterial type in subScope.SubScope.ConnectionTypes)
+            foreach (TECElectricalMaterial type in subScope.SubScope.Connection.Protocol.ConnectionTypes)
             {
                 length += subScope.SubScope.Connection.Length;
             }

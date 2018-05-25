@@ -40,7 +40,7 @@ namespace EstimatingLibrary
         public TECSystem(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
 
         public TECSystem(TECSystem source, bool isTypical, TECScopeManager manager, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableListDictionary<TECObject> characteristicReference = null, Tuple<TemplateSynchronizer<TECEquipment>, TemplateSynchronizer<TECSubScope>> synchronizers = null) : this(isTypical)
+            ObservableListDictionary<ITECObject> characteristicReference = null, Tuple<TemplateSynchronizer<TECEquipment>, TemplateSynchronizer<TECSubScope>> synchronizers = null) : this(isTypical)
         {
             if (guidDictionary == null)
             { guidDictionary = new Dictionary<Guid, Guid>();  }

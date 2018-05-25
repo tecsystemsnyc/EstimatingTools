@@ -97,7 +97,7 @@ namespace EstimatingLibrary
 
         //Copy Constructor
         public TECSubScope(TECSubScope sourceSubScope, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableListDictionary<TECObject> characteristicReference = null) : this(isTypical)
+            ObservableListDictionary<ITECObject> characteristicReference = null) : this(isTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = sourceSubScope.Guid; }
