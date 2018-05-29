@@ -1,8 +1,11 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using TECUserControlLibrary.ViewModels;
 using static Tests.CostTestingUtilities;
 
@@ -443,20 +446,21 @@ namespace Tests
 
             ObservableCollection<TECConnectionType> connectionTypes = new ObservableCollection<TECConnectionType>();
             connectionTypes.Add(bid.Catalogs.ConnectionTypes[0]);
-            TECDevice dev = new TECDevice(connectionTypes, bid.Catalogs.Manufacturers[0]);
+            TECDevice dev = new TECDevice(connectionTypes, new List<TECProtocol>(), bid.Catalogs.Manufacturers[0]);
             bid.Catalogs.Devices.Add(dev);
             typSS.Devices.Add(dev);
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
             //Act
-            IControllerConnection connection = controller.Connect(typSS);
+            IControllerConnection connection = controller.Connect(typSS, (typSS as IConnectable).AvailableProtocols.First());
             connection.Length = 50;
             connection.ConduitLength = 50;
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];
 
             TECSystem instance = typical.AddInstance(bid);
-            IControllerConnection instanceConnection = controller.Connect(instance.GetAllSubScope()[0]);
+            TECSubScope instanceSubScope = instance.GetAllSubScope()[0];
+            IControllerConnection instanceConnection = controller.Connect(instanceSubScope, (instanceSubScope as IConnectable).AvailableProtocols.First());
             instanceConnection.Length = 50;
             instanceConnection.ConduitLength = 50;
             instanceConnection.ConduitType = bid.Catalogs.ConduitTypes[0];
@@ -921,7 +925,8 @@ namespace Tests
             
             TECSystem instance = typical.AddInstance(bid);
 
-            IControllerConnection connection = controller.Connect(instance.GetAllSubScope()[0]);
+            TECSubScope instanceSubScope = instance.GetAllSubScope()[0];
+            IControllerConnection connection = controller.Connect(instanceSubScope, (instanceSubScope as IConnectable).AvailableProtocols.First());
             connection.Length = 50;
             connection.ConduitLength = 50;
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];
@@ -979,7 +984,7 @@ namespace Tests
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
             //Act
-            IControllerConnection connection = controller.Connect(ss);
+            IControllerConnection connection = controller.Connect(ss, (ss as IConnectable).AvailableProtocols.First());
             connection.Length = 100;
             connection.ConduitLength = 100;
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];

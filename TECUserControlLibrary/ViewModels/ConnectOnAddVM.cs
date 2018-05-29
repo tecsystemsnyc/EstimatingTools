@@ -132,9 +132,10 @@ namespace TECUserControlLibrary.ViewModels
         {
             if (Connect && SelectedController != null)
             {
+                IProtocol protocol = (finalToConnect as IConnectable).AvailableProtocols.First();
                 if (parent is TECTypical typical)
                 {
-                    List<IControllerConnection> connections = typical.CreateTypicalAndInstanceConnections(SelectedController, finalToConnect);
+                    List<IControllerConnection> connections = typical.CreateTypicalAndInstanceConnections(SelectedController, finalToConnect, protocol);
                     foreach (IControllerConnection conn in connections)
                     {
                         setConnectionProperties(conn);
@@ -149,7 +150,8 @@ namespace TECUserControlLibrary.ViewModels
         
         private void connectControllerToSubScope(TECController controller, TECSubScope finalToConnect)
         {
-            IControllerConnection connection = controller.Connect(finalToConnect);
+            IProtocol protocol = (finalToConnect as IConnectable).AvailableProtocols.First();
+            IControllerConnection connection = controller.Connect(finalToConnect, protocol);
             setConnectionProperties(connection);
         }
         public bool CanConnect()

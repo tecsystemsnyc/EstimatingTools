@@ -7,6 +7,8 @@ using TECUserControlLibrary.ViewModels.SummaryVMs;
 using EstimatingLibrary.Utilities;
 using EstimatingLibrary;
 using TECUserControlLibrary.Models;
+using EstimatingLibrary.Interfaces;
+using System.Linq;
 
 namespace TECUserControlLibraryTests
 {
@@ -131,7 +133,7 @@ namespace TECUserControlLibraryTests
             TECController otherController = new TECController(controllerType, true);
             otherController.Name = "Other Controller";
             typical.AddController(otherController);
-            IControllerConnection connection = controller.Connect(connected);
+            IControllerConnection connection = controller.Connect(connected, (connected as IConnectable).AvailableProtocols.First());
             connection.Length = 10;
             connection.ConduitLength = 20;
             connection.ConduitType = bid.Catalogs.ConduitTypes[1];

@@ -584,7 +584,7 @@ namespace TECUserControlLibrary.ViewModels
                     
                     if (sub.Connection != null)
                     {
-                        foreach(TECElectricalMaterial connectionType in endDev.ConnectionTypes)
+                        foreach(TECElectricalMaterial connectionType in sub.Connection.Protocol.ConnectionTypes)
                         {
                             updateTotals(WireSummaryVM.AddRun(connectionType, sub.Connection.Length));
                         }
@@ -653,7 +653,7 @@ namespace TECUserControlLibrary.ViewModels
                     
                     if (sub.Connection != null)
                     {
-                        foreach(TECElectricalMaterial connectionType in endDev.ConnectionTypes)
+                        foreach(TECElectricalMaterial connectionType in sub.Connection.Protocol.ConnectionTypes)
                         {
                             updateTotals(WireSummaryVM.AddRun(connectionType, sub.Connection.Length));
                         }
@@ -684,7 +684,7 @@ namespace TECUserControlLibrary.ViewModels
                     if (args.PropertyName == "Length")
                     {
                         double deltaLength = (double)args.Value - (double)args.OldValue;
-                        foreach (TECElectricalMaterial connectionType in connection.ConnectionTypes)
+                        foreach (TECElectricalMaterial connectionType in connection.Protocol.ConnectionTypes)
                         {
                             updateTotals(WireSummaryVM.AddLength(connectionType, deltaLength));
                         }

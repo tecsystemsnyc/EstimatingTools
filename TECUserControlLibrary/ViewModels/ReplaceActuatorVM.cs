@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -26,7 +27,7 @@ namespace TECUserControlLibrary.ViewModels
             ViableReplacements = new List<TECDevice>();
             foreach(TECDevice dev in devices)
             {
-                if (valve.Actuator.ConnectionTypes.Matches(dev.ConnectionTypes) && valve.Actuator != dev)
+                if ((valve.Actuator as IEndDevice).ConnectionMethods.Matches((dev as IEndDevice).ConnectionMethods) && valve.Actuator != dev)
                 {
                     ViableReplacements.Add(dev);
                 }
