@@ -171,7 +171,21 @@ namespace EstimatingLibrary
         public IControllerConnection Connect(IConnectable connectable, IProtocol protocol)
         {
             //TO DO: Connect
-            throw new NotImplementedException();
+            IControllerConnection connection;
+            if(protocol is TECHardwiredProtocol wired)
+            {
+                connection = new TECHardwiredConnection(connectable, this, wired, this.IsTypical);
+            }
+            else if (protocol is TECProtocol network)
+            {
+                connection = new TECNetworkConnection(this, network, IsTypical);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+            this.ChildrenConnections.Add(connection);
+            return connection;
         }
         /// <summary>
         /// Removes the connectable from controller and parent connection.

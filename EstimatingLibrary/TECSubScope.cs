@@ -11,9 +11,9 @@ namespace EstimatingLibrary
     public class TECSubScope : TECLocated, INotifyPointChanged, IDragDropable, ITypicalable, IConnectable, IInterlockable
     {
         #region Properties
-        private ObservableCollection<IEndDevice> _devices;
-        private ObservableCollection<TECPoint> _points;
-        private ObservableCollection<TECInterlockConnection> _interlocks;
+        private ObservableCollection<IEndDevice> _devices = new ObservableCollection<IEndDevice>();
+        private ObservableCollection<TECPoint> _points = new ObservableCollection<TECPoint>();
+        private ObservableCollection<TECInterlockConnection> _interlocks = new ObservableCollection<TECInterlockConnection>();
 
         public ObservableCollection<IEndDevice> Devices
         {
@@ -22,12 +22,12 @@ namespace EstimatingLibrary
             {
                 if (Devices != null)
                 {
-                    Devices.CollectionChanged -= Devices_CollectionChanged;
+                    Devices.CollectionChanged -= DevicesCollectionChanged;
                 }
                 var old = Devices;
                 _devices = value;
                 notifyCombinedChanged(Change.Edit, "Devices", this, value, old);
-                Devices.CollectionChanged += Devices_CollectionChanged;
+                Devices.CollectionChanged += DevicesCollectionChanged;
             }
         }
         public ObservableCollection<TECPoint> Points
@@ -60,8 +60,7 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "Interlocks", this, value, old);
             }
         }
-
-
+        
         public IControllerConnection Connection { get; private set; }
         public int PointNumber
         {
@@ -88,10 +87,9 @@ namespace EstimatingLibrary
         public TECSubScope(Guid guid, bool isTypical) : base(guid)
         {
             IsTypical = isTypical;
-            _devices = new ObservableCollection<IEndDevice>();
-            _points = new ObservableCollection<TECPoint>();
-            Devices.CollectionChanged += Devices_CollectionChanged;
+            Devices.CollectionChanged += DevicesCollectionChanged;
             Points.CollectionChanged += PointsCollectionChanged;
+            Interlocks.CollectionChanged += InterlocksCollectionChanged;
         }
         public TECSubScope(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
 
@@ -122,7 +120,7 @@ namespace EstimatingLibrary
         {
             collectionChanged(sender, e, "Points");
         }
-        private void Devices_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void DevicesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             collectionChanged(sender, e, "Devices");
         }
@@ -137,12 +135,14 @@ namespace EstimatingLibrary
             {
                 CostBatch costs = new CostBatch();
                 int pointNumber = 0;
+                bool costChanged = false;
 
                 foreach (TECObject item in e.NewItems)
                 {
                     if(item is INotifyCostChanged cost)
                     {
                         costs += cost.CostBatch;
+                        costChanged = true;
                     }
                     if(item is INotifyPointChanged pointed)
                     {
@@ -151,15 +151,16 @@ namespace EstimatingLibrary
                     
                     notifyCombinedChanged(Change.Add, propertyName, this, item);
                 }
-                notifyCostChanged(costs);
-                notifyPointChanged(pointNumber);
+                if(costChanged) notifyCostChanged(costs);
+                if(pointNumber != 0) notifyPointChanged(pointNumber);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 CostBatch costs = new CostBatch();
                 int pointNumber = 0;
+                bool costChanged = false;
 
-                foreach (TECObject item in e.NewItems)
+                foreach (TECObject item in e.OldItems)
                 {
                     if (item is INotifyCostChanged cost)
                     {
@@ -172,8 +173,8 @@ namespace EstimatingLibrary
 
                     notifyCombinedChanged(Change.Remove, propertyName, this, item);
                 }
-                notifyCostChanged(costs * -1);
-                notifyPointChanged(pointNumber * -1);
+                if (costChanged) notifyCostChanged(costs * -1);
+                if (pointNumber != 0) notifyPointChanged(pointNumber * -1);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
@@ -282,7 +283,7 @@ namespace EstimatingLibrary
         /// <summary>
         /// Returns the intersect of connection methods in this TECSubScope's devices.
         /// </summary>
-        List<IProtocol> IConnectable.AvailableProtocols
+        public List<IProtocol> AvailableProtocols
         {
             get
             {

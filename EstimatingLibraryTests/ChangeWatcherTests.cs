@@ -2272,7 +2272,7 @@ namespace Tests
             TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes[0];
 
             bid.Systems.Add(typical);
-            IControllerConnection connection = controller.Connect(ss, dev.PossibleProtocols.First());
+            IControllerConnection connection = controller.Connect(ss, (ss as IConnectable).AvailableProtocols.First());
             connection.Length = 16.46;
             connection.ConduitLength = 81.64;
 
@@ -2303,7 +2303,7 @@ namespace Tests
             TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes[0];
 
             bid.Systems.Add(typical);
-            IControllerConnection connection = controller.Connect(ss, dev.PossibleProtocols.First());
+            IControllerConnection connection = controller.Connect(ss, (ss as IConnectable).AvailableProtocols.First());
             connection.Length = 16.43;
             connection.ConduitLength = 74.13;
 
@@ -2590,7 +2590,7 @@ namespace Tests
             TECController typController = new TECController(bid.Catalogs.ControllerTypes[0], true);
             typical.AddController(typController);
 
-            typController.Connect(typSS, typDev.PossibleProtocols.First());
+            typController.Connect(typSS, (typSS as IConnectable).AvailableProtocols.First());
 
             TECSystem instance = typical.AddInstance(bid);
             IControllerConnection ssConnect = instance.Equipment[0].SubScope[0].Connection;

@@ -174,8 +174,12 @@ namespace Tests
 
             subScope2.Points.Add(point2);
 
+            //Devices
+            subScope1.Devices.Add(bid.Catalogs.Devices[0]);
+
             //Connections
-            IControllerConnection testConnection = expectedController.Connect(system1.GetInstancesFromTypical(subScope1)[0], (subScope1 as IConnectable).AvailableProtocols.First());
+            TECSubScope instanceSubScope = system1.GetInstancesFromTypical(subScope1)[0];
+            IControllerConnection testConnection = expectedController.Connect(instanceSubScope, (instanceSubScope as IConnectable).AvailableProtocols.First());
             testConnection.ConduitType = bid.Catalogs.ConduitTypes[0];
             testConnection.Length = 42;
 
@@ -582,6 +586,11 @@ namespace Tests
             outCatalogs.Devices.Add(actuator);
             TECValve valve = new TECValve(manufacturer1, actuator);
             outCatalogs.Valves.Add(valve);
+
+            //Protocols
+            TECProtocol protocol = new TECProtocol(new List<TECConnectionType> { connectionType1 });
+            protocol.Name = "BACnet IP";
+            outCatalogs.Protocols.Add(protocol);
 
             return outCatalogs;
         }
