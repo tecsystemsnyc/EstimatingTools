@@ -115,7 +115,6 @@ namespace EstimatingUtilitiesLibrary.Database
             allEndDevices.AddRange(templates.Catalogs.Valves);
             Dictionary<Guid, List<IEndDevice>> endDevices = getOneToManyRelationships(new SubScopeDeviceTable(), allEndDevices);
             Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes = getOneToOneRelationships(new ConnectionConduitTypeTable(), templates.Catalogs.ConduitTypes);
-            Dictionary<Guid, List<TECConnectionType>> connectionConnectionTypeRelationships = getOneToManyRelationships(new NetworkConnectionConnectionTypeTable(), templates.Catalogs.ConnectionTypes);
             Dictionary<Guid, List<TECIOModule>> controllerModuleRelationships = getOneToManyRelationships(new ControllerIOModuleTable(), templates.Catalogs.IOModules);
 
             Dictionary<Guid, TECControllerType> controllerTypeDictionary = getOneToOneRelationships(new ControllerControllerTypeTable(), templates.Catalogs.ControllerTypes);
@@ -239,7 +238,6 @@ namespace EstimatingUtilitiesLibrary.Database
             allEndDevices.AddRange(catalogs.Valves);
             Dictionary<Guid, List<IEndDevice>> endDevices = getOneToManyRelationships(new SubScopeDeviceTable(), allEndDevices);
             Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes = getOneToOneRelationships(new ConnectionConduitTypeTable(), catalogs.ConduitTypes);
-            Dictionary<Guid, List<TECConnectionType>> connectionConnectionTypeRelationships = getOneToManyRelationships(new NetworkConnectionConnectionTypeTable(), catalogs.ConnectionTypes);
             Dictionary<Guid, TECProtocol> connectionProtocols = getOneToOneRelationships(new NetworkConnectionProtocolTable(), catalogs.Protocols);
 
             DataTable allSystemData = SQLiteDB.GetDataFromTable(SystemTable.TableName);
@@ -432,8 +430,9 @@ namespace EstimatingUtilitiesLibrary.Database
             catalogs.Tags = getObjectsFromTable(new TagTable(), id => new TECTag(id)).ToOC();
             Dictionary<Guid, List<TECConnectionType>> protocolConnectionType = getOneToManyRelationships(new ProtocolConnectionTypeTable(), catalogs.ConnectionTypes);
             catalogs.Protocols = getObjectsFromTable(new ProtocolTable(), id => new TECProtocol(id, protocolConnectionType[id])).ToOC();
+            Dictionary<Guid, TECProtocol> ioProtocols = getOneToOneRelationships(new IOProtocolTable(), catalogs.Protocols);
 
-            List<TECIO> io = getObjectsFromTable(new IOTable(), getIOFromRow).ToList();
+            List<TECIO> io = getObjectsFromTable(new IOTable(), row => getIOFromRow(row, ioProtocols)).ToList();
             Dictionary<Guid, TECProtocol> ioProtocol = getOneToOneRelationships(new IOProtocolTable(), catalogs.Protocols);
             io.ForEach(x => { if (ioProtocol.ContainsKey(x.Guid)) { x.Protocol = ioProtocol[x.Guid]; } });
 
@@ -603,11 +602,19 @@ namespace EstimatingUtilitiesLibrary.Database
             return getControllerFromRow(row, isTypical, controllerTypes);
         }
 
-        private static TECIO getIOFromRow(DataRow row)
+        private static TECIO getIOFromRow(DataRow row, Dictionary<Guid, TECProtocol> protocols)
         {
             Guid guid = new Guid(row[IOTable.ID.Name].ToString());
             IOType type = UtilitiesMethods.StringToEnum<IOType>(row[IOTable.IOType.Name].ToString());
-            var io = new TECIO(guid, type);
+            TECIO io;
+            if(type == IOType.Protocol)
+            {
+                io = new TECIO(guid, protocols[guid]);
+            }
+            else
+            {
+                io = new TECIO(guid, type);
+            }
             assignValuePropertiesFromTable(io, new IOTable(), row);
             return io;
         }
@@ -695,19 +702,6 @@ namespace EstimatingUtilitiesLibrary.Database
                     {
                         string dueDateString = row[field.Name].ToString();
                         field.Property.SetValue(item, DateTime.ParseExact(dueDateString, DB_FMT, CultureInfo.InvariantCulture));
-                    }
-                    else if (field.Property.PropertyType == typeof(IOType))
-                    {
-                        string typeString = row[field.Name].ToString();
-                        if (typeString == "BO")
-                        {
-                            typeString = "DO";
-                        }
-                        else if (typeString == "BI")
-                        {
-                            typeString = "DI";
-                        }
-                        field.Property.SetValue(item, UtilitiesMethods.StringToEnum<IOType>(typeString));
                     }
                 }
             }

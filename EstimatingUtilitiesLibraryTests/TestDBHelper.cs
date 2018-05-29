@@ -42,6 +42,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToIOModuleTable();
             addToIOTable();
             addToControllerTypeTable();
+            addToProtocolTable();
 
             addToBidScopeBranchTable();
             addToBidMiscTable();
@@ -60,7 +61,6 @@ namespace EstimatingUtilitiesLibraryTests
             addToScopeAssociatedCostTable();
             addElectricalComponentRatedCostTable();
             addToConnectionConduitTypeTable();
-            addToNetworkConnectionConnectionTypeTable();
             addToNetworkConnectionControllerTable();
             addToSubScopeConnectionChildrenTable();
             addToPanelPanelTypeTable();
@@ -76,6 +76,9 @@ namespace EstimatingUtilitiesLibraryTests
             addToControllerControllerTypeTable();
             addToControllerIOModuleTable();
             addToBidLocationTable();
+            addToProtocolConnectionTypeTable();
+            addToIOProtocolTable();
+            addToConnectionProtocolTable();
 
             SQLiteDB.NonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
@@ -110,6 +113,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToScopeBranchTable();
             addToControllerTypeTable();
             addToParametersTable();
+            addToProtocolTable();
 
             addToHardwareManufacturerTable();
             addToIOModuleIOTable();
@@ -122,7 +126,6 @@ namespace EstimatingUtilitiesLibraryTests
             addToConnectionConduitTypeTable();
             addToSubScopeConnectionChildrenTable();
             addToNetworkConnectionControllerTable();
-            addToNetworkConnectionConnectionTypeTable();
             addToPanelPanelTypeTable();
             addToPanelControllerTable();
             addToSystemControllerTable();
@@ -139,6 +142,9 @@ namespace EstimatingUtilitiesLibraryTests
             addToControllerTypeIOModuleTable();
             addToControllerControllerTypeTable();
             addToControllerIOModuleTable();
+            addToProtocolConnectionTypeTable();
+            addToIOProtocolTable();
+            addToConnectionProtocolTable();
 
             addToTemplatesSystemTable();
             addToTemplatesEquipmentTable();
@@ -462,6 +468,8 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("20");
             values.Add("false");
             addDataToTable(new SubScopeConnectionTable(), values);
+            if (isBid)
+            {
 
                 values = new List<string>();
                 values.Add("560ffd84-444d-4611-a346-266074f62f6f");
@@ -469,30 +477,18 @@ namespace EstimatingUtilitiesLibraryTests
                 values.Add("30");
                 values.Add("false");
                 addDataToTable(new SubScopeConnectionTable(), values);
+            }
         }
         private static void addToNetworkConnectionTable()
         {
             List<string> values = new List<string>();
-            values.Add("4f93907a-9aab-4ed5-8e55-43aab2af5ef8");
-            values.Add("100");
-            values.Add("80");
-            values.Add("BACnetIP");
-            values.Add("false");
-            addDataToTable(new NetworkConnectionTable(), values);
 
-            values = new List<string>();
-            values.Add("99aea45e-ebeb-4c1a-8407-1d1a3540ceeb");
-            values.Add("90");
-            values.Add("70");
-            values.Add("BACnetIP");
-            values.Add("false");
-            addDataToTable(new NetworkConnectionTable(), values);
-
-            values = new List<string>();
-                values.Add("6aca8c22-5115-4534-a5b1-698b7e42d6c2");
+            if (isBid)
+            {
+                values = new List<string>();
+                values.Add("4f93907a-9aab-4ed5-8e55-43aab2af5ef8");
+                values.Add("100");
                 values.Add("80");
-                values.Add("60");
-                values.Add("BACnetIP");
                 values.Add("false");
                 addDataToTable(new NetworkConnectionTable(), values);
 
@@ -500,9 +496,25 @@ namespace EstimatingUtilitiesLibraryTests
                 values.Add("e503fdd4-f299-4618-8d54-6751c3b2bc25");
                 values.Add("70");
                 values.Add("50");
-                values.Add("BACnetIP");
                 values.Add("false");
                 addDataToTable(new NetworkConnectionTable(), values);
+            }
+            
+            values = new List<string>();
+            values.Add("99aea45e-ebeb-4c1a-8407-1d1a3540ceeb");
+            values.Add("90");
+            values.Add("70");
+            values.Add("false");
+            addDataToTable(new NetworkConnectionTable(), values);
+
+            values = new List<string>();
+            values.Add("6aca8c22-5115-4534-a5b1-698b7e42d6c2");
+            values.Add("80");
+            values.Add("60");
+            values.Add("false");
+            addDataToTable(new NetworkConnectionTable(), values);
+
+            
 
         }
         private static void addToControllerTable()
@@ -624,7 +636,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             List<string> values = new List<string>();
             values.Add("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
-            values.Add("BACnetIP");
+            values.Add("Protocol");
             values.Add("2");
             addDataToTable(new IOTable(), values);
 
@@ -640,6 +652,13 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("5");
             addDataToTable(new IOTable(), values);
 
+        }
+        private static void addToProtocolTable()
+        {
+            List<string> values = new List<string>();
+            values.Add("5296ae52-09ff-4ec8-907c-40e7e2b45c4a");
+            values.Add("BACnetIP");
+            addDataToTable(new ProtocolTable(), values);
         }
         private static void addToControllerTypeTable()
         {
@@ -1289,28 +1308,6 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("8d442906-efa2-49a0-ad21-f6b27852c9ef");
             addDataToTable(new ConnectionConduitTypeTable(), values);
         }
-        private static void addToNetworkConnectionConnectionTypeTable()
-        {
-            List<string> values = new List<string>();
-            values.Add("4f93907a-9aab-4ed5-8e55-43aab2af5ef8");
-            values.Add("f38867c8-3846-461f-a6fa-c941aeb723c7");
-            addDataToTable(new NetworkConnectionConnectionTypeTable(), values);
-
-            values = new List<string>();
-            values.Add("6aca8c22-5115-4534-a5b1-698b7e42d6c2");
-            values.Add("f38867c8-3846-461f-a6fa-c941aeb723c7");
-            addDataToTable(new NetworkConnectionConnectionTypeTable(), values);
-
-            values = new List<string>();
-            values.Add("99aea45e-ebeb-4c1a-8407-1d1a3540ceeb");
-            values.Add("f38867c8-3846-461f-a6fa-c941aeb723c7");
-            addDataToTable(new NetworkConnectionConnectionTypeTable(), values);
-
-            values = new List<string>();
-            values.Add("e503fdd4-f299-4618-8d54-6751c3b2bc25");
-            values.Add("f38867c8-3846-461f-a6fa-c941aeb723c7");
-            addDataToTable(new NetworkConnectionConnectionTypeTable(), values);
-        }
         private static void addToNetworkConnectionControllerTable()
         {
             List<string> values = new List<string>();
@@ -1509,6 +1506,7 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("7201ca48-f885-4a87-afa7-61b3e6942697");
             values.Add("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
             addDataToTable(new ControllerTypeIOTable(), values);
+
         }
         private static void addToControllerTypeIOModuleTable()
         {
@@ -1517,6 +1515,13 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
             values.Add("10");
             addDataToTable(new ControllerTypeIOModuleTable(), values);
+        }
+        private static void addToIOProtocolTable()
+        {
+            var values = new List<string>();
+            values.Add("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb"); //IO ID
+            values.Add("5296ae52-09ff-4ec8-907c-40e7e2b45c4a"); //Protocol ID
+            addDataToTable(new IOProtocolTable(), values);
         }
         private static void addToControllerControllerTypeTable()
         {
@@ -1609,6 +1614,36 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
             values.Add("2");
             addDataToTable(new ControllerIOModuleTable(), values);
+        }
+        private static void addToProtocolConnectionTypeTable()
+        {
+            List<string> values = new List<string>();
+            values.Add("5296ae52-09ff-4ec8-907c-40e7e2b45c4a");
+            values.Add("f38867c8-3846-461f-a6fa-c941aeb723c7");
+            values.Add("1");
+            addDataToTable(new ProtocolConnectionTypeTable(), values);
+        }
+        private static void addToConnectionProtocolTable()
+        {
+            List<string> values = new List<string>();
+            values.Add("4f93907a-9aab-4ed5-8e55-43aab2af5ef8");
+            values.Add("5296ae52-09ff-4ec8-907c-40e7e2b45c4a");
+            addDataToTable(new NetworkConnectionProtocolTable(), values);
+
+            values = new List<string>();
+            values.Add("99aea45e-ebeb-4c1a-8407-1d1a3540ceeb");
+            values.Add("5296ae52-09ff-4ec8-907c-40e7e2b45c4a");
+            addDataToTable(new NetworkConnectionProtocolTable(), values);
+
+            values = new List<string>();
+            values.Add("6aca8c22-5115-4534-a5b1-698b7e42d6c2");
+            values.Add("5296ae52-09ff-4ec8-907c-40e7e2b45c4a");
+            addDataToTable(new NetworkConnectionProtocolTable(), values);
+
+            values = new List<string>();
+            values.Add("e503fdd4-f299-4618-8d54-6751c3b2bc25");
+            values.Add("5296ae52-09ff-4ec8-907c-40e7e2b45c4a");
+            addDataToTable(new NetworkConnectionProtocolTable(), values);
         }
         private static void addToBidLocationTable()
         {

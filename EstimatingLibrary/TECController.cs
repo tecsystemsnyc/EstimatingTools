@@ -174,11 +174,11 @@ namespace EstimatingLibrary
             IControllerConnection connection;
             if(protocol is TECHardwiredProtocol wired)
             {
-                connection = new TECHardwiredConnection(connectable, this, wired, this.IsTypical);
+                connection = new TECHardwiredConnection(connectable, this, wired, connectable.IsTypical);
             }
             else if (protocol is TECProtocol network)
             {
-                connection = new TECNetworkConnection(this, network, IsTypical);
+                connection = new TECNetworkConnection(this, network, connectable.IsTypical);
             }
             else
             {
@@ -539,7 +539,12 @@ namespace EstimatingLibrary
         }
         void IConnectable.SetParentConnection(IControllerConnection connection)
         {
-            if (connection is TECNetworkConnection networkConnection)
+            if(connection == null)
+            {
+                _parentConnection = null;
+                raisePropertyChanged("ParentConnection");
+            }
+            else if (connection is TECNetworkConnection networkConnection)
             {
                 _parentConnection = networkConnection;
                 raisePropertyChanged("ParentConnection");

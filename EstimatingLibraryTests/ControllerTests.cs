@@ -18,7 +18,7 @@ namespace EstimatingLibraryTests
             TECDevice dev = catalogs.Devices.First();
             subScope.Devices.Add(dev);
 
-            controller.Connect(subScope, dev.PossibleProtocols.First());
+            controller.Connect(subScope, subScope.AvailableProtocols.First());
 
             Assert.AreEqual(1, controller.ChildrenConnections.Count, "Connection not added to controller");
             Assert.AreNotEqual(null, subScope.Connection, "Connection not added to subscope");
@@ -33,7 +33,7 @@ namespace EstimatingLibraryTests
             TECDevice dev = catalogs.Devices.First();
             subScope.Devices.Add(dev);
 
-            controller.Connect(subScope, dev.PossibleProtocols.First());
+            controller.Connect(subScope, subScope.AvailableProtocols.First());
             controller.Disconnect(subScope);
 
             Assert.AreEqual(0, controller.ChildrenConnections.Count, "Connection not removed from controller");
@@ -50,6 +50,7 @@ namespace EstimatingLibraryTests
             TECController childController = new TECController(type, false);
 
             TECProtocol protocol = new TECProtocol(new List<TECConnectionType> { });
+            type.IO.Add(new TECIO(protocol));
 
             TECNetworkConnection connection = controller.AddNetworkConnection(protocol);
             connection.AddChild(childController);
@@ -68,6 +69,7 @@ namespace EstimatingLibraryTests
             TECController childController = new TECController(type, false);
 
             TECProtocol protocol = new TECProtocol(new List<TECConnectionType> { });
+            type.IO.Add(new TECIO(protocol));
 
             TECNetworkConnection connection = controller.AddNetworkConnection(protocol);
             connection.AddChild(childController);
@@ -88,6 +90,7 @@ namespace EstimatingLibraryTests
             TECController childController = new TECController(type, false);
 
             TECProtocol protocol = new TECProtocol(new List<TECConnectionType> { });
+            type.IO.Add(new TECIO(protocol));
 
             TECNetworkConnection connection = controller.AddNetworkConnection(protocol);
             connection.AddChild(childController);
@@ -110,6 +113,7 @@ namespace EstimatingLibraryTests
             TECController childestController = new TECController(type, false);
 
             TECProtocol protocol = new TECProtocol(new List<TECConnectionType> { });
+            type.IO.Add(new TECIO(protocol));
 
             TECNetworkConnection connection = controller.AddNetworkConnection(protocol);
             connection.AddChild(childController);

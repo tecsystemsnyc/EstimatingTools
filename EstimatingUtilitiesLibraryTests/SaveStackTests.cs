@@ -1751,7 +1751,8 @@ namespace EstimatingUtilitiesLibraryTests
             bid.AddController(controller);
             bid.AddController(child as TECController);
 
-            TECConnectionType connectionType = new TECConnectionType();
+            TECProtocol protocol = new TECProtocol(new List<TECConnectionType>());
+            type.IO.Add(new TECIO(protocol));
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -1772,10 +1773,10 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
-            data[NetworkConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[NetworkConnectionConnectionTypeTable.TypeID.Name] = connectionType.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionConnectionTypeTable.TableName, data));
-            
+            data[NetworkConnectionProtocolTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionProtocolTable.ProtocolID.Name] = protocol.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionProtocolTable.TableName, data));
+
             data = new Dictionary<string, string>();
             data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
             data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
@@ -1812,8 +1813,8 @@ namespace EstimatingUtilitiesLibraryTests
             TECSystem system = typical.AddInstance(bid);
             TECController instanceController = system.Controllers[0];
             
-            TECConnectionType connectionType = new TECConnectionType();
-
+            TECProtocol protocol= new TECProtocol(new List<TECConnectionType>());
+            type.IO.Add(new TECIO(protocol));
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
 
@@ -1833,9 +1834,9 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
-            data[NetworkConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[NetworkConnectionConnectionTypeTable.TypeID.Name] = connectionType.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionConnectionTypeTable.TableName, data));
+            data[NetworkConnectionProtocolTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionProtocolTable.ProtocolID.Name] = protocol.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionProtocolTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
@@ -1878,7 +1879,8 @@ namespace EstimatingUtilitiesLibraryTests
             TECSystem otherSystem = otherTypical.AddInstance(bid);
             TECController otherInstanceController = otherSystem.Controllers[0];
 
-            TECConnectionType connectionType = new TECConnectionType();
+            TECProtocol protocol = new TECProtocol(new List<TECConnectionType>());
+            type.IO.Add(new TECIO(protocol));
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -1899,9 +1901,9 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
-            data[NetworkConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[NetworkConnectionConnectionTypeTable.TypeID.Name] = connectionType.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionConnectionTypeTable.TableName, data));
+            data[NetworkConnectionProtocolTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionProtocolTable.ProtocolID.Name] = protocol.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionProtocolTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[ControllerConnectionTable.ControllerID.Name] = instanceController.Guid.ToString();
@@ -1937,6 +1939,8 @@ namespace EstimatingUtilitiesLibraryTests
             typical.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
+            subScope.Devices.Add(device);
             bid.Systems.Add(typical);
             
             //Act
@@ -1988,6 +1992,9 @@ namespace EstimatingUtilitiesLibraryTests
             typical.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
+            subScope.Devices.Add(device);
+            bid.Catalogs.Devices.Add(device);
             bid.Systems.Add(typical);
             TECSystem system = typical.AddInstance(bid);
             TECSubScope instanceSubScope = system.Equipment[0].SubScope[0];
@@ -2041,6 +2048,8 @@ namespace EstimatingUtilitiesLibraryTests
             typical.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
+            subScope.Devices.Add(device);
             bid.Systems.Add(typical);
 
             //Act
@@ -2048,7 +2057,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            IControllerConnection connection = controller.Connect(subScope, (subScope as IConnectable).AvailableProtocols.First());
+            IControllerConnection connection = controller.Connect(subScope, subScope.AvailableProtocols.First());
 
             Dictionary<string, string> data;
 
@@ -2092,6 +2101,9 @@ namespace EstimatingUtilitiesLibraryTests
             typical.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
+            subScope.Devices.Add(device);
+            bid.Catalogs.Devices.Add(device);
             bid.Systems.Add(typical);
             TECSystem system = typical.AddInstance(bid);
 
@@ -3696,7 +3708,8 @@ namespace EstimatingUtilitiesLibraryTests
             bid.AddController(controller);
             bid.AddController(child);
 
-            TECConnectionType connectionType = new TECConnectionType();
+            TECProtocol protocol = new TECProtocol(new List<TECConnectionType>());
+            type.IO.Add(new TECIO(protocol));
             IControllerConnection connection = controller.Connect(child, child.AvailableProtocols.First());
 
             //Act
@@ -3719,9 +3732,9 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
-            data[NetworkConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[NetworkConnectionConnectionTypeTable.TypeID.Name] = connectionType.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionConnectionTypeTable.TableName, data));
+            data[NetworkConnectionProtocolTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionProtocolTable.ProtocolID.Name] = protocol.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionProtocolTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
@@ -3753,7 +3766,8 @@ namespace EstimatingUtilitiesLibraryTests
             TECSystem system = typical.AddInstance(bid);
             TECController instanceController = system.Controllers[0];
 
-            TECConnectionType connectionType = new TECConnectionType();
+            TECProtocol protocol = new TECProtocol(new List<TECConnectionType>());
+            type.IO.Add(new TECIO(protocol));
             IControllerConnection connection = controller.Connect(instanceController, instanceController.AvailableProtocols.First());
 
             //Act
@@ -3761,8 +3775,7 @@ namespace EstimatingUtilitiesLibraryTests
             controller.RemoveNetworkConnection(connection as TECNetworkConnection);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
-
-
+            
             Dictionary<string, string> data;
 
             data = new Dictionary<string, string>();
@@ -3775,10 +3788,10 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
-            data[NetworkConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[NetworkConnectionConnectionTypeTable.TypeID.Name] = connectionType.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionConnectionTypeTable.TableName, data));
-            
+            data[NetworkConnectionProtocolTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionProtocolTable.ProtocolID.Name] = protocol.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionProtocolTable.TableName, data));
+
             data = new Dictionary<string, string>();
             data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
             data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
@@ -3814,7 +3827,8 @@ namespace EstimatingUtilitiesLibraryTests
             TECSystem otherSystem = otherTypical.AddInstance(bid);
             TECController otherInstanceController = otherSystem.Controllers[0];
 
-            TECConnectionType connectionType = new TECConnectionType();
+            TECProtocol protocol = new TECProtocol(new List<TECConnectionType>());
+            type.IO.Add(new TECIO(protocol));
             IControllerConnection connection = instanceController.Connect(otherInstanceController, otherInstanceController.AvailableProtocols.First());
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -3836,10 +3850,10 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
-            data[NetworkConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[NetworkConnectionConnectionTypeTable.TypeID.Name] = connectionType.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionConnectionTypeTable.TableName, data));
-            
+            data[NetworkConnectionProtocolTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionProtocolTable.ProtocolID.Name] = protocol.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, NetworkConnectionProtocolTable.TableName, data));
+
             data = new Dictionary<string, string>();
             data[ControllerConnectionTable.ControllerID.Name] = instanceController.Guid.ToString();
             data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();

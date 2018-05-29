@@ -8,6 +8,7 @@ namespace EstimatingLibrary.Interfaces
 {
     public interface IControllerConnection : IConnection, ITypicalable, INotifyCostChanged
     {
+        Guid Guid { get; }
         TECController ParentController { get; }
         /// <summary>
         /// The IO that will take up space on the controller, be it Protocol connection types or BMS Points.

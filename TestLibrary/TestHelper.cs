@@ -592,6 +592,8 @@ namespace Tests
             protocol.Name = "BACnet IP";
             outCatalogs.Protocols.Add(protocol);
 
+            controllerType.IO.Add(new TECIO(protocol));
+
             return outCatalogs;
         }
 

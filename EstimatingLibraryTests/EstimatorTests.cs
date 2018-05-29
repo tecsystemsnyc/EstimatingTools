@@ -722,7 +722,7 @@ namespace Tests
             var protocol = new TECProtocol(new List<TECConnectionType> { connectionType });
 
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
-                new List<TECProtocol> { protocol },
+                new List<TECProtocol>(),
                 manufacturer);
             bid.Catalogs.Devices.Add(device);
             bid.Catalogs.ConnectionTypes.Add(connectionType);
@@ -889,7 +889,7 @@ namespace Tests
             var protocol = new TECProtocol(new List<TECConnectionType> { connectionType });
 
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
-                new List<TECProtocol> { protocol },
+                new List<TECProtocol>(),
                 manufacturer);
             bid.Catalogs.Devices.Add(device);
             bid.Catalogs.ConnectionTypes.Add(connectionType);
@@ -958,7 +958,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Estimate_AddSubScopeConnectionConnectionInTypical()
+        public void Estimate_AddSubScopeConnectionInTypical()
         {
             var bid = new TECBid();
             bid.Parameters = parameters;
@@ -984,7 +984,7 @@ namespace Tests
             var protocol = new TECProtocol(new List<TECConnectionType> { connectionType });
 
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
-                new List<TECProtocol> { protocol },
+                new List<TECProtocol>(),
                 manufacturer);
             bid.Catalogs.Devices.Add(device);
             bid.Catalogs.ConnectionTypes.Add(connectionType);
@@ -1045,7 +1045,7 @@ namespace Tests
             var protocol = new TECProtocol(new List<TECConnectionType> { connectionType });
 
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
-                new List<TECProtocol> { protocol },
+                new List<TECProtocol>(),
                 manufacturer);
             bid.Catalogs.Devices.Add(device);
             bid.Catalogs.ConnectionTypes.Add(connectionType);
@@ -1104,7 +1104,7 @@ namespace Tests
             var protocol = new TECProtocol(new List<TECConnectionType> { connectionType });
 
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
-                new List<TECProtocol> { protocol },
+                new List<TECProtocol>(),
                 manufacturer);
             bid.Catalogs.Devices.Add(device);
             bid.Catalogs.ConnectionTypes.Add(connectionType);
@@ -1500,7 +1500,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Estimate_RemoveDeviceToSubScope()
+        public void Estimate_RemoveDeviceFromSubScope()
         {
             var bid = new TECBid();
             bid.Parameters = parameters;
@@ -1623,10 +1623,13 @@ namespace Tests
             var controller1 = new TECController(controllerType, false);
             var controller2 = new TECController(controllerType, false);
 
+            var protocol = new TECProtocol(new List<TECConnectionType>() { connectionType });
+            controllerType.IO.Add(new TECIO(protocol));
+
             bid.AddController(controller1);
             bid.AddController(controller2);
 
-            var connection = controller1.AddNetworkConnection(bid.Catalogs.Protocols[0]);
+            var connection = controller1.AddNetworkConnection(protocol);
 
             connection.AddChild(controller2);
             connection.Length = 50;
@@ -1661,7 +1664,10 @@ namespace Tests
             bid.AddController(controller1);
             bid.AddController(controller2);
 
-            var connection = controller1.AddNetworkConnection(bid.Catalogs.Protocols[0]);
+            var protocol = new TECProtocol(new List<TECConnectionType>() { connectionType });
+            controllerType.IO.Add(new TECIO(protocol));
+
+            var connection = controller1.AddNetworkConnection(protocol);
 
             connection.AddChild(controller2);
             connection.Length = 50;
@@ -1702,7 +1708,10 @@ namespace Tests
             bid.AddController(controller1);
             bid.AddController(controller2);
 
-            var connection = controller1.AddNetworkConnection(bid.Catalogs.Protocols[0]);
+            var protocol = new TECProtocol(new List<TECConnectionType>() { connectionType });
+            controllerType.IO.Add(new TECIO(protocol));
+
+            var connection = controller1.AddNetworkConnection(protocol);
 
             connection.AddChild(controller2);
             connection.Length = 50;
@@ -1740,13 +1749,16 @@ namespace Tests
 
             var controller1 = new TECController(controllerType, false);
             var controller2 = new TECController(controllerType, true);
+            
+            var protocol = new TECProtocol(new List<TECConnectionType>() { connectionType });
+            controllerType.IO.Add(new TECIO(protocol));
 
             bid.AddController(controller1);
             system.AddController(controller2);
             system.AddInstance(bid);
             var instanceController = system.Instances[0].Controllers[0];
 
-            var connection = controller1.AddNetworkConnection(bid.Catalogs.Protocols[0]);
+            var connection = controller1.AddNetworkConnection(protocol);
 
             connection.AddChild(instanceController);
             connection.Length = 50;
@@ -1778,12 +1790,15 @@ namespace Tests
             var controller1 = new TECController(controllerType, false);
             var controller2 = new TECController(controllerType, true);
 
+            var protocol = new TECProtocol(new List<TECConnectionType>() { connectionType });
+            controllerType.IO.Add(new TECIO(protocol));
+
             bid.AddController(controller1);
             system.AddController(controller2);
             system.AddInstance(bid);
             var instanceController = system.Instances[0].Controllers[0];
 
-            var connection = controller1.AddNetworkConnection(bid.Catalogs.Protocols[0]);
+            var connection = controller1.AddNetworkConnection(protocol);
 
             connection.AddChild(instanceController);
             connection.Length = 50;
@@ -1810,10 +1825,13 @@ namespace Tests
 
             TECIO io = new TECIO(IOType.AI);
             controllerType.IO.Add(io);
-
+            
             var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
+
+            var protocol = new TECProtocol(new List<TECConnectionType>() { connectionType });
+            controllerType.IO.Add(new TECIO(protocol));
 
             var controller1 = new TECController(controllerType, false);
             var controller2 = new TECController(controllerType, true);
@@ -1823,7 +1841,7 @@ namespace Tests
             system.AddInstance(bid);
             var instanceController = system.Instances[0].Controllers[0];
 
-            var connection = controller1.AddNetworkConnection(bid.Catalogs.Protocols[0]);
+            var connection = controller1.AddNetworkConnection(protocol);
 
             connection.AddChild(instanceController);
             connection.Length = 50;
@@ -2229,7 +2247,7 @@ namespace Tests
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
-            IControllerConnection ssConnect = controller.Connect(subScope, dev.PossibleProtocols.First());
+            IControllerConnection ssConnect = controller.Connect(subScope, subScope.AvailableProtocols.First());
             ssConnect.Length = 50;
 
             typical.Instances.Remove(instance);

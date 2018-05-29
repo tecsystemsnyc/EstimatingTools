@@ -17,7 +17,7 @@ namespace EstimatingLibrary
         Protocol
     }
 
-    public class TECIO : TECObject
+    public class TECIO : TECObject, IRelatable
     {
         public static List<IOType> PointIO = new List<IOType>()
         {
@@ -97,7 +97,7 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "Quantity", this, value, old);
             }
         }
-
+        
         private void setTypeToProtocol()
         {
             var old = Type;
@@ -124,6 +124,29 @@ namespace EstimatingLibrary
             _quantity = ioSource.Quantity;
             _protocol = ioSource.Protocol;
         }
+
+        #region Relatable
+
+        SaveableMap IRelatable.PropertyObjects
+        {
+            get
+            {
+                SaveableMap map = new SaveableMap();
+                map.Add(Protocol, "Protocol");
+                return map;
+            }
+        }
+
+        SaveableMap IRelatable.LinkedObjects
+        {
+            get
+            {
+                SaveableMap map = new SaveableMap();
+                map.Add(Protocol, "Protocol");
+                return map;
+            }
+        }
+        #endregion
     }
 
     public class IOCollection

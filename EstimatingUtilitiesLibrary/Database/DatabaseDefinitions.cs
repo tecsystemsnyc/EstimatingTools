@@ -799,7 +799,6 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Length = new TableField("Length", "REAL", ObjectType.GetProperty("Length"));
         public static TableField ConduitLength = new TableField("ConduitLength", "REAL", ObjectType.GetProperty("ConduitLength"));
-        public static TableField IOType = new TableField("IOType", "TEXT", ObjectType.GetProperty("IOType"));
         public static TableField IsPlenum = new TableField("IsPlenum", "INTEGER", ObjectType.GetProperty("IsPlenum"), defaultValue: "0");
 
         private List<TableField> primaryKeys = new List<TableField>() {
@@ -814,7 +813,6 @@ namespace EstimatingUtilitiesLibrary.Database
             ID,
             Length,
             ConduitLength,
-            IOType,
             IsPlenum
         };
         private List<string> propertyNames = new List<string>()
@@ -2092,41 +2090,6 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
-    internal class NetworkConnectionConnectionTypeTable : TableBase
-    {
-        public static string TableName = "NetworkConnectionConnectionType";
-        public static Type ObjectType = typeof(TECNetworkConnection);
-        public static Type ReferenceType = typeof(TECConnectionType);
-
-        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField TypeID = new TableField("ConnectionTypeID", "TEXT", ReferenceType.GetProperty("Guid"));
-
-        private List<TableField> primaryKeys = new List<TableField>()
-        {
-            ConnectionID,
-            TypeID
-        };
-        private List<Type> types = new List<Type>()
-        {
-            ObjectType,
-            ReferenceType
-        };
-        private List<TableField> fields = new List<TableField>()
-        {
-            ConnectionID,
-            TypeID
-        };
-        private List<string> propertyNames = new List<string>()
-        {
-            "ConnectionTypes"
-        };
-
-        public override string NameString { get { return TableName; } }
-        public override List<Type> Types { get { return types; } }
-        public override List<string> PropertyNames { get { return propertyNames; } }
-        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
-        public override List<TableField> Fields { get { return fields; } }
-    }
     internal class NetworkConnectionChildrenTable : TableBase
     {
         public static string TableName = "NetworkConnectionChildren";
@@ -2191,7 +2154,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "SubScope"
+            "Child"
         };
 
         public override string NameString { get { return TableName; } }
@@ -3070,7 +3033,6 @@ namespace EstimatingUtilitiesLibrary.Database
             new PanelControllerTable(),
             new SubScopeConnectionChildrenTable(),
             new NetworkConnectionChildrenTable(),
-            new NetworkConnectionConnectionTypeTable(),
             new ValveActuatorTable(),
             new ScheduleScheduleTableTable(),
             new ScheduleTableScheduleItemTable(),
@@ -3137,7 +3099,6 @@ namespace EstimatingUtilitiesLibrary.Database
             new PanelControllerTable(),
             new SubScopeConnectionChildrenTable(),
             new NetworkConnectionChildrenTable(),
-            new NetworkConnectionConnectionTypeTable(),
             new ScopeBranchHierarchyTable(),
             new ValveActuatorTable(),
             new TemplatesSystemTable(),
@@ -3221,7 +3182,6 @@ namespace EstimatingUtilitiesLibrary.Database
             new TypicalInstanceTable(),
             new SubScopeConnectionChildrenTable(),
             new NetworkConnectionChildrenTable(),
-            new NetworkConnectionConnectionTypeTable(),
             new BidMiscTable(),
             new ValveActuatorTable(),
             new TemplatesSystemTable(),

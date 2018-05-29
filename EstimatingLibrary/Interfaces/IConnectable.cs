@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EstimatingLibrary.Interfaces
 {
-    public interface IConnectable : ITECScope
+    public interface IConnectable : ITECScope, ITypicalable
     {
         Guid Guid { get; }
         
