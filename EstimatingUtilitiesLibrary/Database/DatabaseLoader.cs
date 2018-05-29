@@ -291,18 +291,22 @@ namespace EstimatingUtilitiesLibrary.Database
             controllers.ForEach(item => item.IOModules = controllerModuleRelationships.ValueOrNew(item.Guid));
             subScope.ForEach(item => item.Devices = endDevices.ValueOrNew(item.Guid));
 
-            foreach (TECNetworkConnection item in networkConnections)
+
+            foreach(IControllerConnection item in allConnections)
             {
-                if (networkChildren.ContainsKey(item.Guid))
+                item.ConduitType = connectionConduitTypes.ValueOrDefault(item.Guid, null);
+                if(item is TECNetworkConnection netItem)
                 {
-                    item.Children = getRelatedReferences(networkChildren[item.Guid], connectables).ToOC();
+                    if (networkChildren.ContainsKey(netItem.Guid))
+                    {
+                        netItem.Children = getRelatedReferences(networkChildren[item.Guid], connectables).ToOC();
+                    }
+                    netItem.Children.ForEach(x => x.SetParentConnection(netItem));
                 }
-                item.ConduitType = connectionConduitTypes.ValueOrDefault(item.Guid, null);
-            }
-            foreach (TECHardwiredConnection item in subScopeConnections)
-            {
-                item.Child.SetParentConnection(item);
-                item.ConduitType = connectionConduitTypes.ValueOrDefault(item.Guid, null);
+                else if (item is TECHardwiredConnection hardItem)
+                {
+                    hardItem.Child.SetParentConnection(item);
+                }
             }
             foreach (TECSubScope item in subScope.Where(x => subScopePoints.ContainsKey(x.Guid)))
             {
@@ -702,6 +706,22 @@ namespace EstimatingUtilitiesLibrary.Database
                     {
                         string dueDateString = row[field.Name].ToString();
                         field.Property.SetValue(item, DateTime.ParseExact(dueDateString, DB_FMT, CultureInfo.InvariantCulture));
+                    }
+                    else if (field.Property.PropertyType == typeof(IOType))
+                    {
+                        string typeString = row[field.Name].ToString();
+                        if (typeString == "BO")
+                        {
+                            typeString = "DO";
+                        }
+                        else if (typeString == "BI")
+                        {
+                            typeString = "DI";
+                        }
+                        if ((new List<String>{"AI", "AO", "DI", "DO" }).Contains(typeString))
+                        {
+                            field.Property.SetValue(item, UtilitiesMethods.StringToEnum<IOType>(typeString));
+                        }
                     }
                 }
             }
