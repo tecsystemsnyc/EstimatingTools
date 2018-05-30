@@ -186,7 +186,7 @@ namespace EstimatingLibrary
             {
                 throw new NotImplementedException();
             }
-            this.ChildrenConnections.Add(connection);
+            this.addChildConnection(connection);
             return connection;
         }
         /// <summary>
@@ -479,7 +479,7 @@ namespace EstimatingLibrary
         private void addChildConnection(IControllerConnection connection)
         {
             ChildrenConnections.Add(connection);
-            if (!connection.IsTypical && !this.IsTypical)
+            if (!connection.IsTypical && !connection.IsTypical)
             {
                 notifyCostChanged(connection.CostBatch);
             }
@@ -487,7 +487,7 @@ namespace EstimatingLibrary
         private void removeChildConnection(IControllerConnection connection)
         {
             ChildrenConnections.Remove(connection);
-            if (!connection.IsTypical && !this.IsTypical)
+            if (!connection.IsTypical && !connection.IsTypical)
             {
                 notifyCostChanged(connection.CostBatch * -1);
             }

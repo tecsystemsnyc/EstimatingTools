@@ -718,9 +718,7 @@ namespace Tests
             conduitType.Labor = 1;
             conduitType.RatedCosts.Add(ratedCost);
             conduitType.AssociatedCosts.Add(assCost);
-
-            var protocol = new TECProtocol(new List<TECConnectionType> { connectionType });
-
+            
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol>(),
                 manufacturer);
@@ -746,7 +744,7 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
             
-            var connection = controller.Connect(subScope, protocol);
+            var connection = controller.Connect(subScope, subScope.AvailableProtocols.First());
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -758,7 +756,7 @@ namespace Tests
                 {
                     foreach(TECSubScope instanceSubScope in instance.GetAllSubScope())
                     {
-                        var instanceConnection = instanceController.Connect(instanceSubScope, protocol);
+                        var instanceConnection = instanceController.Connect(instanceSubScope, instanceSubScope.AvailableProtocols.First());
                         instanceConnection.Length = 10;
                         instanceConnection.ConduitLength = 5;
                         instanceConnection.ConduitType = conduitType;
@@ -886,8 +884,6 @@ namespace Tests
             conduitType.RatedCosts.Add(ratedCost);
             conduitType.AssociatedCosts.Add(assCost);
 
-            var protocol = new TECProtocol(new List<TECConnectionType> { connectionType });
-
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol>(),
                 manufacturer);
@@ -913,7 +909,7 @@ namespace Tests
             system.AddInstance(bid);
             system.AddInstance(bid);
 
-            var connection = controller.Connect(subScope, protocol);
+            var connection = controller.Connect(subScope, subScope.AvailableProtocols.First());
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -925,7 +921,7 @@ namespace Tests
                 {
                     foreach (TECSubScope instanceSubScope in instance.GetAllSubScope())
                     {
-                        var instanceConnection = instanceController.Connect(instanceSubScope, protocol);
+                        var instanceConnection = instanceController.Connect(instanceSubScope, instanceSubScope.AvailableProtocols.First());
                         instanceConnection.Length = 10;
                         instanceConnection.ConduitLength = 5;
                         instanceConnection.ConduitType = conduitType;
@@ -942,7 +938,7 @@ namespace Tests
                 {
                     foreach (TECSubScope instanceSubScope in instance.GetAllSubScope())
                     {
-                        var instanceConnection = instanceController.Connect(instanceSubScope, protocol);
+                        var instanceConnection = instanceController.Connect(instanceSubScope, instanceSubScope.AvailableProtocols.First());
                         instanceConnection.Length += 1;
                         instanceConnection.ConduitLength += 1;
                     }
@@ -981,7 +977,6 @@ namespace Tests
             conduitType.Labor = 1;
             conduitType.RatedCosts.Add(ratedCost);
 
-            var protocol = new TECProtocol(new List<TECConnectionType> { connectionType });
 
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol>(),
@@ -1005,7 +1000,7 @@ namespace Tests
             subScope.Devices.Add(device);
             bid.Systems.Add(system);
 
-            var connection = controller.Connect(subScope, protocol);
+            var connection = controller.Connect(subScope, subScope.AvailableProtocols.First());
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -1041,9 +1036,7 @@ namespace Tests
             conduitType.Cost = 1;
             conduitType.Labor = 1;
             conduitType.RatedCosts.Add(ratedCost);
-
-            var protocol = new TECProtocol(new List<TECConnectionType> { connectionType });
-
+            
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol>(),
                 manufacturer);
@@ -1065,7 +1058,7 @@ namespace Tests
             equipment.SubScope.Add(subScope);
             subScope.Devices.Add(device);
             bid.Systems.Add(system);
-            var connection = controller.Connect(subScope, protocol);
+            var connection = controller.Connect(subScope, subScope.AvailableProtocols.First());
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
@@ -1101,8 +1094,6 @@ namespace Tests
             conduitType.Labor = 1;
             conduitType.RatedCosts.Add(ratedCost);
 
-            var protocol = new TECProtocol(new List<TECConnectionType> { connectionType });
-
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol>(),
                 manufacturer);
@@ -1125,7 +1116,7 @@ namespace Tests
             subScope.Devices.Add(device);
             bid.Systems.Add(system);
 
-            var connection = controller.Connect(subScope, protocol);
+            var connection = controller.Connect(subScope, subScope.AvailableProtocols.First());
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;

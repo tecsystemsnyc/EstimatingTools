@@ -86,10 +86,10 @@ namespace Tests
             subScope.Devices.Add(dev);
             system.Equipment.Add(equipment);
             equipment.SubScope.Add(subScope);
-            bidController.Connect(subScope, dev.PossibleProtocols.First());
+            bidController.Connect(subScope, subScope.AvailableProtocols.First());
             var instance = system.AddInstance(bid);
             var instanceSubScope = instance.GetAllSubScope().First();
-            bidController.Connect(instanceSubScope, instanceSubScope.Devices.First().ConnectionMethods.First());
+            bidController.Connect(instanceSubScope, instanceSubScope.AvailableProtocols.First());
             
             Assert.AreEqual(2, bidController.ChildrenConnections.Count, "Connection not added");
 
@@ -119,7 +119,7 @@ namespace Tests
             TECSystem instance = typical.AddInstance(bid);
             TECSubScope instanceSS = instance.Equipment[0].SubScope[0];
 
-            controller.Connect(ss, dev.PossibleProtocols.First());
+            controller.Connect(ss, ss.AvailableProtocols.First());
 
             //Act
             controller.Disconnect(ss);
@@ -138,8 +138,9 @@ namespace Tests
             TECController controller = system.Controllers[0];
             TECEquipment equipment = system.Equipment[0];
             TECSubScope subScope = new TECSubScope(false);
+            subScope.Devices.Add(bid.Catalogs.Devices.First());
             equipment.SubScope.Add(subScope);
-            controller.Connect(subScope, new TECProtocol(new List<TECConnectionType> { bid.Catalogs.ConnectionTypes.First() }));
+            controller.Connect(subScope, subScope.AvailableProtocols.First());
             bid.Systems.Add(system);
             TECSystem instance = system.AddInstance(bid);
             

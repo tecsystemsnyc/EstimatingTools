@@ -165,6 +165,7 @@ namespace EstimatingLibrary
                     if (item is INotifyCostChanged cost)
                     {
                         costs += cost.CostBatch;
+                        costChanged = true;
                     }
                     if (item is INotifyPointChanged pointed)
                     {
