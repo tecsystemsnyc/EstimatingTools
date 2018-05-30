@@ -921,6 +921,7 @@ namespace Tests
             typical.Equipment.Add(typEquip);
 
             TECSubScope ss = new TECSubScope(true);
+            ss.Devices.Add(bid.Catalogs.Devices[0]);
             typEquip.SubScope.Add(ss);
             
             TECSystem instance = typical.AddInstance(bid);

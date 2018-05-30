@@ -132,7 +132,7 @@ namespace EstimatingLibrary
             get
             {
                 SaveableMap map = new SaveableMap();
-                map.Add(Protocol, "Protocol");
+                if(Protocol != null) map.Add(Protocol, "Protocol");
                 return map;
             }
         }
@@ -142,7 +142,7 @@ namespace EstimatingLibrary
             get
             {
                 SaveableMap map = new SaveableMap();
-                map.Add(Protocol, "Protocol");
+                if (Protocol != null) map.Add(Protocol, "Protocol");
                 return map;
             }
         }

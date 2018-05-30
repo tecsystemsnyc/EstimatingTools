@@ -178,7 +178,9 @@ namespace EstimatingLibrary
             }
             else if (protocol is TECProtocol network)
             {
-                connection = new TECNetworkConnection(this, network, connectable.IsTypical);
+                var netConnect = new TECNetworkConnection(this, network, connectable.IsTypical);
+                netConnect.AddChild(connectable);
+                connection = netConnect;
             }
             else
             {

@@ -1880,7 +1880,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
         public static TableField DeviceID = new TableField("DeviceID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField TypeID = new TableField("ConnectionTypeID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField Quantity = new TableField("Quantity", "INTEGER", HelperType.GetProperty("Quantity"), "ConnectionTypes");
+        public static TableField Quantity = new TableField("Quantity", "INTEGER", HelperType.GetProperty("Quantity"), "HardwiredConnectionTypes");
 
         private List<TableField> primaryKeys = new List<TableField>()
         {
@@ -1900,7 +1900,42 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "ConnectionTypes"
+            "HardwiredConnectionTypes"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class DeviceProtocolTable : TableBase
+    {
+        public static string TableName = "DeviceProtocol";
+        public static Type ObjectType = typeof(TECDevice);
+        public static Type ReferenceType = typeof(TECProtocol);
+        
+        public static TableField DeviceID = new TableField("DeviceID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField ProtocolID = new TableField("ProtocolID", "TEXT", ReferenceType.GetProperty("Guid"));
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            DeviceID,
+            ProtocolID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            DeviceID,
+            ProtocolID
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "PossibleProtocols"
         };
 
         public override string NameString { get { return TableName; } }
@@ -2568,6 +2603,45 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+    internal class HardwiredConnectionConnectionTypeTable : TableBase
+    {
+        public static string TableName = "HardwiredConnectionConnectionType";
+        public static Type ConnectionType = typeof(TECHardwiredConnection);
+        public static Type ReferenceType = typeof(TECConnectionType);
+
+        public static Type HelperType = typeof(HelperProperties);
+        
+        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ConnectionType.GetProperty("Guid"));
+        public static TableField TypeID = new TableField("ConnectionTypeID", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField Quantity = new TableField("Quantity", "INTEGER", HelperType.GetProperty("Quantity"), "ConnectionTypes");
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ConnectionID,
+            TypeID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ConnectionType,
+            ReferenceType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ConnectionID,
+            TypeID,
+            Quantity
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "ConnectionTypes"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
 
     internal class TypicalInstanceTable : TableBase
     {
@@ -3019,6 +3093,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new ControllerTypeIOModuleTable(),
             new BidScopeBranchTable(),
             new DeviceConnectionTypeTable(),
+            new DeviceProtocolTable(),
             new ScopeAssociatedCostTable(),
             new ControllerControllerTypeTable(),
             new ConnectionConduitTypeTable(),
@@ -3040,7 +3115,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new BidLocationTable(),
             new NetworkConnectionProtocolTable(),
             new ProtocolConnectionTypeTable(),
-            new IOProtocolTable()
+            new IOProtocolTable(),
+            new HardwiredConnectionConnectionTypeTable()
             };
     }
 
@@ -3086,6 +3162,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new ControllerTypeIOModuleTable(),
             new HardwareManufacturerTable(),
             new DeviceConnectionTypeTable(),
+            new DeviceProtocolTable(),
             new ScopeAssociatedCostTable(),
             new ElectricalMaterialRatedCostTable(),
             new ControllerControllerTypeTable(),
@@ -3110,7 +3187,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new TemplateReferenceTable(),
             new NetworkConnectionProtocolTable(),
             new ProtocolConnectionTypeTable(),
-            new IOProtocolTable()
+            new IOProtocolTable(),
+            new HardwiredConnectionConnectionTypeTable()
         };
     }
 
@@ -3167,6 +3245,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new ScopeTagTable(),
             new HardwareManufacturerTable(),
             new DeviceConnectionTypeTable(),
+            new DeviceProtocolTable(),
             new LocatedLocationTable(),
             new ScopeAssociatedCostTable(),
             new ElectricalMaterialRatedCostTable(),
@@ -3197,7 +3276,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new BidLocationTable(),
             new NetworkConnectionProtocolTable(),
             new ProtocolConnectionTypeTable(),
-            new IOProtocolTable()
+            new IOProtocolTable(),
+            new HardwiredConnectionConnectionTypeTable()
         };
     }
 

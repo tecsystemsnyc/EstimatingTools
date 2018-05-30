@@ -297,8 +297,10 @@ namespace EstimatingUtilitiesLibrary.Database
                 for (int x = 0; x < items.Count; x++)
                 {
                     bool isTableType = tableTypes[x].IsInstanceOfType(items[x]);
+                    bool isTableInterface = tableTypes[x].IsAssignableFrom(items[x].GetType());
+                    bool compatibleType = isTableType || isTableInterface;
 
-                    if (!isTableType)
+                    if (!compatibleType)
                     {
                         return false;
                     }

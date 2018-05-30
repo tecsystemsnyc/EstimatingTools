@@ -592,7 +592,7 @@ namespace EstimatingUtilitiesLibraryTests
         }
 
         [TestMethod]
-        public void Bid_AddSubScopeConnectionToTypicalWith()
+        public void Bid_AddSubScopeToTypicalWith()
         {
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
@@ -1772,6 +1772,13 @@ namespace EstimatingUtilitiesLibraryTests
 
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionTable.TableName, data));
 
+
+            data = new Dictionary<string, string>();
+            data[NetworkConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionChildrenTable.ChildID.Name] = child.Guid.ToString();
+            data[NetworkConnectionChildrenTable.Index.Name] = "0";
+            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionChildrenTable.TableName, data));
+
             data = new Dictionary<string, string>();
             data[NetworkConnectionProtocolTable.ConnectionID.Name] = connection.Guid.ToString();
             data[NetworkConnectionProtocolTable.ProtocolID.Name] = protocol.Guid.ToString();
@@ -1781,13 +1788,6 @@ namespace EstimatingUtilitiesLibraryTests
             data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
             data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
-
-            data = new Dictionary<string, string>();
-            data[NetworkConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[NetworkConnectionChildrenTable.ChildID.Name] = child.Guid.ToString();
-            data[NetworkConnectionChildrenTable.Index.Name] = "0";
-            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionChildrenTable.TableName, data));
-
             int expectedCount = expectedItems.Count;
             
             //Assert
@@ -1834,6 +1834,12 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
+            data[NetworkConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionChildrenTable.ChildID.Name] = instanceController.Guid.ToString();
+            data[NetworkConnectionChildrenTable.Index.Name] = "0";
+            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionChildrenTable.TableName, data));
+            
+            data = new Dictionary<string, string>();
             data[NetworkConnectionProtocolTable.ConnectionID.Name] = connection.Guid.ToString();
             data[NetworkConnectionProtocolTable.ProtocolID.Name] = protocol.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionProtocolTable.TableName, data));
@@ -1843,12 +1849,6 @@ namespace EstimatingUtilitiesLibraryTests
             data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
 
-            data = new Dictionary<string, string>();
-            data[NetworkConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[NetworkConnectionChildrenTable.ChildID.Name] = instanceController.Guid.ToString();
-            data[NetworkConnectionChildrenTable.Index.Name] = "0";
-            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionChildrenTable.TableName, data));
-            
             int expectedCount = expectedItems.Count;
 
             //Assert
@@ -1901,6 +1901,12 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
+            data[NetworkConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[NetworkConnectionChildrenTable.ChildID.Name] = otherInstanceController.Guid.ToString();
+            data[NetworkConnectionChildrenTable.Index.Name] = "0";
+            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionChildrenTable.TableName, data));
+
+            data = new Dictionary<string, string>();
             data[NetworkConnectionProtocolTable.ConnectionID.Name] = connection.Guid.ToString();
             data[NetworkConnectionProtocolTable.ProtocolID.Name] = protocol.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionProtocolTable.TableName, data));
@@ -1910,11 +1916,6 @@ namespace EstimatingUtilitiesLibraryTests
             data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
 
-            data = new Dictionary<string, string>();
-            data[NetworkConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[NetworkConnectionChildrenTable.ChildID.Name] = otherInstanceController.Guid.ToString();
-            data[NetworkConnectionChildrenTable.Index.Name] = "0";
-            expectedItems.Add(new UpdateItem(Change.Add, NetworkConnectionChildrenTable.TableName, data));
             
             int expectedCount = expectedItems.Count;
 
@@ -1939,7 +1940,10 @@ namespace EstimatingUtilitiesLibraryTests
             typical.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
-            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
+            TECConnectionType connType = new TECConnectionType();
+            TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
+            bid.Catalogs.Devices.Add(device);
+
             subScope.Devices.Add(device);
             bid.Systems.Add(typical);
             
@@ -1963,6 +1967,12 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopeConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
             data[SubScopeConnectionChildrenTable.ChildID.Name] = subScope.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionChildrenTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[HardwiredConnectionConnectionTypeTable.TypeID.Name] = connType.Guid.ToString();
+            data[HardwiredConnectionConnectionTypeTable.Quantity.Name] = "1";
+            expectedItems.Add(new UpdateItem(Change.Add, HardwiredConnectionConnectionTypeTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
@@ -1992,9 +2002,11 @@ namespace EstimatingUtilitiesLibraryTests
             typical.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
-            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
-            subScope.Devices.Add(device);
+            TECConnectionType connType = new TECConnectionType();
+            TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
             bid.Catalogs.Devices.Add(device);
+
+            subScope.Devices.Add(device);
             bid.Systems.Add(typical);
             TECSystem system = typical.AddInstance(bid);
             TECSubScope instanceSubScope = system.Equipment[0].SubScope[0];
@@ -2019,6 +2031,12 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopeConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
             data[SubScopeConnectionChildrenTable.ChildID.Name] = instanceSubScope.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionChildrenTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[HardwiredConnectionConnectionTypeTable.TypeID.Name] = connType.Guid.ToString();
+            data[HardwiredConnectionConnectionTypeTable.Quantity.Name] = "1";
+            expectedItems.Add(new UpdateItem(Change.Add, HardwiredConnectionConnectionTypeTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
@@ -2048,7 +2066,9 @@ namespace EstimatingUtilitiesLibraryTests
             typical.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
-            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
+            TECConnectionType connType = new TECConnectionType();
+            TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
+            bid.Catalogs.Devices.Add(device);
             subScope.Devices.Add(device);
             bid.Systems.Add(typical);
 
@@ -2073,6 +2093,12 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopeConnectionChildrenTable.ChildID.Name] = subScope.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionChildrenTable.TableName, data));
 
+            data = new Dictionary<string, string>();
+            data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[HardwiredConnectionConnectionTypeTable.TypeID.Name] = connType.Guid.ToString();
+            data[HardwiredConnectionConnectionTypeTable.Quantity.Name] = "1";
+            expectedItems.Add(new UpdateItem(Change.Add, HardwiredConnectionConnectionTypeTable.TableName, data));
+            
             data = new Dictionary<string, string>();
             data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
             data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
@@ -2101,9 +2127,10 @@ namespace EstimatingUtilitiesLibraryTests
             typical.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
             equipment.SubScope.Add(subScope);
-            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
-            subScope.Devices.Add(device);
+            TECConnectionType connType = new TECConnectionType();
+            TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
             bid.Catalogs.Devices.Add(device);
+            subScope.Devices.Add(device);
             bid.Systems.Add(typical);
             TECSystem system = typical.AddInstance(bid);
 
@@ -2132,6 +2159,12 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionChildrenTable.TableName, data));
 
             data = new Dictionary<string, string>();
+            data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[HardwiredConnectionConnectionTypeTable.TypeID.Name] = connType.Guid.ToString();
+            data[HardwiredConnectionConnectionTypeTable.Quantity.Name] = "1";
+            expectedItems.Add(new UpdateItem(Change.Add, HardwiredConnectionConnectionTypeTable.TableName, data));
+            
+            data = new Dictionary<string, string>();
             data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
             data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
@@ -2148,6 +2181,12 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopeConnectionChildrenTable.ChildID.Name] = instanceSubScope.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionChildrenTable.TableName, data));
 
+            data = new Dictionary<string, string>();
+            data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
+            data[HardwiredConnectionConnectionTypeTable.TypeID.Name] = connType.Guid.ToString();
+            data[HardwiredConnectionConnectionTypeTable.Quantity.Name] = "1";
+            expectedItems.Add(new UpdateItem(Change.Add, HardwiredConnectionConnectionTypeTable.TableName, data));
+            
             data = new Dictionary<string, string>();
             data[ControllerConnectionTable.ControllerID.Name] = instanceController.Guid.ToString();
             data[ControllerConnectionTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
@@ -3867,7 +3906,7 @@ namespace EstimatingUtilitiesLibraryTests
         }
 
         [TestMethod]
-        public void Bid_RemoveSubScopeConnectionToTypical()
+        public void Bid_RemoveSubScopeConnectionFromTypical()
         {
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
@@ -3876,11 +3915,14 @@ namespace EstimatingUtilitiesLibraryTests
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
             bid.AddController(controller);
+            TECConnectionType connType = new TECConnectionType();
+            TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
 
             TECTypical typical = new TECTypical();
             TECEquipment equipment = new TECEquipment(true);
             typical.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
+            subScope.Devices.Add(device);
             equipment.SubScope.Add(subScope);
             bid.Systems.Add(typical);
             IControllerConnection connection = controller.Connect(subScope, (subScope as IConnectable).AvailableProtocols.First());
@@ -3890,8 +3932,7 @@ namespace EstimatingUtilitiesLibraryTests
             controller.Disconnect(subScope);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
-
-
+            
             Dictionary<string, string> data;
 
             data = new Dictionary<string, string>();
@@ -3902,6 +3943,11 @@ namespace EstimatingUtilitiesLibraryTests
             data[SubScopeConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
             data[SubScopeConnectionChildrenTable.ChildID.Name] = subScope.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionChildrenTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[HardwiredConnectionConnectionTypeTable.TypeID.Name] = connType.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, HardwiredConnectionConnectionTypeTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
@@ -3916,7 +3962,7 @@ namespace EstimatingUtilitiesLibraryTests
         }
 
         [TestMethod]
-        public void Bid_RemoveSubScopeConnectionToInstance()
+        public void Bid_RemoveSubScopeConnectionFromInstance()
         {
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
@@ -3925,11 +3971,15 @@ namespace EstimatingUtilitiesLibraryTests
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
             bid.AddController(controller);
+            TECConnectionType connType = new TECConnectionType();
+            TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
+            bid.Catalogs.Devices.Add(device);
 
             TECTypical typical = new TECTypical();
             TECEquipment equipment = new TECEquipment(true);
             typical.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
+            subScope.Devices.Add(device);
             equipment.SubScope.Add(subScope);
             bid.Systems.Add(typical);
             TECSystem system = typical.AddInstance(bid);
@@ -3956,9 +4006,16 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionChildrenTable.TableName, data));
 
             data = new Dictionary<string, string>();
+            data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[HardwiredConnectionConnectionTypeTable.TypeID.Name] = connType.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, HardwiredConnectionConnectionTypeTable.TableName, data));
+
+            data = new Dictionary<string, string>();
             data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
             data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, ControllerConnectionTable.TableName, data));
+
+            
 
             int expectedCount = expectedItems.Count;
 
@@ -3976,12 +4033,16 @@ namespace EstimatingUtilitiesLibraryTests
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
+            TECConnectionType connType = new TECConnectionType();
+            TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
+            bid.Catalogs.Devices.Add(device);
 
             TECTypical typical = new TECTypical();
             typical.AddController(controller);
             TECEquipment equipment = new TECEquipment(true);
             typical.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
+            subScope.Devices.Add(device);
             equipment.SubScope.Add(subScope);
             bid.Systems.Add(typical);
 
@@ -4007,6 +4068,11 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionChildrenTable.TableName, data));
 
             data = new Dictionary<string, string>();
+            data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[HardwiredConnectionConnectionTypeTable.TypeID.Name] = connType.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, HardwiredConnectionConnectionTypeTable.TableName, data));
+
+            data = new Dictionary<string, string>();
             data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
             data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, ControllerConnectionTable.TableName, data));
@@ -4027,12 +4093,16 @@ namespace EstimatingUtilitiesLibraryTests
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
             TECController controller = new TECController(type, false);
+            TECConnectionType connType = new TECConnectionType();
+            TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
+            bid.Catalogs.Devices.Add(device);
 
             TECTypical typical = new TECTypical();
             typical.AddController(controller);
             TECEquipment equipment = new TECEquipment(true);
             typical.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope(true);
+            subScope.Devices.Add(device);
             equipment.SubScope.Add(subScope);
             bid.Systems.Add(typical);
             TECSystem system = typical.AddInstance(bid);
@@ -4063,10 +4133,15 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionChildrenTable.TableName, data));
 
             data = new Dictionary<string, string>();
+            data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[HardwiredConnectionConnectionTypeTable.TypeID.Name] = connType.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, HardwiredConnectionConnectionTypeTable.TableName, data));
+
+            data = new Dictionary<string, string>();
             data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
             data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, ControllerConnectionTable.TableName, data));
-
+            
             data = new Dictionary<string, string>();
             data[SubScopeConnectionTable.ID.Name] = instanceConnection.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionTable.TableName, data));
@@ -4077,10 +4152,17 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionChildrenTable.TableName, data));
 
             data = new Dictionary<string, string>();
+            data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
+            data[HardwiredConnectionConnectionTypeTable.TypeID.Name] = connType.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, HardwiredConnectionConnectionTypeTable.TableName, data));
+
+            data = new Dictionary<string, string>();
             data[ControllerConnectionTable.ControllerID.Name] = instanceController.Guid.ToString();
             data[ControllerConnectionTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, ControllerConnectionTable.TableName, data));
+
             
+
             int expectedCount = expectedItems.Count;
 
             //Assert

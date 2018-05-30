@@ -1606,7 +1606,7 @@ namespace Tests
         {
             //Arrange
             Guid expectedGuid = new Guid("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
-            IOType expectedType = IOType.AI;
+            IOType expectedType = IOType.Protocol;
             int expectedQty = 2;
 
             Guid expectedModuleGuid = new Guid("b346378d-dc72-4dda-b275-bbe03022dd12");
@@ -1634,7 +1634,7 @@ namespace Tests
         {
             //Arrange
             Guid expectedGuid = new Guid("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
-            IOType expectedType = IOType.AI;
+            IOType expectedType = IOType.Protocol;
             int expectedLabor = 2;
 
             Guid expectedModuleGuid = new Guid("b346378d-dc72-4dda-b275-bbe03022dd12");
@@ -1665,7 +1665,7 @@ namespace Tests
         {
             //Arrange
             Guid expectedGuid = new Guid("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
-            IOType expectedType = IOType.AI;
+            IOType expectedType = IOType.Protocol;
             int expectedLabor = 2;
 
             Guid expectedModuleGuid = new Guid("b346378d-dc72-4dda-b275-bbe03022dd12");

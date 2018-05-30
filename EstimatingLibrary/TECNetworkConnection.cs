@@ -124,12 +124,7 @@ namespace EstimatingLibrary
         {
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.propertyObjects());
-            List<TECObject> objects = new List<TECObject>();
-            foreach(IConnectable netconnect in Children)
-            {
-                objects.Add(netconnect as TECObject);
-            }
-            saveList.AddRange(objects, "Children");
+            saveList.AddRange(Children, "Children");
             saveList.Add(protocol, "Protocol");
             return saveList;
         }
@@ -137,12 +132,7 @@ namespace EstimatingLibrary
         {
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.linkedObjects());
-            List<TECObject> objects = new List<TECObject>();
-            foreach (IConnectable netconnect in Children)
-            {
-                objects.Add(netconnect as TECObject);
-            }
-            saveList.AddRange(objects, "Children");
+            saveList.AddRange(Children, "Children");
             saveList.Add(protocol, "Protocol");
             return saveList;
         }

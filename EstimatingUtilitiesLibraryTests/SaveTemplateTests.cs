@@ -1971,11 +1971,15 @@ namespace Tests
             expectedScope.Name = "New controlled scope";
             expectedScope.Description = "New controlled scope desc";
             templates.SystemTemplates.Add(expectedScope);
+            
+            var subScope = new TECSubScope(false);
+            subScope.Devices.Add(templates.Catalogs.Devices.First());
 
             var scopeEquipment = new TECEquipment(false);
             scopeEquipment.Name = "Test Scope System";
             scopeEquipment.Description = "Test scope system description";
-            scopeEquipment.SubScope.Add(new TECSubScope(false));
+            scopeEquipment.SubScope.Add(subScope);
+
 
             expectedScope.Equipment.Add(scopeEquipment);
 

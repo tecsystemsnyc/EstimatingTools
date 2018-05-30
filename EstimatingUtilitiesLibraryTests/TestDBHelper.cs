@@ -79,6 +79,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToProtocolConnectionTypeTable();
             addToIOProtocolTable();
             addToConnectionProtocolTable();
+            addToHardwiredConnectionConnectionTypeTable();
 
             SQLiteDB.NonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
@@ -145,6 +146,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToProtocolConnectionTypeTable();
             addToIOProtocolTable();
             addToConnectionProtocolTable();
+            addToHardwiredConnectionConnectionTypeTable();
 
             addToTemplatesSystemTable();
             addToTemplatesEquipmentTable();
@@ -1652,6 +1654,26 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("4175d04b-82b1-486b-b742-b2cc875405cb");
             values.Add("0");
             addDataToTable(new BidLocationTable(), values);
+        }
+        private static void addToHardwiredConnectionConnectionTypeTable()
+        {
+
+            List<string> values = new List<string>();
+            values.Add("5723e279-ac5c-4ee0-ae01-494a0c524b5c");
+            values.Add("f38867c8-3846-461f-a6fa-c941aeb723c7");
+            values.Add("2");
+            addDataToTable(new HardwiredConnectionConnectionTypeTable(), values);
+
+            if (isBid)
+            {
+
+                values = new List<string>();
+                values.Add("560ffd84-444d-4611-a346-266074f62f6f");
+                values.Add("f38867c8-3846-461f-a6fa-c941aeb723c7");
+                values.Add("3");
+                addDataToTable(new HardwiredConnectionConnectionTypeTable(), values);
+            }
+            
         }
 
         private static void addToTemplatesSystemTable()
