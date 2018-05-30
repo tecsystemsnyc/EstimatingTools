@@ -9,183 +9,223 @@
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              xmlns:dd="urn:gong-wpf-dragdrop"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <Style TargetType="TextBlock">
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="Margin" Value="2"/>
-        </Style>
+        <ResourceDictionary>
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style TargetType="TextBox">
+                <Setter Property="Margin" Value="2"/>
+            </Style>
+            <Storyboard x:Key="modalIn">
+                <DoubleAnimation Storyboard.TargetName="connectionsView"
+                                 Storyboard.TargetProperty="(local:ConnectionsView.ModalHeight)" 
+                                 Completed="modalIn_Completed"
+                                 FillBehavior="Stop"
+                                 From="{Binding ElementName=connectionsView, Path=ActualHeight}" To="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
+            </Storyboard>
+            <Storyboard x:Key="modalOut">
+                <DoubleAnimation Storyboard.TargetName="connectionsView"
+                                 Storyboard.TargetProperty="(local:ConnectionsView.ModalHeight)"
+                                 Completed="modalOut_Completed"
+                                 FillBehavior="Stop"
+                                 From="0" To="{Binding ElementName=connectionsView, Path=ActualHeight}" BeginTime="0:0:0" Duration="0:0:0.2"/>
+            </Storyboard>
+        </ResourceDictionary>
     </UserControl.Resources>
-    <Grid DataContext="{Binding ElementName=connectionsView, Path=VM}" 
+    <Grid>
+        <Grid DataContext="{Binding ElementName=connectionsView, Path=VM}" 
           Background="{StaticResource SectionBackgroundBrush}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="160"/>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="160"/>
-        </Grid.ColumnDefinitions>
-        
-        <!--Parent Controllers Selection Grid-->
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition/>
-                <RowDefinition Height="30"/>
-            </Grid.RowDefinitions>
-            <!--Header-->
-            <Border Style="{StaticResource HeaderBorder}">
-                <TextBlock Text="Controllers" Style="{StaticResource ListHeader}"/>
-            </Border>
-            <!--Controllers List-->
-            <controls:ScopeGroupControl ItemsSource="{Binding Controllers}"
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="160"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="160"/>
+            </Grid.ColumnDefinitions>
+
+            <!--Parent Controllers Selection Grid-->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <!--Header-->
+                <Border Style="{StaticResource HeaderBorder}">
+                    <TextBlock Text="Controllers" Style="{StaticResource ListHeader}"/>
+                </Border>
+                <!--Controllers List-->
+                <controls:ScopeGroupControl ItemsSource="{Binding Controllers}"
                                         SelectedItem="{Binding SelectedControllerGroup}"
                                         IsDropTarget="False"
                                         IsDragSource="False"
                                         Grid.Row="1"/>
-            <!--Filters Grid-->
-            <Grid Grid.Row="2">
-                <TextBlock Text="Filters"/>
+                <!--Filters Grid-->
+                <Grid Grid.Row="2">
+                    <TextBlock Text="Filters"/>
+                </Grid>
             </Grid>
-        </Grid>
-        
-        <!--Controller Details-->
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition/>
-                <RowDefinition Height="90"/>
-            </Grid.RowDefinitions>
-            <!--Controller Info-->
-            <Grid>
-                <TextBlock Text="{Binding SelectedController.Name, StringFormat=Selected Controller: {0}}"/>
-            </Grid>
-            <!--Connections List-->
-            <Border Grid.Row="1" BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="1" CornerRadius="10">
-                <ListView ItemsSource="{Binding SelectedController.ChildrenConnections}" 
+
+            <!--Controller Details-->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="90"/>
+                </Grid.RowDefinitions>
+                <!--Controller Info-->
+                <Grid>
+                    <TextBlock Text="{Binding SelectedController.Name, StringFormat=Selected Controller: {0}}"/>
+                </Grid>
+                <!--Connections List-->
+                <Border Grid.Row="1" BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="1" CornerRadius="10">
+                    <ListView ItemsSource="{Binding SelectedController.ChildrenConnections}" 
                           dd:DragDrop.IsDropTarget="True"
                           dd:DragDrop.DropHandler="{Binding ElementName=connectionsView, Path=VM}"
                           Background="Transparent" BorderBrush="Transparent"
                           SelectedItem="{Binding SelectedConnection}"
                           HorizontalContentAlignment="Stretch"
                           x:Name="connectionsList">
-                    <ListView.Resources>
-                        <DataTemplate DataType="{x:Type models:TECHardwiredConnection}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="60"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding Child.Name, StringFormat=To: {0}}"/>
-                                <TextBlock Text="{Binding Length, StringFormat=Length: {0}}"
+                        <ListView.Resources>
+                            <DataTemplate DataType="{x:Type models:TECHardwiredConnection}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="60"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Child.Name, StringFormat=To: {0}}"/>
+                                    <TextBlock Text="{Binding Length, StringFormat=Length: {0}}"
                                            HorizontalAlignment="Right"
                                            Grid.Column="1"/>
-                            </Grid>
-                        </DataTemplate>
-                        <DataTemplate DataType="{x:Type models:TECNetworkConnection}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Text="{Binding Protocol, StringFormat=Length: {0}}"/>
-                                <TextBlock Text="{Binding Length, StringFormat=Length: {0}}"
+                                </Grid>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type models:TECNetworkConnection}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="{Binding Protocol, StringFormat=Length: {0}}"/>
+                                    <TextBlock Text="{Binding Length, StringFormat=Length: {0}}"
                                            HorizontalAlignment="Right"
                                            Grid.Column="1"/>
-                                <Expander Grid.Row="1" Header="{Binding Children.Count, StringFormat=Children: {0}}">
-                                    <ListView ItemsSource="{Binding Children}">
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding Name}"/>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
-                                </Expander>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.Resources>
-                </ListView>
-            </Border>
-            
-            <!--Default Connection Properties-->
-            <Grid Grid.Row="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="55"/>
-                    <ColumnDefinition Width="50"/>
-                    <ColumnDefinition Width="45"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="0,0,1,1"
+                                    <Expander Grid.Row="1" Header="{Binding Children.Count, StringFormat=Children: {0}}">
+                                        <ListView ItemsSource="{Binding Children}">
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Name}"/>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
+                                    </Expander>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.Resources>
+                    </ListView>
+                </Border>
+
+                <!--Default Connection Properties-->
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="55"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="45"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="0,0,1,1"
                         Margin="5,15,5,15"
                         Grid.RowSpan="4">
-                    <TextBlock Text="Defaults"/>
-                </Border>
-                <TextBlock Text="Wire" FontWeight="DemiBold"
+                        <TextBlock Text="Defaults"/>
+                    </Border>
+                    <TextBlock Text="Wire" FontWeight="DemiBold"
                            Grid.Column="1"
                            Grid.RowSpan="2"/>
-                <TextBlock Text="Length: " Grid.Column="2"/>
-                <TextBox Text="{Binding DefaultWireLength}"
+                    <TextBlock Text="Length: " Grid.Column="2"/>
+                    <TextBox Text="{Binding DefaultWireLength}"
                          Grid.Column="3"/>
-                <TextBlock Text="Plenum: " Grid.Column="2" Grid.Row="1"/>
-                <CheckBox IsChecked="{Binding DefaultPlenum}"
+                    <TextBlock Text="Plenum: " Grid.Column="2" Grid.Row="1"/>
+                    <CheckBox IsChecked="{Binding DefaultPlenum}"
                          Grid.Column="3"
                           Grid.Row="1"
                           Margin="2,0,0,0"/>
 
-                <TextBlock Text="Conduit" FontWeight="DemiBold" Grid.Row="2"
+                    <TextBlock Text="Conduit" FontWeight="DemiBold" Grid.Row="2"
                            Grid.Column="1"
                            Grid.RowSpan="2"/>
-                <TextBlock Text="Length: " 
+                    <TextBlock Text="Length: " 
                            Grid.Column="2"
                            Grid.Row="2"/>
-                <TextBox Text="{Binding DefaultConduitLength}"
+                    <TextBox Text="{Binding DefaultConduitLength}"
                          Grid.Row="2"
                          Grid.Column="3"/>
-                <TextBlock Text="Type: " Grid.Row="3" Grid.Column="2"/>
-                <ComboBox ItemsSource="{Binding Catalogs.ConduitTypes}"
+                    <TextBlock Text="Type: " Grid.Row="3" Grid.Column="2"/>
+                    <ComboBox ItemsSource="{Binding Catalogs.ConduitTypes}"
                               SelectedItem="{Binding DefaultConduitType}"
                               DisplayMemberPath="Name"
                               Grid.Column="3"
                           Grid.Row="3" Margin="2"/>
 
-            </Grid>
-            
-            <!--Select label-->
-            <TextBlock Text="Select a controller to make connections."
+                </Grid>
+
+                <!--Select label-->
+                <TextBlock Text="Select a controller to make connections."
                        Visibility="{Binding SelectedControllerGroup, Converter={utilities:NullToVisibilityConverter}}"
                        Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        </Grid>
-        
-        <!--Connectable Grid-->
-        <Grid Grid.Column="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition/>
-                <RowDefinition Height="30"/>
-            </Grid.RowDefinitions>
-            <!--Header-->
-            <Border Style="{StaticResource HeaderBorder}">
-                <TextBlock Text="Connectables" Style="{StaticResource ListHeader}"/>
-            </Border>
-            <!--Connectables List-->
-            <controls:ScopeGroupControl ItemsSource="{Binding Connectables}"
+            </Grid>
+
+            <!--Connectable Grid-->
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <!--Header-->
+                <Border Style="{StaticResource HeaderBorder}">
+                    <TextBlock Text="Connectables" Style="{StaticResource ListHeader}"/>
+                </Border>
+                <!--Connectables List-->
+                <controls:ScopeGroupControl ItemsSource="{Binding Connectables}"
                                         SelectedItem="{Binding SelectedConnectableGroup}"
                                         IsDropTarget="False"
                                         Grid.Row="1"/>
-            <!--Filter-->
-            <TextBlock Text="Filters" Grid.Row="2"/>
+                <!--Filter-->
+                <TextBlock Text="Filters" Grid.Row="2"/>
+            </Grid>
+        </Grid>
+        <!--Add Modal-->
+        <Grid Width="{Binding ElementName=connectionsView, Path=ActualWidth}"
+              Height="{Binding ElementName=connectionsView, Path=ActualHeight}">
+            <Grid.Resources>
+                <sys:Double x:Key="marginEdge">0.0</sys:Double>
+            </Grid.Resources>
+            <Grid.Margin>
+                <MultiBinding Converter="{utilities:HeightToGridMarginConverter}">
+                    <Binding Source="{StaticResource marginEdge}"/>
+                    <Binding ElementName="connectionsView" Path="ModalHeight"/>
+                </MultiBinding>
+            </Grid.Margin>
+            <Border BorderBrush="DarkGray" Background="{StaticResource SectionBackgroundBrush}" 
+                    BorderThickness="2" CornerRadius="8" Margin="20">
+                <Border.BitmapEffect>
+                    <DropShadowBitmapEffect Color="Black" Direction="320" ShadowDepth="25" Softness="1" 
+                                            Opacity="0.5"/>
+                </Border.BitmapEffect>
+                <TextBlock Text="How would you like to connect?"/>
+            </Border>
         </Grid>
     </Grid>
 </UserControl>

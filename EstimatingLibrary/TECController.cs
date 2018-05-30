@@ -166,7 +166,7 @@ namespace EstimatingLibrary
         }
         public bool CanConnect(IConnectable connectable)
         {
-            return CompatibleProtocols(connectable).Count > 0;
+            return connectable != null && CompatibleProtocols(connectable).Count > 0;
         }
         public IControllerConnection Connect(IConnectable connectable, IProtocol protocol)
         {

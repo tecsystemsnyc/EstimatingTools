@@ -289,6 +289,7 @@ namespace EstimatingLibrary
             get
             {
                 List<IProtocol> protocols = new List<IProtocol>();
+                if (Connection != null) return protocols;
                 foreach(IEndDevice endDev in this.Devices)
                 {
                     if (protocols.Count <= 0)

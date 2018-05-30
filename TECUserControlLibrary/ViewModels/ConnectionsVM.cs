@@ -299,12 +299,17 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void Drop(IDropInfo dropInfo)
         {
-            throw new NotImplementedException();
-            //var connection = SelectedController.Connect(((ScopeGroup)dropInfo.Data).Scope as IConnectable);
-            //connection.Length = this.DefaultWireLength;
-            //connection.ConduitType = this.DefaultConduitType;
-            //connection.ConduitLength = this.DefaultConduitLength;
-            //connection.IsPlenum = this.DefaultPlenum;
+            IConnectable connectable = ((ScopeGroup)dropInfo.Data).Scope as IConnectable;
+            var compatibleProtocols = SelectedController.CompatibleProtocols(connectable);
+            if(compatibleProtocols.Count == 1)
+            {
+                var connection = SelectedController.Connect(connectable, compatibleProtocols.First());
+                connection.Length = this.DefaultWireLength;
+                connection.ConduitType = this.DefaultConduitType;
+                connection.ConduitLength = this.DefaultConduitLength;
+                connection.IsPlenum = this.DefaultPlenum;
+            }
+            
         }
 
 

@@ -23,6 +23,14 @@ namespace TECUserControlLibrary.Views
     public partial class ConnectionsView : UserControl
     {
 
+        public double ModalHeight
+        {
+            get { return (double)GetValue(ModalHeightProperty); }
+            set { SetValue(ModalHeightProperty, value); }
+        }
+        public static readonly DependencyProperty ModalHeightProperty =
+            DependencyProperty.Register("ModalHeight", typeof(double),
+              typeof(SystemHierarchyView), new PropertyMetadata(1.0));
 
         public ConnectionsVM VM
         {
@@ -33,13 +41,34 @@ namespace TECUserControlLibrary.Views
         // Using a DependencyProperty as the backing store for VM.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty VMProperty =
             DependencyProperty.Register("VM", typeof(ConnectionsVM), typeof(ConnectionsView));
-
-
-
+        
         public ConnectionsView()
         {
             InitializeComponent();
+            SizeChanged += handleSizeChanged;
         }
-        
+
+        private void modalOut_Completed(object sender, EventArgs e)
+        {
+            ModalHeight = this.ActualHeight;
+        }
+
+        private void modalIn_Completed(object sender, EventArgs e)
+        {
+            ModalHeight = 0;
+        }
+
+        private void handleSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (e.HeightChanged)
+            {
+                if (ModalHeight != 0.0)
+                {
+                    ModalHeight = e.NewSize.Height;
+                }
+            }
+        }
+
+
     }
 }
