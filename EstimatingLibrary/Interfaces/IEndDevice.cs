@@ -11,5 +11,8 @@ namespace EstimatingLibrary.Interfaces
         List<IProtocol> ConnectionMethods { get; }
         String Name { get; }
         String Description { get; }
+
+        ObservableCollection<TECConnectionType> HardwiredConnectionTypes { get; }
+        ObservableCollection<TECProtocol> PossibleProtocols { get; }
     }
 }

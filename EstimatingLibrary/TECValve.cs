@@ -128,12 +128,13 @@ namespace EstimatingLibrary
             return new TECValve(this);
         }
 
-        List<IProtocol> IEndDevice.ConnectionMethods
-        {
-            get
-            {
-                return ((IEndDevice)Actuator).ConnectionMethods;
-            }
-        }
+        #region IEndDevice
+        public List<IProtocol> ConnectionMethods => ((IEndDevice)Actuator).ConnectionMethods;
+
+        public ObservableCollection<TECConnectionType> HardwiredConnectionTypes => ((IEndDevice)Actuator).HardwiredConnectionTypes;
+
+        public ObservableCollection<TECProtocol> PossibleProtocols => ((IEndDevice)Actuator).PossibleProtocols;
+        #endregion
+
     }
 }
