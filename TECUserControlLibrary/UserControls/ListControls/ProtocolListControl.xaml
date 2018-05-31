@@ -29,7 +29,7 @@
             </ListView.ItemsPanel>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <itemControls:ElectricalMaterialControl ElectricalMaterial="{Binding}"
+                    <itemControls:ProtocolControl Protocol="{Binding}"
                                                             DeleteCommand="{Binding ElementName=protocolListcontrol, Path=DeleteCommand}"
                                                             MouseUp="ItemControl_MouseUp"/>
                 </DataTemplate>

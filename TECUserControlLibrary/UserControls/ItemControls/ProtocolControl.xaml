@@ -20,7 +20,7 @@
                               CommandParameter="{Binding}"/>
                 </ContextMenu>
             </Grid.ContextMenu>
-            <TextBlock FontSize="10" Text="{Binding Label}" FontWeight="DemiBold"/>
+            <TextBlock FontSize="10" Text="{Binding Label}" FontWeight="DemiBold" Margin="2"/>
         </Grid>
     </Border>
 </local:BaseItemControl>
