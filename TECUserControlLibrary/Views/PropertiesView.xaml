@@ -70,8 +70,7 @@
                 </DataTemplate>
                 <DataTemplate x:Key="controllerType">
                     <pControls:ControllerTypePropertiesControl Selected="{Binding}"
-                                                               DropHandler="{Binding ElementName=propertiesView, Path=DropHandler}"
-                                                               ProtocolToIODropHandler="{Binding ElementName=propertiesView, Path=DropHandler.ProtocolToIODropHandler}"/>
+                                                               DropHandler="{Binding ElementName=propertiesView, Path=DropHandler}"/>
                 </DataTemplate>
                 <DataTemplate x:Key="connection">
                     <pControls:ConnectionPropertiesControl Selected="{Binding}"

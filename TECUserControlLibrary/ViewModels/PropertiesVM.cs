@@ -88,8 +88,6 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public IDropTarget ProtocolToIODropHandler { get; }
-
         private string getTemplateText(TECObject item)
         {
             TECTemplates templates = scopeManager as TECTemplates;
@@ -155,8 +153,6 @@ namespace TECUserControlLibrary.ViewModels
             TemplateText = "Instance Template";
             DeleteConnectionTypeCommand = new RelayCommand<TECConnectionType>(deleteConnectionTypeExecute, canDeleteConnectionType);
             Refresh(catalogs, scopeManager);
-
-            this.ProtocolToIODropHandler = new ProtocolToIODropHandler();
         }
 
         private void deleteConnectionTypeExecute(TECConnectionType obj)
@@ -188,27 +184,6 @@ namespace TECUserControlLibrary.ViewModels
         public void Drop(IDropInfo dropInfo)
         {
             UIHelpers.StandardDrop(dropInfo, scopeManager);
-        }
-    }
-
-    public class ProtocolToIODropHandler : IDropTarget
-    {
-        public void DragOver(IDropInfo dropInfo)
-        {
-            if (dropInfo.Data is TECProtocol && UIHelpers.TargetCollectionIsType(dropInfo, typeof(TECIO)))
-            {
-                UIHelpers.SetDragAdorners(dropInfo);
-            }
-        }
-
-        public void Drop(IDropInfo dropInfo)
-        {
-            UIHelpers.Drop(dropInfo, convertToIO);
-        }
-
-        static private object convertToIO(object protocol)
-        {
-            return new TECIO(protocol as TECProtocol);
         }
     }
 }

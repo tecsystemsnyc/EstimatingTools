@@ -37,7 +37,7 @@
             <Button Content="Add IO" Command="{Binding AddIOCommand}"
                     Grid.Row="1" Grid.Column="1" Margin="2"/>
             <controls:IOGridControl Grid.Row="2" Grid.ColumnSpan="2" IOSource="{Binding ControllerType.IO}"
-                                    DropHandler="{Binding ElementName=controllerTypePropertiesControl, Path=ProtocolToIODropHandler}">
+                                    DropHandler="{Binding ProtocolToIODropHandler}">
                 <i:Interaction.Behaviors>
                     <utilities:BubbleScrollEvent/>
                 </i:Interaction.Behaviors>
