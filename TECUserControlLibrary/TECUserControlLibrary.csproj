@@ -134,6 +134,9 @@
     <Compile Include="UserControls\ItemControls\NetworkConnectionItemControl.xaml.cs">
       <DependentUpon>NetworkConnectionItemControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ItemControls\ProtocolControl.xaml.cs">
+      <DependentUpon>ProtocolControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ItemControls\TypicalControl.xaml.cs">
       <DependentUpon>TypicalControl.xaml</DependentUpon>
     </Compile>
@@ -191,6 +194,9 @@
     </Compile>
     <Compile Include="UserControls\ListControls\ControllerListControl.xaml.cs">
       <DependentUpon>ControllerListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ListControls\ProtocolListControl.xaml.cs">
+      <DependentUpon>ProtocolListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ListControls\ValveScopeItemListControl.xaml.cs">
       <DependentUpon>ValveScopeItemListControl.xaml</DependentUpon>
@@ -615,6 +621,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\ItemControls\ProtocolControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\ItemControls\TypicalControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -676,6 +686,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\ListControls\ControllerListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ListControls\ProtocolListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,0 +1,39 @@
+﻿<local:BaseListControl x:TypeArguments="models:TECProtocol" 
+                       x:Class="TECUserControlLibrary.UserControls.ListControls.ProtocolListControl"
+                       x:Name="protocolListControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+                       xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
+                       xmlns:dd="urn:gong-wpf-dragdrop"
+                       xmlns:itemControls="clr-namespace:TECUserControlLibrary.UserControls.ItemControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid DataContext="{Binding ElementName=protocolListControl}">
+        <ListView ItemsSource="{Binding Source}"
+                      SelectedItem="{Binding SelectedItem}"
+                      SelectionChanged="ListView_Selected"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      dd:DragDrop.DropHandler="{Binding ElementName=protocolListControl, Path=DropHandler}"
+                      dd:DragDrop.IsDropTarget="True"
+                      dd:DragDrop.IsDragSource="{Binding ElementName=protocolListControl, Path=IsDragSource}"
+                      AllowDrop="True"
+                      MouseDoubleClick="ListView_MouseDoubleClicked"
+                      Drop="ListView_Dropped">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <itemControls:ProtocolControl Protocol="{Binding}"
+                                                            DeleteCommand="{Binding ElementName=protocolListcontrol, Path=DeleteCommand}"
+                                                            MouseUp="ItemControl_MouseUp"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</local:BaseListControl>
