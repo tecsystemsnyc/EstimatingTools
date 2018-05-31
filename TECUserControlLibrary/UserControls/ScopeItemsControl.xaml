@@ -16,8 +16,8 @@
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <DataTemplate x:Key="ScopeDragAdorner">
-                <StackPanel>
-                    <StackPanel.Resources>
+                <ContentPresenter Content="{Binding}">
+                    <ContentPresenter.Resources>
                         <DataTemplate DataType="{x:Type eLib:TECScope}">
                             <Grid Margin="0,0,0,5">
                                 <local:ScopeControl Content="{Binding}"
@@ -34,8 +34,8 @@
                                                     Margin="5"/>
                             </Grid>
                         </DataTemplate>
-                    </StackPanel.Resources>
-                </StackPanel>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
             </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
