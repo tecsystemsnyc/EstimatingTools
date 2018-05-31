@@ -309,6 +309,8 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void Drop(IDropInfo dropInfo)
         {
+            SelectionNeeded = true;
+
             IConnectable connectable = ((ScopeGroup)dropInfo.Data).Scope as IConnectable;
             var compatibleProtocols = SelectedController.CompatibleProtocols(connectable);
             if(compatibleProtocols.Count == 1)
