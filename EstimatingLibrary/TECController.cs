@@ -148,6 +148,7 @@ namespace EstimatingLibrary
         public List<IProtocol> CompatibleProtocols(IConnectable connectable)
         {
             List<IProtocol> compatProtocols = new List<IProtocol>();
+            if(this == connectable) { return compatProtocols; }
             foreach(IProtocol protocol in connectable.AvailableProtocols)
             {
                 if (protocol is TECHardwiredProtocol)
@@ -528,7 +529,7 @@ namespace EstimatingLibrary
         {
             get
             {
-                return this.AvailableProtocols;
+                return (this as IConnectable).GetParentConnection() == null ? this.AvailableProtocols : new List<IProtocol>();
             }
         }
         IOCollection IConnectable.HardwiredIO
