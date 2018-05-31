@@ -30,7 +30,7 @@ namespace TECUserControlLibrary.Views
         }
         public static readonly DependencyProperty ModalHeightProperty =
             DependencyProperty.Register("ModalHeight", typeof(double),
-              typeof(SystemHierarchyView), new PropertyMetadata(1.0));
+              typeof(ConnectionsView), new PropertyMetadata(1.0));
 
         public ConnectionsVM VM
         {
