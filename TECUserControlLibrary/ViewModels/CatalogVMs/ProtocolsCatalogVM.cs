@@ -27,12 +27,19 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
         }
         public ObservableCollection<TECConnectionType> ConnectionTypes { get; }
 
-        public ICommand AddProtocolCommand { get; }
+        public RelayCommand AddProtocolCommand { get; }
 
         public ProtocolsCatalogVM(TECTemplates templates, ReferenceDropper dropHandler) : base(templates, dropHandler)
         {
             this.ConnectionTypes = new ObservableCollection<TECConnectionType>();
             this.AddProtocolCommand = new RelayCommand(addProtocolExecute, canAddProtocol);
+
+            this.ConnectionTypes.CollectionChanged += connectionTypesCollectionChanged;
+        }
+
+        private void connectionTypesCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            AddProtocolCommand.RaiseCanExecuteChanged();
         }
 
         private void addProtocolExecute()
