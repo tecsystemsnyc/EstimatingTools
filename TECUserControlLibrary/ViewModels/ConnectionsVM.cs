@@ -2,6 +2,7 @@
 using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using NLog;
 using System;
@@ -34,6 +35,7 @@ namespace TECUserControlLibrary.ViewModels
         private TECElectricalMaterial _defaultConduitType;
         private bool _defaultPlenum = false;
         private bool _selectionNeeded = false;
+        private IProtocol _selectedProtocol;
         
         public ObservableCollection<ScopeGroup> Connectables
         {
@@ -138,6 +140,30 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("SelectionNeeded");
             }
         }
+        public IProtocol SelectedProtocol
+        {
+            get { return _selectedProtocol; }
+            set
+            {
+                _selectedProtocol = value;
+                RaisePropertyChanged("SelectedProtocol");
+            }
+        }
+
+        private List<IProtocol> _compatibleProtocols;
+
+        public List<IProtocol> CompatibleProtocols
+        {
+            get { return _compatibleProtocols; }
+            set
+            {
+                _compatibleProtocols = value;
+                RaisePropertyChanged("CompatibleProtocols");
+            }
+        }
+        
+        public RelayCommand SelectProtocolCommand { get; private set; }
+        public RelayCommand CancelProtocolSelectionCommand { get; private set; }
 
         public event Action<TECObject> Selected;
 
@@ -171,6 +197,26 @@ namespace TECUserControlLibrary.ViewModels
             {
                 repopulate(child, addConnectable);
             }
+
+            SelectProtocolCommand = new RelayCommand(selectProtocolExecute, selectProtocolCanExecute);
+            CancelProtocolSelectionCommand = new RelayCommand(cancelProtocolSelectionExecute);
+        }
+
+        private void cancelProtocolSelectionExecute()
+        {
+            SelectedProtocol = null;
+            SelectionNeeded = false;
+        }
+
+        private void selectProtocolExecute()
+        {
+            SelectedController.Connect(SelectedConnectable, SelectedProtocol);
+            cancelProtocolSelectionExecute();
+        }
+
+        private bool selectProtocolCanExecute()
+        {
+            return SelectedProtocol != null && SelectedConnectable != null && SelectedController != null;
         }
 
         private void repopulate(ITECObject child, Action<ScopeGroup, IConnectable> action)
@@ -309,8 +355,6 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void Drop(IDropInfo dropInfo)
         {
-            SelectionNeeded = true;
-
             IConnectable connectable = ((ScopeGroup)dropInfo.Data).Scope as IConnectable;
             var compatibleProtocols = SelectedController.CompatibleProtocols(connectable);
             if(compatibleProtocols.Count == 1)
@@ -323,6 +367,7 @@ namespace TECUserControlLibrary.ViewModels
             } else
             {
                 SelectionNeeded = true;
+                CompatibleProtocols = compatibleProtocols;
             }
             
         }

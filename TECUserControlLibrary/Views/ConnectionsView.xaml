@@ -207,8 +207,8 @@
             </Grid>
         </Grid>
         <!--Add Modal-->
-        <Grid Width="{Binding ElementName=connectionsView, Path=ActualWidth}"
-              Height="{Binding ElementName=connectionsView, Path=ActualHeight}">
+        <Grid Width="400"
+              Height="400">
             <Grid.Resources>
                 <sys:Double x:Key="marginEdge">0.0</sys:Double>
             </Grid.Resources>
@@ -224,7 +224,29 @@
                     <DropShadowBitmapEffect Color="Black" Direction="320" ShadowDepth="25" Softness="1" 
                                             Opacity="0.5"/>
                 </Border.BitmapEffect>
-                <TextBlock Text="How would you like to connect?"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="80"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                        
+                        <TextBlock Text="How would you like to connect?"/>
+                    <ComboBox ItemsSource="{Binding ElementName=connectionsView,Path=VM.CompatibleProtocols}"
+                             DisplayMemberPath="Label"
+                              SelectedItem="{Binding ElementName=connectionsView, Path=VM.SelectedProtocol}"
+                              Grid.Column="1"/>
+                    <Button Content="Cancel"
+                            Command="{Binding ElementName=connectionsView, Path=VM.CancelProtocolSelectionCommand}"
+                            Grid.Row="1"/>
+                    <Button Content="Connect"
+                            Command="{Binding ElementName=connectionsView, Path=VM.SelectProtocolCommand}"
+                            Grid.Row="1"
+                            Grid.Column="1"/>
+                </Grid>
             </Border>
         </Grid>
     </Grid>
