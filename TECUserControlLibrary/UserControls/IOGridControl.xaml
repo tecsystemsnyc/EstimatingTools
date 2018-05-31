@@ -6,26 +6,28 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:cLib="clr-namespace:TECUserControlLibrary"
+             xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              mc:Ignorable="d" 
-             x:Name="parent"
+             x:Name="ioGridControl"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
-            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=parent, Path=ViewModel}"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid DataContext="{Binding ElementName=parent, Path=ViewModel}">
-        <DataGrid ItemsSource="{Binding ElementName=parent, Path=IOSource}"
+    <Grid>
+        <DataGrid ItemsSource="{Binding ElementName=ioGridControl, Path=IOSource}"
                   AutoGenerateColumns="False"
-                  CanUserAddRows="False">
+                  CanUserAddRows="False"
+                  dd:DragDrop.DropHandler="{Binding ElementName=ioGridControl, Path=DropHandler}"
+                  dd:DragDrop.IsDropTarget="True">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Type}" Header="Type" Width="Auto" MinWidth="40" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding DisplayName}" Header="Type" Width="Auto" MinWidth="40" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding Quantity}" Header="Quantity" Width="Auto" MinWidth="60"/>
             </DataGrid.Columns>
 

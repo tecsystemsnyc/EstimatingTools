@@ -47,7 +47,7 @@ namespace TECUserControlLibrary.UserControls.PropertyControls
         // Using a DependencyProperty as the backing store for DropHandler.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DropHandlerProperty =
             DependencyProperty.Register("DropHandler", typeof(IDropTarget), typeof(ControllerTypePropertiesControl));
-
+        
 
 
         public ControllerTypePropertiesControl()

@@ -97,6 +97,21 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "Quantity", this, value, old);
             }
         }
+
+        public string DisplayName
+        {
+            get
+            {
+                if (this.Protocol != null)
+                {
+                    return this.Protocol.Label;
+                }
+                else
+                {
+                    return this.Type.ToString();
+                }
+            }
+        }
         
         private void setTypeToProtocol()
         {

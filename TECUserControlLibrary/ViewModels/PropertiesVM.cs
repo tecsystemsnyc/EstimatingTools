@@ -185,6 +185,5 @@ namespace TECUserControlLibrary.ViewModels
         {
             UIHelpers.StandardDrop(dropInfo, scopeManager);
         }
-        
     }
 }
