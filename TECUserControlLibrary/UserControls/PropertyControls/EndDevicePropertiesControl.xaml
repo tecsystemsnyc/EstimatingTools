@@ -9,15 +9,27 @@
              mc:Ignorable="d" 
              d:DesignHeight="120" d:DesignWidth="300">
     <Grid DataContext="{Binding ElementName=endDevicePropertiesControl, Path=Selected}">
-        <Expander Header="Connection Types">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Expander Header="Hardwired Connection Types">
             <Border BorderBrush="DarkGray" BorderThickness="1">
                 
-                <listControls:ElectricalMaterialListControl Source="{Binding ConnectionTypes}" Height="60"
+                <listControls:ElectricalMaterialListControl Source="{Binding HardwiredConnectionTypes}" Height="60"
                                                             IsDragSource="False"
                                                             DropHandler="{Binding ElementName=endDevicePropertiesControl, Path=DropHandler}"
-                                                        DeleteCommand="{Binding ElementName=endDevicePropertiesControl, Path=DeleteCommand}"/>
+                                                            DeleteCommand="{Binding ElementName=endDevicePropertiesControl, Path=DeleteCommand}"/>
             </Border>
 
-        </Expander>   
+        </Expander>
+        <Expander Header="Alternate Protocols" Grid.Row="1">
+            <Border BorderBrush="DarkGray" BorderThickness="1">
+                <listControls:ProtocolListControl Source="{Binding PossibleProtocols}" Height="60"
+                                                  IsDragSource="False"
+                                                  DropHandler="{Binding ElementName=endDevicePropertiesControl, Path=DropHandler}"
+                                                  DeleteCommand="{Binding ElementName=endDevicePropertiesControl, Path=DeleteCommand}"/>
+            </Border>
+        </Expander>
     </Grid>
 </UserControl>
