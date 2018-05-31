@@ -9,9 +9,9 @@ using TECUserControlLibrary.ViewModels;
 namespace TECUserControlLibrary.Views
 {
     /// <summary>
-    /// Interaction logic for MaterialView.xaml
+    /// Interaction logic for CatalogsView.xaml
     /// </summary>
-    public partial class MaterialView : UserControl
+    public partial class CatalogsView : UserControl
     {
         /// <summary>
         /// Gets or sets the SelectedScopeType which is displayed
@@ -27,7 +27,7 @@ namespace TECUserControlLibrary.Views
         /// </summary>
         public static readonly DependencyProperty SelectedMaterialTypeProperty =
             DependencyProperty.Register("SelectedMaterialType", typeof(MaterialType),
-              typeof(MaterialView), new PropertyMetadata(default(MaterialType)));
+              typeof(CatalogsView), new PropertyMetadata(default(MaterialType)));
 
         public object Selected
         {
@@ -37,7 +37,7 @@ namespace TECUserControlLibrary.Views
 
         public static readonly DependencyProperty SelectedProperty =
             DependencyProperty.Register("Selected", typeof(object),
-                typeof(MaterialView), new FrameworkPropertyMetadata(null)
+                typeof(CatalogsView), new FrameworkPropertyMetadata(null)
                 {
                     BindsTwoWayByDefault = true,
                     DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
@@ -51,7 +51,7 @@ namespace TECUserControlLibrary.Views
 
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel", typeof(MaterialVM),
-                typeof(MaterialView));
+                typeof(CatalogsView));
 
 
         public double ModalHeight
@@ -62,9 +62,9 @@ namespace TECUserControlLibrary.Views
 
         // Using a DependencyProperty as the backing store for ModalHeight.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ModalHeightProperty =
-            DependencyProperty.Register("ModalHeight", typeof(double), typeof(MaterialView), new PropertyMetadata(1.0));
+            DependencyProperty.Register("ModalHeight", typeof(double), typeof(CatalogsView), new PropertyMetadata(1.0));
         
-        public MaterialView()
+        public CatalogsView()
         {
             InitializeComponent();
             SizeChanged += handleSizeChanged;

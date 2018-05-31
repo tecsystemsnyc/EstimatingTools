@@ -471,8 +471,8 @@
     <Compile Include="Views\ProposalView.xaml.cs">
       <DependentUpon>ProposalView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MaterialView.xaml.cs">
-      <DependentUpon>MaterialView.xaml</DependentUpon>
+    <Compile Include="Views\CatalogsView.xaml.cs">
+      <DependentUpon>CatalogsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\ControllerInPanel.cs" />
     <Compile Include="Models\FileDialogParameters.cs" />
@@ -983,7 +983,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MaterialView.xaml">
+    <Page Include="Views\CatalogsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
