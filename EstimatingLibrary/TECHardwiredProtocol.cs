@@ -11,7 +11,7 @@ namespace EstimatingLibrary
     public class TECHardwiredProtocol : TECObject, IProtocol, IEquatable<TECHardwiredProtocol>
     {
 
-        public string Name => "Hardwired";
+        public string Label => "Hardwired";
 
         public ObservableCollection<TECConnectionType> ConnectionTypes { get; }
 

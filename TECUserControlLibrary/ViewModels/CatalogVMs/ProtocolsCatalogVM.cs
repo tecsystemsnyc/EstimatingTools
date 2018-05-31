@@ -45,7 +45,7 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
         private void addProtocolExecute()
         {
             TECProtocol toAdd = new TECProtocol(this.ConnectionTypes);
-            toAdd.Name = this.Name;
+            toAdd.Label = this.Name;
 
             this.Templates.Catalogs.Protocols.Add(toAdd);
 
