@@ -33,6 +33,7 @@ namespace TECUserControlLibrary.ViewModels
         private Double _defaultConduitLength = 30.0;
         private TECElectricalMaterial _defaultConduitType;
         private bool _defaultPlenum = false;
+        private bool _selectionNeeded = false;
         
         public ObservableCollection<ScopeGroup> Connectables
         {
@@ -128,7 +129,16 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         public TECCatalogs Catalogs { get; }
-        
+        public bool SelectionNeeded
+        {
+            get { return _selectionNeeded; }
+            set
+            {
+                _selectionNeeded = value;
+                RaisePropertyChanged("SelectionNeeded");
+            }
+        }
+
         public event Action<TECObject> Selected;
 
         /// <summary>
@@ -308,6 +318,9 @@ namespace TECUserControlLibrary.ViewModels
                 connection.ConduitType = this.DefaultConduitType;
                 connection.ConduitLength = this.DefaultConduitLength;
                 connection.IsPlenum = this.DefaultPlenum;
+            } else
+            {
+                SelectionNeeded = true;
             }
             
         }

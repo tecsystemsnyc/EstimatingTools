@@ -38,6 +38,23 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
+
+        <Grid.Style>
+            <Style TargetType="Grid">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ElementName=connectionsView, Path=VM.SelectionNeeded}" Value="True">
+                        <DataTrigger.EnterActions>
+                            <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
+                        </DataTrigger.EnterActions>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ElementName=connectionsView, Path=VM.SelectionNeeded}" Value="False">
+                        <DataTrigger.EnterActions>
+                            <BeginStoryboard Storyboard="{StaticResource modalOut}"/>
+                        </DataTrigger.EnterActions>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Style>
         <Grid DataContext="{Binding ElementName=connectionsView, Path=VM}" 
               Background="{StaticResource SectionBackgroundBrush}">
             <Grid.ColumnDefinitions>
