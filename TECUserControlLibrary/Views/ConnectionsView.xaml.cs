@@ -57,33 +57,19 @@ namespace TECUserControlLibrary.Views
         private static void selectionNeededChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var thisView = d as ConnectionsView;
+            Grid grid = (Grid)thisView.FindName("mainGrid");
             var value = (bool)e.NewValue;
             if (value)
             {
-                Storyboard modalIn = (Storyboard)thisView.FindResource("modalIn");
+                Storyboard modalIn = (Storyboard)grid.FindResource("modalIn");
                 modalIn.Begin();
             }
             else
             {
-                Storyboard modalOut = (Storyboard)thisView.FindResource("modalOut");
+                Storyboard modalOut = (Storyboard)grid.FindResource("modalOut");
                 modalOut.Begin();
             }
         }
-
-        private void moveModal(bool value)
-        {
-            if (value)
-            {
-                Storyboard modalIn = (Storyboard)FindResource("modalIn");
-                modalIn.Begin();
-            }
-            else
-            {
-                Storyboard modalOut = (Storyboard)FindResource("modalOut");
-                modalOut.Begin();
-            }
-        }
-
         public ConnectionsView()
         {
             InitializeComponent();
