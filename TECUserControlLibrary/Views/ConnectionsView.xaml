@@ -12,32 +12,32 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <Style TargetType="TextBlock">
-                <Setter Property="Foreground" Value="Black"/>
-                <Setter Property="VerticalAlignment" Value="Center"/>
-            </Style>
-            <Style TargetType="TextBox">
-                <Setter Property="Margin" Value="2"/>
-            </Style>
-            <Storyboard x:Key="modalIn">
-                <DoubleAnimation Storyboard.TargetName="connectionsView"
+    <Grid x:Name="mainGrid">
+        <Grid.Resources>
+            <ResourceDictionary>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+                <Style TargetType="TextBox">
+                    <Setter Property="Margin" Value="2"/>
+                </Style>
+                <Storyboard x:Key="modalIn">
+                    <DoubleAnimation Storyboard.TargetName="connectionsView"
                                  Storyboard.TargetProperty="(local:ConnectionsView.ModalHeight)" 
                                  Completed="modalIn_Completed"
                                  FillBehavior="Stop"
                                  From="{Binding ElementName=connectionsView, Path=ActualHeight}" To="0" BeginTime="0:0:0" Duration="0:0:0.2"/>
-            </Storyboard>
-            <Storyboard x:Key="modalOut">
-                <DoubleAnimation Storyboard.TargetName="connectionsView"
+                </Storyboard>
+                <Storyboard x:Key="modalOut">
+                    <DoubleAnimation Storyboard.TargetName="connectionsView"
                                  Storyboard.TargetProperty="(local:ConnectionsView.ModalHeight)"
                                  Completed="modalOut_Completed"
                                  FillBehavior="Stop"
                                  From="0" To="{Binding ElementName=connectionsView, Path=ActualHeight}" BeginTime="0:0:0" Duration="0:0:0.2"/>
-            </Storyboard>
-        </ResourceDictionary>
-    </UserControl.Resources>
-    <Grid>
+                </Storyboard>
+            </ResourceDictionary>
+        </Grid.Resources>
         <Grid DataContext="{Binding ElementName=connectionsView, Path=VM}" 
               Background="{StaticResource SectionBackgroundBrush}">
             <Grid.ColumnDefinitions>
@@ -208,7 +208,7 @@
         </Grid>
         <!--Add Modal-->
         <Grid Width="400"
-              Height="400">
+              Height="120">
             <Grid.Resources>
                 <sys:Double x:Key="marginEdge">0.0</sys:Double>
             </Grid.Resources>
@@ -226,26 +226,29 @@
                 </Border.BitmapEffect>
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                         
-                        <TextBlock Text="How would you like to connect?"/>
+                    <TextBlock Text="How would you like to connect?"/>
                     <ComboBox ItemsSource="{Binding ElementName=connectionsView,Path=VM.CompatibleProtocols}"
                              DisplayMemberPath="Label"
                               SelectedItem="{Binding ElementName=connectionsView, Path=VM.SelectedProtocol}"
-                              Grid.Column="1"/>
+                              Grid.Column="1"
+                              Margin="2"/>
                     <Button Content="Cancel"
                             Command="{Binding ElementName=connectionsView, Path=VM.CancelProtocolSelectionCommand}"
-                            Grid.Row="1"/>
+                            Grid.Row="1"
+                            Margin="2"/>
                     <Button Content="Connect"
                             Command="{Binding ElementName=connectionsView, Path=VM.SelectProtocolCommand}"
                             Grid.Row="1"
-                            Grid.Column="1"/>
+                            Grid.Column="1"
+                            Margin="2"/>
                 </Grid>
             </Border>
         </Grid>
