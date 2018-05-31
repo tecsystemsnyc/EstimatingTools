@@ -52,7 +52,7 @@
                   Grid.Row="3"
                   AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Name}" Header="Name"/>
+                <DataGridTextColumn Binding="{Binding Label}" Header="Name"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
