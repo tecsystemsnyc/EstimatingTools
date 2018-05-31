@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TECUserControlLibrary.Utilities;
+using TECUserControlLibrary.Utilities.DropTargets;
 
 namespace TECUserControlLibrary.Models
 {
@@ -28,7 +29,7 @@ namespace TECUserControlLibrary.Models
             }
         }
         public ICommand AddIOCommand { get; private set; }
-        public IDropTarget ProtocolToIODropHandler { get; }
+        public IDropTarget ProtocolToIODropTarget { get; }
 
         public ControllerTypePropertiesItem(TECControllerType controllerType)
         {
@@ -36,7 +37,7 @@ namespace TECUserControlLibrary.Models
             IOModules = new QuantityCollection<TECIOModule>(controllerType.IOModules);
             IOModules.QuantityChanged += ioModules_QuantityChanged;
             AddIOCommand = new RelayCommand(addIOExecute, canAddIO);
-            this.ProtocolToIODropHandler = new ProtocolToIODropHandler();
+            this.ProtocolToIODropTarget = new ProtocolToIODropTarget();
         }
 
         private void ioModules_QuantityChanged(TECIOModule arg1, int arg2, int arg3)
@@ -109,24 +110,4 @@ namespace TECUserControlLibrary.Models
         }
     }
 
-    public class ProtocolToIODropHandler : IDropTarget
-    {
-        public void DragOver(IDropInfo dropInfo)
-        {
-            if (dropInfo.Data is TECProtocol && UIHelpers.TargetCollectionIsType(dropInfo, typeof(TECIO)))
-            {
-                UIHelpers.SetDragAdorners(dropInfo);
-            }
-        }
-
-        public void Drop(IDropInfo dropInfo)
-        {
-            UIHelpers.Drop(dropInfo, convertToIO);
-        }
-
-        static private object convertToIO(object protocol)
-        {
-            return new TECIO(protocol as TECProtocol);
-        }
-    }
 }

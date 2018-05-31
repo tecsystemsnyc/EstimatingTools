@@ -112,7 +112,7 @@
                                         <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
-                                    <TextBlock Text="{Binding Protocol, StringFormat=Length: {0}}"/>
+                                    <TextBlock Text="{Binding Protocol.Label, StringFormat=Protocol: {0}}"/>
                                     <TextBlock Text="{Binding Length, StringFormat=Length: {0}}"
                                                HorizontalAlignment="Right"
                                                Grid.Column="1"/>
