@@ -133,7 +133,8 @@
                     <views:ControllersPanelsView ViewModel="{Binding ControllersPanelsTab}"/>
                 </TabItem>
                 <TabItem Header="Connections">
-                    <views:ConnectionsView VM="{Binding ConnectionsVM}"/>
+                    <views:ConnectionsView VM="{Binding ConnectionsVM}"
+                                           SelectionNeeded="{Binding ConnectionsVM.SelectionNeeded}"/>
                 </TabItem>
                 <TabItem Header="Misc.">
                     <views:MiscCostsView ViewModel="{Binding MiscVM}"

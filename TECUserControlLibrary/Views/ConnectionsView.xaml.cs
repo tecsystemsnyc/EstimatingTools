@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -40,8 +41,49 @@ namespace TECUserControlLibrary.Views
 
         // Using a DependencyProperty as the backing store for VM.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty VMProperty =
-            DependencyProperty.Register("VM", typeof(ConnectionsVM), typeof(ConnectionsView));
+            DependencyProperty.Register("VM", typeof(ConnectionsVM), 
+                typeof(ConnectionsView));
         
+        public bool SelectionNeeded
+        {
+            get { return (bool)GetValue(SelectionNeededProperty); }
+            set { SetValue(SelectionNeededProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for SelectionNeeded.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SelectionNeededProperty =
+            DependencyProperty.Register("SelectionNeeded", typeof(bool), typeof(ConnectionsView), new PropertyMetadata(false, selectionNeededChanged));
+
+        private static void selectionNeededChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var thisView = d as ConnectionsView;
+            var value = (bool)e.NewValue;
+            if (value)
+            {
+                Storyboard modalIn = (Storyboard)thisView.FindResource("modalIn");
+                modalIn.Begin();
+            }
+            else
+            {
+                Storyboard modalOut = (Storyboard)thisView.FindResource("modalOut");
+                modalOut.Begin();
+            }
+        }
+
+        private void moveModal(bool value)
+        {
+            if (value)
+            {
+                Storyboard modalIn = (Storyboard)FindResource("modalIn");
+                modalIn.Begin();
+            }
+            else
+            {
+                Storyboard modalOut = (Storyboard)FindResource("modalOut");
+                modalOut.Begin();
+            }
+        }
+
         public ConnectionsView()
         {
             InitializeComponent();
