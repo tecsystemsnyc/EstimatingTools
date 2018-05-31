@@ -424,9 +424,12 @@ namespace EstimatingUtilitiesLibrary.Database
             catalogs.Manufacturers = getObjectsFromTable(new ManufacturerTable(), id => new TECManufacturer(id)).ToOC();
             catalogs.ConnectionTypes = getObjectsFromTable(new ConnectionTypeTable(), id => new TECConnectionType(id)).ToOC();
             catalogs.ConduitTypes = getObjectsFromTable(new ConduitTypeTable(), id => new TECElectricalMaterial(id)).ToOC();
+            Dictionary<Guid, List<TECConnectionType>> protocolConnectionType = getOneToManyRelationships(new ProtocolConnectionTypeTable(), catalogs.ConnectionTypes);
+            catalogs.Protocols = getObjectsFromTable(new ProtocolTable(), id => new TECProtocol(id, protocolConnectionType[id])).ToOC();
             Dictionary<Guid, TECManufacturer> hardwareManufacturer = getOneToOneRelationships(new HardwareManufacturerTable(), catalogs.Manufacturers);
             Dictionary<Guid, List<TECConnectionType>> deviceConnectionType = getOneToManyRelationships(new DeviceConnectionTypeTable(), catalogs.ConnectionTypes);
-            catalogs.Devices = getObjectsFromTable(new DeviceTable(), id => new TECDevice(id, deviceConnectionType.ValueOrNew(id), new List<TECProtocol>(), hardwareManufacturer[id])).ToOC();
+            Dictionary<Guid, List<TECProtocol>> deviceProtocols = getOneToManyRelationships(new DeviceProtocolTable(), catalogs.Protocols);
+            catalogs.Devices = getObjectsFromTable(new DeviceTable(), id => new TECDevice(id, deviceConnectionType.ValueOrNew(id), deviceProtocols.ValueOrNew(id), hardwareManufacturer[id])).ToOC();
             Dictionary<Guid, TECDevice> actuators = getOneToOneRelationships(new ValveActuatorTable(), catalogs.Devices);
             catalogs.Valves = getObjectsFromTable(new ValveTable(), id => new TECValve(id, hardwareManufacturer[id], actuators[id])).ToOC();
             catalogs.AssociatedCosts = getObjectsFromTable(new AssociatedCostTable(), getAssociatedCostFromRow).ToOC();
@@ -434,8 +437,6 @@ namespace EstimatingUtilitiesLibrary.Database
             catalogs.IOModules = getObjectsFromTable(new IOModuleTable(), id => new TECIOModule(id, hardwareManufacturer[id])).ToOC();
             catalogs.ControllerTypes = getObjectsFromTable(new ControllerTypeTable(), id => new TECControllerType(id, hardwareManufacturer[id])).ToOC();
             catalogs.Tags = getObjectsFromTable(new TagTable(), id => new TECTag(id)).ToOC();
-            Dictionary<Guid, List<TECConnectionType>> protocolConnectionType = getOneToManyRelationships(new ProtocolConnectionTypeTable(), catalogs.ConnectionTypes);
-            catalogs.Protocols = getObjectsFromTable(new ProtocolTable(), id => new TECProtocol(id, protocolConnectionType[id])).ToOC();
             Dictionary<Guid, TECProtocol> ioProtocols = getOneToOneRelationships(new IOProtocolTable(), catalogs.Protocols);
 
             List<TECIO> io = getObjectsFromTable(new IOTable(), row => getIOFromRow(row, ioProtocols)).ToList();
