@@ -117,10 +117,13 @@
                                                HorizontalAlignment="Right"
                                                Grid.Column="1"/>
                                     <Expander Grid.Row="1" Header="{Binding Children.Count, StringFormat=Children: {0}}">
-                                        <ListView ItemsSource="{Binding Children}">
+                                        <ListView ItemsSource="{Binding Children}"
+                                                  dd:DragDrop.DropHandler="{Binding ElementName=connectionsView, Path=VM.ConnectionDropHandler}">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding Name}"/>
+                                                    <Border Style="{StaticResource ListItemBorder}">
+                                                        <TextBlock Text="{Binding Name}"/>
+                                                    </Border>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
                                         </ListView>
