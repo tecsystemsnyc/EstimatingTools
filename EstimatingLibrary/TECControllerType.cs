@@ -92,34 +92,6 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, propertyName, this, sender, sender);
             }
         }
-        
-        public List<IOType> getUniqueIO()
-        {
-            var outList = new List<IOType>();
-
-            foreach (TECIO io in this.IO)
-            {
-                if (!outList.Contains(io.Type))
-                {
-                    outList.Add(io.Type);
-                }
-            }
-            return outList;
-        }
-        public int NumberOfIOType(IOType ioType)
-        {
-            int outNum = 0;
-
-            foreach (TECIO type in IO)
-            {
-                if (type.Type == ioType)
-                {
-                    outNum = type.Quantity;
-                }
-            }
-
-            return outNum;
-        }
 
         protected override SaveableMap propertyObjects()
         {
