@@ -589,7 +589,7 @@ namespace Tests
 
             //Protocols
             TECProtocol protocol = new TECProtocol(new List<TECConnectionType> { connectionType1 });
-            protocol.Name = "BACnet IP";
+            protocol.Label = "BACnet IP";
             outCatalogs.Protocols.Add(protocol);
 
             controllerType.IO.Add(new TECIO(protocol));

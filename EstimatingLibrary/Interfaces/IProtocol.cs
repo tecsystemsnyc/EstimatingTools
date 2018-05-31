@@ -9,7 +9,7 @@ namespace EstimatingLibrary.Interfaces
 {
     public interface IProtocol
     {
-        String Name { get; }
+        String Label { get; }
         List<TECConnectionType> ConnectionTypes { get; }
     }
 }

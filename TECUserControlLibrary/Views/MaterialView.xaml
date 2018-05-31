@@ -56,11 +56,6 @@
                     <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
                 </EventTrigger.Actions>
             </EventTrigger>
-            <EventTrigger RoutedEvent="catalogViews:ProtocolAdaptersCatalogView.StartModal">
-                <EventTrigger.Actions>
-                    <BeginStoryboard Storyboard="{StaticResource modalIn}"/>
-                </EventTrigger.Actions>
-            </EventTrigger>
             <EventTrigger RoutedEvent="views:DeleteEndDeviceView.Done">
                 <EventTrigger.Actions>
                     <BeginStoryboard Storyboard="{StaticResource modalOut}"/>

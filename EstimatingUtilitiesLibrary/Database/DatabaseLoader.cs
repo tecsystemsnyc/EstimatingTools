@@ -571,7 +571,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
             tempConnectionType = new TECConnectionType();
             tempProtocol = new TECProtocol(new List<TECConnectionType>() { tempConnectionType });
-            tempProtocol.Name = "TEMPORARY";
+            tempProtocol.Label = "TEMPORARY";
             
             networkPoints = new Dictionary<string, List<TECPoint>>();
 

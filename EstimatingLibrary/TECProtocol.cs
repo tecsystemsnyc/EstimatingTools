@@ -8,24 +8,10 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECProtocol : TECObject, IRelatable, IProtocol
+    public class TECProtocol : TECLabeled, IRelatable, IProtocol
     {
-        private String _name = "";
         private ObservableCollection<TECConnectionType> _connectionTypes;
-
-        public String Name
-        {
-            get { return _name; }
-            set
-            {
-                if (value != Name)
-                {
-                    var old = Name;
-                    _name = value;
-                    notifyCombinedChanged(Change.Edit, "Name", this, value, old);
-                }
-            }
-        }
+        
         public ObservableCollection<TECConnectionType> ConnectionTypes
         {
             get { return _connectionTypes; }

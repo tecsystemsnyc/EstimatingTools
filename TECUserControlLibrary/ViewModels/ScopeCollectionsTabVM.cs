@@ -71,8 +71,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         #endregion
         #endregion
-
-        #region Intializers
+        
         public ScopeCollectionsTabVM(TECTemplates templates, TECCatalogs catalogs)
         {
             Templates = templates;
@@ -82,7 +81,6 @@ namespace TECUserControlLibrary.ViewModels
             SearchString = "";
             SearchCollectionExecute();
         }
-        #endregion
 
         #region Methods
 
@@ -139,6 +137,9 @@ namespace TECUserControlLibrary.ViewModels
                     break;
                 case AllSearchableObjects.IOModules:
                     ResultCollection = getResultCollection(catalogs.IOModules, SearchString);
+                    break;
+                case AllSearchableObjects.Protocols:
+                    ResultCollection = getResultCollection(catalogs.Protocols, SearchString);
                     break;
                 default:
                     break;
