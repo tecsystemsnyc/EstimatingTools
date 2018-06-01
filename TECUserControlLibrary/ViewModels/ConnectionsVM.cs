@@ -38,15 +38,7 @@ namespace TECUserControlLibrary.ViewModels
         private bool _selectionNeeded = false;
         private IProtocol _selectedProtocol;
         private List<IProtocol> _compatibleProtocols;
-
-        private bool _omitConnectedControllers = false;
-        private TECProtocol _controllerFilterProtocol;
-        private TECLocation _controllerFilterLocation;
-
-        private bool _omitConnectedConnectables = false;
-        private TECProtocol _connectableFilterProtocol;
-        private TECLocation _connectableFilterLocation;
-
+        
         public ObservableCollection<ScopeGroup> Connectables
         {
             get
@@ -176,73 +168,8 @@ namespace TECUserControlLibrary.ViewModels
 
         public event Action<TECObject> Selected;
 
-        public bool OmitConnectedControllers
-        {
-            get { return _omitConnectedControllers; }
-            set
-            {
-                if (_omitConnectedControllers != value)
-                {
-                    _omitConnectedControllers = value;
-                }
-            }
-        }
-        public TECProtocol ControllerFilterProtocol
-        {
-            get { return _controllerFilterProtocol; }
-            set
-            {
-                if (_controllerFilterProtocol != value)
-                {
-                    _controllerFilterProtocol = value;
-                }
-            }
-        }
-        public TECLocation ControllerFilterLocation
-        {
-            get { return _controllerFilterLocation; }
-            set
-            {
-                if (_controllerFilterLocation != value)
-                {
-                    _controllerFilterLocation = value;
-                }
-            }
-        }
-
-        public bool OmitConnectedConnectables
-        {
-            get { return _omitConnectedConnectables; }
-            set
-            {
-                if (_omitConnectedConnectables != value)
-                {
-                    _omitConnectedConnectables = value;
-                }
-            }
-        }
-        public TECProtocol ConnectableFilterProtocol
-        {
-            get { return _connectableFilterProtocol; }
-            set
-            {
-                if (_connectableFilterProtocol != value)
-                {
-                    _connectableFilterProtocol = value;
-                }
-            }
-        }
-        public TECLocation ConnectableFilterLocation
-        {
-            get { return _connectableFilterLocation; }
-            set
-            {
-                if (_connectableFilterLocation != value)
-                {
-                    _connectableFilterLocation = value;
-                }
-            }
-        }
+        public ConnectableFilter ControllerFilter { get; }
+        public ConnectableFilter ConnectableFilter { get; }
 
         public NetworkConnectionDropTarget ConnectionDropHandler { get; }
         TECNetworkConnection NetworkConnectionDropTargetDelegate.SelectedConnection => SelectedConnection as TECNetworkConnection;
@@ -284,6 +211,12 @@ namespace TECUserControlLibrary.ViewModels
             CancelProtocolSelectionCommand = new RelayCommand(cancelProtocolSelectionExecute);
 
             ConnectionDropHandler = new NetworkConnectionDropTarget(this);
+
+            ControllerFilter = new ConnectableFilter();
+            ControllerFilter.FilterChanged += x => repopulateAll();
+
+            ConnectableFilter = new ConnectableFilter();
+            ConnectableFilter.FilterChanged += x => repopulateAll();
         }
 
         private void cancelProtocolSelectionExecute()
@@ -450,28 +383,11 @@ namespace TECUserControlLibrary.ViewModels
 
             if (rootGroup == rootControllerGroup)
             {
-                //Omit connected
-                if (OmitConnectedControllers && connectable.IsConnected())
-                {
-                    return false;
-                }
-
-                //Protocol
-                if (ControllerFilterProtocol != null && !connectable.AvailableProtocols.Contains(ControllerFilterProtocol))
-                {
-                    return false;
-                }
-
-                //Location
-                if (ControllerFilterLocation != null && (connectable as TECLocated)?.Location != ControllerFilterLocation)
-                {
-                    return false;
-                }
-                return true;
+                return ControllerFilter.PassesFilter(connectable);
             }
             else if (rootGroup == rootConnectableGroup)
             {
-
+                return ConnectableFilter.PassesFilter(connectable);
             }
             else
             {
@@ -509,5 +425,70 @@ namespace TECUserControlLibrary.ViewModels
         }
 
 
+    }
+
+    public class ConnectableFilter: ViewModelBase
+    {
+        private bool _omitConnected = false;
+        private TECProtocol _filterProtocol;
+        private TECLocation _filterLocation;
+
+        public bool OmitConnected
+        {
+            get { return _omitConnected; }
+            set
+            {
+                if (_omitConnected != value)
+                {
+                    _omitConnected = value;
+                }
+            }
+        }
+        public TECProtocol FilterProtocol
+        {
+            get { return _filterProtocol; }
+            set
+            {
+                if (_filterProtocol != value)
+                {
+                    _filterProtocol = value;
+                }
+            }
+        }
+        public TECLocation FilterLocation
+        {
+            get { return _filterLocation; }
+            set
+            {
+                if (_filterLocation != value)
+                {
+                    _filterLocation = value;
+                }
+            }
+        }
+
+        public event Action<ConnectableFilter> FilterChanged;
+
+        public bool PassesFilter(IConnectable connectable)
+        {
+            //Omit connected
+            if (OmitConnected && connectable.IsConnected())
+            {
+                return false;
+            }
+
+            //Protocol
+            if (FilterProtocol != null && !connectable.AvailableProtocols.Contains(FilterProtocol))
+            {
+                return false;
+            }
+
+            //Location
+            if (FilterLocation != null && (connectable as TECLocated)?.Location != FilterLocation)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }
