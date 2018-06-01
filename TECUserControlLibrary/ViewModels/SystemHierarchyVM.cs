@@ -293,7 +293,7 @@ namespace TECUserControlLibrary.ViewModels
                 MiscVM = new MiscCostsVM(value);
                 ControllersPanelsVM = new ControllersPanelsVM(value, scopeManager);
                 ValveVM = new ValveSelectionVM(value, scopeManager.Catalogs.Valves);
-                ConnectionsVM = new ConnectionsVM(value, new ChangeWatcher(value), catalogs, connectionFilter);
+                ConnectionsVM = new ConnectionsVM(value, new ChangeWatcher(value), catalogs, locations: (scopeManager as TECBid)?.Locations, filterPredicate: connectionFilter);
 
                 bool connectionFilter(ITECObject obj)
                 {

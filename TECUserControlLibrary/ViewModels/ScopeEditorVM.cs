@@ -36,7 +36,7 @@ namespace TECUserControlLibrary.ViewModels
             };
             PropertiesVM = new PropertiesVM(bid.Catalogs, bid);
             WorkBoxVM = new WorkBoxVM(bid);
-            ConnectionsVM = new ConnectionsVM(bid, watcher, bid.Catalogs, filterPredicate);
+            ConnectionsVM = new ConnectionsVM(bid, watcher, bid.Catalogs, locations: bid.Locations, filterPredicate: filterPredicate);
 
             bool filterPredicate(ITECObject obj)
             {

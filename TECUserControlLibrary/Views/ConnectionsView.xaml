@@ -51,7 +51,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
                     <RowDefinition/>
-                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <!--Header-->
                 <Border Style="{StaticResource HeaderBorder}">
@@ -65,7 +65,17 @@
                                             Grid.Row="1"/>
                 <!--Filters Grid-->
                 <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
                     <TextBlock Text="Filters"/>
+                    <controls:ConnectablesFilterControl Grid.Row="1"
+                                                        OmitConnected="{Binding OmitConnectedControllers}"
+                                                        Protocols="{Binding Catalogs.Protocols}"
+                                                        SelectedProtocol="{Binding ControllerFilterProtocol}"
+                                                        Locations="{Binding Locations}"
+                                                        SelectedLocation="{Binding ControllerFilterLocation}"/>
                 </Grid>
             </Grid>
             
@@ -194,7 +204,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
                     <RowDefinition/>
-                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <!--Header-->
                 <Border Style="{StaticResource HeaderBorder}">
@@ -206,7 +216,19 @@
                                             IsDropTarget="False"
                                             Grid.Row="1"/>
                 <!--Filter-->
-                <TextBlock Text="Filters" Grid.Row="2"/>
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Filters"/>
+                    <controls:ConnectablesFilterControl Grid.Row="1"
+                                                        OmitConnected="{Binding OmitConnectedConnectables}"
+                                                        Protocols="{Binding Catalogs.Protocols}"
+                                                        SelectedProtocol="{Binding ConnectableFilterProtocol}"
+                                                        Locations="{Binding Locations}"
+                                                        SelectedLocation="{Binding ConnectableFilterLocation}"/>
+                </Grid>
             </Grid>
         </Grid>
         <!--Add Modal-->

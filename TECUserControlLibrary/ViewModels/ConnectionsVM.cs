@@ -36,7 +36,16 @@ namespace TECUserControlLibrary.ViewModels
         private bool _defaultPlenum = false;
         private bool _selectionNeeded = false;
         private IProtocol _selectedProtocol;
-        
+        private List<IProtocol> _compatibleProtocols;
+
+        private bool _omitConnectedControllers = false;
+        private TECProtocol _controllerFilterProtocol;
+        private TECLocation _controllerFilterLocation;
+
+        private bool _omitConnectedConnectables = false;
+        private TECProtocol _connectableFilterProtocol;
+        private TECLocation _connectableFilterLocation;
+
         public ObservableCollection<ScopeGroup> Connectables
         {
             get
@@ -131,6 +140,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         public TECCatalogs Catalogs { get; }
+        public ObservableCollection<TECLocation> Locations { get; }
         public bool SelectionNeeded
         {
             get { return _selectionNeeded; }
@@ -149,9 +159,7 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("SelectedProtocol");
             }
         }
-
-        private List<IProtocol> _compatibleProtocols;
-
+        
         public List<IProtocol> CompatibleProtocols
         {
             get { return _compatibleProtocols; }
@@ -167,13 +175,81 @@ namespace TECUserControlLibrary.ViewModels
 
         public event Action<TECObject> Selected;
 
+        public bool OmitConnectedControllers
+        {
+            get { return _omitConnectedControllers; }
+            set
+            {
+                if (_omitConnectedControllers != value)
+                {
+                    _omitConnectedControllers = value;
+                }
+            }
+        }
+        public TECProtocol ControllerFilterProtocol
+        {
+            get { return _controllerFilterProtocol; }
+            set
+            {
+                if (_controllerFilterProtocol != value)
+                {
+                    _controllerFilterProtocol = value;
+                }
+            }
+        }
+        public TECLocation ControllerFilterLocation
+        {
+            get { return _controllerFilterLocation; }
+            set
+            {
+                if (_controllerFilterLocation != value)
+                {
+                    _controllerFilterLocation = value;
+                }
+            }
+        }
+
+        public bool OmitConnectedConnectables
+        {
+            get { return _omitConnectedConnectables; }
+            set
+            {
+                if (_omitConnectedConnectables != value)
+                {
+                    _omitConnectedConnectables = value;
+                }
+            }
+        }
+        public TECProtocol ConnectableFilterProtocol
+        {
+            get { return _connectableFilterProtocol; }
+            set
+            {
+                if (_connectableFilterProtocol != value)
+                {
+                    _connectableFilterProtocol = value;
+                }
+            }
+        }
+        public TECLocation ConnectableFilterLocation
+        {
+            get { return _connectableFilterLocation; }
+            set
+            {
+                if (_connectableFilterLocation != value)
+                {
+                    _connectableFilterLocation = value;
+                }
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="root"></param>
         /// <param name="watcher"></param>
         /// <param name="includeFilter">Predicate for "where" clause of direct children of root.</param>
-        public ConnectionsVM(IRelatable root, ChangeWatcher watcher, TECCatalogs catalogs, Func<ITECObject, bool> filterPredicate = null)
+        public ConnectionsVM(IRelatable root, ChangeWatcher watcher, TECCatalogs catalogs, IEnumerable<TECLocation> locations = null, Func<ITECObject, bool> filterPredicate = null)
         {
             if (filterPredicate == null)
             {
@@ -183,6 +259,7 @@ namespace TECUserControlLibrary.ViewModels
 
             this.root = root;
             this.Catalogs = catalogs;
+            this.Locations = new ObservableCollection<TECLocation>(locations);
             if(this.Catalogs.ConduitTypes.Count > 0)
             {
                 this.DefaultConduitType = this.Catalogs.ConduitTypes[0];
@@ -266,6 +343,17 @@ namespace TECUserControlLibrary.ViewModels
                 else if (obj.Change == Change.Remove)
                 {
                     repopulate(tecObj, removeConnectable);
+                }
+            }
+            else if (obj.Value is TECLocation location)
+            {
+                if (obj.Change == Change.Add)
+                {
+                    this.Locations.Add(location);
+                }
+                else if (obj.Change == Change.Remove)
+                {
+                    this.Locations.Remove(location);
                 }
             }
         }

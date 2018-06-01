@@ -317,9 +317,6 @@
     <Compile Include="Views\ChangeControllerTypeView.xaml.cs">
       <DependentUpon>ChangeControllerTypeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ConnectableFilterView.xaml.cs">
-      <DependentUpon>ConnectableFilterView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ConnectionsView.xaml.cs">
       <DependentUpon>ConnectionsView.xaml</DependentUpon>
     </Compile>
@@ -813,10 +810,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ChangeControllerTypeView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ConnectableFilterView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

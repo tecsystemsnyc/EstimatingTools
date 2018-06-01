@@ -33,7 +33,8 @@
             <TextBlock Text="Protocol:"/>
             <ComboBox Grid.Column="1" Margin="2"
                       ItemsSource="{Binding Protocols}"
-                      SelectedItem="{Binding SelectedProtocol}"/>
+                      SelectedItem="{Binding SelectedProtocol}"
+                      DisplayMemberPath="Label"/>
         </Grid>
         <!--Location-->
         <Grid Grid.Row="2">
@@ -44,7 +45,8 @@
             <TextBlock Text="Location:"/>
             <ComboBox Grid.Column="1" Margin="2"
                       ItemsSource="{Binding Locations}"
-                      SelectedItem="{Binding SelectedLocation}"/>
+                      SelectedItem="{Binding SelectedLocation}"
+                      DisplayMemberPath="Name"/>
         </Grid>
         <!--Clear Filters-->
         <Button Grid.Row="3" Margin="2" Width="80"
