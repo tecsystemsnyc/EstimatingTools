@@ -23,7 +23,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private readonly IRelatable root;
         private readonly ScopeGroup rootConnectableGroup;
-        private readonly ScopeGroup rootControllersGroup;
+        private readonly ScopeGroup rootControllerGroup;
         private readonly Func<ITECObject, bool> filterPredicate;
 
         private readonly List<TECController> allControllers;
@@ -58,7 +58,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             get
             {
-                return rootControllersGroup.ChildrenGroups;
+                return rootControllerGroup.ChildrenGroups;
             }
         }
 
@@ -273,7 +273,7 @@ namespace TECUserControlLibrary.ViewModels
             watcher.ScopeChanged += parentScopeChanged;
 
             this.rootConnectableGroup = new ScopeGroup("root");
-            this.rootControllersGroup = new ScopeGroup("root");
+            this.rootControllerGroup = new ScopeGroup("root");
 
             foreach(ITECObject child in root.GetDirectChildren())
             {
@@ -310,7 +310,7 @@ namespace TECUserControlLibrary.ViewModels
                 action(this.rootConnectableGroup, connectable);
                 if (connectable is TECController)
                 {
-                    action(this.rootControllersGroup, connectable);
+                    action(this.rootControllerGroup, connectable);
                 }
             }
             else if (child is IRelatable relatable)
@@ -438,6 +438,44 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     parentGroup = path[i];
                 }
+            }
+        }
+
+        private bool passesFilters(ScopeGroup rootGroup, IConnectable connectable)
+        {
+            if (!filterPredicate(connectable))
+            {
+                return false;
+            }
+
+            if (rootGroup == rootControllerGroup)
+            {
+                //Omit connected
+                if (OmitConnectedControllers && connectable.IsConnected())
+                {
+                    return false;
+                }
+
+                //Protocol
+                if (ControllerFilterProtocol != null && !connectable.AvailableProtocols.Contains(ControllerFilterProtocol))
+                {
+                    return false;
+                }
+
+                //Location
+                if (ControllerFilterLocation != null && (connectable as TECLocated)?.Location != ControllerFilterLocation)
+                {
+                    return false;
+                }
+                return true;
+            }
+            else if (rootGroup == rootConnectableGroup)
+            {
+
+            }
+            else
+            {
+                return false;
             }
         }
 
