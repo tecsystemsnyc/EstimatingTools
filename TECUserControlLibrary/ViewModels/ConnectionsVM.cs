@@ -184,6 +184,8 @@ namespace TECUserControlLibrary.ViewModels
                 if (_omitConnectedControllers != value)
                 {
                     _omitConnectedControllers = value;
+                    RaisePropertyChanged("OmitConnectedControllers");
+                    repopulateAll();
                 }
             }
         }
@@ -195,6 +197,8 @@ namespace TECUserControlLibrary.ViewModels
                 if (_controllerFilterProtocol != value)
                 {
                     _controllerFilterProtocol = value;
+                    RaisePropertyChanged("ControllerFilterProtocol");
+                    repopulateAll();
                 }
             }
         }
@@ -206,6 +210,8 @@ namespace TECUserControlLibrary.ViewModels
                 if (_controllerFilterLocation != value)
                 {
                     _controllerFilterLocation = value;
+                    RaisePropertyChanged("ControllerFilterLocation");
+                    repopulateAll();
                 }
             }
         }
@@ -218,6 +224,8 @@ namespace TECUserControlLibrary.ViewModels
                 if (_omitConnectedConnectables != value)
                 {
                     _omitConnectedConnectables = value;
+                    RaisePropertyChanged("OmitConnectedConnectables");
+                    repopulateAll();
                 }
             }
         }
@@ -229,6 +237,8 @@ namespace TECUserControlLibrary.ViewModels
                 if (_connectableFilterProtocol != value)
                 {
                     _connectableFilterProtocol = value;
+                    RaisePropertyChanged("ConnectableFilterProtocol");
+                    repopulateAll();
                 }
             }
         }
@@ -240,6 +250,8 @@ namespace TECUserControlLibrary.ViewModels
                 if (_connectableFilterLocation != value)
                 {
                     _connectableFilterLocation = value;
+                    RaisePropertyChanged("ConnectableFilterLocation");
+                    repopulateAll();
                 }
             }
         }
@@ -275,10 +287,7 @@ namespace TECUserControlLibrary.ViewModels
             this.rootConnectableGroup = new ScopeGroup("root");
             this.rootControllerGroup = new ScopeGroup("root");
 
-            foreach(ITECObject child in root.GetDirectChildren())
-            {
-                repopulate(child, addConnectable);
-            }
+            repopulateAll();
 
             SelectProtocolCommand = new RelayCommand(selectProtocolExecute, selectProtocolCanExecute);
             CancelProtocolSelectionCommand = new RelayCommand(cancelProtocolSelectionExecute);
@@ -303,6 +312,13 @@ namespace TECUserControlLibrary.ViewModels
             return SelectedProtocol != null && SelectedConnectable != null && SelectedController != null;
         }
 
+        private void repopulateAll()
+        {
+            foreach (ITECObject child in root.GetDirectChildren())
+            {
+                repopulate(child, addConnectable);
+            }
+        }
         private void repopulate(ITECObject child, Action<ScopeGroup, IConnectable> action)
         {
             if(child is IConnectable connectable)
@@ -370,7 +386,7 @@ namespace TECUserControlLibrary.ViewModels
         
         private void addConnectable(ScopeGroup rootGroup, IConnectable connectable)
         {
-            if (!filterPredicate(connectable)) return;
+            if (!passesFilters(rootGroup, connectable)) return;
             bool isDescendant = root.IsDirectDescendant(connectable);
             if (!root.IsDirectDescendant(connectable))
             {
@@ -421,7 +437,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void removeConnectable(ScopeGroup rootGroup, IConnectable connectable)
         {
-            if (!filterPredicate(connectable)) return;
+            if (!passesFilters(rootGroup, connectable)) return;
             List<ScopeGroup> path = rootGroup.GetPath(connectable);
 
             path[path.Count - 2].Remove(path.Last());
