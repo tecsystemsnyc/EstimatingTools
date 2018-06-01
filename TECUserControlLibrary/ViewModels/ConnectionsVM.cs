@@ -168,8 +168,8 @@ namespace TECUserControlLibrary.ViewModels
 
         public event Action<TECObject> Selected;
 
-        public ConnectableFilter ControllerFilter { get; }
-        public ConnectableFilter ConnectableFilter { get; }
+        public ConnectableFilter ControllerFilter { get; } = new ConnectableFilter();
+        public ConnectableFilter ConnectableFilter { get; } = new ConnectableFilter();
 
         public NetworkConnectionDropTarget ConnectionDropHandler { get; }
         TECNetworkConnection NetworkConnectionDropTargetDelegate.SelectedConnection => SelectedConnection as TECNetworkConnection;
@@ -182,6 +182,9 @@ namespace TECUserControlLibrary.ViewModels
         /// <param name="includeFilter">Predicate for "where" clause of direct children of root.</param>
         public ConnectionsVM(IRelatable root, ChangeWatcher watcher, TECCatalogs catalogs, IEnumerable<TECLocation> locations = null, Func<ITECObject, bool> filterPredicate = null)
         {
+            ControllerFilter.FilterChanged += repopulateAll;
+            ConnectableFilter.FilterChanged += repopulateAll;
+
             if (filterPredicate == null)
             {
                 filterPredicate = item => true;
@@ -208,12 +211,7 @@ namespace TECUserControlLibrary.ViewModels
             CancelProtocolSelectionCommand = new RelayCommand(cancelProtocolSelectionExecute);
 
             ConnectionDropHandler = new NetworkConnectionDropTarget(this);
-
-            ControllerFilter = new ConnectableFilter();
-            ControllerFilter.FilterChanged += x => repopulateAll();
-
-            ConnectableFilter = new ConnectableFilter();
-            ConnectableFilter.FilterChanged += x => repopulateAll();
+            
         }
 
         private void cancelProtocolSelectionExecute()
@@ -445,6 +443,8 @@ namespace TECUserControlLibrary.ViewModels
                 if (_omitConnected != value)
                 {
                     _omitConnected = value;
+                    FilterChanged?.Invoke();
+                    RaisePropertyChanged("OmitConnected");
                 }
             }
         }
@@ -456,6 +456,8 @@ namespace TECUserControlLibrary.ViewModels
                 if (_filterProtocol != value)
                 {
                     _filterProtocol = value;
+                    FilterChanged?.Invoke();
+                    RaisePropertyChanged("FilterProtocol");
                 }
             }
         }
@@ -467,11 +469,13 @@ namespace TECUserControlLibrary.ViewModels
                 if (_filterLocation != value)
                 {
                     _filterLocation = value;
+                    FilterChanged?.Invoke();
+                    RaisePropertyChanged("FilterLocation");
                 }
             }
         }
 
-        public event Action<ConnectableFilter> FilterChanged;
+        public event Action FilterChanged;
 
         public bool PassesFilter(IConnectable connectable)
         {
