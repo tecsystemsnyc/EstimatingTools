@@ -21,4 +21,12 @@ namespace EstimatingLibrary.Interfaces
         void SetParentConnection(IControllerConnection connection);
         IControllerConnection GetParentConnection();
     }
+
+    public static class IConnectableExtensions
+    {
+        public static bool IsConnected(this IConnectable connectable)
+        {
+            return connectable.GetParentConnection() != null;
+        }
+    }
 }

@@ -20,7 +20,14 @@
                     <Expander Visibility="{Binding ChildrenGroups.Count, Converter={utilities:CountVisibilityConverter}}">
                         <Expander.Header>
                             <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="0,0,0,1">
-                                <TextBlock Text="{Binding Name}"/>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} ({1})">
+                                            <Binding Path="Name"/>
+                                            <Binding Path="Type"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                             </Border>
                         </Expander.Header>
                         <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="1,0,0,0" Margin="10,0,0,0">
@@ -32,7 +39,14 @@
                     </Expander>
                     <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="0,0,0,1" Margin="25,0,0,0"
                             Visibility="{Binding ChildrenGroups.Count, Converter={utilities:ZeroCountToVisibileConverter}}">
-                        <TextBlock Text="{Binding Name}"/>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} ({1})">
+                                    <Binding Path="Name"/>
+                                    <Binding Path="Type"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
                     </Border>
                 </Grid>
             </DataTemplate>
