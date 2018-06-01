@@ -71,11 +71,11 @@
                     </Grid.RowDefinitions>
                     <TextBlock Text="Filters"/>
                     <controls:ConnectablesFilterControl Grid.Row="1"
-                                                        OmitConnected="{Binding OmitConnectedControllers}"
+                                                        OmitConnected="{Binding ControllerFilter.OmitConnected}"
                                                         Protocols="{Binding Catalogs.Protocols}"
-                                                        SelectedProtocol="{Binding ControllerFilterProtocol}"
+                                                        SelectedProtocol="{Binding ControllerFilter.FilterProtocol}"
                                                         Locations="{Binding Locations}"
-                                                        SelectedLocation="{Binding ControllerFilterLocation}"/>
+                                                        SelectedLocation="{Binding ControllerFilter.FilterLocation}"/>
                 </Grid>
             </Grid>
             
@@ -223,11 +223,11 @@
                     </Grid.RowDefinitions>
                     <TextBlock Text="Filters"/>
                     <controls:ConnectablesFilterControl Grid.Row="1"
-                                                        OmitConnected="{Binding OmitConnectedConnectables}"
+                                                        OmitConnected="{Binding ConnectableFilter.OmitConnected}"
                                                         Protocols="{Binding Catalogs.Protocols}"
-                                                        SelectedProtocol="{Binding ConnectableFilterProtocol}"
+                                                        SelectedProtocol="{Binding ConnectableFilter.FilterProtocol}"
                                                         Locations="{Binding Locations}"
-                                                        SelectedLocation="{Binding ConnectableFilterLocation}"/>
+                                                        SelectedLocation="{Binding ConnectableFilter.FilterLocation}"/>
                 </Grid>
             </Grid>
         </Grid>
