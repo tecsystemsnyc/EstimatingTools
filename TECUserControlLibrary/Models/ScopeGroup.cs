@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,14 @@ namespace TECUserControlLibrary.Models
                     _name = value;
                     RaisePropertyChanged("Name");
                 }
+            }
+        }
+
+        public string Type
+        {
+            get
+            {
+                return Scope.ToTECTypeString();
             }
         }
 

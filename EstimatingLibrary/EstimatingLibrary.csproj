@@ -173,6 +173,7 @@
     <Compile Include="Utilities\ScopeExtensions.cs" />
     <Compile Include="Utilities\TemplateSynchronizer.cs" />
     <Compile Include="Utilities\TypeExtensions.cs" />
+    <Compile Include="Utilities\TECTypeStringConversion.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
