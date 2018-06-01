@@ -37,7 +37,7 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock FontSize="10" Text="{Binding Type}"/>
+                            <TextBlock FontSize="10" Text="{Binding DisplayName}"/>
                             <TextBlock FontSize="10" Text="{Binding Quantity, StringFormat=Qty: {0}}" Grid.Column="1"/>
                         </Grid>
                     </Border>

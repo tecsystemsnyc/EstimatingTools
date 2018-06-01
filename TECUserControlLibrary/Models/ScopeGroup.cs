@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace TECUserControlLibrary.Models
 {
-    public class ScopeGroup : ViewModelBase
+    public class ScopeGroup : ViewModelBase, IDragDropable
     {
         private string _name;
         public string Name
@@ -123,6 +123,25 @@ namespace TECUserControlLibrary.Models
             }
 
             return path;
+        }
+
+        object IDragDropable.DropData()
+        {
+            return ChildrenGroups.Count == 0 ? Scope as object : allScope();
+        }
+
+        private List<ITECScope> allScope()
+        {
+            List<ITECScope> scope = new List<ITECScope>();
+            if(this.Scope != null)
+            {
+                scope.Add(this.Scope);
+            }
+            foreach(var child in ChildrenGroups)
+            {
+                scope.AddRange(child.allScope());
+            }
+            return scope;
         }
     }
 }

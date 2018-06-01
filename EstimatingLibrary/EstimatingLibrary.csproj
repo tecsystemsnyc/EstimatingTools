@@ -107,8 +107,9 @@
     <Compile Include="Interfaces\IConnection.cs" />
     <Compile Include="Interfaces\ICatalog.cs" />
     <Compile Include="Interfaces\IControllerConnection.cs" />
-    <Compile Include="Interfaces\IDragDropable.cs" />
+    <Compile Include="Interfaces\IDDCopiable.cs" />
     <Compile Include="Interfaces\IConnectable.cs" />
+    <Compile Include="Interfaces\IDragDropable.cs" />
     <Compile Include="Interfaces\IInterlockable.cs" />
     <Compile Include="Interfaces\INotifyCostChanged.cs" />
     <Compile Include="Interfaces\INotifyTECChanged.cs" />

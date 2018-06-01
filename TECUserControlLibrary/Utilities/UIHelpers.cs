@@ -48,6 +48,10 @@ namespace TECUserControlLibrary.Utilities
         public static void DragOver(IDropInfo dropInfo, Func<object, Type, Type, bool> dropCondition, Action failAction = null)
         {
             var sourceItem = dropInfo.Data;
+            if (dropInfo.Data is IDragDropable dropbable)
+            {
+                sourceItem = dropbable.DropData();
+            }
             Type sourceType;
             if (sourceItem is IList sourceList && sourceList.Count > 0)
             { sourceType = sourceList[0].GetType(); }
@@ -93,6 +97,10 @@ namespace TECUserControlLibrary.Utilities
         public static void Drop(IDropInfo dropInfo, Func<object, object> dropObject, bool addObjectToCollection = true)
         {
             var sourceItem = dropInfo.Data;
+            if (dropInfo.Data is IDragDropable dropbable)
+            {
+                sourceItem = dropbable.DropData();
+            }
             Type targetType = GetItemType(dropInfo.TargetCollection);
             if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
             {
@@ -108,7 +116,7 @@ namespace TECUserControlLibrary.Utilities
                 }
                 else
                 {
-                    sourceItem = dropObject(dropInfo.Data);
+                    sourceItem = dropObject(sourceItem);
                 }
 
                 if (addObjectToCollection)
@@ -176,7 +184,7 @@ namespace TECUserControlLibrary.Utilities
             {
                 dropMethod = item =>
                 {
-                    return ((IDragDropable)item).DragDropCopy(scopeManager);
+                    return ((IDDCopiable)item).DragDropCopy(scopeManager);
                 };
             }
             Drop(dropInfo, dropMethod, true);
@@ -188,7 +196,7 @@ namespace TECUserControlLibrary.Utilities
 
             bool dropCondition(object sourceItem, Type sourceType, Type targetType)
             {
-                bool isDragDropable = sourceItem is IDragDropable;
+                bool isDragDropable = sourceItem is IDDCopiable;
                 bool sourceNotNull = sourceItem != null;
                 bool sourceMatchesTarget = sourceType == typeof(TECSystem) && (targetType == typeof(TECTypical) || targetType == typeof(TECSystem));
                 return sourceNotNull && sourceMatchesTarget && isDragDropable;
@@ -250,7 +258,7 @@ namespace TECUserControlLibrary.Utilities
         
         public static bool StandardDropCondition(object sourceItem, Type sourceType, Type targetType)
         {
-            bool isDragDropable = sourceItem is IDragDropable;
+            bool isDragDropable = sourceItem is IDDCopiable;
             bool sourceNotNull = sourceItem != null;
             bool sourceMatchesTarget = targetType.IsInstanceOfType(sourceItem);
             return sourceNotNull && (sourceMatchesTarget) && isDragDropable;

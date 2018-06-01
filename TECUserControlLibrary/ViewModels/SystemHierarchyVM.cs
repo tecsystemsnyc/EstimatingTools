@@ -239,7 +239,7 @@ namespace TECUserControlLibrary.ViewModels
             else
             {
                 object dropped = null;
-                if(!IsTemplates && dropInfo.Data is IDragDropable dropable)
+                if(!IsTemplates && dropInfo.Data is IDDCopiable dropable)
                 {
                     dropped = dropable.DragDropCopy(scopeManager);
                 } else
