@@ -269,7 +269,8 @@ namespace TECUserControlLibrary.ViewModels
                 this.DefaultConduitType = this.Catalogs.ConduitTypes[0];
             }
 
-            watcher.ScopeChanged += parentChanged;
+            watcher.Changed += parentChanged;
+            watcher.ScopeChanged += parentScopeChanged;
 
             this.rootConnectableGroup = new ScopeGroup("root");
             this.rootControllersGroup = new ScopeGroup("root");
@@ -340,6 +341,20 @@ namespace TECUserControlLibrary.ViewModels
         
         private void parentChanged(TECChangedEventArgs obj)
         {
+            if (obj.Value is TECLocation location)
+            {
+                if (obj.Change == Change.Add)
+                {
+                    this.Locations.Add(location);
+                }
+                else if (obj.Change == Change.Remove)
+                {
+                    this.Locations.Remove(location);
+                }
+            }
+        }
+        private void parentScopeChanged(TECChangedEventArgs obj)
+        {
             if (obj.Value is ITECObject tecObj)
             {
                 if (obj.Change == Change.Add)
@@ -349,17 +364,6 @@ namespace TECUserControlLibrary.ViewModels
                 else if (obj.Change == Change.Remove)
                 {
                     repopulate(tecObj, removeConnectable);
-                }
-            }
-            else if (obj.Value is TECLocation location)
-            {
-                if (obj.Change == Change.Add)
-                {
-                    this.Locations.Add(location);
-                }
-                else if (obj.Change == Change.Remove)
-                {
-                    this.Locations.Remove(location);
                 }
             }
         }
