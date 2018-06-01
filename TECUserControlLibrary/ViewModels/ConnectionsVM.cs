@@ -19,6 +19,7 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class ConnectionsVM : ViewModelBase, IDropTarget, NetworkConnectionDropTargetDelegate
     {
+        
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         private readonly IRelatable root;
@@ -443,8 +444,8 @@ namespace TECUserControlLibrary.ViewModels
                 if (_omitConnected != value)
                 {
                     _omitConnected = value;
-                    FilterChanged?.Invoke();
                     RaisePropertyChanged("OmitConnected");
+                    FilterChanged?.Invoke();
                 }
             }
         }
@@ -456,8 +457,8 @@ namespace TECUserControlLibrary.ViewModels
                 if (_filterProtocol != value)
                 {
                     _filterProtocol = value;
-                    FilterChanged?.Invoke();
                     RaisePropertyChanged("FilterProtocol");
+                    FilterChanged?.Invoke();
                 }
             }
         }
@@ -469,8 +470,8 @@ namespace TECUserControlLibrary.ViewModels
                 if (_filterLocation != value)
                 {
                     _filterLocation = value;
-                    FilterChanged?.Invoke();
                     RaisePropertyChanged("FilterLocation");
+                    FilterChanged?.Invoke();
                 }
             }
         }

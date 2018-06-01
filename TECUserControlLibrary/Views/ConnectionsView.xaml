@@ -71,11 +71,11 @@
                     </Grid.RowDefinitions>
                     <TextBlock Text="Filters"/>
                     <controls:ConnectablesFilterControl Grid.Row="1"
-                                                        OmitConnected="{Binding ControllerFilter.OmitConnected}"
+                                                        OmitConnected="{Binding ControllerFilter.OmitConnected, Mode=TwoWay}"
                                                         Protocols="{Binding Catalogs.Protocols}"
-                                                        SelectedProtocol="{Binding ControllerFilter.FilterProtocol}"
+                                                        SelectedProtocol="{Binding ControllerFilter.FilterProtocol, Mode=TwoWay}"
                                                         Locations="{Binding Locations}"
-                                                        SelectedLocation="{Binding ControllerFilter.FilterLocation}"/>
+                                                        SelectedLocation="{Binding ControllerFilter.FilterLocation, Mode=TwoWay}"/>
                 </Grid>
             </Grid>
             
@@ -223,11 +223,11 @@
                     </Grid.RowDefinitions>
                     <TextBlock Text="Filters"/>
                     <controls:ConnectablesFilterControl Grid.Row="1"
-                                                        OmitConnected="{Binding ConnectableFilter.OmitConnected}"
+                                                        OmitConnected="{Binding ConnectableFilter.OmitConnected, Mode=TwoWay}"
                                                         Protocols="{Binding Catalogs.Protocols}"
-                                                        SelectedProtocol="{Binding ConnectableFilter.FilterProtocol}"
+                                                        SelectedProtocol="{Binding ConnectableFilter.FilterProtocol, Mode=TwoWay}"
                                                         Locations="{Binding Locations}"
-                                                        SelectedLocation="{Binding ConnectableFilter.FilterLocation}"/>
+                                                        SelectedLocation="{Binding ConnectableFilter.FilterLocation, Mode=TwoWay}"/>
                 </Grid>
             </Grid>
         </Grid>
