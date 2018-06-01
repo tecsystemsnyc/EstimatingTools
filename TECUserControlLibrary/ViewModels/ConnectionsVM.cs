@@ -13,10 +13,11 @@ using System.Text;
 using System.Threading.Tasks;
 using TECUserControlLibrary.Models;
 using TECUserControlLibrary.Utilities;
+using TECUserControlLibrary.Utilities.DropTargets;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    public class ConnectionsVM : ViewModelBase, IDropTarget
+    public class ConnectionsVM : ViewModelBase, IDropTarget, NetworkConnectionDropTargetDelegate
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -243,6 +244,9 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        public NetworkConnectionDropTarget ConnectionDropHandler { get; }
+        TECNetworkConnection NetworkConnectionDropTargetDelegate.SelectedConnection => SelectedConnection as TECNetworkConnection;
+        
         /// <summary>
         /// 
         /// </summary>
@@ -277,6 +281,8 @@ namespace TECUserControlLibrary.ViewModels
 
             SelectProtocolCommand = new RelayCommand(selectProtocolExecute, selectProtocolCanExecute);
             CancelProtocolSelectionCommand = new RelayCommand(cancelProtocolSelectionExecute);
+
+            ConnectionDropHandler = new NetworkConnectionDropTarget(this);
         }
 
         private void cancelProtocolSelectionExecute()

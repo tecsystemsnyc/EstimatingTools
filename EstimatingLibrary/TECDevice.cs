@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
 {
-    public class TECDevice : TECHardware, IDragDropable, IEndDevice, ICatalog<TECDevice>
+    public class TECDevice : TECHardware, IDDCopiable, IEndDevice, ICatalog<TECDevice>
     {
         #region Constants
         private const CostType COST_TYPE = CostType.TEC;

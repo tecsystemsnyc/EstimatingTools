@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
 {
-    public class TECEquipment : TECLocated, INotifyPointChanged, IDragDropable, ITypicalable
+    public class TECEquipment : TECLocated, INotifyPointChanged, IDDCopiable, ITypicalable
     {
         #region Properties
         private ObservableCollection<TECSubScope> _subScope;

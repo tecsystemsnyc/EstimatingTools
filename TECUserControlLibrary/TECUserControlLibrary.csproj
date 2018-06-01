@@ -249,6 +249,7 @@
     <Compile Include="UserControls\ValveGridControl.xaml.cs">
       <DependentUpon>ValveGridControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\DropTargets\NetworkConnectionDropTarget.cs" />
     <Compile Include="Utilities\DropTargets\ProtocolToIODropTarget.cs" />
     <Compile Include="Utilities\QuantityCollection.cs" />
     <Compile Include="Utilities\SearchUtilities.cs" />

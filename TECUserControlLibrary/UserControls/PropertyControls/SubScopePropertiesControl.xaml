@@ -7,13 +7,14 @@
               xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:interfaces="clr-namespace:EstimatingLibrary.Interfaces;assembly=EstimatingLibrary"
              x:Name="subScopePropertiesControl"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <StackPanel DataContext="{Binding ElementName=subScopePropertiesControl, Path=Selected}">
         <Expander Header="IO">
             <ListView Grid.Row="6" Grid.ColumnSpan="2"
-                      ItemsSource="{Binding IO, Converter={utilities:IOCollectionToListConverter}}"
+                      ItemsSource="{Binding Path=(interfaces:IConnectable.HardwiredIO), Converter={utilities:IOCollectionToListConverter}}"
                       HorizontalContentAlignment="Stretch">
                 <i:Interaction.Behaviors>
                     <utilities:BubbleScrollEvent/>
@@ -34,9 +35,6 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-        </Expander>
-        <Expander Header="Connection Types">
-            <listControls:ElectricalMaterialListControl Source="{Binding ConnectionTypes}"/>
         </Expander>
     </StackPanel>
 </UserControl>

@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace EstimatingLibrary
 {
-    public class TECElectricalMaterial : TECCost, ICatalog<TECElectricalMaterial>, IDragDropable
+    public class TECElectricalMaterial : TECCost, ICatalog<TECElectricalMaterial>, IDDCopiable
     {
         #region Properties
         private ObservableCollection<TECAssociatedCost> _ratedCosts;
