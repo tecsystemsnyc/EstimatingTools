@@ -84,9 +84,11 @@ namespace TECUserControlLibrary.Models
             }
         }
 
-        public void Add(ITECScope child)
+        public FilteredConnectablesGroup Add(ITECScope child)
         {
-            this.Add(new FilteredConnectablesGroup(child, this.filter));
+            FilteredConnectablesGroup newGroup = new FilteredConnectablesGroup(child, this.filter);
+            this.Add(newGroup);
+            return newGroup;
         }
         public void Add(FilteredConnectablesGroup child)
         {

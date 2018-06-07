@@ -23,14 +23,12 @@ namespace TECUserControlLibrary.ViewModels
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         private readonly IRelatable root;
-        private readonly ScopeGroup rootConnectableGroup;
-        private readonly ScopeGroup rootControllerGroup;
+        private readonly FilteredConnectablesGroup rootConnectableGroup;
+        private readonly FilteredConnectablesGroup rootControllerGroup;
         private readonly Func<ITECObject, bool> filterPredicate;
 
-        private readonly List<TECController> allControllers;
-        private readonly List<IConnectable> allConnectables;
-        private ScopeGroup _selectedControllerGroup;
-        private ScopeGroup _selectedConnectableGroup;
+        private FilteredConnectablesGroup _selectedControllerGroup;
+        private FilteredConnectablesGroup _selectedConnectableGroup;
         private IControllerConnection _selectedConnection;
         private Double _defaultWireLength = 50.0;
         private Double _defaultConduitLength = 30.0;
@@ -40,14 +38,14 @@ namespace TECUserControlLibrary.ViewModels
         private IProtocol _selectedProtocol;
         private List<IProtocol> _compatibleProtocols;
         
-        public ObservableCollection<ScopeGroup> Connectables
+        public ObservableCollection<FilteredConnectablesGroup> Connectables
         {
             get
             {
                 return rootConnectableGroup.ChildrenGroups;
             }
         }
-        public ObservableCollection<ScopeGroup> Controllers
+        public ObservableCollection<FilteredConnectablesGroup> Controllers
         {
             get
             {
@@ -55,7 +53,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public ScopeGroup SelectedControllerGroup
+        public FilteredConnectablesGroup SelectedControllerGroup
         {
             get { return _selectedControllerGroup; }
             set
@@ -66,7 +64,7 @@ namespace TECUserControlLibrary.ViewModels
                 Selected?.Invoke(value?.Scope as TECObject);
             }
         }
-        public ScopeGroup SelectedConnectableGroup
+        public FilteredConnectablesGroup SelectedConnectableGroup
         {
             get { return _selectedConnectableGroup; }
             set
@@ -183,9 +181,6 @@ namespace TECUserControlLibrary.ViewModels
         /// <param name="includeFilter">Predicate for "where" clause of direct children of root.</param>
         public ConnectionsVM(IRelatable root, ChangeWatcher watcher, TECCatalogs catalogs, IEnumerable<TECLocation> locations = null, Func<ITECObject, bool> filterPredicate = null)
         {
-            ControllerFilter.FilterChanged += repopulateAll;
-            ConnectableFilter.FilterChanged += repopulateAll;
-
             if (filterPredicate == null)
             {
                 filterPredicate = item => true;
@@ -203,10 +198,10 @@ namespace TECUserControlLibrary.ViewModels
             watcher.Changed += parentChanged;
             watcher.ScopeChanged += parentScopeChanged;
 
-            this.rootConnectableGroup = new ScopeGroup("root");
-            this.rootControllerGroup = new ScopeGroup("root");
+            this.rootConnectableGroup = new FilteredConnectablesGroup("root");
+            this.rootControllerGroup = new FilteredConnectablesGroup("root");
 
-            repopulateAll();
+            repopulateGroups(root, addConnectable);
 
             SelectProtocolCommand = new RelayCommand(selectProtocolExecute, selectProtocolCanExecute);
             CancelProtocolSelectionCommand = new RelayCommand(cancelProtocolSelectionExecute);
@@ -220,30 +215,19 @@ namespace TECUserControlLibrary.ViewModels
             SelectedProtocol = null;
             SelectionNeeded = false;
         }
-
         private void selectProtocolExecute()
         {
             SelectedController.Connect(SelectedConnectable, SelectedProtocol);
             cancelProtocolSelectionExecute();
         }
-
         private bool selectProtocolCanExecute()
         {
             return SelectedProtocol != null && SelectedConnectable != null && SelectedController != null;
         }
-
-        private void repopulateAll()
+        
+        private void repopulateGroups(ITECObject parent, Action<FilteredConnectablesGroup, IConnectable> action)
         {
-            Controllers.ObservablyClear();
-            Connectables.ObservablyClear();
-            foreach (ITECObject child in root.GetDirectChildren())
-            {
-                repopulate(child, addConnectable);
-            }
-        }
-        private void repopulate(ITECObject child, Action<ScopeGroup, IConnectable> action)
-        {
-            if(child is IConnectable connectable)
+            if(parent is IConnectable connectable)
             {
                 action(this.rootConnectableGroup, connectable);
                 if (connectable is TECController)
@@ -251,23 +235,23 @@ namespace TECUserControlLibrary.ViewModels
                     action(this.rootControllerGroup, connectable);
                 }
             }
-            else if (child is IRelatable relatable)
+            else if (parent is IRelatable relatable)
             {
-                foreach (ITECObject nextChild in relatable.GetDirectChildren().Where(filterPredicate))
+                foreach (ITECObject child in relatable.GetDirectChildren().Where(filterPredicate))
                 {
-                    repopulate(nextChild, action);
+                    repopulateGroups(child, action);
                 }
             }
         }
 
-        private static bool containsConnectable(ScopeGroup group)
+        private static bool containsConnectable(FilteredConnectablesGroup group)
         {
             if (group.Scope is IConnectable)
             {
                 return true;
             }
             
-            foreach(ScopeGroup childGroup in group.ChildrenGroups)
+            foreach(FilteredConnectablesGroup childGroup in group.ChildrenGroups)
             {
                 if (containsConnectable(childGroup))
                 {
@@ -297,18 +281,18 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (obj.Change == Change.Add)
                 {
-                    repopulate(tecObj, addConnectable);
+                    repopulateGroups(tecObj, addConnectable);
                 }
                 else if (obj.Change == Change.Remove)
                 {
-                    repopulate(tecObj, removeConnectable);
+                    repopulateGroups(tecObj, removeConnectable);
                 }
             }
         }
         
-        private void addConnectable(ScopeGroup rootGroup, IConnectable connectable)
+        private void addConnectable(FilteredConnectablesGroup rootGroup, IConnectable connectable)
         {
-            if (!passesFilters(rootGroup, connectable)) return;
+            if (!filterPredicate(connectable)) return;
             bool isDescendant = root.IsDirectDescendant(connectable);
             if (!root.IsDirectDescendant(connectable))
             {
@@ -318,14 +302,14 @@ namespace TECUserControlLibrary.ViewModels
 
             List<ITECObject> path = this.root.GetObjectPath(connectable);
 
-            ScopeGroup lastGroup = rootGroup;
+            FilteredConnectablesGroup lastGroup = rootGroup;
             int lastIndex = 0;
 
             for(int i = path.Count - 1; i > 0; i--)
             {
                 if (path[i] is ITECScope scope)
                 {
-                    ScopeGroup group = rootGroup.GetGroup(scope);
+                    FilteredConnectablesGroup group = rootGroup.GetGroup(scope);
 
                     if (group != null)
                     {
@@ -341,14 +325,12 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
             
-            ScopeGroup currentGroup = lastGroup;
+            FilteredConnectablesGroup currentGroup = lastGroup;
             for(int i = lastIndex + 1; i < path.Count; i++)
             {
                 if (path[i] is ITECScope scope)
                 {
-                    ScopeGroup newGroup = new ScopeGroup(scope);
-                    currentGroup.Add(newGroup);
-                    currentGroup = newGroup;
+                    currentGroup = currentGroup.Add(scope);
                 }
                 else
                 {
@@ -357,14 +339,14 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-        private void removeConnectable(ScopeGroup rootGroup, IConnectable connectable)
+        private void removeConnectable(FilteredConnectablesGroup rootGroup, IConnectable connectable)
         {
-            if (!passesFilters(rootGroup, connectable)) return;
-            List<ScopeGroup> path = rootGroup.GetPath(connectable);
+            if (!filterPredicate(connectable)) return;
+            List<FilteredConnectablesGroup> path = rootGroup.GetPath(connectable);
 
             path[path.Count - 2].Remove(path.Last());
 
-            ScopeGroup parentGroup = rootGroup;
+            FilteredConnectablesGroup parentGroup = rootGroup;
             for(int i = 1; i < path.Count; i++)
             {
                 if (!containsConnectable(path[i]))
@@ -379,30 +361,9 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private bool passesFilters(ScopeGroup rootGroup, IConnectable connectable)
-        {
-            if (!filterPredicate(connectable))
-            {
-                return false;
-            }
-
-            if (rootGroup == rootControllerGroup)
-            {
-                return ControllerFilter.PassesFilter(connectable);
-            }
-            else if (rootGroup == rootConnectableGroup)
-            {
-                return ConnectableFilter.PassesFilter(connectable);
-            }
-            else
-            {
-                return false;
-            }
-        }
-
         public void DragOver(IDropInfo dropInfo)
         {
-            if(dropInfo.Data is ScopeGroup group && SelectedController != null)
+            if(dropInfo.Data is FilteredConnectablesGroup group && SelectedController != null)
             {
                 if(SelectedController.CanConnect(group.Scope as IConnectable))
                 {
@@ -412,7 +373,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void Drop(IDropInfo dropInfo)
         {
-            IConnectable connectable = ((ScopeGroup)dropInfo.Data).Scope as IConnectable;
+            IConnectable connectable = ((FilteredConnectablesGroup)dropInfo.Data).Scope as IConnectable;
             var compatibleProtocols = SelectedController.CompatibleProtocols(connectable);
             if(compatibleProtocols.Count == 1)
             {
@@ -428,8 +389,6 @@ namespace TECUserControlLibrary.ViewModels
             }
             
         }
-
-
     }
 
     public class ConnectableFilter: ViewModelBase
