@@ -366,13 +366,17 @@ namespace EstimatingLibrary
                 {
                     handleRemove(args.Value as TECObject, args.Sender);
                 }
-                else if (args.Sender is TECPoint)
+                else if (args.Sender is TECPoint point)
                 {
-                    handlePointChanged(args.Sender as TECPoint, args.PropertyName);
+                    handlePointChanged(point, args.PropertyName);
                 }
-                else if (args.Sender is TECMisc)
+                else if (args.Sender is TECMisc misc)
                 {
-                    handleMiscChanged(args.Sender as TECMisc, args.PropertyName);
+                    handleMiscChanged(misc, args.PropertyName);
+                }
+                else if (args.Sender is TECController controller)
+                {
+                    handleControllerChaned(controller, args.PropertyName);
                 }
             }
         }
@@ -511,6 +515,19 @@ namespace EstimatingLibrary
                 foreach (TECMisc instance in TypicalInstanceDictionary.GetInstances(misc))
                 {
                     property.SetValue(instance, property.GetValue(misc), null);
+                }
+            }
+        }
+        private void handleControllerChaned(TECController controller, string propertyName)
+        {
+            if (propertyName == "Type")
+            {
+                foreach (var instance in this.GetInstancesFromTypical(controller))
+                {
+                    if (instance.CanChangeType(controller.Type))
+                    {
+                        instance.ChangeType(controller.Type);
+                    }
                 }
             }
         }

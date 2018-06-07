@@ -143,6 +143,14 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                             subScope.Location = item.Location;
                         }
                     }
+                    foreach(var controller in newSystem.Controllers)
+                    {
+                        controller.Location = item.Location;
+                    }
+                    foreach(var panel in newSystem.Panels)
+                    {
+                        panel.Location = item.Location;
+                    }
                 }
                 if (LabelInstances)
                 {
