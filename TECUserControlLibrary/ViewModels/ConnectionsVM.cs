@@ -207,7 +207,9 @@ namespace TECUserControlLibrary.ViewModels
             CancelProtocolSelectionCommand = new RelayCommand(cancelProtocolSelectionExecute);
 
             ConnectionDropHandler = new NetworkConnectionDropTarget(this);
-            
+
+            this.ControllerFilter.FilterChanged += () => { if (!SelectedControllerGroup.PassesFilter) SelectedControllerGroup = null; };
+            this.ConnectableFilter.FilterChanged += () => { if (!SelectedConnectableGroup.PassesFilter) SelectedConnectableGroup = null; };
         }
 
         private void cancelProtocolSelectionExecute()
