@@ -55,12 +55,15 @@ namespace TECUserControlLibrary.Models
         public ITECScope Scope { get; }
         public ObservableCollection<FilteredConnectablesGroup> ChildrenGroups { get; }
         
-        public FilteredConnectablesGroup(string name)
+        public FilteredConnectablesGroup(string name, ConnectableFilter filter)
         {
             this.Name = name;
             ChildrenGroups = new ObservableCollection<FilteredConnectablesGroup>();
+            
+            this.filter = filter;
+            this.filter.FilterChanged += filterChanged;
         }
-        public FilteredConnectablesGroup(ITECScope scope, ConnectableFilter filter) : this(scope.Name)
+        public FilteredConnectablesGroup(ITECScope scope, ConnectableFilter filter) : this(scope.Name, filter)
         {
             this.Scope = scope;
             this.Scope.PropertyChanged += (sender, e) =>
@@ -70,10 +73,7 @@ namespace TECUserControlLibrary.Models
                     Name = scope.Name;
                 }
             };
-
-            this.filter = filter;
-            this.filter.FilterChanged += filterChanged;
-
+            
             if (scope is IConnectable connectable)
             {
                 this.PassesFilter = filter.PassesFilter(connectable);

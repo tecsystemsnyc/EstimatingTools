@@ -198,8 +198,8 @@ namespace TECUserControlLibrary.ViewModels
             watcher.Changed += parentChanged;
             watcher.ScopeChanged += parentScopeChanged;
 
-            this.rootConnectableGroup = new FilteredConnectablesGroup("root");
-            this.rootControllerGroup = new FilteredConnectablesGroup("root");
+            this.rootConnectableGroup = new FilteredConnectablesGroup("root", this.ConnectableFilter);
+            this.rootControllerGroup = new FilteredConnectablesGroup("root", this.ControllerFilter);
 
             repopulateGroups(root, addConnectable);
 
