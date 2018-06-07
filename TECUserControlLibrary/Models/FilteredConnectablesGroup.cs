@@ -116,8 +116,7 @@ namespace TECUserControlLibrary.Models
             }
             else
             {
-                this.ChildrenGroups.Remove(groupToRemove);
-                return true;
+                return this.Remove(groupToRemove);
             }
         }
         public bool Remove(FilteredConnectablesGroup child)
