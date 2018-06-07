@@ -31,7 +31,7 @@
                             </Border>
                         </Expander.Header>
                         <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="1,0,0,0" Margin="10,0,0,0">
-                            <local:ScopeGroupControl ItemsSource="{Binding ChildrenGroups}"
+                            <local:FilteredConnectablesGroupControl ItemsSource="{Binding ChildrenGroups}"
                                                      SelectedItem="{Binding ElementName=filteredConnectableGroupControl, Path=SelectedItem}"
                                                      IsDropTarget="{Binding ElementName=filteredConnectableGroupControl, Path=IsDropTarget}"
                                                      IsDragSource="{Binding ElementName=filteredConnectableGroupControl, Path=IsDragSource}"/>
