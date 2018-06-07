@@ -69,6 +69,7 @@
     <Compile Include="TemplatesSynchronizerTests.cs" />
     <Compile Include="TypicalTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BidTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EstimatingLibrary\EstimatingLibrary.csproj">

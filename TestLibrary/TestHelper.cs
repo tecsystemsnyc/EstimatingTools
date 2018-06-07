@@ -532,7 +532,7 @@ namespace Tests
             AssignSecondaryProperties(device1, outCatalogs);
 
             outCatalogs.Devices.Add(device1);
-
+            
             //IO Modules
             TECIOModule testIOModule = new TECIOModule(manufacturer1);
             testIOModule.Name = "Test IO Module";
@@ -594,6 +594,9 @@ namespace Tests
 
             controllerType.IO.Add(new TECIO(protocol));
 
+            TECDevice netDevice = new TECDevice(Guid.NewGuid(), new List<TECConnectionType>(), new List<TECProtocol> { protocol }, manufacturer1);
+            outCatalogs.Devices.Add(netDevice);
+            
             return outCatalogs;
         }
 
