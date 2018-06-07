@@ -208,8 +208,16 @@ namespace TECUserControlLibrary.ViewModels
 
             ConnectionDropHandler = new NetworkConnectionDropTarget(this);
 
-            this.ControllerFilter.FilterChanged += () => { if (!SelectedControllerGroup.PassesFilter) SelectedControllerGroup = null; };
-            this.ConnectableFilter.FilterChanged += () => { if (!SelectedConnectableGroup.PassesFilter) SelectedConnectableGroup = null; };
+            this.ControllerFilter.FilterChanged += () => 
+            {
+                if (SelectedControllerGroup != null && !SelectedControllerGroup.PassesFilter)
+                    SelectedControllerGroup = null;
+            };
+            this.ConnectableFilter.FilterChanged += () => 
+            {
+                if (SelectedControllerGroup != null && !SelectedConnectableGroup.PassesFilter)
+                    SelectedConnectableGroup = null;
+            };
         }
 
         private void cancelProtocolSelectionExecute()
