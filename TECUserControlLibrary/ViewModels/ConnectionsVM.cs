@@ -215,7 +215,7 @@ namespace TECUserControlLibrary.ViewModels
             };
             this.ConnectableFilter.FilterChanged += () => 
             {
-                if (SelectedControllerGroup != null && !SelectedConnectableGroup.PassesFilter)
+                if (SelectedConnectableGroup != null && !SelectedConnectableGroup.PassesFilter)
                     SelectedConnectableGroup = null;
             };
         }
