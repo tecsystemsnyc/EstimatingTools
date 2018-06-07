@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.Models;
 using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.UserControls
@@ -21,24 +22,24 @@ namespace TECUserControlLibrary.UserControls
     /// </summary>
     public partial class FilteredConnectablesGroupControl : UserControl
     {
-        public IEnumerable<FliteredConnectablesGroup> ItemsSource
+        public IEnumerable<FilteredConnectablesGroup> ItemsSource
         {
-            get { return (IEnumerable<FliteredConnectablesGroup>)GetValue(ItemsSourceProperty); }
+            get { return (IEnumerable<FilteredConnectablesGroup>)GetValue(ItemsSourceProperty); }
             set { SetValue(ItemsSourceProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for ItemsSource.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ItemsSourceProperty =
-            DependencyProperty.Register("ItemsSource", typeof(IEnumerable<FliteredConnectablesGroup>), typeof(FilteredConnectablesGroupControl));
+            DependencyProperty.Register("ItemsSource", typeof(IEnumerable<FilteredConnectablesGroup>), typeof(FilteredConnectablesGroupControl));
 
-        public FliteredConnectablesGroup SelectedItem
+        public FilteredConnectablesGroup SelectedItem
         {
-            get { return (FliteredConnectablesGroup)GetValue(SelectedItemProperty); }
+            get { return (FilteredConnectablesGroup)GetValue(SelectedItemProperty); }
             set { SetValue(SelectedItemProperty, value); }
         }
 
         public static readonly DependencyProperty SelectedItemProperty =
-            DependencyProperty.Register("SelectedItem", typeof(FliteredConnectablesGroup),
+            DependencyProperty.Register("SelectedItem", typeof(FilteredConnectablesGroup),
                 typeof(FilteredConnectablesGroupControl), new FrameworkPropertyMetadata(null)
                 {
                     BindsTwoWayByDefault = true,

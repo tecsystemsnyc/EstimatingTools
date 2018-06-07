@@ -9,14 +9,14 @@
              xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <ListView ItemsSource="{Binding ElementName=scopeGroupControl, Path=ItemsSource}"
-              SelectedItem="{Binding ElementName=scopeGroupControl, Path=SelectedItem}"
+    <ListView ItemsSource="{Binding ElementName=filteredConnectableGroupControl, Path=ItemsSource}"
+              SelectedItem="{Binding ElementName=filteredConnectableGroupControl, Path=SelectedItem}"
               MouseUp="ScopeGroupControl_MouseUp"
-              dd:DragDrop.IsDragSource="{Binding ElementName=scopeGroupControl, Path=IsDragSource}"
-              dd:DragDrop.IsDropTarget="{Binding ElementName=scopeGroupControl, Path=IsDropTarget}">
+              dd:DragDrop.IsDragSource="{Binding ElementName=filteredConnectableGroupControl, Path=IsDragSource}"
+              dd:DragDrop.IsDropTarget="{Binding ElementName=filteredConnectableGroupControl, Path=IsDropTarget}">
         <ListView.ItemTemplate>
             <DataTemplate>
-                <Grid Visibility="">
+                <Grid Visibility="{Binding PassesFilter, Converter={utilities:BooleanToVisibilityConverter}}">
                     <Expander Visibility="{Binding ChildrenGroups.Count, Converter={utilities:CountVisibilityConverter}}">
                         <Expander.Header>
                             <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="0,0,0,1">
@@ -32,9 +32,9 @@
                         </Expander.Header>
                         <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="1,0,0,0" Margin="10,0,0,0">
                             <local:ScopeGroupControl ItemsSource="{Binding ChildrenGroups}"
-                                                     SelectedItem="{Binding ElementName=scopeGroupControl, Path=SelectedItem}"
-                                                     IsDropTarget="{Binding ElementName=scopeGroupControl, Path=IsDropTarget}"
-                                                     IsDragSource="{Binding ElementName=scopeGroupControl, Path=IsDragSource}"/>
+                                                     SelectedItem="{Binding ElementName=filteredConnectableGroupControl, Path=SelectedItem}"
+                                                     IsDropTarget="{Binding ElementName=filteredConnectableGroupControl, Path=IsDropTarget}"
+                                                     IsDragSource="{Binding ElementName=filteredConnectableGroupControl, Path=IsDragSource}"/>
                         </Border>
                     </Expander>
                     <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="0,0,0,1" Margin="25,0,0,0"
