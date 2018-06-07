@@ -234,6 +234,8 @@ namespace TECUserControlLibrary.ViewModels
 
         private void repopulateAll()
         {
+            Controllers.ObservablyClear();
+            Connectables.ObservablyClear();
             foreach (ITECObject child in root.GetDirectChildren())
             {
                 repopulate(child, addConnectable);
