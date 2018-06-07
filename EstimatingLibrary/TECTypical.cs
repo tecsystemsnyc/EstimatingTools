@@ -291,8 +291,7 @@ namespace EstimatingLibrary
         {
             return this.TypicalInstanceDictionary.GetInstances(typical);
         }
-
-
+        
         internal void RefreshRegistration()
         {
             watcher.Changed -= handleSystemChanged;

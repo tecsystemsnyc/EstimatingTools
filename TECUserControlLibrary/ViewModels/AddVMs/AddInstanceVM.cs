@@ -132,9 +132,17 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             {
                 TECSystem newSystem = parent.AddInstance(bid);
                 newSystem.Name = item.Name;
-                if(item.Location != null)
+                if (item.Location != null)
                 {
                     newSystem.Location = item.Location;
+                    foreach (var equip in newSystem.Equipment)
+                    {
+                        equip.Location = item.Location;
+                        foreach(var subScope in equip.SubScope)
+                        {
+                            subScope.Location = item.Location;
+                        }
+                    }
                 }
                 if (LabelInstances)
                 {
@@ -171,7 +179,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 {
                     newItem.Name = String.Format("{0}-{1}", PatternName, x);
                 }
-                newItem.Location = PatternLocation;
+                newItem.Location = PatternLocation;                
                 Names.Add(newItem);
             }
             int nextIndex = Locations.IndexOf(PatternLocation) + 1;
@@ -179,6 +187,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             {
                 PatternLocation = Locations[nextIndex];
             }
+
         }
         private bool canAddPattern()
         {
