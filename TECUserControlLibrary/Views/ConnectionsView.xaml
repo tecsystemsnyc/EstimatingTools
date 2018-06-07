@@ -58,7 +58,7 @@
                     <TextBlock Text="Controllers" Style="{StaticResource ListHeader}"/>
                 </Border>
                 <!--Controllers List-->
-                <controls:ScopeGroupControl ItemsSource="{Binding Controllers}"
+                <controls:FilteredConnectablesGroupControl ItemsSource="{Binding Controllers}"
                                             SelectedItem="{Binding SelectedControllerGroup}"
                                             IsDropTarget="False"
                                             IsDragSource="False"
@@ -211,7 +211,7 @@
                     <TextBlock Text="Connectables" Style="{StaticResource ListHeader}"/>
                 </Border>
                 <!--Connectables List-->
-                <controls:ScopeGroupControl ItemsSource="{Binding Connectables}"
+                <controls:FilteredConnectablesGroupControl ItemsSource="{Binding Connectables}"
                                             SelectedItem="{Binding SelectedConnectableGroup}"
                                             IsDropTarget="False"
                                             Grid.Row="1"/>

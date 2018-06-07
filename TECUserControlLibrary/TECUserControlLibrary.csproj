@@ -128,6 +128,9 @@
     <Compile Include="UserControls\CostSummaryItemGridControl.xaml.cs">
       <DependentUpon>CostSummaryItemGridControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\FilteredConnectablesGroupControl.xaml.cs">
+      <DependentUpon>FilteredConnectablesGroupControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ItemControls\BaseItemControl.cs" />
     <Compile Include="UserControls\ItemControls\ControllerInPanelControl.xaml.cs">
       <DependentUpon>ControllerInPanelControl.xaml</DependentUpon>
@@ -612,6 +615,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\CostSummaryItemGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\FilteredConnectablesGroupControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
