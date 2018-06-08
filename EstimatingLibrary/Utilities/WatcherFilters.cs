@@ -56,10 +56,24 @@ namespace EstimatingLibrary.Utilities.WatcherFilters
 
         protected override void watcherChanged(TECChangedEventArgs args)
         {
-            if (!propertyExceptions.Contains(args.PropertyName) && !(args.Sender is TECCatalogs) &&
-                (!(args.Sender.IsTypical()) || !(args.Value.IsTypical())))
+            if (!propertyExceptions.Contains(args.PropertyName) && !(args.Sender is TECCatalogs))
             {
-                this.InstanceChanged?.Invoke(args);
+                if(args.Value is ITypicalable valueTyp)
+                {
+                    if (!valueTyp.IsTypical)
+                    {
+                        this.InstanceChanged?.Invoke(args);
+
+                    }
+                }
+                else
+                {
+                    if(!(args.Sender is ITypicalable) ||
+                        args.Sender is ITypicalable senderTyp && !senderTyp.IsTypical)
+                    {
+                        this.InstanceChanged?.Invoke(args);
+                    }
+                }
             }
         }
     }
