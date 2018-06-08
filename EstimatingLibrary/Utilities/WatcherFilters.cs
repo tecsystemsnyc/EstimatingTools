@@ -147,6 +147,24 @@ namespace EstimatingLibrary.Utilities.WatcherFilters
         }
     }
 
+    public class DirectRelationshipChangedFilter
+    {
+        public event Action<TECChangedEventArgs> DirectRelationshipChanged;
+
+        public DirectRelationshipChangedFilter(ChangeWatcher watcher)
+        {
+            new ScopeWatcherFilter(watcher).ScopeChanged += scopeFilterChanged;
+        }
+
+        private void scopeFilterChanged(TECChangedEventArgs obj)
+        {
+            if (obj.Value is ITECObject tecObj && ((IRelatable)obj.Sender).IsDirectDescendant(tecObj))
+            {
+                DirectRelationshipChanged?.Invoke(obj);
+            }
+        }
+    }
+
     internal static class TypicalExtension
     {
         public static bool IsTypical(this object obj)
