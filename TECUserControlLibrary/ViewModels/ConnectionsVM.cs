@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
+using EstimatingLibrary.Utilities.WatcherFilters;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
@@ -196,7 +197,7 @@ namespace TECUserControlLibrary.ViewModels
             }
 
             watcher.Changed += parentChanged;
-            watcher.ScopeChanged += parentScopeChanged;
+            new ScopeWatcherFilter(watcher).ScopeChanged += parentScopeChanged;
 
             this.rootConnectableGroup = new FilteredConnectablesGroup("root", this.ConnectableFilter);
             this.rootControllerGroup = new FilteredConnectablesGroup("root", this.ControllerFilter);

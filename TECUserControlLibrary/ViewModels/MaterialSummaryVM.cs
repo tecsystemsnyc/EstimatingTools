@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
+using EstimatingLibrary.Utilities.WatcherFilters;
 using GalaSoft.MvvmLight;
 using System;
 using System.Linq;
@@ -232,7 +233,8 @@ namespace TECUserControlLibrary.ViewModels
             reinitializeTotals();
             initializeVMs();
             loadBid(bid);
-            resubscribe(changeWatcher);
+            //resubscribe(changeWatcher);
+            new InstanceWatcherFilter(changeWatcher).InstanceChanged += instanceChanged;
         }
 
         #region Initialization Methods
@@ -267,11 +269,11 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private void resubscribe(ChangeWatcher changeWatcher)
-        {
-            changeWatcher.InstanceChanged -= instanceChanged;
-            changeWatcher.InstanceChanged += instanceChanged;
-        }
+        //private void resubscribe(ChangeWatcher changeWatcher)
+        //{
+        //    changeWatcher.InstanceChanged -= instanceChanged;
+        //    changeWatcher.InstanceChanged += instanceChanged;
+        //}
 
         private void initializeVMs()
         {
