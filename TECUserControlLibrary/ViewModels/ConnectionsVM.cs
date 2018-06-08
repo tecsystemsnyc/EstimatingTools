@@ -229,9 +229,9 @@ namespace TECUserControlLibrary.ViewModels
             return SelectedProtocol != null && SelectedConnectable != null && SelectedController != null;
         }
         
-        private void repopulateGroups(ITECObject parent, Action<FilteredConnectablesGroup, IConnectable> action)
+        private void repopulateGroups(ITECObject item, Action<FilteredConnectablesGroup, IConnectable> action)
         {
-            if(parent is IConnectable connectable)
+            if(item is IConnectable connectable)
             {
                 action(this.rootConnectableGroup, connectable);
                 if (connectable is TECController)
@@ -239,7 +239,7 @@ namespace TECUserControlLibrary.ViewModels
                     action(this.rootControllerGroup, connectable);
                 }
             }
-            else if (parent is IRelatable relatable)
+            else if (item is IRelatable relatable)
             {
                 foreach (ITECObject child in relatable.GetDirectChildren().Where(filterPredicate))
                 {
