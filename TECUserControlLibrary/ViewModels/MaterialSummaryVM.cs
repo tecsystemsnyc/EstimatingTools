@@ -223,20 +223,14 @@ namespace TECUserControlLibrary.ViewModels
         //Constructor
         public MaterialSummaryVM(TECBid bid, ChangeWatcher changeWatcher)
         {
-            Refresh(bid, changeWatcher);
+            reinitializeTotals();
+            initializeVMs();
+            loadBid(bid);
+            new InstanceWatcherFilter(changeWatcher).InstanceChanged += instanceChanged;
             SelectedIndex = MaterialSummaryIndex.Devices;
         }
 
         #region Methods
-        public void Refresh(TECBid bid, ChangeWatcher changeWatcher)
-        {
-            reinitializeTotals();
-            initializeVMs();
-            loadBid(bid);
-            //resubscribe(changeWatcher);
-            new InstanceWatcherFilter(changeWatcher).InstanceChanged += instanceChanged;
-        }
-
         #region Initialization Methods
         private void reinitializeTotals()
         {

@@ -56,7 +56,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update proplery.");
             Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -94,7 +93,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
             Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -119,7 +117,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update proplery.");
             Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -144,7 +141,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update proplery.");
             Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -173,7 +169,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update proplery.");
             Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -202,7 +197,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
             Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -228,7 +222,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update proplery.");
             Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -254,7 +247,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update proplery.");
             Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -291,7 +283,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update proplery.");
             Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -328,7 +319,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update proplery.");
             Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -362,7 +352,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update proplery.");
             Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -393,7 +382,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update proplery.");
             Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -420,7 +408,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update proplery.");
             Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -474,7 +461,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
             Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
         #endregion
 
@@ -521,7 +507,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
             Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -564,7 +549,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
             Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -596,7 +580,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
             Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -628,7 +611,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
             Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -661,7 +643,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
             Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -694,7 +675,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
             Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -739,7 +719,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
             Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -785,7 +764,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
             Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -827,7 +805,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
             Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -866,7 +843,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
             Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -901,7 +877,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
             Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
 
         [TestMethod]
@@ -952,7 +927,6 @@ namespace Tests
             Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
             Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
-            checkRefresh(matVM, bid, cw);
         }
         #endregion
 
@@ -995,25 +969,10 @@ namespace Tests
             Assert.AreEqual(0, matVM.TotalElecCost, "Typical connection added to elec cost.");
             Assert.AreEqual(0, matVM.TotalElecLabor, "Typical connection added to elec labor.");
 
-            checkRefresh(matVM, bid, cw);
         }
         #endregion
 
         #endregion
-
-        private void checkRefresh(MaterialSummaryVM matVM, TECBid bid, ChangeWatcher cw)
-        {
-            double tecCost = matVM.TotalTECCost;
-            double tecLabor = matVM.TotalTECLabor;
-            double elecCost = matVM.TotalElecCost;
-            double elecLabor = matVM.TotalElecLabor;
-
-            matVM.Refresh(bid, cw);
-
-            Assert.AreEqual(tecCost, matVM.TotalTECCost, DELTA, "Total tec cost didn't refresh properly.");
-            Assert.AreEqual(tecLabor, matVM.TotalTECLabor, DELTA, "Total tec labor didn't refresh properly.");
-            Assert.AreEqual(elecCost, matVM.TotalElecCost, DELTA, "Total elec cost didn't refresh properly.");
-            Assert.AreEqual(elecLabor, matVM.TotalElecLabor, DELTA, "Total elec labor didn't refresh properly.");
-        }
+        
     }
 }
