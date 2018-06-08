@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
+using EstimatingLibrary.Utilities.WatcherFilters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -48,7 +49,7 @@ namespace Tests
                 changedArgs = args;
                 changedRaised = true;
             };
-            cw.InstanceChanged += (args) =>
+            new InstanceWatcherFilter(cw).InstanceChanged += (args) =>
             {
                 instanceChangedArgs = args;
                 instanceChangedRaised = true;
@@ -63,18 +64,18 @@ namespace Tests
                 pointDelta = numPoints;
                 pointChangedRaised = true;
             };
-            cw.InstanceConstituentChanged += (changeType, obj) =>
+            new InstanceConstituentChangedFilter(cw).InstanceConstituentChanged += (changeType, obj) =>
             {
                 instanceConstituentChangedArgs.Add(new Tuple<Change, ITECObject>(changeType, obj));
                 instanceConstituentChangedRaised = true;
             };
-            
+
             tcw.Changed += (args) =>
             {
                 changedArgs = args;
                 changedRaised = true;
             };
-            tcw.InstanceChanged += (args) =>
+            new InstanceWatcherFilter(tcw).InstanceChanged += (args) =>
             {
                 instanceChangedArgs = args;
                 instanceChangedRaised = true;
