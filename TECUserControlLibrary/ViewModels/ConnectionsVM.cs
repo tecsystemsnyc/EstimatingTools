@@ -197,7 +197,7 @@ namespace TECUserControlLibrary.ViewModels
             }
 
             watcher.Changed += parentChanged;
-            new ScopeWatcherFilter(watcher).ScopeChanged += parentScopeChanged;
+            new DirectRelationshipChangedFilter(watcher).DirectRelationshipChanged += parentScopeChanged;
 
             this.rootConnectableGroup = new FilteredConnectablesGroup("root", this.ConnectableFilter);
             this.rootControllerGroup = new FilteredConnectablesGroup("root", this.ControllerFilter);
