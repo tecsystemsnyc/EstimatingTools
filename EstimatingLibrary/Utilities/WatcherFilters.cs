@@ -172,7 +172,9 @@ namespace EstimatingLibrary.Utilities.WatcherFilters
 
         private void scopeFilterChanged(TECChangedEventArgs obj)
         {
-            if (obj.Value is ITECObject tecObj && ((IRelatable)obj.Sender).IsDirectDescendant(tecObj))
+            if (obj.Value is ITECObject tecObj 
+                && ((IRelatable)obj.Sender).PropertyObjects.Contains(obj.PropertyName) 
+                && !((IRelatable)obj.Sender).LinkedObjects.Contains(obj.PropertyName))
             {
                 DirectRelationshipChanged?.Invoke(obj);
             }
