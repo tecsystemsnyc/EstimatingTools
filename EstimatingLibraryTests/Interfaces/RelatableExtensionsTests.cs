@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tests;
+using System.ComponentModel;
 
 namespace EstimatingLibrary.Interfaces.Tests
 {
@@ -15,19 +16,44 @@ namespace EstimatingLibrary.Interfaces.Tests
         [TestMethod()]
         public void GetAllTest()
         {
-            Assert.Fail();
+
+            var test = new RelatableTest();
+            test.PropertyObjects.Add(new TECMisc(CostType.TEC, false), "TestingDirect");
+            test.PropertyObjects.Add(new TECLocation(), "TestingRelated");
+
+            test.LinkedObjects.Add(new TECLocation(), "TestingRelated");
+            
+            Assert.IsTrue(test.GetAll<TECAssociatedCost>().Count == 0);
+            Assert.IsTrue(test.GetAll<TECLocation>().Count == 0);
+
+            Assert.IsTrue(test.GetAll<TECMisc>().Count == 1);
         }
 
         [TestMethod()]
         public void GetDirectChildrenTest()
         {
-            Assert.Fail();
+            var test = new RelatableTest();
+            test.PropertyObjects.Add(new TECMisc(CostType.TEC, false), "TestingDirect");
+            test.PropertyObjects.Add(new TECLocation(), "TestingRelated");
+
+            test.LinkedObjects.Add(new TECLocation(), "TestingRelated");
+
+            Assert.IsTrue(test.GetDirectChildren().Count == 1);
         }
 
         [TestMethod()]
         public void IsDirectChildPropertyTest()
         {
-            Assert.Fail();
+            var test = new RelatableTest();
+            var misc = new TECMisc(CostType.TEC, false);
+            test.PropertyObjects.Add(misc, "TestingDirect");
+            var location = new TECLocation();
+            test.PropertyObjects.Add(location, "TestingRelated");
+
+            test.LinkedObjects.Add(location, "TestingRelated");
+
+            Assert.IsTrue(test.IsDirectChildProperty("TestingDirect"));
+            Assert.IsFalse(test.IsDirectChildProperty("TestingRelated"));
         }
 
         [TestMethod()]
@@ -104,5 +130,17 @@ namespace EstimatingLibrary.Interfaces.Tests
 
             Assert.AreEqual(2, sysToControllerPath.Count);
         }
+    }
+
+    class RelatableTest : IRelatable
+    {
+        public SaveableMap PropertyObjects { get; set; } = new SaveableMap();
+
+        public SaveableMap LinkedObjects { get; set; } = new SaveableMap();
+
+        public Guid Guid { get; set; } = new Guid();
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event Action<TECChangedEventArgs> TECChanged;
     }
 }

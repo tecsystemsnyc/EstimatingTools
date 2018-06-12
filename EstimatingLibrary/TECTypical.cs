@@ -479,6 +479,43 @@ namespace EstimatingLibrary
                     subScope.Connection.ParentController.Disconnect(subScope);
                 }
             }
+            foreach(TECController controller in instance.Controllers)
+            {
+                if(controller.ParentConnection != null && !instance.Controllers.Contains(controller.ParentConnection.ParentController))
+                {
+                    controller.ParentConnection.ParentController.Disconnect(controller);
+                }
+                foreach(TECConnection connection in controller.ChildrenConnections)
+                {
+                    if(connection is TECHardwiredConnection hardwired)
+                    {
+                        if (instance.GetAllSubScope().Contains(hardwired.Child))
+                        {
+                            hardwired.Child.SetParentConnection(null);
+                        }
+                    } else if(connection is TECNetworkConnection netConnect)
+                    {
+                        foreach(var child in netConnect.Children)
+                        {
+                            if(child is TECController childController)
+                            {
+                                if (instance.Controllers.Contains(childController))
+                                {
+                                    break;
+                                }
+                            }
+                            if(child is TECSubScope childSub)
+                            {
+                                if (instance.GetAllSubScope().Contains(childSub))
+                                {
+                                    break;
+                                }
+                            }
+                            child.SetParentConnection(null);
+                        }
+                    }
+                }
+            }
             removeFromDictionary(Panels, instance.Panels);
             removeFromDictionary(Equipment, instance.Equipment);
             foreach(TECEquipment instanceEquip in instance.Equipment)

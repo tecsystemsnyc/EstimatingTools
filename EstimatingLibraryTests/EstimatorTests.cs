@@ -938,7 +938,7 @@ namespace Tests
                 {
                     foreach (TECSubScope instanceSubScope in instance.GetAllSubScope())
                     {
-                        var instanceConnection = instanceController.Connect(instanceSubScope, instanceSubScope.AvailableProtocols.First());
+                        var instanceConnection = instanceSubScope.Connection;
                         instanceConnection.Length += 1;
                         instanceConnection.ConduitLength += 1;
                     }
@@ -947,8 +947,8 @@ namespace Tests
 
 
             //For Both Conduit and Wire: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor + AssCost.Cost/Labor) 
-            Assert.AreEqual(70, estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
-            Assert.AreEqual(70, estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
+            Assert.AreEqual(72, estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
+            Assert.AreEqual(72, estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
 
             checkRefresh(bid, estimate);
         }

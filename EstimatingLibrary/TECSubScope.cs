@@ -205,7 +205,7 @@ namespace EstimatingLibrary
 
         public bool CanConnectToNetwork(TECNetworkConnection netConnect)
         {
-            throw new NotImplementedException();
+            return this.AvailableProtocols.Contains(netConnect.Protocol);
         }
         
         private int getPointNumber()

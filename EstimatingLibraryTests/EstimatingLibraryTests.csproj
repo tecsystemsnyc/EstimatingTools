@@ -65,7 +65,6 @@
     <Compile Include="Interfaces\RelatableExtensionsTests.cs" />
     <Compile Include="IOCollectionTests.cs" />
     <Compile Include="SystemModelTests.cs" />
-    <Compile Include="TemplatesLinkingTests.cs" />
     <Compile Include="TemplatesSynchronizerTests.cs" />
     <Compile Include="TypicalTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
