@@ -466,4 +466,44 @@ namespace TECUserControlLibrary.ViewModels
             return true;
         }
     }
+
+    static class ConnectionHelper
+    {
+        static bool CanConnectToController(TECController controller, ITECObject item)
+        {
+
+            var connectables = GetConnectables(item)
+                .Where(x => x.GetParentConnection() == null);
+            foreach(var connectable in connectables)
+            {
+                if(connectable.AvailableProtocols.Count == 0)
+                {
+                    return false;
+                }
+            }
+
+            var singleConnections = connectables
+                .Where(x => x.AvailableProtocols.Count == 1)
+                .Select(x => x.AvailableProtocols.First());
+            
+
+            
+            return false;
+        }
+
+
+        static List<IConnectable> GetConnectables(ITECObject parent)
+        {
+            List<IConnectable> outList = new List<IConnectable>();
+            if(parent is IConnectable connectable)
+            {
+                outList.Add(connectable);
+            }
+            if(parent is IRelatable relatable)
+            {
+                relatable.GetDirectChildren().ForEach(x => outList.AddRange(GetConnectables(x)));
+            }
+            return outList;
+        }
+    }
 }
