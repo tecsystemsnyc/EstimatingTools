@@ -129,7 +129,9 @@ namespace TECUserControlLibrary.ViewModels
         public RelayCommand<TECPoint> DeletePointCommand { get; private set; }
         public RelayCommand<TECController> DeleteControllerCommand { get; private set; }
         public RelayCommand<TECPanel> DeletePanelCommand { get; private set; }
-        
+
+        public RelayCommand UpdateInstanceConnectionsCommand { get; private set; }
+
         public MiscCostsVM MiscVM
         {
             get { return miscVM; }
@@ -294,7 +296,15 @@ namespace TECUserControlLibrary.ViewModels
                 ControllersPanelsVM = new ControllersPanelsVM(value, scopeManager);
                 ValveVM = new ValveSelectionVM(value, scopeManager.Catalogs.Valves);
                 ConnectionsVM = new ConnectionsVM(value, new ChangeWatcher(value), catalogs, locations: (scopeManager as TECBid)?.Locations, filterPredicate: connectionFilter);
-
+                if(value is TECTypical typical)
+                {
+                    UpdateInstanceConnectionsCommand = new RelayCommand(typical.UpdateInstanceConnections, typical.CanUpdateInstanceConnections);
+                }
+                else
+                {
+                    UpdateInstanceConnectionsCommand = null;
+                }
+                RaisePropertyChanged("UpdateInstanceConnectionsCommand");
                 bool connectionFilter(ITECObject obj)
                 {
                     if(obj is ITypicalable typ && typ.IsTypical == value.IsTypical)

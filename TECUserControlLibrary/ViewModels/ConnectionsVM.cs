@@ -376,6 +376,10 @@ namespace TECUserControlLibrary.ViewModels
             List<IConnectable> connectables = new List<IConnectable>();
             if (dropInfo.Data is FilteredConnectablesGroup group)
             {
+                if(group.Scope == SelectedController)
+                {
+                    return;
+                }
                 connectables = ConnectionHelper.GetConnectables(group.Scope, filterPredicate);
                 
             }

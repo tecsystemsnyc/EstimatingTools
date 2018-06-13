@@ -145,7 +145,6 @@ namespace EstimatingLibrary
                 }
             }
         }
-        
         #endregion
 
         #region Methods
@@ -196,55 +195,63 @@ namespace EstimatingLibrary
             return (newSystem);
         }
 
-        public void UpdateInstanceNetworkInController(TECController controller)
+        public void UpdateInstanceConnections()
         {
-            foreach (TECController instance in this.TypicalInstanceDictionary.GetInstances(controller))
+            foreach(TECController controller in this.Controllers)
             {
-                instance.RemoveAllChildNetworkConnections();
-                foreach (TECNetworkConnection connection in controller.ChildrenConnections.Where(connection => connection is TECNetworkConnection))
+                foreach (TECController instance in this.TypicalInstanceDictionary.GetInstances(controller))
                 {
-                    TECNetworkConnection instanceConnection = instance.AddNetworkConnection(connection.NetworkProtocol);
-                    instanceConnection.Length = connection.Length;
-                    instanceConnection.ConduitType = connection.ConduitType;
-                    instanceConnection.ConduitLength = connection.ConduitLength;
-                    foreach (IConnectable child in connection.Children)
+                    instance.RemoveAllChildConnections();
+                    foreach (IControllerConnection connection in controller.ChildrenConnections)
                     {
-                        if (child is TECController childController)
+                        List<IControllerConnection> instanceConnections = new List<IControllerConnection>();
+                        if(connection is TECNetworkConnection netConnection)
                         {
-                            foreach (TECController instanceChild in this.TypicalInstanceDictionary.GetInstances(childController))
+                            TECNetworkConnection netInstanceConnection = instance.AddNetworkConnection(netConnection.NetworkProtocol);
+                            
+                            foreach (IConnectable child in netConnection.Children)
+                            {
+                                foreach (IConnectable instanceChild in this.TypicalInstanceDictionary.GetInstances(child))
+                                {
+                                    foreach (TECSystem system in this.Instances)
+                                    {
+                                        if (system.IsDirectDescendant(instanceChild))
+                                        {
+                                            netInstanceConnection.AddChild(instanceChild);
+                                        }
+                                    }
+                                }
+                            }
+                            instanceConnections.Add(netInstanceConnection);
+                        }
+                        else if(connection is TECHardwiredConnection hardwired)
+                        {
+                            foreach (IConnectable instanceChild in this.TypicalInstanceDictionary.GetInstances(hardwired.Child))
                             {
                                 foreach (TECSystem system in this.Instances)
                                 {
-                                    if (system.Controllers.Contains(instanceChild))
+                                    if (system.IsDirectDescendant(instanceChild))
                                     {
-                                        instanceConnection.AddChild(instanceChild);
+                                        instanceConnections.Add(instance.Connect(instanceChild, connection.Protocol));
                                     }
                                 }
                             }
                         }
-                        else if (child is TECSubScope childSubScope)
+                        foreach(IControllerConnection instanceConnection in instanceConnections)
                         {
-                            foreach (TECSubScope instanceChild in this.TypicalInstanceDictionary.GetInstances(childSubScope))
-                            {
-                                foreach (TECSystem system in this.Instances)
-                                {
-                                    if (system.GetAllSubScope().Contains(instanceChild))
-                                    {
-                                        instanceConnection.AddChild(instanceChild);
-                                    }
-                                }
-                            }
+                            instanceConnection.Length = connection.Length;
+                            instanceConnection.ConduitType = connection.ConduitType;
+                            instanceConnection.ConduitLength = connection.ConduitLength;
+                            instanceConnection.IsPlenum = connection.IsPlenum;
                         }
+                        
                     }
                 }
             }
         }
-        public bool CanUpdateInstanceNetworkInController(TECController controller)
+        public bool CanUpdateInstanceConnections()
         {
-            bool canExecute =
-                    (controller != null) &&
-                    (this.Instances.Count > 0) &&
-                    (this.TypicalInstanceDictionary.GetInstances(controller as TECObject).Count > 0);
+            bool canExecute = this.Instances.Count > 0;
 
             return canExecute;
         }

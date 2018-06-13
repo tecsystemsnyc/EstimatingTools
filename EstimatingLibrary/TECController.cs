@@ -270,10 +270,19 @@ namespace EstimatingLibrary
         /// </summary>
         public void DisconnectAll()
         {
-            //Remove network connections
-            RemoveAllChildNetworkConnections();
+            //Remove child connections
+            RemoveAllChildConnections();
 
-            //Remove hardwired connections
+            //Remove parent connection
+            this.ParentConnection?.RemoveChild(this);
+        }
+        public void RemoveAllChildNetworkConnections()
+        {
+            List<IControllerConnection> networkConnections = new List<IControllerConnection>(ChildrenConnections.Where(connection => connection is TECNetworkConnection));
+            networkConnections.ForEach(netConnect => RemoveNetworkConnection(netConnect as TECNetworkConnection));
+        }
+        public void RemoveAllChildHardwiredConnections()
+        {
             List<IConnectable> connectables = new List<IConnectable>();
             foreach (TECHardwiredConnection connection in this.ChildrenConnections)
             {
@@ -284,13 +293,14 @@ namespace EstimatingLibrary
                 Disconnect(connectable);
             }
 
-            //Remove parent connection
-            this.ParentConnection?.RemoveChild(this);
         }
-        public void RemoveAllChildNetworkConnections()
+        public void RemoveAllChildConnections()
         {
-            List<IControllerConnection> networkConnections = new List<IControllerConnection>(ChildrenConnections.Where(connection => connection is TECNetworkConnection));
-            networkConnections.ForEach(netConnect => RemoveNetworkConnection(netConnect as TECNetworkConnection));
+            //Remove network connections
+            RemoveAllChildNetworkConnections();
+
+            //Remove hardwired connections
+            RemoveAllChildHardwiredConnections();
         }
         #endregion
 

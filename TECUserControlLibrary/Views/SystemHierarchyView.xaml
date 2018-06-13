@@ -258,7 +258,19 @@
                                 </Grid>
                             </DataTemplate>
                             <DataTemplate x:Key="ConnectionsTemplate">
-                                <local:ConnectionsView VM="{Binding ElementName=systemHierarchyView, Path=ViewModel.ConnectionsVM}"/>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Button Content="Update All Instances"
+                                            Command="{Binding ElementName=systemHierarchyView, Path=ViewModel.UpdateInstanceConnectionsCommand}"
+                                            Height="30"
+                                            Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.UpdateInstanceConnectionsCommand, Converter={utilities:NullToCollapsedConverter}}"/>
+                                    <local:ConnectionsView VM="{Binding ElementName=systemHierarchyView, Path=ViewModel.ConnectionsVM}"
+                                                           Grid.Row="1"/>
+
+                                </Grid>
                             </DataTemplate>
                             <DataTemplate x:Key="MiscTemplate">
                                 <local:MiscCostsView ViewModel="{Binding ElementName=systemHierarchyView, Path=ViewModel.MiscVM}"
