@@ -69,7 +69,8 @@
                         <RowDefinition/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="Filters"/>
+                    <TextBlock Text="Filters" Style="{StaticResource ListHeader}"/>
+                    <Border Style="{StaticResource HeaderBorder}"/>
                     <controls:ConnectablesFilterControl Grid.Row="1"
                                                         OmitConnected="{Binding ControllerFilter.OmitConnected, Mode=TwoWay}"
                                                         Protocols="{Binding Catalogs.Protocols}"
@@ -221,7 +222,8 @@
                         <RowDefinition/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="Filters"/>
+                    <Border Style="{StaticResource HeaderBorder}"/>
+                    <TextBlock Text="Filters" Style="{StaticResource ListHeader}"/>
                     <controls:ConnectablesFilterControl Grid.Row="1"
                                                         OmitConnected="{Binding ConnectableFilter.OmitConnected, Mode=TwoWay}"
                                                         Protocols="{Binding Catalogs.Protocols}"
