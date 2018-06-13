@@ -16,18 +16,18 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
     {
         private TECEquipment parent;
         private TECSubScope toAdd;
-        private int quantity;
+        private int quantity = 1;
         private Action<TECSubScope> add;
         private bool isTypical = false;
-        private string _pointName;
-        private int _pointQuantity;
-        private IOType _pointType;
+        private string _pointName = "";
+        private int _pointQuantity = 1;
+        private IOType _pointType = IOType.AI;
         private TECSubScope underlyingTemplate;
         private List<TECPoint> originalPoints = new List<TECPoint>();
         private List<IEndDevice> originalDevices = new List<IEndDevice>();
         private bool _displayReferenceProperty = false;
         private ConnectOnAddVM _connectVM;
-        public List<IOType> PossibleTypes { get; private set; }
+        public List<IOType> PossibleTypes { get; private set; } = TECIO.PointIO;
 
         public TECSubScope ToAdd
         {
@@ -126,15 +126,10 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
 
         private void setup()
         {
-            Quantity = 1;
-            PointQuantity = 1;
-            PointName = "";
-            PointType = IOType.AI;
             AddCommand = new RelayCommand(addExecute, addCanExecute);
             AddPointCommand = new RelayCommand(addPointExecute, canAddPoint);
             DeletePointCommand = new RelayCommand<TECPoint>(deletePointExecute);
             DeleteDeviceCommand = new RelayCommand<IEndDevice>(deleteDeviceExecute);
-            setTypes();
         }
 
         private void addPointExecute()
@@ -146,7 +141,6 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             ToAdd.Points.Add(newPoint);
             PointName = "";
             updateConnectVMWithQuantity(Quantity);
-            setTypes();
         }
         private bool canAddPoint()
         {
@@ -219,11 +213,6 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             }
             ConnectVM.Update(toConnect);
         }
-        private void setTypes()
-        {
-            PossibleTypes = TECIO.PointIO;
-            RaisePropertyChanged("PossibleTypes");
-        }
         
         internal void SetTemplate(TECSubScope subScope)
         {
@@ -235,7 +224,6 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             {
                 DisplayReferenceProperty = true;
             }
-            setTypes();
         }
         
     }

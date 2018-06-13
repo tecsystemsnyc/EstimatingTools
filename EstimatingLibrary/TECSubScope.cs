@@ -123,6 +123,13 @@ namespace EstimatingLibrary
         private void DevicesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             collectionChanged(sender, e, "Devices");
+            if(e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                if(this.Connection != null && !this.AvailableProtocols.Contains(this.Connection.Protocol))
+                {
+                    this.Connection.ParentController.Disconnect(this);
+                }
+            }
         }
         private void InterlocksCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {

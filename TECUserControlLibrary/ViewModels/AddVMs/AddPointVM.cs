@@ -25,7 +25,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 RaisePropertyChanged("ToAdd");
             }
         }
-        public List<IOType> PossibleTypes { get; }
+        public List<IOType> PossibleTypes { get; } = TECIO.PointIO;
 
         public AddPointVM(TECSubScope parentSubScope, TECScopeManager scopeManager) : base(scopeManager)
         {
@@ -33,14 +33,6 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             isTypical = parentSubScope.IsTypical;
             toAdd = new TECPoint(parentSubScope.IsTypical);
             ToAdd.Quantity = 1;
-
-            //Set the IOTypes that the user can use for the new Point.
-            PossibleTypes = TECIO.PointIO;
-
-            if (PossibleTypes.Count > 0)
-            {
-                ToAdd.Type = PossibleTypes[0];
-            }
             AddCommand = new RelayCommand(addExecute, addCanExecute);
         }
 
@@ -64,7 +56,26 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             var newPoint = new TECPoint(ToAdd, isTypical);
             parent.Points.Add(newPoint);
+            if (parent.Connection != null && parent.Connection is TECHardwiredConnection hardwiredConnection)
+            {
+                var parentController = parent.Connection.ParentController;
+                var length = hardwiredConnection.Length;
+                var conduitLength = hardwiredConnection.ConduitLength;
+                var conduit = hardwiredConnection.ConduitType;
+                var isPlenum = hardwiredConnection.IsPlenum;
+                var protocol = hardwiredConnection.Protocol;
+
+                parentController.Disconnect(parent);
+                var newConnection = parentController.Connect(parent, protocol);
+                newConnection.Length = length;
+                newConnection.ConduitLength = conduitLength;
+                newConnection.ConduitType = conduit;
+                newConnection.IsPlenum = isPlenum;
+
+            }
+
             Added?.Invoke(newPoint);
+
         }
         
 

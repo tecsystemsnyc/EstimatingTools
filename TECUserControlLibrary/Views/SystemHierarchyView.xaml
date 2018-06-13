@@ -197,11 +197,9 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <!--Is Enabled was bound to ViewModel.ConnectionsVM.CanLeave-->
                 <Button x:Name="systemBack" 
                         Visibility="{Binding SystemWidth, Converter={utilities:WidthDoubleToVisibilityConverter}}"
-                        Click="systemBack_Click" Margin="2"
-                        IsEnabled="True">
+                        Click="systemBack_Click" Margin="2">
                     <Button.Content>
                         &lt;-
                     </Button.Content>

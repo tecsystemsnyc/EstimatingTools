@@ -252,7 +252,8 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     SelectedVM = new AddEquipmentVM(SelectedSystem, scopeManager);
                     ((AddEquipmentVM)SelectedVM).SetTemplate(equipment);
-                } else if (dropped is TECSubScope subScope)
+                }
+                else if (dropped is TECSubScope subScope)
                 {
                     SelectedVM = new AddSubScopeVM(SelectedEquipment, scopeManager);
                     ((AddSubScopeVM)SelectedVM).SetTemplate(subScope);
