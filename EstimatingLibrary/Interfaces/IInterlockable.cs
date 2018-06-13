@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary.Interfaces
 {
-    interface IInterlockable : ITECObject
+    public interface IInterlockable : ITECObject
     {
         ObservableCollection<TECInterlockConnection> Interlocks { get; }
     }

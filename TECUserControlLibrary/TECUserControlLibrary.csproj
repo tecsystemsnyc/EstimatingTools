@@ -193,6 +193,9 @@
     <Compile Include="UserControls\ListControls\ControllerInPanelListControl.xaml.cs">
       <DependentUpon>ControllerInPanelListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ListControls\InterlocksListControl.xaml.cs">
+      <DependentUpon>InterlocksListControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ListControls\MiscListControl.xaml.cs">
       <DependentUpon>MiscListControl.xaml</DependentUpon>
     </Compile>
@@ -277,6 +280,7 @@
     <Compile Include="ViewModels\BugReportVM.cs" />
     <Compile Include="ViewModels\DeleteEndDeviceVM.cs" />
     <Compile Include="ViewModels\EquipmentHierarchyVM.cs" />
+    <Compile Include="ViewModels\InterlocksVM.cs" />
     <Compile Include="ViewModels\ReplaceActuatorVM.cs" />
     <Compile Include="ViewModels\RiserVM.cs" />
     <Compile Include="ViewModels\ScheduleVM.cs" />
@@ -442,6 +446,9 @@
     <Compile Include="Utilities\BindingProxy.cs" />
     <Compile Include="Utilities\BubbleScrollEvent .cs" />
     <Compile Include="ViewModels\MiscCostsVM.cs" />
+    <Compile Include="Views\InterlocksView.xaml.cs">
+      <DependentUpon>InterlocksView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ItemizedDetailsView.xaml.cs">
       <DependentUpon>ItemizedDetailsView.xaml</DependentUpon>
     </Compile>
@@ -687,6 +694,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ListControls\ControllerInPanelListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ListControls\InterlocksListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -943,6 +954,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\SystemProposalGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\InterlocksView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

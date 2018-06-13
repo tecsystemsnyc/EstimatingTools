@@ -379,6 +379,7 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
                         Margin="35,0,35,0">
@@ -424,6 +425,9 @@
                                 CommandParameter="{Binding ViewModel.SelectedSubScope}"
                                 Style="{StaticResource AddButtonStyle}" />
                     </Grid>
+                </Grid>
+                <Grid Grid.Row="3">
+                    <local:InterlocksView/>
                 </Grid>
                     
                 
