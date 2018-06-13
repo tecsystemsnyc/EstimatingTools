@@ -41,9 +41,9 @@
         <Grid DataContext="{Binding ElementName=connectionsView, Path=VM}" 
               Background="{StaticResource SectionBackgroundBrush}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="160"/>
+                <ColumnDefinition MinWidth="160" Width=".5*"/>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="160"/>
+                <ColumnDefinition MinWidth="160" Width=".5*"/>
             </Grid.ColumnDefinitions>
 
             <!--Parent Controllers Selection Grid-->

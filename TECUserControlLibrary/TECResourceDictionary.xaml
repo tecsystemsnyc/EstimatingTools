@@ -202,5 +202,12 @@
         <Setter Property="BorderBrush" Value="Gray"/>
         <Setter Property="BorderThickness" Value="0,0,0,2"/>
     </Style>
+    <Style x:Key="ExpanderHeader" TargetType="{x:Type TextBlock}">
+        <Setter Property="Height" Value="22" />
+        <Setter Property="Margin" Value="16,0,0,0" />
+        <Setter Property="Padding" Value="9,3,0,0" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+    </Style>
 
 </ResourceDictionary>

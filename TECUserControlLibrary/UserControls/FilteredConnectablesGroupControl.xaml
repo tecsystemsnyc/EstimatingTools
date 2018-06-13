@@ -17,8 +17,9 @@
         <ListView.ItemTemplate>
             <DataTemplate>
                 <Grid Visibility="{Binding PassesFilter, Converter={utilities:BooleanToVisibilityConverter}}">
-                    <Expander Visibility="{Binding ChildrenGroups.Count, Converter={utilities:CountVisibilityConverter}}">
-                        <Expander.Header>
+                    <Expander Visibility="{Binding ChildrenGroups.Count, Converter={utilities:CountVisibilityConverter}}"
+                              x:Name="groupExpander">
+                        <!--<Expander.Header>
                             <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="0,0,0,1">
                                 <TextBlock>
                                     <TextBlock.Text>
@@ -29,7 +30,8 @@
                                     </TextBlock.Text>
                                 </TextBlock>
                             </Border>
-                        </Expander.Header>
+                        </Expander.Header>-->
+                        
                         <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="1,0,0,0" Margin="10,0,0,0">
                             <local:FilteredConnectablesGroupControl ItemsSource="{Binding ChildrenGroups}"
                                                      SelectedItem="{Binding ElementName=filteredConnectableGroupControl, Path=SelectedItem}"
@@ -37,6 +39,18 @@
                                                      IsDragSource="{Binding ElementName=filteredConnectableGroupControl, Path=IsDragSource}"/>
                         </Border>
                     </Expander>
+                    <TextBlock Style="{StaticResource ResourceKey=ExpanderHeader}"
+                               Visibility="{Binding ElementName=groupExpander, Path=Visibility}">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0} ({1})">
+                                <Binding Path="Name"/>
+                                <Binding Path="Type"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                    <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="0,0,0,1" 
+                            Margin="25,0,0,0"
+                            Visibility="{Binding ElementName=groupExpander, Path=Visibility}"/>
                     <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="0,0,0,1" Margin="25,0,0,0"
                             Visibility="{Binding ChildrenGroups.Count, Converter={utilities:ZeroCountToVisibileConverter}}">
                         <TextBlock>
