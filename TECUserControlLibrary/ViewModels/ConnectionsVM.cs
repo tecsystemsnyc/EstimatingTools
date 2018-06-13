@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using NLog;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -368,29 +369,82 @@ namespace TECUserControlLibrary.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
-            if(dropInfo.Data is FilteredConnectablesGroup group && SelectedController != null)
+            if(SelectedController == null)
             {
-                if(SelectedController.CanConnect(group.Scope as IConnectable))
+                return;
+            }
+            List<IConnectable> connectables = new List<IConnectable>();
+            if (dropInfo.Data is FilteredConnectablesGroup group)
+            {
+                connectables = ConnectionHelper.GetConnectables(group.Scope, filterPredicate);
+                
+            }
+            else if (dropInfo.Data is IEnumerable dropList && UIHelpers.GetItemType(dropList) == typeof(FilteredConnectablesGroup))
+            {
+                foreach(FilteredConnectablesGroup item in dropList)
                 {
-                    UIHelpers.SetDragAdorners(dropInfo);
+                    connectables.AddRange(ConnectionHelper.GetConnectables(item.Scope, filterPredicate)); 
                 }
+            }
+            if (ConnectionHelper.CanConnectToController(connectables, SelectedController))
+            {
+                UIHelpers.SetDragAdorners(dropInfo);
             }
         }
         public void Drop(IDropInfo dropInfo)
         {
-            IConnectable connectable = ((FilteredConnectablesGroup)dropInfo.Data).Scope as IConnectable;
-            var compatibleProtocols = SelectedController.CompatibleProtocols(connectable);
-            if(compatibleProtocols.Count == 1)
+            if(dropInfo.Data is FilteredConnectablesGroup group && group.Scope is IConnectable)
             {
-                var connection = SelectedController.Connect(connectable, compatibleProtocols.First());
-                connection.Length = this.DefaultWireLength;
-                connection.ConduitType = this.DefaultConduitType;
-                connection.ConduitLength = this.DefaultConduitLength;
-                connection.IsPlenum = this.DefaultPlenum;
-            } else
+                IConnectable connectable = group.Scope as IConnectable;
+                var compatibleProtocols = SelectedController.CompatibleProtocols(connectable);
+                if (compatibleProtocols.Count == 1)
+                {
+                    var connection = SelectedController.Connect(connectable, compatibleProtocols.First());
+                    connection.Length = this.DefaultWireLength;
+                    connection.ConduitType = this.DefaultConduitType;
+                    connection.ConduitLength = this.DefaultConduitLength;
+                    connection.IsPlenum = this.DefaultPlenum;
+                }
+                else
+                {
+                    SelectionNeeded = true;
+                    CompatibleProtocols = compatibleProtocols;
+                }
+            }
+            else
             {
-                SelectionNeeded = true;
-                CompatibleProtocols = compatibleProtocols;
+                List<IConnectable> connectables = new List<IConnectable>();
+                if (dropInfo.Data is IList dropList)
+                {
+                    if (UIHelpers.GetItemType(dropList) == typeof(FilteredConnectablesGroup))
+                    {
+                        foreach (FilteredConnectablesGroup item in dropList)
+                        {
+                            connectables.AddRange(ConnectionHelper.GetConnectables(item.Scope, filterPredicate));
+                        }
+
+                    }
+                }
+                else if (dropInfo.Data is FilteredConnectablesGroup parentGroup)
+                {
+                    connectables = ConnectionHelper.GetConnectables(parentGroup.Scope, filterPredicate);
+                }
+                else
+                {
+                    return;
+                }
+
+                var connections = ConnectionHelper.ConnectToController(connectables, SelectedController);
+                foreach (IControllerConnection connection in connections)
+                {
+                    connection.Length += this.DefaultWireLength;
+                    connection.ConduitLength += this.DefaultConduitLength;
+                }
+                foreach (IControllerConnection connection in connections.Distinct())
+                {
+                    connection.ConduitType = this.DefaultConduitType;
+                    connection.IsPlenum = this.DefaultPlenum;
+                }
             }
             
         }
@@ -467,43 +521,137 @@ namespace TECUserControlLibrary.ViewModels
         }
     }
 
-    static class ConnectionHelper
+    internal static class ConnectionHelper
     {
-        static bool CanConnectToController(TECController controller, ITECObject item)
+        internal static bool CanConnectToController(IEnumerable<IConnectable> items, TECController controller)
         {
 
-            var connectables = GetConnectables(item)
+            var connectables = items
                 .Where(x => x.GetParentConnection() == null);
-            foreach(var connectable in connectables)
+            if(connectables.Count() == 0)
             {
-                if(connectable.AvailableProtocols.Count == 0)
+                return false;
+            }
+
+            var availableIO = controller.AvailableIO + ExistingNetworkIO(controller);
+            foreach(var connectable in connectables.Where(x => x.AvailableProtocols.Count == 1))
+            {
+                var protocol = connectable.AvailableProtocols.First();
+
+                if (protocol is TECProtocol netProtocol)
                 {
-                    return false;
+                    if (!availableIO.Contains(netProtocol))
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (availableIO.Contains(connectable.HardwiredIO))
+                    {
+                        availableIO -= connectable.HardwiredIO;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
             }
 
-            var singleConnections = connectables
-                .Where(x => x.AvailableProtocols.Count == 1)
-                .Select(x => x.AvailableProtocols.First());
+            foreach(var connectable in connectables.Where(x => x.AvailableProtocols.Count > 1))
+            {
+                var canConnect = false;
+                foreach(var protocol in connectable.AvailableProtocols)
+                {
+                    if (protocol is TECProtocol networkProtocol)
+                    {
+                        if (availableIO.Contains(networkProtocol))
+                        {
+                            canConnect = true;
+                            break;
+                        }
+                    }
+                }
+                if(canConnect == false)
+                {
+                    if(connectable.AvailableProtocols.Any(x => x is TECHardwiredProtocol) 
+                        && availableIO.Contains(connectable.HardwiredIO))
+                    {
+                        availableIO -= connectable.HardwiredIO;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
             
-
-            
-            return false;
+            return true;
         }
+        
+        internal static List<IControllerConnection> ConnectToController(IEnumerable<IConnectable> items, TECController controller)
+        {
+            var connectables = items
+                .Where(x => x.GetParentConnection() == null);
 
+            var availableIO = controller.AvailableIO + ExistingNetworkIO(controller);
+            List<IControllerConnection> connections = new List<IControllerConnection>();
 
-        static List<IConnectable> GetConnectables(ITECObject parent)
+            foreach (var connectable in connectables)
+            {
+                var protocols = connectable.AvailableProtocols;
+                if(protocols.Count == 1)
+                {
+                    connections.Add(controller.Connect(connectable, protocols.First(), true));
+                }
+                else
+                {
+                    var connected = false;
+                    foreach (var protocol in connectable.AvailableProtocols
+                        .Where(x => x is TECProtocol networkProtocol && availableIO.Contains(networkProtocol)))
+                    {
+                        connected = true;
+                        connections.Add(controller.Connect(connectable, protocol, true));
+                        break;
+                    }
+                    if (!connected && connectable.AvailableProtocols.Any(x => x is TECHardwiredProtocol)
+                            && availableIO.Contains(connectable.HardwiredIO))
+                    {
+                        connections.Add(controller.Connect(connectable, connectable.AvailableProtocols.First(x => x is TECHardwiredProtocol), true));
+                        
+                    }
+                    else
+                    {
+                        throw new Exception("Not able to connect connectable to controller");
+                    }
+                }
+            }
+            return connections;
+
+        }
+        
+        internal static List<IConnectable> GetConnectables(ITECObject parent, Func<ITECObject, bool> predicate)
         {
             List<IConnectable> outList = new List<IConnectable>();
-            if(parent is IConnectable connectable)
+            if(parent is IConnectable connectable && predicate(parent))
             {
                 outList.Add(connectable);
             }
             if(parent is IRelatable relatable)
             {
-                relatable.GetDirectChildren().ForEach(x => outList.AddRange(GetConnectables(x)));
+                relatable.GetDirectChildren().Where(predicate).ForEach(x => outList.AddRange(GetConnectables(x, predicate)));
             }
             return outList;
+        }
+
+        static IOCollection ExistingNetworkIO(TECController controller)
+        {
+            IOCollection existingNetwork = new IOCollection();
+            foreach(TECNetworkConnection connection in controller.ChildrenConnections.Where(x => x is TECNetworkConnection))
+            {
+                existingNetwork.Add(connection.NetworkProtocol);
+            }
+            return existingNetwork;
         }
     }
 }

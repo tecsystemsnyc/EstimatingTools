@@ -169,17 +169,26 @@ namespace EstimatingLibrary
         {
             return connectable != null && CompatibleProtocols(connectable).Count > 0;
         }
-        public IControllerConnection Connect(IConnectable connectable, IProtocol protocol)
+        public IControllerConnection Connect(IConnectable connectable, IProtocol protocol, bool attemptExisiting = false)
         {
-            //TO DO: Connect
             IControllerConnection connection;
+            bool isNew = true;
             if(protocol is TECHardwiredProtocol wired)
             {
                 connection = new TECHardwiredConnection(connectable, this, wired, connectable.IsTypical);
             }
             else if (protocol is TECProtocol network)
             {
-                var netConnect = new TECNetworkConnection(this, network, connectable.IsTypical);
+                TECNetworkConnection netConnect = null;
+                if (attemptExisiting)
+                {
+                    netConnect = ChildrenConnections.Where(x => x.Protocol == protocol).FirstOrDefault() as TECNetworkConnection;
+                    isNew = netConnect == null;
+                }
+                if(netConnect == null)
+                {
+                    netConnect = new TECNetworkConnection(this, network, connectable.IsTypical);
+                }
                 netConnect.AddChild(connectable);
                 connection = netConnect;
             }
@@ -187,7 +196,10 @@ namespace EstimatingLibrary
             {
                 throw new NotImplementedException();
             }
-            this.addChildConnection(connection);
+            if (isNew)
+            {
+                this.addChildConnection(connection);
+            }
             return connection;
         }
         /// <summary>

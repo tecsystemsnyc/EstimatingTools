@@ -219,6 +219,10 @@ namespace EstimatingLibrary
         {
             return this.Contains(new TECIO(type));
         }
+        public bool Contains(TECProtocol protocol)
+        {
+            return this.Contains(new TECIO(protocol));
+        }
         public bool Contains(TECIO io)
         {
             if (TECIO.UniversalIO.Contains(io.Type))
@@ -267,6 +271,10 @@ namespace EstimatingLibrary
         public void Add(IOType type)
         {
             this.Add(new TECIO(type));
+        }
+        public void Add(TECProtocol protocol)
+        {
+            this.Add(new TECIO(protocol));
         }
         public void Add(TECIO io)
         {
