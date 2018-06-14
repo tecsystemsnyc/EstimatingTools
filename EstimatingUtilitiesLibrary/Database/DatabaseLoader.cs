@@ -324,8 +324,8 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             foreach (TECSubScope item in subScope.Where(x => subScopePoints.ContainsKey(x.Guid)))
             {
-                item.Points = getRelatedReferences(subScopePoints[item.Guid], points).ToOC();
-                item.Interlocks = getRelatedReferences(subScopeInterlocks[item.Guid], interlockConnections).ToOC();
+                item.Points = getRelatedReferences(subScopePoints.ValueOrNew(item.Guid).ToList(), points).ToOC();
+                item.Interlocks = getRelatedReferences(subScopeInterlocks.ValueOrNew(item.Guid).ToList(), interlockConnections).ToOC();
             }
             foreach(TECEquipment item in equipment.Where(x => equipmentSubScope.ContainsKey(x.Guid)))
             {
