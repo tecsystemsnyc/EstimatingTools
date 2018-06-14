@@ -6,70 +6,110 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+             xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid DataContext="{Binding ElementName=interlocksView, Path=VM}">
+    <Grid DataContext="{Binding ElementName=interlocksView, Path=VM}"
+          Background="{StaticResource SectionBackgroundBrush}">
         <Grid.Resources>
-            <Style TargetType="TextBlock">
+            <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                 <Setter Property="Margin" Value="2"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
-
+                <Setter Property="Foreground" Value="Black"/>
             </Style>
-            <Style TargetType="TextBox">
+            <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
                 <Setter Property="Margin" Value="2"/>
             </Style>
         </Grid.Resources>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <TextBlock Text="Interlocks" Style="{StaticResource ListHeader}"/>
-        <Border Style="{StaticResource HeaderBorder}"/>
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="Name:"/>
-            <TextBox Text="{Binding Name}"
-                     Grid.Column="1"/>
-            <TextBlock Text="Length:"
-                       Grid.Column="2"/>
-            <TextBox Text="{Binding Length}"
-                     Grid.Column="3"/>
-            <TextBlock Text="Conduit Length:"
-                     Grid.Column="4"/>
-            <TextBox Text="{Binding ConduitLength}"
-                     Grid.Column="5"/>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <!--Header-->
+            <Border Style="{StaticResource HeaderBorder}">
+                <TextBlock Text="Points" Style="{StaticResource ListHeader}"/>
+            </Border>
+            <!--Controllers List-->
+            <controls:ScopeGroupControl ItemsSource="{Binding Interlockables}"
+                                                       SelectedItem="{Binding SelectedInterlockableGroup}"
+                                                       IsDropTarget="False"
+                                                       IsDragSource="False"
+                                                       Grid.Row="1"/>
         </Grid>
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="Conduit:"/>
-            <ComboBox ItemsSource="{Binding ConduitTypes}"
-                      SelectedItem="{Binding ConduitType}"
-                      DisplayMemberPath="Label"
-                      Grid.Column="1"/>
-            <TextBlock Text="Plenum:"
-                       Grid.Column="2"/>
-            <CheckBox IsChecked="{Binding Plenum}"
-                      Grid.Column="3"/>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Interlocks" Style="{StaticResource ListHeader}"/>
+            <Border Style="{StaticResource HeaderBorder}"/>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="45"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="55"/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Name:"/>
+                <TextBox Text="{Binding Name}"
+                         Grid.Column="1"/>
+                <TextBlock Text="Length:"
+                           Grid.Column="2"/>
+                <TextBox Text="{Binding Length}"
+                         Grid.Column="3"/>
+                <TextBlock Text="Plenum:"
+                           Grid.Column="4"/>
+                <CheckBox IsChecked="{Binding IsPlenum}"
+                          Grid.Column="5"
+                          HorizontalAlignment="Center"/>
+                
+            </Grid>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="55"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="95"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Conduit:"/>
+                <ComboBox ItemsSource="{Binding ConduitTypes}"
+                          SelectedItem="{Binding ConduitType}"
+                          DisplayMemberPath="Name"
+                          Grid.Column="1"
+                          Margin="2"/>
+                <TextBlock Text="Conduit Length:"
+                           Grid.Column="2"/>
+                <TextBox Text="{Binding ConduitLength}"
+                         Grid.Column="3"/>
+                
+            </Grid>
+            
+            <Border Style="{StaticResource ItemsAreaBorder}" Grid.Row="3">
+                <listControls:ElectricalMaterialListControl Source="{Binding ConnectionTypes}"
+                                                            Background="Transparent" BorderBrush="Transparent"/>
+            </Border>
             <Button Content="Add"
                     Command="{Binding AddInterlockCommand}"
-                    Grid.Column="4"/>
+                    Grid.Row="4"
+                    Margin="2"/>
+            <Border Style="{StaticResource ItemsAreaBorder}" Grid.Row="5">
+                <listControls:InterlocksListControl Source="{Binding SelectedInterlockable.Interlocks}"
+                                                    Background="Transparent" BorderBrush="Transparent"/>
+            </Border>
+            
         </Grid>
-        <listControls:InterlocksListControl Source="{Binding Parent.Interlocks}"
-                                            Grid.Row="2"/>
     </Grid>
 </UserControl>

@@ -56,9 +56,11 @@ namespace TECUserControlLibrary.Models
             };
         }
 
-        public void Add(ITECScope child)
+        public ScopeGroup Add(ITECScope child)
         {
-            this.Add(new ScopeGroup(child));
+            ScopeGroup newGroup = new ScopeGroup(child);
+            this.Add(newGroup);
+            return newGroup;
         }
         public void Add(ScopeGroup child)
         {
