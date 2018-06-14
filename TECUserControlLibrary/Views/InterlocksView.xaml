@@ -99,6 +99,7 @@
             
             <Border Style="{StaticResource ItemsAreaBorder}" Grid.Row="3">
                 <listControls:ElectricalMaterialListControl Source="{Binding ConnectionTypes}"
+                                                            DropHandler="{Binding CatalogDropHandler}"
                                                             Background="Transparent" BorderBrush="Transparent"/>
             </Border>
             <Button Content="Add"
@@ -107,6 +108,7 @@
                     Margin="2"/>
             <Border Style="{StaticResource ItemsAreaBorder}" Grid.Row="5">
                 <listControls:InterlocksListControl Source="{Binding SelectedInterlockable.Interlocks}"
+                                                    DeleteCommand="{Binding DeleteInterlockCommand}"
                                                     Background="Transparent" BorderBrush="Transparent"/>
             </Border>
             

@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TECUserControlLibrary.Models;
+using TECUserControlLibrary.Utilities.DropTargets;
 
 namespace TECUserControlLibrary.ViewModels
 {
@@ -57,6 +58,8 @@ namespace TECUserControlLibrary.ViewModels
 
 
         public RelayCommand AddInterlockCommand { get; private set; }
+        public RelayCommand<TECInterlockConnection> DeleteInterlockCommand { get; private set; }
+
         public ObservableCollection<TECConnectionType> ConnectionTypes { get; } 
             = new ObservableCollection<TECConnectionType>();
         public List<TECElectricalMaterial> ConduitTypes { get; }
@@ -107,7 +110,10 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        public CatalogDropTarget CatalogDropHandler { get; } = new CatalogDropTarget();
+
         public event Action<TECObject> Selected;
+
         
         public InterlocksVM(IRelatable root, ChangeWatcher watcher, 
             TECCatalogs catalogs, Func<ITECObject, bool> filterPredicate = null)
@@ -127,6 +133,7 @@ namespace TECUserControlLibrary.ViewModels
             noneConduit.Name = "None";
             this.rootInterlockablesGroup = new ScopeGroup("root");
             this.AddInterlockCommand = new RelayCommand(addInterlockExecute, canAddInterlock);
+            this.DeleteInterlockCommand = new RelayCommand<TECInterlockConnection>(deleteInterlockExecute, canDeleteInterlock);
             this.ConduitTypes = new List<TECElectricalMaterial>(catalogs.ConduitTypes);
             this.ConduitTypes.Add(noneConduit);
             this.ConduitType = noneConduit;
@@ -135,6 +142,17 @@ namespace TECUserControlLibrary.ViewModels
 
         }
 
+        private void deleteInterlockExecute(TECInterlockConnection interlock)
+        {
+            SelectedInterlockable.Interlocks.Remove(interlock);
+        }
+
+        private bool canDeleteInterlock(TECInterlockConnection interlock)
+        {
+            return interlock != null 
+                && SelectedInterlockable != null 
+                && SelectedInterlockable.Interlocks.Contains(interlock);
+        }
 
         private void addInterlockExecute()
         {

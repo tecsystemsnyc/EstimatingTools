@@ -49,4 +49,25 @@ namespace TECUserControlLibrary.Utilities.DropTargets
     {
         TECNetworkConnection SelectedConnection { get; }
     }
+
+    public class CatalogDropTarget : IDropTarget
+    {
+        public void DragOver(IDropInfo dropInfo)
+        {
+            UIHelpers.DragOver(dropInfo,
+                (item, sourceType, targetType) =>
+                {
+                    return sourceType == targetType;
+                });
+        }
+        public void Drop(IDropInfo dropInfo)
+        {
+            object drop<T>(T item)
+            {
+                return item;
+            }
+
+            UIHelpers.Drop(dropInfo, drop);
+        }
+    }
 }

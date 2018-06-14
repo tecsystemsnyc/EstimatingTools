@@ -12,13 +12,15 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <ResourceDictionary>
-            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=interlocksListControl}"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=interlocksListControl}">
+        <Grid.Resources>
+            <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=interlocksListControl}"/>
+        </Grid.Resources>
         <ListView ItemsSource="{Binding Source}" 
                   SelectedItem="{Binding SelectedItem}"
                   dd:DragDrop.DropHandler="{Binding DropHandler}"
