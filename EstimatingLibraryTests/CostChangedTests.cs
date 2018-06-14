@@ -78,7 +78,7 @@ namespace Tests
         {
             TECControllerType controllerType = new TECControllerType(manufacturer);
             controllerType.Price = 100;
-            TECController controller = new TECController(controllerType, false);
+            TECController controller = new TECProvidedController(controllerType, false);
 
             bid.AddController(controller);
             

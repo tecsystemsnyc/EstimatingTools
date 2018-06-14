@@ -55,7 +55,7 @@ namespace EstimatingLibrary
             copyPropertiesFromScope(panel);
             foreach (TECController controller in panel.Controllers)
             {
-                _controllers.Add(new TECController(controller, isTypical, guidDictionary));
+                _controllers.Add(controller.CopyController(isTypical, guidDictionary));
             }
         }
         public object DragDropCopy(TECScopeManager scopeManager)

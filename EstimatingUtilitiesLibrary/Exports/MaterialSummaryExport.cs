@@ -15,8 +15,16 @@ namespace EstimatingUtilitiesLibrary.Exports
         internal static void AddControllersSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Controllers")
         {
             List<TECController> controllers = getAllControllers(bid);
+            List<TECProvidedController> providedControllers = new List<TECProvidedController>();
+            foreach(TECController controller in controllers)
+            {
+                if (controller is TECProvidedController provided)
+                {
+                    providedControllers.Add(provided);
+                }
+            } 
             List<TECIOModule> modules = getAllIOModules(bid);
-            List<HardwareSummaryItem> controllerItems = consolidateHardware(controllers.Select(controller => controller.Type));
+            List<HardwareSummaryItem> controllerItems = consolidateHardware(providedControllers.Select(provided => provided.Type));
             List<CostSummaryItem> costItems = consolidateCostInControllers(controllers);
             List<HardwareSummaryItem> modulesItems = consolidateHardware(modules);
 
@@ -493,7 +501,10 @@ namespace EstimatingUtilitiesLibrary.Exports
                 {
                     foreach(TECController controller in sys.Controllers)
                     {
-                        modules.AddRange(controller.IOModules);
+                        if (controller is TECProvidedController provided)
+                        {
+                            modules.AddRange(provided.IOModules);
+                        }
                     }
                 }
             }
@@ -579,7 +590,10 @@ namespace EstimatingUtilitiesLibrary.Exports
             foreach(TECController controller in controllers)
             {
                 costs.AddRange(controller.AssociatedCosts);
-                costs.AddRange(controller.Type.AssociatedCosts);
+                if (controller is TECProvidedController provided)
+                {
+                    costs.AddRange(provided.Type.AssociatedCosts);
+                }
             }
 
             foreach (TECCost cost in costs)

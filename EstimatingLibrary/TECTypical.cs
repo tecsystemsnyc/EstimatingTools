@@ -49,7 +49,7 @@ namespace EstimatingLibrary
             }
             foreach (TECController controller in source.Controllers)
             {
-                var toAdd = new TECController(controller, true, guidDictionary);
+                var toAdd = controller.CopyController(true, guidDictionary);
                 if (characteristicReference != null)
                 {
                     characteristicReference.AddItem(controller, toAdd);
@@ -89,7 +89,7 @@ namespace EstimatingLibrary
             }
             foreach (TECController controller in system.Controllers)
             {
-                var toAdd = new TECController(controller, true, guidDictionary);
+                var toAdd = controller.CopyController(true, guidDictionary);
                 AddController(toAdd);
             }
             foreach (TECPanel panel in system.Panels)
@@ -162,7 +162,7 @@ namespace EstimatingLibrary
             }
             foreach (TECController controller in Controllers)
             {
-                var toAdd = new TECController(controller, false, guidDictionary);
+                var toAdd = controller.CopyController(false, guidDictionary);
                 _typicalInstanceDictionary.AddItem(controller, toAdd);
                 newSystem.AddController(toAdd);
             }
@@ -564,13 +564,13 @@ namespace EstimatingLibrary
         }
         private void handleControllerChaned(TECController controller, string propertyName)
         {
-            if (propertyName == "Type")
+            if (propertyName == "Type" && controller is TECProvidedController provided)
             {
-                foreach (var instance in this.GetInstancesFromTypical(controller))
+                foreach (var instance in this.GetInstancesFromTypical(provided))
                 {
-                    if (instance.CanChangeType(controller.Type))
+                    if (instance.CanChangeType(provided.Type))
                     {
-                        instance.ChangeType(controller.Type);
+                        instance.ChangeType(provided.Type);
                     }
                 }
             }
@@ -583,7 +583,7 @@ namespace EstimatingLibrary
                 var characteristicController = value as TECController;
                 foreach (TECSystem system in Instances)
                 {
-                    var controllerToAdd = new TECController(characteristicController, false);
+                    var controllerToAdd = characteristicController.CopyController(false);
                     _typicalInstanceDictionary.AddItem(characteristicController, controllerToAdd);
                     system.AddController(controllerToAdd);
                 }
@@ -697,14 +697,14 @@ namespace EstimatingLibrary
                     }
                 }
             }
-            else if (value is TECIOModule && sender is TECController)
+            else if (value is TECIOModule mod && sender is TECProvidedController provided)
             {
-                var characteristicController = sender as TECController;
+                var characteristicController = provided;
                 if (TypicalInstanceDictionary.ContainsKey(characteristicController))
                 {
-                    foreach (TECController instance in TypicalInstanceDictionary.GetInstances(characteristicController))
+                    foreach (TECProvidedController instance in TypicalInstanceDictionary.GetInstances(characteristicController))
                     {
-                        instance.IOModules.Add(value as TECIOModule);
+                        instance.IOModules.Add(mod);
                     }
                 }
             }
@@ -925,12 +925,11 @@ namespace EstimatingLibrary
                     }
                 }
             }
-            else if (value is TECIOModule && sender is TECController)
+            else if (value is TECIOModule mod && sender is TECProvidedController provided)
             {
-                var characteristicController = sender as TECController;
-                if (TypicalInstanceDictionary.ContainsKey(characteristicController))
+                if (TypicalInstanceDictionary.ContainsKey(provided))
                 {
-                    foreach (TECController instance in TypicalInstanceDictionary.GetInstances(characteristicController))
+                    foreach (TECProvidedController instance in TypicalInstanceDictionary.GetInstances(provided))
                     {
                         instance.IOModules.Remove(value as TECIOModule);
                     }

@@ -17,7 +17,7 @@ namespace EstimatingLibraryTests
 
             bid.Catalogs = TestHelper.CreateTestCatalogs();
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes.First(), false);
+            TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes.First(), false);
             bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
@@ -55,11 +55,11 @@ namespace EstimatingLibraryTests
 
             bid.Catalogs = TestHelper.CreateTestCatalogs();
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes.First(), false);
+            TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes.First(), false);
             bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
-            TECController typicalController = new TECController(bid.Catalogs.ControllerTypes.First(), false);
+            TECController typicalController = new TECProvidedController(bid.Catalogs.ControllerTypes.First(), false);
 
             typical.AddController(typicalController);
 

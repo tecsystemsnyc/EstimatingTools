@@ -1196,12 +1196,12 @@ namespace Tests
             string expectedDescription = "Bid Controller Description";
             double expectedCost = 142;
 
-            TECController actualController = null;
+            TECProvidedController actualController = null;
             foreach (TECController controller in actualBid.Controllers)
             {
-                if (controller.Guid == expectedGuid)
+                if (controller.Guid == expectedGuid && controller is TECProvidedController provided)
                 {
-                    actualController = controller;
+                    actualController = provided;
                     break;
                 }
             }
@@ -1248,14 +1248,14 @@ namespace Tests
             double expectedCost = 142;
             bool expectedType = false;
 
-            TECController actualController = null;
+            TECProvidedController actualController = null;
             foreach (TECSystem system in actualBid.Systems)
             {
                 foreach (TECController controller in system.Controllers)
                 {
-                    if (controller.Guid == expectedGuid)
+                    if (controller.Guid == expectedGuid && controller is TECProvidedController provided)
                     {
-                        actualController = controller;
+                        actualController = provided;
                         break;
                     }
                 }
@@ -1304,16 +1304,16 @@ namespace Tests
             double expectedCost = 142;
             bool expectedType = false;
 
-            TECController actualController = null;
+            TECProvidedController actualController = null;
             foreach (TECTypical typical in actualBid.Systems)
             {
                 foreach (TECSystem system in typical.Instances)
                 {
                     foreach (TECController controller in system.Controllers)
                     {
-                        if (controller.Guid == expectedGuid)
+                        if (controller.Guid == expectedGuid && controller is TECProvidedController provided)
                         {
-                            actualController = controller;
+                            actualController = provided;
                             break;
                         }
                     }
@@ -1614,7 +1614,7 @@ namespace Tests
             TECIO actualIO = null;
             foreach (TECController controller in actualBid.Controllers)
             {
-                foreach (TECIO io in controller.Type.IO)
+                foreach (TECIO io in ((TECProvidedController)controller)?.Type.IO)
                 {
                     if (io.Guid == expectedGuid)
                     {
@@ -1644,7 +1644,7 @@ namespace Tests
             {
                 foreach (TECController controller in system.Controllers)
                 {
-                    foreach (TECIO io in controller.Type.IO)
+                    foreach (TECIO io in ((TECProvidedController)controller)?.Type.IO)
                     {
                         if (io.Guid == expectedGuid)
                         {
@@ -1676,7 +1676,7 @@ namespace Tests
                 foreach (TECSystem system in typical.Instances)
                     foreach (TECController controller in system.Controllers)
                     {
-                        foreach (TECIO io in controller.Type.IO)
+                        foreach (TECIO io in ((TECProvidedController)controller)?.Type.IO)
                         {
                             if (io.Guid == expectedGuid)
                             {

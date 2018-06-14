@@ -76,7 +76,7 @@ namespace Tests
         {
             var bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
-            var bidController = new TECController(new TECControllerType(new TECManufacturer()), false);
+            var bidController = new TECProvidedController(new TECControllerType(new TECManufacturer()), false);
             bid.AddController(bidController);
 
             var system = new TECTypical();
@@ -104,7 +104,7 @@ namespace Tests
             //Arrange
             TECBid bid = new TECBid();
             bid.Catalogs = TestHelper.CreateTestCatalogs();
-            TECController controller = new TECController(new TECControllerType(new TECManufacturer()), false);
+            TECController controller = new TECProvidedController(new TECControllerType(new TECManufacturer()), false);
             bid.AddController(controller);
 
             TECTypical typical = new TECTypical();

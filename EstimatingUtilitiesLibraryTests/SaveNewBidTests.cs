@@ -30,7 +30,7 @@ namespace Tests
         static TECLabeled expectedNote;
         static TECLabeled expectedExclusion;
         static TECLabeled expectedTag;
-        static TECController expectedController;
+        static TECProvidedController expectedController;
 
         static string path;
 
@@ -48,7 +48,7 @@ namespace Tests
         static TECLabeled actualNote;
         static TECLabeled actualExclusion;
         static TECLabeled actualTag;
-        static TECController actualController;
+        static TECProvidedController actualController;
 
 
         private TestContext testContextInstance;
@@ -103,7 +103,7 @@ namespace Tests
             expectedExclusion = expectedBid.Exclusions[0];
             expectedTag = expectedBid.Catalogs.Tags[0];
 
-            expectedController = expectedBid.Controllers.First(item => item.Name == "Test Controller");
+            expectedController = (TECProvidedController)expectedBid.Controllers.First(item => item.Name == "Test Controller" && item is TECProvidedController);
 
             path = Path.GetTempFileName();
 
@@ -195,9 +195,9 @@ namespace Tests
             }
 
 
-            foreach (TECController con in actualBid.Controllers)
+            foreach (TECProvidedController con in actualBid.Controllers)
             {
-                if (con.Guid == expectedController.Guid)
+                if (con?.Guid == expectedController.Guid)
                 {
                     actualController = con;
                     break;

@@ -7,15 +7,13 @@ using System.Linq;
 
 namespace EstimatingLibrary
 {
-    public class TECController : TECLocated, IDDCopiable, ITypicalable, IConnectable
+    public abstract class TECController : TECLocated, ITypicalable, IConnectable
     {
         #region Properties
         //---Stored---
         private TECNetworkConnection _parentConnection;
         private ObservableCollection<IControllerConnection> _childrenConnections = new ObservableCollection<IControllerConnection>();
-        private TECControllerType _type;
         private bool _isServer;
-        private ObservableCollection<TECIOModule> _ioModules = new ObservableCollection<TECIOModule>();
 
         public TECNetworkConnection ParentConnection
         {
@@ -34,17 +32,7 @@ namespace EstimatingLibrary
                 raisePropertyChanged("ChildNetworkConnections");
             }
         }
-        public TECControllerType Type
-        {
-            get { return _type; }
-            set
-            {
-                var old = Type;
-                _type = value;
-                notifyCombinedChanged(Change.Edit, "Type", this, value, old);
-                notifyCostChanged(value.CostBatch - old.CostBatch);
-            }
-        }
+        
         public bool IsServer
         {
             get { return _isServer; }
@@ -55,18 +43,6 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "IsServer", this, value, old);
             }
         }
-        public ObservableCollection<TECIOModule> IOModules
-        {
-            get { return _ioModules; }
-            set
-            {
-                var old = IOModules;
-                IOModules.CollectionChanged -= handleModulesChanged;
-                _ioModules = value;
-                IOModules.CollectionChanged += handleModulesChanged;
-                notifyCombinedChanged(Change.Edit, "IOModules", this, value, old);
-            }
-        }
 
         public bool IsTypical
         {
@@ -74,16 +50,10 @@ namespace EstimatingLibrary
         }
 
         //---Derived---
-        public IOCollection IO
+        public abstract IOCollection IO
         {
-            get
-            {
-                IOCollection allIO = new IOCollection(this.Type.IO);
-                List<TECIO> moduleIO = new List<TECIO>();
-                this.IOModules.ForEach(x => moduleIO.AddRange(x.IO));
-                allIO.Add(moduleIO);
-                return allIO;
-            }
+            get;
+            
         }
         public IOCollection UsedIO
         {
@@ -103,19 +73,16 @@ namespace EstimatingLibrary
         #endregion
 
         #region Constructors
-        public TECController(Guid guid, TECControllerType type, bool isTypical) : base(guid)
+        public TECController(Guid guid, bool isTypical) : base(guid)
         {
             _isServer = false;
             IsTypical = isTypical;
-            _type = type;
             _childrenConnections = new ObservableCollection<IControllerConnection>();
-            _ioModules = new ObservableCollection<TECIOModule>();
             ChildrenConnections.CollectionChanged += handleChildrenChanged;
-            IOModules.CollectionChanged += handleModulesChanged;
         }
 
-        public TECController(TECControllerType type, bool isTypical) : this(Guid.NewGuid(), type, isTypical) { }
-        public TECController(TECController controllerSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : this(controllerSource.Type, isTypical)
+        public TECController( bool isTypical) : this(Guid.NewGuid(), isTypical) { }
+        public TECController(TECController controllerSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : this(isTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = controllerSource.Guid; }
@@ -133,10 +100,6 @@ namespace EstimatingLibrary
                     TECNetworkConnection connectionToAdd = new TECNetworkConnection(connection as TECNetworkConnection, this, isTypical, guidDictionary);
                     _childrenConnections.Add(connectionToAdd);
                 }
-            }
-            foreach (TECIOModule module in controllerSource.IOModules)
-            {
-                this.IOModules.Add(module);
             }
         }
         #endregion
@@ -304,88 +267,11 @@ namespace EstimatingLibrary
         }
         #endregion
 
-        #region Module Methods
-        public bool CanAddModule(TECIOModule module)
-        {
-            return (this.Type.IOModules.Count(mod => (mod == module)) >
-                this.IOModules.Count(mod => (mod == module)));
-        }
-        public void AddModule(TECIOModule module)
-        {
-            if (CanAddModule(module))
-            {
-                IOModules.Add(module);
-            }
-            else
-            {
-                throw new InvalidOperationException("Controller can't accept IOModule.");
-            }
-        }
-
-        private List<TECIOModule> getPotentialModules()
-        {
-            List<TECIOModule> modules = new List<TECIOModule>(this.Type.IOModules);
-            foreach(TECIOModule module in this.IOModules)
-            {
-                modules.Remove(module);
-            }
-            return modules;
-        }
-        /// <summary>
-        /// Gets nessessary modules from potential modules to handle io.
-        /// </summary>
-        /// <param name="io"></param>
-        /// <returns>Nessessary modules. Returns empty list if no collection of modules exists.</returns>
-        private List<TECIOModule> getModulesForIO(IOCollection io)
-        {
-            IOCollection nessessaryIO = io - (io | AvailableIO);
-
-            List<TECIOModule> potentialModules = getPotentialModules();
-
-            //Check that any singular module can cover the nessessary io
-            foreach(TECIOModule module in potentialModules)
-            {
-                if (module.IOCollection.Contains(io)) return new List<TECIOModule>() { module };
-            }
-            
-            //List of modules to return
-            List<TECIOModule> returnModules = new List<TECIOModule>();
-            foreach(TECIO type in io.ToList())
-            {
-                TECIO singularIO = new TECIO(type);
-                singularIO.Quantity = 1;
-
-                //List of remaining potential modules after return modules is considered
-                List<TECIOModule> newPotentialModules = new List<TECIOModule>(potentialModules);
-                foreach(TECIOModule module in returnModules)
-                {
-                    newPotentialModules.Remove(module);
-                }
-
-                //Add the first module that contains the IOType we're checking
-                foreach(TECIOModule module in newPotentialModules)
-                {
-                    if (module.IOCollection.Contains(singularIO))
-                    {
-                        returnModules.Add(module);
-                        break;
-                    }
-                }
-
-                //If return modules satisfies our IO, return them
-                if (returnModules.ToIOCollection().Contains(io))
-                {
-                    return returnModules;
-                }
-            }
-
-            return new List<TECIOModule>();
-        }
-        #endregion
-
         #region Methods
+        public abstract TECController CopyController(bool isTypical, Dictionary<Guid, Guid> guidDictionary = null);
+
         #region Event Handlers
-        private void collectionChanged(object sender,
+        protected void collectionChanged(object sender,
             System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
@@ -421,43 +307,15 @@ namespace EstimatingLibrary
         }
         #endregion
         
-        
-        public bool CanChangeType(TECControllerType newType)
-        {
-            if (newType == null) return false;
-            TECController possibleController = new TECController(newType, false);
-            IOCollection necessaryIO = this.UsedIO;
-            IOCollection possibleIO = possibleController.getPotentialIO() + possibleController.AvailableIO;
-            return possibleIO.Contains(necessaryIO);
-        }
-        public void ChangeType(TECControllerType newType)
-        {
-            if (CanChangeType(newType))
-            {
-                this.IOModules.ObservablyClear();
-                this.Type = newType;
-                ModelCleanser.addRequiredIOModules(this);
-            }
-            else
-            {
-                return;
-            }
-        }
-
         protected override CostBatch getCosts()
         {
             if (!IsTypical)
             {
                 CostBatch costs = base.getCosts();
-                costs += Type.CostBatch;
                 foreach (IControllerConnection connection in
                     ChildrenConnections.Where(connection => !connection.IsTypical))
                 {
                     costs += connection.CostBatch;
-                }
-                foreach (TECIOModule module in IOModules)
-                {
-                    costs += module.CostBatch;
                 }
                 return costs;
             }
@@ -471,16 +329,12 @@ namespace EstimatingLibrary
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.propertyObjects());
             saveList.AddRange(this.ChildrenConnections, "ChildrenConnections");
-            saveList.AddRange(this.IOModules, "IOModules");
-            saveList.Add(this.Type, "Type");
             return saveList;
         }
         protected override SaveableMap linkedObjects()
         {
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.linkedObjects());
-            saveList.AddRange(this.IOModules, "IOModules");
-            saveList.Add(this.Type, "Type");
             return saveList;
         }
         protected override void notifyCostChanged(CostBatch costs)
@@ -512,42 +366,9 @@ namespace EstimatingLibrary
         {
             collectionChanged(sender, e, "ChildrenConnections");
         }
-        private void handleModulesChanged(Object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            collectionChanged(sender, e, "IOModules");
-        }
-
-        private IOCollection getPotentialIO()
-        {
-            IOCollection potentialIO = new IOCollection();
-            foreach (TECIOModule module in Type.IOModules)
-            {
-                foreach (TECIO io in module.IO)
-                {
-                    potentialIO.Add(io);
-                }
-            }
-            foreach (TECIOModule module in IOModules)
-            {
-                foreach (TECIO io in module.IO)
-                {
-                    potentialIO.Remove(io);
-                }
-            }
-            return potentialIO;
-        }
         #endregion
 
         #region Interfaces
-        #region IDDCopiable
-        Object IDDCopiable.DragDropCopy(TECScopeManager scopeManager)
-        {
-            var outController = new TECController(this, this.IsTypical);
-            ModelLinkingHelper.LinkScopeItem(outController, scopeManager);
-            return outController;
-        }
-        #endregion
-        
         #region IConnectable
         List<IProtocol> IConnectable.AvailableProtocols
         {
@@ -563,7 +384,7 @@ namespace EstimatingLibrary
 
         IConnectable IConnectable.Copy(bool isTypical, Dictionary<Guid, Guid> guidDictionary)
         {
-            return new TECController(this, isTypical, guidDictionary);
+            return CopyController(isTypical, guidDictionary);
         }
         IControllerConnection IConnectable.GetParentConnection()
         {

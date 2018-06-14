@@ -126,11 +126,11 @@ namespace TECUserControlLibraryTests
             bid.Catalogs.IOModules[0].IO.Add(io);
             controllerType.Name = "Test Type";
 
-            TECController controller = new TECController(controllerType, true);
+            TECProvidedController controller = new TECProvidedController(controllerType, true);
             controller.IOModules.Add(bid.Catalogs.IOModules[0]);
             controller.Name = "Test Controller";
             typical.AddController(controller);
-            TECController otherController = new TECController(controllerType, true);
+            TECController otherController = new TECProvidedController(controllerType, true);
             otherController.Name = "Other Controller";
             typical.AddController(otherController);
             IControllerConnection connection = controller.Connect(connected, (connected as IConnectable).AvailableProtocols.First());

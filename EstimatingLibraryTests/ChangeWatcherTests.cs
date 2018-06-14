@@ -127,7 +127,7 @@ namespace Tests
         {
             //Arrange
             TECControllerType controllerType = bid.Catalogs.ControllerTypes[0];
-            TECController controller = new TECController(controllerType, false);
+            TECController controller = new TECProvidedController(controllerType, false);
 
             //Act
             bid.AddController(controller);
@@ -328,7 +328,7 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             TECControllerType type = bid.Catalogs.ControllerTypes[0];
-            TECController controller = new TECController(type, true);
+            TECController controller = new TECProvidedController(type, true);
 
             resetRaised();
 
@@ -458,7 +458,7 @@ namespace Tests
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
             TECControllerType type = bid.Catalogs.ControllerTypes[0];
-            TECController controller = new TECController(type, false);
+            TECController controller = new TECProvidedController(type, false);
 
             resetRaised();
 
@@ -745,7 +745,7 @@ namespace Tests
         {
             //Arrange
             TECControllerType type = bid.Catalogs.ControllerTypes[0];
-            TECController parentController = new TECController(type, false);
+            TECController parentController = new TECProvidedController(type, false);
             bid.AddController(parentController);
 
             TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
@@ -771,7 +771,7 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
 
-            TECController childController = new TECController(type, false);
+            TECController childController = new TECProvidedController(type, false);
             typical.AddController(childController);
             TECSystem instance = typical.AddInstance(bid);
             TECController instanceController = instance.Controllers[0];
@@ -797,7 +797,7 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
 
-            TECController typicalController = new TECController(bid.Catalogs.ControllerTypes[0], true);
+            TECController typicalController = new TECProvidedController(bid.Catalogs.ControllerTypes[0], true);
             typical.AddController(typicalController);
 
             TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
@@ -827,7 +827,7 @@ namespace Tests
             system.AddInstance(bid);
             TECSubScope instanceSubScope = system.Instances[0].Equipment[0].SubScope[0];
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0], false);
             bid.AddController(controller);
 
             resetRaised();
@@ -855,7 +855,7 @@ namespace Tests
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
            
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], true);
+            TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0], true);
             system.AddController(controller);
 
             resetRaised();
@@ -881,7 +881,7 @@ namespace Tests
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0], false);
             bid.AddController(controller);
 
             resetRaised();
@@ -905,7 +905,7 @@ namespace Tests
             subScope.Devices.Add(dev);
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0], false);
             system.AddController(controller);
             bid.Systems.Add(system);
             TECSystem instance = system.AddInstance(bid);
@@ -929,13 +929,13 @@ namespace Tests
         {
             //Arrange
             TECControllerType type = bid.Catalogs.ControllerTypes[0];
-            TECController parentController = new TECController(type, false);
+            TECController parentController = new TECProvidedController(type, false);
             bid.AddController(parentController);
 
-            TECController childController = new TECController(type, false);
+            TECController childController = new TECProvidedController(type, false);
             bid.AddController(childController);
 
-            TECController daisyController = new TECController(type, false);
+            TECController daisyController = new TECProvidedController(type, false);
 
             TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
             TECNetworkConnection netConnect = parentController.AddNetworkConnection(bid.Catalogs.Protocols[0]);
@@ -986,7 +986,7 @@ namespace Tests
         {
             //Arrange
             TECControllerType controllerType = bid.Catalogs.ControllerTypes[0];
-            TECController controller = new TECController(controllerType, false);
+            TECController controller = new TECProvidedController(controllerType, false);
             bid.AddController(controller);
 
             resetRaised();
@@ -1207,7 +1207,7 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             TECControllerType type = bid.Catalogs.ControllerTypes[0];
-            TECController controller = new TECController(type, true);
+            TECController controller = new TECProvidedController(type, true);
             typical.AddController(controller);
 
             resetRaised();
@@ -1344,7 +1344,7 @@ namespace Tests
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
             TECControllerType type = bid.Catalogs.ControllerTypes[0];
-            TECController controller = new TECController(type, false);
+            TECController controller = new TECProvidedController(type, false);
             instance.AddController(controller);
 
             resetRaised();
@@ -1641,10 +1641,10 @@ namespace Tests
         {
             //Arrange
             TECControllerType type = bid.Catalogs.ControllerTypes[0];
-            TECController parentController = new TECController(type, false);
+            TECController parentController = new TECProvidedController(type, false);
             bid.AddController(parentController);
 
-            TECController childController = new TECController(type, false);
+            TECController childController = new TECProvidedController(type, false);
             bid.AddController(childController);
 
             TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
@@ -1669,13 +1669,13 @@ namespace Tests
         {
             //Arrange
             TECControllerType type = bid.Catalogs.ControllerTypes[0];
-            TECController parentController = new TECController(type, false);
+            TECController parentController = new TECProvidedController(type, false);
             bid.AddController(parentController);
             
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
 
-            TECController childController = new TECController(type, false);
+            TECController childController = new TECProvidedController(type, false);
             system.AddController(childController);
 
             TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
@@ -1711,7 +1711,7 @@ namespace Tests
             system.AddInstance(bid);
             TECSubScope instanceSubScope = system.Instances[0].Equipment[0].SubScope[0];
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0], false);
             bid.AddController(controller);
             IControllerConnection connection = controller.Connect(instanceSubScope, instanceSubScope.AvailableProtocols.First());
             connection.Length = 10;
@@ -1740,7 +1740,7 @@ namespace Tests
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0], false);
             system.AddController(controller);
             IControllerConnection connection = controller.Connect(subScope, subScope.AvailableProtocols.First());
             connection.Length = 10;
@@ -1767,7 +1767,7 @@ namespace Tests
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0], false);
             bid.AddController(controller);
             IControllerConnection connection = controller.Connect(subScope, subScope.AvailableProtocols.First());
             connection.Length = 10;
@@ -1792,7 +1792,7 @@ namespace Tests
             subScope.Devices.Add(dev);
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], true);
+            TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0], true);
             system.AddController(controller);
             bid.Systems.Add(system);
             TECSystem instance = system.AddInstance(bid);
@@ -1817,13 +1817,13 @@ namespace Tests
         {
             //Arrange
             TECControllerType type = bid.Catalogs.ControllerTypes[0];
-            TECController parentController = new TECController(type, false);
+            TECController parentController = new TECProvidedController(type, false);
             bid.AddController(parentController);
 
-            TECController childController = new TECController(type, false);
+            TECController childController = new TECProvidedController(type, false);
             bid.AddController(childController);
 
-            TECController daisyController = new TECController(type, false);
+            TECController daisyController = new TECProvidedController(type, false);
 
             TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
             TECNetworkConnection netConnect = parentController.AddNetworkConnection(bid.Catalogs.Protocols[0]);
@@ -1865,7 +1865,7 @@ namespace Tests
             var original = "original";
             var edited = "edit";
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0], false);
             controller.Name = original;
             bid.AddController(controller);
 
@@ -1886,7 +1886,7 @@ namespace Tests
             var original = bid.Catalogs.ControllerTypes[0];
             var edited = new TECControllerType(bid.Catalogs.Manufacturers[0]);
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            TECProvidedController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0], false);
             bid.AddController(controller);
             bid.Catalogs.ControllerTypes.Add(edited);
 
@@ -1907,8 +1907,8 @@ namespace Tests
             Double original = 10;
             Double edited = 12;
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
-            TECController child = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0], false);
+            TECController child = new TECProvidedController(bid.Catalogs.ControllerTypes[0], false);
             bid.AddController(controller);
             bid.AddController(child);
             TECNetworkConnection connection = controller.AddNetworkConnection(bid.Catalogs.Protocols[0]);
@@ -1933,8 +1933,8 @@ namespace Tests
             var edited = new TECConnectionType();
             bid.Catalogs.ConduitTypes.Add(edited);
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
-            TECController child = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0], false);
+            TECController child = new TECProvidedController(bid.Catalogs.ControllerTypes[0], false);
             bid.AddController(controller);
             bid.AddController(child);
             TECNetworkConnection connection = controller.AddNetworkConnection(bid.Catalogs.Protocols[0]);
@@ -2098,7 +2098,7 @@ namespace Tests
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], true);
+            TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0], true);
             controller.Name = original;
             typical.AddController(controller);
 
@@ -2268,7 +2268,7 @@ namespace Tests
             equip.SubScope.Add(ss);
             typical.Equipment.Add(equip);
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0], false);
             bid.AddController(controller);
 
             TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes[0];
@@ -2299,7 +2299,7 @@ namespace Tests
             ss.Devices.Add(dev);
             equip.SubScope.Add(ss);
             typical.Equipment.Add(equip);
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], true);
+            TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0], true);
             typical.AddController(controller);
 
             TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes[0];
@@ -2375,7 +2375,7 @@ namespace Tests
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], true);
+            TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0], true);
             typical.AddController(controller);
             TECSystem system = typical.AddInstance(bid);
             TECController systemController = system.Controllers[0];
@@ -2589,7 +2589,7 @@ namespace Tests
             typical.Equipment.Add(typEquip);
             bid.Systems.Add(typical);
 
-            TECController typController = new TECController(bid.Catalogs.ControllerTypes[0], true);
+            TECController typController = new TECProvidedController(bid.Catalogs.ControllerTypes[0], true);
             typical.AddController(typController);
 
             typController.Connect(typSS, (typSS as IConnectable).AvailableProtocols.First());

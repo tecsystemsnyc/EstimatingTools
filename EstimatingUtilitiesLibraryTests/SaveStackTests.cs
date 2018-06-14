@@ -23,7 +23,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECControllerType type = new TECControllerType(new TECManufacturer());
-            TECController controller = new TECController(type, false);
+            TECProvidedController controller = new TECProvidedController(type, false);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -33,15 +33,15 @@ namespace EstimatingUtilitiesLibraryTests
             Dictionary<string, string> data;
             
             data = new Dictionary<string, string>();
-            data[ControllerTable.ID.Name] = controller.Guid.ToString();
-            data[ControllerTable.Name.Name] = controller.Name;
-            data[ControllerTable.Description.Name] = controller.Name;
-            expectedItems.Add(new UpdateItem(Change.Add, ControllerTable.TableName, data));
+            data[ProvidedControllerTable.ID.Name] = controller.Guid.ToString();
+            data[ProvidedControllerTable.Name.Name] = controller.Name;
+            data[ProvidedControllerTable.Description.Name] = controller.Name;
+            expectedItems.Add(new UpdateItem(Change.Add, ProvidedControllerTable.TableName, data));
 
             data = new Dictionary<string, string>();
-            data[ControllerControllerTypeTable.ControllerID.Name] = controller.Guid.ToString();
-            data[ControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, ControllerControllerTypeTable.TableName, data));
+            data[ProvidedControllerControllerTypeTable.ControllerID.Name] = controller.Guid.ToString();
+            data[ProvidedControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ProvidedControllerControllerTypeTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
 
@@ -57,7 +57,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECControllerType type = new TECControllerType(new TECManufacturer());
-            TECController controller = new TECController(type, false);
+            TECProvidedController controller = new TECProvidedController(type, false);
             bid.AddController(controller);
 
             TECAssociatedCost cost = new TECAssociatedCost(CostType.TEC);
@@ -130,7 +130,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.Panels.Add(panel);
 
             TECControllerType controllerType = new TECControllerType(new TECManufacturer());
-            TECController controller = new TECController(controllerType, false);
+            TECProvidedController controller = new TECProvidedController(controllerType, false);
             bid.AddController(controller);
 
             //Act
@@ -1209,7 +1209,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECTypical system = new TECTypical();
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType type = new TECControllerType(manufacturer);
-            TECController controller = new TECController(type, true);
+            TECProvidedController controller = new TECProvidedController(type, true);
             bid.Systems.Add(system);
 
             //Act
@@ -1218,14 +1218,14 @@ namespace EstimatingUtilitiesLibraryTests
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data;
             data = new Dictionary<string, string>();
-            data[ControllerTable.ID.Name] = controller.Guid.ToString();
-            data[ControllerTable.Name.Name] = controller.Name.ToString();
-            data[ControllerTable.Description.Name] = controller.Description.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, ControllerTable.TableName, data));
+            data[ProvidedControllerTable.ID.Name] = controller.Guid.ToString();
+            data[ProvidedControllerTable.Name.Name] = controller.Name.ToString();
+            data[ProvidedControllerTable.Description.Name] = controller.Description.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ProvidedControllerTable.TableName, data));
             data = new Dictionary<string, string>();
-            data[ControllerControllerTypeTable.ControllerID.Name] = controller.Guid.ToString();
-            data[ControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, ControllerControllerTypeTable.TableName, data));
+            data[ProvidedControllerControllerTypeTable.ControllerID.Name] = controller.Guid.ToString();
+            data[ProvidedControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ProvidedControllerControllerTypeTable.TableName, data));
             data = new Dictionary<string, string>();
             data[SystemControllerTable.SystemID.Name] = system.Guid.ToString();
             data[SystemControllerTable.ControllerID.Name] = controller.Guid.ToString();
@@ -1249,7 +1249,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECTypical typical = new TECTypical();
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType type = new TECControllerType(manufacturer);
-            TECController controller = new TECController(type, true);
+            TECController controller = new TECProvidedController(type, true);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
@@ -1265,14 +1265,14 @@ namespace EstimatingUtilitiesLibraryTests
             data[TypicalInstanceTable.InstanceID.Name] = instance.Controllers[0].Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, TypicalInstanceTable.TableName, data));
             data = new Dictionary<string, string>();
-            data[ControllerTable.ID.Name] = instance.Controllers[0].Guid.ToString();
-            data[ControllerTable.Name.Name] = instance.Controllers[0].Name.ToString();
-            data[ControllerTable.Description.Name] = instance.Controllers[0].Description.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, ControllerTable.TableName, data));
+            data[ProvidedControllerTable.ID.Name] = instance.Controllers[0].Guid.ToString();
+            data[ProvidedControllerTable.Name.Name] = instance.Controllers[0].Name.ToString();
+            data[ProvidedControllerTable.Description.Name] = instance.Controllers[0].Description.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ProvidedControllerTable.TableName, data));
             data = new Dictionary<string, string>();
-            data[ControllerControllerTypeTable.ControllerID.Name] = instance.Controllers[0].Guid.ToString();
-            data[ControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, ControllerControllerTypeTable.TableName, data));
+            data[ProvidedControllerControllerTypeTable.ControllerID.Name] = instance.Controllers[0].Guid.ToString();
+            data[ProvidedControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ProvidedControllerControllerTypeTable.TableName, data));
             
             data = new Dictionary<string, string>();
             data[SystemControllerTable.SystemID.Name] = instance.Guid.ToString();
@@ -1280,14 +1280,14 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemControllerTable.Index.Name] = "0";
             expectedItems.Add(new UpdateItem(Change.Add, SystemControllerTable.TableName, data));
             data = new Dictionary<string, string>();
-            data[ControllerTable.ID.Name] = controller.Guid.ToString();
-            data[ControllerTable.Name.Name] = controller.Name.ToString();
-            data[ControllerTable.Description.Name] = controller.Description.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, ControllerTable.TableName, data));
+            data[ProvidedControllerTable.ID.Name] = controller.Guid.ToString();
+            data[ProvidedControllerTable.Name.Name] = controller.Name.ToString();
+            data[ProvidedControllerTable.Description.Name] = controller.Description.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ProvidedControllerTable.TableName, data));
             data = new Dictionary<string, string>();
-            data[ControllerControllerTypeTable.ControllerID.Name] = controller.Guid.ToString();
-            data[ControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, ControllerControllerTypeTable.TableName, data));
+            data[ProvidedControllerControllerTypeTable.ControllerID.Name] = controller.Guid.ToString();
+            data[ProvidedControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ProvidedControllerControllerTypeTable.TableName, data));
             
             data = new Dictionary<string, string>();
             data[SystemControllerTable.SystemID.Name] = typical.Guid.ToString();
@@ -1313,7 +1313,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType type = new TECControllerType(manufacturer);
 
-            TECController controller = new TECController(type, true);
+            TECController controller = new TECProvidedController(type, true);
             bid.Systems.Add(typical);
             typical.AddController(controller);
 
@@ -1334,15 +1334,15 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
             data = new Dictionary<string, string>();
-            data[ControllerTable.ID.Name] = instance.Controllers[0].Guid.ToString();
-            data[ControllerTable.Name.Name] = instance.Controllers[0].Name.ToString();
-            data[ControllerTable.Description.Name] = instance.Controllers[0].Description.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, ControllerTable.TableName, data));
+            data[ProvidedControllerTable.ID.Name] = instance.Controllers[0].Guid.ToString();
+            data[ProvidedControllerTable.Name.Name] = instance.Controllers[0].Name.ToString();
+            data[ProvidedControllerTable.Description.Name] = instance.Controllers[0].Description.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ProvidedControllerTable.TableName, data));
             data = new Dictionary<string, string>();
 
-            data[ControllerControllerTypeTable.ControllerID.Name] = instance.Controllers[0].Guid.ToString();
-            data[ControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, ControllerControllerTypeTable.TableName, data));
+            data[ProvidedControllerControllerTypeTable.ControllerID.Name] = instance.Controllers[0].Guid.ToString();
+            data[ProvidedControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ProvidedControllerControllerTypeTable.TableName, data));
             
             data = new Dictionary<string, string>();
             data[SystemControllerTable.SystemID.Name] = instance.Guid.ToString();
@@ -1417,7 +1417,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType ControllerType = new TECControllerType(manufacturer);
-            TECController controller = new TECController(ControllerType, true);
+            TECController controller = new TECProvidedController(ControllerType, true);
             system.AddController(controller);
 
             //Act
@@ -1746,8 +1746,8 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECController(type, false);
-            IConnectable child = new TECController(type, false);
+            TECController controller = new TECProvidedController(type, false);
+            IConnectable child = new TECProvidedController(type, false);
             bid.AddController(controller);
             bid.AddController(child as TECController);
 
@@ -1803,10 +1803,10 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECController(type, false);
+            TECController controller = new TECProvidedController(type, false);
             bid.AddController(controller);
 
-            TECController child = new TECController(type, false);
+            TECController child = new TECProvidedController(type, false);
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             typical.AddController(child);
@@ -1865,14 +1865,14 @@ namespace EstimatingUtilitiesLibraryTests
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
 
-            TECController controller = new TECController(type, false);
+            TECController controller = new TECProvidedController(type, false);
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             typical.AddController(controller);
             TECSystem system = typical.AddInstance(bid);
             TECController instanceController = system.Controllers[0];
 
-            TECController otherController = new TECController(type, false);
+            TECController otherController = new TECProvidedController(type, false);
             TECTypical otherTypical = new TECTypical();
             bid.Systems.Add(otherTypical);
             otherTypical.AddController(otherController);
@@ -1932,7 +1932,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECController(type, false);
+            TECController controller = new TECProvidedController(type, false);
             bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
@@ -1994,7 +1994,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECController(type, false);
+            TECController controller = new TECProvidedController(type, false);
             bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
@@ -2058,7 +2058,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECController(type, false);
+            TECController controller = new TECProvidedController(type, false);
 
             TECTypical typical = new TECTypical();
             typical.AddController(controller);
@@ -2119,7 +2119,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECController(type, false);
+            TECController controller = new TECProvidedController(type, false);
 
             TECTypical typical = new TECTypical();
             typical.AddController(controller);
@@ -2212,7 +2212,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType type = new TECControllerType(manufacturer);
-            TECController controller = new TECController(type, false);
+            TECController controller = new TECProvidedController(type, false);
             bid.AddController(controller);
 
             //Act
@@ -2222,13 +2222,13 @@ namespace EstimatingUtilitiesLibraryTests
             Dictionary<string, string> data;
 
             data = new Dictionary<string, string>();
-            data[ControllerTable.ID.Name] = controller.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, ControllerTable.TableName, data));
+            data[ProvidedControllerTable.ID.Name] = controller.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ProvidedControllerTable.TableName, data));
 
             data = new Dictionary<string, string>();
-            data[ControllerControllerTypeTable.ControllerID.Name] = controller.Guid.ToString();
-            data[ControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, ControllerControllerTypeTable.TableName, data));
+            data[ProvidedControllerControllerTypeTable.ControllerID.Name] = controller.Guid.ToString();
+            data[ProvidedControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ProvidedControllerControllerTypeTable.TableName, data));
             
             int expectedCount = expectedItems.Count;
 
@@ -2283,7 +2283,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.Panels.Add(panel);
 
             TECControllerType controllerType = new TECControllerType(new TECManufacturer());
-            TECController controller = new TECController(controllerType, false);
+            TECController controller = new TECProvidedController(controllerType, false);
             bid.AddController(controller);
             panel.Controllers.Add(controller);
 
@@ -3257,7 +3257,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECTypical system = new TECTypical();
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType type = new TECControllerType(manufacturer);
-            TECController controller = new TECController(type, true);
+            TECController controller = new TECProvidedController(type, true);
             bid.Systems.Add(system);
             system.AddController(controller);
 
@@ -3267,12 +3267,12 @@ namespace EstimatingUtilitiesLibraryTests
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data;
             data = new Dictionary<string, string>();
-            data[ControllerTable.ID.Name] = controller.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, ControllerTable.TableName, data));
+            data[ProvidedControllerTable.ID.Name] = controller.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ProvidedControllerTable.TableName, data));
             data = new Dictionary<string, string>();
-            data[ControllerControllerTypeTable.ControllerID.Name] = controller.Guid.ToString();
-            data[ControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, ControllerControllerTypeTable.TableName, data));
+            data[ProvidedControllerControllerTypeTable.ControllerID.Name] = controller.Guid.ToString();
+            data[ProvidedControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ProvidedControllerControllerTypeTable.TableName, data));
             
             data = new Dictionary<string, string>();
             data[SystemControllerTable.SystemID.Name] = system.Guid.ToString();
@@ -3296,7 +3296,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECTypical typical = new TECTypical();
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType type = new TECControllerType(manufacturer);
-            TECController controller = new TECController(type, true);
+            TECController controller = new TECProvidedController(type, true);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
             typical.AddController(controller);
@@ -3312,24 +3312,24 @@ namespace EstimatingUtilitiesLibraryTests
             data[TypicalInstanceTable.InstanceID.Name] = removed.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, TypicalInstanceTable.TableName, data));
             data = new Dictionary<string, string>();
-            data[ControllerTable.ID.Name] = removed.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, ControllerTable.TableName, data));
+            data[ProvidedControllerTable.ID.Name] = removed.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ProvidedControllerTable.TableName, data));
             data = new Dictionary<string, string>();
-            data[ControllerControllerTypeTable.ControllerID.Name] = removed.Guid.ToString();
-            data[ControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, ControllerControllerTypeTable.TableName, data));
+            data[ProvidedControllerControllerTypeTable.ControllerID.Name] = removed.Guid.ToString();
+            data[ProvidedControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ProvidedControllerControllerTypeTable.TableName, data));
             
             data = new Dictionary<string, string>();
             data[SystemControllerTable.SystemID.Name] = instance.Guid.ToString();
             data[SystemControllerTable.ControllerID.Name] = removed.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, SystemControllerTable.TableName, data));
             data = new Dictionary<string, string>();
-            data[ControllerTable.ID.Name] = controller.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, ControllerTable.TableName, data));
+            data[ProvidedControllerTable.ID.Name] = controller.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ProvidedControllerTable.TableName, data));
             data = new Dictionary<string, string>();
-            data[ControllerControllerTypeTable.ControllerID.Name] = controller.Guid.ToString();
-            data[ControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, ControllerControllerTypeTable.TableName, data));
+            data[ProvidedControllerControllerTypeTable.ControllerID.Name] = controller.Guid.ToString();
+            data[ProvidedControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ProvidedControllerControllerTypeTable.TableName, data));
             
             data = new Dictionary<string, string>();
             data[SystemControllerTable.SystemID.Name] = typical.Guid.ToString();
@@ -3352,7 +3352,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECTypical typical = new TECTypical();
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType type = new TECControllerType(manufacturer);
-            TECController controller = new TECController(type, true);
+            TECController controller = new TECProvidedController(type, true);
             bid.Systems.Add(typical);
             typical.AddController(controller);
             TECSystem instance = typical.AddInstance(bid);
@@ -3372,12 +3372,12 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, SystemTable.TableName, data));
             data = new Dictionary<string, string>();
-            data[ControllerTable.ID.Name] = instance.Controllers[0].Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, ControllerTable.TableName, data));
+            data[ProvidedControllerTable.ID.Name] = instance.Controllers[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ProvidedControllerTable.TableName, data));
             data = new Dictionary<string, string>();
-            data[ControllerControllerTypeTable.ControllerID.Name] = instance.Controllers[0].Guid.ToString();
-            data[ControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, ControllerControllerTypeTable.TableName, data));
+            data[ProvidedControllerControllerTypeTable.ControllerID.Name] = instance.Controllers[0].Guid.ToString();
+            data[ProvidedControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ProvidedControllerControllerTypeTable.TableName, data));
             
             data = new Dictionary<string, string>();
             data[SystemControllerTable.SystemID.Name] = instance.Guid.ToString();
@@ -3448,7 +3448,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType ControllerType = new TECControllerType(manufacturer);
-            TECController controller = new TECController(ControllerType, true);
+            TECController controller = new TECProvidedController(ControllerType, true);
             system.AddController(controller);
             panel.Controllers.Add(controller);
 
@@ -3742,8 +3742,8 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECController(type, false);
-            TECController child = new TECController(type, false);
+            TECController controller = new TECProvidedController(type, false);
+            TECController child = new TECProvidedController(type, false);
             bid.AddController(controller);
             bid.AddController(child);
 
@@ -3795,10 +3795,10 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECController(type, false);
+            TECController controller = new TECProvidedController(type, false);
             bid.AddController(controller);
 
-            TECController child = new TECController(type, false);
+            TECController child = new TECProvidedController(type, false);
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             typical.AddController(child);
@@ -3852,14 +3852,14 @@ namespace EstimatingUtilitiesLibraryTests
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
 
-            TECController controller = new TECController(type, false);
+            TECController controller = new TECProvidedController(type, false);
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             typical.AddController(controller);
             TECSystem system = typical.AddInstance(bid);
             TECController instanceController = system.Controllers[0];
 
-            TECController otherController = new TECController(type, false);
+            TECController otherController = new TECProvidedController(type, false);
             TECTypical otherTypical = new TECTypical();
             bid.Systems.Add(otherTypical);
             otherTypical.AddController(otherController);
@@ -3913,7 +3913,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECController(type, false);
+            TECController controller = new TECProvidedController(type, false);
             bid.AddController(controller);
             TECConnectionType connType = new TECConnectionType();
             TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
@@ -3969,7 +3969,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECController(type, false);
+            TECController controller = new TECProvidedController(type, false);
             bid.AddController(controller);
             TECConnectionType connType = new TECConnectionType();
             TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
@@ -4032,7 +4032,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECController(type, false);
+            TECController controller = new TECProvidedController(type, false);
             TECConnectionType connType = new TECConnectionType();
             TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
             bid.Catalogs.Devices.Add(device);
@@ -4092,7 +4092,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECController(type, false);
+            TECController controller = new TECProvidedController(type, false);
             TECConnectionType connType = new TECConnectionType();
             TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
             bid.Catalogs.Devices.Add(device);

@@ -94,7 +94,7 @@ namespace Tests
             var type = new TECControllerType(manufacturer);
             type.Price = 100;
 
-            var controller = new TECController(type, false);
+            var controller = new TECProvidedController(type, false);
 
             bid.AddController(controller);
 
@@ -116,7 +116,7 @@ namespace Tests
             var type = new TECControllerType(manufacturer);
             type.Price = 100;
 
-            var controller = new TECController(type, false);
+            var controller = new TECProvidedController(type, false);
 
             bid.AddController(controller);
             bid.RemoveController(controller);
@@ -137,7 +137,7 @@ namespace Tests
             var type = new TECControllerType(manufacturer);
             type.Price = 100;
 
-            var controller = new TECController(type, true);
+            var controller = new TECProvidedController(type, true);
 
             var typical = new TECTypical();
             bid.Systems.Add(typical);
@@ -163,7 +163,7 @@ namespace Tests
             var type = new TECControllerType(manufacturer);
             type.Price = 100;
 
-            var controller = new TECController(type, true);
+            var controller = new TECProvidedController(type, true);
 
             var typical = new TECTypical();
             bid.Systems.Add(typical);
@@ -189,7 +189,7 @@ namespace Tests
             var type = new TECControllerType(manufacturer);
             type.Price = 100;
 
-            var controller = new TECController(type, true);
+            var controller = new TECProvidedController(type, true);
 
             var typical = new TECTypical();
             bid.Systems.Add(typical);
@@ -215,7 +215,7 @@ namespace Tests
             var type = new TECControllerType(manufacturer);
             type.Price = 100;
 
-            var controller = new TECController(type, true);
+            var controller = new TECProvidedController(type, true);
 
             var typical = new TECTypical();
             bid.Systems.Add(typical);
@@ -599,7 +599,7 @@ namespace Tests
             var equipment = new TECEquipment(true);
             var subScope = new TECSubScope(true);
             
-            var controller = new TECController(controllerType, true);
+            var controller = new TECProvidedController(controllerType, true);
 
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
@@ -664,7 +664,7 @@ namespace Tests
             var equipment = new TECEquipment(true);
             var subScope = new TECSubScope(true);
 
-            var controller = new TECController(controllerType, true);
+            var controller = new TECProvidedController(controllerType, true);
 
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
@@ -733,7 +733,7 @@ namespace Tests
             var equipment = new TECEquipment(true);
             var subScope = new TECSubScope(true);
             
-            var controller = new TECController(controllerType, true);
+            var controller = new TECProvidedController(controllerType, true);
 
             system.AddController(controller);
             system.Equipment.Add(equipment);
@@ -819,7 +819,7 @@ namespace Tests
             var equipment = new TECEquipment(true);
             var subScope = new TECSubScope(true);
 
-            var controller = new TECController(controllerType, true);
+            var controller = new TECProvidedController(controllerType, true);
 
             system.AddController(controller);
             system.Equipment.Add(equipment);
@@ -898,7 +898,7 @@ namespace Tests
             var equipment = new TECEquipment(true);
             var subScope = new TECSubScope(true);
 
-            var controller = new TECController(controllerType, true);
+            var controller = new TECProvidedController(controllerType, true);
 
             system.AddController(controller);
             system.Equipment.Add(equipment);
@@ -992,7 +992,7 @@ namespace Tests
             var equipment = new TECEquipment(true);
             var subScope = new TECSubScope(true);
 
-            var controller = new TECController(controllerType, false);
+            var controller = new TECProvidedController(controllerType, false);
             bid.AddController(controller);
 
             system.Equipment.Add(equipment);
@@ -1051,7 +1051,7 @@ namespace Tests
             var equipment = new TECEquipment(true);
             var subScope = new TECSubScope(true);
 
-            var controller = new TECController(controllerType, false);
+            var controller = new TECProvidedController(controllerType, false);
             bid.AddController(controller);
 
             system.Equipment.Add(equipment);
@@ -1108,7 +1108,7 @@ namespace Tests
             var equipment = new TECEquipment(true);
             var subScope = new TECSubScope(true);
 
-            var controller = new TECController(controllerType, false);
+            var controller = new TECProvidedController(controllerType, false);
             bid.AddController(controller);
 
             system.Equipment.Add(equipment);
@@ -1611,8 +1611,8 @@ namespace Tests
             conduitType.Cost = 1;
             conduitType.Labor = 1;
 
-            var controller1 = new TECController(controllerType, false);
-            var controller2 = new TECController(controllerType, false);
+            var controller1 = new TECProvidedController(controllerType, false);
+            var controller2 = new TECProvidedController(controllerType, false);
 
             var protocol = new TECProtocol(new List<TECConnectionType>() { connectionType });
             controllerType.IO.Add(new TECIO(protocol));
@@ -1649,8 +1649,8 @@ namespace Tests
             connectionType.Cost = 1;
             connectionType.Labor = 1;
 
-            var controller1 = new TECController(controllerType, false);
-            var controller2 = new TECController(controllerType, false);
+            var controller1 = new TECProvidedController(controllerType, false);
+            var controller2 = new TECProvidedController(controllerType, false);
 
             bid.AddController(controller1);
             bid.AddController(controller2);
@@ -1693,8 +1693,8 @@ namespace Tests
             conduitType.Cost = 1;
             conduitType.Labor = 1;
 
-            var controller1 = new TECController(controllerType, false);
-            var controller2 = new TECController(controllerType, false);
+            var controller1 = new TECProvidedController(controllerType, false);
+            var controller2 = new TECProvidedController(controllerType, false);
 
             bid.AddController(controller1);
             bid.AddController(controller2);
@@ -1738,8 +1738,8 @@ namespace Tests
             connectionType.Cost = 1;
             connectionType.Labor = 1;
 
-            var controller1 = new TECController(controllerType, false);
-            var controller2 = new TECController(controllerType, true);
+            var controller1 = new TECProvidedController(controllerType, false);
+            var controller2 = new TECProvidedController(controllerType, true);
             
             var protocol = new TECProtocol(new List<TECConnectionType>() { connectionType });
             controllerType.IO.Add(new TECIO(protocol));
@@ -1778,8 +1778,8 @@ namespace Tests
             connectionType.Cost = 1;
             connectionType.Labor = 1;
 
-            var controller1 = new TECController(controllerType, false);
-            var controller2 = new TECController(controllerType, true);
+            var controller1 = new TECProvidedController(controllerType, false);
+            var controller2 = new TECProvidedController(controllerType, true);
 
             var protocol = new TECProtocol(new List<TECConnectionType>() { connectionType });
             controllerType.IO.Add(new TECIO(protocol));
@@ -1824,8 +1824,8 @@ namespace Tests
             var protocol = new TECProtocol(new List<TECConnectionType>() { connectionType });
             controllerType.IO.Add(new TECIO(protocol));
 
-            var controller1 = new TECController(controllerType, false);
-            var controller2 = new TECController(controllerType, true);
+            var controller1 = new TECProvidedController(controllerType, false);
+            var controller2 = new TECProvidedController(controllerType, true);
 
             bid.AddController(controller1);
             system.AddController(controller2);
@@ -2111,7 +2111,7 @@ namespace Tests
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
 
-            var controller = new TECController(controllerType, true);
+            var controller = new TECProvidedController(controllerType, true);
 
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
@@ -2172,7 +2172,7 @@ namespace Tests
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
 
-            var controller = new TECController(controllerType, true);
+            var controller = new TECProvidedController(controllerType, true);
 
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
@@ -2225,7 +2225,7 @@ namespace Tests
             bid.Catalogs = TestHelper.CreateTestCatalogs();
             TECControllerType type = new TECControllerType(new TECManufacturer());
 
-            TECController controller = new TECController(type, false);
+            TECController controller = new TECProvidedController(type, false);
             bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
@@ -2265,7 +2265,7 @@ namespace Tests
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
 
-            var controller = new TECController(controllerType, true);
+            var controller = new TECProvidedController(controllerType, true);
 
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);

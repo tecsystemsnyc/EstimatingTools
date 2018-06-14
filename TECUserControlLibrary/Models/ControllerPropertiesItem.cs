@@ -8,13 +8,13 @@ using System.Linq;
 
 namespace TECUserControlLibrary.Models
 {
-    public class ControllerPropertiesItem : ViewModelBase
+    public class ProvidedControllerPropertiesItem : ViewModelBase
     {
         private List<TECIO> _io;
         private List<TECIO> _availableIO;
         private ObservableCollection<ModuleGroup> _modules;
 
-        public TECController Controller
+        public TECProvidedController Controller
         {
             get; private set;
         }
@@ -51,7 +51,7 @@ namespace TECUserControlLibrary.Models
         public RelayCommand<TECIOModule> RemoveModuleCommand { get; private set; }
         public RelayCommand OptimizeModulesCommand { get; private set; }
 
-        public ControllerPropertiesItem(TECController controller)
+        public ProvidedControllerPropertiesItem(TECProvidedController controller)
         {
             Controller = controller;
             AddModuleCommand = new RelayCommand<TECIOModule>(addModuleExecute, canAddModule);

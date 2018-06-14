@@ -74,7 +74,7 @@ namespace Tests
             bid.Exclusions.Add(exclusion1);
 
             //Controller
-            TECController expectedController = new TECController(Guid.NewGuid(), bid.Catalogs.ControllerTypes[0], false);
+            TECController expectedController = new TECProvidedController(Guid.NewGuid(), bid.Catalogs.ControllerTypes[0], false);
             expectedController.Name = "Test Controller";
             expectedController.Description = "Test description";
             
@@ -381,11 +381,11 @@ namespace Tests
             expectedControllerType.IO.Add(otherIO);
             templates.Catalogs.ControllerTypes.Add(expectedControllerType);
 
-            TECController expectedController = new TECController(expectedControllerType, false);
+            TECController expectedController = new TECProvidedController(expectedControllerType, false);
             expectedController.Name = "Test Controller";
             expectedController.Description = "Test description";
 
-            TECController controlledController = new TECController(expectedControllerType, false);
+            TECController controlledController = new TECProvidedController(expectedControllerType, false);
             controlledController.Name = "Controlled Controller";
             
             templates.ControllerTemplates.Add(expectedController);
@@ -696,7 +696,7 @@ namespace Tests
         {
             var type = catalogs.ControllerTypes[0];
 
-            var controller = new TECController(type, isTypical);
+            var controller = new TECProvidedController(type, isTypical);
             controller.Tags.Add(catalogs.Tags[0]);
             return controller;
         }

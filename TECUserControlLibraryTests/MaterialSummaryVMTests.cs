@@ -419,7 +419,7 @@ namespace Tests
 
             TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
             bid.Catalogs.ControllerTypes.Add(controllerType);
-            TECController controller = new TECController(controllerType, false);
+            TECController controller = new TECProvidedController(controllerType, false);
             bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
@@ -886,7 +886,7 @@ namespace Tests
             TECBid bid = TestHelper.CreateEmptyCatalogBid();
             ChangeWatcher cw = new ChangeWatcher(bid);
 
-            TECController controller = new TECController(bid.Catalogs.ControllerTypes[0], false);
+            TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0], false);
             bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
@@ -940,7 +940,7 @@ namespace Tests
 
             TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
             bid.Catalogs.ControllerTypes.Add(controllerType);
-            TECController controller = new TECController(controllerType, false);
+            TECController controller = new TECProvidedController(controllerType, false);
             bid.AddController(controller);
 
             TECTypical typical = new TECTypical();

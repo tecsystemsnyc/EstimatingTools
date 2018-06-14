@@ -17,10 +17,13 @@ namespace EstimatingLibrary.Utilities
 
             foreach (TECController controller in bid.GetAll<TECController>())
             {
-                bool controllerNeedsSave = ModelCleanser.addRequiredIOModules(controller);
-                if (controllerNeedsSave)
+                if (controller is TECProvidedController provided)
                 {
-                    needsSave = true;
+                    bool controllerNeedsSave = ModelCleanser.addRequiredIOModules(provided);
+                    if (controllerNeedsSave)
+                    {
+                        needsSave = true;
+                    }
                 }
             }
 
@@ -188,7 +191,10 @@ namespace EstimatingLibrary.Utilities
         }
         private static void linkControllerToCatalogs(TECController controller, TECCatalogs catalogs)
         {
-            linkControllerToControllerType(controller, catalogs.ControllerTypes);
+            if (controller is TECProvidedController provided)
+            {
+                linkProvidedControllerToControllerType(provided, catalogs.ControllerTypes);
+            }
             foreach(IControllerConnection connection in controller.ChildrenConnections)
             {
                 linkConnectionToCatalogs(connection, catalogs);
@@ -323,7 +329,7 @@ namespace EstimatingLibrary.Utilities
                 }
             }
         }
-        private static void linkControllerToControllerType(TECController controller, IEnumerable<TECControllerType> controllerTypes)
+        private static void linkProvidedControllerToControllerType(TECProvidedController controller, IEnumerable<TECControllerType> controllerTypes)
         {
             foreach (TECControllerType type in controllerTypes)
             {

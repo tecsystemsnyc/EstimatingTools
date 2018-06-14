@@ -347,7 +347,14 @@ namespace TECUserControlLibrary.ViewModels
         private CostBatch addController(TECController controller)
         {
             CostBatch deltas = new CostBatch();
-            deltas += (ControllerSummaryVM.AddHardware(controller.Type));
+            if (controller is TECProvidedController provided)
+            {
+                deltas += (ControllerSummaryVM.AddHardware(provided.Type));
+                foreach (TECIOModule module in provided.IOModules)
+                {
+                    deltas += (addIOModule(module));
+                }
+            }
             foreach(TECCost cost in controller.AssociatedCosts)
             {
                 deltas += (ControllerSummaryVM.AddCost(cost));
@@ -356,10 +363,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 deltas += (addConnection(connection));
             }
-            foreach(TECIOModule module in controller.IOModules)
-            {
-                deltas += (addIOModule(module));
-            }
+            
             return deltas;
         }
         private CostBatch addIOModule(TECIOModule module)
@@ -468,7 +472,14 @@ namespace TECUserControlLibrary.ViewModels
         private CostBatch removeController(TECController controller)
         {
             CostBatch deltas = new CostBatch();
-            deltas += (ControllerSummaryVM.RemoveHardware(controller.Type));
+            if (controller is TECProvidedController provided)
+            {
+                deltas += (ControllerSummaryVM.RemoveHardware(provided.Type));
+                foreach (TECIOModule module in provided.IOModules)
+                {
+                    deltas += (removeIOModule(module));
+                }
+            }
             foreach(TECCost cost in controller.AssociatedCosts)
             {
                 deltas += (ControllerSummaryVM.RemoveCost(cost));
@@ -476,10 +487,6 @@ namespace TECUserControlLibrary.ViewModels
             foreach(IControllerConnection connection in controller.ChildrenConnections)
             {
                 deltas += (removeConnection(connection));
-            }
-            foreach(TECIOModule module in controller.IOModules)
-            {
-                deltas += (removeIOModule(module));
             }
             return deltas;
         }

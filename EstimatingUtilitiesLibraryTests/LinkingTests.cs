@@ -330,17 +330,26 @@ namespace Tests
                 {
                     foreach (TECController controller in instance.Controllers)
                     {
-                        Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(controller.Type));
+                        if (controller is TECProvidedController provided)
+                        {
+                            Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(provided.Type));
+                        } 
                     }
                 }
                 foreach (TECController controller in typical.Controllers)
                 {
-                    Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(controller.Type));
+                    if (controller is TECProvidedController provided)
+                    {
+                        Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(provided.Type));
+                    }
                 }
             }
             foreach (TECController controller in bid.Controllers)
             {
-                Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(controller.Type));
+                if (controller is TECProvidedController provided)
+                {
+                    Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(provided.Type));
+                }
             }
         }
 
@@ -385,19 +394,28 @@ namespace Tests
         {
             foreach (TECController controller in bid.Controllers)
             {
-                Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(controller.Type));
+                if (controller is TECProvidedController provided)
+                {
+                    Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(provided.Type));
+                }
             }
             foreach (TECTypical typical in bid.Systems)
             {
                 foreach (TECController controller in typical.Controllers)
                 {
-                    Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(controller.Type));
+                    if (controller is TECProvidedController provided)
+                    {
+                        Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(provided.Type));
+                    }
                 }
                 foreach (TECSystem instance in typical.Instances)
                 {
                     foreach (TECController controller in instance.Controllers)
                     {
-                        Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(controller.Type));
+                        if (controller is TECProvidedController provided)
+                        {
+                            Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(provided.Type));
+                        }
                     }
                 }
             }
@@ -443,12 +461,18 @@ namespace Tests
             {
                 foreach (TECController controller in typical.Controllers)
                 {
-                    Assert.IsTrue(templates.Catalogs.ControllerTypes.Contains(controller.Type));
+                    if (controller is TECProvidedController provided)
+                    {
+                        Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(provided.Type));
+                    }
                 }
             }
             foreach (TECController controller in templates.ControllerTemplates)
             {
-                Assert.IsTrue(templates.Catalogs.ControllerTypes.Contains(controller.Type));
+                if(controller is TECProvidedController provided)
+                        {
+                    Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(provided.Type));
+                }
             }
         }
 

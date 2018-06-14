@@ -115,9 +115,9 @@ namespace EstimatingUtilitiesLibrary.Database
             allEndDevices.AddRange(templates.Catalogs.Valves);
             Dictionary<Guid, List<IEndDevice>> endDevices = getOneToManyRelationships(new SubScopeDeviceTable(), allEndDevices);
             Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes = getOneToOneRelationships(new ConnectionConduitTypeTable(), templates.Catalogs.ConduitTypes);
-            Dictionary<Guid, List<TECIOModule>> controllerModuleRelationships = getOneToManyRelationships(new ControllerIOModuleTable(), templates.Catalogs.IOModules);
+            Dictionary<Guid, List<TECIOModule>> providedControllerModuleRelationships = getOneToManyRelationships(new ProvidedControllerIOModuleTable(), templates.Catalogs.IOModules);
 
-            Dictionary<Guid, TECControllerType> controllerTypeDictionary = getOneToOneRelationships(new ControllerControllerTypeTable(), templates.Catalogs.ControllerTypes);
+            Dictionary<Guid, TECControllerType> providedControllerTypeDictionary = getOneToOneRelationships(new ProvidedControllerControllerTypeTable(), templates.Catalogs.ControllerTypes);
             Dictionary<Guid, TECPanelType> panelTypeDictionary = getOneToOneRelationships(new PanelPanelTypeTable(), templates.Catalogs.PanelTypes);
             Dictionary<Guid, TECProtocol> connectionProtocol = getOneToOneRelationships(new NetworkConnectionProtocolTable(), templates.Catalogs.Protocols);
             Dictionary<Guid, List<TECConnectionType>> hardwiredConnectionTypes = getOneToManyRelationships(new HardwiredConnectionConnectionTypeTable(), templates.Catalogs.ConnectionTypes);
@@ -127,7 +127,10 @@ namespace EstimatingUtilitiesLibrary.Database
             List<TECSubScope> subScope = getObjectsFromTable(new SubScopeTable(), id => new TECSubScope(id, false));
             List<TECPoint> points = getObjectsFromTable(new PointTable(), id => new TECPoint(id, false));
             List<TECMisc> misc = getObjectsFromTable(new MiscTable(), data => getMiscFromRow(data, false));
-            List<TECController> controllers = getObjectsFromTable(new ControllerTable(), data => getControllerFromRow(data, false, controllerTypeDictionary));
+            List<TECProvidedController> providedControllers = getObjectsFromTable(new ProvidedControllerTable(), data => getProvidedControllerFromRow(data, false, providedControllerTypeDictionary));
+            List<TECFBOController> fboControllers = getObjectsFromTable(new FBOControllerTable(), id => new TECFBOController(id, false, templates.Catalogs));
+            List<TECController> controllers = new List<TECController>(providedControllers);
+            controllers.AddRange(fboControllers);
             List<TECPanel> panels = getObjectsFromTable(new PanelTable(), data => getPanelFromRow(data, false, panelTypeDictionary));
 
             Dictionary<Guid, TECController> connectionParents = getChildIDToParentRelationships(new ControllerConnectionTable(), controllers);
@@ -173,7 +176,7 @@ namespace EstimatingUtilitiesLibrary.Database
             });
             
             Dictionary<Guid, List<TECController>> panelControllerDictionary = getOneToManyRelationships(new PanelControllerTable(), controllers);
-            controllers.ForEach(item => item.IOModules = controllerModuleRelationships.ValueOrNew(item.Guid));
+            controllers.ForEach(item => { if (item is TECProvidedController provided) provided.IOModules = providedControllerModuleRelationships.ValueOrNew(provided.Guid);});
 
             subScope.ForEach(item => item.Devices = endDevices.ValueOrNew(item.Guid));
             panels.ForEach(item => item.Controllers = panelControllerDictionary.ValueOrNew(item.Guid));
@@ -233,9 +236,9 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<Guid, List<Guid>> networkChildren = getOneToManyRelationships(new NetworkConnectionChildrenTable());
             Dictionary<Guid, Guid> subScopeConnectionChildren = getOneToOneRelationships(new SubScopeConnectionChildrenTable());
 
-            Dictionary<Guid, TECControllerType> controllerTypes = getOneToOneRelationships(new ControllerControllerTypeTable(), catalogs.ControllerTypes);
+            Dictionary<Guid, TECControllerType> controllerTypes = getOneToOneRelationships(new ProvidedControllerControllerTypeTable(), catalogs.ControllerTypes);
             Dictionary<Guid, TECPanelType> panelTypes = getOneToOneRelationships(new PanelPanelTypeTable(), catalogs.PanelTypes);
-            Dictionary<Guid, List<TECIOModule>> controllerModuleRelationships = getOneToManyRelationships(new ControllerIOModuleTable(), catalogs.IOModules);
+            Dictionary<Guid, List<TECIOModule>> controllerModuleRelationships = getOneToManyRelationships(new ProvidedControllerIOModuleTable(), catalogs.IOModules);
             List<IEndDevice> allEndDevices = new List<IEndDevice>(catalogs.Devices);
             allEndDevices.AddRange(catalogs.Valves);
             Dictionary<Guid, List<IEndDevice>> endDevices = getOneToManyRelationships(new SubScopeDeviceTable(), allEndDevices);
@@ -269,8 +272,12 @@ namespace EstimatingUtilitiesLibrary.Database
             List<TECEquipment> equipment = getObjectsFromTable(new EquipmentTable(), id => new TECEquipment(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
             List<TECMisc> misc = getObjectsFromTable(new MiscTable(), row => { return getMiscFromRow(row, typicalDictionary); });
             List<TECScopeBranch> scopeBranches = getObjectsFromTable(new ScopeBranchTable(), id => new TECScopeBranch(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
-            List<TECController> controllers = getObjectsFromTable(new ControllerTable(), row => getControllerFromRow(row, typicalDictionary, controllerTypes));
+            List<TECProvidedController> providedControllers = getObjectsFromTable(new ProvidedControllerTable(), data => getProvidedControllerFromRow(data, false, controllerTypes));
+            List<TECFBOController> fboControllers = getObjectsFromTable(new FBOControllerTable(), id => new TECFBOController(id, false, catalogs));
             List<TECPanel> panels = getObjectsFromTable(new PanelTable(), row => getPanelFromRow(row, typicalDictionary, panelTypes));
+
+            List<TECController> controllers = new List<TECController>(providedControllers);
+            controllers.AddRange(fboControllers);
 
             List<IConnectable> connectables = new List<IConnectable>(controllers);
             connectables.AddRange(subScope);
@@ -290,7 +297,7 @@ namespace EstimatingUtilitiesLibrary.Database
             
             Dictionary<Guid, List<TECController>> panelControllers = getOneToManyRelationships(new PanelControllerTable(), controllers);
 
-            controllers.ForEach(item => item.IOModules = controllerModuleRelationships.ValueOrNew(item.Guid));
+            controllers.ForEach(item => { if (item is TECProvidedController provided) provided.IOModules = controllerModuleRelationships.ValueOrNew(provided.Guid); });
             subScope.ForEach(item => item.Devices = endDevices.ValueOrNew(item.Guid));
 
 
@@ -594,19 +601,19 @@ namespace EstimatingUtilitiesLibrary.Database
             return getPanelFromRow(row, isTypical, panelTypes);
         }
 
-        private static TECController getControllerFromRow(DataRow row, bool isTypical, Dictionary<Guid, TECControllerType> controllerTypes)
+        private static TECProvidedController getProvidedControllerFromRow(DataRow row, bool isTypical, Dictionary<Guid, TECControllerType> controllerTypes)
         {
-            Guid guid = new Guid(row[ControllerTable.ID.Name].ToString());
+            Guid guid = new Guid(row[ProvidedControllerTable.ID.Name].ToString());
             TECControllerType type = justUpdated ? controllerTypes.ValueOrDefault(guid, tempControllerType) : controllerTypes[guid];
-            TECController controller = new TECController(guid, type, isTypical);
-            assignValuePropertiesFromTable(controller, new ControllerTable(), row);
+            TECProvidedController controller = new TECProvidedController(guid, type, isTypical);
+            assignValuePropertiesFromTable(controller, new ProvidedControllerTable(), row);
             return controller;
         }
-        private static TECController getControllerFromRow(DataRow row, Dictionary<Guid, bool> typicalDictionary, Dictionary<Guid, TECControllerType> controllerTypes)
+        private static TECProvidedController getProvidedControllerFromRow(DataRow row, Dictionary<Guid, bool> typicalDictionary, Dictionary<Guid, TECControllerType> controllerTypes)
         {
-            Guid guid = new Guid(row[ControllerTable.ID.Name].ToString());
+            Guid guid = new Guid(row[ProvidedControllerTable.ID.Name].ToString());
             bool isTypical = typicalDictionary.ContainsKey(guid) ? typicalDictionary[guid] : false;
-            return getControllerFromRow(row, isTypical, controllerTypes);
+            return getProvidedControllerFromRow(row, isTypical, controllerTypes);
         }
 
         private static TECIO getIOFromRow(DataRow row, Dictionary<Guid, TECProtocol> protocols)

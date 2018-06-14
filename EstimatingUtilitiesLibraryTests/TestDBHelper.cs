@@ -35,7 +35,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToAssociatedCostTable();
             addToSubScopeConnectionTable();
             addToNetworkConnectionTable();
-            addToControllerTable();
+            addToProvidedControllerTable();
             addToMiscTable();
             addToPanelTypeTable();
             addToPanelTable();
@@ -105,7 +105,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToAssociatedCostTable();
             addToSubScopeConnectionTable();
             addToNetworkConnectionTable();
-            addToControllerTable();
+            addToProvidedControllerTable();
             addToMiscTable();
             addToPanelTypeTable();
             addToPanelTable();
@@ -519,25 +519,25 @@ namespace EstimatingUtilitiesLibraryTests
             
 
         }
-        private static void addToControllerTable()
+        private static void addToProvidedControllerTable()
         {
             List<string> values = new List<string>();
             values.Add("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
             values.Add("Bid Controller");
             values.Add("Bid Controller Description");
-            addDataToTable(new ControllerTable(), values);
+            addDataToTable(new ProvidedControllerTable(), values);
 
             values = new List<string>();
             values.Add("1bb86714-2512-4fdd-a80f-46969753d8a0");
             values.Add("Typical Controller");
             values.Add("Typical Controller Description");
-            addDataToTable(new ControllerTable(), values);
+            addDataToTable(new ProvidedControllerTable(), values);
 
             values = new List<string>();
             values.Add("95032348-c661-470f-9bea-47dd750a47a5");
             values.Add("Child Typical Controller");
             values.Add("");
-            addDataToTable(new ControllerTable(), values);
+            addDataToTable(new ProvidedControllerTable(), values);
 
             if (isBid)
             {
@@ -545,31 +545,31 @@ namespace EstimatingUtilitiesLibraryTests
                 values.Add("f22913a6-e348-4a77-821f-80447621c6e0");
                 values.Add("Instance Controller");
                 values.Add("Instance Controller Description");
-                addDataToTable(new ControllerTable(), values);
+                addDataToTable(new ProvidedControllerTable(), values);
 
                 values = new List<string>();
                 values.Add("973e6100-31f7-40b0-bfe7-9d64630c1c56");
                 values.Add("Child Bid Controller");
                 values.Add("");
-                addDataToTable(new ControllerTable(), values);
+                addDataToTable(new ProvidedControllerTable(), values);
 
                 values = new List<string>();
                 values.Add("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
                 values.Add("Child Instance Controller");
                 values.Add("");
-                addDataToTable(new ControllerTable(), values);
+                addDataToTable(new ProvidedControllerTable(), values);
 
                 values = new List<string>();
                 values.Add("bf17527a-18ba-4765-a01e-8ab8de5664a3");
                 values.Add("Daisy 1");
                 values.Add("");
-                addDataToTable(new ControllerTable(), values);
+                addDataToTable(new ProvidedControllerTable(), values);
 
                 values = new List<string>();
                 values.Add("7b6825df-57da-458a-a859-a9459c15907b");
                 values.Add("Daisy 2");
                 values.Add("");
-                addDataToTable(new ControllerTable(), values);
+                addDataToTable(new ProvidedControllerTable(), values);
             }
                 
         }
@@ -1530,42 +1530,42 @@ namespace EstimatingUtilitiesLibraryTests
             List<string> values = new List<string>();
             values.Add("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
             values.Add("7201ca48-f885-4a87-afa7-61b3e6942697");
-            addDataToTable(new ControllerControllerTypeTable(), values);
+            addDataToTable(new ProvidedControllerControllerTypeTable(), values);
 
             values = new List<string>();
             values.Add("1bb86714-2512-4fdd-a80f-46969753d8a0");
             values.Add("7201ca48-f885-4a87-afa7-61b3e6942697");
-            addDataToTable(new ControllerControllerTypeTable(), values);
+            addDataToTable(new ProvidedControllerControllerTypeTable(), values);
 
             values = new List<string>();
             values.Add("f22913a6-e348-4a77-821f-80447621c6e0");
             values.Add("7201ca48-f885-4a87-afa7-61b3e6942697");
-            addDataToTable(new ControllerControllerTypeTable(), values);
+            addDataToTable(new ProvidedControllerControllerTypeTable(), values);
 
             values = new List<string>();
             values.Add("973e6100-31f7-40b0-bfe7-9d64630c1c56");
             values.Add("7201ca48-f885-4a87-afa7-61b3e6942697");
-            addDataToTable(new ControllerControllerTypeTable(), values);
+            addDataToTable(new ProvidedControllerControllerTypeTable(), values);
 
             values = new List<string>();
             values.Add("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
             values.Add("7201ca48-f885-4a87-afa7-61b3e6942697");
-            addDataToTable(new ControllerControllerTypeTable(), values);
+            addDataToTable(new ProvidedControllerControllerTypeTable(), values);
 
             values = new List<string>();
             values.Add("bf17527a-18ba-4765-a01e-8ab8de5664a3");
             values.Add("7201ca48-f885-4a87-afa7-61b3e6942697");
-            addDataToTable(new ControllerControllerTypeTable(), values);
+            addDataToTable(new ProvidedControllerControllerTypeTable(), values);
 
             values = new List<string>();
             values.Add("7b6825df-57da-458a-a859-a9459c15907b");
             values.Add("7201ca48-f885-4a87-afa7-61b3e6942697");
-            addDataToTable(new ControllerControllerTypeTable(), values);
+            addDataToTable(new ProvidedControllerControllerTypeTable(), values);
 
             values = new List<string>();
             values.Add("95032348-c661-470f-9bea-47dd750a47a5");
             values.Add("7201ca48-f885-4a87-afa7-61b3e6942697");
-            addDataToTable(new ControllerControllerTypeTable(), values);
+            addDataToTable(new ProvidedControllerControllerTypeTable(), values);
         }
         private static void addToControllerIOModuleTable()
         {
@@ -1573,49 +1573,49 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
             values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
             values.Add("2");
-            addDataToTable(new ControllerIOModuleTable(), values);
+            addDataToTable(new ProvidedControllerIOModuleTable(), values);
 
             values = new List<string>();
             values.Add("1bb86714-2512-4fdd-a80f-46969753d8a0");
             values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
             values.Add("2");
-            addDataToTable(new ControllerIOModuleTable(), values);
+            addDataToTable(new ProvidedControllerIOModuleTable(), values);
 
             values = new List<string>();
             values.Add("f22913a6-e348-4a77-821f-80447621c6e0");
             values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
             values.Add("2");
-            addDataToTable(new ControllerIOModuleTable(), values);
+            addDataToTable(new ProvidedControllerIOModuleTable(), values);
 
             values = new List<string>();
             values.Add("973e6100-31f7-40b0-bfe7-9d64630c1c56");
             values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
             values.Add("2");
-            addDataToTable(new ControllerIOModuleTable(), values);
+            addDataToTable(new ProvidedControllerIOModuleTable(), values);
 
             values = new List<string>();
             values.Add("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
             values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
             values.Add("2");
-            addDataToTable(new ControllerIOModuleTable(), values);
+            addDataToTable(new ProvidedControllerIOModuleTable(), values);
 
             values = new List<string>();
             values.Add("bf17527a-18ba-4765-a01e-8ab8de5664a3");
             values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
             values.Add("2");
-            addDataToTable(new ControllerIOModuleTable(), values);
+            addDataToTable(new ProvidedControllerIOModuleTable(), values);
 
             values = new List<string>();
             values.Add("7b6825df-57da-458a-a859-a9459c15907b");
             values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
             values.Add("2");
-            addDataToTable(new ControllerIOModuleTable(), values);
+            addDataToTable(new ProvidedControllerIOModuleTable(), values);
 
             values = new List<string>();
             values.Add("95032348-c661-470f-9bea-47dd750a47a5");
             values.Add("b346378d-dc72-4dda-b275-bbe03022dd12");
             values.Add("2");
-            addDataToTable(new ControllerIOModuleTable(), values);
+            addDataToTable(new ProvidedControllerIOModuleTable(), values);
         }
         private static void addToProtocolConnectionTypeTable()
         {

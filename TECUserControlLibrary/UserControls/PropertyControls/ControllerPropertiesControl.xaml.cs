@@ -53,7 +53,7 @@ namespace TECUserControlLibrary.UserControls.PropertyControls
         {
             if(value != null)
             {
-                return new ControllerPropertiesItem(value as TECController);
+                return new ProvidedControllerPropertiesItem(value as TECProvidedController);
 
             } else
             {

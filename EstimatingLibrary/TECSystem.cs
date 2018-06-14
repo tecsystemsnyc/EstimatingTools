@@ -54,7 +54,7 @@ namespace EstimatingLibrary
             }
             foreach (TECController controller in source._controllers)
             {
-                var toAdd = new TECController(controller, isTypical, guidDictionary);
+                var toAdd = controller.CopyController(isTypical, guidDictionary);
                 if (characteristicReference != null)
                 {
                     characteristicReference.AddItem(controller, toAdd);

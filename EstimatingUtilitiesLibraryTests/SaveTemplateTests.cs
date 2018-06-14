@@ -923,7 +923,7 @@ namespace Tests
         public void Save_Templates_Add_Controller()
         {
             //Act
-            TECController expectedController = new TECController(Guid.NewGuid(), templates.Catalogs.ControllerTypes[0], false);
+            TECController expectedController = new TECProvidedController(Guid.NewGuid(), templates.Catalogs.ControllerTypes[0], false);
             expectedController.Name = "Test Controller";
             expectedController.Description = "Test description";
 
@@ -1983,7 +1983,7 @@ namespace Tests
 
             expectedScope.Equipment.Add(scopeEquipment);
 
-            var scopeController = new TECController(templates.Catalogs.ControllerTypes[0], false);
+            var scopeController = new TECProvidedController(templates.Catalogs.ControllerTypes[0], false);
             scopeController.Name = "Test Scope Controller";
             expectedScope.AddController(scopeController);
             scopeController.Connect(scopeEquipment.SubScope[0], (scopeEquipment.SubScope[0] as IConnectable).AvailableProtocols.First());

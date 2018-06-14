@@ -9,7 +9,7 @@ namespace EstimatingLibrary.Utilities
 {
     public static class ModelCleanser
     {
-        internal static bool addRequiredIOModules(TECController controller)
+        internal static bool addRequiredIOModules(TECProvidedController controller)
         {
             //The IO needed by the points connected to the controller
             IOCollection necessaryIO = new IOCollection();

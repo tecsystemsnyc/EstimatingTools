@@ -19,7 +19,7 @@ namespace Tests
         static TECDevice expectedDevice;
         static TECManufacturer expectedManufacturer;
         static TECLabeled expectedTag;
-        static TECController expectedController;
+        static TECProvidedController expectedController;
         static TECCost expectedAssociatedCost;
         static TECElectricalMaterial expectedConnectionType;
         static TECElectricalMaterial expectedConduitType;
@@ -33,7 +33,7 @@ namespace Tests
         static TECDevice actualDevice;
         static TECManufacturer actualManufacturer;
         static TECLabeled actualTag;
-        static TECController actualController;
+        static TECProvidedController actualController;
         static TECCost actualAssociatedCost;
         static TECElectricalMaterial actualConnectionType;
         static TECElectricalMaterial actualConduitType;
@@ -62,7 +62,7 @@ namespace Tests
             expectedDevice = expectedTemplates.Catalogs.Devices.First(item => item.Name == "Test Device");
             expectedManufacturer = expectedTemplates.Catalogs.Manufacturers.First(item => item.Label == "Test Manufacturer");
             expectedTag = expectedTemplates.Catalogs.Tags[0];
-            expectedController = expectedTemplates.ControllerTemplates.First(sys => sys.Name == "Test Controller");
+            expectedController = (TECProvidedController)expectedTemplates.ControllerTemplates.First(sys => sys.Name == "Test Controller" && sys is TECProvidedController);
             expectedAssociatedCost = expectedTemplates.Catalogs.AssociatedCosts[0];
             expectedConnectionType = expectedTemplates.Catalogs.ConnectionTypes[0];
             expectedConduitType = expectedTemplates.Catalogs.ConduitTypes[0];
@@ -142,9 +142,9 @@ namespace Tests
                 }
             }
 
-            foreach (TECController controller in actualTemplates.ControllerTemplates)
+            foreach (TECProvidedController controller in actualTemplates.ControllerTemplates)
             {
-                if (controller.Guid == expectedController.Guid)
+                if (controller?.Guid == expectedController.Guid)
                 {
                     actualController = controller;
                     break;

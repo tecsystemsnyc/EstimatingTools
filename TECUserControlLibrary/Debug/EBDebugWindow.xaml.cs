@@ -58,19 +58,19 @@ namespace TECUserControlLibrary.Debug
 
             bid.Catalogs.ControllerTypes.Add(type);
 
-            TECController controller = new TECController(type, false);
+            TECProvidedController controller = new TECProvidedController(type, false);
             controller.Name = "Test Server";
             controller.Description = "For testing.";
             controller.IsServer = true;
 
             bid.AddController(controller);
 
-            TECController child = new TECController(type, false);
+            TECProvidedController child = new TECProvidedController(type, false);
             child.Name = "Child";
 
             bid.AddController(child);
 
-            TECController emptyController = new TECController(type, false);
+            TECProvidedController emptyController = new TECProvidedController(type, false);
             emptyController.Name = "EmptyController";
 
             bid.AddController(emptyController);
@@ -136,11 +136,11 @@ namespace TECUserControlLibrary.Debug
             bid.Catalogs.IOModules[0].IO.Add(io);
             controllerType.Name = "Test Type";
 
-            TECController controller = new TECController(controllerType, true);
+            TECProvidedController controller = new TECProvidedController(controllerType, true);
             controller.IOModules.Add(bid.Catalogs.IOModules[0]);
             controller.Name = "Test Controller";
             typical.AddController(controller);
-            TECController otherController = new TECController(controllerType, true);
+            TECProvidedController otherController = new TECProvidedController(controllerType, true);
             otherController.Name = "Other Controller";
             typical.AddController(otherController);
             IControllerConnection connection = controller.Connect(connected, (connected as IConnectable).AvailableProtocols.First());

@@ -7,13 +7,13 @@ using Tests;
 namespace EstimatingLibraryTests
 {
     [TestClass]
-    public class ControllerTests
+    public class ProvidedControllerTests
     {
         [TestMethod]
         public void Controller_AddSubScope()
         {
             TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
-            TECController controller = new TECController(new TECControllerType(new TECManufacturer()), false);
+            TECController controller = new TECProvidedController(new TECControllerType(new TECManufacturer()), false);
             TECSubScope subScope = new TECSubScope(false);
             TECDevice dev = catalogs.Devices.First();
             subScope.Devices.Add(dev);
@@ -28,7 +28,7 @@ namespace EstimatingLibraryTests
         public void Controller_RemoveSubScope()
         {
             TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
-            TECController controller = new TECController(new TECControllerType(new TECManufacturer()), false);
+            TECController controller = new TECProvidedController(new TECControllerType(new TECManufacturer()), false);
             TECSubScope subScope = new TECSubScope(false);
             TECDevice dev = catalogs.Devices.First();
             subScope.Devices.Add(dev);
@@ -46,8 +46,8 @@ namespace EstimatingLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             type.IO.Add(new TECIO(IOType.AI));
 
-            TECController controller = new TECController(type, false);
-            TECController childController = new TECController(type, false);
+            TECController controller = new TECProvidedController(type, false);
+            TECController childController = new TECProvidedController(type, false);
 
             TECProtocol protocol = new TECProtocol(new List<TECConnectionType> { });
             type.IO.Add(new TECIO(protocol));
@@ -65,8 +65,8 @@ namespace EstimatingLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             type.IO.Add(new TECIO(IOType.AI));
 
-            TECController controller = new TECController(type, false);
-            TECController childController = new TECController(type, false);
+            TECController controller = new TECProvidedController(type, false);
+            TECController childController = new TECProvidedController(type, false);
 
             TECProtocol protocol = new TECProtocol(new List<TECConnectionType> { });
             type.IO.Add(new TECIO(protocol));
@@ -86,8 +86,8 @@ namespace EstimatingLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             type.IO.Add(new TECIO(IOType.AI));
 
-            TECController controller = new TECController(type, false);
-            TECController childController = new TECController(type, false);
+            TECController controller = new TECProvidedController(type, false);
+            TECController childController = new TECProvidedController(type, false);
 
             TECProtocol protocol = new TECProtocol(new List<TECConnectionType> { });
             type.IO.Add(new TECIO(protocol));
@@ -108,9 +108,9 @@ namespace EstimatingLibraryTests
             type.IO.Add(new TECIO(IOType.AI));
             type.IO.Add(new TECIO(IOType.AI));
 
-            TECController controller = new TECController(type, false);
-            TECController childController = new TECController(type, false);
-            TECController childestController = new TECController(type, false);
+            TECController controller = new TECProvidedController(type, false);
+            TECController childController = new TECProvidedController(type, false);
+            TECController childestController = new TECProvidedController(type, false);
 
             TECProtocol protocol = new TECProtocol(new List<TECConnectionType> { });
             type.IO.Add(new TECIO(protocol));
