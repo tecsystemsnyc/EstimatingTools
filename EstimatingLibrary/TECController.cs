@@ -420,16 +420,8 @@ namespace EstimatingLibrary
             }
         }
         #endregion
-        public Object DragDropCopy(TECScopeManager scopeManager)
-        {
-            var outController = new TECController(this, this.IsTypical);
-            ModelLinkingHelper.LinkScopeItem(outController, scopeManager);
-            return outController;
-        }
-        public IConnectable Copy(bool isTypical, Dictionary<Guid, Guid> guidDictionary)
-        {
-            return new TECController(this, isTypical, guidDictionary);
-        }
+        
+        
         public bool CanChangeType(TECControllerType newType)
         {
             if (newType == null) return false;
@@ -546,6 +538,16 @@ namespace EstimatingLibrary
         }
         #endregion
 
+        #region Interfaces
+        #region IDDCopiable
+        Object IDDCopiable.DragDropCopy(TECScopeManager scopeManager)
+        {
+            var outController = new TECController(this, this.IsTypical);
+            ModelLinkingHelper.LinkScopeItem(outController, scopeManager);
+            return outController;
+        }
+        #endregion
+        
         #region IConnectable
         List<IProtocol> IConnectable.AvailableProtocols
         {
@@ -558,13 +560,18 @@ namespace EstimatingLibrary
         {
             get { return new IOCollection(); }
         }
+
+        IConnectable IConnectable.Copy(bool isTypical, Dictionary<Guid, Guid> guidDictionary)
+        {
+            return new TECController(this, isTypical, guidDictionary);
+        }
         IControllerConnection IConnectable.GetParentConnection()
         {
             return this.ParentConnection;
         }
         void IConnectable.SetParentConnection(IControllerConnection connection)
         {
-            if(connection == null)
+            if (connection == null)
             {
                 _parentConnection = null;
                 raisePropertyChanged("ParentConnection");
@@ -584,6 +591,6 @@ namespace EstimatingLibrary
             return (connection is TECNetworkConnection);
         }
         #endregion
-
+        #endregion
     }
 }
