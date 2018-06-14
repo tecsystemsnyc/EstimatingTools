@@ -157,7 +157,6 @@ namespace TECUserControlLibrary.ViewModels
 
         private void populatePotentialReplacements()
         {
-            bool hasNetworkConnection = false;
             foreach (TECSystem sys in templates.SystemTemplates)
             {
                 foreach (TECEquipment equip in sys.Equipment)

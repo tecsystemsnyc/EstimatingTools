@@ -28,6 +28,8 @@
                   dd:DragDrop.IsDragSource="{Binding IsDragSource}"
                   dd:DragDrop.DragAdornerTemplate="{Binding DragAdornerTemplate}"
                   MouseDoubleClick="ListView_MouseDoubleClicked"
+                  Background="{Binding ElementName=interlocksListControl, Path=Background}"
+                  BorderBrush="{Binding ElementName=interlocksListControl, Path=BorderBrush}"
                   AllowDrop="True"
                   Drop="ListView_Dropped"
                   MouseUp="ListView_MouseUp"
