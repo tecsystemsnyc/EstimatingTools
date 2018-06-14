@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
@@ -475,7 +476,7 @@ namespace TECUserControlLibrary.ViewModels
                     var controllerTypes = Templates == null ? Bid.Catalogs.ControllerTypes : Templates.Catalogs.ControllerTypes;
                     SelectedVM = addControllerMethod != null ? new AddControllerVM(addControllerMethod, controllerTypes, scopeManager) :
                         new AddControllerVM(SelectedSystem, controllerTypes, scopeManager);
-                    TECController dropped = (TECController)controller.DragDropCopy(scopeManager);
+                    TECController dropped = (TECController)((IDDCopiable)controller).DragDropCopy(scopeManager);
                     ((AddControllerVM)SelectedVM).SetTemplate(dropped);
                     ((AddControllerVM)SelectedVM).SelectedType = dropped.Type;
                 }
