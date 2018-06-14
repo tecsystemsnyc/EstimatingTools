@@ -285,7 +285,7 @@ namespace EstimatingUtilitiesLibrary.Database
                 id => new TECHardwiredConnection(id, subScopeConnectionChildrenRelationships[id], connectionParents[id],
                 new TECHardwiredProtocol(hardwiredConnectionTypes.ValueOrNew(id)), typicalDictionary.ValueOrDefault(id, false)));
             List<TECNetworkConnection> networkConnections = getObjectsFromTable(new NetworkConnectionTable(), 
-                id => new TECNetworkConnection(id, connectionParents[id], connectionProtocols[id], typicalDictionary.ValueOrDefault(id, false));
+                id => new TECNetworkConnection(id, connectionParents[id], connectionProtocols[id], typicalDictionary.ValueOrDefault(id, false)));
             List<TECInterlockConnection> interlockConnections = getObjectsFromTable(new InterlockConnectionTable(),
                 id => new TECInterlockConnection(id, interlockConnectionTypes.ValueOrNew(id), typicalDictionary.ValueOrDefault(id, false)));
             List<IControllerConnection> allConnections = new List<IControllerConnection>(subScopeConnections);
