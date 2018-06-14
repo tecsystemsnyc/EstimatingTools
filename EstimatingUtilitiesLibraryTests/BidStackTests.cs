@@ -893,7 +893,7 @@ namespace Tests
                     break;
                 }
             }
-            TECControllerType expected = null;
+            TECControllerType expected = provided.Type;
             TECControllerType edit = Bid.Catalogs.ControllerTypes[0];
 
             //Act
