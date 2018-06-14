@@ -55,8 +55,7 @@ namespace TECUserControlLibrary.ViewModels
                 return rootInterlockablesGroup.ChildrenGroups;
             }
         }
-
-
+        
         public RelayCommand AddInterlockCommand { get; private set; }
         public RelayCommand<TECInterlockConnection> DeleteInterlockCommand { get; private set; }
 
@@ -113,7 +112,6 @@ namespace TECUserControlLibrary.ViewModels
         public CatalogDropTarget CatalogDropHandler { get; } = new CatalogDropTarget();
 
         public event Action<TECObject> Selected;
-
         
         public InterlocksVM(IRelatable root, ChangeWatcher watcher, 
             TECCatalogs catalogs, Func<ITECObject, bool> filterPredicate = null)
@@ -156,9 +154,8 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addInterlockExecute()
         {
-            var protocol = new TECHardwiredProtocol(ConnectionTypes);
             var typical = SelectedInterlockable as ITypicalable;
-            TECInterlockConnection connection = new TECInterlockConnection(protocol, typical?.IsTypical ?? false);
+            TECInterlockConnection connection = new TECInterlockConnection(ConnectionTypes, typical?.IsTypical ?? false);
             connection.Name = Name;
             connection.Length = Length;
             if(ConduitType != noneConduit) { connection.ConduitType = ConduitType; }
@@ -166,7 +163,6 @@ namespace TECUserControlLibrary.ViewModels
             connection.IsPlenum = IsPlenum;
 
             SelectedInterlockable.Interlocks.Add(connection);
-
         }
         private bool canAddInterlock()
         {
@@ -288,7 +284,6 @@ namespace TECUserControlLibrary.ViewModels
             }
             return false;
         }
-
-
+        
     }
 }
