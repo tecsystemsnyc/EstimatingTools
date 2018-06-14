@@ -271,6 +271,7 @@ namespace EstimatingUtilitiesLibrary.Database
             List<TECScopeBranch> scopeBranches = getObjectsFromTable(new ScopeBranchTable(), id => new TECScopeBranch(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
             List<TECController> controllers = getObjectsFromTable(new ControllerTable(), row => getControllerFromRow(row, typicalDictionary, controllerTypes));
             List<TECPanel> panels = getObjectsFromTable(new PanelTable(), row => getPanelFromRow(row, typicalDictionary, panelTypes));
+            List<TECInterlockConnection> interlocks = getObjectFromTable(new InterlockConnectionTable(), row => new TECInterlockConnection())
 
             List<IConnectable> connectables = new List<IConnectable>(controllers);
             connectables.AddRange(subScope);

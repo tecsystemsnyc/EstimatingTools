@@ -2,6 +2,7 @@
 using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,13 +13,16 @@ namespace EstimatingLibrary
     {
         private readonly ConnectionWrapper connection;
         
-        public TECInterlockConnection(Guid guid, IProtocol protocol, bool isTypical) : base(guid)
+        public List<TECConnectionType> ConnectionTypes { get; }
+        
+        public TECInterlockConnection(Guid guid, IEnumerable<TECConnectionType> connectionTypes, bool isTypical) : base(guid)
         {
-            this.connection = new ConnectionWrapper(guid, protocol, isTypical);
+            this.connection = new ConnectionWrapper(guid, new TECHardwiredProtocol(connectionTypes), isTypical);
+            this.ConnectionTypes = new List<TECConnectionType>(connectionTypes);
             subscribeToConnection();
         }
 
-        public TECInterlockConnection(IProtocol protocol, bool isTypical) : this(Guid.NewGuid(), protocol, isTypical)
+        public TECInterlockConnection(IEnumerable<TECConnectionType> connectionTypes, bool isTypical) : this(Guid.NewGuid(), connectionTypes, isTypical)
         { }
         public TECInterlockConnection(TECInterlockConnection source, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : base(source.Guid)
         {

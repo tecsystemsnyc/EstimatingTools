@@ -826,6 +826,45 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+    internal class InterlockConnectionTable : TableBase
+    {
+        public static string TableName = "InterlockConnection";
+        public static Type ObjectType = typeof(TECInterlockConnection);
+
+        public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
+        public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
+        public static TableField Length = new TableField("Length", "REAL", ObjectType.GetProperty("Length"));
+        public static TableField ConduitLength = new TableField("ConduitLength", "REAL", ObjectType.GetProperty("ConduitLength"));
+        public static TableField IsPlenum = new TableField("IsPlenum", "INTEGER", ObjectType.GetProperty("IsPlenum"), defaultValue: "0");
+
+        private List<TableField> primaryKeys = new List<TableField>() {
+            ID
+            };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ID,
+            Name,
+            Description,
+            Length,
+            ConduitLength,
+            IsPlenum
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Interlocks"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
     internal class ControllerTable : TableBase
     {
         public static string TableName = "Controller";
@@ -2198,6 +2237,40 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+    internal class InterlockableInterlockTable : TableBase
+    {
+        public static string TableName = "InterlockableInterlock";
+        public static Type ParentType = typeof(IInterlockable);
+        public static Type ChildType = typeof(TECInterlockConnection);
+
+        public static TableField ParentID = new TableField("ParentID", "TEXT", ParentType.GetProperty("Guid"));
+        public static TableField ChildID = new TableField("ChildID", "TEXT", ChildType.GetProperty("Guid"));
+
+        private List<TableField> primaryKeys = new List<TableField>() {
+            ParentID,
+            ChildID
+            };
+        private List<Type> types = new List<Type>()
+        {
+            ParentType,
+            ChildType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ParentID,
+            ChildID
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Interlocks"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
     internal class PanelPanelTypeTable : TableBase
     {
         public static string TableName = "PanelPanelType";
@@ -3071,6 +3144,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new ScheduleTableTable(),
             new ScheduleItemTable(),
             new ProtocolTable(),
+            new InterlockConnectionTable(),
 
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -3116,7 +3190,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new NetworkConnectionProtocolTable(),
             new ProtocolConnectionTypeTable(),
             new IOProtocolTable(),
-            new HardwiredConnectionConnectionTypeTable()
+            new HardwiredConnectionConnectionTypeTable(),
+            new InterlockableInterlockTable()
             };
     }
 
@@ -3145,6 +3220,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new ControllerTypeTable(),
             new ValveTable(),
             new ProtocolTable(),
+            new InterlockConnectionTable(),
 
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -3188,7 +3264,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new NetworkConnectionProtocolTable(),
             new ProtocolConnectionTypeTable(),
             new IOProtocolTable(),
-            new HardwiredConnectionConnectionTypeTable()
+            new HardwiredConnectionConnectionTypeTable(),
+            new InterlockableInterlockTable()
         };
     }
 
