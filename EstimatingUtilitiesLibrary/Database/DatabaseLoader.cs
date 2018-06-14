@@ -235,6 +235,7 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<Guid, List<Guid>> scopeBranchHierarchy = getOneToManyRelationships(new ScopeBranchHierarchyTable());
             Dictionary<Guid, List<Guid>> networkChildren = getOneToManyRelationships(new NetworkConnectionChildrenTable());
             Dictionary<Guid, Guid> subScopeConnectionChildren = getOneToOneRelationships(new SubScopeConnectionChildrenTable());
+            Dictionary<Guid, List<Guid>> subScopeInterlocks = getOneToManyRelationships(new InterlockableInterlockTable());
 
             Dictionary<Guid, TECControllerType> controllerTypes = getOneToOneRelationships(new ProvidedControllerControllerTypeTable(), catalogs.ControllerTypes);
             Dictionary<Guid, TECPanelType> panelTypes = getOneToOneRelationships(new PanelPanelTypeTable(), catalogs.PanelTypes);
@@ -245,6 +246,8 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes = getOneToOneRelationships(new ConnectionConduitTypeTable(), catalogs.ConduitTypes);
             Dictionary<Guid, TECProtocol> connectionProtocols = getOneToOneRelationships(new NetworkConnectionProtocolTable(), catalogs.Protocols);
             Dictionary<Guid, List<TECConnectionType>> hardwiredConnectionTypes = getOneToManyRelationships(new HardwiredConnectionConnectionTypeTable(), catalogs.ConnectionTypes);
+            Dictionary<Guid, List<TECConnectionType>> interlockConnectionTypes = getOneToManyRelationships(new InterlockConnectionConnectionTypeTable(), catalogs.ConnectionTypes);
+
 
             DataTable allSystemData = SQLiteDB.GetDataFromTable(SystemTable.TableName);
             var typicalRows = from row in allSystemData.AsEnumerable() where typicalIDs.Contains(new Guid(row[SystemTable.ID.Name].ToString())) select row;
@@ -287,9 +290,11 @@ namespace EstimatingUtilitiesLibrary.Database
 
             List<TECHardwiredConnection> subScopeConnections = getObjectsFromTable(new SubScopeConnectionTable(), 
                 id => new TECHardwiredConnection(id, subScopeConnectionChildrenRelationships[id], connectionParents[id],
-                new TECHardwiredProtocol(hardwiredConnectionTypes[id]), typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
+                new TECHardwiredProtocol(hardwiredConnectionTypes.ValueOrNew(id)), typicalDictionary.ValueOrDefault(id, false)));
             List<TECNetworkConnection> networkConnections = getObjectsFromTable(new NetworkConnectionTable(), 
-                id => new TECNetworkConnection(id, connectionParents[id], connectionProtocols[id], typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
+                id => new TECNetworkConnection(id, connectionParents[id], connectionProtocols[id], typicalDictionary.ValueOrDefault(id, false)));
+            List<TECInterlockConnection> interlockConnections = getObjectsFromTable(new InterlockConnectionTable(),
+                id => new TECInterlockConnection(id, interlockConnectionTypes.ValueOrNew(id), typicalDictionary.ValueOrDefault(id, false)));
             List<IControllerConnection> allConnections = new List<IControllerConnection>(subScopeConnections);
             allConnections.AddRange(networkConnections);
             List<TECSystem> systems = getObjectsFromData(new SystemTable(), systemData, id => new TECSystem(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
@@ -320,6 +325,7 @@ namespace EstimatingUtilitiesLibrary.Database
             foreach (TECSubScope item in subScope.Where(x => subScopePoints.ContainsKey(x.Guid)))
             {
                 item.Points = getRelatedReferences(subScopePoints[item.Guid], points).ToOC();
+                item.Interlocks = getRelatedReferences(subScopeInterlocks[item.Guid], interlockConnections).ToOC();
             }
             foreach(TECEquipment item in equipment.Where(x => equipmentSubScope.ContainsKey(x.Guid)))
             {
