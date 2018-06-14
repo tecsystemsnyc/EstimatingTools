@@ -2,6 +2,7 @@
 using EstimatingLibrary.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace EstimatingUtilitiesLibrary.Database
@@ -865,10 +866,44 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
-    internal class ControllerTable : TableBase
+    internal class ProvidedControllerTable : TableBase
     {
-        public static string TableName = "Controller";
-        public static Type ObjectType = typeof(TECController);
+        public static string TableName = "ProvidedController";
+        public static Type ObjectType = typeof(TECProvidedController);
+
+        public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
+        public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
+
+        private List<TableField> primaryKeys = new List<TableField>() {
+            ID
+            };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ID,
+            Name,
+            Description
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Controllers",
+            "ControllerTemplates"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class FBOControllerTable : TableBase
+    {
+        public static string TableName = "FBOController";
+        public static Type ObjectType = typeof(TECFBOController);
 
         public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
@@ -1491,6 +1526,41 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+    internal class FBOControllerIOTable : TableBase
+    {
+        public static string TableName = "FBOControllerIOTable";
+        public static Type ObjectType = typeof(TECFBOController);
+        public static Type ReferenceType = typeof(TECIO);
+
+        public static TableField ControllerID = new TableField("ControllerID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField IOID = new TableField("IOID", "TEXT", ReferenceType.GetProperty("Guid"));
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ControllerID,
+            IOID,
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ControllerID,
+            IOID
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "IO"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
     internal class ControllerTypeIOModuleTable : TableBase
     {
         public static string TableName = "ControllerTypeIOModule";
@@ -1528,10 +1598,10 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
-    internal class ControllerIOModuleTable : TableBase
+    internal class ProvidedControllerIOModuleTable : TableBase
     {
-        public static string TableName = "ControllerIOModule";
-        public static Type ObjectType = typeof(TECController);
+        public static string TableName = "ProvidedControllerIOModule";
+        public static Type ObjectType = typeof(TECProvidedController);
         public static Type ReferenceType = typeof(TECIOModule);
         public static Type HelperType = typeof(HelperProperties);
         
@@ -2095,10 +2165,10 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
-    internal class ControllerControllerTypeTable : TableBase
+    internal class ProvidedControllerControllerTypeTable : TableBase
     {
-        public static string TableName = "ControllerControllerType";
-        public static Type ControllerType = typeof(TECController);
+        public static string TableName = "ProvidedControllerControllerType";
+        public static Type ControllerType = typeof(TECProvidedController);
         public static Type TypeType = typeof(TECControllerType);
 
         public static TableField ControllerID = new TableField("ControllerID", "TEXT", ControllerType.GetProperty("Guid"));
@@ -3123,6 +3193,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new NoteTable(),
             new ExclusionTable(),
             new ScopeBranchTable(),
+            new FBOControllerTable(),
+            new ProvidedControllerTable(),
             new SystemTable(),
             new EquipmentTable(),
             new SubScopeTable(),
@@ -3157,19 +3229,19 @@ namespace EstimatingUtilitiesLibrary.Database
             new ScopeTagTable(),
             new HardwareManufacturerTable(),
             new LocatedLocationTable(),
-            new ControllerTable(),
             new AssociatedCostTable(),
             new ElectricalMaterialRatedCostTable(),
             new ControllerConnectionTable(),
             new ControllerTypeIOTable(),
             new IOModuleIOTable(),
-            new ControllerIOModuleTable(),
+            new ProvidedControllerIOModuleTable(),
+            new FBOControllerIOTable(),
             new ControllerTypeIOModuleTable(),
             new BidScopeBranchTable(),
             new DeviceConnectionTypeTable(),
             new DeviceProtocolTable(),
             new ScopeAssociatedCostTable(),
-            new ControllerControllerTypeTable(),
+            new ProvidedControllerControllerTypeTable(),
             new ConnectionConduitTypeTable(),
             new SystemControllerTable(),
             new SystemPanelTable(),
@@ -3231,17 +3303,19 @@ namespace EstimatingUtilitiesLibrary.Database
             new SubScopeDeviceTable(),
             new SubScopePointTable(),
             new ScopeTagTable(),
-            new ControllerTable(),
+            new ProvidedControllerTable(),
+            new FBOControllerTable(),
             new ControllerTypeIOTable(),
             new IOModuleIOTable(),
-            new ControllerIOModuleTable(),
+            new FBOControllerIOTable(),
+            new ProvidedControllerIOModuleTable(),
             new ControllerTypeIOModuleTable(),
             new HardwareManufacturerTable(),
             new DeviceConnectionTypeTable(),
             new DeviceProtocolTable(),
             new ScopeAssociatedCostTable(),
             new ElectricalMaterialRatedCostTable(),
-            new ControllerControllerTypeTable(),
+            new ProvidedControllerControllerTypeTable(),
             new ConnectionConduitTypeTable(),
             new PanelPanelTypeTable(),
             new SystemControllerTable(),
@@ -3271,91 +3345,14 @@ namespace EstimatingUtilitiesLibrary.Database
 
     internal static class AllTables
     {
-        public static List<TableBase> Tables = new List<TableBase>()
+        public static List<TableBase> Tables = getTables();
+        private static List<TableBase> getTables()
         {
-            new MetadataTable(),
-            new BidInfoTable(),
-            new TemplatesInfoTable(),
-            new ParametersTable(),
-            new ExtraLaborTable(),
-            new NoteTable(),
-            new ExclusionTable(),
-            new BidScopeBranchTable(),
-            new ScopeBranchTable(),
-            new SystemTable(),
-            new EquipmentTable(),
-            new SubScopeTable(),
-            new DeviceTable(),
-            new PointTable(),
-            new TagTable(),
-            new ManufacturerTable(),
-            new LocationTable(),
-            new MiscTable(),
-            new PanelTypeTable(),
-            new PanelTable(),
-            new SubScopeConnectionTable(),
-            new NetworkConnectionTable(),
-            new IOModuleTable(),
-            new IOTable(),
-            new ControllerTypeTable(),
-            new ValveTable(),
-            new ScheduleTable(),
-            new ScheduleTableTable(),
-            new ScheduleItemTable(),
-            new ProtocolTable(),
-
-            new ConnectionTypeTable(),
-            new ConduitTypeTable(),
-            new AssociatedCostTable(),
-            new ControllerTable(),
-            new ControllerTypeIOTable(),
-            new IOModuleIOTable(),
-            new ControllerIOModuleTable(),
-            new ControllerTypeIOModuleTable(),
-            new ControllerConnectionTable(),
-            new ScopeBranchHierarchyTable(),
-            new BidSystemTable(),
-            new SystemEquipmentTable(),
-            new EquipmentSubScopeTable(),
-            new SubScopeDeviceTable(),
-            new SubScopePointTable(),
-            new ScopeTagTable(),
-            new HardwareManufacturerTable(),
-            new DeviceConnectionTypeTable(),
-            new DeviceProtocolTable(),
-            new LocatedLocationTable(),
-            new ScopeAssociatedCostTable(),
-            new ElectricalMaterialRatedCostTable(),
-            new ControllerControllerTypeTable(),
-            new ConnectionConduitTypeTable(),
-            new PanelPanelTypeTable(),
-            new PanelControllerTable(),
-            new SystemControllerTable(),
-            new SystemPanelTable(),
-            new SystemHierarchyTable(),
-            new SystemScopeBranchTable(),
-            new SystemMiscTable(),
-            new TypicalInstanceTable(),
-            new SubScopeConnectionChildrenTable(),
-            new NetworkConnectionChildrenTable(),
-            new BidMiscTable(),
-            new ValveActuatorTable(),
-            new TemplatesSystemTable(),
-            new TemplatesEquipmentTable(),
-            new TemplatesSubScopeTable(),
-            new TemplatesControllerTable(),
-            new TemplatesMiscCostTable(),
-            new TemplatesPanelTable(),
-            new TemplateReferenceTable(),
-            new ScheduleScheduleTableTable(),
-            new ScheduleTableScheduleItemTable(),
-            new ScheduleItemScopeTable(),
-            new BidLocationTable(),
-            new NetworkConnectionProtocolTable(),
-            new ProtocolConnectionTypeTable(),
-            new IOProtocolTable(),
-            new HardwiredConnectionConnectionTypeTable()
-        };
+            List<TableBase> tables = new List<TableBase>();
+            tables.AddRange(AllBidTables.Tables);
+            tables.AddRange(AllTemplateTables.Tables);
+            return tables.Distinct().ToList();
+        }
     }
 
     internal abstract class TableBase
