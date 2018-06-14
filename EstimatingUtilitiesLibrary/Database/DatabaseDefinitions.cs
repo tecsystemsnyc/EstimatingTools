@@ -3302,7 +3302,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new ProtocolConnectionTypeTable(),
             new IOProtocolTable(),
             new HardwiredConnectionConnectionTypeTable(),
-            new InterlockableInterlockTable()
+            new InterlockableInterlockTable(),
+            new InterlockConnectionConnectionTypeTable()
             };
     }
 
@@ -3378,7 +3379,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new ProtocolConnectionTypeTable(),
             new IOProtocolTable(),
             new HardwiredConnectionConnectionTypeTable(),
-            new InterlockableInterlockTable()
+            new InterlockableInterlockTable(),
+            new InterlockConnectionConnectionTypeTable()
         };
     }
 

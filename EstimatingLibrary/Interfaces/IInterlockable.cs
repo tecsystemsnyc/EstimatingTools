@@ -10,6 +10,7 @@ namespace EstimatingLibrary.Interfaces
 {
     public interface IInterlockable : ITECObject
     {
+        Guid Guid { get; }
         ObservableCollection<TECInterlockConnection> Interlocks { get; }
     }
 }
