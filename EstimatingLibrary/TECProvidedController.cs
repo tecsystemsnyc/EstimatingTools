@@ -61,6 +61,7 @@ namespace EstimatingLibrary
         public TECProvidedController(TECControllerType type, bool isTypical) : this(Guid.NewGuid(), type, isTypical) { }
         public TECProvidedController(TECProvidedController controllerSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : base(controllerSource, isTypical, guidDictionary)
         {
+            this.Type = controllerSource.Type;
             foreach (TECIOModule module in controllerSource.IOModules)
             {
                 this.IOModules.Add(module);
