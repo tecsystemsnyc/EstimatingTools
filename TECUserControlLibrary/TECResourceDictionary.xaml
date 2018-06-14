@@ -209,5 +209,10 @@
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Top" />
     </Style>
+    <Style x:Key="ItemsAreaBorder" TargetType="{x:Type Border}">
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="BorderBrush" Value="{StaticResource ItemBorderBrush}"/>
+    </Style>
 
 </ResourceDictionary>

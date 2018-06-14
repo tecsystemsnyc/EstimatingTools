@@ -175,19 +175,23 @@ namespace TECUserControlLibrary.ViewModels
         public NetworkConnectionDropTarget ConnectionDropHandler { get; }
         TECNetworkConnection NetworkConnectionDropTargetDelegate.SelectedConnection => SelectedConnection as TECNetworkConnection;
         
+        public InterlocksVM InterlocksVM { get; }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="root"></param>
         /// <param name="watcher"></param>
         /// <param name="includeFilter">Predicate for "where" clause of direct children of root.</param>
-        public ConnectionsVM(IRelatable root, ChangeWatcher watcher, TECCatalogs catalogs, IEnumerable<TECLocation> locations = null, Func<ITECObject, bool> filterPredicate = null)
+        public ConnectionsVM(IRelatable root, ChangeWatcher watcher, TECCatalogs catalogs, IEnumerable<TECLocation> locations = null, 
+            Func<ITECObject, bool> filterPredicate = null)
         {
             if (filterPredicate == null)
             {
                 filterPredicate = item => true;
             }
             this.filterPredicate = filterPredicate;
+            this.InterlocksVM = new InterlocksVM(root, watcher, catalogs, filterPredicate);
 
             this.root = root;
             this.Catalogs = catalogs;

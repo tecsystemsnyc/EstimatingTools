@@ -366,8 +366,7 @@
                 <Grid Grid.Row="2" Grid.Column="2"
                       Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedEquipment, Converter={utilities:NullToCollapsedConverter}}">
                     <Button Content="Add" x:Name="addSubScope" 
-                            Style="{StaticResource AddButtonStyle}" 
-                        
+                            Style="{StaticResource AddButtonStyle}"
                             Command="{Binding ViewModel.AddSubScopeCommand}"
                             CommandParameter="{Binding ViewModel.SelectedEquipment}"/>
                 </Grid>

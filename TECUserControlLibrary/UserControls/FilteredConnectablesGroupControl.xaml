@@ -19,19 +19,6 @@
                 <Grid Visibility="{Binding PassesFilter, Converter={utilities:BooleanToVisibilityConverter}}">
                     <Expander Visibility="{Binding ChildrenGroups.Count, Converter={utilities:CountVisibilityConverter}}"
                               x:Name="groupExpander">
-                        <!--<Expander.Header>
-                            <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="0,0,0,1">
-                                <TextBlock>
-                                    <TextBlock.Text>
-                                        <MultiBinding StringFormat="{}{0} ({1})">
-                                            <Binding Path="Name"/>
-                                            <Binding Path="Type"/>
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </Border>
-                        </Expander.Header>-->
-                        
                         <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="1,0,0,0" Margin="10,0,0,0">
                             <local:FilteredConnectablesGroupControl ItemsSource="{Binding ChildrenGroups}"
                                                      SelectedItem="{Binding ElementName=filteredConnectableGroupControl, Path=SelectedItem}"
