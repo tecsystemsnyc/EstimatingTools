@@ -2785,6 +2785,45 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+    internal class InterlockConnectionConnectionTypeTable : TableBase
+    {
+        public static string TableName = "InterlockConnectionConnectionType";
+        public static Type ConnectionType = typeof(TECInterlockConnection);
+        public static Type ReferenceType = typeof(TECConnectionType);
+
+        public static Type HelperType = typeof(HelperProperties);
+
+        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ConnectionType.GetProperty("Guid"));
+        public static TableField TypeID = new TableField("ConnectionTypeID", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField Quantity = new TableField("Quantity", "INTEGER", HelperType.GetProperty("Quantity"), "ConnectionTypes");
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ConnectionID,
+            TypeID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ConnectionType,
+            ReferenceType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ConnectionID,
+            TypeID,
+            Quantity
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "ConnectionTypes"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
 
     internal class TypicalInstanceTable : TableBase
     {
