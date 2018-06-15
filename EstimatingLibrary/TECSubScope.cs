@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace EstimatingLibrary
 {
-    public class TECSubScope : TECLocated, INotifyPointChanged, IDDCopiable, ITypicalable, IConnectable, IInterlockable
+    public class TECSubScope : TECLocated, INotifyPointChanged, IDDCopiable, INewTypicalable, IConnectable, IInterlockable
     {
         #region Properties
         private ObservableCollection<IEndDevice> _devices = new ObservableCollection<IEndDevice>();
@@ -336,6 +336,9 @@ namespace EstimatingLibrary
                 return this.Points.ToIOCollection();
             }
         }
+
+        bool ITypicalable.IsTypical => throw new NotImplementedException();
+
         bool IConnectable.CanSetParentConnection(IControllerConnection connection)
         {
             return ((IConnectable)this).AvailableProtocols.Contains(connection.Protocol);            
@@ -350,6 +353,61 @@ namespace EstimatingLibrary
             return this.Connection;
         }
 
+        #endregion
+
+        #region ITypicalable
+
+        ITECObject INewTypicalable.CreateInstance(ObservableListDictionary<ITECObject> typicalDictionary)
+        {
+            if (!this.IsTypical)
+            {
+                throw new Exception("Attempted to create an instance of an object which is already instanced.");
+            } 
+            else
+            {
+                return new TECSubScope(this, false, characteristicReference: typicalDictionary);
+            }
+        }
+
+        void INewTypicalable.AddChildForProperty(string property, ITECObject item)
+        {
+            if(property == "Points" && item is TECPoint point)
+            {
+                Points.Add(point);
+            }
+            else if (property == "Devices" && item is IEndDevice device)
+            {
+                Devices.Add(device);
+            }
+            else if (property == "Interlocks" && item is TECInterlockConnection interlock)
+            {
+                Interlocks.Add(interlock);
+            }
+            else
+            {
+                throw new Exception(String.Format("There is no compatible add method for the property {0} with an object of type {1}", property, item.GetType().ToString()));
+            }
+        }
+
+        bool INewTypicalable.RemoveChildForProperty(string property, ITECObject item)
+        {
+            if (property == "Points" && item is TECPoint point)
+            {
+                return Points.Remove(point);
+            }
+            else if (property == "Devices" && item is IEndDevice device)
+            {
+                return Devices.Remove(device);
+            }
+            else if (property == "Interlocks" && item is TECInterlockConnection interlock)
+            {
+                return Interlocks.Remove(interlock);
+            }
+            else
+            {
+                throw new Exception(String.Format("There is no compatible remove method for the property {0} with an object of type {1}", property, item.GetType().ToString()));
+            }
+        }
         #endregion
     }
 }
