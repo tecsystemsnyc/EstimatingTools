@@ -29,7 +29,7 @@ namespace EstimatingLibrary
             this.connection = new ConnectionWrapper(source.connection, isTypical, guidDictionary);
             subscribeToConnection();
         }
-
+        
         private void subscribeToConnection()
         {
             this.connection.CostChanged += notifyCostChanged;

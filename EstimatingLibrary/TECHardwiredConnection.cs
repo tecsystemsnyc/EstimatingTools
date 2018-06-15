@@ -60,6 +60,14 @@ namespace EstimatingLibrary
         #endregion Constructors
 
         #region Methods
+        public void UpdatePropertiesBasedOn(TECInterlockConnection basis)
+        {
+            this.Length = basis.Length;
+            this.ConduitLength = basis.ConduitLength;
+            this.ConduitType = basis.ConduitType;
+            this.IsPlenum = basis.IsPlenum;
+        }
+
         protected override SaveableMap propertyObjects()
         {
             SaveableMap saveList = new SaveableMap();

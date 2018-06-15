@@ -10,4 +10,15 @@ namespace EstimatingLibrary.Interfaces
         double Length { get; set; }
         IProtocol Protocol { get; }
     }
-}
+
+    public static class IConnectionExtensions
+    {
+        public static void UpdatePropertiesBasedOn(this IConnection toUpdate, IConnection basis)
+        {
+            toUpdate.Length = basis.Length;
+            toUpdate.ConduitLength = basis.ConduitLength;
+            toUpdate.ConduitType = basis.ConduitType;
+            toUpdate.IsPlenum = basis.IsPlenum;
+        }
+    }
+} 

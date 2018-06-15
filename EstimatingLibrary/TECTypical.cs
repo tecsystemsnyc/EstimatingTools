@@ -237,15 +237,15 @@ namespace EstimatingLibrary
                                 }
                             }
                         }
-                        foreach(IControllerConnection instanceConnection in instanceConnections)
-                        {
-                            instanceConnection.Length = connection.Length;
-                            instanceConnection.ConduitType = connection.ConduitType;
-                            instanceConnection.ConduitLength = connection.ConduitLength;
-                            instanceConnection.IsPlenum = connection.IsPlenum;
-                        }
-                        
+                        instanceConnections.ForEach(x => x.UpdatePropertiesBasedOn(connection));
                     }
+                }
+            }
+            foreach(TECInterlockConnection interlock in this.GetAllSubScope().SelectMany(x => x.Interlocks))
+            {
+                foreach(var instanceInterlock in TypicalInstanceDictionary.GetInstances(interlock))
+                {
+                    instanceInterlock.UpdatePropertiesBasedOn(interlock);
                 }
             }
         }
