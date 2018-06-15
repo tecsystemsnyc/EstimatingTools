@@ -280,6 +280,7 @@
     <Compile Include="ViewModels\BugReportVM.cs" />
     <Compile Include="ViewModels\DeleteEndDeviceVM.cs" />
     <Compile Include="ViewModels\EquipmentHierarchyVM.cs" />
+    <Compile Include="ViewModels\InternalNotesVM.cs" />
     <Compile Include="ViewModels\InterlocksVM.cs" />
     <Compile Include="ViewModels\ReplaceActuatorVM.cs" />
     <Compile Include="ViewModels\RiserVM.cs" />
@@ -446,6 +447,9 @@
     <Compile Include="Utilities\BindingProxy.cs" />
     <Compile Include="Utilities\BubbleScrollEvent .cs" />
     <Compile Include="ViewModels\MiscCostsVM.cs" />
+    <Compile Include="Views\InternalNotesView.xaml.cs">
+      <DependentUpon>InternalNotesView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\InterlocksView.xaml.cs">
       <DependentUpon>InterlocksView.xaml</DependentUpon>
     </Compile>
@@ -958,6 +962,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\InterlocksView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\InternalNotesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

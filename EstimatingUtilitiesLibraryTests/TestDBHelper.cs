@@ -42,6 +42,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToIOModuleTable();
             addToIOTable();
             addToControllerTypeTable();
+            addToInternalNoteTable();
             addToProtocolTable();
 
             addToBidScopeBranchTable();
@@ -76,6 +77,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToControllerControllerTypeTable();
             addToControllerIOModuleTable();
             addToBidLocationTable();
+            addToBidInternalNoteTable();
             addToProtocolConnectionTypeTable();
             addToIOProtocolTable();
             addToConnectionProtocolTable();
@@ -673,8 +675,16 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("DDC");
             addDataToTable(new ControllerTypeTable(), values);
         }
+        private static void addToInternalNoteTable()
+        {
+            List<string> values = new List<string>();
+            values.Add("f591aa84-6c1e-460c-86af-cf0f01ced6e9");
+            values.Add("Internal Note");
+            values.Add("Note Body");
+            addDataToTable(new InternalNoteTable(), values);
+        }
         #endregion
-
+        
         #region Relationship Tables
         private static void addToBidScopeBranchTable()
         {
@@ -1655,6 +1665,14 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("0");
             addDataToTable(new BidLocationTable(), values);
         }
+        private static void addToBidInternalNoteTable()
+        {
+            List<string> values = new List<string>();
+            values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
+            values.Add("f591aa84-6c1e-460c-86af-cf0f01ced6e9");
+            values.Add("0");
+            addDataToTable(new BidInternalNoteTable(), values);
+        }
         private static void addToHardwiredConnectionConnectionTypeTable()
         {
 
@@ -1673,7 +1691,6 @@ namespace EstimatingUtilitiesLibraryTests
                 values.Add("3");
                 addDataToTable(new HardwiredConnectionConnectionTypeTable(), values);
             }
-            
         }
 
         private static void addToTemplatesSystemTable()

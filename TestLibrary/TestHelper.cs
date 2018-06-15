@@ -26,6 +26,12 @@ namespace Tests
             bid.Parameters = CreateTestParameters(bid.Guid);
             bid.Catalogs = CreateTestCatalogs();
 
+            //Internal Notes
+            TECInternalNote internalNote = new TECInternalNote();
+            internalNote.Label = "Test internal";
+            internalNote.Body = "Test body";
+            bid.InternalNotes.Add(internalNote);
+
             //Locations
             var cellar = new TECLocation();
             cellar.Name = "Cellar";
