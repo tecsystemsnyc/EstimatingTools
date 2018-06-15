@@ -5,10 +5,10 @@ using EstimatingLibrary.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tests;
 
-namespace EstimatingLibraryTests
+namespace Models
 {
     [TestClass]
-    public class BidTests
+    public class TECBidTests
     {
         [TestMethod]
         public void RemoveInstanceWithGlobalConnectionToSubScope()

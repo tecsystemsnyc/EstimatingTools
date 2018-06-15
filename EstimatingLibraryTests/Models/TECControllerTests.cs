@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Tests;
 
-namespace EstimatingLibraryTests
+namespace Models
 {
     [TestClass]
-    public class ProvidedControllerTests
+    public class TECControllerTests
     {
         [TestMethod]
         public void Controller_AddSubScope()

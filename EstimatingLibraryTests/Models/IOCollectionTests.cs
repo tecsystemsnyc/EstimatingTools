@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EstimatingLibrary;
 using System.Linq;
 
-namespace EstimatingLibraryTests
+namespace Models
 {
     /// <summary>
     /// Summary description for IOCollectionTests

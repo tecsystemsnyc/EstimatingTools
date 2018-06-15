@@ -7,10 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EstimatingLibraryTests
+namespace Utilities
 {
     [TestClass]
-    public class TemplatesSynchronizerTests
+    public class TemplateSynchronizerTests
     {
         #region Base Class Tests
         private TECSubScope copySubScope(TECSubScope template)

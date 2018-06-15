@@ -7,11 +7,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Tests;
 using System.ComponentModel;
+using EstimatingLibrary;
 
-namespace EstimatingLibrary.Interfaces.Tests
+namespace Interfaces
 {
     [TestClass()]
-    public class RelatableExtensionsTests
+    public class IRelatableTests
     {
         [TestMethod()]
         public void GetAllTest()

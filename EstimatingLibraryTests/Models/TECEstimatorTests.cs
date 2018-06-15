@@ -6,43 +6,18 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Tests;
 
-namespace Tests
+namespace Models
 {
     /// <summary>
     /// Summary description for EstimatorTests
     /// </summary>
     [TestClass]
-    public class EstimatorTests
+    public class TECEstimatorTests
     {
-        public EstimatorTests()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
-
-        private TestContext testContextInstance;
-
         private TECParameters parameters;
 
-        /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
-
-        #region Additional test attributes
         [TestInitialize()]
         public void MyTestInitialize()
         {
@@ -65,12 +40,6 @@ namespace Tests
 
             parameters.DesiredConfidence = Confidence.Fifty;
         }
-
-        // Use TestCleanup to run code after each test has run
-        // [TestCleanup()]
-        // public void MyTestCleanup() { }
-        //
-        #endregion
             
         [TestMethod]
         public void Estimate_Refresh()

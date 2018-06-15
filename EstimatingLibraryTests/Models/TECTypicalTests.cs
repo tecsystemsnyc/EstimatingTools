@@ -2,26 +2,13 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
+using Tests;
 
-namespace Tests
+namespace Models
 {
     [TestClass]
-    public class TypicalTests
+    public class TECTypicalTests
     {
-        private TestContext testContextInstance;
-        
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
-        
         [TestMethod]
         public void AddInstances()
         {

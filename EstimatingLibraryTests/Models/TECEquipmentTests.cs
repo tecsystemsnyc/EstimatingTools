@@ -7,10 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EstimatingLibraryTests
+namespace Models
 {
     [TestClass]
-    public class EquipmentModelTests
+    public class TECEquipmentTests
     {
         [TestMethod]
         public void CopyTemplateWithReferences()
