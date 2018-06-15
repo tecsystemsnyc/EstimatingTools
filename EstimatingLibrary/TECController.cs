@@ -53,7 +53,6 @@ namespace EstimatingLibrary
         public abstract IOCollection IO
         {
             get;
-            
         }
         public IOCollection UsedIO
         {

@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tests;
@@ -126,6 +127,73 @@ namespace Models
             Assert.AreEqual(0, childController.ChildrenConnections.Count, "Connection not removed from controller");
             Assert.AreEqual(null, childController.ParentConnection, "Connection not removed from child");
             Assert.AreEqual(null, childestController.ParentConnection, "Connection not removed from childest");
+        }
+
+        //New Tests
+        [TestMethod]
+        public void CompatibleProtocols()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void CanConnect()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void Connect()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void Disconnect()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void CanAddNetworkConnection()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void AddNetworkConnection()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void RemoveNetworkConnection()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void DisconnectAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void RemoveAllChildNetworkConnections()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void RemoveAllChildHardwiredConnections()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void RemoveAllChildConnections()
+        {
+            throw new NotImplementedException();
         }
     }
 }

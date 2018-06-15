@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\TECProvidedControllerTests.cs" />
     <Compile Include="Utilities\ChangeWatcherTests.cs" />
     <Compile Include="Models\TECControllerTests.cs" />
     <Compile Include="Interfaces\INotifyCostChangedTests.cs" />
@@ -65,7 +66,6 @@
     <Compile Include="Interfaces\IRelatableTests.cs" />
     <Compile Include="Models\IOCollectionTests.cs" />
     <Compile Include="Models\TECSystemTests.cs" />
-    <Compile Include="Models\TECInterlockConnectionTests.cs" />
     <Compile Include="Utilities\TemplatesSynchronizerTests.cs" />
     <Compile Include="Models\TECTypicalTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
