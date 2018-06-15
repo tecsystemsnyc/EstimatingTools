@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace EstimatingLibrary
 {
-    public abstract class TECController : TECLocated, ITypicalable, IConnectable
+    public abstract class TECController : TECLocated, IConnectable
     {
         #region Properties
         //---Stored---

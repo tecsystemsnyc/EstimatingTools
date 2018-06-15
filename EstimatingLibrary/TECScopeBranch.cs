@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.ObjectModel;
 
@@ -30,6 +31,7 @@ namespace EstimatingLibrary
         }
 
         public bool IsTypical { get; private set; }
+
         #endregion //Properites
 
         #region Constructors
@@ -81,6 +83,35 @@ namespace EstimatingLibrary
             saveList.AddRange(this.Branches, "Branches");
             return saveList;
         }
+        
+        #region ITypicalable
+        ITECObject ITypicalable.CreateInstance(ObservableListDictionary<ITECObject> typicalDictionary)
+        {
+            if (!this.IsTypical)
+            {
+                throw new Exception("Attempted to create an instance of an object which is already instanced.");
+            }
+            else
+            {
+                return new TECScopeBranch(this, false);
+            }
+        }
+
+        void ITypicalable.AddChildForProperty(string property, ITECObject item)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool ITypicalable.RemoveChildForProperty(string property, ITECObject item)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool ITypicalable.ContinsChildForProperty(string property, ITECObject item)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
 
     }
 }

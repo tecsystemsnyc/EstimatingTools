@@ -10,7 +10,7 @@ namespace EstimatingLibrary.Interfaces
         ITECObject CreateInstance(ObservableListDictionary<ITECObject> typicalDictionary = null);
         void AddChildForProperty(String property, ITECObject item);
         bool RemoveChildForProperty(String property, ITECObject item);
-        bool ContinsChildForProperty(String Property, ITECObject item);
+        bool ContinsChildForProperty(String property, ITECObject item);
     }
     
 }

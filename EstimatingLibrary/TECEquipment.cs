@@ -39,6 +39,7 @@ namespace EstimatingLibrary
         }
 
         public bool IsTypical { get; private set; }
+
         #endregion //Properties
 
         #region Constructors
@@ -174,6 +175,58 @@ namespace EstimatingLibrary
                 PointChanged?.Invoke(numPoints);
             }
         }
+
         #endregion
+
+        #region ITypicalable
+        ITECObject ITypicalable.CreateInstance(ObservableListDictionary<ITECObject> typicalDictionary)
+        {
+            if (!this.IsTypical)
+            {
+                throw new Exception("Attempted to create an instance of an object which is already instanced.");
+            }
+            else
+            {
+                return new TECEquipment(this, false, characteristicReference: typicalDictionary);
+            }
+        }
+
+        void ITypicalable.AddChildForProperty(string property, ITECObject item)
+        {
+            if(property == "SubScope" && item is TECSubScope subScope)
+            {
+                this.SubScope.Add(subScope);
+            }
+            else
+            {
+                throw new Exception(String.Format("Cannot add to {0} with object of type {1}", property, item.GetType().ToString()));
+            }
+        }
+
+        bool ITypicalable.RemoveChildForProperty(string property, ITECObject item)
+        {
+            if (property == "SubScope" && item is TECSubScope subScope)
+            {
+                return this.SubScope.Remove(subScope);
+            }
+            else
+            {
+                throw new Exception(String.Format("Cannot remove from {0} with object of type {1}", property, item.GetType().ToString()));
+            }
+        }
+
+        bool ITypicalable.ContinsChildForProperty(string property, ITECObject item)
+        {
+            if (property == "SubScope" && item is TECSubScope subScope)
+            {
+                return this.SubScope.Contains(subScope);
+            }
+            else
+            {
+                return false;
+            }
+        }
+        #endregion
+
     }
 }

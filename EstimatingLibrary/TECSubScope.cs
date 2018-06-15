@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace EstimatingLibrary
 {
-    public class TECSubScope : TECLocated, INotifyPointChanged, IDDCopiable, INewTypicalable, IConnectable, IInterlockable
+    public class TECSubScope : TECLocated, INotifyPointChanged, IDDCopiable, ITypicalable, IConnectable, IInterlockable
     {
         #region Properties
         private ObservableCollection<IEndDevice> _devices = new ObservableCollection<IEndDevice>();
@@ -357,7 +357,7 @@ namespace EstimatingLibrary
 
         #region ITypicalable
 
-        ITECObject INewTypicalable.CreateInstance(ObservableListDictionary<ITECObject> typicalDictionary)
+        ITECObject ITypicalable.CreateInstance(ObservableListDictionary<ITECObject> typicalDictionary)
         {
             if (!this.IsTypical)
             {
@@ -369,7 +369,7 @@ namespace EstimatingLibrary
             }
         }
 
-        void INewTypicalable.AddChildForProperty(string property, ITECObject item)
+        void ITypicalable.AddChildForProperty(string property, ITECObject item)
         {
             if(property == "Points" && item is TECPoint point)
             {
@@ -389,7 +389,7 @@ namespace EstimatingLibrary
             }
         }
 
-        bool INewTypicalable.RemoveChildForProperty(string property, ITECObject item)
+        bool ITypicalable.RemoveChildForProperty(string property, ITECObject item)
         {
             if (property == "Points" && item is TECPoint point)
             {
@@ -407,6 +407,11 @@ namespace EstimatingLibrary
             {
                 throw new Exception(String.Format("There is no compatible remove method for the property {0} with an object of type {1}", property, item.GetType().ToString()));
             }
+        }
+
+        bool ITypicalable.ContinsChildForProperty(string property, ITECObject item)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }
