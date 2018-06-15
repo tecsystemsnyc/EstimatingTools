@@ -270,13 +270,13 @@ namespace EstimatingUtilitiesLibrary.Database
                 addSystemChildrenToTypicalDict(typID, true);
             }
 
-            List<TECPoint> points = getObjectsFromTable(new PointTable(), id => new TECPoint(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
-            List<TECSubScope> subScope = getObjectsFromTable(new SubScopeTable(), id => new TECSubScope(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
-            List<TECEquipment> equipment = getObjectsFromTable(new EquipmentTable(), id => new TECEquipment(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
+            List<TECPoint> points = getObjectsFromTable(new PointTable(), id => new TECPoint(id, typicalDictionary.ValueOrDefault(id, false)));
+            List<TECSubScope> subScope = getObjectsFromTable(new SubScopeTable(), id => new TECSubScope(id, typicalDictionary.ValueOrDefault(id, false)));
+            List<TECEquipment> equipment = getObjectsFromTable(new EquipmentTable(), id => new TECEquipment(id, typicalDictionary.ValueOrDefault(id, false)));
             List<TECMisc> misc = getObjectsFromTable(new MiscTable(), row => { return getMiscFromRow(row, typicalDictionary); });
-            List<TECScopeBranch> scopeBranches = getObjectsFromTable(new ScopeBranchTable(), id => new TECScopeBranch(id, typicalDictionary.ContainsKey(id) ? typicalDictionary[id] : false));
-            List<TECProvidedController> providedControllers = getObjectsFromTable(new ProvidedControllerTable(), data => getProvidedControllerFromRow(data, false, controllerTypes));
-            List<TECFBOController> fboControllers = getObjectsFromTable(new FBOControllerTable(), id => new TECFBOController(id, false, catalogs));
+            List<TECScopeBranch> scopeBranches = getObjectsFromTable(new ScopeBranchTable(), id => new TECScopeBranch(id, typicalDictionary.ValueOrDefault(id, false)));
+            List<TECProvidedController> providedControllers = getObjectsFromTable(new ProvidedControllerTable(), data => getProvidedControllerFromRow(data, typicalDictionary, controllerTypes));
+            List<TECFBOController> fboControllers = getObjectsFromTable(new FBOControllerTable(), id => new TECFBOController(id, typicalDictionary.ValueOrDefault(id, false), catalogs));
             List<TECPanel> panels = getObjectsFromTable(new PanelTable(), row => getPanelFromRow(row, typicalDictionary, panelTypes));
 
             List<TECController> controllers = new List<TECController>(providedControllers);
