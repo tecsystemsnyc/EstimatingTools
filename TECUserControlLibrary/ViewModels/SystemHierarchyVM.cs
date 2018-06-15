@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
@@ -21,11 +22,10 @@ namespace TECUserControlLibrary.ViewModels
         private TECPoint selectedPoint;
         private TECController selectedController;
         private TECPanel selectedPanel;
-        private SystemConnectionsVM connectionsVM;
         private MiscCostsVM miscVM;
         private ControllersPanelsVM controllersPanelsVM;
-        private NetworkVM networkVM;
         private ValveSelectionVM valveVM;
+        private ConnectionsVM _connectionsVM;
 
         public ViewModelBase SelectedVM
         {
@@ -130,23 +130,8 @@ namespace TECUserControlLibrary.ViewModels
         public RelayCommand<TECController> DeleteControllerCommand { get; private set; }
         public RelayCommand<TECPanel> DeletePanelCommand { get; private set; }
 
-        public SystemConnectionsVM ConnectionsVM
-        {
-            get { return connectionsVM; }
-            set
-            {
-                connectionsVM = value;
-                RaisePropertyChanged("ConnectionsVM");
-                connectionsVM.UpdateVM += updateVM =>
-                {
-                    SelectedVM = updateVM;
-                };
-                connectionsVM.Selected += item =>
-                {
-                    Selected?.Invoke(item as TECObject);
-                };
-            }
-        }
+        public RelayCommand UpdateInstanceConnectionsCommand { get; private set; }
+
         public MiscCostsVM MiscVM
         {
             get { return miscVM; }
@@ -154,10 +139,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 miscVM = value;
                 RaisePropertyChanged("MiscVM");
-                miscVM.SelectionChanged += misc =>
-                {
-                    Selected?.Invoke(misc as TECObject);
-                };
+                miscVM.SelectionChanged += raiseSelected;
             }
         }
         public ControllersPanelsVM ControllersPanelsVM
@@ -167,23 +149,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 controllersPanelsVM = value;
                 RaisePropertyChanged("ControllersPanelsVM");
-                controllersPanelsVM.SelectionChanged += item =>
-                {
-                    Selected?.Invoke(item as TECObject);
-                };
-            }
-        }
-        public NetworkVM NetworkVM
-        {
-            get { return networkVM; }
-            set
-            {
-                networkVM = value;
-                RaisePropertyChanged("NetworkVM");
-                NetworkVM.Selected += item =>
-                {
-                    Selected?.Invoke(item as TECObject);
-                };
+                controllersPanelsVM.SelectionChanged += raiseSelected;
             }
         }
         public ValveSelectionVM ValveVM
@@ -193,6 +159,16 @@ namespace TECUserControlLibrary.ViewModels
             {
                 valveVM = value;
                 RaisePropertyChanged("ValveVM");
+            }
+        }
+        public ConnectionsVM ConnectionsVM
+        {
+            get { return _connectionsVM; }
+            set
+            {
+                _connectionsVM = value;
+                RaisePropertyChanged("ConnectionsVM");
+                _connectionsVM.Selected += raiseSelected;
             }
         }
 
@@ -265,7 +241,7 @@ namespace TECUserControlLibrary.ViewModels
             else
             {
                 object dropped = null;
-                if(!IsTemplates && dropInfo.Data is IDragDropable dropable)
+                if(!IsTemplates && dropInfo.Data is IDDCopiable dropable)
                 {
                     dropped = dropable.DragDropCopy(scopeManager);
                 } else
@@ -276,7 +252,8 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     SelectedVM = new AddEquipmentVM(SelectedSystem, scopeManager);
                     ((AddEquipmentVM)SelectedVM).SetTemplate(equipment);
-                } else if (dropped is TECSubScope subScope)
+                }
+                else if (dropped is TECSubScope subScope)
                 {
                     SelectedVM = new AddSubScopeVM(SelectedEquipment, scopeManager);
                     ((AddSubScopeVM)SelectedVM).SetTemplate(subScope);
@@ -316,14 +293,36 @@ namespace TECUserControlLibrary.ViewModels
         {
             if (value != null)
             {
-                ConnectionsVM = new SystemConnectionsVM(value, catalogs.ConduitTypes);
                 MiscVM = new MiscCostsVM(value);
                 ControllersPanelsVM = new ControllersPanelsVM(value, scopeManager);
-                NetworkVM = NetworkVM.GetNetworkVMFromSystem(value, scopeManager.Catalogs);
                 ValveVM = new ValveSelectionVM(value, scopeManager.Catalogs.Valves);
+                ConnectionsVM = new ConnectionsVM(value, new ChangeWatcher(value), catalogs, locations: (scopeManager as TECBid)?.Locations, filterPredicate: connectionFilter);
+                if(value is TECTypical typical)
+                {
+                    UpdateInstanceConnectionsCommand = new RelayCommand(typical.UpdateInstanceConnections, typical.CanUpdateInstanceConnections);
+                }
+                else
+                {
+                    UpdateInstanceConnectionsCommand = null;
+                }
+                RaisePropertyChanged("UpdateInstanceConnectionsCommand");
+                bool connectionFilter(ITECObject obj)
+                {
+                    if(obj is ITypicalable typ && typ.IsTypical == value.IsTypical)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
             }
         }
-
+        private void raiseSelected(TECObject item)
+        {
+            Selected?.Invoke(item);
+        }
         private void backExecute(object obj)
         {
             if(obj is TECEquipment)
@@ -472,7 +471,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void deleteControllerExecute(TECController obj)
         {
-            obj.RemoveAllConnections();
+            obj.DisconnectAll();
             SelectedSystem.RemoveController(obj);
         }
         private bool canDeleteController(TECController arg)

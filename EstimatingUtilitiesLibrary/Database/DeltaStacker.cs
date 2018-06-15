@@ -55,7 +55,7 @@ namespace EstimatingUtilitiesLibrary.Database
             return outStack;
         }
 
-        public static List<UpdateItem> AddStack(string propertyName, TECObject sender, TECObject item, DBType type)
+        public static List<UpdateItem> AddStack(string propertyName, ITECObject  sender, ITECObject  item, DBType type)
         {
             if (item == null)
             {
@@ -68,7 +68,7 @@ namespace EstimatingUtilitiesLibrary.Database
             List<UpdateItem> outStack = new List<UpdateItem>();
             foreach (var saveItem in item.PropertyObjects.ChildList())
             {
-                outStack.AddRange(addRemoveStack(change, saveItem.PropertyName, item as TECObject, saveItem.Child, type));
+                outStack.AddRange(addRemoveStack(change, saveItem.PropertyName, item as ITECObject , saveItem.Child, type));
             }
             if (item is TECTypical system)
             {
@@ -101,25 +101,25 @@ namespace EstimatingUtilitiesLibrary.Database
             return outStack;
         }
         
-        private static List<UpdateItem> addRemoveStack(Change change, string propertyName, TECObject sender, TECObject item, DBType type)
+        private static List<UpdateItem> addRemoveStack(Change change, string propertyName, ITECObject sender, ITECObject item, DBType type)
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
             List<TableBase> tables;
             if(sender is IRelatable parent && parent.IsDirectChildProperty(propertyName))
             {
-                tables = DatabaseHelper.GetTables(new List<TECObject>() { item }, propertyName, type);
+                tables = DatabaseHelper.GetTables(new List<ITECObject>() { item }, propertyName, type);
                 outStack.AddRange(tableObjectStack(change, tables, item));
                 if (item is IRelatable saveable)
                 {
                     outStack.AddRange(ChildStack(change, saveable, type));
                 }
             }
-            tables = DatabaseHelper.GetTables(new List<TECObject>() { sender, item }, propertyName, type);
+            tables = DatabaseHelper.GetTables(new List<ITECObject>() { sender, item }, propertyName, type);
             outStack.AddRange(tableObjectStack(change, tables, sender, item));
 
             return outStack;
         }
-        private static List<UpdateItem> editStack(TECObject sender, string propertyName, 
+        private static List<UpdateItem> editStack(ITECObject  sender, string propertyName, 
             object value, object oldValue, DBType type)
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
@@ -130,7 +130,7 @@ namespace EstimatingUtilitiesLibrary.Database
                 {
                     return new List<UpdateItem>();
                 }
-                var tables = DatabaseHelper.GetTables(new List<TECObject>() { sender, listValue[0] as TECObject }, propertyName, type);
+                var tables = DatabaseHelper.GetTables(new List<ITECObject >() { sender, listValue[0] as ITECObject  }, propertyName, type);
                 foreach(var table in tables.Where(x => x.IndexString != ""))
                 {
                     List<(Dictionary<string, string> data, Tuple<string, string> keyData)> dataList = DatabaseHelper.PrepareIndexData(sender, propertyName, table, type);
@@ -141,7 +141,7 @@ namespace EstimatingUtilitiesLibrary.Database
                 }
                 return outStack;
             }
-            else if(!(value is TECObject) && !(oldValue is TECObject))
+            else if(!(value is ITECObject ) && !(oldValue is ITECObject ))
             {
                 List<TableBase> tables = DatabaseHelper.GetTables(sender, type);
                 foreach (TableBase table in tables)
@@ -158,26 +158,24 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             else
             {
-                if (oldValue != null)
+                if (oldValue != null && oldValue is ITECObject  oldObject)
                 {
-                    List<TableBase> tables = DatabaseHelper.GetTables(new List<TECObject>() { sender, oldValue as TECObject }, propertyName);
-                    outStack.AddRange(tableObjectStack(Change.Remove, tables, sender, oldValue as TECObject));
+                    outStack.AddRange(addRemoveStack(Change.Remove, propertyName, sender, oldObject, type));
                 }
-                if (value != null)
+                if (value != null && value is ITECObject  newObject)
                 {
-                    List<TableBase> tables = DatabaseHelper.GetTables(new List<TECObject>() { sender, value as TECObject }, propertyName);
-                    outStack.AddRange(tableObjectStack(Change.Add, tables, sender, value as TECObject));
+                    outStack.AddRange(addRemoveStack(Change.Add, propertyName, sender, newObject, type));
                 }
                 return outStack;
             }
             
         }
 
-        private static List<UpdateItem> tableObjectStack(Change change, List<TableBase> tables, TECObject item)
+        private static List<UpdateItem> tableObjectStack(Change change, List<TableBase> tables, ITECObject  item)
         {
             return tableObjectStack(change, tables, item, null);
         }
-        private static List<UpdateItem> tableObjectStack(Change change, List<TableBase> tables, TECObject item, TECObject child)
+        private static List<UpdateItem> tableObjectStack(Change change, List<TableBase> tables, ITECObject  item, ITECObject  child)
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
             foreach (TableBase table in tables)
@@ -209,11 +207,11 @@ namespace EstimatingUtilitiesLibrary.Database
         private static List<UpdateItem> typicalInstanceStack(Change change, TECTypical system, DBType type)
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
-            foreach (KeyValuePair<TECObject, List<TECObject>> pair in system.TypicalInstanceDictionary.GetFullDictionary())
+            foreach (KeyValuePair<ITECObject , List<ITECObject >> pair in system.TypicalInstanceDictionary.GetFullDictionary())
             {
-                foreach(TECObject item in pair.Value)
+                foreach(ITECObject  item in pair.Value)
                 {
-                    outStack.AddRange(addRemoveStack(change, "TypicalInstanceDictionary", (TECObject)pair.Key, (TECObject)item, type));
+                    outStack.AddRange(addRemoveStack(change, "TypicalInstanceDictionary", (ITECObject )pair.Key, (ITECObject )item, type));
                 }
             }
 
@@ -224,11 +222,11 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             if (e.Change == Change.Add || e.Change == Change.Remove)
             {               
-                stack.AddRange(addRemoveStack(e.Change, e.PropertyName, e.Sender as TECObject, e.Value as TECObject, dbType));
+                stack.AddRange(addRemoveStack(e.Change, e.PropertyName, e.Sender as ITECObject , e.Value as ITECObject , dbType));
             }
             else if (e.Change == Change.Edit)
             {
-                stack.AddRange(editStack(e.Sender as TECObject, e.PropertyName, e.Value, e.OldValue, dbType));
+                stack.AddRange(editStack(e.Sender as ITECObject , e.PropertyName, e.Value, e.OldValue, dbType));
             }
         }
     }

@@ -170,7 +170,7 @@ namespace EstimatingUtilitiesLibrary
             num = 0;
             foreach (TECPoint point in subScope.SubScope.Points)
             {
-                if (TECIO.NetworkIO.Contains(point.Type))
+                if (point.Type == IOType.Protocol)
                 {
                     num += point.Quantity;
                 }
@@ -242,7 +242,7 @@ namespace EstimatingUtilitiesLibrary
             cell.DataType = new EnumValue<CellValues>(CellValues.String);
 
             double length = 0;
-            foreach (TECElectricalMaterial type in subScope.SubScope.Connection.GetConnectionTypes())
+            foreach (TECElectricalMaterial type in subScope.SubScope.Connection.Protocol.ConnectionTypes)
             {
                 length += subScope.SubScope.Connection.Length;
             }

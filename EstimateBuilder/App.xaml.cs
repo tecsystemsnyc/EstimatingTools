@@ -1,7 +1,12 @@
-﻿using GalaSoft.MvvmLight.Threading;
+﻿using EstimateBuilder.MVVM;
+using EstimatingUtilitiesLibrary;
+using GalaSoft.MvvmLight.Threading;
 using NLog;
 using System;
+using System.IO;
+using System.Linq;
 using System.Windows;
+using TECUserControlLibrary.Windows;
 
 namespace EstimateBuilder
 {
@@ -28,6 +33,7 @@ namespace EstimateBuilder
                 && AppDomain.CurrentDomain.SetupInformation
                 .ActivationArguments.ActivationData.Length > 0)
             {
+                EBSettings.StartUpFilePath = "";
                 try
                 {
                     string fname = AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData[0];
@@ -36,13 +42,13 @@ namespace EstimateBuilder
                     Uri uri = new Uri(fname);
                     string startUpFilePath = uri.LocalPath;
                     logger.Debug("StartUp file path: {0}", startUpFilePath);
-                    EstimateBuilder.Properties.Settings.Default.StartUpFilePath = startUpFilePath;
-                    EstimateBuilder.Properties.Settings.Default.Save();
+                    EBSettings.StartUpFilePath = startUpFilePath;
                 }
                 catch (Exception)
                 {
                     logger.Error("Couldn't process startup arguments as a path.");
                 }
+                EBSettings.Save();
             }
             else
             {
@@ -56,7 +62,18 @@ namespace EstimateBuilder
             logger.Fatal("Unhandled exception: {0}", e.Exception.Message);
             logger.Fatal("Inner exception: {0}", e.Exception.InnerException?.Message);
             logger.Fatal("Stack trace: {0}", e.Exception.StackTrace);
-            MessageBox.Show("Fatal error occured, view logs for more information.", "Fatal Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+
+            string reportPrompt = "A crash has occured. Please describe to the best of your ability the actions leading up to the crash.";
+
+            string logDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "EstimateBuilder\\logs");
+            string logPath = UtilitiesMethods.GetMostRecentFilePathFromDirectoryPath(logDirectory);
+
+            BugReportWindow reportWindow = new BugReportWindow("Estimate Builder Crash", reportPrompt, logPath);
+            reportWindow.ShowDialog();
+
+            //MessageBox.Show("Fatal error occured, view logs for more information.",
+            //    "Fatal Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+
             System.Environment.Exit(0);
         }
     }

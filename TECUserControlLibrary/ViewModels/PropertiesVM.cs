@@ -157,7 +157,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void deleteConnectionTypeExecute(TECConnectionType obj)
         {
-            (Selected as TECDevice).ConnectionTypes.Remove(obj);
+            (Selected as TECDevice).HardwiredConnectionTypes.Remove(obj);
         }
 
         private bool canDeleteConnectionType(TECConnectionType arg)
@@ -185,6 +185,5 @@ namespace TECUserControlLibrary.ViewModels
         {
             UIHelpers.StandardDrop(dropInfo, scopeManager);
         }
-        
     }
 }

@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace EstimatingUtilitiesLibrary.Properties
-{
-
-
+namespace EstimatingUtilitiesLibrary.Properties {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -61,6 +61,17 @@ namespace EstimatingUtilitiesLibrary.Properties
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to DTaylor@tec-system.com
+        ///GHanson@tec-system.com
+        ///tecestimating+qhs3hufh9un7pg08xt7z@boards.trello.com.
+        /// </summary>
+        internal static string BugReportEmails {
+            get {
+                return ResourceManager.GetString("BugReportEmails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 47-25 34th Street 4th floor
         ///Long Island City, NY 11101
         ///Tel: 718-247-2100
@@ -92,20 +103,11 @@ namespace EstimatingUtilitiesLibrary.Properties
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Table 1,Field 1,Table 2,Field 2
-        ///TECBidInfo,DBVersion,NONE,NONE
-        ///TECBidInfo,BidName,BidInfo,Name
-        ///TECBidInfo,BidID,BidInfo,ID
-        ///TECBidInfo,BidNumber,BidInfo,Number
-        ///TECBidInfo,DueDate,BidInfo,DueDate
-        ///TECBidInfo,Salesperson,BidInfo,SalesPerson
-        ///TECBidInfo,Estimator,BidInfo,Estimator
-        ///TECTemplatesInfo,TemplateID,TemplatesInfo,ID
-        ///TECBidParameters,ParametersID,NONE,NONE
-        ///TECBidParameters,Escalation,Parameters,Escalation
-        ///TECBidParameters,Overhead,Parameters,Overhead
-        ///TECBidParameters,Profit,Parameters,Profit
-        /// [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Table 1,Field 1,Table 2,Field 2,Table 3,Field 3,Table 4,Field 4,Table 5,Field 5,Table 6,Field 6,Table 7,Field 7,Table 8,Field 8,Table 9,Field 9
+        ///TECBidInfo,DBVersion,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE
+        ///TECBidInfo,BidName,BidInfo,Name,BidInfo,Name,BidInfo,Name,BidInfo,Name,BidInfo,Name,BidInfo,Name,BidInfo,Name,BidInfo,Name
+        ///TECBidInfo,BidID,BidInfo,ID,BidInfo,ID,BidInfo,ID,BidInfo,ID,BidInfo,ID,BidInfo,ID,BidInfo,ID,BidInfo,ID
+        ///TECBidInfo,BidNumber,BidInfo,Number [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string VersionDefinition {
             get {

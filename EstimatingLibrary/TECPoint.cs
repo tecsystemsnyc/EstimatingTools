@@ -6,8 +6,9 @@ namespace EstimatingLibrary
     public class TECPoint : TECLabeled, INotifyPointChanged, ITypicalable
     {
         #region Properties
-        private IOType _type;
-        private int _quantity;
+        private IOType _type = IOType.AI;
+        private int _quantity = 1;
+        private bool _isNetwork = false;
 
         public event Action<int> PointChanged;
 
@@ -16,7 +17,7 @@ namespace EstimatingLibrary
             get { return _type; }
             set
             {
-                if (TECIO.PointIO.Contains(value) || TECIO.NetworkIO.Contains(value))
+                if (TECIO.PointIO.Contains(value))
                 {
                     var old = Type;
                     _type = value;
@@ -44,12 +45,14 @@ namespace EstimatingLibrary
 
             }
         }
-
-        public int PointNumber
+        public bool IsNetwork
         {
-            get
+            get { return _isNetwork; }
+            set
             {
-                return Quantity;
+                var old = IsNetwork;
+                _isNetwork = value;
+                notifyCombinedChanged(Change.Edit, "IsNetwork", this, value, old);
             }
         }
         
@@ -74,6 +77,16 @@ namespace EstimatingLibrary
             if (!IsTypical)
             {
                 PointChanged?.Invoke(numPoints);
+            }
+        }
+        #endregion
+
+        #region INotityPointChanged
+        int INotifyPointChanged.PointNumber
+        {
+            get
+            {
+                return Quantity;
             }
         }
         #endregion

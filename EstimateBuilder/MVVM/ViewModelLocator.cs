@@ -11,6 +11,7 @@
 
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
+using TECUserControlLibrary.ViewModels;
 
 namespace EstimateBuilder.MVVM
 {
@@ -28,6 +29,7 @@ namespace EstimateBuilder.MVVM
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
             SimpleIoc.Default.Register<EstimateManager>();
+            SimpleIoc.Default.Register<EBSettingsVM>();
         }
 
         /// <summary>
@@ -43,6 +45,18 @@ namespace EstimateBuilder.MVVM
                 return ServiceLocator.Current.GetInstance<EstimateManager>();
             }
         }
+        
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
+            "CA1822:MarkMembersAsStatic",
+            Justification = "This non-static member is needed for data binding purposes.")]
+        public EBSettingsVM Settings
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<EBSettingsVM>();
+            }
+        }
+
         public static void Cleanup()
         {
         }

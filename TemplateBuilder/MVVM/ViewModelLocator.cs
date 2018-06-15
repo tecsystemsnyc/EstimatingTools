@@ -30,6 +30,7 @@ namespace TemplateBuilder.MVVM
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
             SimpleIoc.Default.Register<TemplatesManager>();
+            SimpleIoc.Default.Register<TBSettingsVM>();
         }
 
         /// <summary>
@@ -46,9 +47,17 @@ namespace TemplateBuilder.MVVM
             }
         }
 
-        /// <summary>
-        /// Cleans up all the resources.
-        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
+            "CA1822:MarkMembersAsStatic",
+            Justification = "This non-static member is needed for data binding purposes.")]
+        public TBSettingsVM Settings
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<TBSettingsVM>();
+            }
+        }
+        
         public static void Cleanup()
         {
         }

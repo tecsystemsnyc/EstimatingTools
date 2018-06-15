@@ -7,30 +7,23 @@ using System.Collections.Specialized;
 
 namespace EstimatingLibrary
 {
-    public class TECSystem : TECLocated, INotifyPointChanged, IDragDropable, ITypicalable
+    public class TECSystem : TECLocated, INotifyPointChanged, IDDCopiable, ITypicalable
     {
         #region Fields
-        private ObservableCollection<TECEquipment> _equipment;
-        private ObservableCollection<TECController> _controllers;
-        private ObservableCollection<TECPanel> _panels;
-        private ObservableCollection<TECMisc> _miscCosts;
-        private ObservableCollection<TECScopeBranch> _scopeBranches;
+        private ObservableCollection<TECEquipment> _equipment = new ObservableCollection<TECEquipment>();
+        private ObservableCollection<TECController> _controllers = new ObservableCollection<TECController>();
+        private ObservableCollection<TECPanel> _panels = new ObservableCollection<TECPanel>();
+        private ObservableCollection<TECMisc> _miscCosts = new ObservableCollection<TECMisc>();
+        private ObservableCollection<TECScopeBranch> _scopeBranches = new ObservableCollection<TECScopeBranch>();
 
-        private bool _proposeEquipment;
+        private bool _proposeEquipment = false;
         #endregion
 
         #region Constructors
         public TECSystem(Guid guid, bool isTypical) : base(guid)
         {
             IsTypical = isTypical;
-
-            _proposeEquipment = false;
-            _equipment = new ObservableCollection<TECEquipment>();
-            _controllers = new ObservableCollection<TECController>();
-            _panels = new ObservableCollection<TECPanel>();
-            _miscCosts = new ObservableCollection<TECMisc>();
-            _scopeBranches = new ObservableCollection<TECScopeBranch>();
-
+            
             _equipment.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Equipment");
             _panels.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Panels");
             _miscCosts.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "MiscCosts");
@@ -40,7 +33,7 @@ namespace EstimatingLibrary
         public TECSystem(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
 
         public TECSystem(TECSystem source, bool isTypical, TECScopeManager manager, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableListDictionary<TECObject> characteristicReference = null, Tuple<TemplateSynchronizer<TECEquipment>, TemplateSynchronizer<TECSubScope>> synchronizers = null) : this(isTypical)
+            ObservableListDictionary<ITECObject> characteristicReference = null, Tuple<TemplateSynchronizer<TECEquipment>, TemplateSynchronizer<TECSubScope>> synchronizers = null) : this(isTypical)
         {
             if (guidDictionary == null)
             { guidDictionary = new Dictionary<Guid, Guid>();  }
@@ -61,7 +54,7 @@ namespace EstimatingLibrary
             }
             foreach (TECController controller in source._controllers)
             {
-                var toAdd = new TECController(controller, isTypical, guidDictionary);
+                var toAdd = controller.CopyController(isTypical, guidDictionary);
                 if (characteristicReference != null)
                 {
                     characteristicReference.AddItem(controller, toAdd);
@@ -193,7 +186,7 @@ namespace EstimatingLibrary
         }
         public void RemoveController(TECController controller)
         {
-            controller.RemoveAllConnections();
+            controller.DisconnectAll();
             _controllers.Remove(controller);
             foreach(TECPanel panel in this.Panels)
             {
@@ -373,7 +366,7 @@ namespace EstimatingLibrary
             TECController controller = removed.Connection?.ParentController;
             if(controller != null)
             {
-                controller.RemoveSubScope(removed);
+                controller.Disconnect(removed);
             }
         }
         #endregion

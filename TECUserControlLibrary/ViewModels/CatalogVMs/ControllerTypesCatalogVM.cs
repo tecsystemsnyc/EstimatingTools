@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TECUserControlLibrary.Utilities;
+using TECUserControlLibrary.Utilities.DropTargets;
 using static TECUserControlLibrary.ViewModels.MaterialVM;
 
 namespace TECUserControlLibrary.ViewModels.CatalogVMs
@@ -132,6 +134,8 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
         public ICommand AddIOCommand { get; }
         public ICommand AddControllerTypeCommand { get; private set; }
 
+        public IDropTarget ProtocolToIODropTarget { get; }
+
         public ControllerTypesCatalogVM(TECTemplates templates, ReferenceDropper dropHandler) : base(templates, dropHandler)
         {
             this.ControllerTypeIO = new ObservableCollection<TECIO>();
@@ -139,6 +143,8 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
 
             this.AddIOCommand = new RelayCommand(addIOToControllerTypeExecute, canAddIOToControllerType);
             this.AddControllerTypeCommand = new RelayCommand(addControllerTypeExecute, canAddControllerType);
+
+            this.ProtocolToIODropTarget = new ProtocolToIODropTarget();
         }
 
         private void addIOToControllerTypeExecute()

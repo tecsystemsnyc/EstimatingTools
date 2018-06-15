@@ -8,14 +8,14 @@ namespace EstimatingLibrary.Utilities
 {
     public class ChangeWatcher
     {
-        private readonly List<string> propertyExceptions = new List<string>
+        public readonly List<string> propertyExceptions = new List<string>
         {
             "TypicalInstanceDictionary",
             "TemplateRelationship"
         };
 
         #region Constructors
-        public ChangeWatcher(TECObject item)
+        public ChangeWatcher(ITECObject item)
         {
             register(item);
         }
@@ -26,10 +26,6 @@ namespace EstimatingLibrary.Utilities
         /// Adds, removes, edit raised from models
         /// </summary>
         public event Action<TECChangedEventArgs> Changed;
-        /// <summary>
-        /// All Changed events where the object is not typical
-        /// </summary>
-        public event Action<TECChangedEventArgs> InstanceChanged;
         /// <summary>
         /// Changes in cost raised from models
         /// </summary>
@@ -42,23 +38,15 @@ namespace EstimatingLibrary.Utilities
         /// INotifyPropertyChanged events from all registered objects
         /// </summary>
         public event Action<object, PropertyChangedEventArgs> PropertyChanged;
-        /// <summary>
-        /// Add, Remove events from all instances and their PropertyObjects
-        /// </summary>
-        public event Action<Change, TECObject> InstanceConstituentChanged;
-        /// <summary>
-        /// Add, Remove events from all typical objects and their PropertyObjects
-        /// </summary>
-        public event Action<Change, TECObject> TypicalConstituentChanged;
         #endregion
 
         #region Methods
-        public void Refresh(TECObject item)
+        public void Refresh(ITECObject item)
         {
             register(item);
         }
         
-        private void register(TECObject item)
+        private void register(ITECObject item)
         {
             registerTECObject(item);
             if (item is IRelatable saveable)
@@ -66,7 +54,7 @@ namespace EstimatingLibrary.Utilities
                 saveable.GetDirectChildren().ForEach(register);
             }
         }
-        private void registerTECObject(TECObject ob)
+        private void registerTECObject(ITECObject ob)
         {
             ob.TECChanged += handleTECChanged;
             ob.PropertyChanged += raisePropertyChanged;
@@ -83,13 +71,13 @@ namespace EstimatingLibrary.Utilities
         {
             if(!propertyExceptions.Contains(args.PropertyName))
             {
-                if (args.Change == Change.Add && args.Value is TECObject tObj)
+                if (args.Change == Change.Add && args.Value is ITECObject tObj)
                 {
                     register(tObj);
                 }
                 else if (args.Change == Change.Edit && args.Sender is IRelatable saveable)
                 {
-                    if (!saveable.LinkedObjects.Contains(args.PropertyName) && args.Value is TECObject tValue)
+                    if (!saveable.LinkedObjects.Contains(args.PropertyName) && args.Value is ITECObject tValue)
                     {
                         register(tValue);
                     }
@@ -100,46 +88,6 @@ namespace EstimatingLibrary.Utilities
         {
             registerChange(e);
             raiseChanged(e);
-
-            if (!propertyExceptions.Contains(e.PropertyName) && !(e.Sender is TECCatalogs))
-            {
-                if (e.Value is ITypicalable valueTyp)
-                {
-                    raiseIfTypical(valueTyp);
-                }
-                else
-                {
-                    if (e.Sender is ITypicalable senderTyp)
-                    {
-                        raiseIfTypical(senderTyp);
-                    }
-                    else
-                    {
-                        raiseInstanceChanged(e);
-                    }
-                }
-            }
-
-            void raiseIfTypical(ITypicalable item)
-            {
-                if (!item.IsTypical)
-                {
-                    raiseInstanceChanged(e);
-                }
-                else
-                {
-                    raiseTypicalConsituentChanged(e);
-                }
-            }
-        }
-
-        private void raiseTypicalConsituentChanged(TECChangedEventArgs e)
-        {
-            if ((e.Change == Change.Add || e.Change == Change.Remove) && e.Sender is IRelatable parent)
-            {
-                if (!parent.LinkedObjects.Contains(e.PropertyName))
-                    raiseTypicalConstituents(e.Change, e.Value as TECObject);
-            }
         }
 
         private void raisePropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -150,44 +98,14 @@ namespace EstimatingLibrary.Utilities
         {
             Changed?.Invoke(e);
         }
-        private void raiseCostChanged(TECObject sender, CostBatch obj)
+        private void raiseCostChanged(ITECObject sender, CostBatch obj)
         {
             CostChanged?.Invoke(obj);
         }
-        private void raisePointChanged(TECObject sender, int num)
+        private void raisePointChanged(ITECObject sender, int num)
         {
             PointChanged?.Invoke(num);
         }
-        private void raiseInstanceChanged(TECChangedEventArgs e)
-        {
-            InstanceChanged?.Invoke(e);
-            if((e.Change == Change.Add || e.Change == Change.Remove) && e.Sender is IRelatable parent)
-            {
-                if(!parent.LinkedObjects.Contains(e.PropertyName))
-                    raiseConstituents(e.Change, e.Value as TECObject);
-            }
-        }
-        private void raiseConstituents(Change change, TECObject item)
-        {
-            InstanceConstituentChanged?.Invoke(change, item);
-            if(item is IRelatable parent)
-            {
-                foreach(var child in parent.GetDirectChildren())
-                {
-                    raiseConstituents(change, child);
-                }
-            }
-        }
-        private void raiseTypicalConstituents(Change change, TECObject item)
-        {
-            TypicalConstituentChanged?.Invoke(change, item);
-            if (item is IRelatable parent)
-            {
-                parent.GetDirectChildren().Where(x => x is ITypicalable typ && typ.IsTypical).
-                    ForEach(child => raiseTypicalConstituents(change, child));
-            }
-        }
-        
         #endregion
 
     }

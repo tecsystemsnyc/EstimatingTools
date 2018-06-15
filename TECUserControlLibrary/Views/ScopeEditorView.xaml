@@ -97,15 +97,15 @@
                 <TabItem Header="NoneTab" Visibility="Collapsed"/>
                 <TabItem Header="Systems">
                     <Border Background="{StaticResource SectionBackgroundBrush}">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
                             <Grid Grid.ColumnSpan="2">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="200"/>
@@ -115,41 +115,24 @@
                                           DisplayMemberPath="Item1"
                                           SelectedValuePath="Item2"
                                           SelectedIndex="0"
-                                          VerticalAlignment="Center"
-                                          IsEnabled="{Binding TypicalEditVM.ConnectionsVM.CanLeave}"/>
+                                          VerticalAlignment="Center"/>
                                 <ContentPresenter Content="{Binding ElementName=TypicalInstanceCombo, Path=SelectedValue}" 
                                       ContentTemplateSelector="{StaticResource typicalInstanceDescriptionSelector}"
                                       Grid.Column="1"/>
                             </Grid>
-                        
-                        <ContentPresenter Content="{Binding ElementName=TypicalInstanceCombo, Path=SelectedValue}" 
+
+                            <ContentPresenter Content="{Binding ElementName=TypicalInstanceCombo, Path=SelectedValue}" 
                                       ContentTemplateSelector="{StaticResource typicalInstanceSelector}"
                                       Grid.Row="1" Grid.ColumnSpan="2"/>
-                    </Grid>
+                        </Grid>
                     </Border>
-
-                    <!--<TabControl SelectedIndex="{Binding SystemsSubIndex, Converter={utilities:SystemsSubIndexIntegerConverter}, Mode=OneWayToSource}">
-                    <TabItem Header="Typical">
-                        <views:TypicalSystemsView ViewModel="{Binding TypicalSystemsTab}"/>
-                    </TabItem>
-                    <TabItem Header="Instances">
-                        <views:InstanceSystemView ViewModel="{Binding InstanceSystemVM}"/>
-                    </TabItem>
-                    <TabItem Header="By Location">
-                        <views:LocationView LabeledSource="{Binding Bid.Locations}"
-                                            ViewModel="{Binding LocationDataGrid}"/>
-                    </TabItem>
-                </TabControl>-->
                 </TabItem>
                 <TabItem Header="Controllers and Panels">
                     <views:ControllersPanelsView ViewModel="{Binding ControllersPanelsTab}"/>
                 </TabItem>
-                <TabItem Header="Network">
-                    <views:NetworkView ViewModel="{Binding NetworkVM}"/>
-                </TabItem>
-                <TabItem Header="Global Runs">
-                    <views:GlobalConnectionsView ViewModel="{Binding GlobalConnectionsVM}"
-                                                 DropHandler="{Binding GlobalConnectionsVM}"/>
+                <TabItem Header="Connections">
+                    <views:ConnectionsView VM="{Binding ConnectionsVM}"
+                                           SelectionNeeded="{Binding ConnectionsVM.SelectionNeeded}"/>
                 </TabItem>
                 <TabItem Header="Misc.">
                     <views:MiscCostsView ViewModel="{Binding MiscVM}"

@@ -32,7 +32,7 @@ namespace TECUserControlLibrary.Utilities
     public class MiscSelector : InterfaceDataTemplateSelector<TECMisc> { }
     public class IOModuleSelector : InterfaceDataTemplateSelector<TECIOModule> { }
     public class ControllerTypeSelector : InterfaceDataTemplateSelector<TECControllerType> { }
-    public class ConnectionSelector : InterfaceDataTemplateSelector<TECConnection> { }
+    public class ConnectionSelector : InterfaceDataTemplateSelector<IControllerConnection> { }
     public class ElectricalMaterialSelector : InterfaceDataTemplateSelector<TECElectricalMaterial> { }
     public class ConnectionTypeSelector : InterfaceDataTemplateSelector<TECConnectionType> { }
     public class ValveSelector : InterfaceDataTemplateSelector<TECValve> { }
@@ -40,7 +40,7 @@ namespace TECUserControlLibrary.Utilities
 
     public class CostBatchInterfaceSelector : InterfaceDataTemplateSelector<INotifyCostChanged> { }
     public class PointInterfaceSelector : InterfaceDataTemplateSelector<INotifyPointChanged> { }
-    public class NetworkParentableSelector : InterfaceDataTemplateSelector<INetworkParentable> { }
+    public class NetworkParentableSelector : InterfaceDataTemplateSelector<TECController> { }
     public class EndDeviceSelector : InterfaceDataTemplateSelector<IEndDevice> { }
 
     public class ScopeTemplateSelector : DataTemplateSelector
@@ -81,7 +81,6 @@ namespace TECUserControlLibrary.Utilities
         public DataTemplate ControllerTemplate { get; set; }
         public DataTemplate MiscTemplate { get; set; }
         public DataTemplate ConnectionTemplate { get; set; }
-        public DataTemplate NetworkTemplate { get; set; }
         public DataTemplate ValveTemplate { get; set; }
 
 
@@ -99,10 +98,8 @@ namespace TECUserControlLibrary.Utilities
                         return ProposalTemplate;
                     case SystemComponentIndex.Controllers:
                         return ControllerTemplate;
-                    case SystemComponentIndex.Electrical:
+                    case SystemComponentIndex.Connections:
                         return ConnectionTemplate;
-                    case SystemComponentIndex.Network:
-                        return NetworkTemplate;
                     case SystemComponentIndex.Valves:
                         return ValveTemplate;
                     default:
@@ -153,6 +150,7 @@ namespace TECUserControlLibrary.Utilities
         public DataTemplate ValveTemplate { get; set; }
         public DataTemplate ManufacturerTemplate { get; set; }
         public DataTemplate TagTemplate { get; set; }
+        public DataTemplate ProtocolTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
@@ -176,6 +174,8 @@ namespace TECUserControlLibrary.Utilities
                         return IOModuleTemplate;
                     case MaterialType.Valve:
                         return ValveTemplate;
+                    case MaterialType.Protocol:
+                        return ProtocolTemplate;
                     case MaterialType.Manufacturer:
                         return ManufacturerTemplate;
                     case MaterialType.Tag:

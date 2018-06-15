@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace EstimatingUtilitiesLibrary
 {
-    public static class ScopeDocumentBuilder
+    internal static class ScopeDocumentBuilder
     {
         static private Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -28,7 +28,7 @@ namespace EstimatingUtilitiesLibrary
             "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX"
         });
 
-        public static void CreateScopeDocument(TECBid bid, string path, bool isEstimate)
+        internal static void CreateScopeDocument(TECBid bid, string path, bool isEstimate)
         {
             Document scopeDocument = new Document();
             defineStyles(scopeDocument);

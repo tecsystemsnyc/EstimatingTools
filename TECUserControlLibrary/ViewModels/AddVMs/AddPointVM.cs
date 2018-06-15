@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
@@ -24,7 +25,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 RaisePropertyChanged("ToAdd");
             }
         }
-        public List<IOType> PossibleTypes { get; }
+        public List<IOType> PossibleTypes { get; } = TECIO.PointIO;
 
         public AddPointVM(TECSubScope parentSubScope, TECScopeManager scopeManager) : base(scopeManager)
         {
@@ -32,17 +33,12 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             isTypical = parentSubScope.IsTypical;
             toAdd = new TECPoint(parentSubScope.IsTypical);
             ToAdd.Quantity = 1;
-            PossibleTypes = parentSubScope.PossibleIOTypes();
-            if(PossibleTypes.Count > 0)
-            {
-                ToAdd.Type = PossibleTypes[0];
-            }
             AddCommand = new RelayCommand(addExecute, addCanExecute);
         }
 
         private bool addCanExecute()
         {
-            TECConnection connection = parent.Connection;
+            IControllerConnection connection = parent.Connection;
             if(connection == null)
             {
                 return true;
@@ -52,7 +48,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 TECIO proposedIO = new TECIO(ToAdd.Type);
                 proposedIO.Quantity = ToAdd.Quantity;
                 bool containsIO = connection.ParentController.AvailableIO.Contains(proposedIO);
-                bool isNetworkIO = connection is TECNetworkConnection netConnect && netConnect.IOType == ToAdd.Type;
+                bool isNetworkIO = connection is TECNetworkConnection netConnect;
                 return containsIO || isNetworkIO;
             }
         }
@@ -60,7 +56,26 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             var newPoint = new TECPoint(ToAdd, isTypical);
             parent.Points.Add(newPoint);
+            if (parent.Connection != null && parent.Connection is TECHardwiredConnection hardwiredConnection)
+            {
+                var parentController = parent.Connection.ParentController;
+                var length = hardwiredConnection.Length;
+                var conduitLength = hardwiredConnection.ConduitLength;
+                var conduit = hardwiredConnection.ConduitType;
+                var isPlenum = hardwiredConnection.IsPlenum;
+                var protocol = hardwiredConnection.Protocol;
+
+                parentController.Disconnect(parent);
+                var newConnection = parentController.Connect(parent, protocol);
+                newConnection.Length = length;
+                newConnection.ConduitLength = conduitLength;
+                newConnection.ConduitType = conduit;
+                newConnection.IsPlenum = isPlenum;
+
+            }
+
             Added?.Invoke(newPoint);
+
         }
         
 

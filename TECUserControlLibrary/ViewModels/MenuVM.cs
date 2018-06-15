@@ -88,6 +88,11 @@ namespace TECUserControlLibrary.ViewModels
             RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
             setCommand("Open File Location", command);
         }
+        public void SetSettingsCommand(Action execute, Func<bool> canExecute = null)
+        {
+            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
+            setCommand("Settings", command);
+        }
 
         protected TECMenuItem addMenuItem(string newItemName, string disabledText = null, string parentItemName = null)
         {
@@ -170,6 +175,7 @@ namespace TECUserControlLibrary.ViewModels
             //Help menu items
             addMenuItem("Wiki", parentItemName: "Help");
             addMenuItem("Report Bug", parentItemName: "Help");
+            addMenuItem("Settings", parentItemName: "Help");
         }
         #endregion
     }

@@ -141,7 +141,7 @@ namespace EstimatingUtilitiesLibrary.Database
             logger.Trace("Finished backup. Backup path: " + backupPath);
         }
 
-        public static List<TableBase> GetTables(List<TECObject> items, string propertyName, DBType type = 0)
+        public static List<TableBase> GetTables(List<ITECObject > items, string propertyName, DBType type = 0)
         {
             List<TableBase> tables = new List<TableBase>();
             if (items.Count > 2 || items.Count == 0)
@@ -168,7 +168,7 @@ namespace EstimatingUtilitiesLibrary.Database
             return tables;
         }
 
-        internal static List<(Dictionary<string, string> data, Tuple<string, string> keyData)> PrepareIndexData(TECObject sender, string propertyName, TableBase table, DBType type)
+        internal static List<(Dictionary<string, string> data, Tuple<string, string> keyData)> PrepareIndexData(ITECObject  sender, string propertyName, TableBase table, DBType type)
         {
             List<(Dictionary<string, string> data, Tuple<string, string> keyData)> outData = new List<(Dictionary<string, string> data, Tuple<string, string> keyData)>();
             var childCollection = sender.GetType().GetProperty(propertyName).GetValue(sender) as IList;
@@ -185,7 +185,7 @@ namespace EstimatingUtilitiesLibrary.Database
             return outData;
         }
 
-        public static List<TableBase> GetTables(TECObject item, DBType type = 0)
+        public static List<TableBase> GetTables(ITECObject  item, DBType type = 0)
         {
             List<TableBase> tables = new List<TableBase>();
             List<TableBase> allTables = AllTables.Tables;
@@ -258,7 +258,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
             return fieldData;
         }
-        public static Dictionary<string, string> PrepareDataForEditObject(List<TableField> fields, TECObject item, string propertyName, object value)
+        public static Dictionary<string, string> PrepareDataForEditObject(List<TableField> fields, ITECObject  item, string propertyName, object value)
         {
             foreach (TableField field in fields)
             {
@@ -272,7 +272,7 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             return null;
         }
-        public static Tuple<string, string> PrimaryKeyData(TableBase table, TECObject item)
+        public static Tuple<string, string> PrimaryKeyData(TableBase table, ITECObject  item)
         {
             if (table.PrimaryKeys.Count != 1)
             {
@@ -290,15 +290,17 @@ namespace EstimatingUtilitiesLibrary.Database
             }
         }
 
-        private static bool matchesAllTypes(List<TECObject> items, List<Type> tableTypes)
+        private static bool matchesAllTypes(List<ITECObject > items, List<Type> tableTypes)
         {
             if (items.Count == tableTypes.Count)
             {
                 for (int x = 0; x < items.Count; x++)
                 {
                     bool isTableType = tableTypes[x].IsInstanceOfType(items[x]);
+                    bool isTableInterface = tableTypes[x].IsAssignableFrom(items[x].GetType());
+                    bool compatibleType = isTableType || isTableInterface;
 
-                    if (!isTableType)
+                    if (!compatibleType)
                     {
                         return false;
                     }
@@ -311,7 +313,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             return (tablePropertyNames.Contains(propertyName));
         }
-        private static bool matchesObjectType(TECObject item, List<Type> tableTypes)
+        private static bool matchesObjectType(ITECObject  item, List<Type> tableTypes)
         {
             if (tableTypes.Count != 1)
             {

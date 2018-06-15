@@ -19,6 +19,7 @@ namespace TECUserControlLibrary.ViewModels
     {
         private readonly TECTemplates templates;
         internal IUserConfirmable messageBox;
+        private List<IProtocol> requiredProtocols = new List<IProtocol>();
 
         public IEndDevice EndDevice { get; }
         public List<IEndDevice> PotentialReplacements { get; }
@@ -156,36 +157,25 @@ namespace TECUserControlLibrary.ViewModels
 
         private void populatePotentialReplacements()
         {
-            bool hasNetworkConnection = false;
             foreach (TECSystem sys in templates.SystemTemplates)
             {
                 foreach (TECEquipment equip in sys.Equipment)
                 {
-                    foreach (TECSubScope ss in equip.SubScope)
+                    foreach (TECSubScope ss in equip.SubScope.Where(x => x.Devices.Contains(EndDevice)))
                     {
-                        if (ss.IsNetwork && ss.Connection != null)
+                        if (ss.Connection != null)
                         {
-                            hasNetworkConnection = true;
-                            break;
+                            requiredProtocols.Add(ss.Connection.Protocol);
                         }
                     }
-                    if (hasNetworkConnection) break;
                 }
-                if (hasNetworkConnection) break;
             }
 
             List<IEndDevice> endDevices = new List<IEndDevice>(templates.Catalogs.Devices);
             endDevices.AddRange(templates.Catalogs.Valves);
             foreach (IEndDevice dev in endDevices)
             {
-                if (hasNetworkConnection)
-                {
-                    if (connectionTypesAreSame(EndDevice, dev))
-                    {
-                        PotentialReplacements.Add(dev);
-                    }
-                }
-                else
+                if (hasRequiredProtocols(dev, requiredProtocols))
                 {
                     PotentialReplacements.Add(dev);
                 }
@@ -194,28 +184,16 @@ namespace TECUserControlLibrary.ViewModels
             
         }
 
-        private bool connectionTypesAreSame(IEndDevice dev1, IEndDevice dev2)
+        private bool hasRequiredProtocols(IEndDevice device, IEnumerable<IProtocol> protocols)
         {
-            bool oneContainsTwo = true;
-            foreach (TECConnectionType type in dev2.ConnectionTypes)
+            foreach (IProtocol protocol in protocols)
             {
-                if (!dev1.ConnectionTypes.Contains(type))
+                if (!device.ConnectionMethods.Contains(protocol))
                 {
-                    oneContainsTwo = false;
-                    break;
+                    return false;
                 }
             }
-            bool twoContainsOne = true;
-            foreach (TECConnectionType type in dev1.ConnectionTypes)
-            {
-                if (!dev2.ConnectionTypes.Contains(type))
-                {
-                    twoContainsOne = false;
-                    break;
-                }
-            }
-
-            return (oneContainsTwo && twoContainsOne);
+            return true;
         }
     }
 }

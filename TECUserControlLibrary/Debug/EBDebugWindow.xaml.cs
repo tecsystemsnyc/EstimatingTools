@@ -1,8 +1,12 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
+using EstimatingUtilitiesLibrary;
 using EstimatingUtilitiesLibrary.Database;
 using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -18,6 +22,7 @@ namespace TECUserControlLibrary.Debug
         private ICommand addTypical;
         private ICommand throwException;
         private ICommand exportDBCommand;
+        private ICommand sendTestEmailCommand;
 
         public EBDebugWindow(TECBid bid)
         {
@@ -33,6 +38,7 @@ namespace TECUserControlLibrary.Debug
             addTypical = new RelayCommand(addTypicalExecute);
             throwException = new RelayCommand(throwExceptionExecute);
             exportDBCommand = new RelayCommand(exportDBCVSExecute);
+            sendTestEmailCommand = new RelayCommand(sendTestEmailExecute);
         }
         
         private void addResources()
@@ -41,36 +47,37 @@ namespace TECUserControlLibrary.Debug
             this.Resources.Add("AddTypicalCommand", addTypical);
             this.Resources.Add("ThrowExceptionCommand", throwException);
             this.Resources.Add("ExportDBCommand", exportDBCommand);
+            this.Resources.Add("SendTestEmailCommand", sendTestEmailCommand);
         }
 
         private void testNetworkExecute()
         {
             TECControllerType type = new TECControllerType(bid.Catalogs.Manufacturers[0]);
             type.Name = "Controller Type";
-            type.IO = new System.Collections.ObjectModel.ObservableCollection<TECIO>() { new TECIO(IOType.BACnetIP) };
+            type.IO = new System.Collections.ObjectModel.ObservableCollection<TECIO>() { new TECIO(IOType.AI) };
 
             bid.Catalogs.ControllerTypes.Add(type);
 
-            TECController controller = new TECController(type, false);
+            TECProvidedController controller = new TECProvidedController(type, false);
             controller.Name = "Test Server";
             controller.Description = "For testing.";
             controller.IsServer = true;
 
             bid.AddController(controller);
 
-            TECController child = new TECController(type, false);
+            TECProvidedController child = new TECProvidedController(type, false);
             child.Name = "Child";
 
             bid.AddController(child);
 
-            TECController emptyController = new TECController(type, false);
+            TECProvidedController emptyController = new TECProvidedController(type, false);
             emptyController.Name = "EmptyController";
 
             bid.AddController(emptyController);
 
-            TECNetworkConnection connection = controller.AddNetworkConnection(false, new List<TECConnectionType>() { bid.Catalogs.ConnectionTypes[0], bid.Catalogs.ConnectionTypes[1] }, IOType.BACnetIP);
+            TECNetworkConnection connection = controller.AddNetworkConnection(bid.Catalogs.Protocols[0]);
 
-            connection.AddINetworkConnectable(child);
+            connection.AddChild(child);
 
             TECTypical typical = new TECTypical();
             TECEquipment equip = new TECEquipment(true);
@@ -78,7 +85,7 @@ namespace TECUserControlLibrary.Debug
             ss.Name = "Test Subscope";
             ss.Devices.Add(bid.Catalogs.Devices[0]);
             TECPoint point = new TECPoint(true);
-            point.Type = IOType.BACnetIP;
+            point.Type = IOType.AI;
             point.Quantity = 1;
             ss.Points.Add(point);
             equip.SubScope.Add(ss);
@@ -87,7 +94,6 @@ namespace TECUserControlLibrary.Debug
             bid.Systems.Add(typical);
             typical.AddInstance(bid);
         }
-        
         private void addTypicalExecute()
         {
             TECTypical typical = new TECTypical();
@@ -98,7 +104,7 @@ namespace TECUserControlLibrary.Debug
             ss.Name = "Test Subscope";
             ss.Devices.Add(bid.Catalogs.Devices[0]);
             TECPoint point = new TECPoint(true);
-            point.Type = IOType.BACnetIP;
+            point.Type = IOType.AI;
             point.Quantity = 1;
             ss.Points.Add(point);
             equipment.SubScope.Add(ss);
@@ -130,14 +136,14 @@ namespace TECUserControlLibrary.Debug
             bid.Catalogs.IOModules[0].IO.Add(io);
             controllerType.Name = "Test Type";
 
-            TECController controller = new TECController(controllerType, true);
+            TECProvidedController controller = new TECProvidedController(controllerType, true);
             controller.IOModules.Add(bid.Catalogs.IOModules[0]);
             controller.Name = "Test Controller";
             typical.AddController(controller);
-            TECController otherController = new TECController(controllerType, true);
+            TECProvidedController otherController = new TECProvidedController(controllerType, true);
             otherController.Name = "Other Controller";
             typical.AddController(otherController);
-            TECConnection connection = controller.AddSubScopeConnection(connected);
+            IControllerConnection connection = controller.Connect(connected, (connected as IConnectable).AvailableProtocols.First());
             connection.Length = 10;
             connection.ConduitLength = 20;
             connection.ConduitType = bid.Catalogs.ConduitTypes[1];
@@ -156,15 +162,18 @@ namespace TECUserControlLibrary.Debug
             bid.Systems.Add(typical);
             typical.AddInstance(bid);
         }
-
         private void throwExceptionExecute()
         {
             throw new Exception("Test Exception.");
         }
-
         private void exportDBCVSExecute()
         {
             DatabaseManager<TECScopeManager>.ExportDef();
+        }
+        private void sendTestEmailExecute()
+        {
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "IncreaseContrastTeriostar.gif");
+            BugReporter.SendBugReport("Test", "Greg", "ghanson@tec-system.com", "My program crashed!", path);
         }
     }
 }

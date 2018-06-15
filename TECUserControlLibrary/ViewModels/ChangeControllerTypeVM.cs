@@ -13,11 +13,11 @@ namespace TECUserControlLibrary.ViewModels
     public class ChangeControllerTypeVM : ViewModelBase
     {
         public List<TECControllerType> Types { get; }
-        public TECController Controller { get; }
+        public TECProvidedController Controller { get; }
 
         public ICommand ChangeCommand { get; private set; }
 
-        public ChangeControllerTypeVM(TECController controller, IEnumerable<TECControllerType> types)
+        public ChangeControllerTypeVM(TECProvidedController controller, IEnumerable<TECControllerType> types)
         {
             this.Controller = controller;
             this.Types = getCompatibleTypes(types);

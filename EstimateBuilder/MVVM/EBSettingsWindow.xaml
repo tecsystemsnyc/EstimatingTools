@@ -1,0 +1,64 @@
+﻿<Window x:Class="EstimateBuilder.MVVM.EBSettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EstimateBuilder.MVVM"
+        mc:Ignorable="d"
+        DataContext="{Binding Settings, Source={StaticResource Locator}}"
+        Title="Settings" Height="300" Width="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="100"/>
+        </Grid.ColumnDefinitions>
+        
+        <!--Default Bid Directory-->
+        <TextBlock Text="Default Bid Directory:" HorizontalAlignment="Right"/>
+        <TextBox Text="{Binding DefaultBidDirectory}" 
+                 Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="5"/>
+        <Button Content="Choose Folder"
+                Command="{Binding ChooseBidDirectoryCommand}"
+                Grid.Column="3"
+                Margin="5"/>
+
+        <!--Default Templates Directory-->
+        <TextBlock Text="Default Templates Directory:" 
+                   Grid.Row="1" HorizontalAlignment="Right"/>
+        <TextBox Text="{Binding DefaultTemplatesDirectory}"
+                 Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="5"/>
+        <Button Content="Choose Folder"
+                Command="{Binding ChooseTemplatesDirectoryCommand}"
+                Grid.Row="1" Grid.Column="3"
+                Margin="5"/>
+
+        <!--Open On Export-->
+        <TextBlock Text="Open Files on Export Complete:" 
+                   Grid.Row="2" HorizontalAlignment="Right"/>
+        <CheckBox IsChecked="{Binding OpenOnExport}"
+                  Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+
+        <!--Apply Settings-->
+        <Button Content="Apply"
+                Command="{Binding ApplyCommand}"
+                Grid.Row="4"
+                Grid.Column="2"
+                Margin="5"/>
+
+        <!--Cancel-->
+        <Button Content="Cancel"
+                Click="Cancel_Click"
+                Grid.Row="4"
+                Grid.Column="3"
+                Margin="5"/>
+    </Grid>
+</Window>

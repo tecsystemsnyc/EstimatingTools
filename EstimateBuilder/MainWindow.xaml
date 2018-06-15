@@ -118,7 +118,13 @@
                               BidVisibility="Visible" 
                               BidPath="{Binding BidPath}"
                               GetBidPathCommand="{Binding GetBidPathCommand}" 
-                              ClearBidPathCommand="{Binding ClearBidPathCommand}"/>
+                              ClearBidPathCommand="{Binding ClearBidPathCommand}"
+                              FirstRecentBid="{Binding FirstRecentBid}"
+                              SecondRecentBid="{Binding SecondRecentBid}"
+                              ThirdRecentBid="{Binding ThirdRecentBid}"
+                              FourthRecentBid="{Binding FourthRecentBid}"
+                              FifthRecentBid="{Binding FifthRecentBid}"
+                              ChooseRecentBidCommand="{Binding ChooseRecentBidCommand}"/>
         </DataTemplate>
         </ContentControl.Resources>
     </ContentControl>

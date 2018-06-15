@@ -29,7 +29,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
             {
                 _selectedSystem = value;
                 RaisePropertyChanged("SelectedSystem");
-                Selected = new ScopeSummaryItem(new TECSystem(value.Typical, false, bid), bid.Parameters, bid.Duration);
+                Selected = value != null ? new ScopeSummaryItem(new TECSystem(value.Typical, false, bid), bid.Parameters, bid.Duration) : null;
             }
         }
         public ScopeSummaryItem SelectedRiser
@@ -104,14 +104,37 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
         {
             get { return getMiscTotal(); }
         }
+
+
+        private TECEstimator _extraLaborEstimate;
+
+        public TECEstimator ExtraLaborEstimate
+        {
+            get { return _extraLaborEstimate; }
+            set
+            {
+                _extraLaborEstimate = value;
+                RaisePropertyChanged("ExtraLaborEstimate");
+            }
+        }
         
         public SystemSummaryVM(TECBid bid, ChangeWatcher watcher)
         {
             this.bid = bid;
+            setupExtraLaborEstimate(bid);
+            populateAll(bid);
+            watcher.Changed += changed;
+        }
+        
+        private void setupExtraLaborEstimate(TECBid bid)
+        {
+            ExtraLaborEstimate = new TECEstimator(new TECPoint(true), bid.Parameters, bid.ExtraLabor, bid.Duration, new ChangeWatcher(bid.ExtraLabor));
+        }
+        private void populateAll(TECBid bid)
+        {
             populateSystems(bid.Systems);
             populateRiser(bid.Controllers, bid.Panels);
             populateMisc(bid.MiscCosts);
-            watcher.Changed += changed;
         }
 
         private void changed(TECChangedEventArgs e)
@@ -175,7 +198,8 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
                         };
                         Misc.Add(summaryItem);
                     }
-                } else if (e.Change == Change.Remove)
+                }
+                else if (e.Change == Change.Remove)
                 {
                     if (e.Value is TECController || e.Value is TECPanel)
                     {
@@ -185,6 +209,11 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
                     {
                         removeFromCollection(Misc, misc);
                     }
+                }
+                if(e.PropertyName == "Duration")
+                {
+                    populateAll(bid);
+                    setupExtraLaborEstimate(bid);
                 }
                 RaisePropertyChanged("RiserTotal");
                 RaisePropertyChanged("MiscTotal");

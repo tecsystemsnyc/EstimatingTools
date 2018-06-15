@@ -55,8 +55,8 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Shipping:"/>
                 <TextBlock Text="{Binding Estimate.TECShipping, StringFormat= {} {0:C}}"
-                    Grid.Column="1"
-                   TextAlignment="Right"/>
+                           Grid.Column="1"
+                           TextAlignment="Right"/>
 
             </Grid>
             <Grid>
@@ -66,8 +66,8 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Warranty:"/>
                 <TextBlock Text="{Binding Estimate.TECWarranty, StringFormat= {} {0:C}}"
-                   Grid.Row="4" Grid.Column="1"
-                   TextAlignment="Right"/>
+                           Grid.Row="4" Grid.Column="1"
+                           TextAlignment="Right"/>
 
             </Grid>
             <Grid>
@@ -77,8 +77,8 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Labor Hours:"/>
                 <TextBlock Text="{Binding Estimate.TECLaborHours, StringFormat= {}}" 
-                 Grid.Column="1"
-               TextAlignment="Right" />
+                           Grid.Column="1"
+                           TextAlignment="Right" />
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -87,8 +87,19 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Labor:"/>
                 <TextBlock Text="{Binding Estimate.TECLaborCost, StringFormat= {} {0:C}}" 
-                 Grid.Column="1"
-               TextAlignment="Right" />
+                           Grid.Column="1"
+                           TextAlignment="Right" />
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Cost:"
+                           FontWeight="DemiBold"/>
+                <TextBlock Text="{Binding Estimate.TECCost, StringFormat= {} {0:C}}"
+                           Grid.Column="1"
+                           TextAlignment="Right"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -97,28 +108,8 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Escalation:" />
                 <TextBlock Text="{Binding Estimate.Escalation, StringFormat={}{0:C}}"
-                 Grid.Column="1"
-                 HorizontalAlignment="Right"/>
-            </Grid>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Overhead:"  />
-                <TextBlock Text="{Binding Estimate.Overhead, StringFormat={}{0:C}}"
-                 Grid.Column="1"
-                 HorizontalAlignment="Right"/>
-            </Grid>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Profit:"/>
-                <TextBlock Text="{Binding Estimate.Profit, StringFormat={}{0:C}}"
-                 Grid.Column="1"
-                 HorizontalAlignment="Right"/>
+                           Grid.Column="1"
+                           HorizontalAlignment="Right"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -128,8 +119,8 @@
                 <TextBlock Text="Subtotal:"
                            FontWeight="DemiBold"/>
                 <TextBlock Text="{Binding Estimate.TECSubtotal, StringFormat= {} {0:C}}"
-                        Grid.Column="1"
-                     TextAlignment="Right"/>
+                           Grid.Column="1"
+                           TextAlignment="Right"/>
             </Grid>
             <Grid Height="10"/>
             <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1">
@@ -142,8 +133,8 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Material Cost:"/>
                 <TextBlock Text="{Binding Estimate.ElectricalMaterialCost, StringFormat= {} {0:C}}" 
-               Grid.Column="1"
-               TextAlignment="Right"/>
+                           Grid.Column="1"
+                           TextAlignment="Right"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -152,8 +143,8 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Shipping:"/>
                 <TextBlock Text="{Binding Estimate.ElectricalShipping, StringFormat= {} {0:C}}"
-                    Grid.Column="1"
-                   TextAlignment="Right"/>
+                           Grid.Column="1"
+                           TextAlignment="Right"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -162,8 +153,8 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Warranty:"/>
                 <TextBlock Text="{Binding Estimate.ElectricalWarranty, StringFormat= {} {0:C}}"
-                   Grid.Column="1"
-                   TextAlignment="Right"/>
+                           Grid.Column="1"
+                           TextAlignment="Right"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -172,8 +163,8 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Labor Hours:"/>
                 <TextBlock Text="{Binding Estimate.SubcontractorLaborHours, StringFormat= {}}" 
-                 Grid.Column="1"
-               TextAlignment="Right" />
+                           Grid.Column="1"
+                           TextAlignment="Right" />
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -182,8 +173,18 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Labor:"/>
                 <TextBlock Text="{Binding Estimate.SubcontractorLaborCost, StringFormat= {} {0:C}}"
-                   Grid.Column="1"
-                   TextAlignment="Right"/>
+                           Grid.Column="1"
+                           TextAlignment="Right"/>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Cost:" FontWeight="DemiBold"/>
+                <TextBlock Text="{Binding Estimate.SubcontractorCost, StringFormat= {} {0:C}}"
+                           Grid.Column="1"
+                           TextAlignment="Right"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -192,18 +193,8 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Escalation:" />
                 <TextBlock Text="{Binding Estimate.ElectricalEscalation, StringFormat={}{0:C}}"
-                 Grid.Column="1"
-                 HorizontalAlignment="Right"/>
-            </Grid>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Markup:"  />
-                <TextBlock Text="{Binding Estimate.ElectricalMarkup, StringFormat={}{0:C}}"
-                 Grid.Column="1"
-                 HorizontalAlignment="Right"/>
+                           Grid.Column="1"
+                           HorizontalAlignment="Right"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -212,44 +203,41 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Subtotal:" FontWeight="DemiBold"/>
                 <TextBlock Text="{Binding Estimate.SubcontractorSubtotal, StringFormat= {} {0:C}}"
-                 Grid.Column="1"
-               TextAlignment="Right"/>
+                           Grid.Column="1"
+                           TextAlignment="Right"/>
             </Grid>
             <Grid Height="10"/>
-            <!--<Border BorderBrush="DarkGray" BorderThickness="0,0,0,1">
-                <TextBlock Text="Totals" FontWeight="DemiBold"/>
-            </Border>-->
-            <!--<Grid>
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Total Cost:" />
-                <TextBlock Text="{Binding Estimate.TotalCost, StringFormat=' \{0:C\}'}"
-            Grid.Column="1"
-            TextAlignment="Right"/>-->
-            <!--</Grid>-->
-            <!--<Grid>
+                <TextBlock Text="Bond:"/>
+                <TextBlock Text="{Binding Estimate.BondCost, StringFormat= {} {0:C}}"
+                           Grid.Column="1"
+                           TextAlignment="Right"/>
+            </Grid>
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Total Markup:" />
-                <TextBlock Text="{Binding Estimate.Markup, StringFormat=' \{0:C\}'}"
-            Grid.Column="1"
-            TextAlignment="Right"/>
-            </Grid>-->
+                <TextBlock Text="Markup:"/>
+                <TextBlock Text="{Binding Estimate.Markup, StringFormat= {} {0:C}}"
+                           Grid.Column="1"
+                           TextAlignment="Right"/>
+            </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Total Price:" 
-               FontWeight="Bold"
-               FontStyle="Italic"/>
+                           FontWeight="Bold"
+                           FontStyle="Italic"/>
                 <Border Grid.Column="1"
-            BorderThickness="2"
-            BorderBrush="Black">
+                        BorderThickness="2"
+                        BorderBrush="Black">
                     <TextBlock Text="{Binding Estimate.TotalPrice, StringFormat=' \{0:C\}'}" TextAlignment="Right"/>
                 </Border>
             </Grid>

@@ -32,15 +32,10 @@ namespace TECUserControlLibrary.BaseVMs
         protected ChangeWatcher watcher;
         protected DoStacker doStack;
         protected DeltaStacker deltaStack;
-        protected string workingFileDirectory;
         private EditorVM _editorVM;
         private string _titleString;
         private object _currentVM;
         private bool _viewEnabled;
-        /// <summary>
-        /// Exclusively for use instantiating the delta stacker
-        /// </summary>
-        private bool isTemplates = false;
         protected string appName { get; }
 
         #region Properties
@@ -102,14 +97,12 @@ namespace TECUserControlLibrary.BaseVMs
         public RelayCommand<(CancelEventArgs, Window)> ClosingCommand { get; private set; }
 
         abstract protected FileDialogParameters workingFileParameters { get; }
-        abstract protected string defaultDirectory { get; set; }
+        abstract protected string defaultDirectory { get; }
         abstract protected string defaultFileName { get; }
-        abstract protected string templatesFilePath { get; set; }
         #endregion
 
         public AppManager(string name, SplashVM splashVM, MenuVM menuVM)
         {
-            if(typeof(T) == typeof(TECTemplates)) { isTemplates = true; }
             appName = name;
             ViewEnabled = true;
             Version = getVersionNumber();
@@ -139,6 +132,7 @@ namespace TECUserControlLibrary.BaseVMs
             MenuVM.SetWikiCommand(wikiExecute);
             MenuVM.SetReportBugCommand(reportBugExecute);
             MenuVM.SetOpenFileLocationCommand(openFileLocationExecute, canOpenFileLocation);
+            MenuVM.SetSettingsCommand(settingsExecute);
         }
         //New
         private void newExecute()
@@ -163,7 +157,7 @@ namespace TECUserControlLibrary.BaseVMs
             string loadFilePath;
             checkForChanges(message, () =>
             {
-                loadFilePath = UIHelpers.GetLoadPath(workingFileParameters, defaultDirectory, workingFileDirectory);
+                loadFilePath = UIHelpers.GetLoadPath(workingFileParameters, defaultDirectory);
                 if(loadFilePath != null)
                 {
                     logger.Info("User chose load path: {0}, loading...", loadFilePath);
@@ -234,7 +228,7 @@ namespace TECUserControlLibrary.BaseVMs
         private void saveNewExecute()
         {
             logger.Info("User clicked File->Save As");
-            string saveFilePath = UIHelpers.GetSavePath(workingFileParameters, defaultFileName, defaultDirectory, workingFileDirectory);
+            string saveFilePath = UIHelpers.GetSavePath(workingFileParameters, defaultFileName, defaultDirectory);
             if(saveFilePath != null)
             {
                 logger.Info("Saving new file...");
@@ -312,10 +306,7 @@ namespace TECUserControlLibrary.BaseVMs
             System.Diagnostics.Process.Start(WIKI_URL);
         }
         //Report Bug
-        private void reportBugExecute()
-        {
-            System.Diagnostics.Process.Start(BUG_REPORT_URL);
-        }
+        protected abstract void reportBugExecute();
         //Open File Location
         private void openFileLocationExecute()
         {
@@ -325,6 +316,8 @@ namespace TECUserControlLibrary.BaseVMs
         {
             return databaseManager != null;
         }
+        //Settings
+        protected abstract void settingsExecute();
         #endregion
 
         protected string getVersionNumber()
@@ -446,7 +439,7 @@ namespace TECUserControlLibrary.BaseVMs
                         if (databaseManager == null)
                         {
                             logger.Info("Saving new file before closing.");
-                            string saveFilePath = UIHelpers.GetSavePath(workingFileParameters, defaultFileName, defaultDirectory, workingFileDirectory);
+                            string saveFilePath = UIHelpers.GetSavePath(workingFileParameters, defaultFileName, defaultDirectory);
                             if (saveFilePath != null && saveFilePath != "")
                             {
                                 databaseManager = new DatabaseManager<T>(saveFilePath);

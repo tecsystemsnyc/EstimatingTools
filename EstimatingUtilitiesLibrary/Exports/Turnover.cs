@@ -145,7 +145,8 @@ namespace EstimatingUtilitiesLibrary.Exports
                     worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                     worksheet.Cell(x, 2).Value = devices.Count(item => item == device);
                     worksheet.Cell(x, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                    worksheet.Cell(x, 3).Value = device.Manufacturer.Label;
+                    if (device is TECHardware hardware) { worksheet.Cell(x, 3).Value = hardware.Manufacturer.Label; }
+                    else{ worksheet.Cell(x, 3).Value = "NA"; }
                     worksheet.Cell(x, 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                     worksheet.Cell(x, 4).Value = device.Name;
                     worksheet.Cell(x, 4).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
@@ -160,11 +161,11 @@ namespace EstimatingUtilitiesLibrary.Exports
                     worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                     worksheet.Cell(x, 2).Value = "1";
                     worksheet.Cell(x, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                    worksheet.Cell(x, 3).Value = controller.Type.Manufacturer.Label;
+                    worksheet.Cell(x, 3).Value = controller is TECProvidedController provided ? provided.Type.Manufacturer.Label : "FBO";
                     worksheet.Cell(x, 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                    worksheet.Cell(x, 4).Value = controller.Type.Name;
+                    worksheet.Cell(x, 4).Value = controller is TECProvidedController provided1 ? provided1.Type.Name : "FBO";
                     worksheet.Cell(x, 4).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                    worksheet.Cell(x, 5).Value = controller.Type.Description;
+                    worksheet.Cell(x, 5).Value = controller is TECProvidedController provided2 ? provided2.Type.Description : "FBO";
                     worksheet.Cell(x, 5).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                     worksheet.Cell(x, 6).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                     x++;
@@ -250,11 +251,11 @@ namespace EstimatingUtilitiesLibrary.Exports
                 worksheet.Cell(x, 1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                 worksheet.Cell(x, 2).Value = "1";
                 worksheet.Cell(x, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                worksheet.Cell(x, 3).Value = controller.Type.Manufacturer.Label;
+                worksheet.Cell(x, 3).Value = controller is TECProvidedController provided ? provided.Type.Manufacturer.Label : "FBO";
                 worksheet.Cell(x, 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                worksheet.Cell(x, 4).Value = controller.Type.Name;
+                worksheet.Cell(x, 4).Value = controller is TECProvidedController provided1 ? provided1.Type.Name : "FBO";
                 worksheet.Cell(x, 4).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                worksheet.Cell(x, 5).Value = controller.Type.Description;
+                worksheet.Cell(x, 5).Value = controller is TECProvidedController provided2 ? provided2.Type.Description : "FBO";
                 worksheet.Cell(x, 5).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                 worksheet.Cell(x, 6).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                 x++;
@@ -394,16 +395,6 @@ namespace EstimatingUtilitiesLibrary.Exports
             worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
             worksheet.Cell(x, 2).DataType = XLCellValues.Number;
             x += 2;
-            worksheet.Cell(x, 1).Value = "Overhead";
-            worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.Overhead);
-            worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
-            worksheet.Cell(x, 2).DataType = XLCellValues.Number;
-            x++;
-            worksheet.Cell(x, 1).Value = "Profit";
-            worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.Profit);
-            worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
-            worksheet.Cell(x, 2).DataType = XLCellValues.Number;
-            x++;
             worksheet.Cell(x, 1).Value = "Subtotal";
             worksheet.Cell(x, 2).Value = String.Format("{0}", estimate.TECSubtotal);
             worksheet.Cell(x, 2).Style.NumberFormat.Format = accountingFormat;
@@ -442,11 +433,6 @@ namespace EstimatingUtilitiesLibrary.Exports
             x += 2;
             worksheet.Cell(x, 4).Value = "Escalation";
             worksheet.Cell(x, 5).Value = String.Format("{0}", estimate.ElectricalEscalation);
-            worksheet.Cell(x, 5).Style.NumberFormat.Format = accountingFormat;
-            worksheet.Cell(x, 5).DataType = XLCellValues.Number;
-            x++;
-            worksheet.Cell(x, 4).Value = "Markup";
-            worksheet.Cell(x, 5).Value = String.Format("{0}", estimate.ElectricalMarkup);
             worksheet.Cell(x, 5).Style.NumberFormat.Format = accountingFormat;
             worksheet.Cell(x, 5).DataType = XLCellValues.Number;
             x++;

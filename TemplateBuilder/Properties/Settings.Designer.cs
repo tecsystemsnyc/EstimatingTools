@@ -12,7 +12,7 @@ namespace TemplateBuilder.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.3.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.6.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -26,24 +26,12 @@ namespace TemplateBuilder.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string TemplatesFilePath {
+        public string TemplatesDirectory {
             get {
-                return ((string)(this["TemplatesFilePath"]));
+                return ((string)(this["TemplatesDirectory"]));
             }
             set {
-                this["TemplatesFilePath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DefaultDirectory {
-            get {
-                return ((string)(this["DefaultDirectory"]));
-            }
-            set {
-                this["DefaultDirectory"] = value;
+                this["TemplatesDirectory"] = value;
             }
         }
         
@@ -56,6 +44,78 @@ namespace TemplateBuilder.Properties {
             }
             set {
                 this["StartUpFilePath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool OpenFileOnExport {
+            get {
+                return ((bool)(this["OpenFileOnExport"]));
+            }
+            set {
+                this["OpenFileOnExport"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FirstRecentTemplates {
+            get {
+                return ((string)(this["FirstRecentTemplates"]));
+            }
+            set {
+                this["FirstRecentTemplates"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SecondRecentTemplates {
+            get {
+                return ((string)(this["SecondRecentTemplates"]));
+            }
+            set {
+                this["SecondRecentTemplates"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ThirdRecentTemplates {
+            get {
+                return ((string)(this["ThirdRecentTemplates"]));
+            }
+            set {
+                this["ThirdRecentTemplates"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FourthRecentTemplates {
+            get {
+                return ((string)(this["FourthRecentTemplates"]));
+            }
+            set {
+                this["FourthRecentTemplates"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FifthRecentTemplates {
+            get {
+                return ((string)(this["FifthRecentTemplates"]));
+            }
+            set {
+                this["FifthRecentTemplates"] = value;
             }
         }
     }

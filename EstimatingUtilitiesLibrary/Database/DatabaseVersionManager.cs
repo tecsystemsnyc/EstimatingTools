@@ -91,34 +91,33 @@ namespace EstimatingUtilitiesLibrary.Database
             TableMapList mapList = buildMap(dataTable, originalVersion, updateVersion, tempMap, currentTables);
             foreach(TableMap map in mapList)
             {
-                if(map.OriginalTableNames.Count == 1)
+                if (isSingleRow(map))
                 {
-                    migrateData(map.OriginalTableNames[0], DatabaseHelper.FieldsString(map.OriginalFields),
-                        map.UpdateTableName, DatabaseHelper.FieldsString(map.UpdateFields), db);
-                }
-                else if (map.OriginalTableNames.Count > 1)
-                {
-                    if (isSingleRow(map))
+                    DataTable dt = combinedTable(map, db);
+                    string insertColumns = DatabaseHelper.FieldsString(map.UpdateFields);
+                    foreach (DataRow row in dt.Rows)
                     {
-                        DataTable dt = combinedTable(map, db);
-                        Tuple<List<string>, List<string>> fieldValues = fieldValuePair(dt, map.OriginalFields);
-                        string insertColumns = DatabaseHelper.FieldsString(map.UpdateFields);
-                        string insertValues = DatabaseHelper.ValuesString(fieldValues.Item2);
+                        List<string> values = new List<string>();
+                        foreach (var field in map.OriginalFields)
+                        {
+                            values.Add(row[field].ToString());
+                        }
+                        string insertValues = DatabaseHelper.ValuesString(values);
                         string command = String.Format("insert into {0} ({1}) values ({2})", map.UpdateTableName, insertColumns, insertValues);
                         db.NonQueryCommand(command);
                     }
-                    else
+
+                }
+                else
+                {
+                    foreach (string table in map.OriginalTableNames)
                     {
-                        foreach(string table in map.OriginalTableNames)
-                        {
-                            migrateData(table, DatabaseHelper.FieldsString(map.TableFieldsDictionary[table]),
-                            map.UpdateTableName, DatabaseHelper.FieldsString(map.UpdateFields), db);
-                        }
+                        migrateData(table, DatabaseHelper.FieldsString(map.TableFieldsDictionary[table]),
+                        map.UpdateTableName, DatabaseHelper.FieldsString(map.UpdateFields), db);
                     }
-                    
                 }
 
-                foreach(TableBase table in AllTables)
+                foreach (TableBase table in AllTables)
                 {
                     if(tempMap[table.NameString] == map.UpdateTableName)
                     {
@@ -133,7 +132,6 @@ namespace EstimatingUtilitiesLibrary.Database
                         }
                     }
                 }
-                
             }
         }
         static private void migrateFromTempTables(Dictionary<string, string> tableMap, SQLiteDatabase db)
@@ -180,33 +178,9 @@ namespace EstimatingUtilitiesLibrary.Database
 
         private static DataTable combinedTable(TableMap map, SQLiteDatabase db)
         {
-            DataTable outTable = new DataTable("Combined Table");
-            List<object> rowList = new List<object>();
-            foreach(string table in map.OriginalTableNames)
-            {
-                string command = String.Format("select * from {0};", table);
-                DataTable tableData = db.GetDataFromCommand(command);
-                foreach(DataColumn column in tableData.Columns)
-                {
-                    if (map.TableFieldsDictionary[table].Contains(column.ColumnName))
-                    {
-                        outTable.Columns.Add(column.ColumnName, column.DataType);
-                        rowList.Add(tableData.Rows[0][column]);
-                    }
-                }
-            }
-            outTable.Rows.Add(rowList.ToArray());
+            string command = String.Format("select {0} from {1}", selectString(map), joinString(map.OriginalTableNames));
+            DataTable outTable = db.GetDataFromCommand(command);
             return outTable;
-        }
-        private static Tuple<List<string>, List<string>> fieldValuePair(DataTable dt, List<string> fields)
-        {
-            Tuple<List<string>, List<string>> outData = new Tuple<List<string>, List<string>>(new List<string>(), new List<string>());
-            foreach(string field in fields)
-            {
-                outData.Item1.Add(field);
-                outData.Item2.Add(dt.Rows[0][field].ToString());
-            }
-            return outData;
         }
         private static bool isSingleRow(TableMap map)
         {
@@ -216,7 +190,8 @@ namespace EstimatingUtilitiesLibrary.Database
                 if (pair.Value.Count == map.UpdateFields.Count)
                 {
                     outBool = false;
-                } else
+                }
+                else
                 {
                     outBool = true;
                 }
@@ -224,7 +199,52 @@ namespace EstimatingUtilitiesLibrary.Database
             return outBool;
         }
 
-        private static TableMapList buildMap(DataTable dt, int originalVersion,
+        private static string joinString(List<string> tables)
+        {
+            string outString = "";
+            int x = 0;
+            foreach (var table in tables)
+            {
+                if(x < tables.Count -1)
+                {
+                    outString += table + " inner join ";
+                    x++;
+                } else
+                {
+                    outString += table;
+                }
+                
+            }
+            return outString;
+            
+        }
+        private static string selectString(TableMap map)
+        {
+            string outString = "";
+            int x = 0;
+            foreach(var pair in map.TableFieldsDictionary)
+            {
+                int y = 0;
+                foreach(var field in pair.Value)
+                {
+                    outString += String.Format("{0} as '{0}'", field);
+
+                    if (x < map.TableFieldsDictionary.Count - 1 || y < pair.Value.Count - 1)
+                    {
+                        outString += ", ";
+                    }
+                    else
+                    {
+                        outString += " ";
+                    }
+                    y++;
+                }
+                x++;
+            }
+            return outString;
+        }
+
+        private static TableMapList buildMap(DataTable versionData, int originalVersion,
             int updateVersion, Dictionary<string, string> tempMap, List<string> currentTables)
         {
             string originalTableColumn = tableString(originalVersion);
@@ -233,12 +253,12 @@ namespace EstimatingUtilitiesLibrary.Database
             string updateFieldColumn = fieldString(updateVersion);
 
             TableMapList mapList = new TableMapList();
-            foreach(DataRow row in dt.Rows)
+            foreach(DataRow row in versionData.Rows)
             {
                 if (tempMap.ContainsKey(row[updateTableColumn].ToString()) && currentTables.Contains(row[originalTableColumn]))
                 {
                     string originalTable = row[originalTableColumn].ToString();
-                    string originalField = row[originalFieldColumn].ToString();
+                    string originalField = originalTable + "." + row[originalFieldColumn].ToString();
                     string updateTempTable = tempMap[row[updateTableColumn].ToString()];
                     string updateField = row[updateFieldColumn].ToString();
 

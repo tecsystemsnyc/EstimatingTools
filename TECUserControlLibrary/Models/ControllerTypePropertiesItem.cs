@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TECUserControlLibrary.Utilities;
+using TECUserControlLibrary.Utilities.DropTargets;
 
 namespace TECUserControlLibrary.Models
 {
@@ -28,6 +29,7 @@ namespace TECUserControlLibrary.Models
             }
         }
         public ICommand AddIOCommand { get; private set; }
+        public IDropTarget ProtocolToIODropTarget { get; }
 
         public ControllerTypePropertiesItem(TECControllerType controllerType)
         {
@@ -35,7 +37,7 @@ namespace TECUserControlLibrary.Models
             IOModules = new QuantityCollection<TECIOModule>(controllerType.IOModules);
             IOModules.QuantityChanged += ioModules_QuantityChanged;
             AddIOCommand = new RelayCommand(addIOExecute, canAddIO);
-
+            this.ProtocolToIODropTarget = new ProtocolToIODropTarget();
         }
 
         private void ioModules_QuantityChanged(TECIOModule arg1, int arg2, int arg3)
@@ -107,4 +109,5 @@ namespace TECUserControlLibrary.Models
             }
         }
     }
+
 }

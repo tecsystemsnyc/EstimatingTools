@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using System;
@@ -12,12 +13,12 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class ConnectOnAddVM : ViewModelBase
     {
-        private List<TECSubScope> toConnect;
+        private List<IConnectable> toConnect;
         private TECSystem parent;
-        private double _length;
-        private double _conduitLength;
+        private double _length = 0.0;
+        private double _conduitLength = 0.0;
         private TECElectricalMaterial _conduitType;
-        private bool _isPlenum;
+        private bool _isPlenum = false;
         private bool _connect = false;
         private TECController _selectedController;
 
@@ -78,9 +79,9 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         
-        public ConnectOnAddVM(IEnumerable<TECSubScope> toConnect, TECSystem parent, IEnumerable<TECElectricalMaterial> conduitTypes, IEnumerable<TECConnectionType> connectionTypes)
+        public ConnectOnAddVM(IEnumerable<IConnectable> toConnect, TECSystem parent, IEnumerable<TECElectricalMaterial> conduitTypes, IEnumerable<TECConnectionType> connectionTypes)
         {
-            this.toConnect = new List<TECSubScope>(toConnect);
+            this.toConnect = new List<IConnectable>(toConnect);
             this.parent = parent;
             this.ConduitTypes =  new List<TECElectricalMaterial>(conduitTypes);
             ParentControllers = getCompatibleControllers(parent);
@@ -91,30 +92,7 @@ namespace TECUserControlLibrary.ViewModels
             List<TECController> result = new List<TECController>();
             foreach(TECController controller in parent.Controllers)
             {
-                bool allCompatible = true;
-
-                foreach(TECSubScope ss in toConnect)
-                {
-                    if (ss.IsNetwork)
-                    {
-                        IOType ioType = ss.IO.ListIO()[0].Type;
-                        if (!controller.TotalIO.Contains(ioType))
-                        {
-                            allCompatible = false;
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        if (!controller.CanConnectSubScope(ss))
-                        {
-                            allCompatible = false;
-                            break;
-                        }
-                    }
-                }
-
-                if (allCompatible)
+                if (ConnectionHelper.CanConnectToController(toConnect, controller))
                 {
                     result.Add(controller);
                 }
@@ -122,43 +100,31 @@ namespace TECUserControlLibrary.ViewModels
             return result;
         }
 
-        public void Update(IEnumerable<TECSubScope> toConnect)
+        public void Update(IEnumerable<IConnectable> toConnect)
         {
-            this.toConnect = new List<TECSubScope>(toConnect);
+            this.toConnect = new List<IConnectable>(toConnect);
             ParentControllers = getCompatibleControllers(parent);
+            if (!ParentControllers.Contains(SelectedController))
+            {
+                SelectedController = null;
+            }
             RaisePropertyChanged("ParentControllers");
         }
-        public void ExecuteConnection(IEnumerable<TECSubScope> finalToConnect)
+        public void ExecuteConnection(IEnumerable<IConnectable> finalToConnect)
         {
-            foreach(TECSubScope subScope in finalToConnect)
+
+            var connections = ConnectionHelper.ConnectToController(finalToConnect, SelectedController);
+
+            foreach (IControllerConnection conn in connections)
             {
-                ExecuteConnection(subScope);
+                setConnectionProperties(conn);
             }
         }
         public void ExecuteConnection(TECSubScope finalToConnect)
         {
-            if (Connect && SelectedController != null)
-            {
-                if (parent is TECTypical typical)
-                {
-                    List<TECConnection> connections = typical.CreateTypicalAndInstanceConnections(SelectedController, finalToConnect);
-                    foreach (TECConnection conn in connections)
-                    {
-                        setConnectionProperties(conn);
-                    }
-                }
-                else
-                {
-                    connectControllerToSubScope(SelectedController, finalToConnect);
-                }
-            }
+            ExecuteConnection(new List<IConnectable> { finalToConnect });
         }
         
-        private void connectControllerToSubScope(TECController controller, TECSubScope finalToConnect)
-        {
-            TECConnection connection = controller.AddSubScope(finalToConnect, true);
-            setConnectionProperties(connection);
-        }
         public bool CanConnect()
         {
             if (Connect)
@@ -171,7 +137,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private void setConnectionProperties(TECConnection connection)
+        private void setConnectionProperties(IControllerConnection connection)
         {
             connection.Length += Length;
             connection.ConduitLength += ConduitLength;

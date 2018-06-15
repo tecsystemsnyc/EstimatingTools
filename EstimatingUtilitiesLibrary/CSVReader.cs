@@ -3,9 +3,9 @@ using System.IO;
 
 namespace EstimatingUtilitiesLibrary
 {
-    public static class CSVReader
+    internal static class CSVReader
     {
-        public static DataTable Read(string content)
+        internal static DataTable Read(string content)
         {
             DataTable data = new DataTable();
             StringReader reader = new StringReader(content);

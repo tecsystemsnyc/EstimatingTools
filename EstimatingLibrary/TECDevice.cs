@@ -5,51 +5,34 @@ using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
 {
-    public class TECDevice : TECHardware, IDragDropable, IEndDevice, ICatalog<TECDevice>
+    public class TECDevice : TECHardware, IDDCopiable, IEndDevice, ICatalog<TECDevice>
     {
         #region Constants
         private const CostType COST_TYPE = CostType.TEC;
         #endregion
 
-        #region Fields
-        private ObservableCollection<TECConnectionType> _connectionTypes;
-
-        #endregion
-
-        #region Properties
-        virtual public ObservableCollection<TECConnectionType> ConnectionTypes
-        {
-            get { return _connectionTypes; }
-            set
-            {
-                if(ConnectionTypes != null)
-                {
-                    ConnectionTypes.CollectionChanged -= (sender, args) => ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
-                }
-                var old = ConnectionTypes;
-                _connectionTypes = value; if (ConnectionTypes != null)
-                {
-                    ConnectionTypes.CollectionChanged += (sender, args) => ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
-                }
-                notifyCombinedChanged(Change.Edit, "ConnectionTypes", this, value, old);
-            }
-        }
-        #endregion//Properties
+        public ObservableCollection<TECConnectionType> HardwiredConnectionTypes { get; }
+        public ObservableCollection<TECProtocol> PossibleProtocols { get; }
 
         #region Constructors
         public TECDevice(Guid guid,
-            IEnumerable<TECConnectionType> connectionTypes,
+            IEnumerable<TECConnectionType> hardwiredConnectionTypes,
+            IEnumerable<TECProtocol> possibleProtocols,
             TECManufacturer manufacturer) : base(guid, manufacturer, COST_TYPE)
         {
-            _connectionTypes = new ObservableCollection<TECConnectionType>(connectionTypes);
-            ConnectionTypes.CollectionChanged += (sender, args) => ConnectionTypes_CollectionChanged(sender, args, "ConnectionTypes");
+            this.HardwiredConnectionTypes = new ObservableCollection<TECConnectionType>(hardwiredConnectionTypes);
+            this.PossibleProtocols = new ObservableCollection<TECProtocol>(possibleProtocols);
+
+            this.HardwiredConnectionTypes.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "HardwiredConnectionTypes");
+            this.PossibleProtocols.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "PossibleProtocols");
         }
         public TECDevice(IEnumerable<TECConnectionType> connectionTypes,
-            TECManufacturer manufacturer) : this(Guid.NewGuid(), connectionTypes, manufacturer) { }
+            IEnumerable<TECProtocol> possibleProtocols,
+            TECManufacturer manufacturer) : this(Guid.NewGuid(), connectionTypes, possibleProtocols, manufacturer) { }
 
         //Copy Constructor
         public TECDevice(TECDevice deviceSource)
-            : this(deviceSource.ConnectionTypes, deviceSource.Manufacturer)
+            : this(deviceSource.HardwiredConnectionTypes, deviceSource.PossibleProtocols, deviceSource.Manufacturer)
         {
             this.copyPropertiesFromHardware(deviceSource);
         }
@@ -68,20 +51,20 @@ namespace EstimatingLibrary
             throw new Exception();
         }
 
-        private void ConnectionTypes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
+        private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                foreach (TECElectricalMaterial type in e.NewItems)
+                foreach (object obj in e.NewItems)
                 {
-                    notifyCombinedChanged(Change.Add, propertyName, this, type);
+                    notifyCombinedChanged(Change.Add, propertyName, this, obj);
                 }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                foreach (TECElectricalMaterial type in e.OldItems)
+                foreach (object obj in e.OldItems)
                 {
-                    notifyCombinedChanged(Change.Remove, propertyName, this, type);
+                    notifyCombinedChanged(Change.Remove, propertyName, this, obj);
                 }
             }
         }
@@ -90,20 +73,34 @@ namespace EstimatingLibrary
         {
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.propertyObjects());
-            saveList.AddRange(this.ConnectionTypes, "ConnectionTypes");
+            saveList.AddRange(this.HardwiredConnectionTypes, "HardwiredConnectionTypes");
+            saveList.AddRange(this.PossibleProtocols, "PossibleProtocols");
             return saveList;
         }
         protected override SaveableMap linkedObjects()
         {
             SaveableMap saveList = new SaveableMap();
             saveList.AddRange(base.linkedObjects());
-            saveList.AddRange(this.ConnectionTypes, "ConnectionTypes");
+            saveList.AddRange(this.HardwiredConnectionTypes, "HardwiredConnectionTypes");
+            saveList.AddRange(this.PossibleProtocols, "PossibleProtocols");
             return saveList;
         }
 
         public TECDevice CatalogCopy()
         {
             return new TECDevice(this);
+        }
+        #endregion
+
+        #region IEndDevice
+        List<IProtocol> IEndDevice.ConnectionMethods
+        {
+            get
+            {
+                List<IProtocol> connectionMethods = new List<IProtocol>(PossibleProtocols);
+                connectionMethods.Add(new TECHardwiredProtocol(HardwiredConnectionTypes));
+                return connectionMethods;
+            }
         }
         #endregion
     }

@@ -42,8 +42,8 @@ namespace TECUserControlLibrary.ViewModels
             set
             {
                 _userPrice = value;
-                var newProfit = (value - Estimate.SubcontractorSubtotal) / (Estimate.TECCost * (1 + Bid.Parameters.Overhead / 100)) - 1;
-                Bid.Parameters.Profit = newProfit * 100;
+                var newMarkup = value / Estimate.TotalCost - 1;
+                Bid.Parameters.Markup = newMarkup * 100;
                 RaisePropertyChanged("UserPrice");
             }
         }

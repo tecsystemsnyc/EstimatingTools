@@ -6,14 +6,17 @@ using EstimatingUtilitiesLibrary.Exports;
 using NLog;
 using System;
 using System.Deployment.Application;
+using System.IO;
 using TECUserControlLibrary.BaseVMs;
 using TECUserControlLibrary.Models;
 using TECUserControlLibrary.Utilities;
+using TECUserControlLibrary.Windows;
 
 namespace TemplateBuilder.MVVM
 {
     public class TemplatesManager : AppManager<TECTemplates>
     {
+        #region Fields and Properties
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         private TECTemplates templates;
@@ -38,18 +41,6 @@ namespace TemplateBuilder.MVVM
                 return FileDialogParameters.TemplatesFileParameters;
             }
         }
-        override protected string defaultDirectory
-        {
-            get
-            {
-                return Properties.Settings.Default.DefaultDirectory;
-            }
-            set
-            {
-                Properties.Settings.Default.DefaultDirectory = value;
-                Properties.Settings.Default.Save();
-            }
-        }
         override protected string defaultFileName
         {
             get
@@ -57,21 +48,14 @@ namespace TemplateBuilder.MVVM
                 return string.Format("Templates v{0}", Version);
             }
         }
-        protected override string templatesFilePath
+        override protected string defaultDirectory
         {
-            get
-            {
-                return Properties.Settings.Default.TemplatesFilePath;
-            }
-            set
-            {
-                Properties.Settings.Default.TemplatesFilePath = value;
-                Properties.Settings.Default.Save();
-            }
+            get { return TBSettings.TemplatesDirectory; }
         }
+        #endregion
 
         public TemplatesManager() : base("Template Builder",
-            new TemplatesSplashVM(Properties.Settings.Default.TemplatesFilePath, Properties.Settings.Default.DefaultDirectory), new TemplatesMenuVM())
+            new TemplatesSplashVM(TBSettings.FirstRecentTemplates, TBSettings.TemplatesDirectory), new TemplatesMenuVM())
         {
             string startUpFilePath = getStartUpFilePath();
             if (startUpFilePath != null && startUpFilePath != "")
@@ -85,10 +69,10 @@ namespace TemplateBuilder.MVVM
 
         private void userStartedEditorHandler(string path)
         {
+            updateRecentTemplatesSettings(path);
             buildTitleString(path, "TemplateBuilder");
             if(path != "")
             {
-                templatesFilePath = path;
                 databaseManager = new DatabaseManager<TECTemplates>(path);
                 databaseManager.LoadComplete += handleLoaded;
                 ViewEnabled = false;
@@ -123,12 +107,12 @@ namespace TemplateBuilder.MVVM
         private void exportTemplatesExecute()
         {
             string path = UIHelpers.GetSavePath(FileDialogParameters.ExcelFileParameters,
-                defaultFileName, defaultDirectory, workingFileDirectory);
+                Exporter.TemplateSummaryDefaultName(), defaultDirectory);
             if (path != null)
             {
                 if (!UtilitiesMethods.IsFileLocked(path))
                 {
-                    Exporter.GenerateTemplateSummary(path, templates);
+                    Exporter.GenerateTemplateSummary(path, templates, TBSettings.OpenFileOnExport);
                     logger.Info("Exported templates spreadsheet.");
                 }
                 else
@@ -137,8 +121,25 @@ namespace TemplateBuilder.MVVM
                 }
             }
         }
+        //Settings
+        protected override void settingsExecute()
+        {
+            TBSettingsWindow settingsWindow = new TBSettingsWindow();
+            settingsWindow.Show();
+        }
+        //Report Bug
+        protected override void reportBugExecute()
+        {
+            string reportPrompt = "Please describe the bug and how to reproduce it.";
+
+            string logDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TemplateBuilder\\logs");
+            string logPath = UtilitiesMethods.GetMostRecentFilePathFromDirectoryPath(logDirectory);
+
+            BugReportWindow reportWindow = new BugReportWindow("Template Builder Bug", reportPrompt, logPath);
+            reportWindow.ShowDialog();
+        }
         #endregion
-        
+
         private string getStartUpFilePath()
         {
             string startUpFilePath = Properties.Settings.Default.StartUpFilePath;
@@ -153,6 +154,76 @@ namespace TemplateBuilder.MVVM
         protected override TECTemplates getNewWorkingScope()
         {
             return new TECTemplates();
+        }
+
+        private void updateRecentTemplatesSettings(string templatesPath)
+        {
+            if (templatesPath != null && templatesPath != "")
+            {
+                string first = TBSettings.FirstRecentTemplates;
+                string second = TBSettings.SecondRecentTemplates;
+                string third = TBSettings.ThirdRecentTemplates;
+                string fourth = TBSettings.FourthRecentTemplates;
+                string fifth = TBSettings.FifthRecentTemplates;
+
+                string limbo = templatesPath;
+
+                if (limbo == first)
+                {
+                    TBSettings.Save();
+                    return;
+                }
+                else
+                {
+                    TBSettings.FirstRecentTemplates = limbo;
+                    limbo = first;
+                }
+
+                if (limbo == second)
+                {
+                    TBSettings.Save();
+                    return;
+                }
+                else
+                {
+                    TBSettings.SecondRecentTemplates = limbo;
+                    limbo = second;
+                }
+
+                if (limbo == third)
+                {
+                    TBSettings.Save();
+                    return;
+                }
+                else
+                {
+                    TBSettings.ThirdRecentTemplates = limbo;
+                    limbo = third;
+                }
+
+                if (limbo == fourth)
+                {
+                    TBSettings.Save();
+                    return;
+                }
+                else
+                {
+                    TBSettings.FourthRecentTemplates = limbo;
+                    limbo = fourth;
+                }
+
+                if (limbo == fifth)
+                {
+                    TBSettings.Save();
+                    return;
+                }
+                else
+                {
+                    TBSettings.FifthRecentTemplates = limbo;
+                }
+
+                TBSettings.Save();
+            }
         }
     }
 }

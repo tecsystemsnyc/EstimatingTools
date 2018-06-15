@@ -35,6 +35,31 @@ namespace EstimatingLibrary
             }
         }
 
+        public double TotalPlenumCost
+        {
+            get
+            {
+                return (Cost + PlenumCost);
+            }
+            set
+            {
+                PlenumCost = (value - Cost);
+                raisePropertyChanged("TotalPlenumCost");
+            }
+        }
+        public double TotalPlenumLabor
+        {
+            get
+            {
+                return (Labor + PlenumLabor);
+            }
+            set
+            {
+                PlenumLabor = (value - Labor);
+                raisePropertyChanged("TotalPlenumLabor");
+            }
+        }
+
         public TECConnectionType(Guid guid) : base(guid)
         {
             PlenumCost = 0.0;

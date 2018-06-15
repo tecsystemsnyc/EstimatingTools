@@ -1,8 +1,10 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Tests
 {
@@ -78,7 +80,7 @@ namespace Tests
             bid.Exclusions.Add(exclusion1);
 
             //Controller
-            TECController expectedController = new TECController(Guid.NewGuid(), bid.Catalogs.ControllerTypes[0], false);
+            TECController expectedController = new TECProvidedController(Guid.NewGuid(), bid.Catalogs.ControllerTypes[0], false);
             expectedController.Name = "Test Controller";
             expectedController.Description = "Test description";
             
@@ -178,8 +180,12 @@ namespace Tests
 
             subScope2.Points.Add(point2);
 
+            //Devices
+            subScope1.Devices.Add(bid.Catalogs.Devices[0]);
+
             //Connections
-            TECConnection testConnection = expectedController.AddSubScopeConnection(system1.GetInstancesFromTypical(subScope1)[0]);
+            TECSubScope instanceSubScope = system1.GetInstancesFromTypical(subScope1)[0];
+            IControllerConnection testConnection = expectedController.Connect(instanceSubScope, (instanceSubScope as IConnectable).AvailableProtocols.First());
             testConnection.ConduitType = bid.Catalogs.ConduitTypes[0];
             testConnection.Length = 42;
 
@@ -289,14 +295,14 @@ namespace Tests
             //Devices
             ObservableCollection<TECConnectionType> contypes2 = new ObservableCollection<TECConnectionType>();
             contypes2.Add(testDevConnType);
-            TECDevice testDev = new TECDevice(Guid.NewGuid(), contypes2, testDevMan);
+            TECDevice testDev = new TECDevice(Guid.NewGuid(), contypes2, new List<TECProtocol>(), testDevMan);
             testDev.Name = "Test Device";
             testDev.Description = "Device Description";
             testDev.Price = 20.3;
 
             ObservableCollection<TECConnectionType> contypes3 = new ObservableCollection<TECConnectionType>();
             contypes3.Add(childDevConnType);
-            TECDevice childDev = new TECDevice(Guid.NewGuid(), contypes3, childDevMan);
+            TECDevice childDev = new TECDevice(Guid.NewGuid(), contypes3, new List<TECProtocol>(), childDevMan);
             childDev.Name = "Child Device";
             childDev.Description = "Child Device Description";
             childDev.Price = 54.1;
@@ -320,7 +326,7 @@ namespace Tests
             sysSS.Description = "Child SubScope";
             sysSS.AssociatedCosts.Add(testAssociatedCost);
             TECPoint sysPoint = new TECPoint(false);
-            sysPoint.Type = IOType.BACnetIP;
+            sysPoint.Type = IOType.AI;
             sysPoint.Label = "System Point";
 
             sysSS.Points.Add(sysPoint);
@@ -375,17 +381,17 @@ namespace Tests
             expectedControllerType.Price = 42.6;
             TECIO ioToAdd = new TECIO(IOType.AI);
             ioToAdd.Quantity = 5;
-            TECIO otherIO = new TECIO(IOType.BACnetMSTP);
+            TECIO otherIO = new TECIO(IOType.UI);
             otherIO.Quantity = 3;
             expectedControllerType.IO.Add(ioToAdd);
             expectedControllerType.IO.Add(otherIO);
             templates.Catalogs.ControllerTypes.Add(expectedControllerType);
 
-            TECController expectedController = new TECController(expectedControllerType, false);
+            TECController expectedController = new TECProvidedController(expectedControllerType, false);
             expectedController.Name = "Test Controller";
             expectedController.Description = "Test description";
 
-            TECController controlledController = new TECController(expectedControllerType, false);
+            TECController controlledController = new TECProvidedController(expectedControllerType, false);
             controlledController.Name = "Controlled Controller";
             
             templates.ControllerTemplates.Add(expectedController);
@@ -524,7 +530,7 @@ namespace Tests
             //Devices
             ObservableCollection<TECConnectionType> contypes4 = new ObservableCollection<TECConnectionType>();
             contypes4.Add(connectionType1);
-            TECDevice device1 = new TECDevice(Guid.NewGuid(), contypes4, manufacturer1);
+            TECDevice device1 = new TECDevice(Guid.NewGuid(), contypes4, new List<TECProtocol>(), manufacturer1);
             device1.Name = "Device 1";
             device1.Description = "Description 1";
             device1.Price = 64.96;
@@ -532,7 +538,7 @@ namespace Tests
             AssignSecondaryProperties(device1, outCatalogs);
 
             outCatalogs.Devices.Add(device1);
-
+            
             //IO Modules
             TECIOModule testIOModule = new TECIOModule(manufacturer1);
             testIOModule.Name = "Test IO Module";
@@ -547,7 +553,7 @@ namespace Tests
             controllerType.Labor = 61.34;
             AssignSecondaryProperties(controllerType, outCatalogs);
 
-            TECIO io = new TECIO(IOType.BACnetIP);
+            TECIO io = new TECIO(IOType.AI);
             io.Quantity = 100;
             controllerType.IO.Add(io);
 
@@ -579,13 +585,24 @@ namespace Tests
             outCatalogs.PanelTypes.Add(otherPanelType);
 
             //Valves
-            TECDevice actuator = new TECDevice(new ObservableCollection<TECConnectionType>() { connectionType1 },
+            TECDevice actuator = new TECDevice(new ObservableCollection<TECConnectionType>() { connectionType1 }, 
+                new List<TECProtocol>(),
                 manufacturer1);
             actuator.Name = "actuator";
             outCatalogs.Devices.Add(actuator);
             TECValve valve = new TECValve(manufacturer1, actuator);
             outCatalogs.Valves.Add(valve);
 
+            //Protocols
+            TECProtocol protocol = new TECProtocol(new List<TECConnectionType> { connectionType1 });
+            protocol.Label = "BACnet IP";
+            outCatalogs.Protocols.Add(protocol);
+
+            controllerType.IO.Add(new TECIO(protocol));
+
+            TECDevice netDevice = new TECDevice(Guid.NewGuid(), new List<TECConnectionType>(), new List<TECProtocol> { protocol }, manufacturer1);
+            outCatalogs.Devices.Add(netDevice);
+            
             return outCatalogs;
         }
 
@@ -599,7 +616,7 @@ namespace Tests
             outScope.Panels.Add(panel);
             var equipment = CreateTestEquipment(true, catalogs);
             outScope.Equipment.Add(equipment);
-
+            
             var controller = CreateTestController(true, catalogs);
             outScope.AddController(controller);
 
@@ -634,7 +651,7 @@ namespace Tests
                 assCosts.Add(catalogs.AssociatedCosts[0]);
             }
 
-            TECDevice device = new TECDevice(connectionTypes, manufacturer);
+            TECDevice device = new TECDevice(connectionTypes, new List<TECProtocol>(), manufacturer);
             device.Price = cost;
             device.AssociatedCosts = assCosts;
             device.Tags.Add(catalogs.Tags[0]);
@@ -653,6 +670,7 @@ namespace Tests
             var device = catalogs.Devices[0];
             var point = new TECPoint(isTypical);
             point.Type = IOType.AI;
+            point.Quantity = 3;
 
             var subScope = new TECSubScope(isTypical);
             subScope.Tags.Add(catalogs.Tags[0]);
@@ -664,6 +682,7 @@ namespace Tests
         {
             TECPoint point = new TECPoint(isTypical);
             point.Type = (IOType)Enum.GetNames(typeof(IOType)).Length;
+            point.Quantity = 2;
             return point;
         }
         public static TECEquipment CreateTestEquipment(bool isTypical, TECCatalogs catalogs)
@@ -683,7 +702,7 @@ namespace Tests
         {
             var type = catalogs.ControllerTypes[0];
 
-            var controller = new TECController(type, isTypical);
+            var controller = new TECProvidedController(type, isTypical);
             controller.Tags.Add(catalogs.Tags[0]);
             return controller;
         }
@@ -751,7 +770,7 @@ namespace Tests
         {
             foreach(TECSubScope subscope in equipment.SubScope)
             {
-                controller.AddSubScopeConnection(subscope);
+                controller.Connect(subscope, (subscope as IConnectable).AvailableProtocols.First());
             }
         }
 
@@ -819,9 +838,9 @@ namespace Tests
             }
             return null;
         }
-        public static TECConnection FindConnectionInController(TECController controller, TECConnection reference)
+        public static IControllerConnection FindConnectionInController(TECController controller, IControllerConnection reference)
         {
-            foreach(TECConnection connection in controller.ChildrenConnections)
+            foreach(IControllerConnection connection in controller.ChildrenConnections)
             {
                 if(connection.Guid == reference.Guid)
                 {
@@ -926,7 +945,7 @@ namespace Tests
             return false;
         }
 
-        public static TECObject ObjectWithGuid(Guid guid, TECBid bid)
+        public static ITECObject ObjectWithGuid(Guid guid, TECBid bid)
         {
             if(bid.Guid == guid)
             {
@@ -973,7 +992,7 @@ namespace Tests
                     {
                         return controller;
                     }
-                    foreach (TECConnection connection in controller.ChildrenConnections)
+                    foreach (IControllerConnection connection in controller.ChildrenConnections)
                     {
                         if (connection.Guid == guid)
                         {
@@ -1028,7 +1047,7 @@ namespace Tests
                         {
                             return controller;
                         }
-                        foreach (TECConnection connection in controller.ChildrenConnections)
+                        foreach (IControllerConnection connection in controller.ChildrenConnections)
                         {
                             if (connection.Guid == guid)
                             {
@@ -1058,7 +1077,7 @@ namespace Tests
                 {
                     return controller;
                 }
-                foreach(TECConnection connection in controller.ChildrenConnections)
+                foreach(IControllerConnection connection in controller.ChildrenConnections)
                 {
                     if(connection.Guid == guid)
                     {

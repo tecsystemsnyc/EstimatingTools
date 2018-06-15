@@ -1,0 +1,73 @@
+﻿<Window x:Class="TECUserControlLibrary.Windows.BugReportWindow"
+        x:Name="bugReportWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TECUserControlLibrary.Windows"
+        mc:Ignorable="d"
+        Title="Report Bug" Height="300" Width="600">
+    <Grid DataContext="{Binding ElementName=bugReportWindow, Path=VM}">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!--User Prompt-->
+        <TextBlock Text="{Binding UserPrompt}"
+                   HorizontalAlignment="Center"/>
+
+        <!--Crash Description-->
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Description:"/>
+            <TextBox Text="{Binding BugDescription}" 
+                     Margin="5" Grid.Row="1"
+                     TextWrapping="Wrap"
+                     AcceptsReturn="True"
+                     AcceptsTab="true"
+                     SpellCheck.IsEnabled="True"
+                     VerticalContentAlignment="Top"/>
+        </Grid>
+        
+        <!--User's name and email-->
+        <Grid Grid.Row="2" Height="Auto">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Name:"/>
+                <TextBox Text="{Binding UserName}"
+                         Margin="5" Grid.Column="1"/>
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Email:"/>
+                <TextBox Text="{Binding UserEmail}"
+                         Margin="5" Grid.Column="1"/>
+            </Grid>
+        </Grid>
+        
+        <!--Submit Button-->
+        <Button Content="Submit" 
+                Command="{Binding SubmitReportCommand}"
+                Click="SubmitClicked"
+                Grid.Row="3" Height="50" Width="200" Margin="5"/>
+    </Grid>
+</Window>

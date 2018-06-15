@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary.Interfaces
@@ -7,9 +8,11 @@ namespace EstimatingLibrary.Interfaces
     {
         Guid Guid { get; }
 
-        ObservableCollection<TECConnectionType> ConnectionTypes { get; }
-        TECManufacturer Manufacturer { get; }
+        List<IProtocol> ConnectionMethods { get; }
         String Name { get; }
         String Description { get; }
+
+        ObservableCollection<TECConnectionType> HardwiredConnectionTypes { get; }
+        ObservableCollection<TECProtocol> PossibleProtocols { get; }
     }
 }
