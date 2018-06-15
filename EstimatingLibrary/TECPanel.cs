@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
 {
-    public class TECPanel : TECLocated, IDragDropable, ITypicalable
+    public class TECPanel : TECLocated, IDDCopiable, ITypicalable
     {
         #region Properties
         private TECPanelType _type;
@@ -55,7 +55,7 @@ namespace EstimatingLibrary
             copyPropertiesFromScope(panel);
             foreach (TECController controller in panel.Controllers)
             {
-                _controllers.Add(new TECController(controller, isTypical, guidDictionary));
+                _controllers.Add(controller.CopyController(isTypical, guidDictionary));
             }
         }
         public object DragDropCopy(TECScopeManager scopeManager)

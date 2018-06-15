@@ -104,20 +104,30 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Defaults.cs" />
+    <Compile Include="Interfaces\IConnection.cs" />
     <Compile Include="Interfaces\ICatalog.cs" />
+    <Compile Include="Interfaces\IControllerConnection.cs" />
+    <Compile Include="Interfaces\IDDCopiable.cs" />
+    <Compile Include="Interfaces\IConnectable.cs" />
     <Compile Include="Interfaces\IDragDropable.cs" />
-    <Compile Include="Interfaces\INetworkConnectable.cs" />
-    <Compile Include="Interfaces\INetworkParentable.cs" />
+    <Compile Include="Interfaces\IInterlockable.cs" />
     <Compile Include="Interfaces\INotifyCostChanged.cs" />
     <Compile Include="Interfaces\INotifyTECChanged.cs" />
     <Compile Include="Interfaces\INotifyPointChanged.cs" />
+    <Compile Include="Interfaces\IProtocol.cs" />
     <Compile Include="Interfaces\IRelatable.cs" />
     <Compile Include="Interfaces\IEndDevice.cs" />
     <Compile Include="Interfaces\ITypicalable.cs" />
     <Compile Include="Interfaces\ITECObject.cs" />
+    <Compile Include="Interfaces\ITECScope.cs" />
     <Compile Include="TECAssociatedCost.cs" />
     <Compile Include="TECConnectionType.cs" />
     <Compile Include="TECExtraLabor.cs" />
+    <Compile Include="TECFBOController.cs" />
+    <Compile Include="TECHardwiredProtocol.cs" />
+    <Compile Include="TECInterlockConnection.cs" />
+    <Compile Include="TECProtocol.cs" />
+    <Compile Include="TECProvidedController.cs" />
     <Compile Include="TECSchedule.cs" />
     <Compile Include="TECScheduleItem.cs" />
     <Compile Include="TECScheduleTable.cs" />
@@ -159,13 +169,15 @@
     <Compile Include="TECScope.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TECScopeBranch.cs" />
-    <Compile Include="TECSubScopeConnection.cs" />
+    <Compile Include="TECHardwiredConnection.cs" />
     <Compile Include="TECSystem.cs" />
     <Compile Include="TECTemplates.cs" />
     <Compile Include="Utilities\ChangeWatcher.cs" />
     <Compile Include="Utilities\ScopeExtensions.cs" />
     <Compile Include="Utilities\TemplateSynchronizer.cs" />
     <Compile Include="Utilities\TypeExtensions.cs" />
+    <Compile Include="Utilities\TECTypeStringConversion.cs" />
+    <Compile Include="Utilities\WatcherFilters.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

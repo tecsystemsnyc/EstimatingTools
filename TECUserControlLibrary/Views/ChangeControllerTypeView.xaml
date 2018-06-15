@@ -31,7 +31,6 @@
         <TextBlock Text="Compatible Types:"
                    Grid.Row="1"/>
         <ComboBox ItemsSource="{Binding Types}"
-                  SelectedItem="{Binding SelectedType}"
                   DisplayMemberPath="Name"
                   Name="typesComboBox"
                   Grid.Row="1" Grid.Column="1"

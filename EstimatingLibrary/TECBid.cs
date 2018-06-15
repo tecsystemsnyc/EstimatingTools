@@ -10,27 +10,27 @@ namespace EstimatingLibrary
     public class TECBid : TECScopeManager, INotifyCostChanged, INotifyPointChanged, IRelatable
     {
         #region Fields
-        private string _name;
-        private string _bidNumber;
-        private DateTime _dueDate;
-        private string _salesperson;
-        private string _estimator;
-        private double _duration;
+        private string _name = "";
+        private string _bidNumber = "";
+        private DateTime _dueDate = DateTime.Now;
+        private string _salesperson = "";
+        private string _estimator = "";
+        private double _duration = 0.0;
         private TECParameters _parameters;
         private TECExtraLabor _extraLabor;
 
         public event Action<CostBatch> CostChanged;
         public event Action<int> PointChanged;
 
-        private ObservableCollection<TECScopeBranch> _scopeTree;
-        private ObservableCollection<TECTypical> _systems;
-        private ObservableCollection<TECLabeled> _notes;
-        private ObservableCollection<TECLabeled> _exclusions;
-        private ObservableCollection<TECLocation> _locations;
-        private ObservableCollection<TECController> _controllers;
-        private ObservableCollection<TECMisc> _miscCosts;
-        private ObservableCollection<TECPanel> _panels;
-        private TECSchedule _schedule;
+        private ObservableCollection<TECScopeBranch> _scopeTree = new ObservableCollection<TECScopeBranch>();
+        private ObservableCollection<TECTypical> _systems = new ObservableCollection<TECTypical>();
+        private ObservableCollection<TECLabeled> _notes = new ObservableCollection<TECLabeled>();
+        private ObservableCollection<TECLabeled> _exclusions = new ObservableCollection<TECLabeled>();
+        private ObservableCollection<TECLocation> _locations = new ObservableCollection<TECLocation>();
+        private ObservableCollection<TECController> _controllers = new ObservableCollection<TECController>();
+        private ObservableCollection<TECMisc> _miscCosts = new ObservableCollection<TECMisc>();
+        private ObservableCollection<TECPanel> _panels = new ObservableCollection<TECPanel>();
+        private TECSchedule _schedule = new TECSchedule();
         #endregion
 
         #region Properties
@@ -257,21 +257,8 @@ namespace EstimatingLibrary
         #region Constructors
         public TECBid(Guid guid) : base(guid)
         {
-            _name = "";
-            _bidNumber = "";
-            _salesperson = "";
-            _estimator = "";
-            _scopeTree = new ObservableCollection<TECScopeBranch>();
-            _systems = new ObservableCollection<TECTypical>();
-            _notes = new ObservableCollection<TECLabeled>();
-            _exclusions = new ObservableCollection<TECLabeled>();
-            _locations = new ObservableCollection<TECLocation>();
-            _controllers = new ObservableCollection<TECController>();
-            _miscCosts = new ObservableCollection<TECMisc>();
-            _panels = new ObservableCollection<TECPanel>();
             _extraLabor = new TECExtraLabor(this.Guid);
             _parameters = new TECParameters(this.Guid);
-            _schedule = new TECSchedule();
 
             Systems.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Systems");
             ScopeTree.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ScopeTree");
@@ -280,7 +267,6 @@ namespace EstimatingLibrary
             Locations.CollectionChanged += locationsCollectionChanged;
             MiscCosts.CollectionChanged += (sender, args) => collectionChanged(sender, args, "MiscCosts");
             Panels.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Panels");
-
         }
 
         public TECBid() : this(Guid.NewGuid())
@@ -318,7 +304,7 @@ namespace EstimatingLibrary
         }
         public void RemoveController(TECController controller)
         {
-            controller.RemoveAllConnections();
+            controller.DisconnectAll();
             _controllers.Remove(controller);
             foreach(TECPanel panel in this.Panels)
             {
@@ -399,7 +385,7 @@ namespace EstimatingLibrary
                                 TECController parentController = subScope.Connection?.ParentController;
                                 if(parentController != null && this.Controllers.Contains(parentController))
                                 {
-                                    parentController.RemoveSubScope(subScope);
+                                    parentController.Disconnect(subScope);
                                 }
                             }
                             foreach(TECController controller in instance.Controllers)
@@ -407,7 +393,7 @@ namespace EstimatingLibrary
                                 TECController parentController = controller.ParentConnection?.ParentController;
                                 if(parentController != null && this.Controllers.Contains(parentController))
                                 {
-                                    parentController.RemoveController(controller);
+                                    parentController.Disconnect(controller);
                                 }
                             }
                         }

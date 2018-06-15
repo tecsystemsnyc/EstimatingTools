@@ -980,7 +980,7 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
             Assert.AreEqual(expectedQuantity, actualQuantity);
             Assert.AreEqual(expectedDevice.Price, actualDevice.Price);
-            Assert.AreEqual(expectedDevice.ConnectionTypes.Count, actualDevice.ConnectionTypes.Count);
+            Assert.AreEqual(expectedDevice.HardwiredConnectionTypes.Count, actualDevice.HardwiredConnectionTypes.Count);
         }
 
         [TestMethod]
@@ -2314,7 +2314,7 @@ namespace Tests
         public void Save_Bid_Add_Controller()
         {
             //Act
-            TECController expectedController = new TECController(Guid.NewGuid(), bid.Catalogs.ControllerTypes[0], false);
+            TECController expectedController = new TECProvidedController(Guid.NewGuid(), bid.Catalogs.ControllerTypes[0], false);
             expectedController.Name = "Test Add Controller";
             expectedController.Description = "Test description";
 

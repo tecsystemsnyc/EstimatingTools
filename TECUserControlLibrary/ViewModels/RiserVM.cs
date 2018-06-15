@@ -275,7 +275,7 @@ namespace TECUserControlLibrary.ViewModels
 
             bool dropCondition(object data, Type sourceType, Type targetType)
             {
-                bool dataComplies = sourceType == typeof(TECLocated);
+                bool dataComplies = typeof(TECLocated).IsAssignableFrom(sourceType);
                 bool targetComplies = Locations.Any(item => item.Scope == dropInfo.TargetCollection) ||
                     dropInfo.TargetCollection == Unlocated;
                 bool isReorder = sourceType == typeof(LocationContainer) && targetType == typeof(LocationContainer);

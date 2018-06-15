@@ -4,7 +4,7 @@ using System;
 
 namespace EstimatingLibrary
 {
-    public class TECMisc : TECCost, IDragDropable, ITypicalable
+    public class TECMisc : TECCost, IDDCopiable, ITypicalable
     {
         #region Fields
         private int _quantity;

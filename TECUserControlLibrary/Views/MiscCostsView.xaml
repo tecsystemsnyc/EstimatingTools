@@ -117,20 +117,20 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Label Content="Name:" Grid.Column="0"/>
-            <TextBox Text="{Binding MiscName}" Grid.Column="1"/>
+            <TextBox Text="{Binding MiscName, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"/>
             <Label Content="Type:" Grid.Column="2"/>
             <ComboBox ItemsSource="{Binding Source={utilities:EnumBindingSource {x:Type eLib:CostType}}}"
-                      SelectedItem="{Binding MiscType}"
+                      SelectedItem="{Binding MiscType, UpdateSourceTrigger=PropertyChanged}"
                       Grid.Column="3"
                   VerticalContentAlignment="Center"
                       Margin="2"/>
             <Label Content="Qty:" Grid.Column="4"/>
-            <TextBox Text="{Binding Quantity}" Grid.Column="5"/>
+            <TextBox Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5"/>
             <Button Content="Add" Command="{Binding AddNewCommand}" Grid.Column="4" Grid.Row="1" Grid.ColumnSpan="2" Margin="2"/>
             <Label Content="Cost:" Grid.Column="0" Grid.Row="1"/>
-            <TextBox Text="{Binding Cost}" Grid.Column="1" Grid.Row="1"/>
+            <TextBox Text="{Binding Cost, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="1"/>
             <Label Content="Labor:" Grid.Column="2" Grid.Row="1"/>
-            <TextBox Text="{Binding Labor}" Grid.Column="3" Grid.Row="1"/>
+            <TextBox Text="{Binding Labor, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Grid.Row="1"/>
         </Grid>
     </Grid>
 </UserControl>

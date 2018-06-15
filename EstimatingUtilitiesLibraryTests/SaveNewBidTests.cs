@@ -30,7 +30,7 @@ namespace Tests
         static TECLabeled expectedNote;
         static TECLabeled expectedExclusion;
         static TECLabeled expectedTag;
-        static TECController expectedController;
+        static TECProvidedController expectedController;
 
         static string path;
 
@@ -48,7 +48,7 @@ namespace Tests
         static TECLabeled actualNote;
         static TECLabeled actualExclusion;
         static TECLabeled actualTag;
-        static TECController actualController;
+        static TECProvidedController actualController;
 
 
         private TestContext testContextInstance;
@@ -103,7 +103,7 @@ namespace Tests
             expectedExclusion = expectedBid.Exclusions[0];
             expectedTag = expectedBid.Catalogs.Tags[0];
 
-            expectedController = expectedBid.Controllers.First(item => item.Name == "Test Controller");
+            expectedController = (TECProvidedController)expectedBid.Controllers.First(item => item.Name == "Test Controller" && item is TECProvidedController);
 
             path = Path.GetTempFileName();
 
@@ -195,9 +195,9 @@ namespace Tests
             }
 
 
-            foreach (TECController con in actualBid.Controllers)
+            foreach (TECProvidedController con in actualBid.Controllers)
             {
-                if (con.Guid == expectedController.Guid)
+                if (con?.Guid == expectedController.Guid)
                 {
                     actualController = con;
                     break;
@@ -473,10 +473,10 @@ namespace Tests
             Assert.AreEqual(expectedQuantity, actualQuantity);
             Assert.AreEqual(expectedDevice.Price, actualDevice.Price);
 
-            foreach (TECElectricalMaterial expectedConnectionType in expectedDevice.ConnectionTypes)
+            foreach (TECElectricalMaterial expectedConnectionType in expectedDevice.HardwiredConnectionTypes)
             {
                 bool found = false;
-                foreach (TECElectricalMaterial actualConnectionType in actualDevice.ConnectionTypes)
+                foreach (TECElectricalMaterial actualConnectionType in actualDevice.HardwiredConnectionTypes)
                 {
                     if (actualConnectionType.Guid == expectedConnectionType.Guid)
                     {
@@ -601,15 +601,15 @@ namespace Tests
         {
             //Arrange
             TECController expectedConnectedController = null;
-            TECSubScopeConnection expectedConnection = null;
+            TECHardwiredConnection expectedConnection = null;
             foreach (TECController controller in expectedBid.Controllers)
             {
-                foreach (TECConnection connection in controller.ChildrenConnections)
+                foreach (IControllerConnection connection in controller.ChildrenConnections)
                 {
-                    if (connection is TECSubScopeConnection)
+                    if (connection is TECHardwiredConnection)
                     {
                         expectedConnectedController = controller;
-                        expectedConnection = connection as TECSubScopeConnection;
+                        expectedConnection = connection as TECHardwiredConnection;
                         break;
                     }
                 }
@@ -619,14 +619,14 @@ namespace Tests
                 }
             }
             TECController actualConnectedController = TestHelper.FindControllerInController(actualBid.Controllers, expectedConnectedController);
-            TECSubScopeConnection actualConnection = TestHelper.FindConnectionInController(actualConnectedController, expectedConnection) as TECSubScopeConnection;
+            TECHardwiredConnection actualConnection = TestHelper.FindConnectionInController(actualConnectedController, expectedConnection) as TECHardwiredConnection;
 
             //Assert
             Assert.AreEqual(expectedConnection.Guid, actualConnection.Guid);
             Assert.AreEqual(expectedConnection.ConduitType.Guid, actualConnection.ConduitType.Guid);
             Assert.AreEqual(expectedConnection.Length, actualConnection.Length);
             Assert.AreEqual(expectedConnection.ParentController.Guid, actualConnection.ParentController.Guid);
-            Assert.AreEqual(expectedConnection.SubScope.Guid, actualConnection.SubScope.Guid);
+            Assert.AreEqual(expectedConnection.Child.Guid, actualConnection.Child.Guid);
             Assert.IsTrue(compareCosts(expectedConnection.CostBatch, actualConnection.CostBatch));
             //Assert.IsFalse(actualConnection.IsTypical);
 
@@ -812,7 +812,7 @@ namespace Tests
             var expectedTotalCost = estimate.TotalCost;
             double delta = 0.0001;
 
-            Dictionary<Guid, CostBatch> saveCostDictionary = new Dictionary<Guid, CostBatch>();
+            Dictionary<Guid, INotifyCostChanged> saveCostDictionary = new Dictionary<Guid, INotifyCostChanged>();
             addToCost(saveCostDictionary, saveBid, saveBid);
 
             //Act
@@ -823,34 +823,33 @@ namespace Tests
             var loadedWatcher = new ChangeWatcher(saveBid);
             TECEstimator loadedEstimate = new TECEstimator(loadedBid, loadedWatcher);
 
-            Dictionary<Guid, CostBatch> loadCostDictionary = new Dictionary<Guid, CostBatch>();
+            Dictionary<Guid, INotifyCostChanged> loadCostDictionary = new Dictionary<Guid, INotifyCostChanged>();
             addToCost(loadCostDictionary, loadedBid, loadedBid);
 
-            compareCosts(saveBid, loadedBid, saveCostDictionary, loadCostDictionary);
+            compareCosts(saveCostDictionary, loadCostDictionary);
             Assert.AreEqual(expectedTotalCost, loadedEstimate.TotalCost, delta);
             
         }
 
-        private void compareCosts(TECBid saveBid, TECBid LoadBid, 
-            Dictionary<Guid, CostBatch> saveCostDictionary, Dictionary<Guid, CostBatch> loadCostDictionary)
+        private void compareCosts(Dictionary<Guid, INotifyCostChanged> saveCostDictionary, Dictionary<Guid, INotifyCostChanged> loadCostDictionary)
         {
-            foreach(KeyValuePair<Guid, CostBatch> pair in saveCostDictionary.Reverse()){
+            foreach(KeyValuePair<Guid, INotifyCostChanged> pair in saveCostDictionary.Reverse())
+            {
+                INotifyCostChanged saveObj = pair.Value;
+
                 if (!loadCostDictionary.ContainsKey(pair.Key))
                 {
-                    TECObject lost = TestHelper.ObjectWithGuid(pair.Key, saveBid);
-                    Assert.Fail("Guid not found with cost: " + lost.Guid);
+                    Assert.Fail("Guid not found with cost: " + saveObj.Guid);
                 }
                 else
                 {
-                    CostBatch saveCost = pair.Value;
-                    CostBatch loadCost = loadCostDictionary[pair.Key];
-                    TECObject item = TestHelper.ObjectWithGuid(pair.Key, LoadBid);
-                    Assert.IsTrue(compareCosts(saveCost, loadCost), "Loaded value not correct: " + item);
+                    INotifyCostChanged loadObj = loadCostDictionary[pair.Key];
+                    Assert.IsTrue(compareCosts(saveObj.CostBatch, loadObj.CostBatch), "Loaded value not correct: " + loadObj);
                 }
             }
         }
 
-        public void addToCost(Dictionary<Guid, CostBatch> costDictionary, TECObject item, TECBid referenceBid)
+        public void addToCost(Dictionary<Guid, INotifyCostChanged> costDictionary, ITECObject item, TECBid referenceBid)
         {
             if(item is TECCatalogs)
             {
@@ -863,7 +862,7 @@ namespace Tests
                     var errant = item;
                     throw new Exception();
                 }
-                costDictionary[item.Guid] = costItem.CostBatch;
+                costDictionary[item.Guid] = costItem;
             }
             if(item is IRelatable saveable)
             {
@@ -873,7 +872,6 @@ namespace Tests
                     {
                         addToCost(costDictionary, child, referenceBid);
                     }
-
                 }
             }
         } 

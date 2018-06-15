@@ -7,6 +7,8 @@ using TECUserControlLibrary.ViewModels.SummaryVMs;
 using EstimatingLibrary.Utilities;
 using EstimatingLibrary;
 using TECUserControlLibrary.Models;
+using EstimatingLibrary.Interfaces;
+using System.Linq;
 
 namespace TECUserControlLibraryTests
 {
@@ -92,7 +94,7 @@ namespace TECUserControlLibraryTests
             ss.Name = "Test Subscope";
             ss.Devices.Add(bid.Catalogs.Devices[0]);
             TECPoint point = new TECPoint(true);
-            point.Type = IOType.BACnetIP;
+            point.Type = IOType.AI;
             point.Quantity = 1;
             ss.Points.Add(point);
             equipment.SubScope.Add(ss);
@@ -124,14 +126,14 @@ namespace TECUserControlLibraryTests
             bid.Catalogs.IOModules[0].IO.Add(io);
             controllerType.Name = "Test Type";
 
-            TECController controller = new TECController(controllerType, true);
+            TECProvidedController controller = new TECProvidedController(controllerType, true);
             controller.IOModules.Add(bid.Catalogs.IOModules[0]);
             controller.Name = "Test Controller";
             typical.AddController(controller);
-            TECController otherController = new TECController(controllerType, true);
+            TECController otherController = new TECProvidedController(controllerType, true);
             otherController.Name = "Other Controller";
             typical.AddController(otherController);
-            TECConnection connection = controller.AddSubScopeConnection(connected);
+            IControllerConnection connection = controller.Connect(connected, (connected as IConnectable).AvailableProtocols.First());
             connection.Length = 10;
             connection.ConduitLength = 20;
             connection.ConduitType = bid.Catalogs.ConduitTypes[1];

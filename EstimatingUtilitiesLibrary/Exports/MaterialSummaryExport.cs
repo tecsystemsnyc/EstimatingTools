@@ -15,8 +15,16 @@ namespace EstimatingUtilitiesLibrary.Exports
         internal static void AddControllersSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Controllers")
         {
             List<TECController> controllers = getAllControllers(bid);
+            List<TECProvidedController> providedControllers = new List<TECProvidedController>();
+            foreach(TECController controller in controllers)
+            {
+                if (controller is TECProvidedController provided)
+                {
+                    providedControllers.Add(provided);
+                }
+            } 
             List<TECIOModule> modules = getAllIOModules(bid);
-            List<HardwareSummaryItem> controllerItems = consolidateHardware(controllers.Select(controller => controller.Type));
+            List<HardwareSummaryItem> controllerItems = consolidateHardware(providedControllers.Select(provided => provided.Type));
             List<CostSummaryItem> costItems = consolidateCostInControllers(controllers);
             List<HardwareSummaryItem> modulesItems = consolidateHardware(modules);
 
@@ -161,7 +169,7 @@ namespace EstimatingUtilitiesLibrary.Exports
         }
         internal static void AddElectricalMaterialSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Wire and Conduit")
         {
-            List<TECConnection> connections = getAllConnections(bid);
+            List<IControllerConnection> connections = getAllConnections(bid);
             List<LengthSummaryItem> wireItems = consolidateWire(connections);
             List<LengthSummaryItem> conduitItems = consolidateConduit(connections);
             List<CostSummaryItem> costItems = consolidateCostInConnections(connections);
@@ -443,9 +451,9 @@ namespace EstimatingUtilitiesLibrary.Exports
             }
             return valves;
         }
-        private static List<TECConnection> getAllConnections(TECBid bid)
+        private static List<IControllerConnection> getAllConnections(TECBid bid)
         {
-            List<TECConnection> connections = new List<TECConnection>();
+            List<IControllerConnection> connections = new List<IControllerConnection>();
             foreach (TECController controller in bid.Controllers)
             {
                 connections.AddRange(controller.ChildrenConnections);
@@ -493,7 +501,10 @@ namespace EstimatingUtilitiesLibrary.Exports
                 {
                     foreach(TECController controller in sys.Controllers)
                     {
-                        modules.AddRange(controller.IOModules);
+                        if (controller is TECProvidedController provided)
+                        {
+                            modules.AddRange(provided.IOModules);
+                        }
                     }
                 }
             }
@@ -521,14 +532,14 @@ namespace EstimatingUtilitiesLibrary.Exports
 
             return items;
         }
-        private static List<LengthSummaryItem> consolidateWire(IEnumerable<TECConnection> connections)
+        private static List<LengthSummaryItem> consolidateWire(IEnumerable<IControllerConnection> connections)
         {
             Dictionary<TECElectricalMaterial, LengthSummaryItem> dictionary = new Dictionary<TECElectricalMaterial, LengthSummaryItem>();
             List<LengthSummaryItem> items = new List<LengthSummaryItem>();
 
-            foreach(TECConnection connection in connections)
+            foreach(IControllerConnection connection in connections)
             {
-                foreach(TECElectricalMaterial type in connection.GetConnectionTypes())
+                foreach(TECElectricalMaterial type in connection.Protocol.ConnectionTypes)
                 {
                     if (dictionary.ContainsKey(type))
                     {
@@ -545,12 +556,12 @@ namespace EstimatingUtilitiesLibrary.Exports
 
             return items;
         }
-        private static List<LengthSummaryItem> consolidateConduit(IEnumerable<TECConnection> connections)
+        private static List<LengthSummaryItem> consolidateConduit(IEnumerable<IControllerConnection> connections)
         {
             Dictionary<TECElectricalMaterial, LengthSummaryItem> dictionary = new Dictionary<TECElectricalMaterial, LengthSummaryItem>();
             List<LengthSummaryItem> items = new List<LengthSummaryItem>();
 
-            foreach (TECConnection connection in connections)
+            foreach (IControllerConnection connection in connections)
             {
                 TECElectricalMaterial type = connection.ConduitType;
                 if (type != null)
@@ -579,7 +590,10 @@ namespace EstimatingUtilitiesLibrary.Exports
             foreach(TECController controller in controllers)
             {
                 costs.AddRange(controller.AssociatedCosts);
-                costs.AddRange(controller.Type.AssociatedCosts);
+                if (controller is TECProvidedController provided)
+                {
+                    costs.AddRange(provided.Type.AssociatedCosts);
+                }
             }
 
             foreach (TECCost cost in costs)
@@ -679,15 +693,15 @@ namespace EstimatingUtilitiesLibrary.Exports
             }
             return items;
         }
-        private static List<CostSummaryItem> consolidateCostInConnections(IEnumerable<TECConnection> connections)
+        private static List<CostSummaryItem> consolidateCostInConnections(IEnumerable<IControllerConnection> connections)
         {
             Dictionary<TECCost, CostSummaryItem> dictionary = new Dictionary<TECCost, CostSummaryItem>();
             List<CostSummaryItem> items = new List<CostSummaryItem>();
 
             List<TECCost> costs = new List<TECCost>();
-            foreach(TECConnection connection in connections)
+            foreach(IControllerConnection connection in connections)
             {
-                foreach(TECElectricalMaterial mat in connection.GetConnectionTypes())
+                foreach(TECElectricalMaterial mat in connection.Protocol.ConnectionTypes)
                 {
                     costs.AddRange(mat.AssociatedCosts);
                 }
@@ -712,15 +726,15 @@ namespace EstimatingUtilitiesLibrary.Exports
             }
             return items;
         }
-        private static List<RatedCostSummaryItem> consolidateRatedCostInConnections(IEnumerable<TECConnection> connections)
+        private static List<RatedCostSummaryItem> consolidateRatedCostInConnections(IEnumerable<IControllerConnection> connections)
         {
             Dictionary<TECCost, RatedCostSummaryItem> dictionary = new Dictionary<TECCost, RatedCostSummaryItem>();
             List<RatedCostSummaryItem> items = new List<RatedCostSummaryItem>();
 
             List<Tuple<TECCost, double>> costs = new List<Tuple<TECCost, double>>();
-            foreach (TECConnection connection in connections)
+            foreach (IControllerConnection connection in connections)
             {
-                foreach(TECElectricalMaterial mat in connection.GetConnectionTypes())
+                foreach(TECElectricalMaterial mat in connection.Protocol.ConnectionTypes)
                 {
                     foreach(TECCost rated in mat.RatedCosts)
                     {

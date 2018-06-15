@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
+using EstimatingLibrary.Utilities.WatcherFilters;
 using GalaSoft.MvvmLight;
 using System;
 using System.Linq;
@@ -222,19 +223,14 @@ namespace TECUserControlLibrary.ViewModels
         //Constructor
         public MaterialSummaryVM(TECBid bid, ChangeWatcher changeWatcher)
         {
-            Refresh(bid, changeWatcher);
+            reinitializeTotals();
+            initializeVMs();
+            loadBid(bid);
+            new InstanceWatcherFilter(changeWatcher).InstanceChanged += instanceChanged;
             SelectedIndex = MaterialSummaryIndex.Devices;
         }
 
         #region Methods
-        public void Refresh(TECBid bid, ChangeWatcher changeWatcher)
-        {
-            reinitializeTotals();
-            initializeVMs();
-            loadBid(bid);
-            resubscribe(changeWatcher);
-        }
-
         #region Initialization Methods
         private void reinitializeTotals()
         {
@@ -267,11 +263,11 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private void resubscribe(ChangeWatcher changeWatcher)
-        {
-            changeWatcher.InstanceChanged -= instanceChanged;
-            changeWatcher.InstanceChanged += instanceChanged;
-        }
+        //private void resubscribe(ChangeWatcher changeWatcher)
+        //{
+        //    changeWatcher.InstanceChanged -= instanceChanged;
+        //    changeWatcher.InstanceChanged += instanceChanged;
+        //}
 
         private void initializeVMs()
         {
@@ -351,19 +347,23 @@ namespace TECUserControlLibrary.ViewModels
         private CostBatch addController(TECController controller)
         {
             CostBatch deltas = new CostBatch();
-            deltas += (ControllerSummaryVM.AddHardware(controller.Type));
+            if (controller is TECProvidedController provided)
+            {
+                deltas += (ControllerSummaryVM.AddHardware(provided.Type));
+                foreach (TECIOModule module in provided.IOModules)
+                {
+                    deltas += (addIOModule(module));
+                }
+            }
             foreach(TECCost cost in controller.AssociatedCosts)
             {
                 deltas += (ControllerSummaryVM.AddCost(cost));
             }
-            foreach(TECConnection connection in controller.ChildrenConnections)
+            foreach(IControllerConnection connection in controller.ChildrenConnections)
             {
                 deltas += (addConnection(connection));
             }
-            foreach(TECIOModule module in controller.IOModules)
-            {
-                deltas += (addIOModule(module));
-            }
+            
             return deltas;
         }
         private CostBatch addIOModule(TECIOModule module)
@@ -387,12 +387,12 @@ namespace TECUserControlLibrary.ViewModels
             }
             return deltas;
         }
-        private CostBatch addConnection(TECConnection connection)
+        private CostBatch addConnection(IControllerConnection connection)
         {
             if (!connection.IsTypical)
             {
                 CostBatch deltas = new CostBatch();
-                foreach (TECElectricalMaterial connectionType in connection.GetConnectionTypes())
+                foreach (TECElectricalMaterial connectionType in connection.Protocol.ConnectionTypes)
                 {
                     deltas += (WireSummaryVM.AddRun(connectionType, connection.Length));
                 }
@@ -472,18 +472,21 @@ namespace TECUserControlLibrary.ViewModels
         private CostBatch removeController(TECController controller)
         {
             CostBatch deltas = new CostBatch();
-            deltas += (ControllerSummaryVM.RemoveHardware(controller.Type));
+            if (controller is TECProvidedController provided)
+            {
+                deltas += (ControllerSummaryVM.RemoveHardware(provided.Type));
+                foreach (TECIOModule module in provided.IOModules)
+                {
+                    deltas += (removeIOModule(module));
+                }
+            }
             foreach(TECCost cost in controller.AssociatedCosts)
             {
                 deltas += (ControllerSummaryVM.RemoveCost(cost));
             }
-            foreach(TECConnection connection in controller.ChildrenConnections)
+            foreach(IControllerConnection connection in controller.ChildrenConnections)
             {
                 deltas += (removeConnection(connection));
-            }
-            foreach(TECIOModule module in controller.IOModules)
-            {
-                deltas += (removeIOModule(module));
             }
             return deltas;
         }
@@ -508,10 +511,10 @@ namespace TECUserControlLibrary.ViewModels
             }
             return deltas;
         }
-        private CostBatch removeConnection(TECConnection connection)
+        private CostBatch removeConnection(IControllerConnection connection)
         {
             CostBatch deltas = new CostBatch();
-            foreach (TECElectricalMaterial connectionType in connection.GetConnectionTypes())
+            foreach (TECElectricalMaterial connectionType in connection.Protocol.ConnectionTypes)
             {
                 deltas += (WireSummaryVM.RemoveRun(connectionType, connection.Length));
             }
@@ -563,7 +566,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     updateTotals(addPanel(panel));
                 }
-                else if (args.Value is TECConnection connection)
+                else if (args.Value is IControllerConnection connection)
                 {
                     updateTotals(addConnection(connection));
                 }
@@ -584,7 +587,7 @@ namespace TECUserControlLibrary.ViewModels
                     
                     if (sub.Connection != null)
                     {
-                        foreach(TECElectricalMaterial connectionType in endDev.ConnectionTypes)
+                        foreach(TECElectricalMaterial connectionType in sub.Connection.Protocol.ConnectionTypes)
                         {
                             updateTotals(WireSummaryVM.AddRun(connectionType, sub.Connection.Length));
                         }
@@ -632,7 +635,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     updateTotals(removePanel(panel));
                 }
-                else if (args.Value is TECConnection connection)
+                else if (args.Value is IControllerConnection connection)
                 {
                     updateTotals(removeConnection(connection));
                 }
@@ -653,7 +656,7 @@ namespace TECUserControlLibrary.ViewModels
                     
                     if (sub.Connection != null)
                     {
-                        foreach(TECElectricalMaterial connectionType in endDev.ConnectionTypes)
+                        foreach(TECElectricalMaterial connectionType in sub.Connection.Protocol.ConnectionTypes)
                         {
                             updateTotals(WireSummaryVM.AddRun(connectionType, sub.Connection.Length));
                         }
@@ -679,12 +682,12 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (args.Change == Change.Edit)
             {
-                if (args.Sender is TECConnection connection)
+                if (args.Sender is IControllerConnection connection)
                 {
                     if (args.PropertyName == "Length")
                     {
                         double deltaLength = (double)args.Value - (double)args.OldValue;
-                        foreach (TECElectricalMaterial connectionType in connection.GetConnectionTypes())
+                        foreach (TECElectricalMaterial connectionType in connection.Protocol.ConnectionTypes)
                         {
                             updateTotals(WireSummaryVM.AddLength(connectionType, deltaLength));
                         }

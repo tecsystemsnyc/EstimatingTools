@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -27,21 +28,19 @@ namespace TECUserControlLibrary.UserControls
             DependencyProperty.Register("IOSource", typeof(ObservableCollection<TECIO>),
               typeof(IOGridControl), new PropertyMetadata(default(ObservableCollection<TECIO>)));
 
-        /// <summary>
-        /// Gets or sets the ViewModel which is used
-        /// </summary>
-        public Object ViewModel
+
+
+        public IDropTarget DropHandler
         {
-            get { return (Object)GetValue(ViewModelProperty); }
-            set { SetValue(ViewModelProperty, value); }
+            get { return (IDropTarget)GetValue(DropHandlerProperty); }
+            set { SetValue(DropHandlerProperty, value); }
         }
 
-        /// <summary>
-        /// Identified the ViewModel dependency property
-        /// </summary>
-        public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(Object),
-              typeof(IOGridControl));
+        // Using a DependencyProperty as the backing store for DropHandler.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DropHandlerProperty =
+            DependencyProperty.Register("DropHandler", typeof(IDropTarget), typeof(IOGridControl));
+
+        
 
         public IOGridControl()
         {

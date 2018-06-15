@@ -9,7 +9,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
     public class AddControllerVM : AddVM
     {
         private TECSystem parent;
-        private TECController toAdd;
+        private TECProvidedController toAdd;
         private int quantity;
         private Action<TECController> add;
         private TECControllerType noneControllerType;
@@ -17,7 +17,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private TECControllerType _selectedType;
         private bool isTypical = false;
 
-        public TECController ToAdd
+        public TECProvidedController ToAdd
         {
             get { return toAdd; }
             private set
@@ -78,9 +78,9 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             add = addMethod;
         }
 
-        public void SetTemplate(TECController template)
+        public void SetTemplate(TECProvidedController template)
         {
-            ToAdd = new TECController(template, isTypical);
+            ToAdd = new TECProvidedController(template, false);
         }
         
         private void setup(IEnumerable<TECControllerType> controllerTypes, bool isTypical)
@@ -88,7 +88,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             Quantity = 1;
             noneControllerType = new TECControllerType(new TECManufacturer());
             noneControllerType.Name = "Select Controller Type";
-            toAdd = new TECController(noneControllerType, isTypical);
+            toAdd = new TECProvidedController(noneControllerType, isTypical);
             ControllerTypes = new List<TECControllerType>(controllerTypes);
             ControllerTypes.Insert(0, noneControllerType);
             AddCommand = new RelayCommand(addExecute, addCanExecute);
@@ -114,7 +114,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             for(int x = 0; x < Quantity; x++)
             {
-                var controller = AsReference ? ToAdd : new TECController(ToAdd, isTypical);
+                var controller = AsReference ? ToAdd : new TECProvidedController(ToAdd, isTypical);
                 add(controller);
                 Added?.Invoke(controller);
             }

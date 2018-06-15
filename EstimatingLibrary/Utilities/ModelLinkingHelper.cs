@@ -17,10 +17,13 @@ namespace EstimatingLibrary.Utilities
 
             foreach (TECController controller in bid.GetAll<TECController>())
             {
-                bool controllerNeedsSave = ModelCleanser.addRequiredIOModules(controller);
-                if (controllerNeedsSave)
+                if (controller is TECProvidedController provided)
                 {
-                    needsSave = true;
+                    bool controllerNeedsSave = ModelCleanser.addRequiredIOModules(provided);
+                    if (controllerNeedsSave)
+                    {
+                        needsSave = true;
+                    }
                 }
             }
 
@@ -43,7 +46,7 @@ namespace EstimatingLibrary.Utilities
         {
             linkSystemToCatalogs(system, scopeManager.Catalogs);
             linkSubScopeConnections(system.Controllers, system.GetAllSubScope(), guidDictionary);
-            List<INetworkConnectable> allChildren = new List<INetworkConnectable>();
+            List<IConnectable> allChildren = new List<IConnectable>();
             allChildren.AddRange(system.Controllers);
             allChildren.AddRange(system.GetAllSubScope());
             linkNetworkConnections(system.Controllers, allChildren, guidDictionary);
@@ -115,9 +118,9 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        public static void LinkTypicalInstanceDictionary(ObservableListDictionary<TECObject> oldDictionary, TECTypical newTypical)
+        public static void LinkTypicalInstanceDictionary(ObservableListDictionary<ITECObject > oldDictionary, TECTypical newTypical)
         {
-            ObservableListDictionary<TECObject> newCharacteristicInstances = new ObservableListDictionary<TECObject>();
+            ObservableListDictionary<ITECObject > newCharacteristicInstances = new ObservableListDictionary<ITECObject >();
             foreach (TECSystem instance in newTypical.Instances)
             {
                 linkCharacteristicCollections(newTypical.Equipment, instance.Equipment, oldDictionary, newCharacteristicInstances);
@@ -188,20 +191,19 @@ namespace EstimatingLibrary.Utilities
         }
         private static void linkControllerToCatalogs(TECController controller, TECCatalogs catalogs)
         {
-            linkControllerToControllerType(controller, catalogs.ControllerTypes);
-            foreach(TECConnection connection in controller.ChildrenConnections)
+            if (controller is TECProvidedController provided)
+            {
+                linkProvidedControllerToControllerType(provided, catalogs.ControllerTypes);
+            }
+            foreach(IControllerConnection connection in controller.ChildrenConnections)
             {
                 linkConnectionToCatalogs(connection, catalogs);
             }
             linkScopeChildrenToCatalogs(controller, catalogs);
         }
-        private static void linkConnectionToCatalogs(TECConnection connection, TECCatalogs catalogs)
+        private static void linkConnectionToCatalogs(IControllerConnection connection, TECCatalogs catalogs)
         {
             linkConnectionToConduitType(connection, catalogs.ConduitTypes);
-            TECNetworkConnection netConnect = connection as TECNetworkConnection;if (netConnect != null)
-            {
-                linkNetworkConnectionToConnectionType(netConnect, catalogs.ConnectionTypes);
-            }
         }
         private static void linkPanelToCatalogs(TECPanel panel, TECCatalogs catalogs)
         {
@@ -233,26 +235,26 @@ namespace EstimatingLibrary.Utilities
                 panel.Controllers = new ObservableCollection<TECController>(controllersToLink);
             }
         }
-        private static void linkNetworkConnections(IEnumerable<TECController> controllers, IEnumerable<INetworkConnectable> children,
+        private static void linkNetworkConnections(IEnumerable<TECController> controllers, IEnumerable<IConnectable> children,
             Dictionary<Guid, Guid> guidDictionary = null)
         {
             foreach (TECController controller in controllers)
             {
-                foreach (TECConnection connection in controller.ChildrenConnections)
+                foreach (IControllerConnection connection in controller.ChildrenConnections)
                 {
                     if (connection is TECNetworkConnection)
                     {
                         TECNetworkConnection netConnect = connection as TECNetworkConnection;
-                        ObservableCollection<INetworkConnectable> controllersToAdd = new ObservableCollection<INetworkConnectable>();
-                        foreach (INetworkConnectable child in netConnect.Children)
+                        ObservableCollection<IConnectable> controllersToAdd = new ObservableCollection<IConnectable>();
+                        foreach (IConnectable child in netConnect.Children)
                         {
-                            foreach (INetworkConnectable item in children)
+                            foreach (IConnectable item in children)
                             {
                                 bool isCopy = (guidDictionary != null && guidDictionary[child.Guid] == guidDictionary[item.Guid]);
                                 if (child.Guid == item.Guid || isCopy)
                                 {
                                     controllersToAdd.Add(item);
-                                    item.ParentConnection = netConnect;
+                                    item.SetParentConnection(netConnect);
                                 }
                             }
                         }
@@ -268,30 +270,28 @@ namespace EstimatingLibrary.Utilities
             {
                 foreach (TECController controller in controllers)
                 {
-                    List<TECSubScopeConnection> newConnections = new List<TECSubScopeConnection>();
-                    List<TECSubScopeConnection> oldConnections = new List<TECSubScopeConnection>();
-                    foreach (TECConnection connection in controller.ChildrenConnections)
+                    List<TECHardwiredConnection> newConnections = new List<TECHardwiredConnection>();
+                    List<TECHardwiredConnection> oldConnections = new List<TECHardwiredConnection>();
+                    foreach (IControllerConnection connection in controller.ChildrenConnections)
                     {
                         
-                        if (connection is TECSubScopeConnection)
+                        if (connection is TECHardwiredConnection)
                         {
-                            TECSubScopeConnection ssConnect = connection as TECSubScopeConnection;
-                            bool isCopy = (guidDictionary != null && guidDictionary[ssConnect.SubScope.Guid] == guidDictionary[subScope.Guid]);
-                            if (ssConnect.SubScope.Guid == subScope.Guid || isCopy)
+                            TECHardwiredConnection ssConnect = connection as TECHardwiredConnection;
+                            bool isCopy = (guidDictionary != null && guidDictionary[ssConnect.Child.Guid] == guidDictionary[subScope.Guid]);
+                            if (ssConnect.Child.Guid == subScope.Guid || isCopy)
                             {
-                                TECSubScopeConnection linkedConnection = new TECSubScopeConnection(ssConnect, subScope, subScope.IsTypical || controller.IsTypical);
-                                subScope.Connection = linkedConnection;
+                                TECHardwiredConnection linkedConnection = new TECHardwiredConnection(ssConnect, subScope, subScope.IsTypical || controller.IsTypical);
                                 newConnections.Add(linkedConnection);
                                 oldConnections.Add(ssConnect);
-                                linkedConnection.ParentController = controller;
                             }
                         }
                     }
-                    foreach(TECSubScopeConnection conn in newConnections)
+                    foreach(TECHardwiredConnection conn in newConnections)
                     {
                         controller.ChildrenConnections.Add(conn);
                     }
-                    foreach(TECSubScopeConnection conn in oldConnections)
+                    foreach(TECHardwiredConnection conn in oldConnections)
                     {
                         controller.ChildrenConnections.Remove(conn);
                     }
@@ -299,7 +299,7 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        private static void linkConnectionToConduitType(TECConnection connection, IEnumerable<TECElectricalMaterial> conduitTypes)
+        private static void linkConnectionToConduitType(IControllerConnection connection, IEnumerable<TECElectricalMaterial> conduitTypes)
         {
             if (connection.ConduitType != null)
             {
@@ -318,21 +318,6 @@ namespace EstimatingLibrary.Utilities
             linkAssociatedCostsInScope(catalogs.AssociatedCosts, scope);
             linkTagsInScope(catalogs.Tags, scope);
         }
-        private static void linkNetworkConnectionToConnectionType(TECNetworkConnection netConnect, IEnumerable<TECConnectionType> connectionTypes)
-        {
-            ObservableCollection<TECConnectionType> linkedTypes = new ObservableCollection<TECConnectionType>();
-            foreach (TECConnectionType type in connectionTypes)
-            {
-                foreach(TECConnectionType connType in netConnect.ConnectionTypes)
-                {
-                    if (connType.Guid == type.Guid)
-                    {
-                        linkedTypes.Add(type);
-                    }
-                }
-            }
-            netConnect.ConnectionTypes = linkedTypes;
-        }
         private static void linkPanelToPanelType(TECPanel panel, IEnumerable<TECPanelType> panelTypes)
         {
             foreach(TECPanelType type in panelTypes)
@@ -344,7 +329,7 @@ namespace EstimatingLibrary.Utilities
                 }
             }
         }
-        private static void linkControllerToControllerType(TECController controller, IEnumerable<TECControllerType> controllerTypes)
+        private static void linkProvidedControllerToControllerType(TECProvidedController controller, IEnumerable<TECControllerType> controllerTypes)
         {
             foreach (TECControllerType type in controllerTypes)
             {
@@ -419,7 +404,7 @@ namespace EstimatingLibrary.Utilities
             }
 
         }
-        private static List<T> findReferences<T>(T template, IEnumerable<T> referenceList, Dictionary<Guid, List<Guid>> templateReferences) where T : TECObject
+        private static List<T> findReferences<T>(T template, IEnumerable<T> referenceList, Dictionary<Guid, List<Guid>> templateReferences) where T : ITECObject 
         {
             List<T> references = new List<T>();
             foreach (T item in referenceList)
@@ -488,18 +473,18 @@ namespace EstimatingLibrary.Utilities
         /// <param name="oldCharacteristicInstances">A previosuly linked scope dictionary, from the original system before copying</param>
         /// <param name="newCharacteristicInstances">The scope dictionary that must be linked</param>
         static private void linkCharacteristicCollections(IList characteristic, IList instances,
-            ObservableListDictionary<TECObject> oldCharacteristicInstances,
-            ObservableListDictionary<TECObject> newCharacteristicInstances)
+            ObservableListDictionary<ITECObject > oldCharacteristicInstances,
+            ObservableListDictionary<ITECObject > newCharacteristicInstances)
         {
             foreach (var item in oldCharacteristicInstances.GetFullDictionary())
             {
-                foreach (TECObject charItem in characteristic)
+                foreach (ITECObject  charItem in characteristic)
                 {
                     if (item.Key.Guid == charItem.Guid)
                     {
                         foreach (var sub in item.Value)
                         {
-                            foreach (TECObject subInstance in instances)
+                            foreach (ITECObject  subInstance in instances)
                             {
                                 if (subInstance.Guid == sub.Guid)
                                 {
@@ -569,11 +554,11 @@ namespace EstimatingLibrary.Utilities
         /// <param name="instances"></param>
         /// <param name="referenceDict"></param>
         /// <param name="characteristicList"></param>
-        private static void linkCharacteristicWithInstances(TECObject characteristic, IList instances,
+        private static void linkCharacteristicWithInstances(ITECObject  characteristic, IList instances,
             Dictionary<Guid, List<Guid>> referenceDict,
-            ObservableListDictionary<TECObject> characteristicList)
+            ObservableListDictionary<ITECObject > characteristicList)
         {
-            foreach (TECObject item in instances)
+            foreach (ITECObject  item in instances)
             {
                 if (referenceDict[characteristic.Guid].Contains(item.Guid))
                 {

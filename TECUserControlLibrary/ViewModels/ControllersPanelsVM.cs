@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
@@ -168,13 +169,13 @@ namespace TECUserControlLibrary.ViewModels
         public RelayCommand AddPanelCommand { get; private set; }
         public RelayCommand<TECController> DeleteControllerCommand { get; private set; }
         public RelayCommand<TECPanel> DeletePanelCommand { get; private set; }
-        public RelayCommand<TECController> ChangeTypeCommand { get; private set; }
+        public RelayCommand<TECProvidedController> ChangeTypeCommand { get; private set; }
 
         #region Delegates
         public Action<IDropInfo> DragHandler;
         public Action<IDropInfo> DropHandler;
 
-        public Action<Object> SelectionChanged;
+        public Action<TECObject> SelectionChanged;
         #endregion
 
         #endregion
@@ -187,12 +188,12 @@ namespace TECUserControlLibrary.ViewModels
             AddPanelCommand = new RelayCommand(addPanelExecute, canAddPanel);
             DeleteControllerCommand = new RelayCommand<TECController>(deleteControllerExecute);
             DeletePanelCommand = new RelayCommand<TECPanel>(deletePanelExecute);
-            ChangeTypeCommand = new RelayCommand<TECController>(changeTypeExecute, canChangeType);
+            ChangeTypeCommand = new RelayCommand<TECProvidedController>(changeTypeExecute, canChangeType);
 
             Refresh(parent, controllers, panels);
         }
 
-        private void changeTypeExecute(TECController obj)
+        private void changeTypeExecute(TECProvidedController obj)
         {
             ObservableCollection<TECControllerType> types = Bid != null ? Bid.Catalogs.ControllerTypes : Templates.Catalogs.ControllerTypes;
 
@@ -201,9 +202,16 @@ namespace TECUserControlLibrary.ViewModels
 
         private bool canChangeType(TECController arg)
         {
-            ObservableCollection<TECControllerType> types = Bid != null ? Bid.Catalogs.ControllerTypes : Templates.Catalogs.ControllerTypes;
+            if (arg is TECProvidedController provided)
+            {
+                ObservableCollection<TECControllerType> types = Bid != null ? Bid.Catalogs.ControllerTypes : Templates.Catalogs.ControllerTypes;
 
-            return arg != null && types.Any(x => arg.CanChangeType(x));
+                return provided != null && types.Any(x => provided.CanChangeType(x));
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public ControllersPanelsVM(TECBid bid) : this(bid, bid.Controllers, bid.Panels)
@@ -315,7 +323,7 @@ namespace TECUserControlLibrary.ViewModels
             addControllerMethod = templates.ControllerTemplates.Add;
             addPanelMethod = templates.PanelTemplates.Add;
             deleteControllerMethod = controller => {
-                controller.RemoveAllConnections();
+                controller.DisconnectAll();
                 templates.ControllerTemplates.Remove(controller);
             };
             deletePanelMethod = panel => { templates.PanelTemplates.Remove(panel); };
@@ -470,12 +478,12 @@ namespace TECUserControlLibrary.ViewModels
             TECScopeManager scopeManager = Templates != null ? Templates as TECScopeManager : Bid as TECScopeManager;
             UIHelpers.Drop(dropInfo, (item) =>
             {
-                if (item is TECController controller)
+                if (item is TECProvidedController controller)
                 {
                     var controllerTypes = Templates == null ? Bid.Catalogs.ControllerTypes : Templates.Catalogs.ControllerTypes;
                     SelectedVM = addControllerMethod != null ? new AddControllerVM(addControllerMethod, controllerTypes, scopeManager) :
                         new AddControllerVM(SelectedSystem, controllerTypes, scopeManager);
-                    TECController dropped = (TECController)controller.DragDropCopy(scopeManager);
+                    TECProvidedController dropped = (TECProvidedController)((IDDCopiable)controller).DragDropCopy(scopeManager);
                     ((AddControllerVM)SelectedVM).SetTemplate(dropped);
                     ((AddControllerVM)SelectedVM).SelectedType = dropped.Type;
                 }

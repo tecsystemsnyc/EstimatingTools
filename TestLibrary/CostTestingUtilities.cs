@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 
 namespace Tests
 {
@@ -134,8 +135,12 @@ namespace Tests
         {
             Total total = new Total();
             total += CalculateTotal(controller as TECScope, type);
-            total += CalculateTotal(controller.Type as TECHardware, type);
-            foreach (TECConnection connection in controller.ChildrenConnections)
+            if (controller is TECProvidedController provided)
+            {
+                total += CalculateTotal(provided.Type as TECHardware, type);
+            }
+            
+            foreach (IControllerConnection connection in controller.ChildrenConnections)
             {
                 total += CalculateTotal(connection, type);
             }
@@ -150,12 +155,12 @@ namespace Tests
             return total;
         }
 
-        static public Total CalculateTotal(TECConnection connection, CostType type)
+        static public Total CalculateTotal(IControllerConnection connection, CostType type)
         {
             Total total = new Total();
-            if (connection is TECSubScopeConnection)
+            if (connection is TECHardwiredConnection)
             {
-                foreach (TECElectricalMaterial conType in (connection as TECSubScopeConnection).ConnectionTypes)
+                foreach (TECElectricalMaterial conType in (connection as TECHardwiredConnection).ConnectionTypes)
                 {
                     total += CalculateTotal(conType, type) * connection.Length;
                     total += CalculateTotal(conType as TECScope, type);
@@ -168,7 +173,7 @@ namespace Tests
             else if (connection is TECNetworkConnection netConn)
             {
                 
-                foreach(TECElectricalMaterial connType in netConn.ConnectionTypes)
+                foreach(TECElectricalMaterial connType in netConn.Protocol.ConnectionTypes)
                 {
                     total += CalculateTotal(connType, type) * connection.Length;
                     total += CalculateTotal(connType as TECScope, type);

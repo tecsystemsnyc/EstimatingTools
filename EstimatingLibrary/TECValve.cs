@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
@@ -61,14 +62,6 @@ namespace EstimatingLibrary
                 var old = _style;
                 _style = value;
                 notifyCombinedChanged(Change.Edit, "Style", this, _style, old);
-            }
-        }
-        
-        public ObservableCollection<TECConnectionType> ConnectionTypes
-        {
-            get
-            {
-                return Actuator.ConnectionTypes;
             }
         }
 
@@ -134,5 +127,14 @@ namespace EstimatingLibrary
         {
             return new TECValve(this);
         }
+
+        #region IEndDevice
+        public List<IProtocol> ConnectionMethods => ((IEndDevice)Actuator).ConnectionMethods;
+
+        public ObservableCollection<TECConnectionType> HardwiredConnectionTypes => ((IEndDevice)Actuator).HardwiredConnectionTypes;
+
+        public ObservableCollection<TECProtocol> PossibleProtocols => ((IEndDevice)Actuator).PossibleProtocols;
+        #endregion
+
     }
 }

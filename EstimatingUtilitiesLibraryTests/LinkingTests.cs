@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibraryTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -51,7 +52,7 @@ namespace Tests
         {
             foreach(TECDevice device in bid.Catalogs.Devices)
             {
-                foreach(TECConnectionType connectionType in device.ConnectionTypes)
+                foreach(TECConnectionType connectionType in device.HardwiredConnectionTypes)
                 {
                     if (!bid.Catalogs.ConnectionTypes.Contains(connectionType))
                     {
@@ -218,7 +219,7 @@ namespace Tests
         {
             foreach(TECTypical typical in bid.Systems)
             {
-                ObservableListDictionary<TECObject> list = typical.TypicalInstanceDictionary;
+                ObservableListDictionary<ITECObject> list = typical.TypicalInstanceDictionary;
                 int scopeFound = 0;
                 foreach(TECEquipment equip in typical.Equipment)
                 {
@@ -269,7 +270,7 @@ namespace Tests
         {
             foreach(TECTypical typical in bid.Systems)
             {
-                ObservableListDictionary<TECObject> list = typical.TypicalInstanceDictionary;
+                ObservableListDictionary<ITECObject> list = typical.TypicalInstanceDictionary;
                 foreach (TECSystem instance in typical.Instances)
                 {
                     int scopeFound = 0;
@@ -329,17 +330,26 @@ namespace Tests
                 {
                     foreach (TECController controller in instance.Controllers)
                     {
-                        Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(controller.Type));
+                        if (controller is TECProvidedController provided)
+                        {
+                            Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(provided.Type));
+                        } 
                     }
                 }
                 foreach (TECController controller in typical.Controllers)
                 {
-                    Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(controller.Type));
+                    if (controller is TECProvidedController provided)
+                    {
+                        Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(provided.Type));
+                    }
                 }
             }
             foreach (TECController controller in bid.Controllers)
             {
-                Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(controller.Type));
+                if (controller is TECProvidedController provided)
+                {
+                    Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(provided.Type));
+                }
             }
         }
 
@@ -384,19 +394,28 @@ namespace Tests
         {
             foreach (TECController controller in bid.Controllers)
             {
-                Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(controller.Type));
+                if (controller is TECProvidedController provided)
+                {
+                    Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(provided.Type));
+                }
             }
             foreach (TECTypical typical in bid.Systems)
             {
                 foreach (TECController controller in typical.Controllers)
                 {
-                    Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(controller.Type));
+                    if (controller is TECProvidedController provided)
+                    {
+                        Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(provided.Type));
+                    }
                 }
                 foreach (TECSystem instance in typical.Instances)
                 {
                     foreach (TECController controller in instance.Controllers)
                     {
-                        Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(controller.Type));
+                        if (controller is TECProvidedController provided)
+                        {
+                            Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(provided.Type));
+                        }
                     }
                 }
             }
@@ -442,12 +461,18 @@ namespace Tests
             {
                 foreach (TECController controller in typical.Controllers)
                 {
-                    Assert.IsTrue(templates.Catalogs.ControllerTypes.Contains(controller.Type));
+                    if (controller is TECProvidedController provided)
+                    {
+                        Assert.IsTrue(templates.Catalogs.ControllerTypes.Contains(provided.Type));
+                    }
                 }
             }
             foreach (TECController controller in templates.ControllerTemplates)
             {
-                Assert.IsTrue(templates.Catalogs.ControllerTypes.Contains(controller.Type));
+                if(controller is TECProvidedController provided)
+                        {
+                    Assert.IsTrue(templates.Catalogs.ControllerTypes.Contains(provided.Type));
+                }
             }
         }
 
@@ -519,7 +544,7 @@ namespace Tests
                 {
                     foreach (TECController controller in instance.Controllers)
                     {
-                        foreach (TECConnection connection in controller.ChildrenConnections)
+                        foreach (IControllerConnection connection in controller.ChildrenConnections)
                         {
                             Assert.IsTrue(bid.Catalogs.ConduitTypes.Contains(connection.ConduitType) || connection.ConduitType == null);
                         }
@@ -527,7 +552,7 @@ namespace Tests
                 }
                 foreach (TECController controller in typical.Controllers)
                 {
-                    foreach (TECConnection connection in controller.ChildrenConnections)
+                    foreach (IControllerConnection connection in controller.ChildrenConnections)
                     {
                         Assert.IsTrue(bid.Catalogs.ConduitTypes.Contains(connection.ConduitType) || connection.ConduitType == null);
                     }
@@ -535,7 +560,7 @@ namespace Tests
             }
             foreach (TECController controller in bid.Controllers)
             {
-                foreach (TECConnection connection in controller.ChildrenConnections)
+                foreach (IControllerConnection connection in controller.ChildrenConnections)
                 {
                     Assert.IsTrue(bid.Catalogs.ConduitTypes.Contains(connection.ConduitType) || connection.ConduitType == null);
                 }
@@ -547,12 +572,12 @@ namespace Tests
         {
             foreach(TECController controller in bid.Controllers)
             {
-                foreach(TECConnection connection in controller.ChildrenConnections)
+                foreach(IControllerConnection connection in controller.ChildrenConnections)
                 {
-                    var subScopeConnection = connection as TECSubScopeConnection;
+                    var subScopeConnection = connection as TECHardwiredConnection;
                     if(subScopeConnection != null)
                     {
-                        Assert.IsTrue(TestHelper.IsInBid(subScopeConnection.SubScope, bid));
+                        Assert.IsTrue(TestHelper.IsInBid(subScopeConnection.Child as TECSubScope, bid));
                     }
                 }
             }
@@ -560,12 +585,12 @@ namespace Tests
             {
                 foreach (TECController controller in typical.Controllers)
                 {
-                    foreach (TECConnection connection in controller.ChildrenConnections)
+                    foreach (IControllerConnection connection in controller.ChildrenConnections)
                     {
-                        var subScopeConnection = connection as TECSubScopeConnection;
+                        var subScopeConnection = connection as TECHardwiredConnection;
                         if (subScopeConnection != null)
                         {
-                            Assert.IsTrue(TestHelper.IsInBid(subScopeConnection.SubScope, bid));
+                            Assert.IsTrue(TestHelper.IsInBid(subScopeConnection.Child as TECSubScope, bid));
                         }
                     }
                 }
@@ -573,12 +598,12 @@ namespace Tests
                 {
                     foreach (TECController controller in instance.Controllers)
                     {
-                        foreach (TECConnection connection in controller.ChildrenConnections)
+                        foreach (IControllerConnection connection in controller.ChildrenConnections)
                         {
-                            var subScopeConnection = connection as TECSubScopeConnection;
+                            var subScopeConnection = connection as TECHardwiredConnection;
                             if (subScopeConnection != null)
                             {
-                                Assert.IsTrue(TestHelper.IsInBid(subScopeConnection.SubScope, bid));
+                                Assert.IsTrue(TestHelper.IsInBid(subScopeConnection.Child as TECSubScope, bid));
                             }
                         }
                     }
@@ -595,7 +620,7 @@ namespace Tests
             {
                 foreach (TECController controller in typical.Controllers)
                 {
-                    foreach (TECConnection connection in controller.ChildrenConnections)
+                    foreach (IControllerConnection connection in controller.ChildrenConnections)
                     {
                         Assert.IsTrue(templates.Catalogs.ConduitTypes.Contains(connection.ConduitType) || connection.ConduitType == null);
                     }
@@ -603,7 +628,7 @@ namespace Tests
             }
             foreach (TECController controller in templates.ControllerTemplates)
             {
-                foreach (TECConnection connection in controller.ChildrenConnections)
+                foreach (IControllerConnection connection in controller.ChildrenConnections)
                 {
                     Assert.IsTrue(templates.Catalogs.ConduitTypes.Contains(connection.ConduitType) || connection.ConduitType == null);
                 }
@@ -617,12 +642,12 @@ namespace Tests
             {
                 foreach (TECController controller in typical.Controllers)
                 {
-                    foreach (TECConnection connection in controller.ChildrenConnections)
+                    foreach (IControllerConnection connection in controller.ChildrenConnections)
                     {
-                        var subScopeConnection = connection as TECSubScopeConnection;
+                        var subScopeConnection = connection as TECHardwiredConnection;
                         if (subScopeConnection != null)
                         {
-                            Assert.IsTrue(typical.GetAllSubScope().Contains(subScopeConnection.SubScope));
+                            Assert.IsTrue(typical.GetAllSubScope().Contains(subScopeConnection.Child as TECSubScope));
                         }
                     }
                 }
@@ -651,7 +676,7 @@ namespace Tests
 
             foreach (TECController controller in allControllers)
             {
-                foreach (TECConnection connection in controller.ChildrenConnections)
+                foreach (IControllerConnection connection in controller.ChildrenConnections)
                 {
                     TECNetworkConnection netConnect = connection as TECNetworkConnection;
                     if (netConnect != null)

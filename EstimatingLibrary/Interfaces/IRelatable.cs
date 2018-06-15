@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace EstimatingLibrary.Interfaces
 {
-    public interface IRelatable
+    public interface IRelatable : ITECObject
     {
         SaveableMap PropertyObjects { get; }
         SaveableMap LinkedObjects { get; }
@@ -39,9 +39,9 @@ namespace EstimatingLibrary.Interfaces
             return list;
         }
         
-        public static List<TECObject> GetDirectChildren(this IRelatable relatable)
+        public static List<ITECObject> GetDirectChildren(this IRelatable relatable)
         {
-            List<TECObject> list = new List<TECObject>();
+            List<ITECObject> list = new List<ITECObject>();
             foreach (var item in relatable.PropertyObjects.ChildList().Where(x => !relatable.LinkedObjects.Contains(x.PropertyName)))
             {
                 list.Add(item.Child);
@@ -53,22 +53,69 @@ namespace EstimatingLibrary.Interfaces
         {
             return !relatable.LinkedObjects.Contains(propertyName) && relatable.PropertyObjects.Contains(propertyName);
         }
+
+        public static bool IsDirectDescendant(this IRelatable relatable, ITECObject item)
+        {
+            List<ITECObject> directChildren = relatable.GetDirectChildren();
+            if (directChildren.Contains(item))
+            {
+                return true;
+            }
+
+            foreach(ITECObject child in directChildren)
+            {
+                if (child is IRelatable relatableChild && relatableChild.IsDirectDescendant(item))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static List<ITECObject> GetObjectPath(this IRelatable parent, ITECObject descendant)
+        {
+            List<ITECObject> path = new List<ITECObject>();
+
+            if (!parent.IsDirectDescendant(descendant))
+            {
+                return path;
+            }
+
+            path.Add(parent);
+
+            foreach(ITECObject child in parent.GetDirectChildren())
+            {
+                if (child == descendant)
+                {
+                    path.Add(child);
+                    return path;
+                }
+                else if (child is IRelatable childRelatable && childRelatable.IsDirectDescendant(descendant))
+                {
+                    path.AddRange(childRelatable.GetObjectPath(descendant));
+                    return path;
+                }
+            }
+
+            throw new Exception("Parent shown as having the direct descendant, but path to direct descendant not found.");
+        }
     }
 
     public class SaveableMap
     {
-        public List<TECObject> Objects;
+        public List<ITECObject> Objects;
         public List<string> PropertyNames;
-        Dictionary<string, List<TECObject>> nameDictionary;
+        Dictionary<string, List<ITECObject>> nameDictionary;
 
         public SaveableMap()
         {
-            Objects = new List<TECObject>();
+            Objects = new List<ITECObject>();
             PropertyNames = new List<string>();
-            nameDictionary = new Dictionary<string, List<TECObject>>();
+            nameDictionary = new Dictionary<string, List<ITECObject>>();
         }
 
-        public bool Contains(TECObject item)
+        public bool Contains(ITECObject item)
         {
             return Objects.Contains(item);
         }
@@ -80,7 +127,7 @@ namespace EstimatingLibrary.Interfaces
         {
             return parent.GetType().GetProperty(propertyName).GetValue(parent);
         }
-        public void Add(TECObject item, string name)
+        public void Add(ITECObject item, string name)
         {
             Objects.Add(item);
             this.Add(name);
@@ -90,7 +137,7 @@ namespace EstimatingLibrary.Interfaces
         {
             PropertyNames.Add(name);
         }
-        public void AddRange(IEnumerable<TECObject> items, string name)
+        public void AddRange(IEnumerable<ITECObject> items, string name)
         {
             Objects.AddRange(items);
             this.Add(name);
@@ -106,7 +153,7 @@ namespace EstimatingLibrary.Interfaces
         }
         public void AddRange(SaveableMap map)
         {
-            foreach(KeyValuePair<string, List<TECObject>> pair in map.nameDictionary)
+            foreach(KeyValuePair<string, List<ITECObject>> pair in map.nameDictionary)
             {
                 if (nameDictionary.ContainsKey(pair.Key))
                 {
@@ -132,10 +179,10 @@ namespace EstimatingLibrary.Interfaces
         /// List of all child objects nd the name of their containing property
         /// </summary>
         /// <returns></returns>
-        public List<(string PropertyName, TECObject Child)> ChildList()
+        public List<(string PropertyName, ITECObject Child)> ChildList()
         {
-            List<(string propertyName, TECObject child)> outList = new List<(string propertyName, TECObject child)>();
-            foreach(KeyValuePair<string, List<TECObject>> pair in nameDictionary)
+            List<(string propertyName, ITECObject child)> outList = new List<(string propertyName, ITECObject child)>();
+            foreach(KeyValuePair<string, List<ITECObject>> pair in nameDictionary)
             {
                 foreach(TECObject item in pair.Value)
                 {
@@ -145,11 +192,11 @@ namespace EstimatingLibrary.Interfaces
             return outList;
         }
 
-        private void addToDictionary(string name, TECObject item)
+        private void addToDictionary(string name, ITECObject item)
         {
             if (!nameDictionary.ContainsKey(name))
             {
-                nameDictionary[name] = new List<TECObject>() { item };
+                nameDictionary[name] = new List<ITECObject>() { item };
             }
             else
             {

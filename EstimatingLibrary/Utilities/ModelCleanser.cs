@@ -9,22 +9,22 @@ namespace EstimatingLibrary.Utilities
 {
     public static class ModelCleanser
     {
-        internal static bool addRequiredIOModules(TECController controller)
+        internal static bool addRequiredIOModules(TECProvidedController controller)
         {
             //The IO needed by the points connected to the controller
             IOCollection necessaryIO = new IOCollection();
             bool needsSave = false;
 
-            foreach (TECSubScopeConnection ssConnect in
-                controller.ChildrenConnections.Where(con => con is TECSubScopeConnection))
+            foreach (TECHardwiredConnection ssConnect in
+                controller.ChildrenConnections.Where(con => con is TECHardwiredConnection))
             {
-                foreach (TECIO io in ssConnect.SubScope.IO.ListIO())
+                foreach (TECIO io in ssConnect.Child.HardwiredIO.ToList())
                 {
                     for (int i = 0; i < io.Quantity; i++)
                     {
                         //The point IO that exists on our controller at the moment.
                         IOCollection totalPointIO = getPointIO(controller);
-                        necessaryIO.AddIO(io.Type);
+                        necessaryIO.Add(io.Type);
                         //Check if our io that exists satisfies the IO that we need.
                         if (!totalPointIO.Contains(necessaryIO))
                         {
@@ -34,7 +34,7 @@ namespace EstimatingLibrary.Utilities
                             foreach (TECIOModule module in controller.Type.IOModules)
                             {
                                 //We only need to check for the type of the last IO that we added.
-                                if (module.IOCollection().Contains(io.Type) && controller.CanAddModule(module))
+                                if (module.IOCollection.Contains(io.Type) && controller.CanAddModule(module))
                                 {
                                     controller.AddModule(module);
                                     moduleFound = true;
@@ -43,7 +43,7 @@ namespace EstimatingLibrary.Utilities
                             }
                             if (!moduleFound)
                             {
-                                controller.RemoveAllConnections();
+                                controller.DisconnectAll();
                                 MessageBox.Show(string.Format("The controller type of the controller '{0}' is incompatible with the connected points. Please review the controller's connections.",
                                                                     controller.Name));
 
@@ -58,9 +58,9 @@ namespace EstimatingLibrary.Utilities
             IOCollection getPointIO(TECController con)
             {
                 IOCollection pointIOCollection = new IOCollection();
-                foreach (TECIO pointIO in controller.TotalIO.ListIO().Where(io => (TECIO.PointIO.Contains(io.Type) || TECIO.UniversalIO.Contains(io.Type))))
+                foreach (TECIO pointIO in controller.IO.ToList().Where(io => (TECIO.PointIO.Contains(io.Type) || TECIO.UniversalIO.Contains(io.Type))))
                 {
-                    pointIOCollection.AddIO(pointIO);
+                    pointIOCollection.Add(pointIO);
                 }
                 return pointIOCollection;
             }

@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GongSolutions.Wpf.DragDrop;
@@ -33,15 +34,23 @@ namespace TECUserControlLibrary.ViewModels
             InstanceEditVM.Selected += item => {
                 Selected = item;
             };
-            NetworkVM = NetworkVM.GetNetworkVMFromBid(bid, watcher);
-            NetworkVM.Selected += item =>
-            {
-                Selected = item;
-            };
             PropertiesVM = new PropertiesVM(bid.Catalogs, bid);
             WorkBoxVM = new WorkBoxVM(bid);
-            GlobalConnectionsVM = new GlobalConnectionsVM(bid, watcher);
-            GlobalConnectionsVM.Selected += item =>
+            ConnectionsVM = new ConnectionsVM(bid, watcher, bid.Catalogs, locations: bid.Locations, filterPredicate: filterPredicate);
+
+            bool filterPredicate(ITECObject obj)
+            {
+                if (obj is ITypicalable typable)
+                {
+                    return (typable is TECTypical || !typable.IsTypical);
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            ConnectionsVM.Selected += item =>
             {
                 Selected = item;
             };
@@ -75,24 +84,14 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         #region Extensions
-        private NetworkVM _networkVM;
-
         public ScopeCollectionsTabVM ScopeCollection { get; set; }
         public ControllersPanelsVM ControllersPanelsTab { get; set; }
         public MiscCostsVM MiscVM { get; set; }
         public SystemHierarchyVM TypicalEditVM { get; set; }
         public TypicalHierarchyVM InstanceEditVM { get; set; }
-        public NetworkVM NetworkVM {
-            get { return _networkVM; }
-            private set
-            {
-                _networkVM = value;
-                RaisePropertyChanged("NetworkVM");
-            }
-        }
         public PropertiesVM PropertiesVM { get; }
         public WorkBoxVM WorkBoxVM { get; }
-        public GlobalConnectionsVM GlobalConnectionsVM { get; }
+        public ConnectionsVM ConnectionsVM { get; }
         #endregion
 
         #region Interface Properties
@@ -150,7 +149,6 @@ namespace TECUserControlLibrary.ViewModels
             ControllersPanelsTab.Refresh(Bid);
             MiscVM.Refresh(Bid);
             TypicalEditVM.Refresh(Bid);
-            NetworkVM = NetworkVM.GetNetworkVMFromBid(bid, watcher);
             PropertiesVM.Refresh(bid.Catalogs, bid);
             WorkBoxVM.Refresh(bid);
         }

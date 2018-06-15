@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls.PropertyControls"
              xmlns:listControls="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              x:Name="connectionPropertiesControl"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -16,6 +17,9 @@
             <Style TargetType="TextBlock">
                 <Setter Property="Foreground" Value="Black"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style TargetType="TextBox">
+                <Setter Property="Margin" Value="2"/>
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -29,25 +33,32 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <TextBlock Text="{Binding Length, StringFormat=Distance: {0} (ft)}"/>
-            <TextBlock Text="{Binding ConduitType.Name, StringFormat=Conduit Type: {0}}" Grid.Row="1"/>
-            <TextBlock Text="{Binding ConduitLength, StringFormat=Conduit Length: {0} (ft)}" Grid.Row="2"/>
-            <Grid Grid.Row="3">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="50"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Plenum:"/>
-                <CheckBox IsChecked="{Binding IsPlenum}" IsEnabled="False" Grid.Column="1"
-                          VerticalAlignment="Center"/>
-            </Grid>
-            <Expander Header="IO" Grid.Row="4">
-                <listControls:IOListControl Source="{Binding IOList}"
-                                            Height="100"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="90"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Length:"/>
+            <TextBox Text="{Binding Length, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"/>
+            <TextBlock Text="Conduit Type:" Grid.Row="1"/>
+            <ComboBox ItemsSource="{Binding ElementName=connectionPropertiesControl, Path=ConduitTypes}" 
+                      SelectedItem="{Binding ConduitType}"
+                      DisplayMemberPath="Name"
+                      Grid.Row="1"
+                      Grid.Column="1"
+                      Margin="2"/>
+            <TextBlock Text="Conduit Length: " Grid.Row="2"/>
+            <TextBox Text="{Binding ConduitLength, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2"
+                     Grid.Column="1"/>
+            <TextBlock Text="Plenum:" Grid.Row="3"/>
+            <CheckBox IsChecked="{Binding IsPlenum}" Grid.Column="1"
+                          VerticalAlignment="Center" Grid.Row="3"/>
+            <Expander Header="IO" Grid.Row="4" Grid.ColumnSpan="2">
+                <listControls:IOListControl Source="{Binding IO, Converter={utilities:IOCollectionToListConverter}}"
+                                            Height="40"/>
             </Expander>
-            <Expander Header="Connection Types" Grid.Row="5">
-                <listControls:ElectricalMaterialListControl Source="{Binding ConnectionTypes}"
-                                                            Height="100"/>
+            <Expander Header="Connection Types" Grid.Row="5" Grid.ColumnSpan="2">
+                <listControls:ElectricalMaterialListControl Source="{Binding Protocol.ConnectionTypes}"
+                                                            Height="40"/>
             </Expander>
         </Grid>
     </Grid>

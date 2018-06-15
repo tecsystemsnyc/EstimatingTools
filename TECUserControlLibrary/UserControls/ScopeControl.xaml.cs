@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace TECUserControlLibrary
+namespace TECUserControlLibrary.UserControls
 {
     /// <summary>
     /// Interaction logic for ScopeControl.xaml

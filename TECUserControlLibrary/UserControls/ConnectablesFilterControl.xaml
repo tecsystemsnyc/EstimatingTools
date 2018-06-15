@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="TECUserControlLibrary.UserControls.ConnectablesFilterControl"
+             x:Name="connectablesFilterControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="90" d:DesignWidth="150">
+    <Grid DataContext="{Binding ElementName=connectablesFilterControl}">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <!--Is Connected-->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Omit Connected:"/>
+            <CheckBox Grid.Column="1" Margin="2"
+                      IsChecked="{Binding OmitConnected}"/>
+        </Grid>
+        <!--Protocol-->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Protocol:"/>
+            <ComboBox Grid.Column="1" Margin="2"
+                      ItemsSource="{Binding Protocols}"
+                      SelectedItem="{Binding SelectedProtocol}"
+                      DisplayMemberPath="Label"/>
+        </Grid>
+        <!--Location-->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Location:"/>
+            <ComboBox Grid.Column="1" Margin="2"
+                      ItemsSource="{Binding Locations}"
+                      SelectedItem="{Binding SelectedLocation}"
+                      DisplayMemberPath="Name"/>
+        </Grid>
+        <!--Clear Filters-->
+        <Button Grid.Row="3" Margin="2" Width="80"
+                Content="Clear Filters" Click="clearFiltersClicked"/>
+    </Grid>
+</UserControl>

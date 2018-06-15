@@ -107,8 +107,10 @@
     <Compile Include="Interfaces\IUserConfirmable.cs" />
     <Compile Include="Models\ControllerPropertiesItem.cs" />
     <Compile Include="Models\ControllerTypePropertiesItem.cs" />
+    <Compile Include="Models\FilteredConnectablesGroup.cs" />
     <Compile Include="Models\IOModulePropertiesItem.cs" />
     <Compile Include="Models\NetworkConnectionVM.cs" />
+    <Compile Include="Models\ScopeGroup.cs" />
     <Compile Include="Models\ScopeSummaryItem.cs" />
     <Compile Include="Interfaces\ISubScopeConnectionItem.cs" />
     <Compile Include="Models\SubScopeConnectionItem.cs" />
@@ -117,11 +119,17 @@
     <Compile Include="UserControls\AddEquipmentControl.xaml.cs">
       <DependentUpon>AddEquipmentControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ConnectablesFilterControl.xaml.cs">
+      <DependentUpon>ConnectablesFilterControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ConnectionTypesGridControl.xaml.cs">
       <DependentUpon>ConnectionTypesGridControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\CostSummaryItemGridControl.xaml.cs">
       <DependentUpon>CostSummaryItemGridControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\FilteredConnectablesGroupControl.xaml.cs">
+      <DependentUpon>FilteredConnectablesGroupControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ItemControls\BaseItemControl.cs" />
     <Compile Include="UserControls\ItemControls\ControllerInPanelControl.xaml.cs">
@@ -132,6 +140,9 @@
     </Compile>
     <Compile Include="UserControls\ItemControls\NetworkConnectionItemControl.xaml.cs">
       <DependentUpon>NetworkConnectionItemControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ItemControls\ProtocolControl.xaml.cs">
+      <DependentUpon>ProtocolControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ItemControls\TypicalControl.xaml.cs">
       <DependentUpon>TypicalControl.xaml</DependentUpon>
@@ -182,6 +193,9 @@
     <Compile Include="UserControls\ListControls\ControllerInPanelListControl.xaml.cs">
       <DependentUpon>ControllerInPanelListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ListControls\InterlocksListControl.xaml.cs">
+      <DependentUpon>InterlocksListControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ListControls\MiscListControl.xaml.cs">
       <DependentUpon>MiscListControl.xaml</DependentUpon>
     </Compile>
@@ -191,8 +205,8 @@
     <Compile Include="UserControls\ListControls\ControllerListControl.xaml.cs">
       <DependentUpon>ControllerListControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ListControls\NetworkParentableListControl.xaml.cs">
-      <DependentUpon>NetworkParentableListControl.xaml</DependentUpon>
+    <Compile Include="UserControls\ListControls\ProtocolListControl.xaml.cs">
+      <DependentUpon>ProtocolListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ListControls\ValveScopeItemListControl.xaml.cs">
       <DependentUpon>ValveScopeItemListControl.xaml</DependentUpon>
@@ -236,12 +250,16 @@
     <Compile Include="UserControls\PropertyControls\ValvePropertiesControl.xaml.cs">
       <DependentUpon>ValvePropertiesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ScopeGroupControl.xaml.cs">
+      <DependentUpon>ScopeGroupControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ValveGridControl.xaml.cs">
       <DependentUpon>ValveGridControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\DropTargets\NetworkConnectionDropTarget.cs" />
+    <Compile Include="Utilities\DropTargets\ProtocolToIODropTarget.cs" />
     <Compile Include="Utilities\QuantityCollection.cs" />
     <Compile Include="Utilities\SearchUtilities.cs" />
-    <Compile Include="ViewModels\AddNetworkConnectionVM.cs" />
     <Compile Include="ViewModels\AddVMs\AddVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\AssociatedCostsCatalogVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\CatalogVMBase.cs" />
@@ -252,17 +270,17 @@
     <Compile Include="ViewModels\CatalogVMs\IOModulesCatalogVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\ManufacturersCatalogVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\PanelTypesCatalogVM.cs" />
+    <Compile Include="ViewModels\CatalogVMs\ProtocolsCatalogVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\TagsCatalogVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\ValvesCatalogVM.cs" />
     <Compile Include="ViewModels\BidPropertiesVM.cs" />
     <Compile Include="ViewModels\ChangeControllerTypeVM.cs" />
-    <Compile Include="ViewModels\ConnectableFilterVM.cs" />
+    <Compile Include="ViewModels\ConnectionsVM.cs" />
     <Compile Include="ViewModels\ConnectOnAddVM.cs" />
     <Compile Include="ViewModels\BugReportVM.cs" />
     <Compile Include="ViewModels\DeleteEndDeviceVM.cs" />
     <Compile Include="ViewModels\EquipmentHierarchyVM.cs" />
-    <Compile Include="ViewModels\GlobalConnectionsVM.cs" />
-    <Compile Include="ViewModels\NetworkVM.cs" />
+    <Compile Include="ViewModels\InterlocksVM.cs" />
     <Compile Include="ViewModels\ReplaceActuatorVM.cs" />
     <Compile Include="ViewModels\RiserVM.cs" />
     <Compile Include="ViewModels\ScheduleVM.cs" />
@@ -293,6 +311,9 @@
     <Compile Include="Views\CatalogViews\PanelTypesCatalogView.xaml.cs">
       <DependentUpon>PanelTypesCatalogView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\CatalogViews\ProtocolsCatalogView.xaml.cs">
+      <DependentUpon>ProtocolsCatalogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CatalogViews\TagsCatalogView.xaml.cs">
       <DependentUpon>TagsCatalogView.xaml</DependentUpon>
     </Compile>
@@ -305,8 +326,8 @@
     <Compile Include="Views\ChangeControllerTypeView.xaml.cs">
       <DependentUpon>ChangeControllerTypeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ConnectableFilterView.xaml.cs">
-      <DependentUpon>ConnectableFilterView.xaml</DependentUpon>
+    <Compile Include="Views\ConnectionsView.xaml.cs">
+      <DependentUpon>ConnectionsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ConnectOnAddView.xaml.cs">
       <DependentUpon>ConnectOnAddView.xaml</DependentUpon>
@@ -388,9 +409,7 @@
     <Compile Include="ViewModels\SummaryVMs\ItemizedSummaryVM.cs" />
     <Compile Include="ViewModels\SummaryVMs\SystemSummaryVM.cs" />
     <Compile Include="ViewModels\SystemHierarchyVM.cs" />
-    <Compile Include="ViewModels\SystemConnectionsVM.cs" />
     <Compile Include="ViewModels\TypicalHierarchyVM.cs" />
-    <Compile Include="ViewModels\UpdateConnectionVM.cs" />
     <Compile Include="Views\AddViews\AddBaseView.cs" />
     <Compile Include="Views\AddViews\AddControllerView.xaml.cs">
       <DependentUpon>AddControllerView.xaml</DependentUpon>
@@ -417,9 +436,6 @@
       <DependentUpon>AddSystemView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\BaseView.cs" />
-    <Compile Include="Views\GlobalConnectionsView.xaml.cs">
-      <DependentUpon>GlobalConnectionsView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\HardwareSummaryView.xaml.cs">
       <DependentUpon>HardwareSummaryView.xaml</DependentUpon>
     </Compile>
@@ -430,6 +446,9 @@
     <Compile Include="Utilities\BindingProxy.cs" />
     <Compile Include="Utilities\BubbleScrollEvent .cs" />
     <Compile Include="ViewModels\MiscCostsVM.cs" />
+    <Compile Include="Views\InterlocksView.xaml.cs">
+      <DependentUpon>InterlocksView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ItemizedDetailsView.xaml.cs">
       <DependentUpon>ItemizedDetailsView.xaml</DependentUpon>
     </Compile>
@@ -461,9 +480,6 @@
     <Compile Include="Views\MiscCostsView.xaml.cs">
       <DependentUpon>MiscCostsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\NetworkView.xaml.cs">
-      <DependentUpon>NetworkView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ParametersView.xaml.cs">
       <DependentUpon>ParametersView.xaml</DependentUpon>
     </Compile>
@@ -473,8 +489,8 @@
     <Compile Include="Views\ProposalView.xaml.cs">
       <DependentUpon>ProposalView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MaterialView.xaml.cs">
-      <DependentUpon>MaterialView.xaml</DependentUpon>
+    <Compile Include="Views\CatalogsView.xaml.cs">
+      <DependentUpon>CatalogsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\ControllerInPanel.cs" />
     <Compile Include="Models\FileDialogParameters.cs" />
@@ -534,9 +550,6 @@
     <Compile Include="Views\SummaryViews\SystemSummaryView.xaml.cs">
       <DependentUpon>SystemSummaryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SystemConnectionsView.xaml.cs">
-      <DependentUpon>SystemConnectionsView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\SystemHierarchyView.xaml.cs">
       <DependentUpon>SystemHierarchyView.xaml</DependentUpon>
     </Compile>
@@ -567,9 +580,6 @@
     <Compile Include="Utilities\VisibilityModel.cs" />
     <Compile Include="Views\UnconnectedSubScopeView.xaml.cs">
       <DependentUpon>UnconnectedSubScopeView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UpdateConnectionView.xaml.cs">
-      <DependentUpon>UpdateConnectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ValveSelectionView.xaml.cs">
       <DependentUpon>ValveSelectionView.xaml</DependentUpon>
@@ -603,11 +613,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\ConnectablesFilterControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\ConnectionTypesGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\CostSummaryItemGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\FilteredConnectablesGroupControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -620,6 +638,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ItemControls\NetworkConnectionItemControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ItemControls\ProtocolControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -675,6 +697,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\ListControls\InterlocksListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\ListControls\MiscListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -687,7 +713,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\ListControls\NetworkParentableListControl.xaml">
+    <Page Include="UserControls\ListControls\ProtocolListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -747,6 +773,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\ScopeGroupControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\ValveGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -783,6 +813,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\CatalogViews\ProtocolsCatalogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CatalogViews\TagsCatalogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -799,7 +833,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ConnectableFilterView.xaml">
+    <Page Include="Views\ConnectionsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -915,15 +949,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\GlobalConnectionsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\HardwareSummaryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\SystemProposalGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\InterlocksView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -971,10 +1005,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\NetworkView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\ParametersView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -991,7 +1021,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MaterialView.xaml">
+    <Page Include="Views\CatalogsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1050,10 +1080,6 @@
     <Page Include="Views\SummaryViews\SystemSummaryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\SystemConnectionsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SystemHierarchyView.xaml">
       <SubType>Designer</SubType>
@@ -1125,10 +1151,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UnconnectedSubScopeView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UpdateConnectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

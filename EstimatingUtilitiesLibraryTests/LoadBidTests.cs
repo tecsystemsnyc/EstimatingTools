@@ -606,7 +606,7 @@ namespace Tests
             }
 
             bool foundConnectionType = false;
-            foreach(TECElectricalMaterial connectType in actualDevice.ConnectionTypes)
+            foreach(TECElectricalMaterial connectType in actualDevice.HardwiredConnectionTypes)
             {
                 if (connectType.Guid == connectionTypeGuid)
                 {
@@ -877,16 +877,16 @@ namespace Tests
             Guid expectedConduitTypeGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
             Guid expectedSubScopeGuid = new Guid("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
 
-            TECSubScopeConnection actualSSConnect = null;
+            TECHardwiredConnection actualSSConnect = null;
             foreach(TECTypical typical in actualBid.Systems)
             {
                 foreach(TECController controller in typical.Controllers)
                 {
-                    foreach(TECConnection connection in controller.ChildrenConnections)
+                    foreach(IControllerConnection connection in controller.ChildrenConnections)
                     {
                         if (connection.Guid == expectedGuid)
                         {
-                            actualSSConnect = (connection as TECSubScopeConnection);
+                            actualSSConnect = (connection as TECHardwiredConnection);
                             break;
                         }
                     }
@@ -901,7 +901,7 @@ namespace Tests
 
             Assert.AreEqual(expectedParentControllerGuid, actualSSConnect.ParentController.Guid, "Parent controller didn't load properly in subscope connection.");
             Assert.AreEqual(expectedConduitTypeGuid, actualSSConnect.ConduitType.Guid, "Conduit type didn't load properly in subscope connection.");
-            Assert.AreEqual(expectedSubScopeGuid, actualSSConnect.SubScope.Guid, "Subscope didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedSubScopeGuid, actualSSConnect.Child.Guid, "Subscope didn't load properly in subscope connection.");
         }
 
         [TestMethod]
@@ -915,18 +915,18 @@ namespace Tests
             Guid expectedControllerGuid = new Guid("f22913a6-e348-4a77-821f-80447621c6e0");
             Guid expectedConduitTypeGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
 
-            TECSubScopeConnection actualConnection = null;
+            TECHardwiredConnection actualConnection = null;
             foreach (TECTypical typical in actualBid.Systems)
             {
                 foreach (TECSystem system in typical.Instances)
                 {
                     foreach (TECController controller in system.Controllers)
                     {
-                        foreach (TECConnection connection in controller.ChildrenConnections)
+                        foreach (IControllerConnection connection in controller.ChildrenConnections)
                         {
                             if (connection.Guid == expectedGuid)
                             {
-                                actualConnection = connection as TECSubScopeConnection;
+                                actualConnection = connection as TECHardwiredConnection;
                                 break;
                             }
                         }
@@ -946,7 +946,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedLength, actualConnection.Length, "Length didn't load properly in subscope connection.");
             Assert.AreEqual(expectedConduitLength, actualConnection.ConduitLength, "ConduitLength didn't load properly in subscope connection.");
-            Assert.AreEqual(expectedSubScopeGuid, actualConnection.SubScope.Guid, "Subscope didn't load properly in subscope connection.");
+            Assert.AreEqual(expectedSubScopeGuid, actualConnection.Child.Guid, "Subscope didn't load properly in subscope connection.");
             Assert.AreEqual(expectedControllerGuid, actualConnection.ParentController.Guid, "Parent controller didn't load properly in subscope connection.");
             Assert.AreEqual(expectedConduitTypeGuid, actualConnection.ConduitType.Guid, "Conduit type didn't load properly in subscope connection.");
             Assert.IsFalse(actualConnection.IsTypical, "Loaded as typical.");
@@ -967,7 +967,7 @@ namespace Tests
             TECNetworkConnection actualNetConnect = null;
             foreach(TECController controller in actualBid.Controllers)
             {
-                foreach(TECConnection connection in controller.ChildrenConnections)
+                foreach(IControllerConnection connection in controller.ChildrenConnections)
                 {
                     if (connection.Guid == expectedGuid)
                     {
@@ -989,7 +989,7 @@ namespace Tests
             }
 
             bool foundConnectionType = false;
-            foreach (TECElectricalMaterial type in actualNetConnect.ConnectionTypes)
+            foreach (TECElectricalMaterial type in actualNetConnect.Protocol.ConnectionTypes)
             {
                 if (type.Guid == expectedConnectionTypeGuid)
                 {
@@ -1022,7 +1022,7 @@ namespace Tests
             TECNetworkConnection actualNetConnect = null;
             foreach (TECController controller in actualBid.Controllers)
             {
-                foreach (TECConnection connection in controller.ChildrenConnections)
+                foreach (IControllerConnection connection in controller.ChildrenConnections)
                 {
                     if (connection.Guid == expectedGuid)
                     {
@@ -1044,7 +1044,7 @@ namespace Tests
             }
 
             bool foundConnectionType = false;
-            foreach (TECElectricalMaterial type in actualNetConnect.ConnectionTypes)
+            foreach (TECElectricalMaterial type in actualNetConnect.Protocol.ConnectionTypes)
             {
                 if (type.Guid == expectedConnectionTypeGuid)
                 {
@@ -1080,7 +1080,7 @@ namespace Tests
                 {
                     foreach (TECController controller in instance.Controllers)
                     {
-                        foreach (TECConnection connection in controller.ChildrenConnections)
+                        foreach (IControllerConnection connection in controller.ChildrenConnections)
                         {
                             if (connection.Guid == expectedGuid)
                             {
@@ -1106,7 +1106,7 @@ namespace Tests
             }
 
             bool foundConnectionType = false;
-            foreach (TECElectricalMaterial type in actualNetConnect.ConnectionTypes)
+            foreach (TECElectricalMaterial type in actualNetConnect.Protocol.ConnectionTypes)
             {
                 if (type.Guid == expectedConnectionTypeGuid)
                 {
@@ -1139,7 +1139,7 @@ namespace Tests
             TECNetworkConnection actualNetConnect = null;
             foreach (TECController controller in actualBid.Controllers)
             {
-                foreach (TECConnection connection in controller.ChildrenConnections)
+                foreach (IControllerConnection connection in controller.ChildrenConnections)
                 {
                     if (connection.Guid == expectedGuid)
                     {
@@ -1152,7 +1152,7 @@ namespace Tests
 
             bool daisy1Found = false;
             bool daisy2Found = false;
-            foreach(INetworkConnectable controller in actualNetConnect.Children)
+            foreach(IConnectable controller in actualNetConnect.Children)
             {
                 if(controller.Guid == expectedDaisy1Guid)
                 {
@@ -1166,7 +1166,7 @@ namespace Tests
             }
 
             bool foundConnectionType = false;
-            foreach(TECElectricalMaterial type in actualNetConnect.ConnectionTypes)
+            foreach(TECElectricalMaterial type in actualNetConnect.Protocol.ConnectionTypes)
             {
                 if(type.Guid == expectedConnectionTypeGuid)
                 {
@@ -1196,12 +1196,12 @@ namespace Tests
             string expectedDescription = "Bid Controller Description";
             double expectedCost = 142;
 
-            TECController actualController = null;
+            TECProvidedController actualController = null;
             foreach (TECController controller in actualBid.Controllers)
             {
-                if (controller.Guid == expectedGuid)
+                if (controller.Guid == expectedGuid && controller is TECProvidedController provided)
                 {
-                    actualController = controller;
+                    actualController = provided;
                     break;
                 }
             }
@@ -1220,7 +1220,7 @@ namespace Tests
             }
 
             bool hasConnection = false;
-            foreach (TECConnection conn in actualController.ChildrenConnections)
+            foreach (IControllerConnection conn in actualController.ChildrenConnections)
             {
                 if (conn.Guid == expectedConnectionGuid)
                 {
@@ -1248,14 +1248,14 @@ namespace Tests
             double expectedCost = 142;
             bool expectedType = false;
 
-            TECController actualController = null;
+            TECProvidedController actualController = null;
             foreach (TECSystem system in actualBid.Systems)
             {
                 foreach (TECController controller in system.Controllers)
                 {
-                    if (controller.Guid == expectedGuid)
+                    if (controller.Guid == expectedGuid && controller is TECProvidedController provided)
                     {
-                        actualController = controller;
+                        actualController = provided;
                         break;
                     }
                 }
@@ -1275,7 +1275,7 @@ namespace Tests
             }
 
             bool hasConnection = false;
-            foreach (TECConnection conn in actualController.ChildrenConnections)
+            foreach (IControllerConnection conn in actualController.ChildrenConnections)
             {
                 if (conn.Guid == expectedConnectionGuid)
                 {
@@ -1304,16 +1304,16 @@ namespace Tests
             double expectedCost = 142;
             bool expectedType = false;
 
-            TECController actualController = null;
+            TECProvidedController actualController = null;
             foreach (TECTypical typical in actualBid.Systems)
             {
                 foreach (TECSystem system in typical.Instances)
                 {
                     foreach (TECController controller in system.Controllers)
                     {
-                        if (controller.Guid == expectedGuid)
+                        if (controller.Guid == expectedGuid && controller is TECProvidedController provided)
                         {
-                            actualController = controller;
+                            actualController = provided;
                             break;
                         }
                     }
@@ -1334,7 +1334,7 @@ namespace Tests
             }
 
             bool hasConnection = false;
-            foreach (TECConnection conn in actualController.ChildrenConnections)
+            foreach (IControllerConnection conn in actualController.ChildrenConnections)
             {
                 if (conn.Guid == expectedConnectionGuid)
                 {
@@ -1606,7 +1606,7 @@ namespace Tests
         {
             //Arrange
             Guid expectedGuid = new Guid("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
-            IOType expectedType = IOType.BACnetIP;
+            IOType expectedType = IOType.Protocol;
             int expectedQty = 2;
 
             Guid expectedModuleGuid = new Guid("b346378d-dc72-4dda-b275-bbe03022dd12");
@@ -1614,7 +1614,7 @@ namespace Tests
             TECIO actualIO = null;
             foreach (TECController controller in actualBid.Controllers)
             {
-                foreach (TECIO io in controller.Type.IO)
+                foreach (TECIO io in ((TECProvidedController)controller)?.Type.IO)
                 {
                     if (io.Guid == expectedGuid)
                     {
@@ -1634,7 +1634,7 @@ namespace Tests
         {
             //Arrange
             Guid expectedGuid = new Guid("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
-            IOType expectedType = IOType.BACnetIP;
+            IOType expectedType = IOType.Protocol;
             int expectedLabor = 2;
 
             Guid expectedModuleGuid = new Guid("b346378d-dc72-4dda-b275-bbe03022dd12");
@@ -1644,7 +1644,7 @@ namespace Tests
             {
                 foreach (TECController controller in system.Controllers)
                 {
-                    foreach (TECIO io in controller.Type.IO)
+                    foreach (TECIO io in ((TECProvidedController)controller)?.Type.IO)
                     {
                         if (io.Guid == expectedGuid)
                         {
@@ -1665,7 +1665,7 @@ namespace Tests
         {
             //Arrange
             Guid expectedGuid = new Guid("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
-            IOType expectedType = IOType.BACnetIP;
+            IOType expectedType = IOType.Protocol;
             int expectedLabor = 2;
 
             Guid expectedModuleGuid = new Guid("b346378d-dc72-4dda-b275-bbe03022dd12");
@@ -1676,7 +1676,7 @@ namespace Tests
                 foreach (TECSystem system in typical.Instances)
                     foreach (TECController controller in system.Controllers)
                     {
-                        foreach (TECIO io in controller.Type.IO)
+                        foreach (TECIO io in ((TECProvidedController)controller)?.Type.IO)
                         {
                             if (io.Guid == expectedGuid)
                             {

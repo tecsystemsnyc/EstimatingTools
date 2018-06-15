@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
 {
-    public class TECEquipment : TECLocated, INotifyPointChanged, IDragDropable, ITypicalable
+    public class TECEquipment : TECLocated, INotifyPointChanged, IDDCopiable, ITypicalable
     {
         #region Properties
         private ObservableCollection<TECSubScope> _subScope;
@@ -54,7 +54,7 @@ namespace EstimatingLibrary
 
         //Copy Constructor
         public TECEquipment(TECEquipment equipmentSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableListDictionary<TECObject> characteristicReference = null, TemplateSynchronizer<TECSubScope> ssSynchronizer = null) : this(isTypical)
+            ObservableListDictionary<ITECObject> characteristicReference = null, TemplateSynchronizer<TECSubScope> ssSynchronizer = null) : this(isTypical)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = equipmentSource.Guid; }

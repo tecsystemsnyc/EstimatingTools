@@ -3,7 +3,7 @@ using System;
 
 namespace EstimatingLibrary
 {
-    public class TECLabeled : TECObject, IDragDropable
+    public class TECLabeled : TECObject, IDDCopiable
     {
         #region Properties
 

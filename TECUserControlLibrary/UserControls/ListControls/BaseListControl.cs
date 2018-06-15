@@ -146,8 +146,6 @@ namespace TECUserControlLibrary.UserControls.ListControls
                 this.SelectedItem = null;
                 this.SelectedItem = item;
             }
-            
-            //RaiseEvent(new RoutedEventArgs(SelectedEvent, this));
         }
         protected void ListView_MouseDoubleClicked(object sender, MouseButtonEventArgs e)
         {

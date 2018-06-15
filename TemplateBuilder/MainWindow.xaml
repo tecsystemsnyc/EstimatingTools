@@ -139,7 +139,7 @@
                                 </Grid>
                             </TabItem>
                             <TabItem Header="Catalogs">
-                                <views:MaterialView ViewModel="{Binding MaterialsTab}" Selected="{Binding Selected}"/>
+                                <views:CatalogsView ViewModel="{Binding MaterialsTab}" Selected="{Binding Selected}"/>
                             </TabItem>
                             <TabItem Header="Parameters">
                                 <views:ParametersView Source="{Binding Templates.Parameters}"

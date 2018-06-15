@@ -24,7 +24,7 @@ namespace TECUserControlLibraryTests
             TECManufacturer man = new TECManufacturer();
             templates.Catalogs.Manufacturers.Add(man);
 
-            TECDevice dev = new TECDevice(new List<TECConnectionType>(), man);
+            TECDevice dev = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), man);
             templates.Catalogs.Devices.Add(dev);
 
             TECSystem sys = new TECSystem(false);
@@ -71,7 +71,7 @@ namespace TECUserControlLibraryTests
             TECManufacturer man = new TECManufacturer();
             templates.Catalogs.Manufacturers.Add(man);
 
-            TECDevice dev = new TECDevice(new List<TECConnectionType>(), man);
+            TECDevice dev = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), man);
             templates.Catalogs.Devices.Add(dev);
 
             TECSystem sys = new TECSystem(false);

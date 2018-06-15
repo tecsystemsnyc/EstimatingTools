@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:dd="urn:gong-wpf-dragdrop"
              x:Name="splashView"
              mc:Ignorable="d" 
@@ -12,6 +13,21 @@
         <ResourceDictionary>
             <Style TargetType="TextBlock">
                 <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style TargetType="TextBlock" x:Key="buttonTextStyle">
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="false">
+                        <Setter Property="Foreground" Value="Gray"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="TextBlock" x:Key="fileTextStyle">
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="10,0,0,0"/>
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -54,19 +70,19 @@
                    VerticalAlignment="Center"
                    HorizontalAlignment="Left"
                    Margin="5"/>
-        <TextBlock Text="{Binding TemplatesPath}"
+        <TextBlock Text="{Binding TemplatesPath, Converter={utilities:FullPathToNameConverter}}"
                    ToolTip="{Binding TemplatesPath}"
                    Grid.Column="1" Grid.Row="1" Margin="5"
                    VerticalAlignment="Center"/>
         <Button Grid.Column="2" Grid.Row="1"
                 Margin="5"
                 Command="{Binding ClearTemplatesPathCommand}">
-            <TextBlock VerticalAlignment="Center">Clear</TextBlock>
+            <TextBlock Style="{StaticResource buttonTextStyle}">Clear</TextBlock>
         </Button>
         <Button Grid.Column="3" Grid.Row="1"
                 Margin="5"
                 Command="{Binding GetTemplatesPathCommand}">
-            <TextBlock VerticalAlignment="Center">Select File...</TextBlock>
+            <TextBlock Style="{StaticResource buttonTextStyle}">Select File...</TextBlock>
         </Button>
 
         <!--Bid Path Setting-->
@@ -75,7 +91,7 @@
                    HorizontalAlignment="Left"
                    Margin="5"
                    Grid.Row="2" Visibility="{Binding ElementName=splashView, Path=BidVisibility}"/>
-        <TextBlock Text="{Binding ElementName=splashView, Path=BidPath}" Margin="5"
+        <TextBlock Text="{Binding ElementName=splashView, Path=BidPath, Converter={utilities:FullPathToNameConverter}}" Margin="5"
                    Grid.Column="1" ToolTip="{Binding ElementName=splashView, Path=BidPath}" 
                    VerticalAlignment="Center"
                    Grid.Row="2" Visibility="{Binding ElementName=splashView, Path=BidVisibility}"/>
@@ -83,11 +99,11 @@
                 Margin="5"
                 Command="{Binding ElementName=splashView, Path=ClearBidPathCommand}"
                 Visibility="{Binding ElementName=splashView, Path=BidVisibility}">
-            <TextBlock VerticalAlignment="Center">Clear</TextBlock>
+            <TextBlock Style="{StaticResource buttonTextStyle}">Clear</TextBlock>
         </Button>
         <Button Grid.Column="3" Margin="5" Command="{Binding ElementName=splashView, Path=GetBidPathCommand}"
                 Grid.Row="2" Visibility="{Binding ElementName=splashView, Path=BidVisibility}">
-            <TextBlock VerticalAlignment="Center">Select File...</TextBlock>
+            <TextBlock Style="{StaticResource buttonTextStyle}">Select File...</TextBlock>
         </Button>
 
         <!--Create and Open Buttons-->
@@ -96,11 +112,12 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Margin="5" Command="{Binding CreateNewCommand}">
-                <TextBlock VerticalAlignment="Center">Create New</TextBlock>
+            <Button Grid.Column="0" Margin="5" Command="{Binding CreateNewCommand}"
+                    Foreground="Red">
+                <TextBlock Style="{StaticResource buttonTextStyle}">Create New</TextBlock>
             </Button>
             <Button Grid.Column="1" Margin="5" Command="{Binding OpenExistingCommand}">
-                <TextBlock VerticalAlignment="Center">Open Selected</TextBlock>
+                <TextBlock Style="{StaticResource buttonTextStyle}">Open Selected</TextBlock>
             </Button>
         </Grid>
         
@@ -123,7 +140,7 @@
                   DataContext="{Binding ElementName=splashView}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="60"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -139,72 +156,77 @@
                            HorizontalAlignment="Center"/>
 
                 <!--First-->
-                <TextBlock Text="{Binding FirstRecentBid}"
+                <TextBlock Text="{Binding FirstRecentBid, Converter={utilities:FullPathToNameConverter}}"
                            ToolTip="{Binding FirstRecentBid}"
                            Grid.Row="1"
-                           VerticalAlignment="Center"/>
+                           Style="{StaticResource fileTextStyle}"/>
                 <Button Content="Select"
                         Command="{Binding ChooseRecentBidCommand}"
                         CommandParameter="{Binding FirstRecentBid}"
                         Grid.Row="1" Grid.Column="1" Margin="5"/>
 
                 <!--Second-->
-                <TextBlock Text="{Binding SecondRecentBid}"
+                <TextBlock Text="{Binding SecondRecentBid, Converter={utilities:FullPathToNameConverter}}"
                            ToolTip="{Binding SecondRecentBid}"
                            Grid.Row="2"
-                           VerticalAlignment="Center"/>
+                           Style="{StaticResource fileTextStyle}"/>
                 <Button Content="Select"
                         Command="{Binding ChooseRecentBidCommand}"
                         CommandParameter="{Binding SecondRecentBid}"
                         Grid.Row="2" Grid.Column="1" Margin="5"/>
 
                 <!--Third-->
-                <TextBlock Text="{Binding ThirdRecentBid}"
+                <TextBlock Text="{Binding ThirdRecentBid, Converter={utilities:FullPathToNameConverter}}"
                            ToolTip="{Binding ThirdRecentBid}"
                            Grid.Row="3"
-                           VerticalAlignment="Center"/>
+                           Style="{StaticResource fileTextStyle}"/>
                 <Button Content="Select"
                         Command="{Binding ChooseRecentBidCommand}"
                         CommandParameter="{Binding ThirdRecentBid}"
                         Grid.Row="3" Grid.Column="1" Margin="5"/>
 
                 <!--Fourth-->
-                <TextBlock Text="{Binding FourthRecentBid}"
+                <TextBlock Text="{Binding FourthRecentBid, Converter={utilities:FullPathToNameConverter}}"
                            ToolTip="{Binding FourthRecentBid}"
                            Grid.Row="4"
-                           VerticalAlignment="Center"/>
+                           Style="{StaticResource fileTextStyle}"/>
                 <Button Content="Select"
                         Command="{Binding ChooseRecentBidCommand}"
                         CommandParameter="{Binding FourthRecentBid}"
                         Grid.Row="4" Grid.Column="1" Margin="5"/>
 
                 <!--Fifth-->
-                <TextBlock Text="{Binding FifthRecentBid}"
+                <TextBlock Text="{Binding FifthRecentBid, Converter={utilities:FullPathToNameConverter}}"
                            ToolTip="{Binding FifthRecentBid}"
                            Grid.Row="5"
-                           VerticalAlignment="Center"/>
+                           Style="{StaticResource fileTextStyle}"/>
                 <Button Content="Select"
                         Command="{Binding ChooseRecentBidCommand}"
                         CommandParameter="{Binding FifthRecentBid}"
                         Grid.Row="5" Grid.Column="1" Margin="5"/>
 
                 <Border Grid.Row="1" 
-                        BorderThickness="0 0 0 1" BorderBrush="Black"/>
+                        BorderThickness="0 0 0 1" BorderBrush="Black"
+                        Margin="5,0,0,0"/>
                 <Border Grid.Row="2" 
-                        BorderThickness="0 0 0 1" BorderBrush="Black"/>
+                        BorderThickness="0 0 0 1" BorderBrush="Black"
+                        Margin="5,0,0,0"/>
                 <Border Grid.Row="3" 
-                        BorderThickness="0 0 0 1" BorderBrush="Black"/>
+                        BorderThickness="0 0 0 1" BorderBrush="Black"
+                        Margin="5,0,0,0"/>
                 <Border Grid.Row="4" 
-                        BorderThickness="0 0 0 1" BorderBrush="Black"/>
+                        BorderThickness="0 0 0 1" BorderBrush="Black"
+                        Margin="5,0,0,0"/>
                 <Border Grid.Row="5" 
-                        BorderThickness="0 0 0 1" BorderBrush="Black"/>
+                        BorderThickness="0 0 0 1" BorderBrush="Black"
+                        Margin="5,0,0,0"/>
             </Grid>
 
             <!--Recent Templates Files-->
             <Grid Grid.Column="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="60"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -220,65 +242,70 @@
                            HorizontalAlignment="Center"/>
 
                 <!--First-->
-                <TextBlock Text="{Binding FirstRecentTemplates}"
+                <TextBlock Text="{Binding FirstRecentTemplates, Converter={utilities:FullPathToNameConverter}}"
                            ToolTip="{Binding FirstRecentTemplates}"
                            Grid.Row="1"
-                           VerticalAlignment="Center"/>
+                           Style="{StaticResource fileTextStyle}"/>
                 <Button Content="Select"
                         Command="{Binding ChooseRecentTemplatesCommand}"
                         CommandParameter="{Binding FirstRecentTemplates}"
                         Grid.Row="1" Grid.Column="1" Margin="5"/>
 
                 <!--Second-->
-                <TextBlock Text="{Binding SecondRecentTemplates}"
+                <TextBlock Text="{Binding SecondRecentTemplates, Converter={utilities:FullPathToNameConverter}}"
                            ToolTip="{Binding SecondRecentTemplates}"
                            Grid.Row="2"
-                           VerticalAlignment="Center"/>
+                           Style="{StaticResource fileTextStyle}"/>
                 <Button Content="Select"
                         Command="{Binding ChooseRecentTemplatesCommand}"
                         CommandParameter="{Binding SecondRecentTemplates}"
                         Grid.Row="2" Grid.Column="1" Margin="5"/>
 
                 <!--Third-->
-                <TextBlock Text="{Binding ThirdRecentTemplates}"
+                <TextBlock Text="{Binding ThirdRecentTemplates, Converter={utilities:FullPathToNameConverter}}"
                            ToolTip="{Binding ThirdRecentTemplates}"
                            Grid.Row="3"
-                           VerticalAlignment="Center"/>
+                           Style="{StaticResource fileTextStyle}"/>
                 <Button Content="Select"
                         Command="{Binding ChooseRecentTemplatesCommand}"
                         CommandParameter="{Binding ThirdRecentTemplates}"
                         Grid.Row="3" Grid.Column="1" Margin="5"/>
 
                 <!--Fourth-->
-                <TextBlock Text="{Binding FourthRecentTemplates}"
+                <TextBlock Text="{Binding FourthRecentTemplates, Converter={utilities:FullPathToNameConverter}}"
                            ToolTip="{Binding FourthRecentTemplates}"
                            Grid.Row="4"
-                           VerticalAlignment="Center"/>
+                           Style="{StaticResource fileTextStyle}"/>
                 <Button Content="Select"
                         Command="{Binding ChooseRecentTemplatesCommand}"
                         CommandParameter="{Binding FourthRecentTemplates}"
                         Grid.Row="4" Grid.Column="1" Margin="5"/>
 
                 <!--Fifth-->
-                <TextBlock Text="{Binding FifthRecentTemplates}"
+                <TextBlock Text="{Binding FifthRecentTemplates, Converter={utilities:FullPathToNameConverter}}"
                            ToolTip="{Binding FifthRecentTemplates}"
                            Grid.Row="5"
-                           VerticalAlignment="Center"/>
+                           Style="{StaticResource fileTextStyle}"/>
                 <Button Content="Select"
                         Command="{Binding ChooseRecentTemplatesCommand}"
                         CommandParameter="{Binding FifthRecentTemplates}"
                         Grid.Row="5" Grid.Column="1" Margin="5"/>
                 
                 <Border Grid.Row="1" 
-                        BorderThickness="0 0 0 1" BorderBrush="Black"/>
+                        BorderThickness="0 0 0 1" BorderBrush="Black"
+                        Margin="5,0,0,0"/>
                 <Border Grid.Row="2" 
-                        BorderThickness="0 0 0 1" BorderBrush="Black"/>
+                        BorderThickness="0 0 0 1" BorderBrush="Black"
+                        Margin="5,0,0,0"/>
                 <Border Grid.Row="3" 
-                        BorderThickness="0 0 0 1" BorderBrush="Black"/>
+                        BorderThickness="0 0 0 1" BorderBrush="Black"
+                        Margin="5,0,0,0"/>
                 <Border Grid.Row="4" 
-                        BorderThickness="0 0 0 1" BorderBrush="Black"/>
+                        BorderThickness="0 0 0 1" BorderBrush="Black"
+                        Margin="5,0,0,0"/>
                 <Border Grid.Row="5" 
-                        BorderThickness="0 0 0 1" BorderBrush="Black"/>
+                        BorderThickness="0 0 0 1" BorderBrush="Black"
+                        Margin="5,0,0,0"/>
             </Grid>
         </Grid>
         

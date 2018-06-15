@@ -4,7 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TECUserControlLibrary"
+             xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
@@ -16,12 +16,26 @@
                 <ResourceDictionary Source="../TECResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <DataTemplate x:Key="ScopeDragAdorner">
-                <StackPanel>
-                    <local:ScopeControl Content="{Binding}"
-                                        Height="72" Width="72"
-                                        NameLabel="{Binding Name}"
-                                        DescriptionLabel="{Binding Description}"/>
-                </StackPanel>
+                <ContentPresenter Content="{Binding}">
+                    <ContentPresenter.Resources>
+                        <DataTemplate DataType="{x:Type eLib:TECScope}">
+                            <Grid Margin="0,0,0,5">
+                                <local:ScopeControl Content="{Binding}"
+                                                    Height="72" Width="72" 
+                                                    NameLabel="{Binding Name}"
+                                                    DescriptionLabel="{Binding Description}" Margin="5"/>
+                            </Grid>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type eLib:TECLabeled}">
+                            <Grid Margin="0,0,0,5">
+                                <local:ScopeControl Content="{Binding}"
+                                                    Height="72" Width="72" 
+                                                    NameLabel="{Binding Label}"
+                                                    Margin="5"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
             </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>

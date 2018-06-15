@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -491,7 +492,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
     internal class SubScopeConnectionTable : TableBase
     {
         public static new string TableName = "TECSubScopeConnection";
-        public static Type ObjectType = typeof(TECSubScopeConnection);
+        public static Type ObjectType = typeof(TECHardwiredConnection);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Length = new TableField("Length", "REAL", ObjectType.GetProperty("Length"));
@@ -790,7 +791,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
     {
         public static new string TableName = "TECControllerTECConection";
         public static Type ObjectType = typeof(TECController);
-        public static Type ReferenceType = typeof(TECConnection);
+        public static Type ReferenceType = typeof(IControllerConnection);
 
         public static TableField ControllerID = new TableField("ControllerID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ReferenceType.GetProperty("Guid"));
@@ -1148,7 +1149,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
     internal class ConnectionConduitTypeTable : TableBase
     {
         public static new string TableName = "TECConnectionTECConduitType";
-        public static Type ObjectType = typeof(TECConnection);
+        public static Type ObjectType = typeof(IControllerConnection);
         public static Type ReferenceType = typeof(Object);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));
@@ -1206,7 +1207,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
     internal class SubScopeConnectionChildrenTable : TableBase
     {
         public static new string TableName = "TECSubScopeConnectionChild";
-        public static Type ConnectionType = typeof(TECSubScopeConnection);
+        public static Type ConnectionType = typeof(TECHardwiredConnection);
         public static Type ChildType = typeof(TECSubScope);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ConnectionType.GetProperty("Guid"));

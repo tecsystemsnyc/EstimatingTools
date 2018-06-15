@@ -90,7 +90,6 @@
     <Compile Include="ItemSummaryVMTests.cs" />
     <Compile Include="MaterialSummaryVMTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SystemConnectionVMTests.cs" />
     <Compile Include="SystemSummaryVMTests.cs" />
     <Compile Include="ViewModelTests.cs" />
   </ItemGroup>

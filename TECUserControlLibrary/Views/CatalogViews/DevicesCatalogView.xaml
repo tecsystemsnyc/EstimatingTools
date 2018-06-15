@@ -68,15 +68,32 @@
         </Grid>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="70"/>
+                <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Connection Types:" TextWrapping="Wrap"/>
-            <Border Grid.Column="1" BorderBrush="DarkGray" BorderThickness="1">
-                <listControls:ElectricalMaterialListControl Source="{Binding DeviceConnectionTypes}"
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Hardwired Connection Types:" TextWrapping="Wrap"/>
+                <Border Grid.Column="1" BorderBrush="DarkGray" BorderThickness="1">
+                    <listControls:ElectricalMaterialListControl Source="{Binding DeviceConnectionTypes, UpdateSourceTrigger=PropertyChanged}"
                                                             DropHandler="{Binding ReferenceDropHandler}"/>
-            </Border>
+                </Border>
+            </Grid>
 
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Alternate Protocols:" TextWrapping="Wrap"/>
+                <Border Grid.Column="1" BorderBrush="DarkGray" BorderThickness="1">
+                    <listControls:ProtocolListControl Source="{Binding DeviceProtocols, UpdateSourceTrigger=PropertyChanged}"
+                                                      DropHandler="{Binding ReferenceDropHandler}"/>
+                </Border>
+            </Grid>
         </Grid>
 
         <Button Grid.Row="3" Grid.Column="2" 

@@ -4,6 +4,7 @@ using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Tests
@@ -728,7 +729,7 @@ namespace Tests
             }
             ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
             types.Add(Bid.Catalogs.ConnectionTypes[0]);
-            TECDevice edit = new TECDevice(types, Bid.Catalogs.Manufacturers[0]);
+            TECDevice edit = new TECDevice(types, new List<TECProtocol>(), Bid.Catalogs.Manufacturers[0]);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -883,18 +884,27 @@ namespace Tests
         {
             //Arrange
             var Bid = TestHelper.CreateTestBid();
-            TECControllerType expected = Bid.Controllers[0].Type;
+            TECProvidedController provided = null;
+            foreach(TECController controller in Bid.Controllers)
+            {
+                if (controller is TECProvidedController prov)
+                {
+                    provided = prov;
+                    break;
+                }
+            }
+            TECControllerType expected = provided.Type;
             TECControllerType edit = Bid.Catalogs.ControllerTypes[0];
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
             int beforeCount = testStack.UndoCount();
-            Bid.Controllers[0].Type = edit;
+            provided.Type = edit;
             Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            TECControllerType actual = Bid.Controllers[0].Type;
+            TECControllerType actual = provided.Type;
             Assert.AreEqual(expected, actual, "Not Undone");
         }
 
@@ -1532,7 +1542,7 @@ namespace Tests
             var Bid = TestHelper.CreateTestBid();
             ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
             types.Add(Bid.Catalogs.ConnectionTypes[0]);
-            TECDevice edit = new TECDevice(types, Bid.Catalogs.Manufacturers[0]);
+            TECDevice edit = new TECDevice(types, new List<TECProtocol>(), Bid.Catalogs.Manufacturers[0]);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);

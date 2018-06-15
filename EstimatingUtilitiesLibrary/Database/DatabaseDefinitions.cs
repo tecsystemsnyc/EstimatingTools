@@ -2,6 +2,7 @@
 using EstimatingLibrary.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace EstimatingUtilitiesLibrary.Database
@@ -759,7 +760,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class SubScopeConnectionTable : TableBase
     {
         public static string TableName = "SubScopeConnection";
-        public static Type ObjectType = typeof(TECSubScopeConnection);
+        public static Type ObjectType = typeof(TECHardwiredConnection);
 
         public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Length = new TableField("Length", "REAL", ObjectType.GetProperty("Length"));
@@ -799,7 +800,6 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Length = new TableField("Length", "REAL", ObjectType.GetProperty("Length"));
         public static TableField ConduitLength = new TableField("ConduitLength", "REAL", ObjectType.GetProperty("ConduitLength"));
-        public static TableField IOType = new TableField("IOType", "TEXT", ObjectType.GetProperty("IOType"));
         public static TableField IsPlenum = new TableField("IsPlenum", "INTEGER", ObjectType.GetProperty("IsPlenum"), defaultValue: "0");
 
         private List<TableField> primaryKeys = new List<TableField>() {
@@ -814,7 +814,6 @@ namespace EstimatingUtilitiesLibrary.Database
             ID,
             Length,
             ConduitLength,
-            IOType,
             IsPlenum
         };
         private List<string> propertyNames = new List<string>()
@@ -828,10 +827,83 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
-    internal class ControllerTable : TableBase
+    internal class InterlockConnectionTable : TableBase
     {
-        public static string TableName = "Controller";
-        public static Type ObjectType = typeof(TECController);
+        public static string TableName = "InterlockConnection";
+        public static Type ObjectType = typeof(TECInterlockConnection);
+
+        public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
+        public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
+        public static TableField Length = new TableField("Length", "REAL", ObjectType.GetProperty("Length"));
+        public static TableField ConduitLength = new TableField("ConduitLength", "REAL", ObjectType.GetProperty("ConduitLength"));
+        public static TableField IsPlenum = new TableField("IsPlenum", "INTEGER", ObjectType.GetProperty("IsPlenum"), defaultValue: "0");
+
+        private List<TableField> primaryKeys = new List<TableField>() {
+            ID
+            };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ID,
+            Name,
+            Description,
+            Length,
+            ConduitLength,
+            IsPlenum
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Interlocks"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class ProvidedControllerTable : TableBase
+    {
+        public static string TableName = "ProvidedController";
+        public static Type ObjectType = typeof(TECProvidedController);
+
+        public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
+        public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
+
+        private List<TableField> primaryKeys = new List<TableField>() {
+            ID
+            };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ID,
+            Name,
+            Description
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Controllers",
+            "ControllerTemplates"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class FBOControllerTable : TableBase
+    {
+        public static string TableName = "FBOController";
+        public static Type ObjectType = typeof(TECFBOController);
 
         public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
@@ -1232,6 +1304,38 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+    internal class ProtocolTable : TableBase
+    {
+        public static string TableName = "Protocol";
+        public static Type ObjectType = typeof(TECProtocol);
+
+        public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField Label = new TableField("Label", "TEXT", ObjectType.GetProperty("Label"));
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        { ID };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ID,
+            Label
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Protocols"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+
+    }
+    
     #endregion
 
     #region Relationship Tables
@@ -1422,6 +1526,41 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+    internal class FBOControllerIOTable : TableBase
+    {
+        public static string TableName = "FBOControllerIOTable";
+        public static Type ObjectType = typeof(TECFBOController);
+        public static Type ReferenceType = typeof(TECIO);
+
+        public static TableField ControllerID = new TableField("ControllerID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField IOID = new TableField("IOID", "TEXT", ReferenceType.GetProperty("Guid"));
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ControllerID,
+            IOID,
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ControllerID,
+            IOID
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "IO"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
     internal class ControllerTypeIOModuleTable : TableBase
     {
         public static string TableName = "ControllerTypeIOModule";
@@ -1459,10 +1598,10 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
-    internal class ControllerIOModuleTable : TableBase
+    internal class ProvidedControllerIOModuleTable : TableBase
     {
-        public static string TableName = "ControllerIOModule";
-        public static Type ObjectType = typeof(TECController);
+        public static string TableName = "ProvidedControllerIOModule";
+        public static Type ObjectType = typeof(TECProvidedController);
         public static Type ReferenceType = typeof(TECIOModule);
         public static Type HelperType = typeof(HelperProperties);
         
@@ -1534,7 +1673,7 @@ namespace EstimatingUtilitiesLibrary.Database
     {
         public static string TableName = "ControllerConnection";
         public static Type ObjectType = typeof(TECController);
-        public static Type ReferenceType = typeof(TECConnection);
+        public static Type ReferenceType = typeof(IControllerConnection);
 
         public static TableField ControllerID = new TableField("ControllerID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ReferenceType.GetProperty("Guid"));
@@ -1850,7 +1989,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
         public static TableField DeviceID = new TableField("DeviceID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField TypeID = new TableField("ConnectionTypeID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField Quantity = new TableField("Quantity", "INTEGER", HelperType.GetProperty("Quantity"), "ConnectionTypes");
+        public static TableField Quantity = new TableField("Quantity", "INTEGER", HelperType.GetProperty("Quantity"), "HardwiredConnectionTypes");
 
         private List<TableField> primaryKeys = new List<TableField>()
         {
@@ -1870,7 +2009,42 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "ConnectionTypes"
+            "HardwiredConnectionTypes"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class DeviceProtocolTable : TableBase
+    {
+        public static string TableName = "DeviceProtocol";
+        public static Type ObjectType = typeof(TECDevice);
+        public static Type ReferenceType = typeof(TECProtocol);
+        
+        public static TableField DeviceID = new TableField("DeviceID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField ProtocolID = new TableField("ProtocolID", "TEXT", ReferenceType.GetProperty("Guid"));
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            DeviceID,
+            ProtocolID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            DeviceID,
+            ProtocolID
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "PossibleProtocols"
         };
 
         public override string NameString { get { return TableName; } }
@@ -1991,10 +2165,10 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
-    internal class ControllerControllerTypeTable : TableBase
+    internal class ProvidedControllerControllerTypeTable : TableBase
     {
-        public static string TableName = "ControllerControllerType";
-        public static Type ControllerType = typeof(TECController);
+        public static string TableName = "ProvidedControllerControllerType";
+        public static Type ControllerType = typeof(TECProvidedController);
         public static Type TypeType = typeof(TECControllerType);
 
         public static TableField ControllerID = new TableField("ControllerID", "TEXT", ControllerType.GetProperty("Guid"));
@@ -2028,7 +2202,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class ConnectionConduitTypeTable : TableBase
     {
         public static string TableName = "ConnectionConduitType";
-        public static Type ObjectType = typeof(TECConnection);
+        public static Type ObjectType = typeof(IControllerConnection);
         public static Type ReferenceType = typeof(TECElectricalMaterial);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));
@@ -2060,46 +2234,11 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
-    internal class NetworkConnectionConnectionTypeTable : TableBase
-    {
-        public static string TableName = "NetworkConnectionConnectionType";
-        public static Type ObjectType = typeof(TECNetworkConnection);
-        public static Type ReferenceType = typeof(TECConnectionType);
-
-        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField TypeID = new TableField("ConnectionTypeID", "TEXT", ReferenceType.GetProperty("Guid"));
-
-        private List<TableField> primaryKeys = new List<TableField>()
-        {
-            ConnectionID,
-            TypeID
-        };
-        private List<Type> types = new List<Type>()
-        {
-            ObjectType,
-            ReferenceType
-        };
-        private List<TableField> fields = new List<TableField>()
-        {
-            ConnectionID,
-            TypeID
-        };
-        private List<string> propertyNames = new List<string>()
-        {
-            "ConnectionTypes"
-        };
-
-        public override string NameString { get { return TableName; } }
-        public override List<Type> Types { get { return types; } }
-        public override List<string> PropertyNames { get { return propertyNames; } }
-        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
-        public override List<TableField> Fields { get { return fields; } }
-    }
     internal class NetworkConnectionChildrenTable : TableBase
     {
         public static string TableName = "NetworkConnectionChildren";
         public static Type ConnectionType = typeof(TECNetworkConnection);
-        public static Type ChildType = typeof(INetworkConnectable);
+        public static Type ChildType = typeof(IConnectable);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ConnectionType.GetProperty("Guid"));
         public static TableField ChildID = new TableField("ChildID", "TEXT", ChildType.GetProperty("Guid"));
@@ -2137,7 +2276,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class SubScopeConnectionChildrenTable : TableBase
     {
         public static string TableName = "SubScopeConnectionChild";
-        public static Type ConnectionType = typeof(TECSubScopeConnection);
+        public static Type ConnectionType = typeof(TECHardwiredConnection);
         public static Type ChildType = typeof(TECSubScope);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ConnectionType.GetProperty("Guid"));
@@ -2159,7 +2298,41 @@ namespace EstimatingUtilitiesLibrary.Database
         };
         private List<string> propertyNames = new List<string>()
         {
-            "SubScope"
+            "Child"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class InterlockableInterlockTable : TableBase
+    {
+        public static string TableName = "InterlockableInterlock";
+        public static Type ParentType = typeof(IInterlockable);
+        public static Type ChildType = typeof(TECInterlockConnection);
+
+        public static TableField ParentID = new TableField("ParentID", "TEXT", ParentType.GetProperty("Guid"));
+        public static TableField ChildID = new TableField("ChildID", "TEXT", ChildType.GetProperty("Guid"));
+
+        private List<TableField> primaryKeys = new List<TableField>() {
+            ParentID,
+            ChildID
+            };
+        private List<Type> types = new List<Type>()
+        {
+            ParentType,
+            ChildType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ParentID,
+            ChildID
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Interlocks"
         };
 
         public override string NameString { get { return TableName; } }
@@ -2458,6 +2631,191 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<string> propertyNames = new List<string>()
         {
             "Actuator"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class NetworkConnectionProtocolTable : TableBase
+    {
+        public static string TableName = "NetworkConnectionProtocol";
+        public static Type ConnectionType = typeof(TECNetworkConnection);
+        public static Type ProtocolType = typeof(TECProtocol);
+
+        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ConnectionType.GetProperty("Guid"));
+        public static TableField ProtocolID = new TableField("ProtocolID", "TEXT", ProtocolType.GetProperty("Guid"));
+        
+        private List<TableField> primaryKeys = new List<TableField>() {
+            ConnectionID,
+            ProtocolID
+            };
+        private List<Type> types = new List<Type>()
+        {
+            ConnectionType,
+            ProtocolType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ConnectionID,
+            ProtocolID
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Protocol"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class ProtocolConnectionTypeTable : TableBase
+    {
+        public static string TableName = "ProtocolConnectionType";
+        public static Type ObjectType = typeof(TECProtocol);
+        public static Type ReferenceType = typeof(TECConnectionType);
+
+        public static Type HelperType = typeof(HelperProperties);
+
+        public static TableField ProtocolID = new TableField("ProtocolID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField TypeID = new TableField("ConnectionTypeID", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField Quantity = new TableField("Quantity", "INTEGER", HelperType.GetProperty("Quantity"), "ConnectionTypes");
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ProtocolID,
+            TypeID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ProtocolID,
+            TypeID,
+            Quantity
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "ConnectionTypes"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class IOProtocolTable : TableBase
+    {
+        public static string TableName = "IOProtocol";
+        public static Type IOType = typeof(TECIO);
+        public static Type ProtocolType = typeof(TECProtocol);
+
+        public static TableField IOID = new TableField("IOID", "TEXT", IOType.GetProperty("Guid"));
+        public static TableField ProtocolID = new TableField("ProtocolID", "TEXT", ProtocolType.GetProperty("Guid"));
+
+        private List<TableField> primaryKeys = new List<TableField>() {
+            IOID,
+            ProtocolID
+            };
+        private List<Type> types = new List<Type>()
+        {
+            IOType,
+            ProtocolType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            IOID,
+            ProtocolID
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Protocol"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class HardwiredConnectionConnectionTypeTable : TableBase
+    {
+        public static string TableName = "HardwiredConnectionConnectionType";
+        public static Type ConnectionType = typeof(TECHardwiredConnection);
+        public static Type ReferenceType = typeof(TECConnectionType);
+
+        public static Type HelperType = typeof(HelperProperties);
+        
+        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ConnectionType.GetProperty("Guid"));
+        public static TableField TypeID = new TableField("ConnectionTypeID", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField Quantity = new TableField("Quantity", "INTEGER", HelperType.GetProperty("Quantity"), "ConnectionTypes");
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ConnectionID,
+            TypeID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ConnectionType,
+            ReferenceType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ConnectionID,
+            TypeID,
+            Quantity
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "ConnectionTypes"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class InterlockConnectionConnectionTypeTable : TableBase
+    {
+        public static string TableName = "InterlockConnectionConnectionType";
+        public static Type ConnectionType = typeof(TECInterlockConnection);
+        public static Type ReferenceType = typeof(TECConnectionType);
+
+        public static Type HelperType = typeof(HelperProperties);
+
+        public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ConnectionType.GetProperty("Guid"));
+        public static TableField TypeID = new TableField("ConnectionTypeID", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField Quantity = new TableField("Quantity", "INTEGER", HelperType.GetProperty("Quantity"), "ConnectionTypes");
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ConnectionID,
+            TypeID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ConnectionType,
+            ReferenceType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ConnectionID,
+            TypeID,
+            Quantity
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "ConnectionTypes"
         };
 
         public override string NameString { get { return TableName; } }
@@ -2874,6 +3232,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new NoteTable(),
             new ExclusionTable(),
             new ScopeBranchTable(),
+            new FBOControllerTable(),
+            new ProvidedControllerTable(),
             new SystemTable(),
             new EquipmentTable(),
             new SubScopeTable(),
@@ -2894,6 +3254,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new ScheduleTable(),
             new ScheduleTableTable(),
             new ScheduleItemTable(),
+            new ProtocolTable(),
+            new InterlockConnectionTable(),
 
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -2906,18 +3268,19 @@ namespace EstimatingUtilitiesLibrary.Database
             new ScopeTagTable(),
             new HardwareManufacturerTable(),
             new LocatedLocationTable(),
-            new ControllerTable(),
             new AssociatedCostTable(),
             new ElectricalMaterialRatedCostTable(),
             new ControllerConnectionTable(),
             new ControllerTypeIOTable(),
             new IOModuleIOTable(),
-            new ControllerIOModuleTable(),
+            new ProvidedControllerIOModuleTable(),
+            new FBOControllerIOTable(),
             new ControllerTypeIOModuleTable(),
             new BidScopeBranchTable(),
             new DeviceConnectionTypeTable(),
+            new DeviceProtocolTable(),
             new ScopeAssociatedCostTable(),
-            new ControllerControllerTypeTable(),
+            new ProvidedControllerControllerTypeTable(),
             new ConnectionConduitTypeTable(),
             new SystemControllerTable(),
             new SystemPanelTable(),
@@ -2930,12 +3293,17 @@ namespace EstimatingUtilitiesLibrary.Database
             new PanelControllerTable(),
             new SubScopeConnectionChildrenTable(),
             new NetworkConnectionChildrenTable(),
-            new NetworkConnectionConnectionTypeTable(),
             new ValveActuatorTable(),
             new ScheduleScheduleTableTable(),
             new ScheduleTableScheduleItemTable(),
             new ScheduleItemScopeTable(),
-            new BidLocationTable()
+            new BidLocationTable(),
+            new NetworkConnectionProtocolTable(),
+            new ProtocolConnectionTypeTable(),
+            new IOProtocolTable(),
+            new HardwiredConnectionConnectionTypeTable(),
+            new InterlockableInterlockTable(),
+            new InterlockConnectionConnectionTypeTable()
             };
     }
 
@@ -2963,6 +3331,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new ScopeBranchTable(),
             new ControllerTypeTable(),
             new ValveTable(),
+            new ProtocolTable(),
+            new InterlockConnectionTable(),
 
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -2973,16 +3343,19 @@ namespace EstimatingUtilitiesLibrary.Database
             new SubScopeDeviceTable(),
             new SubScopePointTable(),
             new ScopeTagTable(),
-            new ControllerTable(),
+            new ProvidedControllerTable(),
+            new FBOControllerTable(),
             new ControllerTypeIOTable(),
             new IOModuleIOTable(),
-            new ControllerIOModuleTable(),
+            new FBOControllerIOTable(),
+            new ProvidedControllerIOModuleTable(),
             new ControllerTypeIOModuleTable(),
             new HardwareManufacturerTable(),
             new DeviceConnectionTypeTable(),
+            new DeviceProtocolTable(),
             new ScopeAssociatedCostTable(),
             new ElectricalMaterialRatedCostTable(),
-            new ControllerControllerTypeTable(),
+            new ProvidedControllerControllerTypeTable(),
             new ConnectionConduitTypeTable(),
             new PanelPanelTypeTable(),
             new SystemControllerTable(),
@@ -2993,88 +3366,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new PanelControllerTable(),
             new SubScopeConnectionChildrenTable(),
             new NetworkConnectionChildrenTable(),
-            new NetworkConnectionConnectionTypeTable(),
             new ScopeBranchHierarchyTable(),
-            new ValveActuatorTable(),
-            new TemplatesSystemTable(),
-            new TemplatesEquipmentTable(),
-            new TemplatesSubScopeTable(),
-            new TemplatesControllerTable(),
-            new TemplatesMiscCostTable(),
-            new TemplatesPanelTable(),
-            new TemplateReferenceTable()
-        };
-    }
-
-    internal static class AllTables
-    {
-        public static List<TableBase> Tables = new List<TableBase>()
-        {
-            new MetadataTable(),
-            new BidInfoTable(),
-            new TemplatesInfoTable(),
-            new ParametersTable(),
-            new ExtraLaborTable(),
-            new NoteTable(),
-            new ExclusionTable(),
-            new BidScopeBranchTable(),
-            new ScopeBranchTable(),
-            new SystemTable(),
-            new EquipmentTable(),
-            new SubScopeTable(),
-            new DeviceTable(),
-            new PointTable(),
-            new TagTable(),
-            new ManufacturerTable(),
-            new LocationTable(),
-            new MiscTable(),
-            new PanelTypeTable(),
-            new PanelTable(),
-            new SubScopeConnectionTable(),
-            new NetworkConnectionTable(),
-            new IOModuleTable(),
-            new IOTable(),
-            new ControllerTypeTable(),
-            new ValveTable(),
-            new ScheduleTable(),
-            new ScheduleTableTable(),
-            new ScheduleItemTable(),
-
-            new ConnectionTypeTable(),
-            new ConduitTypeTable(),
-            new AssociatedCostTable(),
-            new ControllerTable(),
-            new ControllerTypeIOTable(),
-            new IOModuleIOTable(),
-            new ControllerIOModuleTable(),
-            new ControllerTypeIOModuleTable(),
-            new ControllerConnectionTable(),
-            new ScopeBranchHierarchyTable(),
-            new BidSystemTable(),
-            new SystemEquipmentTable(),
-            new EquipmentSubScopeTable(),
-            new SubScopeDeviceTable(),
-            new SubScopePointTable(),
-            new ScopeTagTable(),
-            new HardwareManufacturerTable(),
-            new DeviceConnectionTypeTable(),
-            new LocatedLocationTable(),
-            new ScopeAssociatedCostTable(),
-            new ElectricalMaterialRatedCostTable(),
-            new ControllerControllerTypeTable(),
-            new ConnectionConduitTypeTable(),
-            new PanelPanelTypeTable(),
-            new PanelControllerTable(),
-            new SystemControllerTable(),
-            new SystemPanelTable(),
-            new SystemHierarchyTable(),
-            new SystemScopeBranchTable(),
-            new SystemMiscTable(),
-            new TypicalInstanceTable(),
-            new SubScopeConnectionChildrenTable(),
-            new NetworkConnectionChildrenTable(),
-            new NetworkConnectionConnectionTypeTable(),
-            new BidMiscTable(),
             new ValveActuatorTable(),
             new TemplatesSystemTable(),
             new TemplatesEquipmentTable(),
@@ -3083,11 +3375,25 @@ namespace EstimatingUtilitiesLibrary.Database
             new TemplatesMiscCostTable(),
             new TemplatesPanelTable(),
             new TemplateReferenceTable(),
-            new ScheduleScheduleTableTable(),
-            new ScheduleTableScheduleItemTable(),
-            new ScheduleItemScopeTable(),
-            new BidLocationTable()
+            new NetworkConnectionProtocolTable(),
+            new ProtocolConnectionTypeTable(),
+            new IOProtocolTable(),
+            new HardwiredConnectionConnectionTypeTable(),
+            new InterlockableInterlockTable(),
+            new InterlockConnectionConnectionTypeTable()
         };
+    }
+
+    internal static class AllTables
+    {
+        public static List<TableBase> Tables = getTables();
+        private static List<TableBase> getTables()
+        {
+            List<TableBase> tables = new List<TableBase>();
+            tables.AddRange(AllBidTables.Tables);
+            tables.AddRange(AllTemplateTables.Tables);
+            return tables.Distinct().ToList();
+        }
     }
 
     internal abstract class TableBase

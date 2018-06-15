@@ -48,6 +48,10 @@ namespace TECUserControlLibrary.Utilities
         public static void DragOver(IDropInfo dropInfo, Func<object, Type, Type, bool> dropCondition, Action failAction = null)
         {
             var sourceItem = dropInfo.Data;
+            if (dropInfo.Data is IDragDropable dropbable)
+            {
+                sourceItem = dropbable.DropData();
+            }
             Type sourceType;
             if (sourceItem is IList sourceList && sourceList.Count > 0)
             { sourceType = sourceList[0].GetType(); }
@@ -93,6 +97,10 @@ namespace TECUserControlLibrary.Utilities
         public static void Drop(IDropInfo dropInfo, Func<object, object> dropObject, bool addObjectToCollection = true)
         {
             var sourceItem = dropInfo.Data;
+            if (dropInfo.Data is IDragDropable dropbable)
+            {
+                sourceItem = dropbable.DropData();
+            }
             Type targetType = GetItemType(dropInfo.TargetCollection);
             if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
             {
@@ -108,7 +116,7 @@ namespace TECUserControlLibrary.Utilities
                 }
                 else
                 {
-                    sourceItem = dropObject(dropInfo.Data);
+                    sourceItem = dropObject(sourceItem);
                 }
 
                 if (addObjectToCollection)
@@ -176,7 +184,7 @@ namespace TECUserControlLibrary.Utilities
             {
                 dropMethod = item =>
                 {
-                    return ((IDragDropable)item).DragDropCopy(scopeManager);
+                    return ((IDDCopiable)item).DragDropCopy(scopeManager);
                 };
             }
             Drop(dropInfo, dropMethod, true);
@@ -188,7 +196,7 @@ namespace TECUserControlLibrary.Utilities
 
             bool dropCondition(object sourceItem, Type sourceType, Type targetType)
             {
-                bool isDragDropable = sourceItem is IDragDropable;
+                bool isDragDropable = sourceItem is IDDCopiable;
                 bool sourceNotNull = sourceItem != null;
                 bool sourceMatchesTarget = sourceType == typeof(TECSystem) && (targetType == typeof(TECTypical) || targetType == typeof(TECSystem));
                 return sourceNotNull && sourceMatchesTarget && isDragDropable;
@@ -250,7 +258,7 @@ namespace TECUserControlLibrary.Utilities
         
         public static bool StandardDropCondition(object sourceItem, Type sourceType, Type targetType)
         {
-            bool isDragDropable = sourceItem is IDragDropable;
+            bool isDragDropable = sourceItem is IDDCopiable;
             bool sourceNotNull = sourceItem != null;
             bool sourceMatchesTarget = targetType.IsInstanceOfType(sourceItem);
             return sourceNotNull && (sourceMatchesTarget) && isDragDropable;
@@ -368,6 +376,7 @@ namespace TECUserControlLibrary.Utilities
             new Tuple<string, MaterialType>("Associated Costs", MaterialType.AssociatedCost),
             new Tuple<string, MaterialType>("IO Modules", MaterialType.IOModule),
             new Tuple<string, MaterialType>("Valves", MaterialType.Valve),
+            new Tuple<string, MaterialType>("Protocols", MaterialType.Protocol),
             new Tuple<string, MaterialType>("Manufacturer", MaterialType.Manufacturer),
             new Tuple<string, MaterialType>("Tag", MaterialType.Tag)
         };
@@ -397,7 +406,9 @@ namespace TECUserControlLibrary.Utilities
             new Tuple<string, AllSearchableObjects>("Tags", AllSearchableObjects.Tags),
             new Tuple<string, AllSearchableObjects>("Controller Types", AllSearchableObjects.ControllerTypes),
             new Tuple<string, AllSearchableObjects>("Panel Types", AllSearchableObjects.PanelTypes),
-            new Tuple<string, AllSearchableObjects>("IO Modules", AllSearchableObjects.IOModules)
+            new Tuple<string, AllSearchableObjects>("IO Modules", AllSearchableObjects.IOModules),
+            new Tuple<string, AllSearchableObjects>("Protocols", AllSearchableObjects.Protocols),
+
         };
 
         public static List<Tuple<string, IOType>> IOSelectorList = new List<Tuple<string, IOType>>
@@ -407,12 +418,7 @@ namespace TECUserControlLibrary.Utilities
             new Tuple<string, IOType>("DI", IOType.DI),
             new Tuple<string, IOType>("DO", IOType.DO),
             new Tuple<string, IOType>("UI", IOType.UI),
-            new Tuple<string, IOType>("UO", IOType.UO),
-            new Tuple<string, IOType>("BACnetIP", IOType.BACnetIP),
-            new Tuple<string, IOType>("BACnetMSTP", IOType.BACnetMSTP),
-            new Tuple<string, IOType>("LonWorks", IOType.LonWorks),
-            new Tuple<string, IOType>("ModbusRTU", IOType.ModbusRTU),
-            new Tuple<string, IOType>("ModbusTCP", IOType.ModbusTCP)
+            new Tuple<string, IOType>("UO", IOType.UO)
         };
 
         public static List<Tuple<string, ScopeTemplateIndex>> ScopeTemplateSelectorList = new List<Tuple<string, ScopeTemplateIndex>>
@@ -484,9 +490,9 @@ namespace TECUserControlLibrary.Utilities
     public enum ScopeCollectionIndex { None, System, Equipment, SubScope, Devices, Tags, Manufacturers, AddDevices, AddControllers, Controllers, AssociatedCosts, Panels, AddPanel, MiscCosts, MiscWiring };
     public enum LocationScopeType { System, Equipment, SubScope };
     public enum MaterialType { Device, ConnectionType, ConduitType, ControllerType,
-        PanelType, AssociatedCost, IOModule, Valve, Manufacturer, Tag};
+        PanelType, AssociatedCost, IOModule, Protocol, Valve, Manufacturer, Tag};
     public enum TypicalSystemIndex { Edit, Instances };
-    public enum SystemComponentIndex { Equipment, Controllers, Electrical, Network, Misc, Valves, Proposal };
+    public enum SystemComponentIndex { Equipment, Controllers, Connections, Misc, Valves, Proposal };
     public enum ProposalIndex { Scope, Systems, Notes }
     public enum SystemsSubIndex { Typical, Instance, Location}
     public enum ScopeTemplateIndex { System, Equipment, SubScope, Misc }
@@ -507,7 +513,8 @@ namespace TECUserControlLibrary.Utilities
         AssociatedCosts,
         Wires,
         Conduits,
-        IOModules
+        IOModules,
+        Protocols
     }
     public enum TypicalInstanceEnum { Typical, Instance }
     public enum MaterialSummaryIndex { Devices, Valves, Controllers, Panels, Wire, Conduit, Misc }

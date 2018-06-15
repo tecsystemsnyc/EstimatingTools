@@ -85,7 +85,7 @@ namespace EstimatingUtilitiesLibrary
                                     else if (point.Type == IOType.DI) { BI += point.Quantity; }
                                     else if (point.Type == IOType.AO) { AO += point.Quantity; }
                                     else if (point.Type == IOType.DO) { BO += point.Quantity; }
-                                    else if (TECIO.NetworkIO.Contains(point.Type) ){ serial += point.Quantity; }
+                                    else if (point.Type == IOType.Protocol){ serial += point.Quantity; }
                                 }
                                 row.Add(AI.ToString());
                                 row.Add(BI.ToString());
