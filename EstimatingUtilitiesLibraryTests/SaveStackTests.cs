@@ -1735,6 +1735,207 @@ namespace EstimatingUtilitiesLibraryTests
             CheckUpdateItems(expectedItems, stack);
         }
         #endregion
+        #region Interlocks
+        [TestMethod]
+        public void Bid_AddInterlockToTypicalWithout()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECTypical system = new TECTypical();
+            bid.Systems.Add(system);
+            TECEquipment equipment = new TECEquipment(true);
+            system.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope(true);
+            equipment.SubScope.Add(subScope);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            TECInterlockConnection interlock = new TECInterlockConnection(new List<TECConnectionType>(), true);
+            subScope.Interlocks.Add(interlock);
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[InterlockConnectionTable.ID.Name] = interlock.Guid.ToString();
+            data[InterlockConnectionTable.Name.Name] = interlock.Name.ToString();
+            data[InterlockConnectionTable.Description.Name] = interlock.Description.ToString();
+            data[InterlockConnectionTable.Length.Name] = interlock.Length.ToString();
+            data[InterlockConnectionTable.ConduitLength.Name] = interlock.ConduitLength.ToString();
+            data[InterlockConnectionTable.IsPlenum.Name] = interlock.IsPlenum.ToInt().ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, InterlockConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[InterlockableInterlockTable.ParentID.Name] = subScope.Guid.ToString();
+            data[InterlockableInterlockTable.ChildID.Name] = interlock.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, InterlockableInterlockTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            CheckUpdateItems(expectedItems, stack);
+
+        }
+
+        [TestMethod]
+        public void Bid_AddInterlockToTypicalWith()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECTypical system = new TECTypical();
+            bid.Systems.Add(system);
+            TECEquipment equipment = new TECEquipment(true);
+            system.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope(true);
+            equipment.SubScope.Add(subScope);
+            TECSystem instance = system.AddInstance(bid);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
+
+            TECInterlockConnection interlock = new TECInterlockConnection(new List<TECConnectionType>(), true);
+            subScope.Interlocks.Add(interlock);
+
+            var instanceSubScope = instance.Equipment[0].SubScope[0];
+            var instanceInterlock = instanceSubScope.Interlocks[0];
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[TypicalInstanceTable.TypicalID.Name] = interlock.Guid.ToString();
+            data[TypicalInstanceTable.InstanceID.Name] = instance.Equipment[0].SubScope[0].Interlocks[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, TypicalInstanceTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[InterlockConnectionTable.ID.Name] = instanceInterlock.Guid.ToString();
+            data[InterlockConnectionTable.Name.Name] = instanceInterlock.Name.ToString();
+            data[InterlockConnectionTable.Description.Name] = instanceInterlock.Description.ToString();
+            data[InterlockConnectionTable.Length.Name] = instanceInterlock.Length.ToString();
+            data[InterlockConnectionTable.ConduitLength.Name] = instanceInterlock.ConduitLength.ToString();
+            data[InterlockConnectionTable.IsPlenum.Name] = instanceInterlock.IsPlenum.ToInt().ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, InterlockConnectionTable.TableName, data));
+            
+            data = new Dictionary<string, string>();
+            data[InterlockableInterlockTable.ParentID.Name] = instanceSubScope.Guid.ToString();
+            data[InterlockableInterlockTable.ChildID.Name] = instanceInterlock.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, InterlockableInterlockTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[InterlockConnectionTable.ID.Name] = interlock.Guid.ToString();
+            data[InterlockConnectionTable.Name.Name] = interlock.Name.ToString();
+            data[InterlockConnectionTable.Description.Name] = interlock.Description.ToString();
+            data[InterlockConnectionTable.Length.Name] = interlock.Length.ToString();
+            data[InterlockConnectionTable.ConduitLength.Name] = interlock.ConduitLength.ToString();
+            data[InterlockConnectionTable.IsPlenum.Name] = interlock.IsPlenum.ToInt().ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, InterlockConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[InterlockableInterlockTable.ParentID.Name] = subScope.Guid.ToString();
+            data[InterlockableInterlockTable.ChildID.Name] = interlock.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, InterlockableInterlockTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            CheckUpdateItems(expectedItems, stack);
+        }
+
+        [TestMethod]
+        public void Bid_AddInstanceToSystemWithInterlock()
+        {
+            //Arrange
+            TECBid bid = new TECBid();
+            TECTypical system = new TECTypical();
+            bid.Systems.Add(system);
+            TECEquipment equipment = new TECEquipment(true);
+            system.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope(true);
+            equipment.SubScope.Add(subScope);
+            TECInterlockConnection interlock = new TECInterlockConnection(new List<TECConnectionType>(), true);
+            subScope.Interlocks.Add(interlock);
+
+            //Act
+            ChangeWatcher watcher = new ChangeWatcher(bid);
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
+            TECSystem instance = system.AddInstance(bid);
+
+            var instanceSubScope = instance.Equipment[0].SubScope[0];
+            var instanceInterlock = instanceSubScope.Interlocks[0];
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[TypicalInstanceTable.TypicalID.Name] = interlock.Guid.ToString();
+            data[TypicalInstanceTable.InstanceID.Name] = instance.Equipment[0].SubScope[0].Interlocks[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, TypicalInstanceTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[TypicalInstanceTable.TypicalID.Name] = subScope.Guid.ToString();
+            data[TypicalInstanceTable.InstanceID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, TypicalInstanceTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[TypicalInstanceTable.TypicalID.Name] = equipment.Guid.ToString();
+            data[TypicalInstanceTable.InstanceID.Name] = instance.Equipment[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, TypicalInstanceTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SystemTable.ID.Name] = instance.Guid.ToString();
+            data[SystemTable.Name.Name] = instance.Name.ToString();
+            data[SystemTable.Description.Name] = instance.Description.ToString();
+            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToInt().ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[EquipmentTable.ID.Name] = instance.Equipment[0].Guid.ToString();
+            data[EquipmentTable.Name.Name] = instance.Equipment[0].Name.ToString();
+            data[EquipmentTable.Description.Name] = instance.Equipment[0].Description.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, EquipmentTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SubScopeTable.ID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
+            data[SubScopeTable.Name.Name] = instance.Equipment[0].SubScope[0].Name.ToString();
+            data[SubScopeTable.Description.Name] = instance.Equipment[0].SubScope[0].Description.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SubScopeTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[InterlockConnectionTable.ID.Name] = instanceInterlock.Guid.ToString();
+            data[InterlockConnectionTable.Name.Name] = instanceInterlock.Name.ToString();
+            data[InterlockConnectionTable.Description.Name] = instanceInterlock.Description.ToString();
+            data[InterlockConnectionTable.Length.Name] = instanceInterlock.Length.ToString();
+            data[InterlockConnectionTable.ConduitLength.Name] = instanceInterlock.ConduitLength.ToString();
+            data[InterlockConnectionTable.IsPlenum.Name] = instanceInterlock.IsPlenum.ToInt().ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, InterlockConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[InterlockableInterlockTable.ParentID.Name] = instanceSubScope.Guid.ToString();
+            data[InterlockableInterlockTable.ChildID.Name] = instanceInterlock.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, InterlockableInterlockTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[EquipmentSubScopeTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
+            data[EquipmentSubScopeTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
+            data[EquipmentSubScopeTable.Index.Name] = "0";
+            expectedItems.Add(new UpdateItem(Change.Add, EquipmentSubScopeTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SystemEquipmentTable.SystemID.Name] = instance.Guid.ToString();
+            data[SystemEquipmentTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
+            data[SystemEquipmentTable.Index.Name] = "0";
+            expectedItems.Add(new UpdateItem(Change.Add, SystemEquipmentTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SystemHierarchyTable.ParentID.Name] = system.Guid.ToString();
+            data[SystemHierarchyTable.ChildID.Name] = instance.Guid.ToString();
+            data[SystemHierarchyTable.Index.Name] = "0";
+            expectedItems.Add(new UpdateItem(Change.Add, SystemHierarchyTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            CheckUpdateItems(expectedItems, stack);
+        }
+        #endregion
         #endregion
 
         #region Connections

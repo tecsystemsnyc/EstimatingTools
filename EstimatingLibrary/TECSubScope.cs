@@ -252,6 +252,7 @@ namespace EstimatingLibrary
             }
             saveList.AddRange(deviceList, "Devices");
             saveList.AddRange(this.Points, "Points");
+            saveList.AddRange(this.Interlocks, "Interlocks");
             return saveList;
         }
         protected override SaveableMap linkedObjects()

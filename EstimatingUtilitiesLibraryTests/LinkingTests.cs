@@ -463,7 +463,7 @@ namespace Tests
                 {
                     if (controller is TECProvidedController provided)
                     {
-                        Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(provided.Type));
+                        Assert.IsTrue(templates.Catalogs.ControllerTypes.Contains(provided.Type));
                     }
                 }
             }
@@ -471,7 +471,7 @@ namespace Tests
             {
                 if(controller is TECProvidedController provided)
                         {
-                    Assert.IsTrue(bid.Catalogs.ControllerTypes.Contains(provided.Type));
+                    Assert.IsTrue(templates.Catalogs.ControllerTypes.Contains(provided.Type));
                 }
             }
         }
