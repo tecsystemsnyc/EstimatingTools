@@ -812,7 +812,7 @@ namespace Tests
             var expectedTotalCost = estimate.TotalCost;
             double delta = 0.0001;
 
-            Dictionary<Guid, CostBatch> saveCostDictionary = new Dictionary<Guid, CostBatch>();
+            Dictionary<Guid, INotifyCostChanged> saveCostDictionary = new Dictionary<Guid, INotifyCostChanged>();
             addToCost(saveCostDictionary, saveBid, saveBid);
 
             //Act
@@ -823,34 +823,33 @@ namespace Tests
             var loadedWatcher = new ChangeWatcher(saveBid);
             TECEstimator loadedEstimate = new TECEstimator(loadedBid, loadedWatcher);
 
-            Dictionary<Guid, CostBatch> loadCostDictionary = new Dictionary<Guid, CostBatch>();
+            Dictionary<Guid, INotifyCostChanged> loadCostDictionary = new Dictionary<Guid, INotifyCostChanged>();
             addToCost(loadCostDictionary, loadedBid, loadedBid);
 
-            compareCosts(saveBid, loadedBid, saveCostDictionary, loadCostDictionary);
+            compareCosts(saveCostDictionary, loadCostDictionary);
             Assert.AreEqual(expectedTotalCost, loadedEstimate.TotalCost, delta);
             
         }
 
-        private void compareCosts(TECBid saveBid, TECBid LoadBid, 
-            Dictionary<Guid, CostBatch> saveCostDictionary, Dictionary<Guid, CostBatch> loadCostDictionary)
+        private void compareCosts(Dictionary<Guid, INotifyCostChanged> saveCostDictionary, Dictionary<Guid, INotifyCostChanged> loadCostDictionary)
         {
-            foreach(KeyValuePair<Guid, CostBatch> pair in saveCostDictionary.Reverse()){
+            foreach(KeyValuePair<Guid, INotifyCostChanged> pair in saveCostDictionary.Reverse())
+            {
+                INotifyCostChanged saveObj = pair.Value;
+
                 if (!loadCostDictionary.ContainsKey(pair.Key))
                 {
-                    ITECObject lost = TestHelper.ObjectWithGuid(pair.Key, saveBid);
-                    Assert.Fail("Guid not found with cost: " + lost.Guid);
+                    Assert.Fail("Guid not found with cost: " + saveObj.Guid);
                 }
                 else
                 {
-                    CostBatch saveCost = pair.Value;
-                    CostBatch loadCost = loadCostDictionary[pair.Key];
-                    ITECObject item = TestHelper.ObjectWithGuid(pair.Key, LoadBid);
-                    Assert.IsTrue(compareCosts(saveCost, loadCost), "Loaded value not correct: " + item);
+                    INotifyCostChanged loadObj = loadCostDictionary[pair.Key];
+                    Assert.IsTrue(compareCosts(saveObj.CostBatch, loadObj.CostBatch), "Loaded value not correct: " + loadObj);
                 }
             }
         }
 
-        public void addToCost(Dictionary<Guid, CostBatch> costDictionary, TECObject item, TECBid referenceBid)
+        public void addToCost(Dictionary<Guid, INotifyCostChanged> costDictionary, ITECObject item, TECBid referenceBid)
         {
             if(item is TECCatalogs)
             {
@@ -863,7 +862,7 @@ namespace Tests
                     var errant = item;
                     throw new Exception();
                 }
-                costDictionary[item.Guid] = costItem.CostBatch;
+                costDictionary[item.Guid] = costItem;
             }
             if(item is IRelatable saveable)
             {
