@@ -9,34 +9,21 @@ namespace TestLibrary.ModelTestingUtilities
 {
     public static class ModelExtensions
     {
-        public static void AssignScopeProperties(this TECScope scope, TECCatalogs catalogs)
+        public static void AssignScopeProperties(this TECScope scope, Random rand, TECCatalogs catalogs)
         {
-            if (scope.Tags.Count == 0)
-            {
-                scope.Tags.Add(catalogs.Tags[0]);
-            }
-            bool tecAdded = false;
-            bool elecAdded = false;
-            foreach (TECAssociatedCost cost in catalogs.AssociatedCosts)
-            {
-                if (cost.Type == CostType.TEC)
-                {
-                    if (!tecAdded)
-                    {
-                        scope.AssociatedCosts.Add(cost);
-                        tecAdded = true;
-                    }
-                }
-                else if (cost.Type == CostType.Electrical)
-                {
-                    if (!elecAdded)
-                    {
-                        scope.AssociatedCosts.Add(cost);
-                        elecAdded = true;
-                    }
-                }
-                if (tecAdded && elecAdded) break;
-            }
+            scope.Tags.Add(catalogs.Tags.RandomElement(rand));
+            scope.AssociatedCosts.Add(catalogs.RandomCost(rand, CostType.TEC));
+            scope.AssociatedCosts.Add(catalogs.RandomCost(rand, CostType.Electrical));
+        }
+
+        public static T RandomElement<T>(this IEnumerable<T> items, Random rand)
+        {
+            return items.ElementAt(rand.Next(items.Count()));
+        }
+
+        public static TECAssociatedCost RandomCost(this TECCatalogs catalogs, Random rand, CostType type)
+        {
+            return catalogs.AssociatedCosts.Where(cost => cost.Type == type).RandomElement(rand);
         }
     }
 }

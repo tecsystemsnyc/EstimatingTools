@@ -22,25 +22,8 @@ namespace TestLibrary.ModelTestingUtilities
             catalogs.Tags.Add(TestTag(rand));
 
             //Conduit Types
-            var conduitType1 = new TECElectricalMaterial();
-            conduitType1.Name = "Test Conduit 1";
-            conduitType1.Cost = 64.49;
-            conduitType1.Labor = 463.87;
-            conduitType1.AssignScopeProperties(catalogs);
-            conduitType1.RatedCosts.Add(tecCost);
-            conduitType1.RatedCosts.Add(elecCost);
-
-            catalogs.ConduitTypes.Add(conduitType1);
-
-            var conduitType2 = new TECElectricalMaterial();
-            conduitType2.Name = "Test Conduit 2";
-            conduitType2.Cost = 13.45;
-            conduitType2.Labor = 9873.40;
-            conduitType2.AssignScopeProperties(catalogs);
-            conduitType2.RatedCosts.Add(tecCost);
-            conduitType2.RatedCosts.Add(elecCost);
-
-            catalogs.ConduitTypes.Add(conduitType2);
+            catalogs.ConduitTypes.Add(TestElectricalMaterial(rand, "Conduit Type", catalogs));
+            catalogs.ConduitTypes.Add(TestElectricalMaterial(rand, "Conduit Type", catalogs));
 
             //ConnectionTypes
             var connectionType1 = new TECConnectionType();
@@ -164,12 +147,18 @@ namespace TestLibrary.ModelTestingUtilities
                 Label = string.Format("Test Tag #{0}", rand.Next(100))
             };
         }
-        public static TECElectricalMaterial TestElectricalMaterial(Random rand, TECCatalogs catalogs)
+        public static TECElectricalMaterial TestElectricalMaterial(Random rand, string type, TECCatalogs catalogs)
         {
-            return new TECElectricalMaterial()
+            TECElectricalMaterial mat = new TECElectricalMaterial()
             {
-
-            }
+                Name = string.Format("Test {0} #{1}", type, rand.Next(100)),
+                Cost = (rand.NextDouble() * 100),
+                Labor = (rand.NextDouble() * 100)
+            };
+            mat.AssignScopeProperties(rand, catalogs);
+            mat.RatedCosts.Add(catalogs.RandomCost(rand, CostType.TEC));
+            mat.RatedCosts.Add(catalogs.RandomCost(rand, CostType.Electrical));
+            return mat;
         } 
     }
 }
