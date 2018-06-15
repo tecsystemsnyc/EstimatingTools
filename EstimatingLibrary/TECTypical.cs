@@ -533,6 +533,7 @@ namespace EstimatingLibrary
                     foreach(TECSubScope subScope in GetAllSubScope())
                     {
                         removeFromDictionary(subScope.Points, instanceSubScope.Points);
+                        removeFromDictionary(subScope.Interlocks, instanceSubScope.Interlocks);
                     }
                 }
             }

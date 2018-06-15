@@ -3995,18 +3995,18 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Remove, TypicalInstanceTable.TableName, data));
             data = new Dictionary<string, string>();
             data[InterlockConnectionTable.ID.Name] = removed.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, PointTable.TableName, data));
+            expectedItems.Add(new UpdateItem(Change.Remove, InterlockConnectionTable.TableName, data));
             data = new Dictionary<string, string>();
             data[InterlockableInterlockTable.ParentID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
             data[InterlockableInterlockTable.ChildID.Name] = removed.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, SubScopePointTable.TableName, data));
+            expectedItems.Add(new UpdateItem(Change.Remove, InterlockableInterlockTable.TableName, data));
             data = new Dictionary<string, string>();
             data[InterlockConnectionTable.ID.Name] = interlock.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, PointTable.TableName, data));
+            expectedItems.Add(new UpdateItem(Change.Remove, InterlockConnectionTable.TableName, data));
             data = new Dictionary<string, string>();
             data[InterlockableInterlockTable.ParentID.Name] = system.Equipment[0].SubScope[0].Guid.ToString();
             data[InterlockableInterlockTable.ChildID.Name] = interlock.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, SubScopePointTable.TableName, data));
+            expectedItems.Add(new UpdateItem(Change.Remove, InterlockableInterlockTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
 
