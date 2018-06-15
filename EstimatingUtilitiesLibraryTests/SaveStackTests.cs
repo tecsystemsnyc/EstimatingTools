@@ -3932,6 +3932,164 @@ namespace EstimatingUtilitiesLibraryTests
             CheckUpdateItems(expectedItems, stack);
         }
         #endregion
+        #region Interlocks
+        [TestMethod]
+        public void Bid_RemoveInterlockFromTypicalWithout()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECTypical system = new TECTypical();
+            bid.Systems.Add(system);
+            TECEquipment equipment = new TECEquipment(true);
+            system.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope(true);
+            equipment.SubScope.Add(subScope);
+            TECInterlockConnection interlock = new TECInterlockConnection(new List<TECConnectionType>(), true);
+            subScope.Interlocks.Add(interlock);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
+            subScope.Interlocks.Remove(interlock);
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[InterlockConnectionTable.ID.Name] = interlock.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, InterlockConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[InterlockableInterlockTable.ParentID.Name] = subScope.Guid.ToString();
+            data[InterlockableInterlockTable.ChildID.Name] = interlock.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, InterlockableInterlockTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            CheckUpdateItems(expectedItems, stack);
+        }
+
+        [TestMethod]
+        public void Bid_RemoveInterlockFromTypicalWith()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECTypical system = new TECTypical();
+            bid.Systems.Add(system);
+            TECEquipment equipment = new TECEquipment(true);
+            system.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope(true);
+            equipment.SubScope.Add(subScope);
+            TECSystem instance = system.AddInstance(bid);
+            TECInterlockConnection interlock = new TECInterlockConnection(new List<TECConnectionType>(), true);
+            subScope.Interlocks.Add(interlock);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
+            var removed = instance.Equipment[0].SubScope[0].Interlocks[0];
+            subScope.Interlocks.Remove(interlock);
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[TypicalInstanceTable.TypicalID.Name] = interlock.Guid.ToString();
+            data[TypicalInstanceTable.InstanceID.Name] = removed.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, TypicalInstanceTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[InterlockConnectionTable.ID.Name] = removed.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, PointTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[InterlockableInterlockTable.ParentID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
+            data[InterlockableInterlockTable.ChildID.Name] = removed.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SubScopePointTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[InterlockConnectionTable.ID.Name] = interlock.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, PointTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[InterlockableInterlockTable.ParentID.Name] = system.Equipment[0].SubScope[0].Guid.ToString();
+            data[InterlockableInterlockTable.ChildID.Name] = interlock.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SubScopePointTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            CheckUpdateItems(expectedItems, stack);
+        }
+
+        [TestMethod]
+        public void Bid_RemoveInstanceFromSystemWithInterlock()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECTypical system = new TECTypical();
+            bid.Systems.Add(system);
+            TECEquipment equipment = new TECEquipment(true);
+            system.Equipment.Add(equipment);
+            TECSubScope subScope = new TECSubScope(true);
+            equipment.SubScope.Add(subScope);
+            TECInterlockConnection interlock = new TECInterlockConnection(new List<TECConnectionType>(), true);
+            subScope.Interlocks.Add(interlock);
+            TECSystem instance = system.AddInstance(bid);
+
+            var instanceInterlock = instance.Equipment[0].SubScope[0].Interlocks[0];
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
+            system.Instances.Remove(instance);
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+            Dictionary<string, string> data;
+            data = new Dictionary<string, string>();
+            data[TypicalInstanceTable.TypicalID.Name] = equipment.Guid.ToString();
+            data[TypicalInstanceTable.InstanceID.Name] = instance.Equipment[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, TypicalInstanceTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[TypicalInstanceTable.TypicalID.Name] = subScope.Guid.ToString();
+            data[TypicalInstanceTable.InstanceID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, TypicalInstanceTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[TypicalInstanceTable.TypicalID.Name] = interlock.Guid.ToString();
+            data[TypicalInstanceTable.InstanceID.Name] = instance.Equipment[0].SubScope[0].Interlocks[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, TypicalInstanceTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[SystemTable.ID.Name] = instance.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SystemTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[EquipmentTable.ID.Name] = instance.Equipment[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, EquipmentTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[SubScopeTable.ID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[InterlockConnectionTable.ID.Name] = instanceInterlock.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, InterlockConnectionTable.TableName, data));
+            data = new Dictionary<string, string>();
+            data[InterlockableInterlockTable.ParentID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
+            data[InterlockableInterlockTable.ChildID.Name] = instance.Equipment[0].SubScope[0].Interlocks[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, InterlockableInterlockTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[EquipmentSubScopeTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
+            data[EquipmentSubScopeTable.SubScopeID.Name] = instance.Equipment[0].SubScope[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, EquipmentSubScopeTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SystemEquipmentTable.SystemID.Name] = instance.Guid.ToString();
+            data[SystemEquipmentTable.EquipmentID.Name] = instance.Equipment[0].Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SystemEquipmentTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[SystemHierarchyTable.ParentID.Name] = system.Guid.ToString();
+            data[SystemHierarchyTable.ChildID.Name] = instance.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SystemHierarchyTable.TableName, data));
+            
+
+            int expectedCount = expectedItems.Count;
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            CheckUpdateItems(expectedItems, stack);
+        }
+        #endregion
         #endregion
 
         #region Connections

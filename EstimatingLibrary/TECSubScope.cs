@@ -107,6 +107,12 @@ namespace EstimatingLibrary
                 characteristicReference?.AddItem(point,toAdd);
                 Points.Add(toAdd);
             }
+            foreach (TECInterlockConnection interlock in sourceSubScope.Interlocks)
+            {
+                var toAdd = new TECInterlockConnection(interlock, isTypical);
+                characteristicReference?.AddItem(interlock, toAdd);
+                Interlocks.Add(toAdd);
+            }
             this.copyPropertiesFromScope(sourceSubScope);
         }
         #endregion //Constructors
