@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using TestLibrary.ModelTestingUtilities;
 
 namespace Tests
 {
@@ -24,7 +25,7 @@ namespace Tests
             //Bid Objects
             bid.ExtraLabor = CreateTestExtraLabor(bid.Guid);
             bid.Parameters = CreateTestParameters(bid.Guid);
-            bid.Catalogs = CreateTestCatalogs();
+            bid.Catalogs = TECCatalogTestingUtilities.CreateTestCatalogs();
 
             //Locations
             var cellar = new TECLocation();
@@ -197,7 +198,7 @@ namespace Tests
         public static TECBid CreateEmptyCatalogBid()
         {
             TECBid bid = new TECBid();
-            bid.Catalogs = CreateTestCatalogs();
+            bid.Catalogs = TECCatalogTestingUtilities.CreateTestCatalogs();
             return bid;
         }
 
@@ -208,7 +209,7 @@ namespace Tests
             //Labor
             //templates.Labor = CreateTestLabor();
             templates.Parameters.Add(CreateTestParameters(Guid.NewGuid()));
-            templates.Catalogs = CreateTestCatalogs();
+            templates.Catalogs = TECCatalogTestingUtilities.CreateTestCatalogs();
 
             //Tags
             TECTag testTag = new TECTag();
@@ -443,161 +444,6 @@ namespace Tests
             syncEquip.SubScope.Add(ssSynchronizer.NewItem(syncSubScope));
 
             return templates;
-        }
-
-        public static TECCatalogs CreateTestCatalogs()
-        {
-            TECCatalogs outCatalogs = new TECCatalogs();
-
-            //Associated Costs
-            TECAssociatedCost elecCost = new TECAssociatedCost(CostType.Electrical);
-            elecCost.Name = "Elec Cost";
-            elecCost.Cost = 156.61;
-            elecCost.Labor = 456.64;
-            elecCost.Type = CostType.Electrical;
-            outCatalogs.AssociatedCosts.Add(elecCost);
-
-            TECAssociatedCost tecCost = new TECAssociatedCost(CostType.TEC);
-            tecCost.Name = "TEC Cost";
-            tecCost.Cost = 46.43;
-            tecCost.Labor = 61.45;
-            tecCost.Type = CostType.TEC;
-            outCatalogs.AssociatedCosts.Add(tecCost);
-
-            //Tags
-            var tag1 = new TECTag();
-            tag1.Label = "Tag 1";
-            var tag2 = new TECTag();
-            tag2.Label = "Test Tag";
-
-            outCatalogs.Tags.Add(tag1);
-            outCatalogs.Tags.Add(tag2);
-
-            //Conduit Types
-            var conduitType1 = new TECElectricalMaterial();
-            conduitType1.Name = "Test Conduit 1";
-            conduitType1.Cost = 64.49;
-            conduitType1.Labor = 463.87;
-            AssignSecondaryProperties(conduitType1, outCatalogs);
-            conduitType1.RatedCosts.Add(tecCost);
-            conduitType1.RatedCosts.Add(elecCost);
-
-            outCatalogs.ConduitTypes.Add(conduitType1);
-
-            var conduitType2 = new TECElectricalMaterial();
-            conduitType2.Name = "Test Conduit 2";
-            conduitType2.Cost = 13.45;
-            conduitType2.Labor = 9873.40;
-            AssignSecondaryProperties(conduitType2, outCatalogs);
-            conduitType2.RatedCosts.Add(tecCost);
-            conduitType2.RatedCosts.Add(elecCost);
-
-            outCatalogs.ConduitTypes.Add(conduitType2);
-
-            //ConnectionTypes
-            var connectionType1 = new TECConnectionType();
-            connectionType1.Name = "FourC18";
-            connectionType1.Cost = 64.63;
-            connectionType1.Labor = 98.16;
-            AssignSecondaryProperties(connectionType1, outCatalogs);
-            connectionType1.RatedCosts.Add(tecCost);
-            connectionType1.RatedCosts.Add(elecCost);
-
-            var connectionType2 = new TECConnectionType();
-            connectionType2.Name = "ThreeC18";
-            connectionType2.Cost = 73.16;
-            connectionType2.Labor = 35.49;
-            AssignSecondaryProperties(connectionType1, outCatalogs);
-            connectionType1.RatedCosts.Add(tecCost);
-            connectionType1.RatedCosts.Add(elecCost);
-
-            outCatalogs.ConnectionTypes.Add(connectionType1);
-            outCatalogs.ConnectionTypes.Add(connectionType2);
-
-            //Manufacturers
-            var manufacturer1 = new TECManufacturer();
-            manufacturer1.Label = "Test";
-            manufacturer1.Multiplier = .51;
-            
-            outCatalogs.Manufacturers.Add(manufacturer1);
-
-            //Devices
-            ObservableCollection<TECConnectionType> contypes4 = new ObservableCollection<TECConnectionType>();
-            contypes4.Add(connectionType1);
-            TECDevice device1 = new TECDevice(Guid.NewGuid(), contypes4, new List<TECProtocol>(), manufacturer1);
-            device1.Name = "Device 1";
-            device1.Description = "Description 1";
-            device1.Price = 64.96;
-            device1.Tags.Add(tag1);
-            AssignSecondaryProperties(device1, outCatalogs);
-
-            outCatalogs.Devices.Add(device1);
-            
-            //IO Modules
-            TECIOModule testIOModule = new TECIOModule(manufacturer1);
-            testIOModule.Name = "Test IO Module";
-            testIOModule.Price = 13.46;
-            testIOModule.Manufacturer = manufacturer1;
-            outCatalogs.IOModules.Add(testIOModule);
-
-            //Controller Types
-            TECControllerType controllerType = new TECControllerType(manufacturer1);
-            controllerType.Name = "Test Controller Type";
-            controllerType.Price = 196.73;
-            controllerType.Labor = 61.34;
-            AssignSecondaryProperties(controllerType, outCatalogs);
-
-            TECIO io = new TECIO(IOType.AI);
-            io.Quantity = 100;
-            controllerType.IO.Add(io);
-
-            io = new TECIO(IOType.UI);
-            io.Quantity = 100;
-            controllerType.IO.Add(io);
-
-            io = new TECIO(IOType.UO);
-            io.Quantity = 100;
-            controllerType.IO.Add(io);
-
-            outCatalogs.ControllerTypes.Add(controllerType);
-
-            //Panel Types
-            TECPanelType panelType = new TECPanelType(manufacturer1);
-            panelType.Price = 16.64;
-            panelType.Labor = 91.46;
-            panelType.Name = "Test Panel Type";
-            AssignSecondaryProperties(panelType, outCatalogs);
-
-            outCatalogs.PanelTypes.Add(panelType);
-
-            TECPanelType otherPanelType = new TECPanelType(manufacturer1);
-            otherPanelType.Price = 46.61;
-            otherPanelType.Labor = 64.19;
-            otherPanelType.Name = "Other Test Panel Type";
-            AssignSecondaryProperties(otherPanelType, outCatalogs);
-
-            outCatalogs.PanelTypes.Add(otherPanelType);
-
-            //Valves
-            TECDevice actuator = new TECDevice(new ObservableCollection<TECConnectionType>() { connectionType1 }, 
-                new List<TECProtocol>(),
-                manufacturer1);
-            actuator.Name = "actuator";
-            outCatalogs.Devices.Add(actuator);
-            TECValve valve = new TECValve(manufacturer1, actuator);
-            outCatalogs.Valves.Add(valve);
-
-            //Protocols
-            TECProtocol protocol = new TECProtocol(new List<TECConnectionType> { connectionType1 });
-            protocol.Label = "BACnet IP";
-            outCatalogs.Protocols.Add(protocol);
-
-            controllerType.IO.Add(new TECIO(protocol));
-
-            TECDevice netDevice = new TECDevice(Guid.NewGuid(), new List<TECConnectionType>(), new List<TECProtocol> { protocol }, manufacturer1);
-            outCatalogs.Devices.Add(netDevice);
-            
-            return outCatalogs;
         }
 
         public static TECTypical CreateTestTypical(TECCatalogs catalogs)
@@ -847,36 +693,7 @@ namespace Tests
         public static void AssignSecondaryProperties(TECLocated located, TECBid bid)
         {
             located.Location = bid.Locations[0];
-            AssignSecondaryProperties(located, bid.Catalogs);
-        }
-        public static void AssignSecondaryProperties(TECScope scope, TECCatalogs catalogs)
-        {
-            if (scope.Tags.Count == 0)
-            {
-                scope.Tags.Add(catalogs.Tags[0]);
-            }
-            bool tecAdded = false;
-            bool elecAdded = false;
-            foreach(TECAssociatedCost cost in catalogs.AssociatedCosts)
-            {
-                if (cost.Type == CostType.TEC)
-                {
-                    if (!tecAdded)
-                    {
-                        scope.AssociatedCosts.Add(cost);
-                        tecAdded = true;
-                    }
-                }
-                else if (cost.Type == CostType.Electrical)
-                {
-                    if (!elecAdded)
-                    {
-                        scope.AssociatedCosts.Add(cost);
-                        elecAdded = true;
-                    }
-                }
-                if (tecAdded && elecAdded) break;
-            }
+            located.AssignScopeProperties(bid.Catalogs);
         }
 
         public static void AssignAllSecondaryProperties(TECBid bid)
@@ -1095,6 +912,5 @@ namespace Tests
             }
             return null;
         }
-        
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TestLibrary.MockClasses;
 using Tests;
 
 namespace Models
@@ -133,6 +134,11 @@ namespace Models
         [TestMethod]
         public void CompatibleProtocols()
         {
+            Random random = new Random(5);
+
+            //Arrange
+            TECControllerMock testController = new TECControllerMock(false);
+
             throw new NotImplementedException();
         }
 

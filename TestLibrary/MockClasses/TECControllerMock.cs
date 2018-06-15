@@ -9,11 +9,11 @@ namespace TestLibrary.MockClasses
 {
     public class TECControllerMock : TECController
     {
-        private IOCollection io;
+        private IOCollection _io;
 
         public override IOCollection IO
         {
-            get { return io; }
+            get { return _io; }
         }
 
         public TECControllerMock(Guid guid, bool isTypical) : base(guid, isTypical) { }
@@ -31,7 +31,7 @@ namespace TestLibrary.MockClasses
         /// <param name="io"></param>
         public void SetIO(IOCollection io)
         {
-            this.io = io;
+            this._io = io;
         }
     }
 }

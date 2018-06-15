@@ -13,11 +13,49 @@ namespace TestLibrary.MockClasses
 {
     public class IConnectableMock : IConnectable, ITECScope, ITypicalable
     {
-        public Guid Guid => throw new NotImplementedException();
+        #region Mocked Properties
+        private Guid _guid;
+        private List<IProtocol> _availableProtocols;
+        private IOCollection _hardwiredIO;
 
-        public List<IProtocol> AvailableProtocols => throw new NotImplementedException();
+        public Guid Guid { get { return _guid; } }
+        public List<IProtocol> AvailableProtocols { get { return _availableProtocols; } }
+        public IOCollection HardwiredIO { get { return _hardwiredIO; } }
+        #endregion
+        
+        #region Mocked Methods
+        public bool CanSetParentConnection(IControllerConnection connection)
+        {
+            throw new NotImplementedException();
+        }
+        public IConnectable Copy(bool isTypical, Dictionary<Guid, Guid> guidDictionary)
+        {
+            throw new NotImplementedException();
+        }
+        public IControllerConnection GetParentConnection()
+        {
+            throw new NotImplementedException();
+        }
+        public void SetParentConnection(IControllerConnection connection)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
 
-        public IOCollection HardwiredIO => throw new NotImplementedException();
+        #region Setters
+        public void SetGuid(Guid guid)
+        {
+            this._guid = guid;
+        }
+        public void SetAvailableProtocols(List<IProtocol> protocols)
+        {
+            this._availableProtocols = protocols;
+        }
+        public void SetHardwiredIO(IOCollection io)
+        {
+            this._hardwiredIO = io;
+        }
+        #endregion
 
         #region Consequential Interfaces
         bool ITypicalable.IsTypical => throw new NotImplementedException();
@@ -75,26 +113,6 @@ namespace TestLibrary.MockClasses
             {
                 throw new NotImplementedException();
             }
-        }
-
-        public bool CanSetParentConnection(IControllerConnection connection)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IConnectable Copy(bool isTypical, Dictionary<Guid, Guid> guidDictionary)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IControllerConnection GetParentConnection()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetParentConnection(IControllerConnection connection)
-        {
-            throw new NotImplementedException();
         }
         #endregion
     }
