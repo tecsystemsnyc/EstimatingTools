@@ -533,6 +533,7 @@ namespace EstimatingLibrary
                     foreach(TECSubScope subScope in GetAllSubScope())
                     {
                         removeFromDictionary(subScope.Points, instanceSubScope.Points);
+                        removeFromDictionary(subScope.Interlocks, instanceSubScope.Interlocks);
                     }
                 }
             }
@@ -663,6 +664,18 @@ namespace EstimatingLibrary
                         var pointToAdd = new TECPoint(characteristicPoint, false);
                         _typicalInstanceDictionary.AddItem(characteristicPoint, pointToAdd);
                         subScope.Points.Add(pointToAdd);
+                    }
+                }
+            }
+            else if (value is TECInterlockConnection interlock && sender is TECSubScope subScope)
+            {
+                if (TypicalInstanceDictionary.ContainsKey(subScope))
+                {
+                    foreach (TECSubScope instance in TypicalInstanceDictionary.GetInstances(subScope))
+                    {
+                        var toAdd = new TECInterlockConnection(interlock, false);
+                        _typicalInstanceDictionary.AddItem(interlock, toAdd);
+                        instance.Interlocks.Add(toAdd);
                     }
                 }
             }
@@ -886,6 +899,28 @@ namespace EstimatingLibrary
                         foreach (TECPoint point in pointsToRemove)
                         {
                             subScope.Points.Remove(point);
+                        }
+                    }
+                }
+            }
+            else if (value is TECInterlockConnection interlock && sender is TECSubScope subScope)
+            {
+                if (TypicalInstanceDictionary.ContainsKey(subScope))
+                {
+                    foreach (TECSubScope instanceSubScope in TypicalInstanceDictionary.GetInstances(subScope))
+                    {
+                        var toRemove = new List<TECInterlockConnection>();
+                        foreach (TECInterlockConnection instanceInterlock in instanceSubScope.Interlocks)
+                        {
+                            if (TypicalInstanceDictionary.GetInstances(interlock).Contains(instanceInterlock))
+                            {
+                                toRemove.Add(instanceInterlock);
+                                _typicalInstanceDictionary.RemoveItem(interlock, instanceInterlock);
+                            }
+                        }
+                        foreach (TECInterlockConnection item in toRemove)
+                        {
+                            instanceSubScope.Interlocks.Remove(item);
                         }
                     }
                 }
