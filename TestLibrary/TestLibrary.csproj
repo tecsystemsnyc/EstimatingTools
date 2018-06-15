@@ -50,6 +50,8 @@
     <Compile Include="CostTestingUtilities.cs" />
     <Compile Include="MockClasses\TECControllerMock.cs" />
     <Compile Include="MockClasses\IConnectableMock.cs" />
+    <Compile Include="ModelTestingUtilities\ModelCreation.cs" />
+    <Compile Include="ModelTestingUtilities\ModelExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelper.cs" />
   </ItemGroup>
