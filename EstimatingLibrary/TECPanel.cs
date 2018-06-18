@@ -37,6 +37,7 @@ namespace EstimatingLibrary
         }
         
         public bool IsTypical { get; private set; }
+
         #endregion
 
         public TECPanel(Guid guid, TECPanelType type, bool isTypical) : base(guid)
@@ -114,6 +115,54 @@ namespace EstimatingLibrary
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
                 notifyCombinedChanged(Change.Edit, "Controllers", this, sender, sender);
+            }
+        }
+
+        ITECObject ITypicalable.CreateInstance(ObservableListDictionary<ITECObject> typicalDictionary)
+        {
+            if (!this.IsTypical)
+            {
+                throw new Exception("Attempted to create an instance of an object which is already instanced.");
+            }
+            else
+            {
+                return new TECPanel(this, false);
+            }
+        }
+
+        void ITypicalable.AddChildForProperty(string property, ITECObject item)
+        {
+            if (property == "Controllers" && item is TECController controller)
+            {
+                Controllers.Add(controller);
+            }
+            else
+            {
+                throw new Exception(String.Format("There is no compatible add method for the property {0} with an object of type {1}", property, item.GetType().ToString()));
+            }
+        }
+
+        bool ITypicalable.RemoveChildForProperty(string property, ITECObject item)
+        {
+            if (property == "Controllers" && item is TECController controller)
+            {
+                return Controllers.Remove(controller);
+            }
+            else
+            {
+                throw new Exception(String.Format("There is no compatible remove method for the property {0} with an object of type {1}", property, item.GetType().ToString()));
+            }
+        }
+
+        bool ITypicalable.ContinsChildForProperty(string property, ITECObject item)
+        {
+            if (property == "Controllers" && item is TECController controller)
+            {
+                return Controllers.Contains(controller);
+            }
+            else
+            {
+                throw new Exception(String.Format("There is no compatible property {0} with an object of type {1}", property, item.GetType().ToString()));
             }
         }
     }

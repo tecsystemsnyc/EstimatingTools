@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 
 namespace EstimatingLibrary
@@ -79,6 +80,7 @@ namespace EstimatingLibrary
                 PointChanged?.Invoke(numPoints);
             }
         }
+
         #endregion
 
         #region INotityPointChanged
@@ -88,6 +90,36 @@ namespace EstimatingLibrary
             {
                 return Quantity;
             }
+        }
+        #endregion
+
+        #region ITypicalable
+
+        ITECObject ITypicalable.CreateInstance(ObservableListDictionary<ITECObject> typicalDictionary)
+        {
+            if (!this.IsTypical)
+            {
+                throw new Exception("Attempted to create an instance of an object which is already instanced.");
+            }
+            else
+            {
+                return new TECPoint(this, false);
+            }
+        }
+
+        void ITypicalable.AddChildForProperty(string property, ITECObject item)
+        {
+            throw new Exception(String.Format("There is no compatible add method for the property {0} with an object of type {1}", property, item.GetType().ToString()));
+        }
+
+        bool ITypicalable.RemoveChildForProperty(string property, ITECObject item)
+        {
+            throw new Exception(String.Format("There is no compatible remove method for the property {0} with an object of type {1}", property, item.GetType().ToString()));
+        }
+
+        bool ITypicalable.ContinsChildForProperty(string property, ITECObject item)
+        {
+            throw new Exception(String.Format("There is no compatible property {0} with an object of type {1}", property, item.GetType().ToString()));
         }
         #endregion
 

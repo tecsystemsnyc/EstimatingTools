@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using EstimatingLibrary.Utilities.WatcherFilters;
 
 namespace EstimatingLibrary
 {
@@ -28,9 +29,12 @@ namespace EstimatingLibrary
             _instances.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Instances");
 
             watcher = new ChangeWatcher(this);
-            watcher.Changed += handleSystemChanged;
-        }
+            //watcher.Changed += handleSystemChanged;
+            new TypicalWatcherFilter(watcher).TypicalChanged += handleSystemChanged;
 
+
+        }
+        
         public TECTypical() : this(Guid.NewGuid()) { }
 
         public TECTypical(TECTypical source, Dictionary<Guid, Guid> guidDictionary = null,
@@ -363,7 +367,7 @@ namespace EstimatingLibrary
         #region Event Handlers
         private void handleSystemChanged(TECChangedEventArgs args)
         {
-            if (Instances.Count > 0)
+            if (Instances.Count > 0 && args.Value.GetType() != typeof(TECSystem))
             {
                 if (args.Change == Change.Add)
                 {
@@ -580,40 +584,59 @@ namespace EstimatingLibrary
         private void handleAdd(TECChangedEventArgs args)
         {
             ITypicalable sender = args.Sender as ITypicalable;
-            if(sender == null)
+            List<ITECObject> parentInstances = new List<ITECObject>();
+            if (args.Sender is TECTypical typ) { parentInstances.AddRange(this.Instances); }
+            else { parentInstances = TypicalInstanceDictionary.GetInstances(sender as ITECObject); }
+            foreach (ITECObject parentInstance in parentInstances)
             {
-                throw new Exception("Change occured from object which is not typicalable");
+                ITypicalable instanceSender = parentInstance as ITypicalable;
+
+                if (instanceSender == null)
+                {
+                    throw new Exception("Change occured from object which is not typicalable");
+                }
+                ITECObject instanceValue = args.Value as ITECObject;
+                if (instanceValue == null)
+                {
+                    throw new Exception("Value to add is not ITECObject");
+                }
+                if (args.Value is ITypicalable typicalChild)
+                {
+                    instanceValue = typicalChild.CreateInstance(TypicalInstanceDictionary);
+                }
+
+                instanceSender.AddChildForProperty(args.PropertyName, instanceValue);
+
+                TypicalInstanceDictionary.AddItem(args.Value as ITECObject, instanceValue);
             }
-            ITECObject instanceValue = args.Value as ITECObject;
-            if (args.Value is ITypicalable typicalChild)
-            {
-                instanceValue = typicalChild.CreateInstance(TypicalInstanceDictionary);
-            }
-            if(instanceValue == null)
-            {
-                throw new Exception("Value to add is not ITECObject");
-            }
-            sender.AddChildForProperty(args.PropertyName, instanceValue);
             
-            TypicalInstanceDictionary.AddItem(args.Value as ITECObject, instanceValue);
             
         }
         private void handleRemove(TECChangedEventArgs args)
         {
             ITypicalable sender = args.Sender as ITypicalable;
-            if (sender == null)
+            List<ITECObject> parentInstances = new List<ITECObject>();
+            if (args.Sender is TECTypical typ) { parentInstances.AddRange(this.Instances); }
+            else { parentInstances = TypicalInstanceDictionary.GetInstances(sender as ITECObject); }
+            foreach (ITECObject parentInstance in parentInstances)
             {
-                throw new Exception("Change occured from object which is not typicalable");
-            }
-            foreach(ITECObject instanceValue in TypicalInstanceDictionary.GetInstances(args.Value as ITECObject))
-            {
-                foreach (ITypicalable instance in TypicalInstanceDictionary.GetInstances(args.Sender)
-                    .Where(x => (x as ITypicalable).ContinsChildForProperty(args.PropertyName, instanceValue)))
+                ITypicalable instanceSender = parentInstance as ITypicalable;
+
+                if (instanceSender == null)
                 {
-                    instance.RemoveChildForProperty(args.PropertyName, instanceValue);
+                    throw new Exception("Change occured from object which is not typicalable");
                 }
+                ITECObject instanceValue = TypicalInstanceDictionary.GetInstances(args.Value as ITECObject)
+                    .Where(x => instanceSender.ContinsChildForProperty(args.PropertyName, x)).First();
+                if (instanceValue == null)
+                {
+                    throw new Exception("Value to add is not ITECObject");
+                }
+
+                instanceSender.RemoveChildForProperty(args.PropertyName, instanceValue);
+
+                TypicalInstanceDictionary.RemoveItem(args.Value as ITECObject, instanceValue);
             }
-            TypicalInstanceDictionary.RemoveKey(args.Value as ITECObject);
         }
 
         #endregion

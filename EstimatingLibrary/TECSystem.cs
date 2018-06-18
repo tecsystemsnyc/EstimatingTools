@@ -175,6 +175,7 @@ namespace EstimatingLibrary
                 return points();
             }
         }
+
         #endregion
 
         #region Methods
@@ -184,16 +185,17 @@ namespace EstimatingLibrary
             notifyTECChanged(Change.Add, "Controllers", this, controller);
             notifyCostChanged(controller.CostBatch);
         }
-        public void RemoveController(TECController controller)
+        public bool RemoveController(TECController controller)
         {
             controller.DisconnectAll();
-            _controllers.Remove(controller);
+            bool success = _controllers.Remove(controller);
             foreach(TECPanel panel in this.Panels)
             {
                 if (panel.Controllers.Contains(controller)) { panel.Controllers.Remove(controller); }
             }
             notifyTECChanged(Change.Remove, "Controllers", this, controller);
             notifyCostChanged(-controller.CostBatch);
+            return success;
         }
         public void SetControllers(IEnumerable<TECController> newControllers)
         {
@@ -369,7 +371,99 @@ namespace EstimatingLibrary
                 controller.Disconnect(removed);
             }
         }
+        
         #endregion
+        #endregion
+
+        #region ITypicalable
+        ITECObject ITypicalable.CreateInstance(ObservableListDictionary<ITECObject> typicalDictionary)
+        {
+            throw new NotImplementedException();
+        }
+
+        void ITypicalable.AddChildForProperty(string property, ITECObject item)
+        {
+            if (property == "Controllers" && item is TECController controller)
+            {
+                AddController(controller);
+            }
+            else if (property == "Equipment" && item is TECEquipment equipment)
+            {
+                Equipment.Add(equipment);
+            }
+            else if (property == "Panels" && item is TECPanel panel)
+            {
+                Panels.Add(panel);
+            }
+            else if (property == "Misc" && item is TECMisc misc)
+            {
+                MiscCosts.Add(misc);
+            }
+            else if (property == "ScopeBranch" && item is TECScopeBranch branch)
+            {
+                ScopeBranches.Add(branch);
+            }
+            else
+            {
+                throw new Exception(String.Format("There is no compatible add method for the property {0} with an object of type {1}", property, item.GetType().ToString()));
+            }
+        }
+
+        bool ITypicalable.RemoveChildForProperty(string property, ITECObject item)
+        {
+            if (property == "Controllers" && item is TECController controller)
+            {
+                return RemoveController(controller);
+            }
+            else if (property == "Equipment" && item is TECEquipment equipment)
+            {
+                return Equipment.Remove(equipment);
+            }
+            else if (property == "Panels" && item is TECPanel panel)
+            {
+                return Panels.Remove(panel);
+            }
+            else if (property == "Misc" && item is TECMisc misc)
+            {
+                return MiscCosts.Remove(misc);
+            }
+            else if (property == "ScopeBranch" && item is TECScopeBranch branch)
+            {
+                return ScopeBranches.Remove(branch);
+            }
+            else
+            {
+                throw new Exception(String.Format("There is no compatible remove method for the property {0} with an object of type {1}", property, item.GetType().ToString()));
+            }
+        }
+
+        bool ITypicalable.ContinsChildForProperty(string property, ITECObject item)
+        {
+            if (property == "Controllers" && item is TECController controller)
+            {
+                return Controllers.Contains(controller);
+            }
+            else if (property == "Equipment" && item is TECEquipment equipment)
+            {
+                return Equipment.Contains(equipment);
+            }
+            else if (property == "Panels" && item is TECPanel panel)
+            {
+                return Panels.Contains(panel);
+            }
+            else if (property == "Misc" && item is TECMisc misc)
+            {
+                return MiscCosts.Contains(misc);
+            }
+            else if (property == "ScopeBranch" && item is TECScopeBranch branch)
+            {
+                return ScopeBranches.Contains(branch);
+            }
+            else
+            {
+                throw new Exception(String.Format("There is no compatible property {0} with an object of type {1}", property, item.GetType().ToString()));
+            }
+        }
         #endregion
     }
 }

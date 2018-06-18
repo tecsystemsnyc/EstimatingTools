@@ -336,9 +336,7 @@ namespace EstimatingLibrary
                 return this.Points.ToIOCollection();
             }
         }
-
-        bool ITypicalable.IsTypical => throw new NotImplementedException();
-
+        
         bool IConnectable.CanSetParentConnection(IControllerConnection connection)
         {
             return ((IConnectable)this).AvailableProtocols.Contains(connection.Protocol);            
@@ -411,7 +409,22 @@ namespace EstimatingLibrary
 
         bool ITypicalable.ContinsChildForProperty(string property, ITECObject item)
         {
-            throw new NotImplementedException();
+            if (property == "Points" && item is TECPoint point)
+            {
+                return Points.Contains(point);
+            }
+            else if (property == "Devices" && item is IEndDevice device)
+            {
+                return Devices.Contains(device);
+            }
+            else if (property == "Interlocks" && item is TECInterlockConnection interlock)
+            {
+                return Interlocks.Contains(interlock);
+            }
+            else
+            {
+                throw new Exception(String.Format("There is no compatible property {0} with an object of type {1}", property, item.GetType().ToString()));
+            }
         }
         #endregion
     }

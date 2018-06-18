@@ -136,8 +136,55 @@ namespace EstimatingLibrary
             saveList.Add(protocol, "Protocol");
             return saveList;
         }
-        
-        #endregion 
 
+        #endregion
+        
+        #region ITypicalable
+
+        ITECObject ITypicalable.CreateInstance(ObservableListDictionary<ITECObject> typicalDictionary)
+        {
+            if (!this.IsTypical)
+            {
+                throw new Exception("Attempted to create an instance of an object which is already instanced.");
+            }
+            else
+            {
+                //Can be typical, but is not kept in sync.
+                return null;
+            }
+        }
+
+        void ITypicalable.AddChildForProperty(string property, ITECObject item)
+        {
+            if (property == "Children" && item is IConnectable child) { }
+            else
+            {
+                throw new Exception(String.Format("There is no compatible add method for the property {0} with an object of type {1}", property, item.GetType().ToString()));
+            }
+        }
+
+        bool ITypicalable.RemoveChildForProperty(string property, ITECObject item)
+        {
+            if (property == "Children" && item is IConnectable child) {
+                return true;
+            }
+            else
+            {
+                throw new Exception(String.Format("There is no compatible remove method for the property {0} with an object of type {1}", property, item.GetType().ToString()));
+            }
+        }
+
+        bool ITypicalable.ContinsChildForProperty(string property, ITECObject item)
+        {
+            if (property == "Children" && item is IConnectable child)
+            {
+                return Children.Contains(child);
+            }
+            else
+            {
+                throw new Exception(String.Format("There is no compatible property {0} with an object of type {1}", property, item.GetType().ToString()));
+            }
+        }
+        #endregion
     }
 }

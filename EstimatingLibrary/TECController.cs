@@ -136,9 +136,10 @@ namespace EstimatingLibrary
         {
             IControllerConnection connection;
             bool isNew = true;
-            if(protocol is TECHardwiredProtocol wired)
+            bool isTypical = (connectable as ITypicalable)?.IsTypical ?? false;
+            if (protocol is TECHardwiredProtocol wired)
             {
-                connection = new TECHardwiredConnection(connectable, this, wired, connectable.IsTypical);
+                connection = new TECHardwiredConnection(connectable, this, wired, isTypical);
             }
             else if (protocol is TECProtocol network)
             {
@@ -150,7 +151,7 @@ namespace EstimatingLibrary
                 }
                 if(netConnect == null)
                 {
-                    netConnect = new TECNetworkConnection(this, network, connectable.IsTypical);
+                    netConnect = new TECNetworkConnection(this, network, isTypical);
                 }
                 netConnect.AddChild(connectable);
                 connection = netConnect;
