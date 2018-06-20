@@ -41,6 +41,10 @@ namespace EstimatingLibrary
             {
                 return Price * Manufacturer.Multiplier;
             }
+            set
+            {
+                Price = value / Manufacturer.Multiplier;
+            }
         }
         public double Price
         {
