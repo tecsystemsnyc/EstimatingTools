@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\TECHardwareTests.cs" />
     <Compile Include="Models\TECProvidedControllerTests.cs" />
     <Compile Include="Utilities\ChangeWatcherTests.cs" />
     <Compile Include="Models\TECControllerTests.cs" />
