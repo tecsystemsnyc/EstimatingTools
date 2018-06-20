@@ -12,6 +12,9 @@ namespace EstimatingLibrary
         private double _plenumCost;
         private double _plenumLabor;
 
+        /// <summary>
+        /// The delta cost of the plenum version of this connection type.
+        /// </summary>
         public double PlenumCost
         {
             get { return _plenumCost; }
@@ -23,6 +26,9 @@ namespace EstimatingLibrary
                 notifyCostChanged(new CostBatch(value - old, 0, Type));
             }
         }
+        /// <summary>
+        /// The delta labor of the plenum version of this connection type.
+        /// </summary>
         public double PlenumLabor
         {
             get { return _plenumLabor; }
