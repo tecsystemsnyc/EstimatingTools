@@ -25,7 +25,7 @@ namespace Tests
             //Bid Objects
             bid.ExtraLabor = CreateTestExtraLabor(bid.Guid);
             bid.Parameters = CreateTestParameters(bid.Guid);
-            bid.Catalogs = TECCatalogTestingUtilities.CreateTestCatalogs();
+            bid.Catalogs = ModelCreation.TestCatalogs();
 
             //Locations
             var cellar = new TECLocation();
@@ -563,7 +563,6 @@ namespace Tests
             labor.SoftExtraHours = 4.4;
             labor.GraphExtraHours = 5.5;
             return labor;
-
         }
         public static TECParameters CreateTestParameters(Guid bidGuid)
         {
