@@ -22,5 +22,15 @@ namespace TestLibrary
                 act.Invoke();
             }
         }
+
+        /// <summary>
+        /// Returns a random bool.
+        /// </summary>
+        /// <param name="rand"></param>
+        /// <returns></returns>
+        public static bool NextBool(this Random rand)
+        {
+            return (rand.NextDouble() < 0.5);
+        }
     }
 }
