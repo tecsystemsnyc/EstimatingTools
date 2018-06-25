@@ -627,7 +627,7 @@ namespace EstimatingLibrary
                     throw new Exception("Change occured from object which is not typicalable");
                 }
                 ITECObject instanceValue = TypicalInstanceDictionary.GetInstances(args.Value as ITECObject)
-                    .Where(x => instanceSender.ContinsChildForProperty(args.PropertyName, x)).First();
+                    .Where(x => instanceSender.ContainsChildForProperty(args.PropertyName, x)).First();
                 if (instanceValue == null)
                 {
                     throw new Exception("Value to add is not ITECObject");

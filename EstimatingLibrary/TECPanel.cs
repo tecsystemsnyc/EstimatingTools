@@ -138,7 +138,7 @@ namespace EstimatingLibrary
             }
             else
             {
-                throw new Exception(String.Format("There is no compatible add method for the property {0} with an object of type {1}", property, item.GetType().ToString()));
+                this.AddChildForScopeProperty(property, item);
             }
         }
 
@@ -150,11 +150,11 @@ namespace EstimatingLibrary
             }
             else
             {
-                throw new Exception(String.Format("There is no compatible remove method for the property {0} with an object of type {1}", property, item.GetType().ToString()));
+                return this.RemoveChildForScopeProperty(property, item);
             }
         }
 
-        bool ITypicalable.ContinsChildForProperty(string property, ITECObject item)
+        bool ITypicalable.ContainsChildForProperty(string property, ITECObject item)
         {
             if (property == "Controllers" && item is TECController controller)
             {
@@ -162,7 +162,7 @@ namespace EstimatingLibrary
             }
             else
             {
-                throw new Exception(String.Format("There is no compatible property {0} with an object of type {1}", property, item.GetType().ToString()));
+                return this.ContainsChildForScopeProperty(property, item);
             }
         }
     }

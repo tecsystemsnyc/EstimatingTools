@@ -174,7 +174,7 @@ namespace EstimatingLibrary
             }
         }
 
-        bool ITypicalable.ContinsChildForProperty(string property, ITECObject item)
+        bool ITypicalable.ContainsChildForProperty(string property, ITECObject item)
         {
             if (property == "Children" && item is IConnectable child)
             {

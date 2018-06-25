@@ -117,7 +117,7 @@ namespace EstimatingLibrary
             throw new Exception(String.Format("There is no compatible remove method for the property {0} with an object of type {1}", property, item.GetType().ToString()));
         }
 
-        bool ITypicalable.ContinsChildForProperty(string property, ITECObject item)
+        bool ITypicalable.ContainsChildForProperty(string property, ITECObject item)
         {
             throw new Exception(String.Format("There is no compatible property {0} with an object of type {1}", property, item.GetType().ToString()));
         }

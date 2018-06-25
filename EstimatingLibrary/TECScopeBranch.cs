@@ -107,7 +107,7 @@ namespace EstimatingLibrary
             throw new NotImplementedException();
         }
 
-        bool ITypicalable.ContinsChildForProperty(string property, ITECObject item)
+        bool ITypicalable.ContainsChildForProperty(string property, ITECObject item)
         {
             throw new NotImplementedException();
         }

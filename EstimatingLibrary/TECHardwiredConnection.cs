@@ -112,7 +112,7 @@ namespace EstimatingLibrary
 
         }
 
-        bool ITypicalable.ContinsChildForProperty(string property, ITECObject item)
+        bool ITypicalable.ContainsChildForProperty(string property, ITECObject item)
         {
             throw new Exception(String.Format("There is no compatible property {0} with an object of type {1}", property, item.GetType().ToString()));
 
