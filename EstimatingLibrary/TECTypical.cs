@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using EstimatingLibrary.Utilities.WatcherFilters;
 
 namespace EstimatingLibrary
 {
@@ -19,8 +20,9 @@ namespace EstimatingLibrary
         #endregion
 
         #region Constructors
-        public TECTypical(Guid guid) : base(guid, true)
+        public TECTypical(Guid guid) : base(guid)
         {
+            this.IsTypical = true;
             _instances = new ObservableCollection<TECSystem>();
 
             TypicalInstanceDictionary = new ObservableListDictionary<ITECObject>();
@@ -28,9 +30,12 @@ namespace EstimatingLibrary
             _instances.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Instances");
 
             watcher = new ChangeWatcher(this);
-            watcher.Changed += handleSystemChanged;
-        }
+            //watcher.Changed += handleSystemChanged;
+            new TypicalWatcherFilter(watcher).TypicalChanged += handleSystemChanged;
 
+
+        }
+        
         public TECTypical() : this(Guid.NewGuid()) { }
 
         public TECTypical(TECTypical source, Dictionary<Guid, Guid> guidDictionary = null,
@@ -40,7 +45,7 @@ namespace EstimatingLibrary
             { guidDictionary[_guid] = source.Guid; }
             foreach (TECEquipment equipment in source.Equipment)
             {
-                var toAdd = new TECEquipment(equipment, true, guidDictionary, characteristicReference);
+                var toAdd = new TECEquipment(equipment, guidDictionary, characteristicReference);
                 if (characteristicReference != null)
                 {
                     characteristicReference.AddItem(equipment, toAdd);
@@ -49,7 +54,7 @@ namespace EstimatingLibrary
             }
             foreach (TECController controller in source.Controllers)
             {
-                var toAdd = controller.CopyController(true, guidDictionary);
+                var toAdd = controller.CopyController(guidDictionary);
                 if (characteristicReference != null)
                 {
                     characteristicReference.AddItem(controller, toAdd);
@@ -58,7 +63,7 @@ namespace EstimatingLibrary
             }
             foreach (TECPanel panel in source.Panels)
             {
-                var toAdd = new TECPanel(panel, true, guidDictionary);
+                var toAdd = new TECPanel(panel, guidDictionary);
                 if (characteristicReference != null)
                 {
                     characteristicReference.AddItem(panel, toAdd);
@@ -67,12 +72,12 @@ namespace EstimatingLibrary
             }
             foreach (TECMisc misc in source.MiscCosts)
             {
-                var toAdd = new TECMisc(misc, true);
+                var toAdd = new TECMisc(misc);
                 MiscCosts.Add(toAdd);
             }
             foreach (TECScopeBranch branch in source.ScopeBranches)
             {
-                var toAdd = new TECScopeBranch(branch, true);
+                var toAdd = new TECScopeBranch(branch);
                 ScopeBranches.Add(toAdd);
             }
             this.copyPropertiesFromLocated(source);
@@ -84,27 +89,27 @@ namespace EstimatingLibrary
             guidDictionary[_guid] = system.Guid;
             foreach (TECEquipment equipment in system.Equipment)
             {
-                var toAdd = new TECEquipment(equipment, true, guidDictionary);
+                var toAdd = new TECEquipment(equipment, guidDictionary);
                 Equipment.Add(toAdd);
             }
             foreach (TECController controller in system.Controllers)
             {
-                var toAdd = controller.CopyController(true, guidDictionary);
+                var toAdd = controller.CopyController(guidDictionary);
                 AddController(toAdd);
             }
             foreach (TECPanel panel in system.Panels)
             {
-                var toAdd = new TECPanel(panel, true, guidDictionary);
+                var toAdd = new TECPanel(panel, guidDictionary);
                 Panels.Add(toAdd);
             }
             foreach (TECMisc misc in system.MiscCosts)
             {
-                var toAdd = new TECMisc(misc, true);
+                var toAdd = new TECMisc(misc);
                 MiscCosts.Add(toAdd);
             }
             foreach (TECScopeBranch branch in system.ScopeBranches)
             {
-                var toAdd = new TECScopeBranch(branch, true);
+                var toAdd = new TECScopeBranch(branch);
                 ScopeBranches.Add(toAdd);
             }
             this.copyPropertiesFromLocated(system);
@@ -151,36 +156,36 @@ namespace EstimatingLibrary
         public TECSystem AddInstance(TECBid bid)
         {
             Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
-            var newSystem = new TECSystem(false);
+            var newSystem = new TECSystem();
             newSystem.Name = Name;
             newSystem.Description = Description;
             foreach (TECEquipment equipment in Equipment)
             {
-                var toAdd = new TECEquipment(equipment, false, guidDictionary, TypicalInstanceDictionary);
+                var toAdd = new TECEquipment(equipment, guidDictionary, TypicalInstanceDictionary);
                 _typicalInstanceDictionary.AddItem(equipment, toAdd);
                 newSystem.Equipment.Add(toAdd);
             }
             foreach (TECController controller in Controllers)
             {
-                var toAdd = controller.CopyController(false, guidDictionary);
+                var toAdd = controller.CopyController(guidDictionary);
                 _typicalInstanceDictionary.AddItem(controller, toAdd);
                 newSystem.AddController(toAdd);
             }
             foreach (TECPanel panel in Panels)
             {
-                var toAdd = new TECPanel(panel, false, guidDictionary);
+                var toAdd = new TECPanel(panel, guidDictionary);
                 _typicalInstanceDictionary.AddItem(panel, toAdd);
                 newSystem.Panels.Add(toAdd);
             }
             foreach (TECMisc misc in MiscCosts)
             {
-                var toAdd = new TECMisc(misc, false);
+                var toAdd = new TECMisc(misc);
                 _typicalInstanceDictionary.AddItem(misc, toAdd);
                 newSystem.MiscCosts.Add(toAdd);
             }
             foreach (TECScopeBranch branch in ScopeBranches)
             {
-                var toAdd = new TECScopeBranch(branch, false);
+                var toAdd = new TECScopeBranch(branch);
                 _typicalInstanceDictionary.AddItem(branch, toAdd);
                 newSystem.ScopeBranches.Add(toAdd);
             }
@@ -363,15 +368,15 @@ namespace EstimatingLibrary
         #region Event Handlers
         private void handleSystemChanged(TECChangedEventArgs args)
         {
-            if (Instances.Count > 0)
+            if (Instances.Count > 0 && args.Value.GetType() != typeof(TECSystem))
             {
                 if (args.Change == Change.Add)
                 {
-                    handleAdd(args.Value as TECObject, args.Sender);
+                    handleAdd(args);
                 }
                 else if (args.Change == Change.Remove)
                 {
-                    handleRemove(args.Value as TECObject, args.Sender);
+                    handleRemove(args);
                 }
                 else if (args.Sender is TECPoint point)
                 {
@@ -577,422 +582,64 @@ namespace EstimatingLibrary
             }
         }
 
-        private void handleAdd(ITECObject value, ITECObject sender)
+        private void handleAdd(TECChangedEventArgs args)
         {
-            if (value is TECController && sender is TECTypical)
+            ITypicalable sender = args.Sender as ITypicalable;
+            List<ITECObject> parentInstances = new List<ITECObject>();
+            if (args.Sender is TECTypical typ) { parentInstances.AddRange(this.Instances); }
+            else { parentInstances = TypicalInstanceDictionary.GetInstances(sender as ITECObject); }
+            foreach (ITECObject parentInstance in parentInstances)
             {
-                var characteristicController = value as TECController;
-                foreach (TECSystem system in Instances)
-                {
-                    var controllerToAdd = characteristicController.CopyController(false);
-                    _typicalInstanceDictionary.AddItem(characteristicController, controllerToAdd);
-                    system.AddController(controllerToAdd);
-                }
-            }
-            else if (value is TECPanel && sender is TECTypical)
-            {
-                var characteristicPanel = value as TECPanel;
-                foreach (TECSystem system in Instances)
-                {
-                    var panelToAdd = new TECPanel(characteristicPanel, false);
-                    _typicalInstanceDictionary.AddItem(characteristicPanel, panelToAdd);
-                    system.Panels.Add(panelToAdd);
-                }
-            }
-            else if (value is TECEquipment && sender is TECTypical)
-            {
-                var characteristicEquipment = value as TECEquipment;
-                foreach (TECSystem system in Instances)
-                {
-                    var equipmentToAdd = new TECEquipment(characteristicEquipment, false, characteristicReference: TypicalInstanceDictionary);
-                    _typicalInstanceDictionary.AddItem(characteristicEquipment, equipmentToAdd);
-                    system.Equipment.Add(equipmentToAdd);
-                }
-            }
-            else if (value is TECMisc misc && sender is TECTypical)
-            {
-                foreach (TECSystem system in Instances)
-                {
-                    var miscToAdd = new TECMisc(misc, false);
-                    _typicalInstanceDictionary.AddItem(misc, miscToAdd);
-                    system.MiscCosts.Add(miscToAdd);
-                }
-            }
-            else if (value is TECScopeBranch branch && sender is TECTypical)
-            {
-                foreach (TECSystem system in Instances)
-                {
-                    var branchToAdd = new TECScopeBranch(branch, false);
-                    _typicalInstanceDictionary.AddItem(branch, branchToAdd);
-                    system.ScopeBranches.Add(branchToAdd);
-                }
-            }
-            else if (value is TECSubScope && sender is TECEquipment)
-            {
-                var characteristicEquipment = sender as TECEquipment;
-                var characteristicSubScope = value as TECSubScope;
-                if (TypicalInstanceDictionary.ContainsKey(characteristicEquipment))
-                {
-                    foreach (TECEquipment equipment in TypicalInstanceDictionary.GetInstances(characteristicEquipment))
-                    {
-                        var subScopeToAdd = new TECSubScope(characteristicSubScope, false, characteristicReference: TypicalInstanceDictionary);
-                        _typicalInstanceDictionary.AddItem(characteristicSubScope, subScopeToAdd);
-                        equipment.SubScope.Add(subScopeToAdd);
-                    }
-                }
-            }
-            else if (value is IEndDevice && sender is TECSubScope)
-            {
-                var characteristicSubScope = sender as TECSubScope;
-                var device = value as IEndDevice;
-                if (TypicalInstanceDictionary.ContainsKey(characteristicSubScope))
-                {
-                    foreach (TECSubScope subScope in TypicalInstanceDictionary.GetInstances(characteristicSubScope))
-                    {
-                        subScope.Devices.Add(device);
-                    }
-                }   
-            }
-            else if (value is TECPoint && sender is TECSubScope)
-            {
-                var characteristicSubScope = sender as TECSubScope;
-                var characteristicPoint = value as TECPoint;
-                if (TypicalInstanceDictionary.ContainsKey(characteristicSubScope))
-                {
-                    foreach (TECSubScope subScope in TypicalInstanceDictionary.GetInstances(characteristicSubScope))
-                    {
-                        var pointToAdd = new TECPoint(characteristicPoint, false);
-                        _typicalInstanceDictionary.AddItem(characteristicPoint, pointToAdd);
-                        subScope.Points.Add(pointToAdd);
-                    }
-                }
-            }
-            else if (value is TECInterlockConnection interlock && sender is TECSubScope subScope)
-            {
-                if (TypicalInstanceDictionary.ContainsKey(subScope))
-                {
-                    foreach (TECSubScope instance in TypicalInstanceDictionary.GetInstances(subScope))
-                    {
-                        var toAdd = new TECInterlockConnection(interlock, false);
-                        _typicalInstanceDictionary.AddItem(interlock, toAdd);
-                        instance.Interlocks.Add(toAdd);
-                    }
-                }
-            }
-            else if (value is TECController && sender is TECPanel)
-            {
-                var characteristicController = value as TECController;
-                var characteristicPanel = sender as TECPanel;
-                if (TypicalInstanceDictionary.ContainsKey(characteristicPanel) && TypicalInstanceDictionary.ContainsKey(characteristicController))
-                {
-                    foreach (TECSystem system in Instances)
-                    {
-                        TECController controllerToConnect = null;
-                        foreach (TECController controller in TypicalInstanceDictionary.GetInstances(characteristicController))
-                        {
-                            if (system.Controllers.Contains(controller))
-                            {
-                                controllerToConnect = controller;
-                                break;
-                            }
-                        }
-                        if (controllerToConnect != null)
-                        {
-                            foreach (TECPanel panel in TypicalInstanceDictionary.GetInstances(characteristicPanel))
-                            {
-                                if (system.Panels.Contains(panel))
-                                {
-                                    panel.Controllers.Add(controllerToConnect);
-                                }
-                            }
-                        }
+                ITypicalable instanceSender = parentInstance as ITypicalable;
 
-                    }
+                if (instanceSender == null)
+                {
+                    throw new Exception("Change occured from object which is not typicalable");
                 }
+                ITECObject instanceValue = args.Value as ITECObject;
+                if (instanceValue == null)
+                {
+                    throw new Exception("Value to add is not ITECObject");
+                }
+                if (args.Value is ITypicalable typicalChild)
+                {
+                    instanceValue = typicalChild.CreateInstance(TypicalInstanceDictionary);
+                }
+
+                instanceSender.AddChildForProperty(args.PropertyName, instanceValue);
+
+                TypicalInstanceDictionary.AddItem(args.Value as ITECObject, instanceValue);
             }
-            else if (value is TECIOModule mod && sender is TECProvidedController provided)
+            
+            
+        }
+        private void handleRemove(TECChangedEventArgs args)
+        {
+            ITypicalable sender = args.Sender as ITypicalable;
+            List<ITECObject> parentInstances = new List<ITECObject>();
+            if (args.Sender is TECTypical typ) { parentInstances.AddRange(this.Instances); }
+            else { parentInstances = TypicalInstanceDictionary.GetInstances(sender as ITECObject); }
+            foreach (ITECObject parentInstance in parentInstances)
             {
-                var characteristicController = provided;
-                if (TypicalInstanceDictionary.ContainsKey(characteristicController))
+                ITypicalable instanceSender = parentInstance as ITypicalable;
+
+                if (instanceSender == null)
                 {
-                    foreach (TECProvidedController instance in TypicalInstanceDictionary.GetInstances(characteristicController))
-                    {
-                        instance.IOModules.Add(mod);
-                    }
+                    throw new Exception("Change occured from object which is not typicalable");
                 }
-            }
-            else if (value is TECAssociatedCost assCost && sender is TECScope)
-            {
-                if (sender is TECTypical)
+                ITECObject instanceValue = TypicalInstanceDictionary.GetInstances(args.Value as ITECObject)
+                    .Where(x => instanceSender.ContainsChildForProperty(args.PropertyName, x)).First();
+                if (instanceValue == null)
                 {
-                    foreach (TECSystem system in Instances)
-                    {
-                        system.AssociatedCosts.Add(assCost);
-                    }
+                    throw new Exception("Value to add is not ITECObject");
                 }
-                else
-                {
-                    var characteristicScope = sender as TECScope;
-                    if (TypicalInstanceDictionary.ContainsKey(characteristicScope))
-                    {
-                        foreach (TECScope scope in TypicalInstanceDictionary.GetInstances(characteristicScope))
-                        {
-                            scope.AssociatedCosts.Add(assCost);
-                        }
-                    }
-                }
+
+                instanceSender.RemoveChildForProperty(args.PropertyName, instanceValue);
+
+                TypicalInstanceDictionary.RemoveItem(args.Value as ITECObject, instanceValue);
             }
         }
-        private void handleRemove(ITECObject value, ITECObject sender)
-        {
-            if (value is TECController && sender is TECTypical)
-            {
-                var characteristicController = value as TECController;
-                foreach (TECSystem system in Instances)
-                {
-                    var controllersToRemove = new List<TECController>();
-                    foreach (TECController controller in system.Controllers)
-                    {
-                        if (TypicalInstanceDictionary.GetInstances(characteristicController).Contains(controller))
-                        {
-                            controllersToRemove.Add(controller);
-                            _typicalInstanceDictionary.RemoveItem(characteristicController, controller);
-                        }
-                    }
-                    foreach (TECController controller in controllersToRemove)
-                    {
-                        system.RemoveController(controller);
-                    }
-                }
-            }
-            else if (value is TECPanel && sender is TECTypical)
-            {
-                var characteristicPanel = value as TECPanel;
-                foreach (TECSystem system in Instances)
-                {
-                    var panelsToRemove = new List<TECPanel>();
-                    foreach (TECPanel panel in system.Panels)
-                    {
-                        if (TypicalInstanceDictionary.GetInstances(characteristicPanel).Contains(panel))
-                        {
-                            panelsToRemove.Add(panel);
-                            _typicalInstanceDictionary.RemoveItem(characteristicPanel, panel);
-                        }
-                    }
-                    foreach (TECPanel panel in panelsToRemove)
-                    {
-                        system.Panels.Remove(panel);
-                    }
-                }
-            }
-            else if (value is TECEquipment && sender is TECTypical)
-            {
-                var characteristicEquipment = value as TECEquipment;
-                foreach (TECSystem system in Instances)
-                {
-                    var equipmentToRemove = new List<TECEquipment>();
-                    foreach (TECEquipment equipment in system.Equipment)
-                    {
-                        if (TypicalInstanceDictionary.GetInstances(characteristicEquipment).Contains(equipment))
-                        {
-                            equipmentToRemove.Add(equipment);
-                            _typicalInstanceDictionary.RemoveItem(characteristicEquipment, equipment);
-                        }
-                    }
-                    foreach (TECEquipment equipment in equipmentToRemove)
-                    {
-                        system.Equipment.Remove(equipment);
-                    }
-                }
-            }
-            else if (value is TECMisc misc && sender is TECTypical)
-            {
-                foreach (TECSystem system in Instances)
-                {
-                    var miscToRemove = new List<TECMisc>();
-                    foreach (TECMisc instanceMisc in system.MiscCosts)
-                    {
-                        if (TypicalInstanceDictionary.GetInstances(misc).Contains(instanceMisc))
-                        {
-                            miscToRemove.Add(instanceMisc);
-                            _typicalInstanceDictionary.RemoveItem(misc, instanceMisc);
-                        }
-                    }
-                    foreach (TECMisc instanceMisc in miscToRemove)
-                    {
-                        system.MiscCosts.Remove(instanceMisc);
-                    }
-                }
-            }
-            else if (value is TECScopeBranch branch && sender is TECTypical)
-            {
-                foreach (TECSystem system in Instances)
-                {
-                    var branchesToRemove = new List<TECScopeBranch>();
-                    foreach (TECScopeBranch instanceBranch in system.ScopeBranches)
-                    {
-                        if (TypicalInstanceDictionary.GetInstances(branch).Contains(instanceBranch))
-                        {
-                            branchesToRemove.Add(instanceBranch);
-                            _typicalInstanceDictionary.RemoveItem(branch, instanceBranch);
-                        }
-                    }
-                    foreach (TECScopeBranch instanceBranch in branchesToRemove)
-                    {
-                        system.ScopeBranches.Remove(instanceBranch);
-                    }
-                }
-            }
-            else if (value is TECSubScope && sender is TECEquipment)
-            {
-                var characteristicEquipment = sender as TECEquipment;
-                var characteristicSubScope = value as TECSubScope;
-                if (TypicalInstanceDictionary.ContainsKey(characteristicEquipment))
-                {
-                    foreach (TECEquipment equipment in TypicalInstanceDictionary.GetInstances(characteristicEquipment))
-                    {
-                        var subScopeToRemove = new List<TECSubScope>();
-                        foreach (TECSubScope subScope in equipment.SubScope)
-                        {
-                            if (TypicalInstanceDictionary.GetInstances(characteristicSubScope).Contains(subScope))
-                            {
-                                subScopeToRemove.Add(subScope);
-                                _typicalInstanceDictionary.RemoveItem(characteristicSubScope, subScope);
-                            }
-                        }
-                        foreach (TECSubScope subScope in subScopeToRemove)
-                        {
-                            equipment.SubScope.Remove(subScope);
-                        }
-                    }
-                }
-            }
-            else if (value is IEndDevice && sender is TECSubScope)
-            {
-                var characteristicSubScope = sender as TECSubScope;
-                var device = value as IEndDevice;
-                if (TypicalInstanceDictionary.ContainsKey(characteristicSubScope))
-                {
-                    foreach (TECSubScope subScope in TypicalInstanceDictionary.GetInstances(characteristicSubScope))
-                    {
-                        subScope.Devices.Remove(device);
-                    }
-                }
-            }
-            else if (value is TECPoint && sender is TECSubScope)
-            {
-                var characteristicSubScope = sender as TECSubScope;
-                var characteristicPoint = value as TECPoint;
-                if (TypicalInstanceDictionary.ContainsKey(characteristicSubScope))
-                {
-                    foreach (TECSubScope subScope in TypicalInstanceDictionary.GetInstances(characteristicSubScope))
-                    {
-                        var pointsToRemove = new List<TECPoint>();
-                        foreach (TECPoint point in subScope.Points)
-                        {
-                            if (TypicalInstanceDictionary.GetInstances(characteristicPoint).Contains(point))
-                            {
-                                pointsToRemove.Add(point);
-                                _typicalInstanceDictionary.RemoveItem(characteristicPoint, point);
-                            }
-                        }
-                        foreach (TECPoint point in pointsToRemove)
-                        {
-                            subScope.Points.Remove(point);
-                        }
-                    }
-                }
-            }
-            else if (value is TECInterlockConnection interlock && sender is TECSubScope subScope)
-            {
-                if (TypicalInstanceDictionary.ContainsKey(subScope))
-                {
-                    foreach (TECSubScope instanceSubScope in TypicalInstanceDictionary.GetInstances(subScope))
-                    {
-                        var toRemove = new List<TECInterlockConnection>();
-                        foreach (TECInterlockConnection instanceInterlock in instanceSubScope.Interlocks)
-                        {
-                            if (TypicalInstanceDictionary.GetInstances(interlock).Contains(instanceInterlock))
-                            {
-                                toRemove.Add(instanceInterlock);
-                                _typicalInstanceDictionary.RemoveItem(interlock, instanceInterlock);
-                            }
-                        }
-                        foreach (TECInterlockConnection item in toRemove)
-                        {
-                            instanceSubScope.Interlocks.Remove(item);
-                        }
-                    }
-                }
-            }
-            else if (value is TECController && sender is TECPanel)
-            {
-                var characteristicController = value as TECController;
-                var characteristicPanel = sender as TECPanel;
-                if (TypicalInstanceDictionary.ContainsKey(characteristicController) && TypicalInstanceDictionary.ContainsKey(characteristicPanel))
-                {
-                    foreach (TECSystem system in Instances)
-                    {
-                        TECController controllerToRemove = null;
-                        foreach (TECController controller in TypicalInstanceDictionary.GetInstances(characteristicController))
-                        {
-                            foreach (TECPanel panel in system.Panels)
-                            {
-                                if (panel.Controllers.Contains(controller))
-                                {
-                                    controllerToRemove = controller;
-                                    break;
-                                }
-                            }
-                        }
-                        if (controllerToRemove != null)
-                        {
-                            foreach (TECPanel panel in TypicalInstanceDictionary.GetInstances(characteristicPanel))
-                            {
-                                if (system.Panels.Contains(panel))
-                                {
-                                    panel.Controllers.Remove(controllerToRemove);
-                                    break;
-                                }
-                            }
-                        }
 
-                    }
-                }
-            }
-            else if (value is TECIOModule mod && sender is TECProvidedController provided)
-            {
-                if (TypicalInstanceDictionary.ContainsKey(provided))
-                {
-                    foreach (TECProvidedController instance in TypicalInstanceDictionary.GetInstances(provided))
-                    {
-                        instance.IOModules.Remove(value as TECIOModule);
-                    }
-                }
-            }
-            else if (value is TECAssociatedCost cost && sender is TECScope)
-            {
-                if (sender is TECTypical)
-                {
-                    foreach (TECSystem system in Instances)
-                    {
-                        system.AssociatedCosts.Remove(cost);
-                    }
-                }
-                else
-                {
-                    var characteristicScope = sender as TECScope;
-                    if (TypicalInstanceDictionary.ContainsKey(characteristicScope))
-                    {
-                        foreach (TECScope scope in TypicalInstanceDictionary.GetInstances(characteristicScope))
-                        {
-                            scope.AssociatedCosts.Remove(cost);
-                        }
-                    }
-                }
-            }
-        }
-        
         #endregion
         #endregion
     }

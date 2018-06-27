@@ -44,7 +44,7 @@ namespace EstimatingLibrary
         /// </summary>
         /// <param name="guid"></param>
         /// <param name="isTypical"></param>
-        public TECFBOController(Guid guid, bool isTypical, TECCatalogs catalogs) : base(guid, isTypical)
+        public TECFBOController(Guid guid, TECCatalogs catalogs) : base(guid)
         {
             this.catalogs = catalogs;
             this.IO = getInitialIO();
@@ -53,14 +53,14 @@ namespace EstimatingLibrary
         /// Constructor for new TECFBOController with generated GUID.
         /// </summary>
         /// <param name="isTypical"></param>
-        public TECFBOController(bool isTypical, TECCatalogs catalogs) : this(Guid.NewGuid(), isTypical, catalogs) { }
+        public TECFBOController(TECCatalogs catalogs) : this(Guid.NewGuid(), catalogs) { }
         /// <summary>
         /// Copy constructor for TECFBOController
         /// </summary>
         /// <param name="controllerSource"></param>
         /// <param name="isTypical"></param>
         /// <param name="guidDictionary"></param>
-        public TECFBOController(TECFBOController controllerSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : base(controllerSource, isTypical, guidDictionary)
+        public TECFBOController(TECFBOController controllerSource, Dictionary<Guid, Guid> guidDictionary = null) : base(controllerSource, guidDictionary)
         {
             this.catalogs = controllerSource.catalogs;
             this.IO = getInitialIO();
@@ -68,9 +68,9 @@ namespace EstimatingLibrary
         #endregion
 
         #region Methods
-        public override TECController CopyController(bool isTypical, Dictionary<Guid, Guid> guidDictionary)
+        public override TECController CopyController(Dictionary<Guid, Guid> guidDictionary)
         {
-            return new TECFBOController(this, isTypical, guidDictionary);
+            return new TECFBOController(this, guidDictionary);
         }
 
         private IOCollection getInitialIO()
@@ -94,12 +94,12 @@ namespace EstimatingLibrary
             collectionChanged(sender, e, "Points");
         }
         #endregion
-
-        #region Interfaces
+        
         #region IDDCopiable
         Object IDDCopiable.DragDropCopy(TECScopeManager scopeManager)
         {
-            var outController = new TECFBOController(this, this.IsTypical);
+            var outController = new TECFBOController(this);
+            outController.IsTypical = this.IsTypical;
             ModelLinkingHelper.LinkScopeItem(outController, scopeManager);
             return outController;
         }
@@ -127,6 +127,32 @@ namespace EstimatingLibrary
             }
         }
         #endregion
+
+        #region ITypicalable
+        protected override ITECObject createInstance(ObservableListDictionary<ITECObject> typicalDictionary)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void addChildForProperty(string property, ITECObject item)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool removeChildForProperty(string property, ITECObject item)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool containsChildForProperty(string property, ITECObject item)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void makeTypical()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

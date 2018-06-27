@@ -39,28 +39,29 @@ namespace EstimatingLibrary
         }
 
         public bool IsTypical { get; private set; }
+
         #endregion //Properties
 
         #region Constructors
-        public TECEquipment(Guid guid, bool isTypical) : base(guid)
+        public TECEquipment(Guid guid) : base(guid)
         {
-            IsTypical = isTypical;
+            IsTypical = false;
             _subScope = new ObservableCollection<TECSubScope>();
             SubScope.CollectionChanged += SubScope_CollectionChanged;
             base.PropertyChanged += TECEquipment_PropertyChanged;
         }
 
-        public TECEquipment(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
+        public TECEquipment() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
-        public TECEquipment(TECEquipment equipmentSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableListDictionary<ITECObject> characteristicReference = null, TemplateSynchronizer<TECSubScope> ssSynchronizer = null) : this(isTypical)
+        public TECEquipment(TECEquipment equipmentSource, Dictionary<Guid, Guid> guidDictionary = null,
+            ObservableListDictionary<ITECObject> characteristicReference = null, TemplateSynchronizer<TECSubScope> ssSynchronizer = null) : this()
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = equipmentSource.Guid; }
             foreach (TECSubScope subScope in equipmentSource.SubScope)
             {
-                var toAdd = new TECSubScope(subScope, isTypical, guidDictionary, characteristicReference);
+                var toAdd = new TECSubScope(subScope, guidDictionary, characteristicReference);
                 if (ssSynchronizer != null && ssSynchronizer.Contains(subScope))
                 {
                     ssSynchronizer.LinkNew(ssSynchronizer.GetTemplate(subScope), toAdd);
@@ -75,7 +76,8 @@ namespace EstimatingLibrary
         #region Methods
         public object DragDropCopy(TECScopeManager scopeManager)
         {
-            TECEquipment outEquip = new TECEquipment(this, this.IsTypical);
+            TECEquipment outEquip = new TECEquipment(this);
+            outEquip.IsTypical = this.IsTypical;
             ModelLinkingHelper.LinkScopeItem(outEquip, scopeManager);
             return outEquip;
         }
@@ -174,6 +176,64 @@ namespace EstimatingLibrary
                 PointChanged?.Invoke(numPoints);
             }
         }
+
         #endregion
+
+        #region ITypicalable
+        ITECObject ITypicalable.CreateInstance(ObservableListDictionary<ITECObject> typicalDictionary)
+        {
+            if (!this.IsTypical)
+            {
+                throw new Exception("Attempted to create an instance of an object which is already instanced.");
+            }
+            else
+            {
+                return new TECEquipment(this, characteristicReference: typicalDictionary);
+            }
+        }
+
+        void ITypicalable.AddChildForProperty(string property, ITECObject item)
+        {
+            if(property == "SubScope" && item is TECSubScope subScope)
+            {
+                this.SubScope.Add(subScope);
+            }
+            else
+            {
+                this.AddChildForScopeProperty(property, item);
+            }
+        }
+
+        bool ITypicalable.RemoveChildForProperty(string property, ITECObject item)
+        {
+            if (property == "SubScope" && item is TECSubScope subScope)
+            {
+                return this.SubScope.Remove(subScope);
+            }
+            else
+            {
+                return this.RemoveChildForScopeProperty(property, item);
+            }
+        }
+
+        bool ITypicalable.ContainsChildForProperty(string property, ITECObject item)
+        {
+            if (property == "SubScope" && item is TECSubScope subScope)
+            {
+                return this.SubScope.Contains(subScope);
+            }
+            else
+            {
+                return this.ContainsChildForScopeProperty(property, item);
+            }
+        }
+
+        void ITypicalable.MakeTypical()
+        {
+            this.IsTypical = true;
+            throw new NotImplementedException();
+        }
+        #endregion
+
     }
 }

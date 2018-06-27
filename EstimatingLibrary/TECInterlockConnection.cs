@@ -15,18 +15,17 @@ namespace EstimatingLibrary
         
         public List<TECConnectionType> ConnectionTypes { get; }
         
-        public TECInterlockConnection(Guid guid, IEnumerable<TECConnectionType> connectionTypes, bool isTypical) : base(guid)
+        public TECInterlockConnection(Guid guid, IEnumerable<TECConnectionType> connectionTypes) : base(guid)
         {
-            this.connection = new ConnectionWrapper(guid, new TECHardwiredProtocol(connectionTypes), isTypical);
+            this.connection = new ConnectionWrapper(guid, new TECHardwiredProtocol(connectionTypes));
             this.ConnectionTypes = new List<TECConnectionType>(connectionTypes);
             subscribeToConnection();
         }
 
-        public TECInterlockConnection(IEnumerable<TECConnectionType> connectionTypes, bool isTypical) : this(Guid.NewGuid(), connectionTypes, isTypical)
-        { }
-        public TECInterlockConnection(TECInterlockConnection source, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : base(source.Guid)
+        public TECInterlockConnection(IEnumerable<TECConnectionType> connectionTypes) : this(Guid.NewGuid(), connectionTypes) { }
+        public TECInterlockConnection(TECInterlockConnection source, Dictionary<Guid, Guid> guidDictionary = null) : base(source.Guid)
         {
-            this.connection = new ConnectionWrapper(source.connection, isTypical, guidDictionary);
+            this.connection = new ConnectionWrapper(source.connection, guidDictionary);
             subscribeToConnection();
         }
         
@@ -76,17 +75,17 @@ namespace EstimatingLibrary
         {
             public override IProtocol Protocol { get; }
 
-            public ConnectionWrapper(IProtocol protocol, bool isTypical) : base(isTypical)
+            public ConnectionWrapper(IProtocol protocol) : base()
             {
                 this.Protocol = protocol;
             }
 
-            public ConnectionWrapper(Guid guid, IProtocol protocol, bool isTypical) : base(guid, isTypical)
+            public ConnectionWrapper(Guid guid, IProtocol protocol) : base(guid)
             {
                 this.Protocol = protocol;
             }
 
-            public ConnectionWrapper(TECConnection connectionSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, isTypical, guidDictionary)
+            public ConnectionWrapper(TECConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, guidDictionary)
             {
                 this.Protocol = connectionSource.Protocol;
             }
