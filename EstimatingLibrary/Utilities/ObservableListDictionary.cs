@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EstimatingLibrary.Utilities
 {
@@ -118,6 +119,17 @@ namespace EstimatingLibrary.Utilities
         public int Count
         {
             get { return dictionary.Count; }
+        }
+
+        public void RemoveValuesForKeys(IEnumerable<T> values, IEnumerable<T> keys)
+        {
+            foreach (T key in keys)
+            {
+                foreach (T value in values.Where(x => this.GetInstances(key).Contains(x)))
+                {
+                    this.RemoveItem(key, value);
+                }
+            }
         }
         #endregion
     }

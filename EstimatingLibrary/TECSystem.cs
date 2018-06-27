@@ -182,6 +182,7 @@ namespace EstimatingLibrary
         public void AddController(TECController controller)
         {
             _controllers.Add(controller);
+            if (this.IsTypical) { ((ITypicalable)controller).MakeTypical(); }
             notifyTECChanged(Change.Add, "Controllers", this, controller);
             notifyCostChanged(controller.CostBatch);
         }
@@ -200,6 +201,7 @@ namespace EstimatingLibrary
         public void SetControllers(IEnumerable<TECController> newControllers)
         {
             IEnumerable<TECController> oldControllers = Controllers;
+            if (this.IsTypical) { newControllers.ForEach((x => ((ITypicalable)x).MakeTypical())); }
             _controllers = new ObservableCollection<TECController>(newControllers);
             notifyTECChanged(Change.Edit, "Controllers", this, newControllers, oldControllers);
         }
@@ -300,6 +302,7 @@ namespace EstimatingLibrary
                 int pointNum = 0;
                 foreach (object item in e.NewItems)
                 {
+                    if(this.IsTypical && item is ITypicalable typ) { typ.MakeTypical(); }
                     if (item != null)
                     {
                         if (item is INotifyCostChanged costItem) { costs += costItem.CostBatch; }

@@ -247,22 +247,43 @@ namespace EstimatingLibrary
         #region ITypicalable
         protected override ITECObject createInstance(ObservableListDictionary<ITECObject> typicalDictionary)
         {
-            throw new NotImplementedException();
+            if (!this.IsTypical)
+            {
+                throw new Exception("Attempted to create an instance of an object which is already instanced.");
+            }
+            else
+            {
+                return new TECProvidedController(this);
+            }
         }
 
         protected override void addChildForProperty(string property, ITECObject item)
         {
-            throw new NotImplementedException();
+            if(property == "ChildrenConnections") { }
+            else
+            {
+                this.AddChildForScopeProperty(property, item);
+            }
         }
 
         protected override bool removeChildForProperty(string property, ITECObject item)
         {
-            throw new NotImplementedException();
+            if (property == "ChildrenConnections") { return true; }
+
+            else
+            {
+                return this.RemoveChildForScopeProperty(property, item);
+            }
         }
 
         protected override bool containsChildForProperty(string property, ITECObject item)
         {
-            throw new NotImplementedException();
+            if (property == "ChildrenConnections") { return true; }
+
+            else
+            {
+                return this.ContainsChildForScopeProperty(property, item);
+            }
         }
 
         protected override void makeTypical()
