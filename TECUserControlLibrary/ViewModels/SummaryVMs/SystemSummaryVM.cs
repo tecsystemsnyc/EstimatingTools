@@ -29,7 +29,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
             {
                 _selectedSystem = value;
                 RaisePropertyChanged("SelectedSystem");
-                Selected = value != null ? new ScopeSummaryItem(new TECSystem(value.Typical, false, bid), bid.Parameters, bid.Duration) : null;
+                Selected = value != null ? new ScopeSummaryItem(new TECSystem(value.Typical, bid), bid.Parameters, bid.Duration) : null;
             }
         }
         public ScopeSummaryItem SelectedRiser
@@ -128,7 +128,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
         
         private void setupExtraLaborEstimate(TECBid bid)
         {
-            ExtraLaborEstimate = new TECEstimator(new TECPoint(true), bid.Parameters, bid.ExtraLabor, bid.Duration, new ChangeWatcher(bid.ExtraLabor));
+            ExtraLaborEstimate = new TECEstimator(new TECPoint(), bid.Parameters, bid.ExtraLabor, bid.Duration, new ChangeWatcher(bid.ExtraLabor));
         }
         private void populateAll(TECBid bid)
         {
