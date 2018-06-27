@@ -1,7 +1,7 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
 
-namespace Tests
+namespace TestLibrary.ModelTestingUtilities
 {
     static public class CostTestingUtilities
     {
