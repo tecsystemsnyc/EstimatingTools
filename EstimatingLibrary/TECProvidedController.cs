@@ -267,7 +267,8 @@ namespace EstimatingLibrary
 
         protected override void makeTypical()
         {
-            throw new NotImplementedException();
+            this.IsTypical = true;
+            TypicalableUtilities.MakeChildrenTypical(this);
         }
         #endregion
     }

@@ -177,6 +177,7 @@
     <Compile Include="Utilities\TemplateSynchronizer.cs" />
     <Compile Include="Utilities\TypeExtensions.cs" />
     <Compile Include="Utilities\TECTypeStringConversion.cs" />
+    <Compile Include="Utilities\TypicalableUtilities.cs" />
     <Compile Include="Utilities\WatcherFilters.cs" />
   </ItemGroup>
   <ItemGroup>
