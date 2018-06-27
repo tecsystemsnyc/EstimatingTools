@@ -61,10 +61,10 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors
-        public TECPoint(Guid guid, bool isTypical) : base(guid) { IsTypical = isTypical; }
-        public TECPoint(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
+        public TECPoint(Guid guid) : base(guid) { IsTypical = false; }
+        public TECPoint() : this(Guid.NewGuid()) { }
 
-        public TECPoint(TECPoint pointSource, bool isTypical) : this(isTypical)
+        public TECPoint(TECPoint pointSource) : this()
         {
             _type = pointSource.Type;
             _label = pointSource.Label;
@@ -103,7 +103,7 @@ namespace EstimatingLibrary
             }
             else
             {
-                return new TECPoint(this, false);
+                return new TECPoint(this);
             }
         }
 
@@ -120,6 +120,12 @@ namespace EstimatingLibrary
         bool ITypicalable.ContainsChildForProperty(string property, ITECObject item)
         {
             throw new Exception(String.Format("There is no compatible property {0} with an object of type {1}", property, item.GetType().ToString()));
+        }
+
+        void ITypicalable.MakeTypical()
+        {
+            this.IsTypical = true;
+            throw new NotImplementedException();
         }
         #endregion
 

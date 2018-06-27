@@ -84,18 +84,18 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors
-        public TECSubScope(Guid guid, bool isTypical) : base(guid)
+        public TECSubScope(Guid guid) : base(guid)
         {
-            IsTypical = isTypical;
+            IsTypical = false;
             Devices.CollectionChanged += DevicesCollectionChanged;
             Points.CollectionChanged += PointsCollectionChanged;
             Interlocks.CollectionChanged += InterlocksCollectionChanged;
         }
-        public TECSubScope(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
+        public TECSubScope() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
-        public TECSubScope(TECSubScope sourceSubScope, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableListDictionary<ITECObject> characteristicReference = null) : this(isTypical)
+        public TECSubScope(TECSubScope sourceSubScope, Dictionary<Guid, Guid> guidDictionary = null,
+            ObservableListDictionary<ITECObject> characteristicReference = null) : this()
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = sourceSubScope.Guid; }
@@ -103,13 +103,13 @@ namespace EstimatingLibrary
             { _devices.Add(device); }
             foreach (TECPoint point in sourceSubScope.Points)
             {
-                var toAdd = new TECPoint(point, isTypical);
+                var toAdd = new TECPoint(point);
                 characteristicReference?.AddItem(point,toAdd);
                 Points.Add(toAdd);
             }
             foreach (TECInterlockConnection interlock in sourceSubScope.Interlocks)
             {
-                var toAdd = new TECInterlockConnection(interlock, isTypical);
+                var toAdd = new TECInterlockConnection(interlock);
                 characteristicReference?.AddItem(interlock, toAdd);
                 Interlocks.Add(toAdd);
             }
@@ -202,7 +202,8 @@ namespace EstimatingLibrary
 
         public object DragDropCopy(TECScopeManager scopeManager)
         {
-            TECSubScope outScope = new TECSubScope(this, this.IsTypical);
+            TECSubScope outScope = new TECSubScope(this);
+            outScope.IsTypical = this.IsTypical;
             ModelLinkingHelper.LinkScopeItem(outScope, scopeManager);
             return outScope;
         }
@@ -288,9 +289,9 @@ namespace EstimatingLibrary
             }
         }
 
-        public IConnectable Copy(bool isTypical, Dictionary<Guid, Guid> guidDictionary)
+        public IConnectable Copy(Dictionary<Guid, Guid> guidDictionary)
         {
-            return new TECSubScope(this, isTypical, guidDictionary);
+            return new TECSubScope(this, guidDictionary);
         }
         #endregion
 
@@ -354,7 +355,6 @@ namespace EstimatingLibrary
         #endregion
 
         #region ITypicalable
-
         ITECObject ITypicalable.CreateInstance(ObservableListDictionary<ITECObject> typicalDictionary)
         {
             if (!this.IsTypical)
@@ -363,7 +363,7 @@ namespace EstimatingLibrary
             } 
             else
             {
-                return new TECSubScope(this, false, characteristicReference: typicalDictionary);
+                return new TECSubScope(this, characteristicReference: typicalDictionary);
             }
         }
 
@@ -425,6 +425,12 @@ namespace EstimatingLibrary
             {
                 return this.ContainsChildForScopeProperty(property, item);
             }
+        }
+
+        void ITypicalable.MakeTypical()
+        {
+            this.IsTypical = true;
+            throw new NotImplementedException();
         }
         #endregion
     }

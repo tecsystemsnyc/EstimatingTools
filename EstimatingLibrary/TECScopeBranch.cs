@@ -35,21 +35,21 @@ namespace EstimatingLibrary
         #endregion //Properites
 
         #region Constructors
-        public TECScopeBranch(Guid guid, bool isTypical) : base(guid)
+        public TECScopeBranch(Guid guid) : base(guid)
         {
-            IsTypical = isTypical;
+            IsTypical = false;
             _branches = new ObservableCollection<TECScopeBranch>();
             Branches.CollectionChanged += Branches_CollectionChanged;
         }
 
-        public TECScopeBranch(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
+        public TECScopeBranch() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
-        public TECScopeBranch(TECScopeBranch scopeBranchSource, bool isTypical) : this(isTypical)
+        public TECScopeBranch(TECScopeBranch scopeBranchSource) : this()
         {
             foreach (TECScopeBranch branch in scopeBranchSource.Branches)
             {
-                Branches.Add(new TECScopeBranch(branch, isTypical));
+                Branches.Add(new TECScopeBranch(branch));
             }
             _label = scopeBranchSource.Label;
         }
@@ -93,7 +93,7 @@ namespace EstimatingLibrary
             }
             else
             {
-                return new TECScopeBranch(this, false);
+                return new TECScopeBranch(this);
             }
         }
 
@@ -109,6 +109,12 @@ namespace EstimatingLibrary
 
         bool ITypicalable.ContainsChildForProperty(string property, ITECObject item)
         {
+            throw new NotImplementedException();
+        }
+
+        void ITypicalable.MakeTypical()
+        {
+            this.IsTypical = true;
             throw new NotImplementedException();
         }
         #endregion

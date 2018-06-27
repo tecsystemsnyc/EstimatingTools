@@ -11,6 +11,8 @@ namespace EstimatingLibrary.Interfaces
         void AddChildForProperty(String property, ITECObject item);
         bool RemoveChildForProperty(String property, ITECObject item);
         bool ContainsChildForProperty(String property, ITECObject item);
+
+        void MakeTypical();
     }
     
 }

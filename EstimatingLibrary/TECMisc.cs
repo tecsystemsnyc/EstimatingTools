@@ -11,18 +11,18 @@ namespace EstimatingLibrary
         #endregion
 
         #region Constructors
-        public TECMisc(Guid guid, CostType type, bool isTypical) : base(guid, type)
+        public TECMisc(Guid guid, CostType type) : base(guid, type)
         {
-            IsTypical = isTypical;
+            IsTypical = false;
             _quantity = 1;
         }
-        public TECMisc(CostType type, bool isTypical) : this(Guid.NewGuid(), type, isTypical) { }
-        public TECMisc(TECMisc miscSource, bool isTypical) : this(miscSource.Type, isTypical)
+        public TECMisc(CostType type) : this(Guid.NewGuid(), type) { }
+        public TECMisc(TECMisc miscSource) : this(miscSource.Type)
         {
             copyPropertiesFromCost(miscSource);
             _quantity = miscSource.Quantity;
         }
-        public TECMisc(TECCost costSource, bool istypical) : this(costSource.Type, istypical)
+        public TECMisc(TECCost costSource) : this(costSource.Type)
         {
             copyPropertiesFromCost(costSource);
         }
@@ -37,7 +37,7 @@ namespace EstimatingLibrary
             }
             set
             {
-                var old = new TECMisc(this, this.IsTypical);
+                var old = new TECMisc(this);
                 base._cost = value;
                 notifyCombinedChanged(Change.Edit, "Cost", this, value, old.Cost);
                 NotifyMiscChanged(this, old);
@@ -51,7 +51,7 @@ namespace EstimatingLibrary
             }
             set
             {
-                var old = new TECMisc(this, this.IsTypical);
+                var old = new TECMisc(this);
                 base._labor = value;
                 notifyCombinedChanged(Change.Edit, "Labor", this, value, old.Labor);
                 NotifyMiscChanged(this, old);
@@ -65,7 +65,7 @@ namespace EstimatingLibrary
             }
             set
             {
-                var old = new TECMisc(this, this.IsTypical);
+                var old = new TECMisc(this);
                 base._type = value;
                 notifyCombinedChanged(Change.Edit, "Type", this, value, old.Type);
                 NotifyMiscChanged(this, old);
@@ -90,7 +90,7 @@ namespace EstimatingLibrary
         #region Methods
         public object DragDropCopy(TECScopeManager scopeManager)
         {
-            return new TECMisc(this, this.IsTypical);
+            return new TECMisc(this);
         }
 
         private void NotifyMiscChanged(TECMisc newMisc, TECMisc oldMisc)
@@ -123,7 +123,7 @@ namespace EstimatingLibrary
             }
             else
             {
-                return new TECMisc(this, false);
+                return new TECMisc(this);
             }
         }
 
@@ -140,6 +140,12 @@ namespace EstimatingLibrary
         bool ITypicalable.ContainsChildForProperty(string property, ITECObject item)
         {
             return this.ContainsChildForScopeProperty(property, item);
+        }
+
+        void ITypicalable.MakeTypical()
+        {
+            this.IsTypical = true;
+            throw new NotImplementedException();
         }
         #endregion
     }

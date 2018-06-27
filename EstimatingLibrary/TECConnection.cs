@@ -79,21 +79,15 @@ namespace EstimatingLibrary
         {
             get { return linkedObjects(); }
         }
-
-        public bool IsTypical { get; private set; }
         abstract public IProtocol Protocol { get; }
-
         #endregion //Properties
 
         public event Action<CostBatch> CostChanged;
 
         #region Constructors 
-        public TECConnection(Guid guid, bool isTypical) : base(guid)
-        {
-            this.IsTypical = isTypical;
-        }
-        public TECConnection(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
-        public TECConnection(TECConnection connectionSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : this(isTypical)
+        public TECConnection(Guid guid) : base(guid) { }
+        public TECConnection() : this(Guid.NewGuid()) { }
+        public TECConnection(TECConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = connectionSource.Guid; }
@@ -108,10 +102,7 @@ namespace EstimatingLibrary
 
         protected void notifyCostChanged(CostBatch costs)
         {
-            if (!IsTypical)
-            {
-                CostChanged?.Invoke(costs);
-            }
+            CostChanged?.Invoke(costs);
         }
 
         protected virtual CostBatch getCosts()
@@ -145,9 +136,5 @@ namespace EstimatingLibrary
             }
             return relatedList;
         }
-        
-        #region IControllerConnection
-
-        #endregion
     }
 }

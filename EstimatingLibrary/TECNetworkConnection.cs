@@ -41,23 +41,25 @@ namespace EstimatingLibrary
         public override IProtocol Protocol => protocol;
         public TECProtocol NetworkProtocol => protocol;
 
+        public bool IsTypical { get; private set; }
         #endregion
 
         #region Constructors
-        public TECNetworkConnection(Guid guid, TECController parent, TECProtocol protocol, bool isTypical) : base(guid, isTypical)
+        public TECNetworkConnection(Guid guid, TECController parent, TECProtocol protocol) : base(guid)
         {
+            this.IsTypical = false;
             ParentController = parent;
             this.protocol = protocol;
             Children.CollectionChanged += Children_CollectionChanged;
         }
-        public TECNetworkConnection(TECController parent, TECProtocol protocol, bool isTypical) : this(Guid.NewGuid(), parent, protocol, isTypical) { }
-        public TECNetworkConnection(TECNetworkConnection connectionSource, TECController parent, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) 
-            : base(connectionSource, isTypical, guidDictionary)
+        public TECNetworkConnection(TECController parent, TECProtocol protocol) : this(Guid.NewGuid(), parent, protocol) { }
+        public TECNetworkConnection(TECNetworkConnection connectionSource, TECController parent, Dictionary<Guid, Guid> guidDictionary = null) 
+            : base(connectionSource, guidDictionary)
         {
             Children.CollectionChanged += Children_CollectionChanged;
             foreach (IConnectable item in connectionSource.Children)
             {
-                IConnectable newChild = item.Copy(isTypical, guidDictionary);
+                IConnectable newChild = item.Copy(guidDictionary);
                 newChild.SetParentConnection(this);
                 _children.Add(newChild);
             }
@@ -184,6 +186,12 @@ namespace EstimatingLibrary
             {
                 throw new Exception(String.Format("There is no compatible property {0} with an object of type {1}", property, item.GetType().ToString()));
             }
+        }
+
+        void ITypicalable.MakeTypical()
+        {
+            this.IsTypical = false;
+            throw new NotImplementedException();
         }
         #endregion
     }

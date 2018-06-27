@@ -43,25 +43,25 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors
-        public TECEquipment(Guid guid, bool isTypical) : base(guid)
+        public TECEquipment(Guid guid) : base(guid)
         {
-            IsTypical = isTypical;
+            IsTypical = false;
             _subScope = new ObservableCollection<TECSubScope>();
             SubScope.CollectionChanged += SubScope_CollectionChanged;
             base.PropertyChanged += TECEquipment_PropertyChanged;
         }
 
-        public TECEquipment(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
+        public TECEquipment() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
-        public TECEquipment(TECEquipment equipmentSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableListDictionary<ITECObject> characteristicReference = null, TemplateSynchronizer<TECSubScope> ssSynchronizer = null) : this(isTypical)
+        public TECEquipment(TECEquipment equipmentSource, Dictionary<Guid, Guid> guidDictionary = null,
+            ObservableListDictionary<ITECObject> characteristicReference = null, TemplateSynchronizer<TECSubScope> ssSynchronizer = null) : this()
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = equipmentSource.Guid; }
             foreach (TECSubScope subScope in equipmentSource.SubScope)
             {
-                var toAdd = new TECSubScope(subScope, isTypical, guidDictionary, characteristicReference);
+                var toAdd = new TECSubScope(subScope, guidDictionary, characteristicReference);
                 if (ssSynchronizer != null && ssSynchronizer.Contains(subScope))
                 {
                     ssSynchronizer.LinkNew(ssSynchronizer.GetTemplate(subScope), toAdd);
@@ -76,7 +76,8 @@ namespace EstimatingLibrary
         #region Methods
         public object DragDropCopy(TECScopeManager scopeManager)
         {
-            TECEquipment outEquip = new TECEquipment(this, this.IsTypical);
+            TECEquipment outEquip = new TECEquipment(this);
+            outEquip.IsTypical = this.IsTypical;
             ModelLinkingHelper.LinkScopeItem(outEquip, scopeManager);
             return outEquip;
         }
@@ -187,7 +188,7 @@ namespace EstimatingLibrary
             }
             else
             {
-                return new TECEquipment(this, false, characteristicReference: typicalDictionary);
+                return new TECEquipment(this, characteristicReference: typicalDictionary);
             }
         }
 
@@ -225,6 +226,12 @@ namespace EstimatingLibrary
             {
                 return this.ContainsChildForScopeProperty(property, item);
             }
+        }
+
+        void ITypicalable.MakeTypical()
+        {
+            this.IsTypical = true;
+            throw new NotImplementedException();
         }
         #endregion
 

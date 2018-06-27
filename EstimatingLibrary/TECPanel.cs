@@ -40,28 +40,28 @@ namespace EstimatingLibrary
 
         #endregion
 
-        public TECPanel(Guid guid, TECPanelType type, bool isTypical) : base(guid)
+        public TECPanel(Guid guid, TECPanelType type) : base(guid)
         {
-            IsTypical = isTypical;
+            IsTypical = false;
             _guid = guid;
             _controllers = new ObservableCollection<TECController>();
             _type = type;
             Controllers.CollectionChanged += controllersCollectionChanged;
         }
-        public TECPanel(TECPanelType type, bool isTypical) : this(Guid.NewGuid(), type, isTypical) { }
-        public TECPanel(TECPanel panel, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : this(panel.Type, isTypical)
+        public TECPanel(TECPanelType type) : this(Guid.NewGuid(), type) { }
+        public TECPanel(TECPanel panel, Dictionary<Guid, Guid> guidDictionary = null) : this(panel.Type)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = panel.Guid; }
             copyPropertiesFromScope(panel);
             foreach (TECController controller in panel.Controllers)
             {
-                _controllers.Add(controller.CopyController(isTypical, guidDictionary));
+                _controllers.Add(controller.CopyController(guidDictionary));
             }
         }
         public object DragDropCopy(TECScopeManager scopeManager)
         {
-            var outPanel = new TECPanel(this, this.IsTypical);
+            var outPanel = new TECPanel(this);
             ModelLinkingHelper.LinkScopeItem(outPanel, scopeManager);
             return outPanel;
         }
@@ -126,7 +126,7 @@ namespace EstimatingLibrary
             }
             else
             {
-                return new TECPanel(this, false);
+                return new TECPanel(this);
             }
         }
 
@@ -164,6 +164,12 @@ namespace EstimatingLibrary
             {
                 return this.ContainsChildForScopeProperty(property, item);
             }
+        }
+
+        void ITypicalable.MakeTypical()
+        {
+            this.IsTypical = true;
+            throw new NotImplementedException();
         }
     }
 }

@@ -20,9 +20,9 @@ namespace EstimatingLibrary
         #endregion
 
         #region Constructors
-        public TECSystem(Guid guid, bool isTypical) : base(guid)
+        public TECSystem(Guid guid) : base(guid)
         {
-            IsTypical = isTypical;
+            IsTypical = false;
             
             _equipment.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Equipment");
             _panels.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Panels");
@@ -30,10 +30,10 @@ namespace EstimatingLibrary
             _scopeBranches.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "ScopeBranches");
         }
 
-        public TECSystem(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
+        public TECSystem() : this(Guid.NewGuid()) { }
 
-        public TECSystem(TECSystem source, bool isTypical, TECScopeManager manager, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableListDictionary<ITECObject> characteristicReference = null, Tuple<TemplateSynchronizer<TECEquipment>, TemplateSynchronizer<TECSubScope>> synchronizers = null) : this(isTypical)
+        public TECSystem(TECSystem source, TECScopeManager manager, Dictionary<Guid, Guid> guidDictionary = null,
+            ObservableListDictionary<ITECObject> characteristicReference = null, Tuple<TemplateSynchronizer<TECEquipment>, TemplateSynchronizer<TECSubScope>> synchronizers = null) : this()
         {
             if (guidDictionary == null)
             { guidDictionary = new Dictionary<Guid, Guid>();  }
@@ -41,7 +41,7 @@ namespace EstimatingLibrary
             guidDictionary[_guid] = source.Guid;
             foreach (TECEquipment equipment in source.Equipment)
             {
-                var toAdd = new TECEquipment(equipment, isTypical, guidDictionary, characteristicReference, ssSynchronizer: synchronizers?.Item2);
+                var toAdd = new TECEquipment(equipment, guidDictionary, characteristicReference, ssSynchronizer: synchronizers?.Item2);
                 if (synchronizers != null && synchronizers.Item1.Contains(equipment))
                 {
                     synchronizers.Item1.LinkNew(synchronizers.Item1.GetTemplate(equipment), toAdd);
@@ -54,7 +54,7 @@ namespace EstimatingLibrary
             }
             foreach (TECController controller in source._controllers)
             {
-                var toAdd = controller.CopyController(isTypical, guidDictionary);
+                var toAdd = controller.CopyController(guidDictionary);
                 if (characteristicReference != null)
                 {
                     characteristicReference.AddItem(controller, toAdd);
@@ -63,7 +63,7 @@ namespace EstimatingLibrary
             }
             foreach (TECPanel panel in source._panels)
             {
-                var toAdd = new TECPanel(panel, isTypical, guidDictionary);
+                var toAdd = new TECPanel(panel, guidDictionary);
                 if (characteristicReference != null)
                 {
                     characteristicReference.AddItem(panel, toAdd);
@@ -72,12 +72,12 @@ namespace EstimatingLibrary
             }
             foreach (TECMisc misc in source.MiscCosts)
             {
-                var toAdd = new TECMisc(misc, isTypical);
+                var toAdd = new TECMisc(misc);
                 _miscCosts.Add(toAdd);
             }
             foreach (TECScopeBranch branch in source._scopeBranches)
             {
-                var toAdd = new TECScopeBranch(branch, IsTypical);
+                var toAdd = new TECScopeBranch(branch);
                 _scopeBranches.Add(toAdd);
             }
             this.copyPropertiesFromLocated(source);
@@ -166,7 +166,7 @@ namespace EstimatingLibrary
         }
         public bool IsTypical
         {
-            get; private set;
+            get; protected set;
         }
         public int PointNumber
         {
@@ -206,7 +206,8 @@ namespace EstimatingLibrary
 
         public virtual object DragDropCopy(TECScopeManager scopeManager)
         {
-            TECSystem outSystem = new TECSystem(this, this.IsTypical, scopeManager);
+            TECSystem outSystem = new TECSystem(this, scopeManager);
+            outSystem.IsTypical = this.IsTypical;
             return outSystem;
         }
 
@@ -463,6 +464,12 @@ namespace EstimatingLibrary
             {
                 return this.ContainsChildForScopeProperty(property, item);
             }
+        }
+
+        void ITypicalable.MakeTypical()
+        {
+            this.IsTypical = true;
+            throw new NotImplementedException();
         }
         #endregion
     }

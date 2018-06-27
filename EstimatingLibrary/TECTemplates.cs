@@ -150,7 +150,7 @@ namespace EstimatingLibrary
             
             SubScopeSynchronizer = new TemplateSynchronizer<TECSubScope>((item => 
             {
-                return new TECSubScope(item, false);
+                return new TECSubScope(item);
             }), (item => { }),
             syncSubScope, this);
             SubScopeSynchronizer.TECChanged += synchronizerChanged;
@@ -158,7 +158,7 @@ namespace EstimatingLibrary
             EquipmentSynchronizer = new TemplateSynchronizer<TECEquipment>(
                 //Copy
                 (item => {
-                    TECEquipment newItem = new TECEquipment(false);
+                    TECEquipment newItem = new TECEquipment();
                     newItem.CopyPropertiesFromScope(item);
                     foreach(TECSubScope subScope in item.SubScope)
                     {
@@ -357,7 +357,7 @@ namespace EstimatingLibrary
                 subject.Devices.ObservablyClear();
                 foreach (TECPoint point in newItem.Points)
                 {
-                    subject.Points.Add(new TECPoint(point, false));
+                    subject.Points.Add(new TECPoint(point));
                 }
                 foreach (IEndDevice device in newItem.Devices)
                 {
@@ -391,7 +391,7 @@ namespace EstimatingLibrary
                     }
                     else
                     {
-                        newTemplate = new TECSubScope(value, false);
+                        newTemplate = new TECSubScope(value);
                     }
                     template.SubScope.Add(newTemplate);
                     SubScopeSynchronizer.NewGroup(newTemplate);
