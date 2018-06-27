@@ -23,7 +23,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECControllerType type = new TECControllerType(new TECManufacturer());
-            TECProvidedController controller = new TECProvidedController(type, false);
+            TECProvidedController controller = new TECProvidedController(type);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -57,7 +57,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECControllerType type = new TECControllerType(new TECManufacturer());
-            TECProvidedController controller = new TECProvidedController(type, false);
+            TECProvidedController controller = new TECProvidedController(type);
             bid.AddController(controller);
 
             TECAssociatedCost cost = new TECAssociatedCost(CostType.TEC);
@@ -92,7 +92,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type, false);
+            TECPanel panel = new TECPanel(type);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -126,11 +126,11 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type, false);
+            TECPanel panel = new TECPanel(type);
             bid.Panels.Add(panel);
 
             TECControllerType controllerType = new TECControllerType(new TECManufacturer());
-            TECProvidedController controller = new TECProvidedController(controllerType, false);
+            TECProvidedController controller = new TECProvidedController(controllerType);
             bid.AddController(controller);
 
             //Act
@@ -159,7 +159,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
-            TECMisc misc = new TECMisc(CostType.TEC, false);
+            TECMisc misc = new TECMisc(CostType.TEC);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -198,7 +198,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
-            TECScopeBranch scopeBranch = new TECScopeBranch(false);
+            TECScopeBranch scopeBranch = new TECScopeBranch();
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -228,10 +228,10 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
-            TECScopeBranch parentBranch = new TECScopeBranch(false);
+            TECScopeBranch parentBranch = new TECScopeBranch();
             bid.ScopeTree.Add(parentBranch);
 
-            TECScopeBranch scopeBranch = new TECScopeBranch(false);
+            TECScopeBranch scopeBranch = new TECScopeBranch();
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
@@ -421,7 +421,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
-            TECEquipment equip = new TECEquipment(true);
+            TECEquipment equip = new TECEquipment();
             bid.Systems.Add(system);
 
             //Act
@@ -457,7 +457,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             TECBid bid = new TECBid(); 
             TECTypical typical = new TECTypical();
-            TECEquipment equip = new TECEquipment(true);
+            TECEquipment equip = new TECEquipment();
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
@@ -507,7 +507,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical typical = new TECTypical();
-            TECEquipment equip = new TECEquipment(true);
+            TECEquipment equip = new TECEquipment();
             bid.Systems.Add(typical);
             typical.Equipment.Add(equip);
 
@@ -562,14 +562,14 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
 
             Dictionary<string, string>  data = new Dictionary<string, string>();
@@ -598,13 +598,13 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
             TECSystem instance = system.AddInstance(bid);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
@@ -649,9 +649,9 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
 
             //Act
@@ -716,16 +716,16 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            TECPoint point = new TECPoint(true);
+            TECPoint point = new TECPoint();
             subScope.Points.Add(point);
 
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -756,15 +756,15 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECSystem instance = system.AddInstance(bid);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
-            TECPoint point = new TECPoint(true);
+            TECPoint point = new TECPoint();
             subScope.Points.Add(point);
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
@@ -813,11 +813,11 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); 
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
-            TECPoint point = new TECPoint(true);
+            TECPoint point = new TECPoint();
             subScope.Points.Add(point);
 
             //Act
@@ -906,9 +906,9 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
 
             //Act
@@ -936,9 +936,9 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid();
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECSystem instance = system.AddInstance(bid);
 
@@ -976,9 +976,9 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             bid.Catalogs.Devices.Add(device);
@@ -1055,9 +1055,9 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
 
             //Act
@@ -1086,9 +1086,9 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid();
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECSystem instance = system.AddInstance(bid);
 
@@ -1127,9 +1127,9 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             TECValve valve = new TECValve(new TECManufacturer(), device);
@@ -1209,7 +1209,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECTypical system = new TECTypical();
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType type = new TECControllerType(manufacturer);
-            TECProvidedController controller = new TECProvidedController(type, true);
+            TECProvidedController controller = new TECProvidedController(type);
             bid.Systems.Add(system);
 
             //Act
@@ -1249,7 +1249,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECTypical typical = new TECTypical();
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType type = new TECControllerType(manufacturer);
-            TECController controller = new TECProvidedController(type, true);
+            TECController controller = new TECProvidedController(type);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
@@ -1313,7 +1313,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType type = new TECControllerType(manufacturer);
 
-            TECController controller = new TECProvidedController(type, true);
+            TECController controller = new TECProvidedController(type);
             bid.Systems.Add(typical);
             typical.AddController(controller);
 
@@ -1371,7 +1371,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type, true);
+            TECPanel panel = new TECPanel(type);
             bid.Systems.Add(system);
 
             //Act
@@ -1410,14 +1410,14 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type, true);
+            TECPanel panel = new TECPanel(type);
             bid.Systems.Add(system);
 
             system.Panels.Add(panel);
 
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType ControllerType = new TECControllerType(manufacturer);
-            TECController controller = new TECProvidedController(ControllerType, true);
+            TECController controller = new TECProvidedController(ControllerType);
             system.AddController(controller);
 
             //Act
@@ -1445,7 +1445,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical typical = new TECTypical();
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type, true);
+            TECPanel panel = new TECPanel(type);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
@@ -1503,7 +1503,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical typical = new TECTypical();
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type, true);
+            TECPanel panel = new TECPanel(type);
             bid.Systems.Add(typical);
             typical.Panels.Add(panel);
 
@@ -1560,7 +1560,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
-            TECMisc misc = new TECMisc(CostType.TEC, true);
+            TECMisc misc = new TECMisc(CostType.TEC);
             bid.Systems.Add(system);
 
             //Act
@@ -1596,7 +1596,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical typical = new TECTypical();
-            TECMisc misc = new TECMisc(CostType.TEC, true);
+            TECMisc misc = new TECMisc(CostType.TEC);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
@@ -1654,7 +1654,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical typical = new TECTypical();
-            TECMisc misc = new TECMisc(CostType.TEC, true);
+            TECMisc misc = new TECMisc(CostType.TEC);
             bid.Systems.Add(typical);
             typical.MiscCosts.Add(misc);
 
@@ -1710,7 +1710,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
-            TECScopeBranch scopeBranch = new TECScopeBranch(true);
+            TECScopeBranch scopeBranch = new TECScopeBranch();
             bid.Systems.Add(system);
 
             //Act
@@ -1743,16 +1743,16 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
-            TECInterlockConnection interlock = new TECInterlockConnection(new List<TECConnectionType>(), true);
+            TECInterlockConnection interlock = new TECInterlockConnection(new List<TECConnectionType>());
             subScope.Interlocks.Add(interlock);
 
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -1784,16 +1784,16 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECSystem instance = system.AddInstance(bid);
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
 
-            TECInterlockConnection interlock = new TECInterlockConnection(new List<TECConnectionType>(), true);
+            TECInterlockConnection interlock = new TECInterlockConnection(new List<TECConnectionType>());
             subScope.Interlocks.Add(interlock);
 
             var instanceSubScope = instance.Equipment[0].SubScope[0];
@@ -1847,11 +1847,11 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid();
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
-            TECInterlockConnection interlock = new TECInterlockConnection(new List<TECConnectionType>(), true);
+            TECInterlockConnection interlock = new TECInterlockConnection(new List<TECConnectionType>());
             subScope.Interlocks.Add(interlock);
 
             //Act
@@ -1947,8 +1947,8 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECProvidedController(type, false);
-            IConnectable child = new TECProvidedController(type, false);
+            TECController controller = new TECProvidedController(type);
+            IConnectable child = new TECProvidedController(type);
             bid.AddController(controller);
             bid.AddController(child as TECController);
 
@@ -2004,10 +2004,10 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECProvidedController(type, false);
+            TECController controller = new TECProvidedController(type);
             bid.AddController(controller);
 
-            TECController child = new TECProvidedController(type, false);
+            TECController child = new TECProvidedController(type);
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             typical.AddController(child);
@@ -2066,14 +2066,14 @@ namespace EstimatingUtilitiesLibraryTests
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
 
-            TECController controller = new TECProvidedController(type, false);
+            TECController controller = new TECProvidedController(type);
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             typical.AddController(controller);
             TECSystem system = typical.AddInstance(bid);
             TECController instanceController = system.Controllers[0];
 
-            TECController otherController = new TECProvidedController(type, false);
+            TECController otherController = new TECProvidedController(type);
             TECTypical otherTypical = new TECTypical();
             bid.Systems.Add(otherTypical);
             otherTypical.AddController(otherController);
@@ -2133,13 +2133,13 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECProvidedController(type, false);
+            TECController controller = new TECProvidedController(type);
             bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             typical.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECConnectionType connType = new TECConnectionType();
             TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
@@ -2195,13 +2195,13 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECProvidedController(type, false);
+            TECController controller = new TECProvidedController(type);
             bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             typical.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECConnectionType connType = new TECConnectionType();
             TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
@@ -2259,13 +2259,13 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECProvidedController(type, false);
+            TECController controller = new TECProvidedController(type);
 
             TECTypical typical = new TECTypical();
             typical.AddController(controller);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             typical.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECConnectionType connType = new TECConnectionType();
             TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
@@ -2320,13 +2320,13 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECProvidedController(type, false);
+            TECController controller = new TECProvidedController(type);
 
             TECTypical typical = new TECTypical();
             typical.AddController(controller);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             typical.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECConnectionType connType = new TECConnectionType();
             TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
@@ -2413,7 +2413,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType type = new TECControllerType(manufacturer);
-            TECController controller = new TECProvidedController(type, false);
+            TECController controller = new TECProvidedController(type);
             bid.AddController(controller);
 
             //Act
@@ -2447,7 +2447,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type, false);
+            TECPanel panel = new TECPanel(type);
             bid.Panels.Add(panel);
 
             //Act
@@ -2480,11 +2480,11 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type, false);
+            TECPanel panel = new TECPanel(type);
             bid.Panels.Add(panel);
 
             TECControllerType controllerType = new TECControllerType(new TECManufacturer());
-            TECController controller = new TECProvidedController(controllerType, false);
+            TECController controller = new TECProvidedController(controllerType);
             bid.AddController(controller);
             panel.Controllers.Add(controller);
 
@@ -2514,7 +2514,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
-            TECMisc misc = new TECMisc(CostType.TEC, false);
+            TECMisc misc = new TECMisc(CostType.TEC);
             bid.MiscCosts.Add(misc);
 
             //Act
@@ -2544,7 +2544,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
-            TECScopeBranch scopeBranch = new TECScopeBranch(false);
+            TECScopeBranch scopeBranch = new TECScopeBranch();
             bid.ScopeTree.Add(scopeBranch);
 
             //Act
@@ -2574,8 +2574,8 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
-            TECScopeBranch scopeBranch = new TECScopeBranch(false);
-            TECScopeBranch parentBranch = new TECScopeBranch(false);
+            TECScopeBranch scopeBranch = new TECScopeBranch();
+            TECScopeBranch parentBranch = new TECScopeBranch();
             bid.ScopeTree.Add(parentBranch);
             parentBranch.Branches.Add(scopeBranch);
 
@@ -2752,7 +2752,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
-            TECEquipment equip = new TECEquipment(true);
+            TECEquipment equip = new TECEquipment();
             bid.Systems.Add(system);
             system.Equipment.Add(equip);
 
@@ -2785,7 +2785,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical typical = new TECTypical();
-            TECEquipment equip = new TECEquipment(true);
+            TECEquipment equip = new TECEquipment();
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
             typical.Equipment.Add(equip);
@@ -2830,7 +2830,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical typical = new TECTypical();
-            TECEquipment equip = new TECEquipment(true);
+            TECEquipment equip = new TECEquipment();
             bid.Systems.Add(typical);
             typical.Equipment.Add(equip);
             TECSystem instance = typical.AddInstance(bid);
@@ -2883,9 +2883,9 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
 
             //Act
@@ -2916,10 +2916,10 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
             TECSystem instance = system.AddInstance(bid);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
 
             //Act
@@ -2961,9 +2961,9 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECSystem instance = system.AddInstance(bid);
 
@@ -3026,11 +3026,11 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
-            TECPoint point = new TECPoint(true);
+            TECPoint point = new TECPoint();
             subScope.Points.Add(point);
 
             //Act
@@ -3061,12 +3061,12 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECSystem instance = system.AddInstance(bid);
-            TECPoint point = new TECPoint(true);
+            TECPoint point = new TECPoint();
             subScope.Points.Add(point);
 
             //Act
@@ -3108,11 +3108,11 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
-            TECPoint point = new TECPoint(true);
+            TECPoint point = new TECPoint();
             subScope.Points.Add(point);
             TECSystem instance = system.AddInstance(bid);
             
@@ -3184,9 +3184,9 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             subScope.Devices.Add(device);
@@ -3213,9 +3213,9 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECSystem instance = system.AddInstance(bid);
             TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
@@ -3250,9 +3250,9 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             bid.Catalogs.Devices.Add(device);
@@ -3318,9 +3318,9 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             TECValve valve = new TECValve(new TECManufacturer(), device);
@@ -3348,9 +3348,9 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECSystem instance = system.AddInstance(bid);
             TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
@@ -3387,9 +3387,9 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             TECValve valve = new TECValve(new TECManufacturer(), device);
@@ -3458,7 +3458,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECTypical system = new TECTypical();
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType type = new TECControllerType(manufacturer);
-            TECController controller = new TECProvidedController(type, true);
+            TECController controller = new TECProvidedController(type);
             bid.Systems.Add(system);
             system.AddController(controller);
 
@@ -3497,7 +3497,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECTypical typical = new TECTypical();
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType type = new TECControllerType(manufacturer);
-            TECController controller = new TECProvidedController(type, true);
+            TECController controller = new TECProvidedController(type);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
             typical.AddController(controller);
@@ -3553,7 +3553,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECTypical typical = new TECTypical();
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType type = new TECControllerType(manufacturer);
-            TECController controller = new TECProvidedController(type, true);
+            TECController controller = new TECProvidedController(type);
             bid.Systems.Add(typical);
             typical.AddController(controller);
             TECSystem instance = typical.AddInstance(bid);
@@ -3605,7 +3605,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type, true);
+            TECPanel panel = new TECPanel(type);
             bid.Systems.Add(system);
             system.Panels.Add(panel);
 
@@ -3642,14 +3642,14 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type, true);
+            TECPanel panel = new TECPanel(type);
             bid.Systems.Add(system);
 
             system.Panels.Add(panel);
 
             TECManufacturer manufacturer = new TECManufacturer();
             TECControllerType ControllerType = new TECControllerType(manufacturer);
-            TECController controller = new TECProvidedController(ControllerType, true);
+            TECController controller = new TECProvidedController(ControllerType);
             system.AddController(controller);
             panel.Controllers.Add(controller);
 
@@ -3678,7 +3678,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical typical = new TECTypical();
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type, true);
+            TECPanel panel = new TECPanel(type);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
             typical.Panels.Add(panel);
@@ -3732,7 +3732,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical typical = new TECTypical();
             TECPanelType type = new TECPanelType(new TECManufacturer());
-            TECPanel panel = new TECPanel(type, true);
+            TECPanel panel = new TECPanel(type);
             bid.Systems.Add(typical);
             typical.Panels.Add(panel);
             TECSystem instance = typical.AddInstance(bid);
@@ -3782,7 +3782,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
-            TECMisc misc = new TECMisc(CostType.TEC, true);
+            TECMisc misc = new TECMisc(CostType.TEC);
             bid.Systems.Add(system);
             system.MiscCosts.Add(misc);
 
@@ -3813,7 +3813,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical typical = new TECTypical();
-            TECMisc misc = new TECMisc(CostType.TEC, true);
+            TECMisc misc = new TECMisc(CostType.TEC);
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
             typical.MiscCosts.Add(misc);
@@ -3860,7 +3860,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical typical = new TECTypical();
-            TECMisc misc = new TECMisc(CostType.TEC, true);
+            TECMisc misc = new TECMisc(CostType.TEC);
             bid.Systems.Add(typical);
             typical.MiscCosts.Add(misc);
             TECSystem instance = typical.AddInstance(bid);
@@ -3908,7 +3908,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
-            TECScopeBranch scopeBranch = new TECScopeBranch(false);
+            TECScopeBranch scopeBranch = new TECScopeBranch();
             bid.Systems.Add(system);
             system.ScopeBranches.Add(scopeBranch);
 
@@ -3940,11 +3940,11 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
-            TECInterlockConnection interlock = new TECInterlockConnection(new List<TECConnectionType>(), true);
+            TECInterlockConnection interlock = new TECInterlockConnection(new List<TECConnectionType>());
             subScope.Interlocks.Add(interlock);
 
             //Act
@@ -3975,12 +3975,12 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECSystem instance = system.AddInstance(bid);
-            TECInterlockConnection interlock = new TECInterlockConnection(new List<TECConnectionType>(), true);
+            TECInterlockConnection interlock = new TECInterlockConnection(new List<TECConnectionType>());
             subScope.Interlocks.Add(interlock);
 
             //Act
@@ -4022,11 +4022,11 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
-            TECInterlockConnection interlock = new TECInterlockConnection(new List<TECConnectionType>(), true);
+            TECInterlockConnection interlock = new TECInterlockConnection(new List<TECConnectionType>());
             subScope.Interlocks.Add(interlock);
             TECSystem instance = system.AddInstance(bid);
 
@@ -4101,8 +4101,8 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECProvidedController(type, false);
-            TECController child = new TECProvidedController(type, false);
+            TECController controller = new TECProvidedController(type);
+            TECController child = new TECProvidedController(type);
             bid.AddController(controller);
             bid.AddController(child);
 
@@ -4154,10 +4154,10 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECProvidedController(type, false);
+            TECController controller = new TECProvidedController(type);
             bid.AddController(controller);
 
-            TECController child = new TECProvidedController(type, false);
+            TECController child = new TECProvidedController(type);
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             typical.AddController(child);
@@ -4211,14 +4211,14 @@ namespace EstimatingUtilitiesLibraryTests
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
 
-            TECController controller = new TECProvidedController(type, false);
+            TECController controller = new TECProvidedController(type);
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             typical.AddController(controller);
             TECSystem system = typical.AddInstance(bid);
             TECController instanceController = system.Controllers[0];
 
-            TECController otherController = new TECProvidedController(type, false);
+            TECController otherController = new TECProvidedController(type);
             TECTypical otherTypical = new TECTypical();
             bid.Systems.Add(otherTypical);
             otherTypical.AddController(otherController);
@@ -4272,15 +4272,15 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECProvidedController(type, false);
+            TECController controller = new TECProvidedController(type);
             bid.AddController(controller);
             TECConnectionType connType = new TECConnectionType();
             TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
 
             TECTypical typical = new TECTypical();
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             typical.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             subScope.Devices.Add(device);
             equipment.SubScope.Add(subScope);
             bid.Systems.Add(typical);
@@ -4328,16 +4328,16 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECProvidedController(type, false);
+            TECController controller = new TECProvidedController(type);
             bid.AddController(controller);
             TECConnectionType connType = new TECConnectionType();
             TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
             bid.Catalogs.Devices.Add(device);
 
             TECTypical typical = new TECTypical();
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             typical.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             subScope.Devices.Add(device);
             equipment.SubScope.Add(subScope);
             bid.Systems.Add(typical);
@@ -4391,16 +4391,16 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECProvidedController(type, false);
+            TECController controller = new TECProvidedController(type);
             TECConnectionType connType = new TECConnectionType();
             TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
             bid.Catalogs.Devices.Add(device);
 
             TECTypical typical = new TECTypical();
             typical.AddController(controller);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             typical.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             subScope.Devices.Add(device);
             equipment.SubScope.Add(subScope);
             bid.Systems.Add(typical);
@@ -4451,16 +4451,16 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(new TECManufacturer());
             TECIO io = new TECIO(IOType.AI);
             type.IO.Add(io);
-            TECController controller = new TECProvidedController(type, false);
+            TECController controller = new TECProvidedController(type);
             TECConnectionType connType = new TECConnectionType();
             TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
             bid.Catalogs.Devices.Add(device);
 
             TECTypical typical = new TECTypical();
             typical.AddController(controller);
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             typical.Equipment.Add(equipment);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             subScope.Devices.Add(device);
             equipment.SubScope.Add(subScope);
             bid.Systems.Add(typical);
@@ -4754,9 +4754,9 @@ namespace EstimatingUtilitiesLibraryTests
             ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECEquipment equip = new TECEquipment(true);
+            TECEquipment equip = new TECEquipment();
             system.Equipment.Add(equip);
-            TECSubScope subScope = new TECSubScope(true);
+            TECSubScope subScope = new TECSubScope();
             equip.SubScope.Add(subScope);
             TECManufacturer originalManufacturer = new TECManufacturer();
             TECManufacturer newManufacturer = new TECManufacturer();

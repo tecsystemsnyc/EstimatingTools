@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
 
-namespace Tests
+namespace EstimatingUtilitiesLibraryTests
 {
     [TestClass]
     public class LoadBidTests
