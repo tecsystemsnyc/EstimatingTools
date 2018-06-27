@@ -300,6 +300,10 @@ namespace TestLibrary.ModelTestingUtilities
             panel.AssignRandomScopeProperties(catalogs, rand);
             return panel;
         }
+        public static TECPoint TestPoint(TECCatalogs catalogs, Random rand)
+        {
+            throw new NotImplementedException();
+        }
         public static TECTypical TestTypical(TECCatalogs catalogs, Random rand)
         {
             TECTypical typ = new TECTypical();
@@ -307,7 +311,7 @@ namespace TestLibrary.ModelTestingUtilities
             typ.ProposeEquipment = rand.NextBool();
             typ.AssignRandomScopeProperties(catalogs, rand);
 
-
+            throw new NotImplementedException();
         }
         #endregion
     }
