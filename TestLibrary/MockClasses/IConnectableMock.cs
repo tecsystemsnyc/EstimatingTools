@@ -28,7 +28,7 @@ namespace TestLibrary.MockClasses
         {
             throw new NotImplementedException();
         }
-        public IConnectable Copy(bool isTypical, Dictionary<Guid, Guid> guidDictionary)
+        public IConnectable Copy(Dictionary<Guid, Guid> guidDictionary)
         {
             throw new NotImplementedException();
         }
@@ -57,7 +57,7 @@ namespace TestLibrary.MockClasses
         }
         #endregion
 
-        #region Consequential Interfaces
+        #region Interfaces
         bool ITypicalable.IsTypical => throw new NotImplementedException();
 
         ObservableCollection<TECAssociatedCost> ITECScope.AssociatedCosts { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -113,6 +113,31 @@ namespace TestLibrary.MockClasses
             {
                 throw new NotImplementedException();
             }
+        }
+        
+        ITECObject ITypicalable.CreateInstance(ObservableListDictionary<ITECObject> typicalDictionary)
+        {
+            throw new NotImplementedException();
+        }
+
+        void ITypicalable.AddChildForProperty(string property, ITECObject item)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool ITypicalable.RemoveChildForProperty(string property, ITECObject item)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool ITypicalable.ContainsChildForProperty(string property, ITECObject item)
+        {
+            throw new NotImplementedException();
+        }
+
+        void ITypicalable.MakeTypical()
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }
