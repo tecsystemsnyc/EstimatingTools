@@ -3,26 +3,34 @@ using System.Linq;
 using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tests;
+using TestLibrary.ModelTestingUtilities;
 
 namespace Models
 {
     [TestClass]
     public class TECBidTests
     {
+        Random rand;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            rand = new Random(0);
+        }
+
         [TestMethod]
         public void RemoveInstanceWithGlobalConnectionToSubScope()
         {
             TECBid bid = new TECBid();
 
-            bid.Catalogs = TestHelper.CreateTestCatalogs();
+            bid.Catalogs = ModelCreation.TestCatalogs(rand);
 
-            TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes.First(), false);
+            TECController controller = ModelCreation.TestProvidedController(bid.Catalogs, rand);
             bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
-            TECEquipment equipment = new TECEquipment(true);
-            TECSubScope subScope = new TECSubScope(true);
+            TECEquipment equipment = new TECEquipment();
+            TECSubScope subScope = new TECSubScope();
             TECDevice device = null;
             foreach(TECDevice item in bid.Catalogs.Devices)
             {
@@ -53,13 +61,13 @@ namespace Models
         {
             TECBid bid = new TECBid();
 
-            bid.Catalogs = TestHelper.CreateTestCatalogs();
+            bid.Catalogs = ModelCreation.TestCatalogs(rand);
 
-            TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes.First(), false);
+            TECController controller = ModelCreation.TestProvidedController(bid.Catalogs, rand);
             bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
-            TECController typicalController = new TECProvidedController(bid.Catalogs.ControllerTypes.First(), false);
+            TECController typicalController = ModelCreation.TestProvidedController(bid.Catalogs, rand);
 
             typical.AddController(typicalController);
 

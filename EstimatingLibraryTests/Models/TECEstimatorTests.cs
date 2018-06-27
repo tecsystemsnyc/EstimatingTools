@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Tests;
+using TestLibrary.ModelTestingUtilities;
 
 namespace Models
 {
@@ -16,11 +16,14 @@ namespace Models
     [TestClass]
     public class TECEstimatorTests
     {
+        private Random rand;
         private TECParameters parameters;
 
         [TestInitialize()]
         public void MyTestInitialize()
         {
+            rand = new Random(0);
+
             parameters = new TECParameters(Guid.NewGuid());
             parameters.Tax = 8.75;
             parameters.PMCoef = 1.54;
@@ -44,7 +47,7 @@ namespace Models
         [TestMethod]
         public void Estimate_Refresh()
         {
-            TECBid bid = TestHelper.CreateTestBid();
+            TECBid bid = ModelCreation.TestBid(rand);
             ChangeWatcher watcher = new ChangeWatcher(bid);
             var estimate = new TECEstimator(bid, watcher);
             double expetcedPrice = estimate.TotalPrice;
@@ -63,7 +66,7 @@ namespace Models
             var type = new TECControllerType(manufacturer);
             type.Price = 100;
 
-            var controller = new TECProvidedController(type, false);
+            var controller = new TECProvidedController(type);
 
             bid.AddController(controller);
 
@@ -85,7 +88,7 @@ namespace Models
             var type = new TECControllerType(manufacturer);
             type.Price = 100;
 
-            var controller = new TECProvidedController(type, false);
+            var controller = new TECProvidedController(type);
 
             bid.AddController(controller);
             bid.RemoveController(controller);
@@ -106,7 +109,7 @@ namespace Models
             var type = new TECControllerType(manufacturer);
             type.Price = 100;
 
-            var controller = new TECProvidedController(type, true);
+            var controller = new TECProvidedController(type);
 
             var typical = new TECTypical();
             bid.Systems.Add(typical);
@@ -132,7 +135,7 @@ namespace Models
             var type = new TECControllerType(manufacturer);
             type.Price = 100;
 
-            var controller = new TECProvidedController(type, true);
+            var controller = new TECProvidedController(type);
 
             var typical = new TECTypical();
             bid.Systems.Add(typical);
@@ -158,7 +161,7 @@ namespace Models
             var type = new TECControllerType(manufacturer);
             type.Price = 100;
 
-            var controller = new TECProvidedController(type, true);
+            var controller = new TECProvidedController(type);
 
             var typical = new TECTypical();
             bid.Systems.Add(typical);
@@ -184,7 +187,7 @@ namespace Models
             var type = new TECControllerType(manufacturer);
             type.Price = 100;
 
-            var controller = new TECProvidedController(type, true);
+            var controller = new TECProvidedController(type);
 
             var typical = new TECTypical();
             bid.Systems.Add(typical);
@@ -212,7 +215,7 @@ namespace Models
             panelType.Price = 50;
             panelType.Labor = 7;
 
-            var panel = new TECPanel(panelType, true);
+            var panel = new TECPanel(panelType);
 
             bid.Panels.Add(panel);
 
@@ -236,7 +239,7 @@ namespace Models
             panelType.Price = 50;
             panelType.Labor = 7;
 
-            var panel = new TECPanel(panelType, true);
+            var panel = new TECPanel(panelType);
 
             bid.Panels.Add(panel);
             bid.Panels.Remove(panel);
@@ -258,7 +261,7 @@ namespace Models
             panelType.Price = 50;
             panelType.Labor = 7;
 
-            var panel = new TECPanel(panelType, true);
+            var panel = new TECPanel(panelType);
 
             var typical = new TECTypical();
             bid.Systems.Add(typical);
@@ -287,7 +290,7 @@ namespace Models
             panelType.Price = 50;
             panelType.Labor = 7;
 
-            var panel = new TECPanel(panelType, true);
+            var panel = new TECPanel(panelType);
 
             var typical = new TECTypical();
             bid.Systems.Add(typical);
@@ -315,7 +318,7 @@ namespace Models
             panelType.Price = 50;
             panelType.Labor = 7;
 
-            var panel = new TECPanel(panelType, true);
+            var panel = new TECPanel(panelType);
 
             var typical = new TECTypical();
             bid.Systems.Add(typical);
@@ -344,7 +347,7 @@ namespace Models
             panelType.Price = 50;
             panelType.Labor = 7;
 
-            var panel = new TECPanel(panelType, true);
+            var panel = new TECPanel(panelType);
 
             var typical = new TECTypical();
             bid.Systems.Add(typical);
@@ -366,7 +369,7 @@ namespace Models
             var bid = new TECBid();
             bid.Parameters = parameters;
             var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
-            bid.Catalogs = TestHelper.CreateTestCatalogs();
+            bid.Catalogs = ModelCreation.TestCatalogs(rand);
             var system = TestHelper.CreateTestTypical(bid.Catalogs);
             bid.Systems.Add(system);
 
