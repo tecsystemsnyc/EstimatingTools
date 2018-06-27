@@ -7,6 +7,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using TestLibrary.ModelTestingUtilities;
 
 namespace EstimatingUtilitiesLibraryTests
 {
@@ -16,12 +17,14 @@ namespace EstimatingUtilitiesLibraryTests
         TECBid bid;
         DeltaStacker testStack;
         string path;
+        Random rand;            
 
         [TestInitialize]
         public void TestInitialize()
         {
+            rand = new Random(0);
             path = Path.GetTempFileName();
-            bid = TestHelper.CreateTestBid();
+            bid = ModelCreation.TestBid(rand);
             ChangeWatcher watcher = new ChangeWatcher(bid);
             testStack = new DeltaStacker(watcher, bid);
             DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
@@ -502,7 +505,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             TECTypical typical = bid.Systems[0];
 
-            typical.Equipment.Add(TestHelper.CreateTestEquipment(true, bid.Catalogs));
+            typical.Equipment.Add(ModelCreation.TestEquipment(bid.Catalogs, rand));
             TECSystem expectedSystem = typical.AddInstance(bid);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
@@ -606,7 +609,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Act
             TECSystem expectedSystem = bid.Systems[0];
-            var expectedMisc = new TECMisc(CostType.Electrical, true);
+            var expectedMisc = new TECMisc(CostType.Electrical);
             expectedSystem.MiscCosts.Add(expectedMisc);
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -642,7 +645,7 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Bid_Add_Equipment()
         {
             //Act
-            TECEquipment expectedEquipment = new TECEquipment(true);
+            TECEquipment expectedEquipment = new TECEquipment();
             expectedEquipment.Name = "New Equipment";
             expectedEquipment.Description = "New Description";
             Guid systemGuid = bid.Systems[0].Guid;
@@ -783,7 +786,7 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Bid_Add_SubScope()
         {
             //Act
-            TECSubScope expectedSubScope = new TECSubScope(true);
+            TECSubScope expectedSubScope = new TECSubScope();
             expectedSubScope.Name = "New SubScope";
             expectedSubScope.Description = "New Description";
 
@@ -1223,7 +1226,7 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Bid_Add_Point()
         {
             //Act
-            TECPoint expectedPoint = new TECPoint(true);
+            TECPoint expectedPoint = new TECPoint();
             expectedPoint.Type = IOType.AI;
             expectedPoint.Label = "New Point";
             expectedPoint.Quantity = 5;
@@ -1615,7 +1618,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Act
             int oldNumBranches = bid.ScopeTree.Count();
-            TECScopeBranch expectedBranch = new TECScopeBranch(false);
+            TECScopeBranch expectedBranch = new TECScopeBranch();
             expectedBranch.Label = "New Branch";
             bid.ScopeTree.Add(expectedBranch);
 
@@ -1642,7 +1645,7 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Bid_Add_Branch_InBranch()
         {
             //Act
-            TECScopeBranch expectedBranch = new TECScopeBranch(false);
+            TECScopeBranch expectedBranch = new TECScopeBranch();
             expectedBranch.Label = "New Child";
             TECScopeBranch branchToModify = bid.ScopeTree[0];
             branchToModify.Branches.Add(expectedBranch);
@@ -2314,7 +2317,7 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Bid_Add_Controller()
         {
             //Act
-            TECController expectedController = new TECProvidedController(Guid.NewGuid(), bid.Catalogs.ControllerTypes[0], false);
+            TECController expectedController = new TECProvidedController(Guid.NewGuid(), bid.Catalogs.ControllerTypes[0]);
             expectedController.Name = "Test Add Controller";
             expectedController.Description = "Test description";
 
@@ -2434,7 +2437,7 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Bid_Add_MiscCost()
         {
             //Act
-            TECMisc expectedCost = new TECMisc(CostType.Electrical, false);
+            TECMisc expectedCost = new TECMisc(CostType.Electrical);
             expectedCost.Name = "Add cost addition";
             expectedCost.Cost = 978.3;
             expectedCost.Quantity = 21;
@@ -2594,7 +2597,7 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Bid_Add_Panel()
         {
             //Act
-            TECPanel expectedPanel = new TECPanel(bid.Catalogs.PanelTypes[0], false);
+            TECPanel expectedPanel = new TECPanel(bid.Catalogs.PanelTypes[0]);
             expectedPanel.Name = "Test Add Controller";
             expectedPanel.Description = "Test description";
             bid.Panels.Add(expectedPanel);

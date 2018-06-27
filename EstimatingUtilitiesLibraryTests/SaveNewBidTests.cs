@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using TestLibrary.ModelTestingUtilities;
 
 namespace EstimatingUtilitiesLibraryTests
 {
@@ -64,11 +65,13 @@ namespace EstimatingUtilitiesLibraryTests
             }
         }
 
+        static Random rand;
+            
         [ClassInitialize]
         public static void ClassInitialize(TestContext TestContext)
         {
             //Arrange
-            expectedBid = TestHelper.CreateTestBid();
+            expectedBid = ModelCreation.TestBid(rand);
             expectedLabor = expectedBid.ExtraLabor;
             expectedParameters = expectedBid.Parameters;
             expectedSystem = expectedBid.Systems.First(item => item.Name == "System 1");
@@ -143,12 +146,12 @@ namespace EstimatingUtilitiesLibraryTests
                     break;
                 }
             }
-
-            actualEquipment = TestHelper.FindObjectInSystems(actualBid.Systems, expectedEquipment) as TECEquipment;
-            actualSubScope = TestHelper.FindObjectInSystems(actualBid.Systems, expectedSubScope) as TECSubScope;
+            
+            actualEquipment = actualBid.FindChild(expectedEquipment.Guid) as TECEquipment;
+            actualSubScope = actualBid.FindChild(expectedSubScope.Guid) as TECSubScope;
             actualDevices = actualSubScope.Devices;
-            actualDevice = TestHelper.FindObjectInSystems(actualBid.Systems, expectedDevice) as TECDevice;
-            actualPoint = TestHelper.FindObjectInSystems(actualBid.Systems, expectedPoint) as TECPoint;
+            actualDevice = actualBid.FindChild(expectedDevice.Guid) as TECDevice;
+            actualPoint = actualBid.FindChild(expectedPoint.Guid) as TECPoint;
             foreach (TECManufacturer man in actualBid.Catalogs.Manufacturers)
             {
                 if (man.Guid == expectedManufacturer.Guid)
@@ -329,8 +332,8 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             TECBid bid = new TECBid();
-            bid.Catalogs = TestHelper.CreateTestCatalogs();
-            TECTypical expectedSystem = TestHelper.CreateTestTypical(bid.Catalogs);
+            bid.Catalogs = ModelCreation.TestCatalogs(rand);
+            TECTypical expectedSystem = ModelCreation.TestTypical(bid.Catalogs, rand);
             bid.Systems.Add(expectedSystem);
             expectedSystem.AddInstance(bid);
 
@@ -371,9 +374,9 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Arrange
             TECBid bid = new TECBid();
-            bid.Catalogs = TestHelper.CreateTestCatalogs();
+            bid.Catalogs = ModelCreation.TestCatalogs(rand);
             TECTypical system = new TECTypical();
-            TECEquipment expectedEquipment = TestHelper.CreateTestEquipment(true, bid.Catalogs);
+            TECEquipment expectedEquipment = ModelCreation.TestEquipment(bid.Catalogs, rand);
             system.Equipment.Add(expectedEquipment);
             bid.Systems.Add(system);
 
@@ -384,7 +387,7 @@ namespace EstimatingUtilitiesLibraryTests
             manager.New(bid);
             TECBid loadedBid = manager.Load() as TECBid;
 
-            TECEquipment actualEquipment = TestHelper.FindObjectInSystems(loadedBid.Systems, expectedEquipment) as TECEquipment;
+            TECEquipment actualEquipment = loadedBid.FindChild(expectedEquipment.Guid) as TECEquipment;
 
             //Assert
             Assert.AreEqual(expectedEquipment.Name, actualEquipment.Name);
@@ -397,10 +400,10 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             TECBid bid = new TECBid();
-            bid.Catalogs = TestHelper.CreateTestCatalogs();
+            bid.Catalogs = ModelCreation.TestCatalogs(rand);
             TECTypical system = new TECTypical();
-            TECEquipment expectedEquipment = new TECEquipment(true);
-            TECSubScope expectedSubScope = TestHelper.CreateTestSubScope(true, bid.Catalogs);
+            TECEquipment expectedEquipment = new TECEquipment();
+            TECSubScope expectedSubScope = ModelCreation.TestSubScope(bid.Catalogs, rand);
             expectedEquipment.SubScope.Add(expectedSubScope);
             system.Equipment.Add(expectedEquipment);
 
@@ -413,7 +416,7 @@ namespace EstimatingUtilitiesLibraryTests
             manager.New(bid);
             TECBid loadedBid = manager.Load() as TECBid;
 
-            TECSubScope actualSubScope = TestHelper.FindObjectInSystems(loadedBid.Systems, expectedSubScope) as TECSubScope;
+            TECSubScope actualSubScope = loadedBid.FindChild(expectedSubScope.Guid) as TECSubScope;
 
 
             //Assert
@@ -498,11 +501,11 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Assert
             Assert.AreEqual(expectedManufacturer.Label, actualManufacturer.Label);
-            Assert.IsTrue(TestHelper.areDoublesEqual(expectedManufacturer.Multiplier, actualManufacturer.Multiplier),
+            Assert.AreEqual(expectedManufacturer.Multiplier, actualManufacturer.Multiplier, DELTA,
                 "Expected: " + expectedManufacturer.Multiplier + " Actual: " + actualManufacturer.Multiplier);
 
             Assert.AreEqual(expectedDevice.Manufacturer.Label, expectedDevice.Manufacturer.Label);
-            Assert.IsTrue(TestHelper.areDoublesEqual(expectedDevice.Manufacturer.Multiplier, expectedDevice.Manufacturer.Multiplier));
+            Assert.AreEqual(expectedDevice.Manufacturer.Multiplier, expectedDevice.Manufacturer.Multiplier, DELTA);
             Assert.AreEqual(expectedDevice.Manufacturer.Guid, expectedDevice.Manufacturer.Guid);
         }
 
@@ -618,8 +621,8 @@ namespace EstimatingUtilitiesLibraryTests
                     break;
                 }
             }
-            TECController actualConnectedController = TestHelper.FindControllerInController(actualBid.Controllers, expectedConnectedController);
-            TECHardwiredConnection actualConnection = TestHelper.FindConnectionInController(actualConnectedController, expectedConnection) as TECHardwiredConnection;
+            TECController actualConnectedController = actualBid.FindChild(expectedConnectedController.Guid) as TECController;
+            TECHardwiredConnection actualConnection = actualConnectedController.FindChild(expectedConnection.Guid) as TECHardwiredConnection;
 
             //Assert
             Assert.AreEqual(expectedConnection.Guid, actualConnection.Guid);
@@ -776,8 +779,8 @@ namespace EstimatingUtilitiesLibraryTests
         public void SaveAs_Bid_SystemInstances()
         {
             TECBid saveBid = new TECBid();
-            saveBid.Catalogs = TestHelper.CreateTestCatalogs();
-            TECTypical system = TestHelper.CreateTestTypical(saveBid.Catalogs);
+            saveBid.Catalogs = ModelCreation.TestCatalogs(rand);
+            TECTypical system = ModelCreation.TestTypical(saveBid.Catalogs, rand);
             saveBid.Systems.Add(system);
 
             //Act
@@ -806,7 +809,7 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void SaveAs_Bid_Estimate()
         {
-            TECBid saveBid = TestHelper.CreateTestBid();
+            TECBid saveBid = ModelCreation.TestBid(rand);
             var watcher = new ChangeWatcher(saveBid);
             TECEstimator estimate = new TECEstimator(saveBid, watcher);
             var expectedTotalCost = estimate.TotalCost;
@@ -857,7 +860,7 @@ namespace EstimatingUtilitiesLibraryTests
             }
             if(item is INotifyCostChanged costItem)
             {
-                if (TestHelper.ObjectWithGuid(item.Guid, referenceBid) == null)
+                if (referenceBid.FindChild(item.Guid) == null)
                 {
                     var errant = item;
                     throw new Exception();
