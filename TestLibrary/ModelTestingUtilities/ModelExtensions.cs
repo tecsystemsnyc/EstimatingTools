@@ -113,5 +113,25 @@ namespace TestLibrary.ModelTestingUtilities
             sys.ProposeEquipment = rand.NextBool();
         }
         #endregion
+
+        #region IRelatableExtension
+        
+        public static ITECObject FindChild(this IRelatable parent, Guid guid)
+        {
+            foreach(ITECObject child in parent.GetDirectChildren())
+            {
+                if(child.Guid == guid)
+                {
+                    return child;
+                }
+                else if (child is IRelatable childRel)
+                {
+                    return childRel.FindChild(guid);
+                }
+            }
+            return null;
+        }
+
+        #endregion
     }
 }

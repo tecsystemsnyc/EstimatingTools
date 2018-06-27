@@ -5,13 +5,17 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
 using System.Linq;
-using static Tests.CostTestingUtilities;
+using TestLibrary;
+using TestLibrary.ModelTestingUtilities;
+using static TestLibrary.GeneralTestingUtilities;
 
-namespace Tests
+namespace EstimatingUtilitiesLibraryTests
 {
     [TestClass]
     public class SaveNewTemplatesTests
     {
+        static Random rand;
+
         static TECTemplates expectedTemplates;
         static TECSystem expectedSystem;
         static TECEquipment expectedEquipment;
@@ -54,8 +58,9 @@ namespace Tests
         [ClassInitialize]
         public static void ClassInitialize(TestContext TestContext)
         {
+            rand = new Random(0);
             //Arrange
-            expectedTemplates = TestHelper.CreateTestTemplates();
+            expectedTemplates = ModelCreation.TestTemplates(rand);
             expectedSystem = expectedTemplates.SystemTemplates.First(sys => sys.Name == "Test System");
             expectedEquipment = expectedTemplates.EquipmentTemplates.First(sys => sys.Name == "Test Equipment");
             expectedSubScope = expectedTemplates.SubScopeTemplates.First(sys => sys.Name == "Test SubScope");

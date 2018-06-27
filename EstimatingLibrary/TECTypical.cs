@@ -12,28 +12,20 @@ namespace EstimatingLibrary
     public class TECTypical : TECSystem
     {
         #region Fields
-        private ObservableCollection<TECSystem> _instances;
-
-        private ObservableListDictionary<ITECObject> _typicalInstanceDictionary;
-
-        private ChangeWatcher watcher;
+        private ObservableCollection<TECSystem> _instances = new ObservableCollection<TECSystem>();
+        private ObservableListDictionary<ITECObject> _typicalInstanceDictionary = new ObservableListDictionary<ITECObject>();
+        private TypicalWatcherFilter watcher;
         #endregion
 
         #region Constructors
         public TECTypical(Guid guid) : base(guid)
         {
             this.IsTypical = true;
-            _instances = new ObservableCollection<TECSystem>();
-
-            TypicalInstanceDictionary = new ObservableListDictionary<ITECObject>();
-
+            
             _instances.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Instances");
 
-            watcher = new ChangeWatcher(this);
-            //watcher.Changed += handleSystemChanged;
-            new TypicalWatcherFilter(watcher).TypicalChanged += handleSystemChanged;
-
-
+            watcher = new TypicalWatcherFilter(new ChangeWatcher(this));
+            watcher.TypicalChanged += handleSystemChanged;
         }
         
         public TECTypical() : this(Guid.NewGuid()) { }
@@ -130,7 +122,6 @@ namespace EstimatingLibrary
                 _instances.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Instances");
             }
         }
-
         public ObservableListDictionary<ITECObject> TypicalInstanceDictionary
         {
             get
@@ -157,8 +148,7 @@ namespace EstimatingLibrary
         {
             Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
             var newSystem = new TECSystem();
-            newSystem.Name = Name;
-            newSystem.Description = Description;
+            newSystem.CopyPropertiesFromScope(this);
             foreach (TECEquipment equipment in Equipment)
             {
                 var toAdd = new TECEquipment(equipment, guidDictionary, TypicalInstanceDictionary);
@@ -188,10 +178,6 @@ namespace EstimatingLibrary
                 var toAdd = new TECScopeBranch(branch);
                 _typicalInstanceDictionary.AddItem(branch, toAdd);
                 newSystem.ScopeBranches.Add(toAdd);
-            }
-            foreach (TECAssociatedCost cost in AssociatedCosts)
-            {
-                newSystem.AssociatedCosts.Add(cost);
             }
             ModelLinkingHelper.LinkSystem(newSystem, bid, guidDictionary);
             
@@ -299,16 +285,16 @@ namespace EstimatingLibrary
 
             return outConnections;
         }
-        public List<T> GetInstancesFromTypical<T>(T typical) where T : TECObject
+        public List<T> GetInstancesFromTypical<T>(T typical) where T : ITECObject
         {
             return this.TypicalInstanceDictionary.GetInstances(typical);
         }
         
         internal void RefreshRegistration()
         {
-            watcher.Changed -= handleSystemChanged;
-            watcher = new ChangeWatcher(this);
-            watcher.Changed += handleSystemChanged;
+            watcher.TypicalChanged -= handleSystemChanged;
+            watcher = new TypicalWatcherFilter(new ChangeWatcher(this));
+            watcher.TypicalChanged += handleSystemChanged;
         }
 
         public override object DragDropCopy(TECScopeManager scopeManager)
@@ -340,19 +326,6 @@ namespace EstimatingLibrary
         private void typicalInstanceDictionary_CollectionChanged(Tuple<Change, ITECObject, ITECObject> obj)
         {
             notifyTECChanged(obj.Item1, "TypicalInstanceDictionary", obj.Item2, obj.Item3);
-        }
-        private void removeFromDictionary(IEnumerable<ITECObject> typicalList, IEnumerable<ITECObject> instanceList)
-        {
-            foreach (TECObject typical in typicalList)
-            {
-                foreach (TECObject instance in instanceList)
-                {
-                    if (TypicalInstanceDictionary.GetInstances(typical).Contains(instance))
-                    {
-                        TypicalInstanceDictionary.RemoveItem(typical, instance);
-                    }
-                }
-            }
         }
 
         protected override int points()
@@ -484,67 +457,30 @@ namespace EstimatingLibrary
 
         private void handleInstanceRemoved(TECSystem instance)
         {
-            foreach (TECSubScope subScope in instance.GetAllSubScope())
-            {
-                if (subScope.Connection != null && !instance.Controllers.Contains(subScope.Connection.ParentController))
-                {
-                    subScope.Connection.ParentController.Disconnect(subScope);
-                }
-            }
-            foreach(TECController controller in instance.Controllers)
-            {
-                if(controller.ParentConnection != null && !instance.Controllers.Contains(controller.ParentConnection.ParentController))
-                {
-                    controller.ParentConnection.ParentController.Disconnect(controller);
-                }
-                foreach(TECConnection connection in controller.ChildrenConnections)
-                {
-                    if(connection is TECHardwiredConnection hardwired)
-                    {
-                        if (instance.GetAllSubScope().Contains(hardwired.Child))
-                        {
-                            hardwired.Child.SetParentConnection(null);
-                        }
-                    } else if(connection is TECNetworkConnection netConnect)
-                    {
-                        foreach(var child in netConnect.Children)
-                        {
-                            if(child is TECController childController)
-                            {
-                                if (instance.Controllers.Contains(childController))
-                                {
-                                    break;
-                                }
-                            }
-                            if(child is TECSubScope childSub)
-                            {
-                                if (instance.GetAllSubScope().Contains(childSub))
-                                {
-                                    break;
-                                }
-                            }
-                            child.SetParentConnection(null);
-                        }
-                    }
-                }
-            }
-            removeFromDictionary(Panels, instance.Panels);
-            removeFromDictionary(Equipment, instance.Equipment);
+            instance.Controllers.ForEach(x => x.DisconnectAll());
+            TypicalInstanceDictionary.RemoveValuesForKeys(instance.Panels, Panels);
+            TypicalInstanceDictionary.RemoveValuesForKeys(instance.Equipment, Equipment);
+
+            var typicalSubScope = GetAllSubScope();
             foreach(TECEquipment instanceEquip in instance.Equipment)
             {
-                removeFromDictionary(GetAllSubScope(), instanceEquip.SubScope);
+                TypicalInstanceDictionary.RemoveValuesForKeys(instanceEquip.SubScope, typicalSubScope);
                 foreach (TECSubScope instanceSubScope in instanceEquip.SubScope)
                 {
-                    foreach(TECSubScope subScope in GetAllSubScope())
+                    if (instanceSubScope.Connection != null && !instance.Controllers.Contains(instanceSubScope.Connection.ParentController))
                     {
-                        removeFromDictionary(subScope.Points, instanceSubScope.Points);
-                        removeFromDictionary(subScope.Interlocks, instanceSubScope.Interlocks);
+                        instanceSubScope.Connection.ParentController.Disconnect(instanceSubScope);
+                    }
+                    foreach (TECSubScope subScope in typicalSubScope)
+                    {
+                        TypicalInstanceDictionary.RemoveValuesForKeys(instanceSubScope.Points, subScope.Points);
+                        TypicalInstanceDictionary.RemoveValuesForKeys(instanceSubScope.Interlocks, subScope.Interlocks);
                     }
                 }
             }
-            removeFromDictionary(Controllers, instance.Controllers);
-            removeFromDictionary(MiscCosts, instance.MiscCosts);
-            removeFromDictionary(ScopeBranches, instance.ScopeBranches);
+            TypicalInstanceDictionary.RemoveValuesForKeys(instance.Controllers, Controllers);
+            TypicalInstanceDictionary.RemoveValuesForKeys(instance.MiscCosts, MiscCosts);
+            TypicalInstanceDictionary.RemoveValuesForKeys(instance.ScopeBranches, ScopeBranches);
         }
         private void handlePointChanged(TECPoint point, string propertyName)
         {

@@ -155,7 +155,7 @@ namespace TECUserControlLibrary.ViewModels
         private void addInterlockExecute()
         {
             var typical = SelectedInterlockable as ITypicalable;
-            TECInterlockConnection connection = new TECInterlockConnection(ConnectionTypes, typical?.IsTypical ?? false);
+            TECInterlockConnection connection = new TECInterlockConnection(ConnectionTypes);
             connection.Name = Name;
             connection.Length = Length;
             if(ConduitType != noneConduit) { connection.ConduitType = ConduitType; }
