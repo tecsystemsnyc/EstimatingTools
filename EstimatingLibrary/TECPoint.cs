@@ -56,12 +56,12 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "IsNetwork", this, value, old);
             }
         }
-        
-        public bool IsTypical { get; private set; }
+
+        public bool IsTypical { get; private set; } = false;
         #endregion //Properties
 
         #region Constructors
-        public TECPoint(Guid guid) : base(guid) { IsTypical = false; }
+        public TECPoint(Guid guid) : base(guid) { }
         public TECPoint() : this(Guid.NewGuid()) { }
 
         public TECPoint(TECPoint pointSource) : this()

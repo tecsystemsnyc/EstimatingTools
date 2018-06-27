@@ -73,6 +73,10 @@ namespace TestLibrary.ModelTestingUtilities
         #endregion
 
         #region Assign Model Properties Methods
+        public static void AssignTestLabel(this TECLabeled labeled)
+        {
+            labeled.Label = labeled.Guid.ToString().Substring(0, 5);
+        }
         public static void AssignRandomScopeProperties(this TECScope scope, TECCatalogs catalogs, Random rand)
         {
             scope.Name = scope.Guid.ToString().Substring(0, 5);
@@ -95,6 +99,17 @@ namespace TestLibrary.ModelTestingUtilities
             TECAssociatedCost randElecCost = catalogs.RandomCost(rand, CostType.Electrical);
             if (randTECCost != null) mat.RatedCosts.Add(randTECCost);
             if (randElecCost != null) mat.RatedCosts.Add(randElecCost);
+        }
+        public static void AssignRandomSystemProperties(this TECSystem sys, TECCatalogs catalogs, Random rand)
+        {
+            sys.AssignRandomScopeProperties(catalogs, rand);
+            rand.RepeatAction(() => sys.Equipment.Add(ModelCreation.TestEquipment(catalogs, rand)), 5);
+            rand.RepeatAction(() => sys.AddController(ModelCreation.TestProvidedController(catalogs, rand)), 5);
+            rand.RepeatAction(() => sys.Panels.Add(ModelCreation.TestPanel(catalogs, rand)), 5);
+            rand.RepeatAction(() => sys.MiscCosts.Add(ModelCreation.TestMisc(catalogs, rand, CostType.TEC)), 5);
+            rand.RepeatAction(() => sys.MiscCosts.Add(ModelCreation.TestMisc(catalogs, rand, CostType.Electrical)), 5);
+            rand.RepeatAction(() => sys.ScopeBranches.Add(ModelCreation.TestScopeBranch(rand, 3)), 5);
+            sys.ProposeEquipment = rand.NextBool();
         }
         #endregion
     }
