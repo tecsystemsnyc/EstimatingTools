@@ -100,8 +100,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         public AddSubScopeVM(TECEquipment parentEquipment, TECScopeManager scopeManager) : base(scopeManager)
         {
             parent = parentEquipment;
-            isTypical = parent.IsTypical;
-            toAdd = new TECSubScope(parentEquipment.IsTypical);
+            toAdd = new TECSubScope();
             add = subScope =>
             {
                 parent.SubScope.Add(subScope);
@@ -113,7 +112,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         public AddSubScopeVM(Action<TECSubScope> addMethod, TECScopeManager scopeManager): base(scopeManager)
         {
             add = addMethod;
-            toAdd = new TECSubScope(false);
+            toAdd = new TECSubScope();
             setup();
             PropertiesVM.DisplayReferenceProperty = false;
         }
@@ -176,7 +175,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 TECSubScope subScope = null;
                 if(underlyingTemplate != null)
                 {
-                    subScope = AsReference ? templates.SubScopeSynchronizer.NewItem(underlyingTemplate) : new TECSubScope(underlyingTemplate, isTypical);
+                    subScope = AsReference ? templates.SubScopeSynchronizer.NewItem(underlyingTemplate) : new TECSubScope(underlyingTemplate);
                     subScope.CopyPropertiesFromScope(ToAdd);
                     foreach (IEndDevice device in ToAdd.Devices.Where(item => !originalDevices.Contains(item)))
                     {
@@ -189,7 +188,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 }
                 else
                 {
-                    subScope = new TECSubScope(ToAdd, isTypical);
+                    subScope = new TECSubScope(ToAdd);
                 }
                 
                 add(subScope);
@@ -216,7 +215,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         
         internal void SetTemplate(TECSubScope subScope)
         {
-            ToAdd = new TECSubScope(subScope, isTypical);
+            ToAdd = new TECSubScope(subScope);
             originalDevices = new List<IEndDevice>(ToAdd.Devices);
             originalPoints = new List<TECPoint>(ToAdd.Points);
             underlyingTemplate = subScope;

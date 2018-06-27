@@ -15,7 +15,6 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private TECPanel toAdd;
         private int quantity;
         private Action<TECPanel> add;
-        private bool isTypical = false;
 
         public TECPanel ToAdd
         {
@@ -41,13 +40,12 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             Quantity = 1;
             parent = parentSystem;
-            isTypical = parent.IsTypical;
             add = panel =>
             {
                 parent.Panels.Add(panel);
             };
             PanelTypes = new List<TECPanelType>(panelTypes);
-            toAdd = new TECPanel(PanelTypes[0], parentSystem.IsTypical);
+            toAdd = new TECPanel(PanelTypes[0]);
             AddCommand = new RelayCommand(addExecute, addCanExecute);
         }
         public AddPanelVM(Action<TECPanel> addMethod, IEnumerable<TECPanelType> panelTypes, TECScopeManager scopeManager) : base(scopeManager)
@@ -55,7 +53,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             Quantity = 1;
             add = addMethod;
             PanelTypes = new List<TECPanelType>(panelTypes);
-            toAdd = new TECPanel(PanelTypes[0], false);
+            toAdd = new TECPanel(PanelTypes[0]);
             AddCommand = new RelayCommand(addExecute, addCanExecute);
 
         }
@@ -68,7 +66,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             for (int x = 0; x < Quantity; x++)
             {
-                var panel = AsReference ? ToAdd : new TECPanel(ToAdd, isTypical);
+                var panel = AsReference ? ToAdd : new TECPanel(ToAdd);
                 add(panel);
                 Added?.Invoke(panel);
             }
@@ -77,7 +75,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
 
         internal void SetTemplate(TECPanel panel)
         {
-            ToAdd = new TECPanel(panel, isTypical);
+            ToAdd = new TECPanel(panel);
         }
     }
 }

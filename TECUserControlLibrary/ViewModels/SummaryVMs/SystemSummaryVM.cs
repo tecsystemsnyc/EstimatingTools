@@ -128,7 +128,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
         
         private void setupExtraLaborEstimate(TECBid bid)
         {
-            ExtraLaborEstimate = new TECEstimator(new TECPoint(true), bid.Parameters, bid.ExtraLabor, bid.Duration, new ChangeWatcher(bid.ExtraLabor));
+            ExtraLaborEstimate = new TECEstimator(new TECPoint(), bid.Parameters, bid.ExtraLabor, bid.Duration, new ChangeWatcher(bid.ExtraLabor));
         }
         private void populateAll(TECBid bid)
         {

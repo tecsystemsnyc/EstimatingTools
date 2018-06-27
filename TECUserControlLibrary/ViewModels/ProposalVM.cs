@@ -40,7 +40,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addSystemNoteExecute(TECSystem obj)
         {
-            obj.ScopeBranches.Add(new TECScopeBranch(obj.IsTypical));
+            obj.ScopeBranches.Add(new TECScopeBranch());
         }
 
         private void addNoteExecute()
@@ -62,10 +62,10 @@ namespace TECUserControlLibrary.ViewModels
         {
             if(obj == null)
             {
-                Bid.ScopeTree.Add(new TECScopeBranch(false));
+                Bid.ScopeTree.Add(new TECScopeBranch());
             } else
             {
-                obj.Branches.Add(new TECScopeBranch(obj.IsTypical));
+                obj.Branches.Add(new TECScopeBranch());
             }
         }
     }
