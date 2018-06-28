@@ -17,7 +17,7 @@ namespace TestLibrary
         public static void RepeatAction(this Random rand, Action act, int maxTimes = -1)
         {
             int numTimes = maxTimes < 0 ? rand.Next() : rand.Next(maxTimes);
-            for(int i = 0; i < numTimes; i++)
+            for(int i = 0; i <= numTimes; i++)
             {
                 act.Invoke();
             }

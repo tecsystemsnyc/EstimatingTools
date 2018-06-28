@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using TestLibrary.ModelTestingUtilities;
+using static TestLibrary.GeneralTestingUtilities;
 
 namespace EstimatingUtilitiesLibraryTests
 {
@@ -947,7 +948,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
-            TECDevice actualDevice = null;
+            IEndDevice actualDevice = null;
             int actualQuantity = 0;
             foreach (TECSystem sys in actualBid.Systems)
             {
@@ -957,12 +958,12 @@ namespace EstimatingUtilitiesLibraryTests
                     {
                         if (ss.Guid == subScopeToModify.Guid)
                         {
-                            foreach (TECDevice dev in ss.Devices)
+                            foreach (IEndDevice dev in ss.Devices)
                             {
                                 if (dev.Guid == expectedDevice.Guid)
                                 { actualQuantity++; }
                             }
-                            foreach (TECDevice dev in ss.Devices)
+                            foreach (IEndDevice dev in ss.Devices)
                             {
                                 if (dev.Guid == expectedDevice.Guid)
                                 {
@@ -982,7 +983,7 @@ namespace EstimatingUtilitiesLibraryTests
             Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
             Assert.AreEqual(expectedQuantity, actualQuantity);
-            Assert.AreEqual(expectedDevice.Price, actualDevice.Price);
+            Assert.AreEqual(expectedDevice.Price, (actualDevice as TECHardware).Price, DELTA);
             Assert.AreEqual(expectedDevice.HardwiredConnectionTypes.Count, actualDevice.HardwiredConnectionTypes.Count);
         }
 
@@ -1084,11 +1085,11 @@ namespace EstimatingUtilitiesLibraryTests
                 }
                 if (ssToModify != null) break;
             }
-            TECDevice deviceToRemove = (ssToModify.Devices[0] as TECDevice);
+            IEndDevice deviceToRemove = (ssToModify.Devices[0] as IEndDevice);
 
             int oldNumDevices = 0;
 
-            foreach (TECDevice dev in ssToModify.Devices)
+            foreach (IEndDevice dev in ssToModify.Devices)
             {
                 if (dev.Guid == deviceToRemove.Guid)
                     oldNumDevices++;
@@ -1120,14 +1121,18 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Assert
             bool devFound = false;
-            foreach (TECDevice dev in actualBid.Catalogs.Devices)
+            foreach (IEndDevice dev in actualBid.Catalogs.Devices)
+            {
+                if (deviceToRemove.Guid == dev.Guid) devFound = true;
+            }
+            foreach (IEndDevice dev in actualBid.Catalogs.Valves)
             {
                 if (deviceToRemove.Guid == dev.Guid) devFound = true;
             }
             if (!devFound) Assert.Fail();
 
             int numDevices = 0;
-            foreach (TECDevice dev in modifiedSubScope.Devices)
+            foreach (IEndDevice dev in modifiedSubScope.Devices)
             {
                 if (dev.Guid == deviceToRemove.Guid)
                     numDevices++;
@@ -1159,11 +1164,11 @@ namespace EstimatingUtilitiesLibraryTests
                 }
                 if (ssToModify != null) break;
             }
-            TECDevice expectedDevice = (ssToModify.Devices[0] as TECDevice);
+            IEndDevice expectedDevice = (ssToModify.Devices[0] as IEndDevice);
 
             int expectedNumDevices = 0;
 
-            foreach (TECDevice dev in ssToModify.Devices)
+            foreach (IEndDevice dev in ssToModify.Devices)
             {
                 if (dev.Guid == expectedDevice.Guid) expectedNumDevices++;
             }
@@ -1196,15 +1201,15 @@ namespace EstimatingUtilitiesLibraryTests
                 if (modifiedSS != null) break;
             }
 
-            TECDevice actualDevice = null;
-            foreach (TECDevice dev in modifiedSS.Devices)
+            IEndDevice actualDevice = null;
+            foreach (IEndDevice dev in modifiedSS.Devices)
             {
                 if (dev.Guid == expectedDevice.Guid)
                 {
                     actualQuantity++;
                 }
             }
-            foreach (TECDevice dev in modifiedSS.Devices)
+            foreach (IEndDevice dev in modifiedSS.Devices)
             {
                 if (expectedDevice.Guid == dev.Guid)
                 {
@@ -1847,15 +1852,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             TECLocation expectedLocation = bid.Locations[0];
 
-            TECSystem sysToModify = null;
-            foreach (TECSystem sys in bid.Systems)
-            {
-                if (sys.Location == null)
-                {
-                    sysToModify = sys;
-                    break;
-                }
-            }
+            TECSystem sysToModify = bid.Systems.First(x => x.Equipment.Count > 0 && x.Equipment[0].SubScope.Count > 0);
             TECEquipment equipToModify = sysToModify.Equipment[0];
             TECSubScope ssToModify = equipToModify.SubScope[0];
 

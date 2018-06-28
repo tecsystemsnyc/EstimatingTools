@@ -152,7 +152,8 @@ namespace EstimatingLibrary
 
                 foreach (TECObject item in e.NewItems)
                 {
-                    if(item is INotifyCostChanged cost)
+                    if (this.IsTypical && item is ITypicalable typ) { typ.MakeTypical(); }
+                    if (item is INotifyCostChanged cost)
                     {
                         costs += cost.CostBatch;
                         costChanged = true;
@@ -212,9 +213,9 @@ namespace EstimatingLibrary
         {
             Points.Add(point);
         }
-        public void RemovePoint(TECPoint point)
+        public bool RemovePoint(TECPoint point)
         {
-            Points.Remove(point);
+            return Points.Remove(point);
         }
 
         public bool CanConnectToNetwork(TECNetworkConnection netConnect)
@@ -371,7 +372,7 @@ namespace EstimatingLibrary
         {
             if(property == "Points" && item is TECPoint point)
             {
-                Points.Add(point);
+                AddPoint(point);
             }
             else if (property == "Devices" && item is IEndDevice device)
             {
@@ -391,7 +392,7 @@ namespace EstimatingLibrary
         {
             if (property == "Points" && item is TECPoint point)
             {
-                return Points.Remove(point);
+                return RemovePoint(point);
             }
             else if (property == "Devices" && item is IEndDevice device)
             {

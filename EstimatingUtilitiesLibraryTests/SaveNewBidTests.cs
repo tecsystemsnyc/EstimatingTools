@@ -70,43 +70,27 @@ namespace EstimatingUtilitiesLibraryTests
         [ClassInitialize]
         public static void ClassInitialize(TestContext TestContext)
         {
+            rand = new Random(0);
             //Arrange
             expectedBid = ModelCreation.TestBid(rand);
             expectedLabor = expectedBid.ExtraLabor;
             expectedParameters = expectedBid.Parameters;
-            expectedSystem = expectedBid.Systems.First(item => item.Name == "System 1");
-            expectedSystem1 = expectedBid.Systems.First(item => item.Name == "System 2");
+            expectedSystem = expectedBid.Systems.First();
+            expectedSystem1 = expectedBid.Systems.First(x => x != expectedSystem);
 
-            expectedEquipment = expectedSystem.Equipment.First(item => item.Name == "Equipment 1");
-            expectedSubScope = expectedEquipment.SubScope.First(item => item.Name == "SubScope 1");
-            expectedDevice = null;
-            foreach(TECDevice device in expectedBid.Catalogs.Devices)
-            {
-                if(device.Tags.Count != 0)
-                {
-                    expectedDevice = device;
-                    break;
-                }
-            }
+            expectedEquipment = expectedSystem.Equipment.First(x => x.SubScope.Count > 0);
+            expectedSubScope = expectedEquipment.SubScope.First();
+            expectedDevice = expectedBid.Catalogs.Devices.Where(x => x.Tags.Count > 0).First();
 
             expectedManufacturer = expectedBid.Catalogs.Manufacturers[0];
             expectedPoint = expectedSubScope.Points[0];
 
-            expectedBranch = null;
-            foreach (TECScopeBranch branch in expectedBid.ScopeTree)
-            {
-                if (branch.Label == "Branch 1")
-                {
-                    expectedBranch = branch;
-                    break;
-                }
-            }
-
+            expectedBranch = expectedBid.ScopeTree.First();
             expectedNote = expectedBid.Notes[0];
             expectedExclusion = expectedBid.Exclusions[0];
             expectedTag = expectedBid.Catalogs.Tags[0];
 
-            expectedController = (TECProvidedController)expectedBid.Controllers.First(item => item.Name == "Test Controller" && item is TECProvidedController);
+            expectedController = (TECProvidedController)expectedBid.Controllers.First(item => item is TECProvidedController);
 
             path = Path.GetTempFileName();
 
@@ -130,83 +114,20 @@ namespace EstimatingUtilitiesLibraryTests
 
             actualLabor = actualBid.ExtraLabor;
             actualBid.Parameters = actualBid.Parameters;
-
-            foreach (TECSystem sys in actualBid.Systems)
-            {
-                if (sys.Guid == expectedSystem.Guid)
-                {
-                    actualSystem = sys;
-                }
-                else if (sys.Guid == expectedSystem1.Guid)
-                {
-                    actualSystem1 = sys;
-                }
-                if (actualSystem != null && actualSystem1 != null)
-                {
-                    break;
-                }
-            }
-            
+            actualSystem = actualBid.FindChild(expectedSystem.Guid) as TECTypical;
+            actualSystem1 = actualBid.FindChild(expectedSystem1.Guid) as TECTypical;
             actualEquipment = actualBid.FindChild(expectedEquipment.Guid) as TECEquipment;
             actualSubScope = actualBid.FindChild(expectedSubScope.Guid) as TECSubScope;
             actualDevices = actualSubScope.Devices;
             actualDevice = actualBid.FindChild(expectedDevice.Guid) as TECDevice;
             actualPoint = actualBid.FindChild(expectedPoint.Guid) as TECPoint;
-            foreach (TECManufacturer man in actualBid.Catalogs.Manufacturers)
-            {
-                if (man.Guid == expectedManufacturer.Guid)
-                {
-                    actualManufacturer = man;
-                    break;
-                }
-            }
-
-            foreach (TECScopeBranch branch in actualBid.ScopeTree)
-            {
-                if (branch.Guid == expectedBranch.Guid)
-                {
-                    actualBranch = branch;
-                    break;
-                }
-            }
-
-            foreach (TECLabeled note in actualBid.Notes)
-            {
-                if (note.Guid == expectedNote.Guid)
-                {
-                    actualNote = note;
-                    break;
-                }
-            }
-
-            foreach (TECLabeled exclusion in actualBid.Exclusions)
-            {
-                if (exclusion.Guid == expectedExclusion.Guid)
-                {
-                    actualExclusion = exclusion;
-                    break;
-                }
-            }
-
-            foreach (TECTag tag in actualBid.Catalogs.Tags)
-            {
-                if (tag.Guid == expectedTag.Guid)
-                {
-                    actualTag = tag;
-                    break;
-                }
-            }
-
-
-            foreach (TECProvidedController con in actualBid.Controllers)
-            {
-                if (con?.Guid == expectedController.Guid)
-                {
-                    actualController = con;
-                    break;
-                }
-            }
-
+            actualManufacturer = actualBid.FindChild(expectedManufacturer.Guid) as TECManufacturer;
+            actualBranch = actualBid.FindChild(expectedBranch.Guid) as TECScopeBranch;
+            actualNote = actualBid.FindChild(expectedNote.Guid) as TECLabeled;
+            actualExclusion = actualBid.FindChild(expectedExclusion.Guid) as TECLabeled;
+            actualTag = actualBid.FindChild(expectedTag.Guid) as TECTag;
+            actualController = actualBid.FindChild(expectedController.Guid) as TECProvidedController;
+            
         }
 
         [ClassCleanup]

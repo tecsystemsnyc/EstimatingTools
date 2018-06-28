@@ -938,7 +938,7 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Bid_Add_Device()
         {
             //Act
-            TECDevice expectedDevice = bid.Catalogs.Devices[0];
+            IEndDevice expectedDevice = bid.Catalogs.Devices[0];
 
             TECSubScope subScopeToModify = bid.Systems[0].Equipment[0].SubScope[0];
 
@@ -955,7 +955,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
-            TECDevice actualDevice = null;
+            IEndDevice actualDevice = null;
             int actualQuantity = 0;
             foreach (TECSystem sys in actualBid.Systems)
             {
@@ -965,12 +965,12 @@ namespace EstimatingUtilitiesLibraryTests
                     {
                         if (ss.Guid == subScopeToModify.Guid)
                         {
-                            foreach (TECDevice dev in ss.Devices)
+                            foreach (IEndDevice dev in ss.Devices)
                             {
                                 if (dev.Guid == expectedDevice.Guid)
                                 { actualQuantity++; }
                             }
-                            foreach (TECDevice dev in ss.Devices)
+                            foreach (IEndDevice dev in ss.Devices)
                             {
                                 if (dev.Guid == expectedDevice.Guid)
                                 {
@@ -990,7 +990,7 @@ namespace EstimatingUtilitiesLibraryTests
             Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
             Assert.AreEqual(expectedQuantity, actualQuantity);
-            Assert.AreEqual(expectedDevice.Cost, actualDevice.Cost);
+            Assert.AreEqual((expectedDevice as TECHardware).Cost, (actualDevice as TECHardware).Cost);
             Assert.AreEqual(expectedDevice.PossibleProtocols.Count, actualDevice.PossibleProtocols.Count);
         }
 

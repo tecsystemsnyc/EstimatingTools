@@ -35,7 +35,7 @@ namespace TestLibrary.ModelTestingUtilities
 
             //Devices
             rand.RepeatAction(() => catalogs.Devices.Add(TestDevice(catalogs, rand)), 10);
-
+            if(catalogs.Devices.Count == 0) { catalogs.Devices.Add(TestDevice(catalogs, rand)); }
             //IO Modules
             rand.RepeatAction(() => catalogs.IOModules.Add(TestIOModule(catalogs, rand)), 10);
 
@@ -47,6 +47,7 @@ namespace TestLibrary.ModelTestingUtilities
 
             //Valves
             rand.RepeatAction(() => catalogs.Valves.Add(TestValve(catalogs, rand)), 10);
+            
 
             return catalogs;
         }
@@ -58,7 +59,7 @@ namespace TestLibrary.ModelTestingUtilities
             //Bid Info
             bid.Name = "Randomized Test Bid";
             bid.BidNumber = string.Format("{0}-{1}", rand.Next(1000, 9999), rand.Next(1000, 9999));
-            bid.DueDate = new DateTime(rand.Next(2000, 3000), rand.Next(12), rand.Next(29));
+            bid.DueDate = new DateTime(rand.Next(2000, 3000), rand.Next(12), rand.Next(28));
             bid.Salesperson = string.Format("Salesperson #{0}", rand.Next(100));
             bid.Estimator = string.Format("Estimator #{0}", rand.Next(100));
 
@@ -303,7 +304,10 @@ namespace TestLibrary.ModelTestingUtilities
         {
             TECScopeBranch branch = new TECScopeBranch();
             branch.AssignTestLabel();
-            rand.RepeatAction(() => branch.Branches.Add(TestScopeBranch(rand, rand.Next(maxDepth))), rand.Next(5));
+            if(maxDepth > 0)
+            {
+                rand.RepeatAction(() => branch.Branches.Add(TestScopeBranch(rand, rand.Next(maxDepth))), rand.Next(5));
+            }
             return branch;
         }
         public static TECLabeled TestLabel(Random rand, string type)
@@ -362,6 +366,23 @@ namespace TestLibrary.ModelTestingUtilities
                     return IOType.Protocol;
             }
         }
+        public static IOType TestPointType(Random rand)
+        {
+            int randInt = rand.Next(3);
+            switch (randInt)
+            {
+                case 0:
+                    return IOType.AI;
+                case 1:
+                    return IOType.AO;
+                case 2:
+                    return IOType.DI;
+                case 3:
+                    return IOType.DO;
+                default:
+                    return IOType.AI;
+            }
+        }
         public static TECIO TestIO(Random rand, IOType type)
         {
             return new TECIO(type)
@@ -373,9 +394,9 @@ namespace TestLibrary.ModelTestingUtilities
         {
             TECPoint point = new TECPoint();
             point.AssignTestLabel();
-            if (type == IOType.Protocol)
+            if (!TECIO.PointIO.Contains(type))
             {
-                point.Type = TestIOType(rand);
+                point.Type = TestPointType(rand);
             }
             point.Quantity = rand.Next(100);
             return point;

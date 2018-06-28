@@ -497,15 +497,7 @@ namespace Tests
         public void RemoveElectricalCost()
         {
             //Arrange
-            TECAssociatedCost cost = null;
-            while (cost == null)
-            {
-                TECAssociatedCost randomCost = bid.Catalogs.AssociatedCosts[0];
-                if (randomCost.Type == CostType.Electrical)
-                {
-                    cost = randomCost;
-                }
-            }
+            TECAssociatedCost cost = bid.Catalogs.AssociatedCosts.First(x => x.Type == CostType.Electrical);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
             system.AddInstance(bid);

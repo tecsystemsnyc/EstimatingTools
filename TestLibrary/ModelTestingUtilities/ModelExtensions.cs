@@ -126,7 +126,11 @@ namespace TestLibrary.ModelTestingUtilities
                 }
                 else if (child is IRelatable childRel)
                 {
-                    return childRel.FindChild(guid);
+                    var found = childRel.FindChild(guid);
+                    if (found != null)
+                    {
+                        return found;
+                    }
                 }
             }
             return null;

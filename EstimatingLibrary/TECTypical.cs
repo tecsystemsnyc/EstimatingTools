@@ -378,6 +378,7 @@ namespace EstimatingLibrary
                 {
                     if (item != null)
                     {
+                        if (this.IsTypical && item is ITypicalable typ) { typ.MakeTypical(); }
                         if (item is TECSystem sys)
                         {
                             costs += sys.CostBatch;

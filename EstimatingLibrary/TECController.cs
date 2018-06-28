@@ -278,6 +278,7 @@ namespace EstimatingLibrary
             {
                 foreach (object item in e.NewItems)
                 {
+                    if (this.IsTypical && item is ITypicalable typ) { typ.MakeTypical(); }
                     notifyCombinedChanged(Change.Add, propertyName, this, item);
                     if (item is INotifyCostChanged cost && !(item is IControllerConnection) && !this.IsTypical)
                     {

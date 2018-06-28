@@ -91,6 +91,7 @@ namespace EstimatingLibrary
                 CostBatch costs = new CostBatch();
                 foreach (TECSubScope item in e.NewItems)
                 {
+                    if (this.IsTypical && item is ITypicalable typ) { typ.MakeTypical(); }
                     pointNumber += item.PointNumber;
                     costs += item.CostBatch;
                     if ((item as TECSubScope).Location == null)

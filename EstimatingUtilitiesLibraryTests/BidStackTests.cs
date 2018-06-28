@@ -731,12 +731,12 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             var Bid = ModelCreation.TestBid(rand);
             var subScope = Bid.Systems[0].Equipment[0].SubScope[0];
-            ObservableCollection<TECDevice> expected = new ObservableCollection<TECDevice>();
-            foreach (TECDevice item in subScope.Devices)
+            List<IEndDevice> expected = new List<IEndDevice>();
+            foreach (IEndDevice item in subScope.Devices)
             {
                 expected.Add(item);
             }
-            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
+            List<TECConnectionType> types = new List<TECConnectionType>();
             types.Add(Bid.Catalogs.ConnectionTypes[0]);
             TECDevice edit = new TECDevice(types, new List<TECProtocol>(), Bid.Catalogs.Manufacturers[0]);
 
@@ -1557,8 +1557,8 @@ namespace EstimatingUtilitiesLibraryTests
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
             var subscope = Bid.Systems[0].Equipment[0].SubScope[0];
             subscope.Devices.Add(edit);
-            var expected = new ObservableCollection<TECDevice>();
-            foreach (TECDevice item in subscope.Devices)
+            var expected = new ObservableCollection<IEndDevice>();
+            foreach (IEndDevice item in subscope.Devices)
             {
                 expected.Add(item);
             }

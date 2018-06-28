@@ -115,7 +115,7 @@ namespace EstimatingLibrary
         void ITypicalable.MakeTypical()
         {
             this.IsTypical = true;
-            throw new NotImplementedException();
+            TypicalableUtilities.MakeChildrenTypical(this);
         }
         #endregion
 
