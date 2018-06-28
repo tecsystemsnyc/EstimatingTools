@@ -61,8 +61,8 @@ namespace Tests
         [TestMethod]
         public void ControllerInPanel_AddPanel()
         {
-            TECPanel panel = new TECPanel(new TECPanelType(new TECManufacturer()), false);
-            TECController controller = new TECProvidedController(new TECControllerType(new TECManufacturer()), false);
+            TECPanel panel = new TECPanel(new TECPanelType(new TECManufacturer()));
+            TECController controller = new TECProvidedController(new TECControllerType(new TECManufacturer()));
 
             ControllerInPanel controllerInPanel = new ControllerInPanel(controller, null);
 
@@ -74,8 +74,8 @@ namespace Tests
         [TestMethod]
         public void ControllerInPanel_RemovePanel()
         {
-            TECPanel panel = new TECPanel(new TECPanelType(new TECManufacturer()), false);
-            TECController controller = new TECProvidedController(new TECControllerType( new TECManufacturer()), false);
+            TECPanel panel = new TECPanel(new TECPanelType(new TECManufacturer()));
+            TECController controller = new TECProvidedController(new TECControllerType( new TECManufacturer()));
 
             ControllerInPanel controllerInPanel = new ControllerInPanel(controller, panel);
 
