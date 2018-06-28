@@ -18,20 +18,20 @@ namespace Models
             //Arrange
             TECTemplates templates = new TECTemplates();
 
-            TECEquipment tempEquip = new TECEquipment(false);
+            TECEquipment tempEquip = new TECEquipment();
             templates.EquipmentTemplates.Add(tempEquip);
 
-            TECSubScope tempSS = new TECSubScope(false);
+            TECSubScope tempSS = new TECSubScope();
             tempSS.Name = "Template SS";
             templates.SubScopeTemplates.Add(tempSS);
             tempEquip.SubScope.Add(templates.SubScopeSynchronizer.NewItem(tempSS));
 
-            TECSubScope equipSS = new TECSubScope(false);
+            TECSubScope equipSS = new TECSubScope();
             equipSS.Name = "Equipment SS";
             tempEquip.SubScope.Add(equipSS);
 
             //Act
-            TECEquipment equipCopy = new TECEquipment(tempEquip, false, ssSynchronizer: templates.SubScopeSynchronizer);
+            TECEquipment equipCopy = new TECEquipment(tempEquip, ssSynchronizer: templates.SubScopeSynchronizer);
 
             //Assert
             TECSubScope newTempSS = null, newEquipSS = null;
