@@ -399,7 +399,7 @@ namespace EstimatingLibrary
             {
                 Panels.Add(panel);
             }
-            else if (property == "Misc" && item is TECMisc misc)
+            else if (property == "MiscCosts" && item is TECMisc misc)
             {
                 MiscCosts.Add(misc);
             }

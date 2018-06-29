@@ -395,7 +395,7 @@ namespace EstimatingUtilitiesLibraryTests
                 }
             }
             Assert.AreEqual(expectedQuantity, actualQuantity);
-            Assert.AreEqual(expectedDevice.Price, actualDevice.Price);
+            Assert.AreEqual(expectedDevice.Price, actualDevice.Price, DELTA);
 
             foreach (TECElectricalMaterial expectedConnectionType in expectedDevice.HardwiredConnectionTypes)
             {
@@ -571,7 +571,7 @@ namespace EstimatingUtilitiesLibraryTests
             }
 
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
-            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost, DELTA);
             Assert.AreEqual(expectedCost.Quantity, actualCost.Quantity);
             Assert.IsTrue(compareCosts(expectedCost.CostBatch, actualCost.CostBatch));
         }
@@ -802,8 +802,8 @@ namespace EstimatingUtilitiesLibraryTests
 
         public bool compareCosts(CostBatch expected, CostBatch actual)
         {
-            if (expected.GetCost(CostType.Electrical) == actual.GetCost(CostType.Electrical) &&
-                expected.GetCost(CostType.TEC) == actual.GetCost(CostType.TEC))
+            if (Math.Abs(expected.GetCost(CostType.Electrical) - actual.GetCost(CostType.Electrical)) < DELTA &&
+                Math.Abs(expected.GetCost(CostType.TEC) - actual.GetCost(CostType.TEC)) < DELTA)
             {
                 return true;
             }

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using TestLibrary.ModelTestingUtilities;
+using System.Linq;
 
 namespace EstimatingUtilitiesLibraryTests
 {
@@ -757,7 +758,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             var Bid = ModelCreation.TestBid(rand);
-            TECElectricalMaterial expected = Bid.Controllers[0].ChildrenConnections[0].ConduitType;
+            TECElectricalMaterial expected = Bid.Controllers.First( x => x.ChildrenConnections.Count != 0).ChildrenConnections[0].ConduitType;
             TECElectricalMaterial edit = Bid.Catalogs.ConduitTypes[1];
 
             //Act

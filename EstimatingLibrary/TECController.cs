@@ -381,9 +381,7 @@ namespace EstimatingLibrary
         {
             get { return new IOCollection(); }
         }
-
-        bool ITypicalable.IsTypical => throw new NotImplementedException();
-
+        
         IConnectable IConnectable.Copy(Dictionary<Guid, Guid> guidDictionary)
         {
             return CopyController(guidDictionary);

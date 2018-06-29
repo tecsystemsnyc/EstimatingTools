@@ -1010,10 +1010,10 @@ namespace EstimatingUtilitiesLibraryTests
             }
 
             int oldNumDevices = ssToModify.Devices.Count();
-            TECDevice deviceToRemove = ssToModify.Devices[0] as TECDevice;
+            IEndDevice deviceToRemove = ssToModify.Devices[0] as IEndDevice;
 
             int numThisDevice = 0;
-            foreach (TECDevice dev in ssToModify.Devices)
+            foreach (IEndDevice dev in ssToModify.Devices)
             {
                 if (dev == deviceToRemove)
                 {
@@ -1049,12 +1049,12 @@ namespace EstimatingUtilitiesLibraryTests
             }
 
             //Assert
-            foreach (TECDevice dev in modifiedSubScope.Devices)
+            foreach (IEndDevice dev in modifiedSubScope.Devices)
             {
                 if (deviceToRemove.Guid == dev.Guid) Assert.Fail("Device not removed properly.");
             }
             bool devFound = false;
-            foreach (TECDevice dev in actualBid.Catalogs.Devices)
+            foreach (IEndDevice dev in actualBid.Catalogs.Devices)
             {
                 if (deviceToRemove.Guid == dev.Guid) devFound = true;
             }

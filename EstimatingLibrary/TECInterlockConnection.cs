@@ -9,9 +9,10 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECInterlockConnection : TECScope, IConnection, INotifyCostChanged, IRelatable
+    public class TECInterlockConnection : TECScope, IConnection, INotifyCostChanged, IRelatable, ITypicalable
     {
         private readonly ConnectionWrapper connection;
+        public bool IsTypical { get; private set; } = false;
         
         public List<TECConnectionType> ConnectionTypes { get; }
         
@@ -43,6 +44,7 @@ namespace EstimatingLibrary
         public double Length { get => ((IConnection)connection).Length; set => ((IConnection)connection).Length = value; }
 
         public IProtocol Protocol => ((IConnection)connection).Protocol;
+
         #endregion
 
         #region INotifyCostChanged
@@ -68,6 +70,36 @@ namespace EstimatingLibrary
             saveList.AddRange(base.propertyObjects());
             saveList.AddRange(connection.PropertyObjects);
             return saveList;
+        }
+
+
+        #endregion
+
+        #region ITypicalable
+
+        ITECObject ITypicalable.CreateInstance(ObservableListDictionary<ITECObject> typicalDictionary)
+        {
+            return new TECInterlockConnection(this);
+        }
+
+        void ITypicalable.AddChildForProperty(string property, ITECObject item)
+        {
+            this.AddChildForScopeProperty(property, item);
+        }
+
+        bool ITypicalable.RemoveChildForProperty(string property, ITECObject item)
+        {
+            return this.RemoveChildForScopeProperty(property, item);
+        }
+
+        bool ITypicalable.ContainsChildForProperty(string property, ITECObject item)
+        {
+            return this.ContainsChildForScopeProperty(property, item);
+        }
+
+        void ITypicalable.MakeTypical()
+        {
+            this.IsTypical = true;
         }
         #endregion
 

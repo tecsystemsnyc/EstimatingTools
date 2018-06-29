@@ -942,8 +942,7 @@ namespace Utilities
 
             TECController daisyController = new TECProvidedController(type);
 
-            TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
-            TECNetworkConnection netConnect = parentController.AddNetworkConnection(bid.Catalogs.Protocols[0]);
+            TECNetworkConnection netConnect = parentController.Connect(daisyController, daisyController.AvailableProtocols.First(x => x is TECProtocol) as TECProtocol) as TECNetworkConnection;
             netConnect.AddChild(childController);
 
             resetRaised();
@@ -1654,7 +1653,7 @@ namespace Utilities
 
             TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
 
-            TECNetworkConnection netConnect = parentController.AddNetworkConnection(bid.Catalogs.Protocols[0]);
+            TECNetworkConnection netConnect = parentController.Connect(childController, childController.AvailableProtocols.First(x => x is TECProtocol) as TECProtocol) as TECNetworkConnection;
             netConnect.AddChild(childController);
 
             resetRaised();
@@ -1685,7 +1684,7 @@ namespace Utilities
 
             TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
 
-            TECNetworkConnection netConnect = parentController.AddNetworkConnection(bid.Catalogs.Protocols[0]);
+            TECNetworkConnection netConnect = parentController.Connect(childController, childController.AvailableProtocols.First(x => x is TECProtocol) as TECProtocol) as TECNetworkConnection;
             netConnect.AddChild(childController);
             netConnect.Length = 10;
 
@@ -1831,7 +1830,7 @@ namespace Utilities
             TECController daisyController = new TECProvidedController(type);
 
             TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
-            TECNetworkConnection netConnect = parentController.AddNetworkConnection(bid.Catalogs.Protocols[0]);
+            TECNetworkConnection netConnect = parentController.Connect(daisyController, daisyController.AvailableProtocols.First(x => x is TECProtocol) as TECProtocol) as TECNetworkConnection;
             netConnect.AddChild(childController);
             netConnect.AddChild(daisyController);
 
@@ -1916,7 +1915,7 @@ namespace Utilities
             TECController child = new TECProvidedController(bid.Catalogs.ControllerTypes[0]);
             bid.AddController(controller);
             bid.AddController(child);
-            TECNetworkConnection connection = controller.AddNetworkConnection(bid.Catalogs.Protocols[0]);
+            TECNetworkConnection connection = controller.Connect(child, child.AvailableProtocols.First(x => x is TECProtocol) as TECProtocol) as TECNetworkConnection;
             connection.AddChild(child);
             connection.Length = original;
 
@@ -1942,7 +1941,7 @@ namespace Utilities
             TECController child = new TECProvidedController(bid.Catalogs.ControllerTypes[0]);
             bid.AddController(controller);
             bid.AddController(child);
-            TECNetworkConnection connection = controller.AddNetworkConnection(bid.Catalogs.Protocols[0]);
+            TECNetworkConnection connection = controller.Connect(child, child.AvailableProtocols.First(x => x is TECProtocol) as TECProtocol) as TECNetworkConnection;
             connection.AddChild(child);
             connection.ConduitType = original;
             resetRaised();

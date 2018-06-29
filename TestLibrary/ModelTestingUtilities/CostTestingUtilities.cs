@@ -108,9 +108,9 @@ namespace TestLibrary.ModelTestingUtilities
         static public Total CalculateTotal(TECSubScope subScope, CostType type)
         {
             Total total = new Total();
-            foreach (TECDevice device in subScope.Devices)
+            foreach (IEndDevice device in subScope.Devices)
             {
-                total += CalculateTotal(device, type);
+                total += CalculateTotal(device as TECHardware, type);
             }
             //foreach(TECPoint point in subScope.Points)
             //{

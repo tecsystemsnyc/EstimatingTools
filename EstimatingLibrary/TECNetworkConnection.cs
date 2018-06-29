@@ -190,8 +190,7 @@ namespace EstimatingLibrary
 
         void ITypicalable.MakeTypical()
         {
-            this.IsTypical = false;
-            throw new NotImplementedException();
+            this.IsTypical = true;
         }
         #endregion
     }

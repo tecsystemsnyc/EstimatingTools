@@ -1718,7 +1718,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Assert
             Assert.AreEqual(expectedCost.Name, actualCost.Name);
-            Assert.AreEqual(expectedCost.Cost, actualCost.Cost);
+            Assert.AreEqual(expectedCost.Cost, actualCost.Cost, DELTA);
         }
 
         [TestMethod]

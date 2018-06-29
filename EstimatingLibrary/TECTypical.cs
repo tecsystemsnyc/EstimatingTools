@@ -23,6 +23,7 @@ namespace EstimatingLibrary
             this.IsTypical = true;
             
             _instances.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Instances");
+            _typicalInstanceDictionary.CollectionChanged += typicalInstanceDictionary_CollectionChanged;
 
             watcher = new TypicalWatcherFilter(new ChangeWatcher(this));
             watcher.TypicalChanged += handleSystemChanged;
@@ -378,7 +379,7 @@ namespace EstimatingLibrary
                 {
                     if (item != null)
                     {
-                        if (this.IsTypical && item is ITypicalable typ) { typ.MakeTypical(); }
+                        if (this.IsTypical && item is ITypicalable typ && !(item is TECSystem)) { typ.MakeTypical(); }
                         if (item is TECSystem sys)
                         {
                             costs += sys.CostBatch;
@@ -541,11 +542,16 @@ namespace EstimatingLibrary
                 if (args.Value is ITypicalable typicalChild)
                 {
                     instanceValue = typicalChild.CreateInstance(TypicalInstanceDictionary);
+                    if(instanceValue != null)
+                    {
+                        TypicalInstanceDictionary.AddItem(args.Value as ITECObject, instanceValue);
+                    }
+                }
+                if(instanceValue != null)
+                {
+                    instanceSender.AddChildForProperty(args.PropertyName, instanceValue);
                 }
 
-                instanceSender.AddChildForProperty(args.PropertyName, instanceValue);
-
-                TypicalInstanceDictionary.AddItem(args.Value as ITECObject, instanceValue);
             }
             
             
@@ -559,21 +565,31 @@ namespace EstimatingLibrary
             foreach (ITECObject parentInstance in parentInstances)
             {
                 ITypicalable instanceSender = parentInstance as ITypicalable;
-
+                ITECObject instanceValue = args.Value as ITECObject;
                 if (instanceSender == null)
                 {
                     throw new Exception("Change occured from object which is not typicalable");
                 }
-                ITECObject instanceValue = TypicalInstanceDictionary.GetInstances(args.Value as ITECObject)
-                    .Where(x => instanceSender.ContainsChildForProperty(args.PropertyName, x)).First();
                 if (instanceValue == null)
                 {
                     throw new Exception("Value to add is not ITECObject");
                 }
 
-                instanceSender.RemoveChildForProperty(args.PropertyName, instanceValue);
+                if(instanceValue is ITypicalable)
+                {
+                    instanceValue = TypicalInstanceDictionary.GetInstances(instanceValue)
+                    .Where(x => instanceSender.ContainsChildForProperty(args.PropertyName, x)).First();
+                    if(instanceValue != null)
+                    {
+                        TypicalInstanceDictionary.RemoveItem(args.Value as ITECObject, instanceValue);
+                    }
+                }
 
-                TypicalInstanceDictionary.RemoveItem(args.Value as ITECObject, instanceValue);
+                if(instanceValue != null)
+                {
+                    instanceSender.RemoveChildForProperty(args.PropertyName, instanceValue);
+                }
+
             }
         }
 

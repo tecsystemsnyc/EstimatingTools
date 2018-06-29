@@ -498,8 +498,8 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             var Template = ModelCreation.TestTemplates(rand);
             var subScope = Template.SubScopeTemplates[0];
-            ObservableCollection<TECDevice> expected = new ObservableCollection<TECDevice>();
-            foreach (TECDevice item in subScope.Devices)
+            ObservableCollection<IEndDevice> expected = new ObservableCollection<IEndDevice>();
+            foreach (IEndDevice item in subScope.Devices)
             {
                 expected.Add(item);
             }
@@ -1175,8 +1175,8 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices.Add(edit);
-            var expected = new ObservableCollection<TECDevice>();
-            foreach (TECDevice item in Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices)
+            var expected = new ObservableCollection<IEndDevice>();
+            foreach (IEndDevice item in Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices)
             {
                 expected.Add(item);
             }
