@@ -22,6 +22,7 @@ namespace TECUserControlLibrary.ViewModels
         private TECPoint selectedPoint;
         private TECController selectedController;
         private TECPanel selectedPanel;
+        private TECInterlockConnection selectedInterlock;
         private MiscCostsVM miscVM;
         private ControllersPanelsVM controllersPanelsVM;
         private ValveSelectionVM valveVM;
@@ -107,6 +108,16 @@ namespace TECUserControlLibrary.ViewModels
                 Selected?.Invoke(value);
             }
         }
+        public TECInterlockConnection SelectedInterlock
+        {
+            get { return selectedInterlock; }
+            set
+            {
+                selectedInterlock = value;
+                RaisePropertyChanged("SelectedInterlock");
+                Selected?.Invoke(value);
+            }
+        }
 
         public bool CanEdit { get; }
         public bool IsTemplates { get; }
@@ -119,6 +130,7 @@ namespace TECUserControlLibrary.ViewModels
         public RelayCommand<TECSystem> AddControllerCommand { get; private set; }
         public RelayCommand<TECSystem> AddPanelCommand { get; private set; }
         public RelayCommand<TECSystem> AddMiscCommand { get; private set; }
+        public RelayCommand<IInterlockable> AddInterlockCommand { get; private set; }
         public RelayCommand<object> BackCommand { get; private set; }
         public RelayCommand<TECScopeBranch> AddScopeBranchCommand { get; private set; }
 
@@ -129,6 +141,7 @@ namespace TECUserControlLibrary.ViewModels
         public RelayCommand<TECPoint> DeletePointCommand { get; private set; }
         public RelayCommand<TECController> DeleteControllerCommand { get; private set; }
         public RelayCommand<TECPanel> DeletePanelCommand { get; private set; }
+        public RelayCommand<TECInterlockConnection> DeleteInterlockCommand { get; private set; }
 
         public RelayCommand UpdateInstanceConnectionsCommand { get; private set; }
 
@@ -184,6 +197,7 @@ namespace TECUserControlLibrary.ViewModels
             AddControllerCommand = new RelayCommand<TECSystem>(addControllerExecute, canAddController);
             AddPanelCommand = new RelayCommand<TECSystem>(addPanelExecute, canAddPanel);
             AddMiscCommand = new RelayCommand<TECSystem>(addMiscExecute, canAddMisc);
+            AddInterlockCommand = new RelayCommand<IInterlockable>(addInterlockExecute, canAddInterlock);
             BackCommand = new RelayCommand<object>(backExecute);
             AddScopeBranchCommand = new RelayCommand<TECScopeBranch>(addBranchExecute);
 
@@ -194,6 +208,7 @@ namespace TECUserControlLibrary.ViewModels
             DeletePointCommand = new RelayCommand<TECPoint>(deletePointExecute, canDeletePoint);
             DeletePanelCommand = new RelayCommand<TECPanel>(deletePanelExecute, canDeletePanel);
             DeleteControllerCommand = new RelayCommand<TECController>(deleteControllerExecute, canDeleteController);
+            DeleteInterlockCommand = new RelayCommand<TECInterlockConnection>(deleteInterlockExecute, canDeleteInterlock);
             catalogs = scopeManager.Catalogs;
             this.scopeManager = scopeManager;
         }
@@ -396,7 +411,16 @@ namespace TECUserControlLibrary.ViewModels
         {
             return true;
         }
-        
+
+        private void addInterlockExecute(IInterlockable interlockable)
+        {
+            SelectedVM = new AddInterlockVM(interlockable, scopeManager);
+        }
+        private bool canAddInterlock(IInterlockable arg)
+        {
+            return true;
+        }
+
         private void addBranchExecute(TECScopeBranch obj)
         {
             if(obj == null)
@@ -474,6 +498,16 @@ namespace TECUserControlLibrary.ViewModels
             SelectedSystem.RemoveController(obj);
         }
         private bool canDeleteController(TECController arg)
+        {
+            return true;
+        }
+
+        private void deleteInterlockExecute(TECInterlockConnection obj)
+        {
+            SelectedSubScope.Interlocks.Remove(obj);
+        }
+
+        private bool canDeleteInterlock(TECInterlockConnection arg)
         {
             return true;
         }
