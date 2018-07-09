@@ -10,13 +10,14 @@ namespace EstimatingLibrary
     public class TECTemplates : TECScopeManager, IRelatable
     {
         #region Properties
-        private ObservableCollection<TECSystem> _systemTemplates;
-        private ObservableCollection<TECEquipment> _equipmentTemplates;
-        private ObservableCollection<TECSubScope> _subScopeTemplates;
-        private ObservableCollection<TECController> _controllerTemplates;
-        private ObservableCollection<TECMisc> _miscCostTemplates;
-        private ObservableCollection<TECPanel> _panelTemplates;
-        private ObservableCollection<TECParameters> _parameters;
+
+        private ObservableCollection<TECSystem> _systemTemplates = new ObservableCollection<TECSystem>();
+        private ObservableCollection<TECEquipment> _equipmentTemplates = new ObservableCollection<TECEquipment>();
+        private ObservableCollection<TECSubScope> _subScopeTemplates = new ObservableCollection<TECSubScope>();
+        private ObservableCollection<TECController> _controllerTemplates = new ObservableCollection<TECController>();
+        private ObservableCollection<TECMisc> _miscCostTemplates = new ObservableCollection<TECMisc>();
+        private ObservableCollection<TECPanel> _panelTemplates = new ObservableCollection<TECPanel>();
+        private ObservableCollection<TECParameters> _parameters = new ObservableCollection<TECParameters>();
 
         public ObservableCollection<TECSystem> SystemTemplates
         {
@@ -130,14 +131,6 @@ namespace EstimatingLibrary
         public TECTemplates() : this(Guid.NewGuid()) { }
         public TECTemplates(Guid guid) : base(guid)
         {
-            _systemTemplates = new ObservableCollection<TECSystem>();
-            _equipmentTemplates = new ObservableCollection<TECEquipment>();
-            _subScopeTemplates = new ObservableCollection<TECSubScope>();
-            _controllerTemplates = new ObservableCollection<TECController>();
-            _miscCostTemplates = new ObservableCollection<TECMisc>();
-            _panelTemplates = new ObservableCollection<TECPanel>();
-            _parameters = new ObservableCollection<TECParameters>();
-
             SystemTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "SystemTemplates");
             EquipmentTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "EquipmentTemplates");
             SubScopeTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "SubScopeTemplates");
