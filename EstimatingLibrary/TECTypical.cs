@@ -354,11 +354,11 @@ namespace EstimatingLibrary
                 }
                 else if (args.Sender is TECPoint point)
                 {
-                    handlePointChanged(point, args.PropertyName);
+                    handleValueChanged(point, args.PropertyName);
                 }
                 else if (args.Sender is TECMisc misc)
                 {
-                    handleMiscChanged(misc, args.PropertyName);
+                    handleValueChanged(misc, args.PropertyName);
                 }
                 else if (args.Sender is TECController controller)
                 {
@@ -484,25 +484,14 @@ namespace EstimatingLibrary
             TypicalInstanceDictionary.RemoveValuesForKeys(instance.MiscCosts, MiscCosts);
             TypicalInstanceDictionary.RemoveValuesForKeys(instance.ScopeBranches, ScopeBranches);
         }
-        private void handlePointChanged(TECPoint point, string propertyName)
+        private void handleValueChanged<T>(T item, string propertyName) where T: ITECObject
         {
-            PropertyInfo property = typeof(TECPoint).GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
-            if (property != null && property.CanWrite && TypicalInstanceDictionary.ContainsKey(point))
+            PropertyInfo property = typeof(T).GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
+            if (property != null && property.CanWrite && TypicalInstanceDictionary.ContainsKey(item))
             {
-                foreach (TECPoint instance in TypicalInstanceDictionary.GetInstances(point))
+                foreach (T instance in TypicalInstanceDictionary.GetInstances(item))
                 {
-                    property.SetValue(instance, property.GetValue(point), null);
-                }
-            }
-        }
-        private void handleMiscChanged(TECMisc misc, string propertyName)
-        {
-            PropertyInfo property = typeof(TECMisc).GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
-            if (property != null && property.CanWrite && TypicalInstanceDictionary.ContainsKey(misc))
-            {
-                foreach (TECMisc instance in TypicalInstanceDictionary.GetInstances(misc))
-                {
-                    property.SetValue(instance, property.GetValue(misc), null);
+                    property.SetValue(instance, property.GetValue(item), null);
                 }
             }
         }
