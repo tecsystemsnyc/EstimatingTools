@@ -20,9 +20,9 @@ namespace EstimatingLibrary
         #endregion
 
         #region Constructors
-        public TECSystem(Guid guid, bool isTypical) : base(guid)
+        public TECSystem(Guid guid) : base(guid)
         {
-            IsTypical = isTypical;
+            IsTypical = false;
             
             _equipment.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Equipment");
             _panels.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Panels");
@@ -30,10 +30,10 @@ namespace EstimatingLibrary
             _scopeBranches.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "ScopeBranches");
         }
 
-        public TECSystem(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
+        public TECSystem() : this(Guid.NewGuid()) { }
 
-        public TECSystem(TECSystem source, bool isTypical, TECScopeManager manager, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableListDictionary<ITECObject> characteristicReference = null, Tuple<TemplateSynchronizer<TECEquipment>, TemplateSynchronizer<TECSubScope>> synchronizers = null) : this(isTypical)
+        public TECSystem(TECSystem source, TECScopeManager manager, Dictionary<Guid, Guid> guidDictionary = null,
+            ObservableListDictionary<ITECObject> characteristicReference = null, Tuple<TemplateSynchronizer<TECEquipment>, TemplateSynchronizer<TECSubScope>> synchronizers = null) : this()
         {
             if (guidDictionary == null)
             { guidDictionary = new Dictionary<Guid, Guid>();  }
@@ -41,7 +41,7 @@ namespace EstimatingLibrary
             guidDictionary[_guid] = source.Guid;
             foreach (TECEquipment equipment in source.Equipment)
             {
-                var toAdd = new TECEquipment(equipment, isTypical, guidDictionary, characteristicReference, ssSynchronizer: synchronizers?.Item2);
+                var toAdd = new TECEquipment(equipment, guidDictionary, characteristicReference, ssSynchronizer: synchronizers?.Item2);
                 if (synchronizers != null && synchronizers.Item1.Contains(equipment))
                 {
                     synchronizers.Item1.LinkNew(synchronizers.Item1.GetTemplate(equipment), toAdd);
@@ -54,7 +54,7 @@ namespace EstimatingLibrary
             }
             foreach (TECController controller in source._controllers)
             {
-                var toAdd = controller.CopyController(isTypical, guidDictionary);
+                var toAdd = controller.CopyController(guidDictionary);
                 if (characteristicReference != null)
                 {
                     characteristicReference.AddItem(controller, toAdd);
@@ -63,7 +63,7 @@ namespace EstimatingLibrary
             }
             foreach (TECPanel panel in source._panels)
             {
-                var toAdd = new TECPanel(panel, isTypical, guidDictionary);
+                var toAdd = new TECPanel(panel, guidDictionary);
                 if (characteristicReference != null)
                 {
                     characteristicReference.AddItem(panel, toAdd);
@@ -72,12 +72,12 @@ namespace EstimatingLibrary
             }
             foreach (TECMisc misc in source.MiscCosts)
             {
-                var toAdd = new TECMisc(misc, isTypical);
+                var toAdd = new TECMisc(misc);
                 _miscCosts.Add(toAdd);
             }
             foreach (TECScopeBranch branch in source._scopeBranches)
             {
-                var toAdd = new TECScopeBranch(branch, IsTypical);
+                var toAdd = new TECScopeBranch(branch);
                 _scopeBranches.Add(toAdd);
             }
             this.copyPropertiesFromLocated(source);
@@ -166,7 +166,7 @@ namespace EstimatingLibrary
         }
         public bool IsTypical
         {
-            get; private set;
+            get; protected set;
         }
         public int PointNumber
         {
@@ -175,36 +175,41 @@ namespace EstimatingLibrary
                 return points();
             }
         }
+
         #endregion
 
         #region Methods
         public void AddController(TECController controller)
         {
             _controllers.Add(controller);
+            if (this.IsTypical) { ((ITypicalable)controller).MakeTypical(); }
             notifyTECChanged(Change.Add, "Controllers", this, controller);
             notifyCostChanged(controller.CostBatch);
         }
-        public void RemoveController(TECController controller)
+        public bool RemoveController(TECController controller)
         {
             controller.DisconnectAll();
-            _controllers.Remove(controller);
+            bool success = _controllers.Remove(controller);
             foreach(TECPanel panel in this.Panels)
             {
                 if (panel.Controllers.Contains(controller)) { panel.Controllers.Remove(controller); }
             }
             notifyTECChanged(Change.Remove, "Controllers", this, controller);
             notifyCostChanged(-controller.CostBatch);
+            return success;
         }
         public void SetControllers(IEnumerable<TECController> newControllers)
         {
             IEnumerable<TECController> oldControllers = Controllers;
+            if (this.IsTypical) { newControllers.ForEach((x => ((ITypicalable)x).MakeTypical())); }
             _controllers = new ObservableCollection<TECController>(newControllers);
             notifyTECChanged(Change.Edit, "Controllers", this, newControllers, oldControllers);
         }
 
         public virtual object DragDropCopy(TECScopeManager scopeManager)
         {
-            TECSystem outSystem = new TECSystem(this, this.IsTypical, scopeManager);
+            TECSystem outSystem = new TECSystem(this, scopeManager);
+            outSystem.IsTypical = this.IsTypical;
             return outSystem;
         }
 
@@ -297,6 +302,7 @@ namespace EstimatingLibrary
                 int pointNum = 0;
                 foreach (object item in e.NewItems)
                 {
+                    if(this.IsTypical && item is ITypicalable typ) { typ.MakeTypical(); }
                     if (item != null)
                     {
                         if (item is INotifyCostChanged costItem) { costs += costItem.CostBatch; }
@@ -369,7 +375,105 @@ namespace EstimatingLibrary
                 controller.Disconnect(removed);
             }
         }
+        
         #endregion
+        #endregion
+
+        #region ITypicalable
+        ITECObject ITypicalable.CreateInstance(ObservableListDictionary<ITECObject> typicalDictionary)
+        {
+            throw new NotImplementedException();
+        }
+
+        void ITypicalable.AddChildForProperty(string property, ITECObject item)
+        {
+            if (property == "Controllers" && item is TECController controller)
+            {
+                AddController(controller);
+            }
+            else if (property == "Equipment" && item is TECEquipment equipment)
+            {
+                Equipment.Add(equipment);
+            }
+            else if (property == "Panels" && item is TECPanel panel)
+            {
+                Panels.Add(panel);
+            }
+            else if (property == "MiscCosts" && item is TECMisc misc)
+            {
+                MiscCosts.Add(misc);
+            }
+            else if (property == "ScopeBranch" && item is TECScopeBranch branch)
+            {
+                ScopeBranches.Add(branch);
+            }
+            else
+            {
+                this.AddChildForScopeProperty(property, item);
+            }
+        }
+
+        bool ITypicalable.RemoveChildForProperty(string property, ITECObject item)
+        {
+            if (property == "Controllers" && item is TECController controller)
+            {
+                return RemoveController(controller);
+            }
+            else if (property == "Equipment" && item is TECEquipment equipment)
+            {
+                return Equipment.Remove(equipment);
+            }
+            else if (property == "Panels" && item is TECPanel panel)
+            {
+                return Panels.Remove(panel);
+            }
+            else if (property == "MiscCosts" && item is TECMisc misc)
+            {
+                return MiscCosts.Remove(misc);
+            }
+            else if (property == "ScopeBranch" && item is TECScopeBranch branch)
+            {
+                return ScopeBranches.Remove(branch);
+            }
+            else
+            {
+                return this.RemoveChildForScopeProperty(property, item);
+            }
+        }
+
+        bool ITypicalable.ContainsChildForProperty(string property, ITECObject item)
+        {
+            if (property == "Controllers" && item is TECController controller)
+            {
+                return Controllers.Contains(controller);
+            }
+            else if (property == "Equipment" && item is TECEquipment equipment)
+            {
+                return Equipment.Contains(equipment);
+            }
+            else if (property == "Panels" && item is TECPanel panel)
+            {
+                return Panels.Contains(panel);
+            }
+            else if (property == "MiscCosts" && item is TECMisc misc)
+            {
+                return MiscCosts.Contains(misc);
+            }
+            else if (property == "ScopeBranch" && item is TECScopeBranch branch)
+            {
+                return ScopeBranches.Contains(branch);
+            }
+            else
+            {
+                return this.ContainsChildForScopeProperty(property, item);
+            }
+        }
+
+        void ITypicalable.MakeTypical()
+        {
+            this.IsTypical = true;
+            TypicalableUtilities.MakeChildrenTypical(this);
+        }
         #endregion
     }
 }

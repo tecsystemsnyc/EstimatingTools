@@ -6,8 +6,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using TestLibrary.ModelTestingUtilities;
 
-namespace Tests
+namespace EstimatingUtilitiesLibraryTests
 {
     /// <summary>
     /// Summary description for TemplateStackTests
@@ -15,6 +16,8 @@ namespace Tests
     [TestClass]
     public class TemplateStackTests
     {
+        Random rand;
+        
         public TemplateStackTests()
         {
             //
@@ -53,8 +56,11 @@ namespace Tests
         // public static void MyClassCleanup() { }
         //
         // Use TestInitialize to run code before running each test 
-        // [TestInitialize()]
-        // public void MyTestInitialize() { }
+        [TestInitialize()]
+        public void MyTestInitialize()
+        {
+            rand = new Random(0);
+        }
         //
         // Use TestCleanup to run code after each test has run
         // [TestCleanup()]
@@ -68,13 +74,13 @@ namespace Tests
         public void Undo_Template_Systems()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             ObservableCollection<TECSystem> expected = new ObservableCollection<TECSystem>();
             foreach (TECSystem item in Template.SystemTemplates)
             {
                 expected.Add(item);
             }
-            TECSystem edit = new TECSystem(false);
+            TECSystem edit = new TECSystem();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
@@ -92,13 +98,13 @@ namespace Tests
         public void Undo_Template_Equipment()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             ObservableCollection<TECEquipment> expected = new ObservableCollection<TECEquipment>();
             foreach (TECEquipment item in Template.EquipmentTemplates)
             {
                 expected.Add(item);
             }
-            TECEquipment edit = new TECEquipment(false);
+            TECEquipment edit = new TECEquipment();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
@@ -116,13 +122,13 @@ namespace Tests
         public void Undo_Template_SubScope()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             ObservableCollection<TECSubScope> expected = new ObservableCollection<TECSubScope>();
             foreach (TECSubScope item in Template.SubScopeTemplates)
             {
                 expected.Add(item);
             }
-            TECSubScope edit = new TECSubScope(false);
+            TECSubScope edit = new TECSubScope();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
@@ -140,7 +146,7 @@ namespace Tests
         public void Undo_Template_Catalogs_Devices()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             ObservableCollection<TECDevice> expected = new ObservableCollection<TECDevice>();
             foreach (TECDevice item in Template.Catalogs.Devices)
             {
@@ -167,7 +173,7 @@ namespace Tests
         public void Undo_Template_Catalogs_Manufacturers()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             ObservableCollection<TECManufacturer> expected = new ObservableCollection<TECManufacturer>();
             foreach (TECManufacturer item in Template.Catalogs.Manufacturers)
             {
@@ -191,7 +197,7 @@ namespace Tests
         public void Undo_Template_Catalogs_AssociatedCosts()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             ObservableCollection<TECAssociatedCost> expected = new ObservableCollection<TECAssociatedCost>();
             foreach (TECAssociatedCost item in Template.Catalogs.AssociatedCosts)
             {
@@ -215,7 +221,7 @@ namespace Tests
         public void Undo_Template_Catalogs_ConnectionTypes()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             ObservableCollection<TECConnectionType> expected = new ObservableCollection<TECConnectionType>();
             foreach (TECConnectionType item in Template.Catalogs.ConnectionTypes)
             {
@@ -239,7 +245,7 @@ namespace Tests
         public void Undo_Template_Catalogs_ConduitTypes()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             ObservableCollection<TECElectricalMaterial> expected = new ObservableCollection<TECElectricalMaterial>();
             foreach (TECElectricalMaterial item in Template.Catalogs.ConduitTypes)
             {
@@ -263,7 +269,7 @@ namespace Tests
         public void Undo_Template_Tags()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             ObservableCollection<TECLabeled> expected = new ObservableCollection<TECLabeled>();
             foreach (TECLabeled item in Template.Catalogs.Tags)
             {
@@ -287,7 +293,7 @@ namespace Tests
         public void Undo_Template_System_Name()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             var system = Template.SystemTemplates[0];
             string expected = system.Name;
             string edit = "Edit";
@@ -308,7 +314,7 @@ namespace Tests
         public void Undo_Template_System_Description()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             var system = Template.SystemTemplates[0];
             string expected = system.Description;
             string edit = "Edit";
@@ -329,14 +335,14 @@ namespace Tests
         public void Undo_Template_System_Equipment()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             var system = Template.SystemTemplates[0];
             ObservableCollection<TECEquipment> expected = new ObservableCollection<TECEquipment>();
             foreach (TECEquipment item in system.Equipment)
             {
                 expected.Add(item);
             }
-            TECEquipment edit = new TECEquipment(false);
+            TECEquipment edit = new TECEquipment();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
@@ -354,7 +360,7 @@ namespace Tests
         public void Undo_Template_Equipment_Name()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             var equipment = Template.EquipmentTemplates[0];
             string expected = equipment.Name;
             string edit = "Edit";
@@ -375,7 +381,7 @@ namespace Tests
         public void Undo_Template_Equipment_Description()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             var equipment = Template.EquipmentTemplates[0];
             string expected = equipment.Description;
             string edit = "Edit";
@@ -397,14 +403,14 @@ namespace Tests
         public void Undo_Template_Equipment_SubScope()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             var equipment = Template.EquipmentTemplates[0];
             ObservableCollection<TECSubScope> expected = new ObservableCollection<TECSubScope>();
             foreach (TECSubScope item in equipment.SubScope)
             {
                 expected.Add(item);
             }
-            TECSubScope edit = new TECSubScope(false);
+            TECSubScope edit = new TECSubScope();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
@@ -422,7 +428,7 @@ namespace Tests
         public void Undo_Template_SubScope_Name()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             var subScope = Template.SubScopeTemplates[0];
             string expected = subScope.Name;
             string edit = "Edit";
@@ -443,7 +449,7 @@ namespace Tests
         public void Undo_Template_SubScope_Description()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             var subScope = Template.SubScopeTemplates[0];
             string expected = subScope.Description;
             string edit = "Edit";
@@ -464,14 +470,14 @@ namespace Tests
         public void Undo_Template_SubScope_Points()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             var subScope = Template.SubScopeTemplates[0];
             ObservableCollection<TECPoint> expected = new ObservableCollection<TECPoint>();
             foreach (TECPoint item in subScope.Points)
             {
                 expected.Add(item);
             }
-            TECPoint edit = new TECPoint(false);
+            TECPoint edit = new TECPoint();
             edit.Type = IOType.AI;
 
             //Act
@@ -490,10 +496,10 @@ namespace Tests
         public void Undo_Template_SubScope_Device()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             var subScope = Template.SubScopeTemplates[0];
-            ObservableCollection<TECDevice> expected = new ObservableCollection<TECDevice>();
-            foreach (TECDevice item in subScope.Devices)
+            ObservableCollection<IEndDevice> expected = new ObservableCollection<IEndDevice>();
+            foreach (IEndDevice item in subScope.Devices)
             {
                 expected.Add(item);
             }
@@ -514,7 +520,7 @@ namespace Tests
         public void Undo_Template_SubScope_AssociatedCost()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             var subScope = Template.SubScopeTemplates[0];
             int expectedCount = subScope.AssociatedCosts.Count;
             TECAssociatedCost edit = new TECAssociatedCost(CostType.Electrical);
@@ -534,7 +540,7 @@ namespace Tests
         public void Undo_Template_Device_Name()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             var device = Template.Catalogs.Devices[0];
             string expected = device.Name;
             string edit = "Edit";
@@ -555,7 +561,7 @@ namespace Tests
         public void Undo_Template_Device_Description()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             var device = Template.Catalogs.Devices[0];
             string expected = device.Description;
             string edit = "Edit";
@@ -576,7 +582,7 @@ namespace Tests
         public void Undo_Template_Device_Cost()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             var device = Template.Catalogs.Devices[0];
             double expected = device.Price;
             double edit = 123;
@@ -597,7 +603,7 @@ namespace Tests
         public void Undo_Template_Device_Manufacturer()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             var device = Template.Catalogs.Devices[0];
             Guid expected = new Guid(device.Manufacturer.Guid.ToString());
             TECManufacturer edit = new TECManufacturer();
@@ -618,7 +624,7 @@ namespace Tests
         public void Undo_Template_Device_ConnectionType()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             var device = Template.Catalogs.Devices[0];
             int expected = device.HardwiredConnectionTypes.Count;
             TECConnectionType edit = Template.Catalogs.ConnectionTypes[0];
@@ -639,7 +645,7 @@ namespace Tests
         public void Undo_Template_Point_Name()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             string expected = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Label;
             string edit = "Edit";
 
@@ -659,7 +665,7 @@ namespace Tests
         public void Undo_Template_Point_Quantity()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             int expected = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Quantity;
             int edit = 3;
 
@@ -679,7 +685,7 @@ namespace Tests
         public void Undo_Template_Point_Type()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             string expected = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Type.ToString();
             IOType edit = IOType.AO;
 
@@ -699,13 +705,13 @@ namespace Tests
         public void Undo_Template_Panel()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             ObservableCollection<TECPanel> expected = new ObservableCollection<TECPanel>();
             foreach (TECPanel item in Template.PanelTemplates)
             {
                 expected.Add(item);
             }
-            TECPanel edit = new TECPanel(Template.Catalogs.PanelTypes[0], false);
+            TECPanel edit = new TECPanel(Template.Catalogs.PanelTypes[0]);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
@@ -724,7 +730,7 @@ namespace Tests
         public void Undo_Template_Panel_Name()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             TECPanel expected = Template.PanelTemplates[0];
             string expectedName = expected.Name;
 
@@ -747,13 +753,13 @@ namespace Tests
         public void Undo_Template_MiscCost()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             ObservableCollection<TECMisc> expected = new ObservableCollection<TECMisc>();
             foreach (TECMisc item in Template.MiscCostTemplates)
             {
                 expected.Add(item);
             }
-            TECMisc edit = new TECMisc(CostType.TEC, false);
+            TECMisc edit = new TECMisc(CostType.TEC);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
@@ -772,7 +778,7 @@ namespace Tests
         public void Undo_Template_PanelType()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             ObservableCollection<TECPanelType> expected = new ObservableCollection<TECPanelType>();
             foreach (TECPanelType item in Template.Catalogs.PanelTypes)
             {
@@ -797,7 +803,7 @@ namespace Tests
         public void Undo_Template_IOModule()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             ObservableCollection<TECIOModule> expected = new ObservableCollection<TECIOModule>();
             foreach (TECIOModule item in Template.Catalogs.IOModules)
             {
@@ -826,8 +832,8 @@ namespace Tests
         public void Redo_Template_Systems()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
-            TECSystem edit = new TECSystem(false);
+            var Template = ModelCreation.TestTemplates(rand);
+            TECSystem edit = new TECSystem();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
@@ -850,8 +856,8 @@ namespace Tests
         public void Redo_Template_Equipment()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
-            TECEquipment edit = new TECEquipment(false);
+            var Template = ModelCreation.TestTemplates(rand);
+            TECEquipment edit = new TECEquipment();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
@@ -874,8 +880,8 @@ namespace Tests
         public void Redo_Template_SubScope()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
-            TECSubScope edit = new TECSubScope(false);
+            var Template = ModelCreation.TestTemplates(rand);
+            TECSubScope edit = new TECSubScope();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
@@ -898,7 +904,7 @@ namespace Tests
         public void Redo_Template_Catalogs_Devices()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
             types.Add(Template.Catalogs.ConnectionTypes[0]);
             TECDevice edit = new TECDevice(types, new List<TECProtocol>(),
@@ -925,7 +931,7 @@ namespace Tests
         public void Redo_Template_Catalogs_Manufacturers()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             TECManufacturer edit = new TECManufacturer();
 
             //Act
@@ -949,7 +955,7 @@ namespace Tests
         public void Redo_Template_Tags()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             TECTag edit = new TECTag();
 
             //Act
@@ -973,7 +979,7 @@ namespace Tests
         public void Redo_Template_System_Name()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             string edit = "Edit";
 
             //Act
@@ -992,7 +998,7 @@ namespace Tests
         public void Redo_Template_System_Description()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             string edit = "Edit";
 
             //Act
@@ -1011,8 +1017,8 @@ namespace Tests
         public void Redo_Template_System_Equipment()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
-            TECEquipment edit = new TECEquipment(false);
+            var Template = ModelCreation.TestTemplates(rand);
+            TECEquipment edit = new TECEquipment();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
@@ -1035,7 +1041,7 @@ namespace Tests
         public void Redo_Template_Equipment_Name()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             string edit = "Edit";
 
             //Act
@@ -1054,7 +1060,7 @@ namespace Tests
         public void Redo_Template_Equipment_Description()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             string edit = "Edit";
 
             //Act
@@ -1073,8 +1079,8 @@ namespace Tests
         public void Redo_Template_Equipment_SubScope()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
-            TECSubScope edit = new TECSubScope(false);
+            var Template = ModelCreation.TestTemplates(rand);
+            TECSubScope edit = new TECSubScope();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
@@ -1097,7 +1103,7 @@ namespace Tests
         public void Redo_Template_SubScope_Name()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             string edit = "Edit";
 
             //Act
@@ -1116,7 +1122,7 @@ namespace Tests
         public void Redo_Template_SubScope_Description()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             string edit = "Edit";
 
             //Act
@@ -1135,8 +1141,8 @@ namespace Tests
         public void Redo_Template_SubScope_Points()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
-            TECPoint edit = new TECPoint(false);
+            var Template = ModelCreation.TestTemplates(rand);
+            TECPoint edit = new TECPoint();
             edit.Type = IOType.AI;
 
             //Act
@@ -1160,7 +1166,7 @@ namespace Tests
         public void Redo_Template_SubScope_Device()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
             types.Add(Template.Catalogs.ConnectionTypes[0]);
             TECDevice edit = new TECDevice(types, new List<TECProtocol>(),
@@ -1169,8 +1175,8 @@ namespace Tests
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices.Add(edit);
-            var expected = new ObservableCollection<TECDevice>();
-            foreach (TECDevice item in Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices)
+            var expected = new ObservableCollection<IEndDevice>();
+            foreach (IEndDevice item in Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices)
             {
                 expected.Add(item);
             }
@@ -1187,7 +1193,7 @@ namespace Tests
         public void Redo_Template_Device_Name()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             string edit = "Edit";
 
             //Act
@@ -1206,7 +1212,7 @@ namespace Tests
         public void Redo_Template_Device_Description()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             string edit = "Edit";
 
             //Act
@@ -1225,7 +1231,7 @@ namespace Tests
         public void Redo_Template_Device_Cost()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             double edit = 123;
 
             //Act
@@ -1244,7 +1250,7 @@ namespace Tests
         public void Redo_Template_Device_Manufacturer()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             TECManufacturer edit = new TECManufacturer();
 
             //Act
@@ -1263,7 +1269,7 @@ namespace Tests
         public void Redo_Template_Point_Name()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             string edit = "Edit";
 
             //Act
@@ -1282,7 +1288,7 @@ namespace Tests
         public void Redo_Template_Point_Quantity()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             int edit = 3;
 
             //Act
@@ -1302,7 +1308,7 @@ namespace Tests
         public void Redo_Template_Point_Type()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             IOType edit = IOType.AO;
 
             //Act
@@ -1321,13 +1327,13 @@ namespace Tests
         public void Redo_Template_Panel()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             ObservableCollection<TECPanel> expected = new ObservableCollection<TECPanel>();
             foreach (TECPanel item in Template.PanelTemplates)
             {
                 expected.Add(item);
             }
-            TECPanel edit = new TECPanel(Template.Catalogs.PanelTypes[0], false);
+            TECPanel edit = new TECPanel(Template.Catalogs.PanelTypes[0]);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
@@ -1347,7 +1353,7 @@ namespace Tests
         public void Redo_Template_Panel_Name()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             TECPanel expected = Template.PanelTemplates[0];
 
             string edit = "edit";
@@ -1369,8 +1375,8 @@ namespace Tests
         public void Redo_Template_MiscCost()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
-            TECMisc edit = new TECMisc(CostType.TEC, false);
+            var Template = ModelCreation.TestTemplates(rand);
+            TECMisc edit = new TECMisc(CostType.TEC);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
@@ -1393,7 +1399,7 @@ namespace Tests
         public void Redo_Template_PanelType()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             TECPanelType edit = new TECPanelType(Template.Catalogs.Manufacturers[0]);
 
             //Act
@@ -1417,7 +1423,7 @@ namespace Tests
         public void Redo_Template_IOModule()
         {
             //Arrange
-            var Template = TestHelper.CreateTestTemplates();
+            var Template = ModelCreation.TestTemplates(rand);
             TECIOModule edit = new TECIOModule(Template.Catalogs.Manufacturers[0]);
 
             //Act

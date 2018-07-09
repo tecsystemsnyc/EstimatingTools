@@ -1,22 +1,32 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using TECUserControlLibrary.ViewModels;
-using static Tests.CostTestingUtilities;
+using TestLibrary;
+using TestLibrary.ModelTestingUtilities;
+using static TestLibrary.ModelTestingUtilities.CostTestingUtilities;
 
 namespace Tests
 {
     [TestClass]
     public class ItemSummaryVMTests
     {
+        Random rand;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            rand = new Random(0);
+        }
         #region Hardware Summary VM
         [TestMethod]
         public void AddControllerTypeToHardwareVM()
         {
             //Arrange
             HardwareSummaryVM hardwareVM = new HardwareSummaryVM();
-            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
             TECControllerType controllerType = catalogs.ControllerTypes[0];
 
             //Act
@@ -53,7 +63,7 @@ namespace Tests
         {
             //Arrange
             HardwareSummaryVM hardwareVM = new HardwareSummaryVM();
-            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
             TECControllerType controllerType = catalogs.ControllerTypes[0];
 
             //Act
@@ -83,7 +93,7 @@ namespace Tests
         {
             //Arrange
             HardwareSummaryVM hardwareVM = new HardwareSummaryVM();
-            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
             TECPanelType panelType = catalogs.PanelTypes[0];
 
             //Act
@@ -120,7 +130,7 @@ namespace Tests
         {
             //Arrange
             HardwareSummaryVM hardwareVM = new HardwareSummaryVM();
-            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
             TECPanelType panelType = catalogs.PanelTypes[0];
 
             //Act
@@ -150,7 +160,7 @@ namespace Tests
         {
             //Arrange
             HardwareSummaryVM hardwareVM = new HardwareSummaryVM();
-            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
             TECDevice device = catalogs.Devices[0];
 
             //Act
@@ -187,7 +197,7 @@ namespace Tests
         {
             //Arrange
             HardwareSummaryVM hardwareVM = new HardwareSummaryVM();
-            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
             TECDevice device = catalogs.Devices[0];
 
             //Act
@@ -217,7 +227,7 @@ namespace Tests
         {
             //Arrange
             HardwareSummaryVM hardwareVM = new HardwareSummaryVM();
-            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
             TECCost tecCost = null;
             foreach (TECCost cost in catalogs.AssociatedCosts)
             {
@@ -251,7 +261,7 @@ namespace Tests
         {
             //Arrange
             HardwareSummaryVM hardwareVM = new HardwareSummaryVM();
-            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
             TECCost tecCost = null;
             foreach (TECCost cost in catalogs.AssociatedCosts)
             {
@@ -286,7 +296,7 @@ namespace Tests
         {
             //Arrange
             HardwareSummaryVM hardwareVM = new HardwareSummaryVM();
-            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
             TECCost elecCost = null;
             foreach (TECCost cost in catalogs.AssociatedCosts)
             {
@@ -320,7 +330,7 @@ namespace Tests
         {
             //Arrange
             HardwareSummaryVM hardwareVM = new HardwareSummaryVM();
-            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
             TECCost elecCost = null;
             foreach (TECCost cost in catalogs.AssociatedCosts)
             {
@@ -358,7 +368,7 @@ namespace Tests
         {
             //Arrange
             LengthSummaryVM lengthVM = new LengthSummaryVM();
-            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
             List<TECElectricalMaterial> elecMats = new List<TECElectricalMaterial>();
             elecMats.AddRange(catalogs.ConnectionTypes);
             elecMats.AddRange(catalogs.ConduitTypes);
@@ -419,7 +429,7 @@ namespace Tests
         {
             //Arrange
             LengthSummaryVM lengthVM = new LengthSummaryVM();
-            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
             List<TECElectricalMaterial> elecMats = new List<TECElectricalMaterial>();
             elecMats.AddRange(catalogs.ConnectionTypes);
             elecMats.AddRange(catalogs.ConduitTypes);
@@ -487,7 +497,7 @@ namespace Tests
         {
             //Arrange
             LengthSummaryVM lengthVM = new LengthSummaryVM();
-            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
             List<TECElectricalMaterial> elecMats = new List<TECElectricalMaterial>();
             elecMats.AddRange(catalogs.ConnectionTypes);
             elecMats.AddRange(catalogs.ConduitTypes);
@@ -540,7 +550,7 @@ namespace Tests
         {
             //Arrange
             LengthSummaryVM lengthVM = new LengthSummaryVM();
-            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
             List<TECElectricalMaterial> elecMats = new List<TECElectricalMaterial>();
             elecMats.AddRange(catalogs.ConnectionTypes);
             elecMats.AddRange(catalogs.ConduitTypes);
@@ -611,7 +621,7 @@ namespace Tests
         {
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
-            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
             TECCost tecCost = null;
             foreach (TECCost cost in catalogs.AssociatedCosts)
             {
@@ -647,7 +657,7 @@ namespace Tests
         {
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
-            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
             TECCost tecCost = null;
             foreach (TECCost cost in catalogs.AssociatedCosts)
             {
@@ -684,7 +694,7 @@ namespace Tests
         {
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
-            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
             TECCost elecCost = null;
             foreach (TECCost cost in catalogs.AssociatedCosts)
             {
@@ -720,7 +730,7 @@ namespace Tests
         {
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
-            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
             TECCost elecCost = null;
             foreach (TECCost cost in catalogs.AssociatedCosts)
             {
@@ -757,7 +767,7 @@ namespace Tests
         {
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
-            TECMisc tecMisc = new TECMisc(CostType.TEC, false);
+            TECMisc tecMisc = new TECMisc(CostType.TEC);
             tecMisc.Cost = 542.7;
             tecMisc.Labor = 467.4;
             tecMisc.Quantity = 3;
@@ -790,7 +800,7 @@ namespace Tests
         {
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
-            TECMisc tecMisc = new TECMisc(CostType.TEC, false);
+            TECMisc tecMisc = new TECMisc(CostType.TEC);
             tecMisc.Cost = 5478.124;
             tecMisc.Labor = 14.6;
             tecMisc.Quantity = 3;
@@ -824,7 +834,7 @@ namespace Tests
         {
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
-            TECMisc elecMisc = new TECMisc(CostType.Electrical, false);
+            TECMisc elecMisc = new TECMisc(CostType.Electrical);
             elecMisc.Cost = 129.3;
             elecMisc.Labor = 12.3;
             elecMisc.Quantity = 3;
@@ -857,7 +867,7 @@ namespace Tests
         {
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
-            TECMisc elecMisc = new TECMisc(CostType.Electrical, false);
+            TECMisc elecMisc = new TECMisc(CostType.Electrical);
             elecMisc.Cost = 395.4;
             elecMisc.Labor = 843.45;
             elecMisc.Quantity = 3;
@@ -891,7 +901,7 @@ namespace Tests
         {
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
-            TECMisc misc = new TECMisc(CostType.TEC, false);
+            TECMisc misc = new TECMisc(CostType.TEC);
             misc.Cost = 942.2;
             misc.Labor = 375.23;
             misc.Quantity = 3;
@@ -929,7 +939,7 @@ namespace Tests
         {
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
-            TECMisc misc = new TECMisc(CostType.TEC, false);
+            TECMisc misc = new TECMisc(CostType.TEC);
             misc.Cost = 129.3;
             misc.Labor = 532.54;
             misc.Quantity = 3;

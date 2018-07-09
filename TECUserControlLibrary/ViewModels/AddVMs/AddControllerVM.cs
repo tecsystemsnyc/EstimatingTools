@@ -62,7 +62,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
 
         public AddControllerVM(TECSystem parentSystem, IEnumerable<TECControllerType> controllerTypes, TECScopeManager scopeManager) : base(scopeManager)
         {
-            setup(controllerTypes, parentSystem.IsTypical);
+            setup(controllerTypes);
             parent = parentSystem;
             isTypical = parent.IsTypical;
             add = controller =>
@@ -74,21 +74,21 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
 
         public AddControllerVM(Action<TECController> addMethod, IEnumerable<TECControllerType> controllerTypes, TECScopeManager scopeManager) : base(scopeManager)
         {
-            setup(controllerTypes, false);
+            setup(controllerTypes);
             add = addMethod;
         }
 
         public void SetTemplate(TECProvidedController template)
         {
-            ToAdd = new TECProvidedController(template, false);
+            ToAdd = new TECProvidedController(template);
         }
         
-        private void setup(IEnumerable<TECControllerType> controllerTypes, bool isTypical)
+        private void setup(IEnumerable<TECControllerType> controllerTypes)
         {
             Quantity = 1;
             noneControllerType = new TECControllerType(new TECManufacturer());
             noneControllerType.Name = "Select Controller Type";
-            toAdd = new TECProvidedController(noneControllerType, isTypical);
+            toAdd = new TECProvidedController(noneControllerType);
             ControllerTypes = new List<TECControllerType>(controllerTypes);
             ControllerTypes.Insert(0, noneControllerType);
             AddCommand = new RelayCommand(addExecute, addCanExecute);
@@ -114,7 +114,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             for(int x = 0; x < Quantity; x++)
             {
-                var controller = AsReference ? ToAdd : new TECProvidedController(ToAdd, isTypical);
+                var controller = AsReference ? ToAdd : new TECProvidedController(ToAdd);
                 add(controller);
                 Added?.Invoke(controller);
             }

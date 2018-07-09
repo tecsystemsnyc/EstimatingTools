@@ -272,8 +272,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     TECMisc misc = dropped as TECMisc;
                     SelectedVM = new AddMiscVM(SelectedSystem, scopeManager);
-                    TECMisc newMisc = misc != null ? new TECMisc(misc, SelectedSystem.IsTypical) :
-                        new TECMisc(dropped as TECCost, SelectedSystem.IsTypical);
+                    TECMisc newMisc = misc != null ? new TECMisc(misc) : new TECMisc(dropped as TECCost);
                     ((AddMiscVM)SelectedVM).SetTemplate(misc);
                 }
                 else if (dropped is TECSystem system)
@@ -402,10 +401,10 @@ namespace TECUserControlLibrary.ViewModels
         {
             if(obj == null)
             {
-                SelectedSystem.ScopeBranches.Add(new TECScopeBranch(SelectedSystem.IsTypical));
+                SelectedSystem.ScopeBranches.Add(new TECScopeBranch());
             } else
             {
-                obj.Branches.Add(new TECScopeBranch(obj.IsTypical));
+                obj.Branches.Add(new TECScopeBranch());
             }
         }
         

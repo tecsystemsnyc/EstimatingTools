@@ -37,30 +37,31 @@ namespace EstimatingLibrary
         }
         
         public bool IsTypical { get; private set; }
+
         #endregion
 
-        public TECPanel(Guid guid, TECPanelType type, bool isTypical) : base(guid)
+        public TECPanel(Guid guid, TECPanelType type) : base(guid)
         {
-            IsTypical = isTypical;
+            IsTypical = false;
             _guid = guid;
             _controllers = new ObservableCollection<TECController>();
             _type = type;
             Controllers.CollectionChanged += controllersCollectionChanged;
         }
-        public TECPanel(TECPanelType type, bool isTypical) : this(Guid.NewGuid(), type, isTypical) { }
-        public TECPanel(TECPanel panel, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : this(panel.Type, isTypical)
+        public TECPanel(TECPanelType type) : this(Guid.NewGuid(), type) { }
+        public TECPanel(TECPanel panel, Dictionary<Guid, Guid> guidDictionary = null) : this(panel.Type)
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = panel.Guid; }
             copyPropertiesFromScope(panel);
             foreach (TECController controller in panel.Controllers)
             {
-                _controllers.Add(controller.CopyController(isTypical, guidDictionary));
+                _controllers.Add(controller.CopyController(guidDictionary));
             }
         }
         public object DragDropCopy(TECScopeManager scopeManager)
         {
-            var outPanel = new TECPanel(this, this.IsTypical);
+            var outPanel = new TECPanel(this);
             ModelLinkingHelper.LinkScopeItem(outPanel, scopeManager);
             return outPanel;
         }
@@ -115,6 +116,60 @@ namespace EstimatingLibrary
             {
                 notifyCombinedChanged(Change.Edit, "Controllers", this, sender, sender);
             }
+        }
+
+        ITECObject ITypicalable.CreateInstance(ObservableListDictionary<ITECObject> typicalDictionary)
+        {
+            if (!this.IsTypical)
+            {
+                throw new Exception("Attempted to create an instance of an object which is already instanced.");
+            }
+            else
+            {
+                return new TECPanel(this);
+            }
+        }
+
+        void ITypicalable.AddChildForProperty(string property, ITECObject item)
+        {
+            if (property == "Controllers" && item is TECController controller)
+            {
+                Controllers.Add(controller);
+            }
+            else
+            {
+                this.AddChildForScopeProperty(property, item);
+            }
+        }
+
+        bool ITypicalable.RemoveChildForProperty(string property, ITECObject item)
+        {
+            if (property == "Controllers" && item is TECController controller)
+            {
+                return Controllers.Remove(controller);
+            }
+            else
+            {
+                return this.RemoveChildForScopeProperty(property, item);
+            }
+        }
+
+        bool ITypicalable.ContainsChildForProperty(string property, ITECObject item)
+        {
+            if (property == "Controllers" && item is TECController controller)
+            {
+                return Controllers.Contains(controller);
+            }
+            else
+            {
+                return this.ContainsChildForScopeProperty(property, item);
+            }
+        }
+
+        void ITypicalable.MakeTypical()
+        {
+            this.IsTypical = true;
+            TypicalableUtilities.MakeChildrenTypical(this);
         }
     }
 }

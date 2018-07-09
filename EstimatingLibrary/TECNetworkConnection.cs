@@ -41,23 +41,25 @@ namespace EstimatingLibrary
         public override IProtocol Protocol => protocol;
         public TECProtocol NetworkProtocol => protocol;
 
+        public bool IsTypical { get; private set; }
         #endregion
 
         #region Constructors
-        public TECNetworkConnection(Guid guid, TECController parent, TECProtocol protocol, bool isTypical) : base(guid, isTypical)
+        public TECNetworkConnection(Guid guid, TECController parent, TECProtocol protocol) : base(guid)
         {
+            this.IsTypical = false;
             ParentController = parent;
             this.protocol = protocol;
             Children.CollectionChanged += Children_CollectionChanged;
         }
-        public TECNetworkConnection(TECController parent, TECProtocol protocol, bool isTypical) : this(Guid.NewGuid(), parent, protocol, isTypical) { }
-        public TECNetworkConnection(TECNetworkConnection connectionSource, TECController parent, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) 
-            : base(connectionSource, isTypical, guidDictionary)
+        public TECNetworkConnection(TECController parent, TECProtocol protocol) : this(Guid.NewGuid(), parent, protocol) { }
+        public TECNetworkConnection(TECNetworkConnection connectionSource, TECController parent, Dictionary<Guid, Guid> guidDictionary = null) 
+            : base(connectionSource, guidDictionary)
         {
             Children.CollectionChanged += Children_CollectionChanged;
             foreach (IConnectable item in connectionSource.Children)
             {
-                IConnectable newChild = item.Copy(isTypical, guidDictionary);
+                IConnectable newChild = item.Copy(guidDictionary);
                 newChild.SetParentConnection(this);
                 _children.Add(newChild);
             }
@@ -86,6 +88,14 @@ namespace EstimatingLibrary
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
             {
                 notifyCombinedChanged(Change.Edit, "Children", this, sender, sender);
+            }
+        }
+
+        protected override void notifyCostChanged(CostBatch costs)
+        {
+            if (!this.IsTypical)
+            {
+                base.notifyCostChanged(costs);
             }
         }
         #endregion
@@ -136,8 +146,60 @@ namespace EstimatingLibrary
             saveList.Add(protocol, "Protocol");
             return saveList;
         }
-        
-        #endregion 
 
+        #endregion
+        
+        #region ITypicalable
+
+        ITECObject ITypicalable.CreateInstance(ObservableListDictionary<ITECObject> typicalDictionary)
+        {
+            if (!this.IsTypical)
+            {
+                throw new Exception("Attempted to create an instance of an object which is already instanced.");
+            }
+            else
+            {
+                //Can be typical, but is not kept in sync.
+                return null;
+            }
+        }
+
+        void ITypicalable.AddChildForProperty(string property, ITECObject item)
+        {
+            if (property == "Children" && item is IConnectable child) { }
+            else
+            {
+                throw new Exception(String.Format("There is no compatible add method for the property {0} with an object of type {1}", property, item.GetType().ToString()));
+            }
+        }
+
+        bool ITypicalable.RemoveChildForProperty(string property, ITECObject item)
+        {
+            if (property == "Children" && item is IConnectable child) {
+                return true;
+            }
+            else
+            {
+                throw new Exception(String.Format("There is no compatible remove method for the property {0} with an object of type {1}", property, item.GetType().ToString()));
+            }
+        }
+
+        bool ITypicalable.ContainsChildForProperty(string property, ITECObject item)
+        {
+            if (property == "Children" && item is IConnectable child)
+            {
+                return Children.Contains(child);
+            }
+            else
+            {
+                throw new Exception(String.Format("There is no compatible property {0} with an object of type {1}", property, item.GetType().ToString()));
+            }
+        }
+
+        void ITypicalable.MakeTypical()
+        {
+            this.IsTypical = true;
+        }
+        #endregion
     }
 }

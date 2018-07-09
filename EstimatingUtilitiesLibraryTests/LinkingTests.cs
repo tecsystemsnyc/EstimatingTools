@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Tests
+namespace EstimatingUtilitiesLibraryTests
 {
     [TestClass]
     public class LinkingTests
@@ -576,8 +576,9 @@ namespace Tests
                 {
                     var subScopeConnection = connection as TECHardwiredConnection;
                     if(subScopeConnection != null)
-                    {
-                        Assert.IsTrue(TestHelper.IsInBid(subScopeConnection.Child as TECSubScope, bid));
+                    {                       
+                        
+                        Assert.IsTrue(bid.GetAll<TECSubScope>().Contains(subScopeConnection.Child as TECSubScope));
                     }
                 }
             }
@@ -590,7 +591,7 @@ namespace Tests
                         var subScopeConnection = connection as TECHardwiredConnection;
                         if (subScopeConnection != null)
                         {
-                            Assert.IsTrue(TestHelper.IsInBid(subScopeConnection.Child as TECSubScope, bid));
+                            Assert.IsTrue(bid.GetAll<TECSubScope>().Contains(subScopeConnection.Child as TECSubScope));
                         }
                     }
                 }
@@ -603,7 +604,7 @@ namespace Tests
                             var subScopeConnection = connection as TECHardwiredConnection;
                             if (subScopeConnection != null)
                             {
-                                Assert.IsTrue(TestHelper.IsInBid(subScopeConnection.Child as TECSubScope, bid));
+                                Assert.IsTrue(bid.GetAll<TECSubScope>().Contains(subScopeConnection.Child as TECSubScope));
                             }
                         }
                     }

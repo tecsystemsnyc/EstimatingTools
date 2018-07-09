@@ -9,6 +9,7 @@ using EstimatingLibrary;
 using TECUserControlLibrary.Models;
 using EstimatingLibrary.Interfaces;
 using System.Linq;
+using TestLibrary.ModelTestingUtilities;
 
 namespace TECUserControlLibraryTests
 {
@@ -18,6 +19,8 @@ namespace TECUserControlLibraryTests
     [TestClass]
     public class SystemSummaryVMTests
     {
+        Random rand;
+
         public SystemSummaryVMTests()
         {
             //
@@ -43,10 +46,20 @@ namespace TECUserControlLibraryTests
             }
         }
 
+        [TestInitialize]
+        public void TestIinitialize()
+        {
+            rand = new Random(0);
+        }
+
         [TestMethod]
         public void TotalMatches()
         {
-            var bid = TestHelper.CreateEmptyCatalogBid();
+            var bid = new TECBid();
+            var parameters = ModelCreation.TestParameters(rand, bid);
+            var catalogs = ModelCreation.TestCatalogs(rand);
+            bid.Parameters = parameters;
+            bid.Catalogs = catalogs;
             ChangeWatcher watcher = new ChangeWatcher(bid);
 
             SystemSummaryVM summaryVM = new SystemSummaryVM(bid, watcher);
@@ -88,31 +101,31 @@ namespace TECUserControlLibraryTests
         {
             TECTypical typical = new TECTypical();
             typical.Name = "test";
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             equipment.Name = "test equipment";
-            TECSubScope ss = new TECSubScope(true);
+            TECSubScope ss = new TECSubScope();
             ss.Name = "Test Subscope";
             ss.Devices.Add(bid.Catalogs.Devices[0]);
-            TECPoint point = new TECPoint(true);
+            TECPoint point = new TECPoint();
             point.Type = IOType.AI;
             point.Quantity = 1;
             ss.Points.Add(point);
             equipment.SubScope.Add(ss);
             typical.Equipment.Add(equipment);
 
-            TECSubScope connected = new TECSubScope(true);
+            TECSubScope connected = new TECSubScope();
             connected.Name = "Connected";
             connected.Devices.Add(bid.Catalogs.Devices[0]);
-            TECPoint point2 = new TECPoint(true);
+            TECPoint point2 = new TECPoint();
             point2.Type = IOType.AI;
             point2.Quantity = 1;
             connected.Points.Add(point2);
             equipment.SubScope.Add(connected);
 
-            TECSubScope toConnect = new TECSubScope(true);
+            TECSubScope toConnect = new TECSubScope();
             toConnect.Name = "To Connect";
             toConnect.Devices.Add(bid.Catalogs.Devices[0]);
-            TECPoint point3 = new TECPoint(true);
+            TECPoint point3 = new TECPoint();
             point3.Type = IOType.AI;
             point3.Quantity = 1;
             toConnect.Points.Add(point3);
@@ -126,11 +139,11 @@ namespace TECUserControlLibraryTests
             bid.Catalogs.IOModules[0].IO.Add(io);
             controllerType.Name = "Test Type";
 
-            TECProvidedController controller = new TECProvidedController(controllerType, true);
+            TECProvidedController controller = new TECProvidedController(controllerType);
             controller.IOModules.Add(bid.Catalogs.IOModules[0]);
             controller.Name = "Test Controller";
             typical.AddController(controller);
-            TECController otherController = new TECProvidedController(controllerType, true);
+            TECController otherController = new TECProvidedController(controllerType);
             otherController.Name = "Other Controller";
             typical.AddController(otherController);
             IControllerConnection connection = controller.Connect(connected, (connected as IConnectable).AvailableProtocols.First());
@@ -141,11 +154,11 @@ namespace TECUserControlLibraryTests
             TECPanelType panelType = new TECPanelType(new TECManufacturer());
             panelType.Name = "test type";
 
-            TECPanel panel = new TECPanel(panelType, true);
+            TECPanel panel = new TECPanel(panelType);
             panel.Name = "Test Panel";
             typical.Panels.Add(panel);
 
-            TECMisc misc = new TECMisc(CostType.TEC, true);
+            TECMisc misc = new TECMisc(CostType.TEC);
             misc.Name = "test Misc";
             typical.MiscCosts.Add(misc);
 

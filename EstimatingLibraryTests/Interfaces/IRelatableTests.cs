@@ -5,21 +5,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tests;
 using System.ComponentModel;
 using EstimatingLibrary;
+using TestLibrary.ModelTestingUtilities;
 
 namespace Interfaces
 {
     [TestClass()]
     public class IRelatableTests
     {
+        Random rand;
+
+        [TestInitialize()]
+        public void TestInitialize()
+        {
+            rand = new Random(0);
+        }
+
         [TestMethod()]
         public void GetAllTest()
         {
-
             var test = new RelatableTest();
-            test.PropertyObjects.Add(new TECMisc(CostType.TEC, false), "TestingDirect");
+            test.PropertyObjects.Add(new TECMisc(CostType.TEC), "TestingDirect");
             test.PropertyObjects.Add(new TECLocation(), "TestingRelated");
 
             test.LinkedObjects.Add(new TECLocation(), "TestingRelated");
@@ -34,7 +41,7 @@ namespace Interfaces
         public void GetDirectChildrenTest()
         {
             var test = new RelatableTest();
-            test.PropertyObjects.Add(new TECMisc(CostType.TEC, false), "TestingDirect");
+            test.PropertyObjects.Add(new TECMisc(CostType.TEC), "TestingDirect");
             test.PropertyObjects.Add(new TECLocation(), "TestingRelated");
 
             test.LinkedObjects.Add(new TECLocation(), "TestingRelated");
@@ -46,7 +53,7 @@ namespace Interfaces
         public void IsDirectChildPropertyTest()
         {
             var test = new RelatableTest();
-            var misc = new TECMisc(CostType.TEC, false);
+            var misc = new TECMisc(CostType.TEC);
             test.PropertyObjects.Add(misc, "TestingDirect");
             var location = new TECLocation();
             test.PropertyObjects.Add(location, "TestingRelated");
@@ -61,11 +68,11 @@ namespace Interfaces
         public void IsDirectDescendantTest()
         {
             //Arrange
-            TECBid bid = TestHelper.CreateTestBid();
+            TECBid bid = ModelCreation.TestBid(rand);
 
-            TECTypical typical = TestHelper.CreateTestTypical(bid.Catalogs);
+            TECTypical typical = ModelCreation.TestTypical(bid.Catalogs, rand);
 
-            TECSubScope newSS = TestHelper.CreateTestSubScope(false, bid.Catalogs);
+            TECSubScope newSS = ModelCreation.TestSubScope(bid.Catalogs, rand);
 
             //Act
             typical.AddInstance(bid);
@@ -86,7 +93,7 @@ namespace Interfaces
         public void GetObjectPathTest()
         {
             //Arrange
-            TECBid bid = TestHelper.CreateTestBid();
+            TECBid bid = ModelCreation.TestBid(rand);
             TECSystem sys = bid.Systems[0];
             TECEquipment equip = sys.Equipment[0];
             TECSubScope ss = equip.SubScope[0];

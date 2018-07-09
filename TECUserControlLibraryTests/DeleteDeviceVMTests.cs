@@ -27,21 +27,21 @@ namespace TECUserControlLibraryTests
             TECDevice dev = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), man);
             templates.Catalogs.Devices.Add(dev);
 
-            TECSystem sys = new TECSystem(false);
+            TECSystem sys = new TECSystem();
             templates.SystemTemplates.Add(sys);
-            TECEquipment sysEquip = new TECEquipment(false);
+            TECEquipment sysEquip = new TECEquipment();
             sys.Equipment.Add(sysEquip);
-            TECSubScope sysSS = new TECSubScope(false);
+            TECSubScope sysSS = new TECSubScope();
             sysEquip.SubScope.Add(sysSS);
             sysSS.Devices.Add(dev);
 
-            TECEquipment equip = new TECEquipment(false);
+            TECEquipment equip = new TECEquipment();
             templates.EquipmentTemplates.Add(equip);
-            TECSubScope equipSS = new TECSubScope(false);
+            TECSubScope equipSS = new TECSubScope();
             equip.SubScope.Add(equipSS);
             equipSS.Devices.Add(dev);
 
-            TECSubScope ss = new TECSubScope(false);
+            TECSubScope ss = new TECSubScope();
             templates.SubScopeTemplates.Add(ss);
             ss.Devices.Add(dev);
             
@@ -74,21 +74,21 @@ namespace TECUserControlLibraryTests
             TECDevice dev = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), man);
             templates.Catalogs.Devices.Add(dev);
 
-            TECSystem sys = new TECSystem(false);
+            TECSystem sys = new TECSystem();
             templates.SystemTemplates.Add(sys);
-            TECEquipment sysEquip = new TECEquipment(false);
+            TECEquipment sysEquip = new TECEquipment();
             sys.Equipment.Add(sysEquip);
-            TECSubScope sysSS = new TECSubScope(false);
+            TECSubScope sysSS = new TECSubScope();
             sysEquip.SubScope.Add(sysSS);
             sysSS.Devices.Add(dev);
 
-            TECEquipment equip = new TECEquipment(false);
+            TECEquipment equip = new TECEquipment();
             templates.EquipmentTemplates.Add(equip);
-            TECSubScope equipSS = new TECSubScope(false);
+            TECSubScope equipSS = new TECSubScope();
             equip.SubScope.Add(equipSS);
             equipSS.Devices.Add(dev);
 
-            TECSubScope ss = new TECSubScope(false);
+            TECSubScope ss = new TECSubScope();
             templates.SubScopeTemplates.Add(ss);
             ss.Devices.Add(dev);
             

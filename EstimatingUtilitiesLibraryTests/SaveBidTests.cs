@@ -7,8 +7,10 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using TestLibrary.ModelTestingUtilities;
+using static TestLibrary.GeneralTestingUtilities;
 
-namespace Tests
+namespace EstimatingUtilitiesLibraryTests
 {
     [TestClass]
     public class SaveBidTests
@@ -16,12 +18,14 @@ namespace Tests
         TECBid bid;
         DeltaStacker testStack;
         string path;
+        Random rand;            
 
         [TestInitialize]
         public void TestInitialize()
         {
+            rand = new Random(0);
             path = Path.GetTempFileName();
-            bid = TestHelper.CreateTestBid();
+            bid = ModelCreation.TestBid(rand);
             ChangeWatcher watcher = new ChangeWatcher(bid);
             testStack = new DeltaStacker(watcher, bid);
             DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
@@ -502,7 +506,7 @@ namespace Tests
             //Act
             TECTypical typical = bid.Systems[0];
 
-            typical.Equipment.Add(TestHelper.CreateTestEquipment(true, bid.Catalogs));
+            typical.Equipment.Add(ModelCreation.TestEquipment(bid.Catalogs, rand));
             TECSystem expectedSystem = typical.AddInstance(bid);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
@@ -606,7 +610,7 @@ namespace Tests
         {
             //Act
             TECSystem expectedSystem = bid.Systems[0];
-            var expectedMisc = new TECMisc(CostType.Electrical, true);
+            var expectedMisc = new TECMisc(CostType.Electrical);
             expectedSystem.MiscCosts.Add(expectedMisc);
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -642,7 +646,7 @@ namespace Tests
         public void Save_Bid_Add_Equipment()
         {
             //Act
-            TECEquipment expectedEquipment = new TECEquipment(true);
+            TECEquipment expectedEquipment = new TECEquipment();
             expectedEquipment.Name = "New Equipment";
             expectedEquipment.Description = "New Description";
             Guid systemGuid = bid.Systems[0].Guid;
@@ -783,7 +787,7 @@ namespace Tests
         public void Save_Bid_Add_SubScope()
         {
             //Act
-            TECSubScope expectedSubScope = new TECSubScope(true);
+            TECSubScope expectedSubScope = new TECSubScope();
             expectedSubScope.Name = "New SubScope";
             expectedSubScope.Description = "New Description";
 
@@ -944,7 +948,7 @@ namespace Tests
 
             (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
 
-            TECDevice actualDevice = null;
+            IEndDevice actualDevice = null;
             int actualQuantity = 0;
             foreach (TECSystem sys in actualBid.Systems)
             {
@@ -954,12 +958,12 @@ namespace Tests
                     {
                         if (ss.Guid == subScopeToModify.Guid)
                         {
-                            foreach (TECDevice dev in ss.Devices)
+                            foreach (IEndDevice dev in ss.Devices)
                             {
                                 if (dev.Guid == expectedDevice.Guid)
                                 { actualQuantity++; }
                             }
-                            foreach (TECDevice dev in ss.Devices)
+                            foreach (IEndDevice dev in ss.Devices)
                             {
                                 if (dev.Guid == expectedDevice.Guid)
                                 {
@@ -979,7 +983,7 @@ namespace Tests
             Assert.AreEqual(expectedDevice.Name, actualDevice.Name);
             Assert.AreEqual(expectedDevice.Description, actualDevice.Description);
             Assert.AreEqual(expectedQuantity, actualQuantity);
-            Assert.AreEqual(expectedDevice.Price, actualDevice.Price);
+            Assert.AreEqual(expectedDevice.Price, (actualDevice as TECHardware).Price, DELTA);
             Assert.AreEqual(expectedDevice.HardwiredConnectionTypes.Count, actualDevice.HardwiredConnectionTypes.Count);
         }
 
@@ -1006,10 +1010,10 @@ namespace Tests
             }
 
             int oldNumDevices = ssToModify.Devices.Count();
-            TECDevice deviceToRemove = ssToModify.Devices[0] as TECDevice;
+            IEndDevice deviceToRemove = ssToModify.Devices[0] as IEndDevice;
 
             int numThisDevice = 0;
-            foreach (TECDevice dev in ssToModify.Devices)
+            foreach (IEndDevice dev in ssToModify.Devices)
             {
                 if (dev == deviceToRemove)
                 {
@@ -1045,12 +1049,12 @@ namespace Tests
             }
 
             //Assert
-            foreach (TECDevice dev in modifiedSubScope.Devices)
+            foreach (IEndDevice dev in modifiedSubScope.Devices)
             {
                 if (deviceToRemove.Guid == dev.Guid) Assert.Fail("Device not removed properly.");
             }
             bool devFound = false;
-            foreach (TECDevice dev in actualBid.Catalogs.Devices)
+            foreach (IEndDevice dev in actualBid.Catalogs.Devices)
             {
                 if (deviceToRemove.Guid == dev.Guid) devFound = true;
             }
@@ -1081,11 +1085,11 @@ namespace Tests
                 }
                 if (ssToModify != null) break;
             }
-            TECDevice deviceToRemove = (ssToModify.Devices[0] as TECDevice);
+            IEndDevice deviceToRemove = (ssToModify.Devices[0] as IEndDevice);
 
             int oldNumDevices = 0;
 
-            foreach (TECDevice dev in ssToModify.Devices)
+            foreach (IEndDevice dev in ssToModify.Devices)
             {
                 if (dev.Guid == deviceToRemove.Guid)
                     oldNumDevices++;
@@ -1117,14 +1121,18 @@ namespace Tests
 
             //Assert
             bool devFound = false;
-            foreach (TECDevice dev in actualBid.Catalogs.Devices)
+            foreach (IEndDevice dev in actualBid.Catalogs.Devices)
+            {
+                if (deviceToRemove.Guid == dev.Guid) devFound = true;
+            }
+            foreach (IEndDevice dev in actualBid.Catalogs.Valves)
             {
                 if (deviceToRemove.Guid == dev.Guid) devFound = true;
             }
             if (!devFound) Assert.Fail();
 
             int numDevices = 0;
-            foreach (TECDevice dev in modifiedSubScope.Devices)
+            foreach (IEndDevice dev in modifiedSubScope.Devices)
             {
                 if (dev.Guid == deviceToRemove.Guid)
                     numDevices++;
@@ -1156,11 +1164,11 @@ namespace Tests
                 }
                 if (ssToModify != null) break;
             }
-            TECDevice expectedDevice = (ssToModify.Devices[0] as TECDevice);
+            IEndDevice expectedDevice = (ssToModify.Devices[0] as IEndDevice);
 
             int expectedNumDevices = 0;
 
-            foreach (TECDevice dev in ssToModify.Devices)
+            foreach (IEndDevice dev in ssToModify.Devices)
             {
                 if (dev.Guid == expectedDevice.Guid) expectedNumDevices++;
             }
@@ -1193,15 +1201,15 @@ namespace Tests
                 if (modifiedSS != null) break;
             }
 
-            TECDevice actualDevice = null;
-            foreach (TECDevice dev in modifiedSS.Devices)
+            IEndDevice actualDevice = null;
+            foreach (IEndDevice dev in modifiedSS.Devices)
             {
                 if (dev.Guid == expectedDevice.Guid)
                 {
                     actualQuantity++;
                 }
             }
-            foreach (TECDevice dev in modifiedSS.Devices)
+            foreach (IEndDevice dev in modifiedSS.Devices)
             {
                 if (expectedDevice.Guid == dev.Guid)
                 {
@@ -1223,7 +1231,7 @@ namespace Tests
         public void Save_Bid_Add_Point()
         {
             //Act
-            TECPoint expectedPoint = new TECPoint(true);
+            TECPoint expectedPoint = new TECPoint();
             expectedPoint.Type = IOType.AI;
             expectedPoint.Label = "New Point";
             expectedPoint.Quantity = 5;
@@ -1615,7 +1623,7 @@ namespace Tests
         {
             //Act
             int oldNumBranches = bid.ScopeTree.Count();
-            TECScopeBranch expectedBranch = new TECScopeBranch(false);
+            TECScopeBranch expectedBranch = new TECScopeBranch();
             expectedBranch.Label = "New Branch";
             bid.ScopeTree.Add(expectedBranch);
 
@@ -1642,7 +1650,7 @@ namespace Tests
         public void Save_Bid_Add_Branch_InBranch()
         {
             //Act
-            TECScopeBranch expectedBranch = new TECScopeBranch(false);
+            TECScopeBranch expectedBranch = new TECScopeBranch();
             expectedBranch.Label = "New Child";
             TECScopeBranch branchToModify = bid.ScopeTree[0];
             branchToModify.Branches.Add(expectedBranch);
@@ -1844,15 +1852,7 @@ namespace Tests
             //Act
             TECLocation expectedLocation = bid.Locations[0];
 
-            TECSystem sysToModify = null;
-            foreach (TECSystem sys in bid.Systems)
-            {
-                if (sys.Location == null)
-                {
-                    sysToModify = sys;
-                    break;
-                }
-            }
+            TECSystem sysToModify = bid.Systems.First(x => x.Equipment.Count > 0 && x.Equipment[0].SubScope.Count > 0);
             TECEquipment equipToModify = sysToModify.Equipment[0];
             TECSubScope ssToModify = equipToModify.SubScope[0];
 
@@ -2388,7 +2388,7 @@ namespace Tests
         public void Save_Bid_Add_Controller()
         {
             //Act
-            TECController expectedController = new TECProvidedController(Guid.NewGuid(), bid.Catalogs.ControllerTypes[0], false);
+            TECController expectedController = new TECProvidedController(Guid.NewGuid(), bid.Catalogs.ControllerTypes[0]);
             expectedController.Name = "Test Add Controller";
             expectedController.Description = "Test description";
 
@@ -2508,7 +2508,7 @@ namespace Tests
         public void Save_Bid_Add_MiscCost()
         {
             //Act
-            TECMisc expectedCost = new TECMisc(CostType.Electrical, false);
+            TECMisc expectedCost = new TECMisc(CostType.Electrical);
             expectedCost.Name = "Add cost addition";
             expectedCost.Cost = 978.3;
             expectedCost.Quantity = 21;
@@ -2668,7 +2668,7 @@ namespace Tests
         public void Save_Bid_Add_Panel()
         {
             //Act
-            TECPanel expectedPanel = new TECPanel(bid.Catalogs.PanelTypes[0], false);
+            TECPanel expectedPanel = new TECPanel(bid.Catalogs.PanelTypes[0]);
             expectedPanel.Name = "Test Add Controller";
             expectedPanel.Description = "Test description";
             bid.Panels.Add(expectedPanel);

@@ -1,4 +1,6 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,20 +11,20 @@ namespace TestLibrary.MockClasses
 {
     public class TECControllerMock : TECController
     {
-        private IOCollection io;
+        private IOCollection _io;
 
         public override IOCollection IO
         {
-            get { return io; }
+            get { return _io; }
         }
 
-        public TECControllerMock(Guid guid, bool isTypical) : base(guid, isTypical) { }
-        public TECControllerMock(bool isTypical) : base(isTypical) { }
-        public TECControllerMock(TECController controllerSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : base(controllerSource, isTypical, guidDictionary) { }
+        public TECControllerMock(Guid guid) : base(guid) { }
+        public TECControllerMock() : base() { }
+        public TECControllerMock(TECController controllerSource, Dictionary<Guid, Guid> guidDictionary = null) : base(controllerSource, guidDictionary) { }
 
-        public override TECController CopyController(bool isTypical, Dictionary<Guid, Guid> guidDictionary = null)
+        public override TECController CopyController(Dictionary<Guid, Guid> guidDictionary = null)
         {
-            return new TECControllerMock(this, isTypical, guidDictionary);
+            return new TECControllerMock(this, guidDictionary);
         }
 
         /// <summary>
@@ -31,7 +33,34 @@ namespace TestLibrary.MockClasses
         /// <param name="io"></param>
         public void SetIO(IOCollection io)
         {
-            this.io = io;
+            this._io = io;
         }
+        
+        #region ITypicalable
+        protected override ITECObject createInstance(ObservableListDictionary<ITECObject> typicalDictionary)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void addChildForProperty(string property, ITECObject item)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool removeChildForProperty(string property, ITECObject item)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool containsChildForProperty(string property, ITECObject item)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void makeTypical()
+        {
+            this.IsTypical = true;
+        }
+        #endregion
     }
 }

@@ -76,8 +76,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         public AddEquipmentVM(TECSystem parentSystem, TECScopeManager scopeManager) : base(scopeManager)
         {
             parent = parentSystem;
-            isTypical = parent.IsTypical;
-            toAdd = new TECEquipment(parentSystem.IsTypical);
+            toAdd = new TECEquipment();
             add = equip =>
             {
                 parentSystem.Equipment.Add(equip);
@@ -88,7 +87,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         }
         public AddEquipmentVM(Action<TECEquipment> addMethod, TECScopeManager scopeManager) : base(scopeManager)
         {
-            toAdd = new TECEquipment(false);
+            toAdd = new TECEquipment();
             add = addMethod;
             AddCommand = new RelayCommand(addExecute, addCanExecute);
             Quantity = 1;
@@ -119,16 +118,16 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 {
                     if (templates != null)
                     {
-                        equipment = new TECEquipment(underlyingTemplate, isTypical, ssSynchronizer: templates.SubScopeSynchronizer);
+                        equipment = new TECEquipment(underlyingTemplate, ssSynchronizer: templates.SubScopeSynchronizer);
                     }
                     else
                     {
-                        equipment = new TECEquipment(underlyingTemplate, isTypical);
+                        equipment = new TECEquipment(underlyingTemplate);
                     }
                 }
                 else
                 {
-                    equipment = new TECEquipment(ToAdd, isTypical);
+                    equipment = new TECEquipment(ToAdd);
                 }
                 equipment.CopyPropertiesFromScope(ToAdd);
                 add(equipment);
@@ -143,7 +142,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         public void SetTemplate(TECEquipment template)
         {
             underlyingTemplate = template;
-            ToAdd = new TECEquipment(template, isTypical);
+            ToAdd = new TECEquipment(template);
             if (IsTemplates)
             {
                 DisplayReferenceProperty = true;

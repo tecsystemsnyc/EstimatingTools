@@ -33,7 +33,7 @@ namespace Interfaces
         {
             TECControllerType controllerType = new TECControllerType(manufacturer);
             controllerType.Price = 100;
-            TECController controller = new TECProvidedController(controllerType, false);
+            TECController controller = new TECProvidedController(controllerType);
 
             bid.AddController(controller);
             
@@ -46,7 +46,7 @@ namespace Interfaces
         {
             TECPanelType panelType = new TECPanelType(manufacturer);
             panelType.Price = 100;
-            TECPanel panel = new TECPanel(panelType, false);
+            TECPanel panel = new TECPanel(panelType);
 
             bid.Panels.Add(panel);
             

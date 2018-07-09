@@ -84,18 +84,18 @@ namespace EstimatingLibrary
         #endregion //Properties
 
         #region Constructors
-        public TECSubScope(Guid guid, bool isTypical) : base(guid)
+        public TECSubScope(Guid guid) : base(guid)
         {
-            IsTypical = isTypical;
+            IsTypical = false;
             Devices.CollectionChanged += DevicesCollectionChanged;
             Points.CollectionChanged += PointsCollectionChanged;
             Interlocks.CollectionChanged += InterlocksCollectionChanged;
         }
-        public TECSubScope(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
+        public TECSubScope() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
-        public TECSubScope(TECSubScope sourceSubScope, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableListDictionary<ITECObject> characteristicReference = null) : this(isTypical)
+        public TECSubScope(TECSubScope sourceSubScope, Dictionary<Guid, Guid> guidDictionary = null,
+            ObservableListDictionary<ITECObject> characteristicReference = null) : this()
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = sourceSubScope.Guid; }
@@ -103,13 +103,13 @@ namespace EstimatingLibrary
             { _devices.Add(device); }
             foreach (TECPoint point in sourceSubScope.Points)
             {
-                var toAdd = new TECPoint(point, isTypical);
+                var toAdd = new TECPoint(point);
                 characteristicReference?.AddItem(point,toAdd);
                 Points.Add(toAdd);
             }
             foreach (TECInterlockConnection interlock in sourceSubScope.Interlocks)
             {
-                var toAdd = new TECInterlockConnection(interlock, isTypical);
+                var toAdd = new TECInterlockConnection(interlock);
                 characteristicReference?.AddItem(interlock, toAdd);
                 Interlocks.Add(toAdd);
             }
@@ -152,7 +152,8 @@ namespace EstimatingLibrary
 
                 foreach (TECObject item in e.NewItems)
                 {
-                    if(item is INotifyCostChanged cost)
+                    if (this.IsTypical && item is ITypicalable typ) { typ.MakeTypical(); }
+                    if (item is INotifyCostChanged cost)
                     {
                         costs += cost.CostBatch;
                         costChanged = true;
@@ -202,7 +203,8 @@ namespace EstimatingLibrary
 
         public object DragDropCopy(TECScopeManager scopeManager)
         {
-            TECSubScope outScope = new TECSubScope(this, this.IsTypical);
+            TECSubScope outScope = new TECSubScope(this);
+            outScope.IsTypical = this.IsTypical;
             ModelLinkingHelper.LinkScopeItem(outScope, scopeManager);
             return outScope;
         }
@@ -211,9 +213,9 @@ namespace EstimatingLibrary
         {
             Points.Add(point);
         }
-        public void RemovePoint(TECPoint point)
+        public bool RemovePoint(TECPoint point)
         {
-            Points.Remove(point);
+            return Points.Remove(point);
         }
 
         public bool CanConnectToNetwork(TECNetworkConnection netConnect)
@@ -288,9 +290,9 @@ namespace EstimatingLibrary
             }
         }
 
-        public IConnectable Copy(bool isTypical, Dictionary<Guid, Guid> guidDictionary)
+        public IConnectable Copy(Dictionary<Guid, Guid> guidDictionary)
         {
-            return new TECSubScope(this, isTypical, guidDictionary);
+            return new TECSubScope(this, guidDictionary);
         }
         #endregion
 
@@ -336,6 +338,7 @@ namespace EstimatingLibrary
                 return this.Points.ToIOCollection();
             }
         }
+        
         bool IConnectable.CanSetParentConnection(IControllerConnection connection)
         {
             return ((IConnectable)this).AvailableProtocols.Contains(connection.Protocol);            
@@ -350,6 +353,86 @@ namespace EstimatingLibrary
             return this.Connection;
         }
 
+        #endregion
+
+        #region ITypicalable
+        ITECObject ITypicalable.CreateInstance(ObservableListDictionary<ITECObject> typicalDictionary)
+        {
+            if (!this.IsTypical)
+            {
+                throw new Exception("Attempted to create an instance of an object which is already instanced.");
+            } 
+            else
+            {
+                return new TECSubScope(this, characteristicReference: typicalDictionary);
+            }
+        }
+
+        void ITypicalable.AddChildForProperty(string property, ITECObject item)
+        {
+            if(property == "Points" && item is TECPoint point)
+            {
+                AddPoint(point);
+            }
+            else if (property == "Devices" && item is IEndDevice device)
+            {
+                Devices.Add(device);
+            }
+            else if (property == "Interlocks" && item is TECInterlockConnection interlock)
+            {
+                Interlocks.Add(interlock);
+            }
+            else
+            {
+                this.AddChildForScopeProperty(property, item);
+            }
+        }
+
+        bool ITypicalable.RemoveChildForProperty(string property, ITECObject item)
+        {
+            if (property == "Points" && item is TECPoint point)
+            {
+                return RemovePoint(point);
+            }
+            else if (property == "Devices" && item is IEndDevice device)
+            {
+                return Devices.Remove(device);
+            }
+            else if (property == "Interlocks" && item is TECInterlockConnection interlock)
+            {
+                return Interlocks.Remove(interlock);
+            }
+            else
+            {
+                return this.RemoveChildForScopeProperty(property, item);
+            }
+        }
+
+        bool ITypicalable.ContainsChildForProperty(string property, ITECObject item)
+        {
+            if (property == "Points" && item is TECPoint point)
+            {
+                return Points.Contains(point);
+            }
+            else if (property == "Devices" && item is IEndDevice device)
+            {
+                return Devices.Contains(device);
+            }
+            else if (property == "Interlocks" && item is TECInterlockConnection interlock)
+            {
+                return Interlocks.Contains(interlock);
+            }
+            else
+            {
+                return this.ContainsChildForScopeProperty(property, item);
+            }
+        }
+
+        void ITypicalable.MakeTypical()
+        {
+            this.IsTypical = true;
+            TypicalableUtilities.MakeChildrenTypical(this);
+        }
         #endregion
     }
 }
