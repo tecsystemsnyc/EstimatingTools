@@ -34,13 +34,25 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             }
         }
         public TECCatalogs Catalogs { get; }
-    
+        public RelayCommand<TECElectricalMaterial> DeleteConnectionTypeCommand { get; }
 
         public AddInterlockVM(IInterlockable parent, TECScopeManager scopeManager) : base(scopeManager)
         {
             this.parent = parent;
             this.Catalogs = scopeManager.Catalogs;
             AddCommand = new RelayCommand(addExecute, canAdd);
+            DeleteConnectionTypeCommand = new RelayCommand<TECElectricalMaterial>(deleteConnectiontypeExecute, canDeleteConnectionType);
+
+        }
+
+        private void deleteConnectiontypeExecute(TECElectricalMaterial obj)
+        {
+            ToAdd.ConnectionTypes.Remove(obj as TECConnectionType);
+        }
+
+        private bool canDeleteConnectionType(TECElectricalMaterial arg)
+        {
+            return arg is TECConnectionType;
         }
 
         private void addExecute()

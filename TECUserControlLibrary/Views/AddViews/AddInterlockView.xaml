@@ -71,6 +71,8 @@
             <TextBlock Text="Connection Types:"
                        Grid.Row="5"/>
             <controls:ElectricalMaterialListControl Source="{Binding ConnectionTypes}"
+                                                    DropHandler="{Binding ElementName=addInterlockView, Path=ViewModel.PropertiesVM}"
+                                                    DeleteCommand="{Binding ElementName=addInterlockView, Path=ViewModel.DeleteConnectionTypeCommand}"
                                                     Grid.Row="6" 
                                                     Grid.ColumnSpan="2"/>
             <TextBlock Text="Quantity" 
