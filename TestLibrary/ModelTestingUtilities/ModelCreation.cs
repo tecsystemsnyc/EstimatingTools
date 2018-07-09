@@ -59,7 +59,7 @@ namespace TestLibrary.ModelTestingUtilities
             //Bid Info
             bid.Name = "Randomized Test Bid";
             bid.BidNumber = string.Format("{0}-{1}", rand.Next(1000, 9999), rand.Next(1000, 9999));
-            bid.DueDate = new DateTime(rand.Next(2000, 3000), rand.Next(12), rand.Next(28));
+            bid.DueDate = new DateTime(rand.Next(2000, 3000), rand.Next(1,12), rand.Next(1,28));
             bid.Salesperson = string.Format("Salesperson #{0}", rand.Next(100));
             bid.Estimator = string.Format("Estimator #{0}", rand.Next(100));
 

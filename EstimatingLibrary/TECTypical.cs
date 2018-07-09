@@ -410,10 +410,10 @@ namespace EstimatingLibrary
                     {
                         if (item is TECSystem sys)
                         {
+                            handleInstanceRemoved(sys);
                             costs += sys.CostBatch;
                             pointNum += sys.PointNumber;
                             raiseEvents = true;
-                            handleInstanceRemoved(sys);
                         }
                         else if (item is TECEquipment equip)
                         {

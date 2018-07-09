@@ -100,7 +100,7 @@ namespace EstimatingLibrary
         }
         #endregion //Constructors
 
-        protected void notifyCostChanged(CostBatch costs)
+        protected virtual void notifyCostChanged(CostBatch costs)
         {
             CostChanged?.Invoke(costs);
         }

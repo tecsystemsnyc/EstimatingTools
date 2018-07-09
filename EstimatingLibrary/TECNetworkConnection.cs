@@ -90,6 +90,14 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "Children", this, sender, sender);
             }
         }
+
+        protected override void notifyCostChanged(CostBatch costs)
+        {
+            if (!this.IsTypical)
+            {
+                base.notifyCostChanged(costs);
+            }
+        }
         #endregion
 
         #region Methods

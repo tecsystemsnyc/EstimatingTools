@@ -55,7 +55,11 @@ namespace TECUserControlLibraryTests
         [TestMethod]
         public void TotalMatches()
         {
-            var bid = ModelCreation.TestBid(rand);
+            var bid = new TECBid();
+            var parameters = ModelCreation.TestParameters(rand, bid);
+            var catalogs = ModelCreation.TestCatalogs(rand);
+            bid.Parameters = parameters;
+            bid.Catalogs = catalogs;
             ChangeWatcher watcher = new ChangeWatcher(bid);
 
             SystemSummaryVM summaryVM = new SystemSummaryVM(bid, watcher);
