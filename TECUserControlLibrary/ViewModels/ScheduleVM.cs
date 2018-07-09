@@ -45,6 +45,7 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("ScopeCollection");
             }
         }
+        public ObservableCollection<TECLocation> Locations { get; }
 
         public ICommand AddTableCommand { get; private set; }
 
@@ -54,6 +55,7 @@ namespace TECUserControlLibrary.ViewModels
             AddTableCommand = new RelayCommand(addTableExecute, canAddTable);
             watcher.Changed += changed;
             populateScopeCollection(bid);
+            this.Locations = bid.Locations;
         }
 
         private void populateScopeCollection(TECBid bid)

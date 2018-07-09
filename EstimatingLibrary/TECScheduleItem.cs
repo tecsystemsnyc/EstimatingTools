@@ -10,7 +10,7 @@ namespace EstimatingLibrary
     public class TECScheduleItem : TECObject, IRelatable
     {
         private String _tag = "";
-        private String _location = "";
+        private TECLocation _location = null;
         private String _service = "";
         private TECScope _scope = null;
 
@@ -27,7 +27,7 @@ namespace EstimatingLibrary
                 }
             }
         }
-        public String Location
+        public TECLocation Location
         {
             get { return _location; }
             set
@@ -82,18 +82,26 @@ namespace EstimatingLibrary
         private SaveableMap propertyObjects()
         {
             SaveableMap saveList = new SaveableMap();
-            if (this.Location != null)
+            if (this.Scope != null)
             {
                 saveList.Add(this.Scope, "Scope");
+            }
+            if(this.Location !=null)
+            {
+                saveList.Add(this.Location, "Location");
             }
             return saveList;
         }
         private SaveableMap linkedObjects()
         {
             SaveableMap saveList = new SaveableMap();
-            if (this.Location != null)
+            if (this.Scope != null)
             {
                 saveList.Add(this.Scope, "Scope");
+            }
+            if (this.Location != null)
+            {
+                saveList.Add(this.Location, "Location");
             }
             return saveList;
         }

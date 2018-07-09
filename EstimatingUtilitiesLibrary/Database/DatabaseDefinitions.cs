@@ -1276,7 +1276,6 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField ID = new TableField("ID", "TEXT", ScheduleType.GetProperty("Guid"));
         public static TableField Tag = new TableField("Tag", "TEXT", ScheduleType.GetProperty("Tag"));
         public static TableField Service = new TableField("Service", "TEXT", ScheduleType.GetProperty("Service"));
-        public static TableField Location = new TableField("Location", "TEXT", ScheduleType.GetProperty("Location"));
         
         private List<TableField> primaryKeys = new List<TableField>()
         {
@@ -1290,8 +1289,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             ID,
             Tag,
-            Service,
-            Location
+            Service
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -2858,6 +2856,41 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+    internal class ScheduleItemLocationTable : TableBase
+    {
+        public static string TableName = "ScheduleItemLocation";
+        public static Type ScheduleType = typeof(TECScheduleItem);
+        public static Type LocationType = typeof(TECLocation);
+
+        public static TableField ScheduleItemID = new TableField("ScheduleItemID", "TEXT", ScheduleType.GetProperty("Guid"));
+        public static TableField LocationID = new TableField("LocationID", "TEXT", LocationType.GetProperty("Guid"));
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ScheduleItemID,
+            LocationID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ScheduleType,
+            LocationType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ScheduleItemID,
+            LocationID
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Location"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
 
     internal class TypicalInstanceTable : TableBase
     {
@@ -3380,7 +3413,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new IOProtocolTable(),
             new HardwiredConnectionConnectionTypeTable(),
             new InterlockableInterlockTable(),
-            new InterlockConnectionConnectionTypeTable()
+            new InterlockConnectionConnectionTypeTable(),
+            new ScheduleItemLocationTable()
             };
     }
 

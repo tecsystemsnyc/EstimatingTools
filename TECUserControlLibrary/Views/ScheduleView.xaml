@@ -71,7 +71,11 @@
                             <DataGrid.Columns>
                                 <DataGridTextColumn Binding="{Binding Tag}" Header="Tag" Width="Auto" MinWidth="40"/>
                                 <DataGridTextColumn Binding="{Binding Service}" Header="Service" Width="Auto" MinWidth="40"/>
-                                <DataGridTextColumn Binding="{Binding Location}" Header="Location" Width="Auto" MinWidth="40"/>
+                                <DataGridComboBoxColumn SelectedItemBinding="{Binding Location}" 
+                                                        DisplayMemberPath="Name"
+                                                        ItemsSource="{Binding Data.Locations, Source={StaticResource proxy}}"
+                                                        Header="Location"
+                                                        Width="Auto" MinWidth="40"/>
                                 <DataGridComboBoxColumn SelectedItemBinding="{Binding Scope}" 
                                                         DisplayMemberPath="Name"
                                                         ItemsSource="{Binding Data.ScopeCollection, Source={StaticResource proxy}}"
