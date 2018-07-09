@@ -258,7 +258,7 @@ namespace EstimatingUtilitiesLibraryTests
             CheckUpdateItems(expectedItems, stack);
         }
         #endregion
-        #region Notes and Exclusions
+        #region Notes etc.
         [TestMethod]
         public void Bid_AddNote()
         {
@@ -304,6 +304,40 @@ namespace EstimatingUtilitiesLibraryTests
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
             CheckUpdateItem(expectedItem, stack.CleansedStack()[stack.CleansedStack().Count - 1]);
+        }
+        [TestMethod]
+        public void Bid_AddInternalNote()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECInternalNote note = new TECInternalNote();
+            note.Label = "Note";
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[InternalNoteTable.ID.Name] = note.Guid.ToString();
+            data[InternalNoteTable.Label.Name] = note.Label.ToString();
+            data[InternalNoteTable.Body.Name] = note.Body.ToString();
+
+            expectedItems.Add(new UpdateItem(Change.Add, InternalNoteTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[BidInternalNoteTable.BidID.Name] = bid.Guid.ToString();
+            data[BidInternalNoteTable.NoteID.Name] = note.Guid.ToString();
+            data[BidInternalNoteTable.Index.Name] = "0";
+
+            expectedItems.Add(new UpdateItem(Change.Add, BidInternalNoteTable.TableName, data));
+
+            int expectedCount = expectedItems.Count;
+
+            bid.InternalNotes.Add(note);
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            CheckUpdateItems(expectedItems, stack);
         }
         #endregion
         #region Locations

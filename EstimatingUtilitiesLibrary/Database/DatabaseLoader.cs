@@ -91,6 +91,7 @@ namespace EstimatingUtilitiesLibrary.Database
             bid.Exclusions = getObjectsFromTable(new ExclusionTable(), id => new TECLabeled(id)).ToOC();
             bid.MiscCosts = getChildObjects(new BidMiscTable(), new MiscTable(), bid.Guid, data => getMiscFromRow(data)).ToOC();
             bid.Schedule = getSchedule(bid);
+            bid.InternalNotes = getChildObjects(new BidInternalNoteTable(), new InternalNoteTable(), bid.Guid, id => { return new TECInternalNote(id); }).ToOC();
             
             List<TECLocated> allLocated = bid.GetAll<TECLocated>();
             allLocated.ForEach(item => item.Location = locationDictionary.ValueOrDefault(item.Guid, null));

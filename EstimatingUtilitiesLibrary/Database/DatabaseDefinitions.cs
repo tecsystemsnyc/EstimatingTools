@@ -1304,6 +1304,42 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+
+    internal class InternalNoteTable : TableBase
+    {
+        public static string TableName = "InternalNote";
+        public static Type NoteType = typeof(TECInternalNote);
+
+        public static TableField ID = new TableField("ID", "TEXT", NoteType.GetProperty("Guid"));
+        public static TableField Label = new TableField("Label", "TEXT", NoteType.GetProperty("Label"));
+        public static TableField Body = new TableField("Body", "TEXT", NoteType.GetProperty("Body"));
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            NoteType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ID,
+            Label,
+            Body
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "InternalNotes"
+        };
+        
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+
     internal class ProtocolTable : TableBase
     {
         public static string TableName = "Protocol";
@@ -1333,9 +1369,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
-
     }
-    
     #endregion
 
     #region Relationship Tables
@@ -3220,6 +3254,47 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+
+    internal class BidInternalNoteTable : TableBase
+    {
+        public static string TableName = "BidInternalNote";
+        public static Type ObjectType = typeof(TECBid);
+        public static Type ReferenceType = typeof(TECInternalNote);
+
+        public static TableField BidID = new TableField("BidID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField NoteID = new TableField("NoteID", "TEXT", ReferenceType.GetProperty("Guid"));
+
+        public static Type HelperType = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"), "InternalNotes", "0");
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            BidID,
+            NoteID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            BidID,
+            NoteID,
+            Index
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "InternalNotes"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
     #endregion
 
     internal static class AllBidTables
@@ -3254,9 +3329,10 @@ namespace EstimatingUtilitiesLibrary.Database
             new ScheduleTable(),
             new ScheduleTableTable(),
             new ScheduleItemTable(),
+            new InternalNoteTable(),
             new ProtocolTable(),
             new InterlockConnectionTable(),
-
+          
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
             new ScopeBranchHierarchyTable(),
@@ -3298,6 +3374,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new ScheduleTableScheduleItemTable(),
             new ScheduleItemScopeTable(),
             new BidLocationTable(),
+            new BidInternalNoteTable(),
             new NetworkConnectionProtocolTable(),
             new ProtocolConnectionTypeTable(),
             new IOProtocolTable(),

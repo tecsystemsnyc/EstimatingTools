@@ -123,6 +123,7 @@
     <Compile Include="TECAssociatedCost.cs" />
     <Compile Include="TECConnectionType.cs" />
     <Compile Include="TECExtraLabor.cs" />
+    <Compile Include="TECInternalNote.cs" />
     <Compile Include="TECFBOController.cs" />
     <Compile Include="TECHardwiredProtocol.cs" />
     <Compile Include="TECInterlockConnection.cs" />

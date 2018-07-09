@@ -21,7 +21,7 @@ namespace EstimatingLibrary
 
         public event Action<CostBatch> CostChanged;
         public event Action<int> PointChanged;
-
+        
         private ObservableCollection<TECScopeBranch> _scopeTree = new ObservableCollection<TECScopeBranch>();
         private ObservableCollection<TECTypical> _systems = new ObservableCollection<TECTypical>();
         private ObservableCollection<TECLabeled> _notes = new ObservableCollection<TECLabeled>();
@@ -30,6 +30,7 @@ namespace EstimatingLibrary
         private ObservableCollection<TECController> _controllers = new ObservableCollection<TECController>();
         private ObservableCollection<TECMisc> _miscCosts = new ObservableCollection<TECMisc>();
         private ObservableCollection<TECPanel> _panels = new ObservableCollection<TECPanel>();
+        private ObservableCollection<TECInternalNote> _internalNotes = new ObservableCollection<TECInternalNote>();
         private TECSchedule _schedule = new TECSchedule();
         #endregion
 
@@ -224,7 +225,19 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "Panels", this, value, old);
             }
         }
-        
+        public ObservableCollection<TECInternalNote> InternalNotes
+        {
+            get { return _internalNotes; }
+            set
+            {
+                var old = InternalNotes;
+                InternalNotes.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "InternalNotes");
+                _internalNotes = value;
+                InternalNotes.CollectionChanged += (sender, args) => collectionChanged(sender, args, "InternalNotes");
+                notifyCombinedChanged(Change.Edit, "InternalNotes", this, value, old);
+            }
+        }
+
         public CostBatch CostBatch
         {
             get { return getCosts();  }
@@ -267,6 +280,7 @@ namespace EstimatingLibrary
             Locations.CollectionChanged += locationsCollectionChanged;
             MiscCosts.CollectionChanged += (sender, args) => collectionChanged(sender, args, "MiscCosts");
             Panels.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Panels");
+            InternalNotes.CollectionChanged += (sender, args) => collectionChanged(sender, args, "InternalNotes");
         }
 
         public TECBid() : this(Guid.NewGuid())
@@ -456,6 +470,7 @@ namespace EstimatingLibrary
             saveList.AddRange(this.Panels, "Panels");
             saveList.AddRange(this.MiscCosts, "MiscCosts");
             saveList.AddRange(this.Locations, "Locations");
+            saveList.AddRange(this.InternalNotes, "InternalNotes");
             return saveList;
         }
 

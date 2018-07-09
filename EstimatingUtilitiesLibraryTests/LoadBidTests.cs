@@ -168,6 +168,29 @@ namespace EstimatingUtilitiesLibraryTests
         }
 
         [TestMethod]
+        public void Load_Bid_Internal()
+        {
+            //Assert
+            Guid expectedGuid = new Guid("f591aa84-6c1e-460c-86af-cf0f01ced6e9");
+            string expectedLabel = "Internal Note";
+            string expectedBody = "Note Body";
+
+            TECInternalNote actualNote = null;
+            foreach (TECInternalNote note in actualBid.InternalNotes)
+            {
+                if (note.Guid == expectedGuid)
+                {
+                    actualNote = note;
+                    break;
+                }
+            }
+
+            Assert.AreEqual(expectedLabel, actualNote.Label, "Note label didn't load properly.");
+            Assert.AreEqual(expectedBody, actualNote.Body, "Note body didn't load properly.");
+
+        }
+
+        [TestMethod]
         public void Load_Bid_Exclusion()
         {
             //Assert
