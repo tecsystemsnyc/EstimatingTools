@@ -416,7 +416,6 @@ namespace EstimatingLibrary
             outCost += getTECLaborCost();
             outCost += getExtendedMaterialCost();
             outCost += getTECEscalation();
-            outCost += getTax();
 
             return outCost;
         }
