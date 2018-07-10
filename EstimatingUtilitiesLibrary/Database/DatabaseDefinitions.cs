@@ -3368,7 +3368,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", ReferenceType.GetProperty("Guid"));
 
         public static Type HelperType = typeof(HelperProperties);
-        public static TableField Index = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"), "Templates", "0");
+        //public static TableField Index = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"), "Templates", "0");
 
         private List<TableField> primaryKeys = new List<TableField>()
         {
@@ -3383,8 +3383,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             ManagerID,
-            TemplatesID,
-            Index
+            TemplatesID//,
+            //Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -3392,7 +3392,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
 
         public override string NameString { get { return TableName; } }
-        public override string IndexString { get { return Index.Name; } }
+        //public override string IndexString { get { return Index.Name; } }
         public override List<Type> Types { get { return types; } }
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
@@ -3487,7 +3487,14 @@ namespace EstimatingUtilitiesLibrary.Database
             new InterlockableInterlockTable(),
             new InterlockConnectionConnectionTypeTable(),
             new ScheduleItemLocationTable(),
-            new ManagerTemplatesTable()
+            new ManagerTemplatesTable(),
+            new TemplatesSystemTable(),
+            new TemplatesEquipmentTable(),
+            new TemplatesSubScopeTable(),
+            new TemplatesControllerTable(),
+            new TemplatesMiscCostTable(),
+            new TemplatesPanelTable()
+
             };
     }
 

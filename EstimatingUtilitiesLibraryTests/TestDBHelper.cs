@@ -44,6 +44,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToControllerTypeTable();
             addToInternalNoteTable();
             addToProtocolTable();
+            addToScopeTemplatesTable();
 
             addToBidScopeBranchTable();
             addToBidMiscTable();
@@ -83,6 +84,15 @@ namespace EstimatingUtilitiesLibraryTests
             addToConnectionProtocolTable();
             addToHardwiredConnectionConnectionTypeTable();
 
+            addToTemplatesSystemTable();
+            addToTemplatesEquipmentTable();
+            addToTemplatesSubScopeTable();
+            addToTemplatesControllerTable();
+            addToTemplatesPanelTable();
+            addToTemplatesMiscTable();
+
+            addToManagerScopeTemplatesTable();
+
             SQLiteDB.NonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
         }
@@ -117,6 +127,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToControllerTypeTable();
             addToParametersTable();
             addToProtocolTable();
+            addToScopeTemplatesTable();
 
             addToHardwareManufacturerTable();
             addToIOModuleIOTable();
@@ -156,6 +167,8 @@ namespace EstimatingUtilitiesLibraryTests
             addToTemplatesControllerTable();
             addToTemplatesPanelTable();
             addToTemplatesMiscTable();
+
+            addToManagerScopeTemplatesTable();
 
             addTemplateSynchronizerData();
 
@@ -683,8 +696,15 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("Note Body");
             addDataToTable(new InternalNoteTable(), values);
         }
-        #endregion
+        private static void addToScopeTemplatesTable()
+        {
+            List<string> values = new List<string>();
+            values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
+            addDataToTable(new ScopeTemplatesTable(), values);
+        }
         
+        #endregion
+
         #region Relationship Tables
         private static void addToBidScopeBranchTable()
         {
@@ -1696,44 +1716,62 @@ namespace EstimatingUtilitiesLibraryTests
         private static void addToTemplatesSystemTable()
         {
             List<string> values = new List<string>();
-            values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+            values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
             values.Add("ebdbcc85-10f4-46b3-99e7-d896679f874a");
             addDataToTable(new TemplatesSystemTable(), values);
         }
         private static void addToTemplatesEquipmentTable()
         {
             List<string> values = new List<string>();
-            values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+            values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
             values.Add("1645886c-fce7-4380-a5c3-295f91961d16");
             addDataToTable(new TemplatesEquipmentTable(), values);
         }
         private static void addToTemplatesSubScopeTable()
         {
             List<string> values = new List<string>();
-            values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+            values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
             values.Add("3ebdfd64-5249-4332-a832-ff3cc0cdb309");
             addDataToTable(new TemplatesSubScopeTable(), values);
         }
         private static void addToTemplatesControllerTable()
         {
             List<string> values = new List<string>();
-            values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+            values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
             values.Add("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
             addDataToTable(new TemplatesControllerTable(), values);
         }
         private static void addToTemplatesPanelTable()
         {
             List<string> values = new List<string>();
-            values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+            values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
             values.Add("a8cdd31c-e690-4eaa-81ea-602c72904391");
             addDataToTable(new TemplatesPanelTable(), values);
         }
         private static void addToTemplatesMiscTable()
         {
             List<string> values = new List<string>();
-            values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+            values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
             values.Add("5df99701-1d7b-4fbe-843d-40793f4145a8");
             addDataToTable(new TemplatesMiscCostTable(), values);
+        }
+
+        private static void addToManagerScopeTemplatesTable()
+        {
+            if (isBid)
+            {
+                List<string> values = new List<string>();
+                values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
+                values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
+                addDataToTable(new ManagerTemplatesTable(), values);
+            }
+            else
+            {
+                List<string> values = new List<string>();
+                values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+                values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
+                addDataToTable(new ManagerTemplatesTable(), values);
+            }
         }
         #endregion
 
