@@ -121,7 +121,10 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<Type> types = new List<Type>() {
             ObjectType
         };
-        private List<string> propertyNames = new List<string>();
+        private List<string> propertyNames = new List<string>()
+        {
+            "Templates"
+        };
 
         public override string NameString { get { return TableName; } }
         public override List<TableField> Fields { get { return fields; } }

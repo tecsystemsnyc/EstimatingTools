@@ -567,7 +567,7 @@ namespace EstimatingLibrary
                 if(instanceValue is ITypicalable)
                 {
                     instanceValue = TypicalInstanceDictionary.GetInstances(instanceValue)
-                    .Where(x => instanceSender.ContainsChildForProperty(args.PropertyName, x)).First();
+                    .Where(x => instanceSender.ContainsChildForProperty(args.PropertyName, x)).FirstOrDefault();
                     if(instanceValue != null)
                     {
                         TypicalInstanceDictionary.RemoveItem(args.Value as ITECObject, instanceValue);

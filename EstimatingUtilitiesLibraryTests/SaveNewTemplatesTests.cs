@@ -156,16 +156,16 @@ namespace EstimatingUtilitiesLibraryTests
         public void SaveNew_Templates_System()
         {
             //Arrange
-            TECEquipment expectedSysEquipment = expectedSystem.Equipment.First(item => item.Name == "System Equipment");
-            TECSubScope expectedSysSubScope = expectedSysEquipment.SubScope.First(item => item.Name == "System SubScope");
+            TECEquipment expectedSysEquipment = expectedSystem.Equipment.First();
+            TECSubScope expectedSysSubScope = expectedSysEquipment.SubScope.First();
             TECDevice expectedChildDevice = expectedSysSubScope.Devices[0] as TECDevice;
-            TECPoint expectedSysPoint = expectedSysSubScope.Points.First(item => item.Label == "System Point");
+            TECPoint expectedSysPoint = expectedSysSubScope.Points.First();
             TECManufacturer expectedChildMan = expectedChildDevice.Manufacturer;
 
-            TECEquipment actualSysEquipment = actualSystem.Equipment.First(item => item.Name == "System Equipment");
-            TECSubScope actualSysSubScope = actualSysEquipment.SubScope.First(item => item.Name == "System SubScope");
+            TECEquipment actualSysEquipment = actualSystem.Equipment.First(item => item.Guid == expectedSysEquipment.Guid);
+            TECSubScope actualSysSubScope = actualSysEquipment.SubScope.First(item => item.Guid == expectedSysSubScope.Guid);
             TECDevice actualChildDevice = actualSysSubScope.Devices[0] as TECDevice;
-            TECPoint actualSysPoint = actualSysSubScope.Points.First(item => item.Label == "System Point");
+            TECPoint actualSysPoint = actualSysSubScope.Points.First(item => item.Guid == expectedSysPoint.Guid);
             TECManufacturer actualChildMan = actualChildDevice.Manufacturer;
 
             //Assert
@@ -183,7 +183,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
             Assert.AreEqual(expectedChildDevice.Description, actualChildDevice.Description);
-            Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost);
+            Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost, DELTA);
             Assert.AreEqual(expectedChildDevice.HardwiredConnectionTypes[0].Guid, actualChildDevice.HardwiredConnectionTypes[0].Guid);
             Assert.AreEqual(expectedChildDevice.Tags[0].Label, actualChildDevice.Tags[0].Label);
 
@@ -192,7 +192,7 @@ namespace EstimatingUtilitiesLibraryTests
             Assert.AreEqual(expectedSysPoint.Type, actualSysPoint.Type);
 
             Assert.AreEqual(expectedChildMan.Label, actualChildMan.Label);
-            Assert.AreEqual(expectedChildMan.Multiplier, actualChildMan.Multiplier);
+            Assert.AreEqual(expectedChildMan.Multiplier, actualChildMan.Multiplier, DELTA);
 
             ////Controlled scope tests]
             //TECSystem expectedConScope = expectedSystem;
@@ -209,12 +209,12 @@ namespace EstimatingUtilitiesLibraryTests
         public void SaveNew_Templates_Equipment()
         {
             //Arrange
-            TECSubScope actualEquipSubScope = actualEquipment.SubScope.First(item => item.Name == "Equipment SubScope");
+            TECSubScope actualEquipSubScope = actualEquipment.SubScope.First(item => item.Devices.Count > 0 && item.Points.Count > 0);
             TECDevice actualChildDevice = actualEquipSubScope.Devices[0] as TECDevice;
             TECPoint actualEquipPoint = actualEquipSubScope.Points[0];
             TECManufacturer actualChildMan = actualChildDevice.Manufacturer;
 
-            TECSubScope expectedEquipSubScope = expectedEquipment.SubScope.First(item => item.Name == "Equipment SubScope");
+            TECSubScope expectedEquipSubScope = expectedEquipment.SubScope.First(item => item.Guid == actualEquipSubScope.Guid);
             TECDevice expectedChildDevice = expectedEquipSubScope.Devices[0] as TECDevice;
             TECPoint expectedEquipPoint = expectedEquipSubScope.Points[0];
             TECManufacturer expectedChildMan = expectedChildDevice.Manufacturer;
@@ -363,8 +363,8 @@ namespace EstimatingUtilitiesLibraryTests
         public void SaveNew_Templates_Panel()
         {
             //Arrange
-            TECPanel expectedPanel = expectedTemplates.Templates.PanelTemplates.First(item => item.Name == "Test Panel");
-            TECPanel actualPanel = actualTemplates.Templates.PanelTemplates.First(item => item.Name == "Test Panel");
+            TECPanel expectedPanel = expectedTemplates.Templates.PanelTemplates.First();
+            TECPanel actualPanel = actualTemplates.Templates.PanelTemplates.First(item => item.Guid == expectedPanel.Guid);
 
             Assert.AreEqual(expectedPanel.Name, actualPanel.Name);
             Assert.AreEqual(expectedPanel.Type.Guid, actualPanel.Type.Guid);

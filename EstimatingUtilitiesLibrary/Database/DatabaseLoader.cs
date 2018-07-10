@@ -69,7 +69,7 @@ namespace EstimatingUtilitiesLibrary.Database
             TECBid bid = getObjectFromTable(new BidInfoTable(), id => { return new TECBid(id); }, new TECBid());
 
             getScopeManagerProperties(bid);
-            bid.Templates = loadScopeTemplates(bid.Catalogs);
+
             List<TECLocation> locations = getObjectsFromTable(new LocationTable(), id => new TECLocation(id));
             Dictionary<Guid, List<TECLocation>> bidLocations = getOneToManyRelationships(new BidLocationTable(), locations);
             bid.Locations = bidLocations.ValueOrNew(bid.Guid);
@@ -109,13 +109,200 @@ namespace EstimatingUtilitiesLibrary.Database
             TECTemplates templates = new TECTemplates();
             templates = getObjectFromTable(new TemplatesInfoTable(), id => { return new TECTemplates(id); }, new TECTemplates());
             getScopeManagerProperties(templates);
-            templates.Templates = loadScopeTemplates(templates.Catalogs);
             
             Dictionary<Guid, List<Guid>> templateReferences = getTemplateReferences();
             bool needsSave = ModelLinkingHelper.LinkLoadedTemplates(templates, templateReferences);
             return (templates, needsSave);
         }
-        private static ScopeTemplates loadScopeTemplates(TECCatalogs catalogs)
+        
+        private static void getScopeManagerProperties(TECScopeManager scopeManager)
+        {
+            scopeManager.Catalogs = getCatalogs();
+            scopeManager.Templates = getScopeTemplates(scopeManager.Catalogs);
+            if (justUpdated)
+            {
+                scopeManager.Catalogs.Manufacturers.Add(tempManufacturer);
+                scopeManager.Catalogs.PanelTypes.Add(tempPanelType);
+                scopeManager.Catalogs.ControllerTypes.Add(tempControllerType);
+                scopeManager.Catalogs.ConnectionTypes.Add(tempConnectionType);
+                scopeManager.Catalogs.Protocols.Add(tempProtocol);
+            }
+        }
+        private static (List<TECTypical> typicals, List<TECController> controllers, List<TECPanel> panels) getScopeHierarchy(Guid bidID, TECCatalogs catalogs)
+        {
+            Dictionary<Guid, List<Guid>> bidTypicals = getOneToManyRelationships(new BidSystemTable());
+            List<Guid> typicalIDs = bidTypicals.Count > 0 ? bidTypicals[bidID] : new List<Guid>();
+            Dictionary<Guid, List<Guid>> typicalSystems = getOneToManyRelationships(new SystemHierarchyTable());
+            Dictionary<Guid, List<Guid>> systemEquipment = getOneToManyRelationships(new SystemEquipmentTable());
+            Dictionary<Guid, List<Guid>> equipmentSubScope = getOneToManyRelationships(new EquipmentSubScopeTable());
+            Dictionary<Guid, List<Guid>> subScopePoints = getOneToManyRelationships(new SubScopePointTable());
+            Dictionary<Guid, List<Guid>> systemControllers = getOneToManyRelationships(new SystemControllerTable());
+            Dictionary<Guid, List<Guid>> systemPanels = getOneToManyRelationships(new SystemPanelTable());
+            Dictionary<Guid, List<Guid>> controllerConnections = getOneToManyRelationships(new ControllerConnectionTable());
+            Dictionary<Guid, List<Guid>> systemMisc = getOneToManyRelationships(new SystemMiscTable());
+            Dictionary<Guid, List<Guid>> systemScopeBranches = getOneToManyRelationships(new SystemScopeBranchTable());
+            Dictionary<Guid, List<Guid>> scopeBranchHierarchy = getOneToManyRelationships(new ScopeBranchHierarchyTable());
+            Dictionary<Guid, List<Guid>> networkChildren = getOneToManyRelationships(new NetworkConnectionChildrenTable());
+            Dictionary<Guid, Guid> subScopeConnectionChildren = getOneToOneRelationships(new SubScopeConnectionChildrenTable());
+            Dictionary<Guid, List<Guid>> subScopeInterlocks = getOneToManyRelationships(new InterlockableInterlockTable());
+
+            Dictionary<Guid, TECControllerType> controllerTypes = getOneToOneRelationships(new ProvidedControllerControllerTypeTable(), catalogs.ControllerTypes);
+            Dictionary<Guid, TECPanelType> panelTypes = getOneToOneRelationships(new PanelPanelTypeTable(), catalogs.PanelTypes);
+            Dictionary<Guid, List<TECIOModule>> controllerModuleRelationships = getOneToManyRelationships(new ProvidedControllerIOModuleTable(), catalogs.IOModules);
+            List<IEndDevice> allEndDevices = new List<IEndDevice>(catalogs.Devices);
+            allEndDevices.AddRange(catalogs.Valves);
+            Dictionary<Guid, List<IEndDevice>> endDevices = getOneToManyRelationships(new SubScopeDeviceTable(), allEndDevices);
+            Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes = getOneToOneRelationships(new ConnectionConduitTypeTable(), catalogs.ConduitTypes);
+            Dictionary<Guid, TECProtocol> connectionProtocols = getOneToOneRelationships(new NetworkConnectionProtocolTable(), catalogs.Protocols);
+            Dictionary<Guid, List<TECConnectionType>> hardwiredConnectionTypes = getOneToManyRelationships(new HardwiredConnectionConnectionTypeTable(), catalogs.ConnectionTypes);
+            Dictionary<Guid, List<TECConnectionType>> interlockConnectionTypes = getOneToManyRelationships(new InterlockConnectionConnectionTypeTable(), catalogs.ConnectionTypes);
+            
+            DataTable allSystemData = SQLiteDB.GetDataFromTable(SystemTable.TableName);
+            var typicalRows = from row in allSystemData.AsEnumerable() where typicalIDs.Contains(new Guid(row[SystemTable.ID.Name].ToString())) select row;
+            var systemRows = from row in allSystemData.AsEnumerable() where !typicalIDs.Contains(new Guid(row[SystemTable.ID.Name].ToString())) select row;
+            DataTable typicalData = typicalRows.Any() ? typicalRows.CopyToDataTable() : new DataTable();
+            DataTable systemData = systemRows.Any() ? systemRows.CopyToDataTable() : new DataTable();
+            
+            List<TECPoint> points = getObjectsFromTable(new PointTable(), id => new TECPoint(id));
+            List<TECSubScope> subScope = getObjectsFromTable(new SubScopeTable(), id => new TECSubScope(id));
+            List<TECEquipment> equipment = getObjectsFromTable(new EquipmentTable(), id => new TECEquipment(id));
+            List<TECMisc> misc = getObjectsFromTable(new MiscTable(), row => { return getMiscFromRow(row); });
+            List<TECScopeBranch> scopeBranches = getObjectsFromTable(new ScopeBranchTable(), id => new TECScopeBranch(id));
+            List<TECProvidedController> providedControllers = getObjectsFromTable(new ProvidedControllerTable(), data => getProvidedControllerFromRow(data, controllerTypes));
+            List<TECFBOController> fboControllers = getObjectsFromTable(new FBOControllerTable(), id => new TECFBOController(id, catalogs));
+            List<TECPanel> panels = getObjectsFromTable(new PanelTable(), row => getPanelFromRow(row, panelTypes));
+
+            List<TECController> controllers = new List<TECController>(providedControllers);
+            controllers.AddRange(fboControllers);
+
+            List<IConnectable> connectables = new List<IConnectable>(controllers);
+            connectables.AddRange(subScope);
+
+            Dictionary<Guid, TECController> connectionParents = getChildIDToParentRelationships(new ControllerConnectionTable(), controllers);
+            Dictionary<Guid, TECSubScope> subScopeConnectionChildrenRelationships = getOneToOneRelationships(new SubScopeConnectionChildrenTable(), subScope);
+
+            List<TECHardwiredConnection> subScopeConnections = getObjectsFromTable(new SubScopeConnectionTable(), 
+                id => new TECHardwiredConnection(id, subScopeConnectionChildrenRelationships[id], connectionParents[id],
+                new TECHardwiredProtocol(hardwiredConnectionTypes.ValueOrNew(id))));
+            List<TECNetworkConnection> networkConnections = getObjectsFromTable(new NetworkConnectionTable(), 
+                id => new TECNetworkConnection(id, connectionParents[id], connectionProtocols[id]));
+            List<TECInterlockConnection> interlockConnections = getObjectsFromTable(new InterlockConnectionTable(),
+                id => new TECInterlockConnection(id, interlockConnectionTypes.ValueOrNew(id)));
+            List<IControllerConnection> allConnections = new List<IControllerConnection>(subScopeConnections);
+            allConnections.AddRange(networkConnections);
+            List<TECSystem> systems = getObjectsFromData(new SystemTable(), systemData, id => new TECSystem(id));
+            List<TECTypical> typicals = getObjectsFromData(new SystemTable(), typicalData, id => new TECTypical(id));
+            
+            Dictionary<Guid, List<TECController>> panelControllers = getOneToManyRelationships(new PanelControllerTable(), controllers);
+
+            controllers.ForEach(item => { if (item is TECProvidedController provided) provided.IOModules = controllerModuleRelationships.ValueOrNew(provided.Guid); });
+            subScope.ForEach(item => item.Devices = endDevices.ValueOrNew(item.Guid));
+            
+            foreach(IControllerConnection item in allConnections)
+            {
+                item.ConduitType = connectionConduitTypes.ValueOrDefault(item.Guid, null);
+                if(item is TECNetworkConnection netItem)
+                {
+                    if (networkChildren.ContainsKey(netItem.Guid))
+                    {
+                        netItem.Children = getRelatedReferences(networkChildren[item.Guid], connectables).ToOC();
+                    }
+                    netItem.Children.ForEach(x => x.SetParentConnection(netItem));
+                }
+                else if (item is TECHardwiredConnection hardItem)
+                {
+                    hardItem.Child.SetParentConnection(item);
+                }
+            }
+            foreach (TECSubScope item in subScope.Where(x => subScopePoints.ContainsKey(x.Guid)))
+            {
+                item.Points = getRelatedReferences(subScopePoints.ValueOrNew(item.Guid).ToList(), points).ToOC();
+                item.Interlocks = getRelatedReferences(subScopeInterlocks.ValueOrNew(item.Guid).ToList(), interlockConnections).ToOC();
+            }
+            foreach(TECEquipment item in equipment.Where(x => equipmentSubScope.ContainsKey(x.Guid)))
+            {
+                item.SubScope = getRelatedReferences(equipmentSubScope[item.Guid], subScope).ToOC();
+            }
+            foreach(TECController item in controllers.Where(x => controllerConnections.ContainsKey(x.Guid)))
+            {
+                item.ChildrenConnections = getRelatedReferences(controllerConnections[item.Guid], allConnections).ToOC();
+            }
+            panels.ForEach(item => item.Controllers = panelControllers.ValueOrNew(item.Guid));
+            foreach(TECSystem item in systems)
+            {
+                setSystemChildren(item);
+            }
+            foreach(TECTypical item in typicals)
+            {
+                setSystemChildren(item);
+                if (typicalSystems.ContainsKey(item.Guid)) 
+                    item.Instances = getRelatedReferences(typicalSystems[item.Guid], systems).ToOC();
+            }
+
+            var outControllers = new List<TECController>(controllers.Where(x => !systemControllers.Any(pair => pair.Value.Contains(x.Guid))));
+            var outPanels = new List<TECPanel>(panels.Where(x => !systemPanels.Any(pair => pair.Value.Contains(x.Guid))));
+
+            return (typicals, outControllers, outPanels);
+            
+            void setSystemChildren(TECSystem item)
+            {
+                if (systemEquipment.ContainsKey(item.Guid))
+                    item.Equipment = getRelatedReferences(systemEquipment[item.Guid], equipment).ToOC();
+                if (systemControllers.ContainsKey(item.Guid))
+                    item.SetControllers(getRelatedReferences(systemControllers[item.Guid], controllers));
+                if (systemPanels.ContainsKey(item.Guid))
+                    item.Panels = getRelatedReferences(systemPanels[item.Guid], panels).ToOC();
+                if (systemMisc.ContainsKey(item.Guid))
+                    item.MiscCosts = getRelatedReferences(systemMisc[item.Guid], misc).ToOC();
+                if (systemScopeBranches.ContainsKey(item.Guid))
+                    item.ScopeBranches = getRelatedReferences(systemScopeBranches[item.Guid], scopeBranches).ToOC();
+                item.ScopeBranches.ForEach(branch => linkBranchHierarchy(branch, scopeBranches, scopeBranchHierarchy));
+            }
+        }
+        private static TECCatalogs getCatalogs()
+        {
+            TECCatalogs catalogs = new TECCatalogs();
+            catalogs.Manufacturers = getObjectsFromTable(new ManufacturerTable(), id => new TECManufacturer(id)).ToOC();
+            catalogs.ConnectionTypes = getObjectsFromTable(new ConnectionTypeTable(), id => new TECConnectionType(id)).ToOC();
+            catalogs.ConduitTypes = getObjectsFromTable(new ConduitTypeTable(), id => new TECElectricalMaterial(id)).ToOC();
+            Dictionary<Guid, List<TECConnectionType>> protocolConnectionType = getOneToManyRelationships(new ProtocolConnectionTypeTable(), catalogs.ConnectionTypes);
+            catalogs.Protocols = getObjectsFromTable(new ProtocolTable(), id => new TECProtocol(id, protocolConnectionType[id])).ToOC();
+            Dictionary<Guid, TECManufacturer> hardwareManufacturer = getOneToOneRelationships(new HardwareManufacturerTable(), catalogs.Manufacturers);
+            Dictionary<Guid, List<TECConnectionType>> deviceConnectionType = getOneToManyRelationships(new DeviceConnectionTypeTable(), catalogs.ConnectionTypes);
+            Dictionary<Guid, List<TECProtocol>> deviceProtocols = getOneToManyRelationships(new DeviceProtocolTable(), catalogs.Protocols);
+            catalogs.Devices = getObjectsFromTable(new DeviceTable(), id => new TECDevice(id, deviceConnectionType.ValueOrNew(id), deviceProtocols.ValueOrNew(id), hardwareManufacturer[id])).ToOC();
+            Dictionary<Guid, TECDevice> actuators = getOneToOneRelationships(new ValveActuatorTable(), catalogs.Devices);
+            catalogs.Valves = getObjectsFromTable(new ValveTable(), id => new TECValve(id, hardwareManufacturer[id], actuators[id])).ToOC();
+            catalogs.AssociatedCosts = getObjectsFromTable(new AssociatedCostTable(), getAssociatedCostFromRow).ToOC();
+            catalogs.PanelTypes = getObjectsFromTable(new PanelTypeTable(), data => getPanelTypeFromRow(data, hardwareManufacturer)).ToOC();
+            catalogs.IOModules = getObjectsFromTable(new IOModuleTable(), id => new TECIOModule(id, hardwareManufacturer[id])).ToOC();
+            catalogs.ControllerTypes = getObjectsFromTable(new ControllerTypeTable(), id => new TECControllerType(id, hardwareManufacturer[id])).ToOC();
+            catalogs.Tags = getObjectsFromTable(new TagTable(), id => new TECTag(id)).ToOC();
+            Dictionary<Guid, TECProtocol> ioProtocols = getOneToOneRelationships(new IOProtocolTable(), catalogs.Protocols);
+
+            List<TECIO> io = getObjectsFromTable(new IOTable(), row => getIOFromRow(row, ioProtocols)).ToList();
+            Dictionary<Guid, TECProtocol> ioProtocol = getOneToOneRelationships(new IOProtocolTable(), catalogs.Protocols);
+            io.ForEach(x => { if (ioProtocol.ContainsKey(x.Guid)) { x.Protocol = ioProtocol[x.Guid]; } });
+
+            Dictionary<Guid, List<TECAssociatedCost>> ratedCostsRelationShips = getOneToManyRelationships(new ElectricalMaterialRatedCostTable(), catalogs.AssociatedCosts);
+            Dictionary<Guid, List<TECIOModule>> controllerTypeModuleRelationships = getOneToManyRelationships(new ControllerTypeIOModuleTable(), catalogs.IOModules);
+            Dictionary<Guid, List<TECIO>> controllerTypeIORelationships = getOneToManyRelationships(new ControllerTypeIOTable(), io);
+            Dictionary<Guid, List<TECIO>> moduleIORelationships = getOneToManyRelationships(new IOModuleIOTable(), io);
+
+            Dictionary<Guid, List<TECTag>> tagRelationships = getOneToManyRelationships(new ScopeTagTable(), catalogs.Tags);
+            Dictionary<Guid, List<TECAssociatedCost>> costRelationships = getOneToManyRelationships(new ScopeAssociatedCostTable(), catalogs.AssociatedCosts);
+
+            catalogs.IOModules.ForEach(item => item.IO = moduleIORelationships.ValueOrNew(item.Guid));
+            catalogs.ControllerTypes.ForEach(item => populateControllerTypeProperties(item, controllerTypeModuleRelationships, controllerTypeIORelationships));
+            catalogs.ConnectionTypes.ForEach(item => item.RatedCosts = ratedCostsRelationShips.ValueOrNew(item.Guid));
+            catalogs.ConduitTypes.ForEach(item => item.RatedCosts = ratedCostsRelationShips.ValueOrNew(item.Guid));
+
+            List<TECScope> allScope = catalogs.GetAll<TECScope>();
+            allScope.ForEach(item => populateScopeProperties(item, tagRelationships, costRelationships));
+
+            return catalogs;
+        }
+        private static ScopeTemplates getScopeTemplates(TECCatalogs catalogs)
         {
             ScopeTemplates templates = new ScopeTemplates();
             templates = getObjectFromTable(new ScopeTemplatesTable(), id => { return new ScopeTemplates(id); }, new ScopeTemplates());
@@ -218,188 +405,6 @@ namespace EstimatingUtilitiesLibrary.Database
             return templates;
         }
         
-        private static void getScopeManagerProperties(TECScopeManager scopeManager)
-        {
-            scopeManager.Catalogs = getCatalogs();
-            if (justUpdated)
-            {
-                scopeManager.Catalogs.Manufacturers.Add(tempManufacturer);
-                scopeManager.Catalogs.PanelTypes.Add(tempPanelType);
-                scopeManager.Catalogs.ControllerTypes.Add(tempControllerType);
-                scopeManager.Catalogs.ConnectionTypes.Add(tempConnectionType);
-                scopeManager.Catalogs.Protocols.Add(tempProtocol);
-            }
-        }
-        private static (List<TECTypical> typicals, List<TECController> controllers, List<TECPanel> panels) getScopeHierarchy(Guid bidID, TECCatalogs catalogs)
-        {
-            Dictionary<Guid, List<Guid>> bidTypicals = getOneToManyRelationships(new BidSystemTable());
-            List<Guid> typicalIDs = bidTypicals.Count > 0 ? bidTypicals[bidID] : new List<Guid>();
-            Dictionary<Guid, List<Guid>> typicalSystems = getOneToManyRelationships(new SystemHierarchyTable());
-            Dictionary<Guid, List<Guid>> systemEquipment = getOneToManyRelationships(new SystemEquipmentTable());
-            Dictionary<Guid, List<Guid>> equipmentSubScope = getOneToManyRelationships(new EquipmentSubScopeTable());
-            Dictionary<Guid, List<Guid>> subScopePoints = getOneToManyRelationships(new SubScopePointTable());
-            Dictionary<Guid, List<Guid>> systemControllers = getOneToManyRelationships(new SystemControllerTable());
-            Dictionary<Guid, List<Guid>> systemPanels = getOneToManyRelationships(new SystemPanelTable());
-            Dictionary<Guid, List<Guid>> controllerConnections = getOneToManyRelationships(new ControllerConnectionTable());
-            Dictionary<Guid, List<Guid>> systemMisc = getOneToManyRelationships(new SystemMiscTable());
-            Dictionary<Guid, List<Guid>> systemScopeBranches = getOneToManyRelationships(new SystemScopeBranchTable());
-            Dictionary<Guid, List<Guid>> scopeBranchHierarchy = getOneToManyRelationships(new ScopeBranchHierarchyTable());
-            Dictionary<Guid, List<Guid>> networkChildren = getOneToManyRelationships(new NetworkConnectionChildrenTable());
-            Dictionary<Guid, Guid> subScopeConnectionChildren = getOneToOneRelationships(new SubScopeConnectionChildrenTable());
-            Dictionary<Guid, List<Guid>> subScopeInterlocks = getOneToManyRelationships(new InterlockableInterlockTable());
-
-            Dictionary<Guid, TECControllerType> controllerTypes = getOneToOneRelationships(new ProvidedControllerControllerTypeTable(), catalogs.ControllerTypes);
-            Dictionary<Guid, TECPanelType> panelTypes = getOneToOneRelationships(new PanelPanelTypeTable(), catalogs.PanelTypes);
-            Dictionary<Guid, List<TECIOModule>> controllerModuleRelationships = getOneToManyRelationships(new ProvidedControllerIOModuleTable(), catalogs.IOModules);
-            List<IEndDevice> allEndDevices = new List<IEndDevice>(catalogs.Devices);
-            allEndDevices.AddRange(catalogs.Valves);
-            Dictionary<Guid, List<IEndDevice>> endDevices = getOneToManyRelationships(new SubScopeDeviceTable(), allEndDevices);
-            Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes = getOneToOneRelationships(new ConnectionConduitTypeTable(), catalogs.ConduitTypes);
-            Dictionary<Guid, TECProtocol> connectionProtocols = getOneToOneRelationships(new NetworkConnectionProtocolTable(), catalogs.Protocols);
-            Dictionary<Guid, List<TECConnectionType>> hardwiredConnectionTypes = getOneToManyRelationships(new HardwiredConnectionConnectionTypeTable(), catalogs.ConnectionTypes);
-            Dictionary<Guid, List<TECConnectionType>> interlockConnectionTypes = getOneToManyRelationships(new InterlockConnectionConnectionTypeTable(), catalogs.ConnectionTypes);
-
-
-            DataTable allSystemData = SQLiteDB.GetDataFromTable(SystemTable.TableName);
-            var typicalRows = from row in allSystemData.AsEnumerable() where typicalIDs.Contains(new Guid(row[SystemTable.ID.Name].ToString())) select row;
-            var systemRows = from row in allSystemData.AsEnumerable() where !typicalIDs.Contains(new Guid(row[SystemTable.ID.Name].ToString())) select row;
-            DataTable typicalData = typicalRows.Any() ? typicalRows.CopyToDataTable() : new DataTable();
-            DataTable systemData = systemRows.Any() ? systemRows.CopyToDataTable() : new DataTable();
-            
-            List<TECPoint> points = getObjectsFromTable(new PointTable(), id => new TECPoint(id));
-            List<TECSubScope> subScope = getObjectsFromTable(new SubScopeTable(), id => new TECSubScope(id));
-            List<TECEquipment> equipment = getObjectsFromTable(new EquipmentTable(), id => new TECEquipment(id));
-            List<TECMisc> misc = getObjectsFromTable(new MiscTable(), row => { return getMiscFromRow(row); });
-            List<TECScopeBranch> scopeBranches = getObjectsFromTable(new ScopeBranchTable(), id => new TECScopeBranch(id));
-            List<TECProvidedController> providedControllers = getObjectsFromTable(new ProvidedControllerTable(), data => getProvidedControllerFromRow(data, controllerTypes));
-            List<TECFBOController> fboControllers = getObjectsFromTable(new FBOControllerTable(), id => new TECFBOController(id, catalogs));
-            List<TECPanel> panels = getObjectsFromTable(new PanelTable(), row => getPanelFromRow(row, panelTypes));
-
-            List<TECController> controllers = new List<TECController>(providedControllers);
-            controllers.AddRange(fboControllers);
-
-            List<IConnectable> connectables = new List<IConnectable>(controllers);
-            connectables.AddRange(subScope);
-
-            Dictionary<Guid, TECController> connectionParents = getChildIDToParentRelationships(new ControllerConnectionTable(), controllers);
-            Dictionary<Guid, TECSubScope> subScopeConnectionChildrenRelationships = getOneToOneRelationships(new SubScopeConnectionChildrenTable(), subScope);
-
-            List<TECHardwiredConnection> subScopeConnections = getObjectsFromTable(new SubScopeConnectionTable(), 
-                id => new TECHardwiredConnection(id, subScopeConnectionChildrenRelationships[id], connectionParents[id],
-                new TECHardwiredProtocol(hardwiredConnectionTypes.ValueOrNew(id))));
-            List<TECNetworkConnection> networkConnections = getObjectsFromTable(new NetworkConnectionTable(), 
-                id => new TECNetworkConnection(id, connectionParents[id], connectionProtocols[id]));
-            List<TECInterlockConnection> interlockConnections = getObjectsFromTable(new InterlockConnectionTable(),
-                id => new TECInterlockConnection(id, interlockConnectionTypes.ValueOrNew(id)));
-            List<IControllerConnection> allConnections = new List<IControllerConnection>(subScopeConnections);
-            allConnections.AddRange(networkConnections);
-            List<TECSystem> systems = getObjectsFromData(new SystemTable(), systemData, id => new TECSystem(id));
-            List<TECTypical> typicals = getObjectsFromData(new SystemTable(), typicalData, id => new TECTypical(id));
-            
-            Dictionary<Guid, List<TECController>> panelControllers = getOneToManyRelationships(new PanelControllerTable(), controllers);
-
-            controllers.ForEach(item => { if (item is TECProvidedController provided) provided.IOModules = controllerModuleRelationships.ValueOrNew(provided.Guid); });
-            subScope.ForEach(item => item.Devices = endDevices.ValueOrNew(item.Guid));
-
-
-            foreach(IControllerConnection item in allConnections)
-            {
-                item.ConduitType = connectionConduitTypes.ValueOrDefault(item.Guid, null);
-                if(item is TECNetworkConnection netItem)
-                {
-                    if (networkChildren.ContainsKey(netItem.Guid))
-                    {
-                        netItem.Children = getRelatedReferences(networkChildren[item.Guid], connectables).ToOC();
-                    }
-                    netItem.Children.ForEach(x => x.SetParentConnection(netItem));
-                }
-                else if (item is TECHardwiredConnection hardItem)
-                {
-                    hardItem.Child.SetParentConnection(item);
-                }
-            }
-            foreach (TECSubScope item in subScope.Where(x => subScopePoints.ContainsKey(x.Guid)))
-            {
-                item.Points = getRelatedReferences(subScopePoints.ValueOrNew(item.Guid).ToList(), points).ToOC();
-                item.Interlocks = getRelatedReferences(subScopeInterlocks.ValueOrNew(item.Guid).ToList(), interlockConnections).ToOC();
-            }
-            foreach(TECEquipment item in equipment.Where(x => equipmentSubScope.ContainsKey(x.Guid)))
-            {
-                item.SubScope = getRelatedReferences(equipmentSubScope[item.Guid], subScope).ToOC();
-            }
-            foreach(TECController item in controllers.Where(x => controllerConnections.ContainsKey(x.Guid)))
-            {
-                item.ChildrenConnections = getRelatedReferences(controllerConnections[item.Guid], allConnections).ToOC();
-            }
-            panels.ForEach(item => item.Controllers = panelControllers.ValueOrNew(item.Guid));
-            foreach(TECSystem item in systems)
-            {
-                setSystemChildren(item);
-            }
-            foreach(TECTypical item in typicals)
-            {
-                setSystemChildren(item);
-                if (typicalSystems.ContainsKey(item.Guid)) 
-                    item.Instances = getRelatedReferences(typicalSystems[item.Guid], systems).ToOC();
-            }
-
-            var outControllers = new List<TECController>(controllers.Where(x => !systemControllers.Any(pair => pair.Value.Contains(x.Guid))));
-            var outPanels = new List<TECPanel>(panels.Where(x => !systemPanels.Any(pair => pair.Value.Contains(x.Guid))));
-
-            return (typicals, outControllers, outPanels);
-            
-            void setSystemChildren(TECSystem item)
-            {
-                if (systemEquipment.ContainsKey(item.Guid))
-                    item.Equipment = getRelatedReferences(systemEquipment[item.Guid], equipment).ToOC();
-                if (systemControllers.ContainsKey(item.Guid))
-                    item.SetControllers(getRelatedReferences(systemControllers[item.Guid], controllers));
-                if (systemPanels.ContainsKey(item.Guid))
-                    item.Panels = getRelatedReferences(systemPanels[item.Guid], panels).ToOC();
-                if (systemMisc.ContainsKey(item.Guid))
-                    item.MiscCosts = getRelatedReferences(systemMisc[item.Guid], misc).ToOC();
-                if (systemScopeBranches.ContainsKey(item.Guid))
-                    item.ScopeBranches = getRelatedReferences(systemScopeBranches[item.Guid], scopeBranches).ToOC();
-                item.ScopeBranches.ForEach(branch => linkBranchHierarchy(branch, scopeBranches, scopeBranchHierarchy));
-            }
-        }
-        private static TECCatalogs getCatalogs()
-        {
-            TECCatalogs catalogs = new TECCatalogs();
-            catalogs.Manufacturers = getObjectsFromTable(new ManufacturerTable(), id => new TECManufacturer(id)).ToOC();
-            catalogs.ConnectionTypes = getObjectsFromTable(new ConnectionTypeTable(), id => new TECConnectionType(id)).ToOC();
-            catalogs.ConduitTypes = getObjectsFromTable(new ConduitTypeTable(), id => new TECElectricalMaterial(id)).ToOC();
-            Dictionary<Guid, List<TECConnectionType>> protocolConnectionType = getOneToManyRelationships(new ProtocolConnectionTypeTable(), catalogs.ConnectionTypes);
-            catalogs.Protocols = getObjectsFromTable(new ProtocolTable(), id => new TECProtocol(id, protocolConnectionType[id])).ToOC();
-            Dictionary<Guid, TECManufacturer> hardwareManufacturer = getOneToOneRelationships(new HardwareManufacturerTable(), catalogs.Manufacturers);
-            Dictionary<Guid, List<TECConnectionType>> deviceConnectionType = getOneToManyRelationships(new DeviceConnectionTypeTable(), catalogs.ConnectionTypes);
-            Dictionary<Guid, List<TECProtocol>> deviceProtocols = getOneToManyRelationships(new DeviceProtocolTable(), catalogs.Protocols);
-            catalogs.Devices = getObjectsFromTable(new DeviceTable(), id => new TECDevice(id, deviceConnectionType.ValueOrNew(id), deviceProtocols.ValueOrNew(id), hardwareManufacturer[id])).ToOC();
-            Dictionary<Guid, TECDevice> actuators = getOneToOneRelationships(new ValveActuatorTable(), catalogs.Devices);
-            catalogs.Valves = getObjectsFromTable(new ValveTable(), id => new TECValve(id, hardwareManufacturer[id], actuators[id])).ToOC();
-            catalogs.AssociatedCosts = getObjectsFromTable(new AssociatedCostTable(), getAssociatedCostFromRow).ToOC();
-            catalogs.PanelTypes = getObjectsFromTable(new PanelTypeTable(), data => getPanelTypeFromRow(data, hardwareManufacturer)).ToOC();
-            catalogs.IOModules = getObjectsFromTable(new IOModuleTable(), id => new TECIOModule(id, hardwareManufacturer[id])).ToOC();
-            catalogs.ControllerTypes = getObjectsFromTable(new ControllerTypeTable(), id => new TECControllerType(id, hardwareManufacturer[id])).ToOC();
-            catalogs.Tags = getObjectsFromTable(new TagTable(), id => new TECTag(id)).ToOC();
-            Dictionary<Guid, TECProtocol> ioProtocols = getOneToOneRelationships(new IOProtocolTable(), catalogs.Protocols);
-
-            List<TECIO> io = getObjectsFromTable(new IOTable(), row => getIOFromRow(row, ioProtocols)).ToList();
-            Dictionary<Guid, TECProtocol> ioProtocol = getOneToOneRelationships(new IOProtocolTable(), catalogs.Protocols);
-            io.ForEach(x => { if (ioProtocol.ContainsKey(x.Guid)) { x.Protocol = ioProtocol[x.Guid]; } });
-
-            Dictionary<Guid, List<TECAssociatedCost>> ratedCostsRelationShips = getOneToManyRelationships(new ElectricalMaterialRatedCostTable(), catalogs.AssociatedCosts);
-            Dictionary<Guid, List<TECIOModule>> controllerTypeModuleRelationships = getOneToManyRelationships(new ControllerTypeIOModuleTable(), catalogs.IOModules);
-            Dictionary<Guid, List<TECIO>> controllerTypeIORelationships = getOneToManyRelationships(new ControllerTypeIOTable(), io);
-            Dictionary<Guid, List<TECIO>> moduleIORelationships = getOneToManyRelationships(new IOModuleIOTable(), io);
-
-            catalogs.IOModules.ForEach(item => item.IO = moduleIORelationships.ValueOrNew(item.Guid));
-            catalogs.ControllerTypes.ForEach(item => populateControllerTypeProperties(item, controllerTypeModuleRelationships, controllerTypeIORelationships));
-            catalogs.ConnectionTypes.ForEach(item => item.RatedCosts = ratedCostsRelationShips.ValueOrNew(item.Guid));
-            catalogs.ConduitTypes.ForEach(item => item.RatedCosts = ratedCostsRelationShips.ValueOrNew(item.Guid));
-
-            return catalogs;
-        }
         private static Dictionary<Guid, List<Guid>> getCharacteristicInstancesList()
         {
             Dictionary<Guid, List<Guid>> outDict = new Dictionary<Guid, List<Guid>>();
