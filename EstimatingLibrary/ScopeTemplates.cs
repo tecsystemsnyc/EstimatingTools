@@ -24,9 +24,9 @@ namespace EstimatingLibrary
             set
             {
                 var old = SystemTemplates;
-                SystemTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "SystemTemplates");
+                SystemTemplates.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "SystemTemplates");
                 _systemTemplates = value;
-                SystemTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "SystemTemplates");
+                SystemTemplates.CollectionChanged += (sender, args) => collectionChanged(sender, args, "SystemTemplates");
                 notifyCombinedChanged(Change.Edit, "SystemTemplates", this, value, old);
             }
         }
@@ -36,9 +36,9 @@ namespace EstimatingLibrary
             set
             {
                 var old = EquipmentTemplates;
-                EquipmentTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "EquipmentTemplates");
+                EquipmentTemplates.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "EquipmentTemplates");
                 _equipmentTemplates = value;
-                EquipmentTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "EquipmentTemplates");
+                EquipmentTemplates.CollectionChanged += (sender, args) => collectionChanged(sender, args, "EquipmentTemplates");
                 notifyCombinedChanged(Change.Edit, "EquipmentTemplates", this, value, old);
             }
         }
@@ -48,9 +48,9 @@ namespace EstimatingLibrary
             set
             {
                 var old = SubScopeTemplates;
-                SubScopeTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "SubScopeTemplates");
+                SubScopeTemplates.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "SubScopeTemplates");
                 _subScopeTemplates = value;
-                SubScopeTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "SubScopeTemplates");
+                SubScopeTemplates.CollectionChanged += (sender, args) => collectionChanged(sender, args, "SubScopeTemplates");
                 notifyCombinedChanged(Change.Edit, "SubScopeTemplates", this, value, old);
             }
         }
@@ -60,9 +60,9 @@ namespace EstimatingLibrary
             set
             {
                 var old = ControllerTemplates;
-                ControllerTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "ControllerTemplates");
+                ControllerTemplates.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "ControllerTemplates");
                 _controllerTemplates = value;
-                ControllerTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "ControllerTemplates");
+                ControllerTemplates.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ControllerTemplates");
                 notifyCombinedChanged(Change.Edit, "ControllerTemplates", this, value, old);
             }
         }
@@ -72,9 +72,9 @@ namespace EstimatingLibrary
             set
             {
                 var old = MiscCostTemplates;
-                MiscCostTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "MiscCostTemplates");
+                MiscCostTemplates.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "MiscCostTemplates");
                 _miscCostTemplates = value;
-                MiscCostTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "MiscCostTemplates");
+                MiscCostTemplates.CollectionChanged += (sender, args) => collectionChanged(sender, args, "MiscCostTemplates");
                 notifyCombinedChanged(Change.Edit, "MiscCostTemplates", this, value, old);
             }
         }
@@ -84,9 +84,9 @@ namespace EstimatingLibrary
             set
             {
                 var old = PanelTemplates;
-                PanelTemplates.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "PanelTemplates");
+                PanelTemplates.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "PanelTemplates");
                 _panelTemplates = value;
-                PanelTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "PanelTemplates");
+                PanelTemplates.CollectionChanged += (sender, args) => collectionChanged(sender, args, "PanelTemplates");
                 notifyCombinedChanged(Change.Edit, "PanelTemplates", this, value, old);
             }
         }
@@ -96,27 +96,27 @@ namespace EstimatingLibrary
             set
             {
                 var old = Parameters;
-                Parameters.CollectionChanged -= (sender, args) => CollectionChanged(sender, args, "Parameters");
+                Parameters.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "Parameters");
                 _parameters = value;
-                Parameters.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Parameters");
+                Parameters.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Parameters");
                 notifyCombinedChanged(Change.Edit, "Parameters", this, value, old);
             }
         }
-
-
+        
+        public ScopeTemplates() : this(Guid.NewGuid()) { }
         public ScopeTemplates(Guid guid) : base(guid)
         {
-            SystemTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "SystemTemplates");
-            EquipmentTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "EquipmentTemplates");
-            SubScopeTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "SubScopeTemplates");
-            ControllerTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "ControllerTemplates");
-            MiscCostTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "MiscCostTemplates");
-            PanelTemplates.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "PanelTemplates");
-            Parameters.CollectionChanged += (sender, args) => CollectionChanged(sender, args, "Parameters");
+            SystemTemplates.CollectionChanged += (sender, args) => collectionChanged(sender, args, "SystemTemplates");
+            EquipmentTemplates.CollectionChanged += (sender, args) => collectionChanged(sender, args, "EquipmentTemplates");
+            SubScopeTemplates.CollectionChanged += (sender, args) => collectionChanged(sender, args, "SubScopeTemplates");
+            ControllerTemplates.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ControllerTemplates");
+            MiscCostTemplates.CollectionChanged += (sender, args) => collectionChanged(sender, args, "MiscCostTemplates");
+            PanelTemplates.CollectionChanged += (sender, args) => collectionChanged(sender, args, "PanelTemplates");
+            Parameters.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Parameters");
         }
 
         #region Collection Changed
-        private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
+        private void collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
@@ -140,9 +140,21 @@ namespace EstimatingLibrary
         #endregion
 
         #region IRelatable
-        SaveableMap IRelatable.PropertyObjects => throw new NotImplementedException();
+        public SaveableMap PropertyObjects { get { return propertyObjects(); } }
+        public SaveableMap LinkedObjects { get { return new SaveableMap(); } }
 
-        SaveableMap IRelatable.LinkedObjects => throw new NotImplementedException();
+        private SaveableMap propertyObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(this.SystemTemplates, "SystemTemplates");
+            saveList.AddRange(this.EquipmentTemplates, "EquipmentTemplates");
+            saveList.AddRange(this.SubScopeTemplates, "SubScopeTemplates");
+            saveList.AddRange(this.ControllerTemplates, "ControllerTemplates");
+            saveList.AddRange(this.MiscCostTemplates, "MiscCostTemplates");
+            saveList.AddRange(this.PanelTemplates, "PanelTemplates");
+            saveList.AddRange(this.Parameters, "Parameters");
+            return saveList;
+        }
         #endregion
     }
 }

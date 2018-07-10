@@ -158,12 +158,12 @@ namespace TECUserControlLibrary.ViewModels
                 QuantityVisibility = Visibility.Collapsed;
                 if (templates != null)
                 {
-                    templates.MiscCostTemplates.CollectionChanged -= MiscCosts_CollectionChanged;
+                    templates.Templates.MiscCostTemplates.CollectionChanged -= MiscCosts_CollectionChanged;
                 }
 
-                templates.MiscCostTemplates.CollectionChanged += MiscCosts_CollectionChanged;
+                templates.Templates.MiscCostTemplates.CollectionChanged += MiscCosts_CollectionChanged;
                 _templates = templates;
-                sourceCollection = templates.MiscCostTemplates;
+                sourceCollection = templates.Templates.MiscCostTemplates;
                 populateCollections();
             }
 

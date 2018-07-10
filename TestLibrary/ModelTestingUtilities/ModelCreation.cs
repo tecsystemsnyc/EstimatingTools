@@ -130,26 +130,26 @@ namespace TestLibrary.ModelTestingUtilities
             templates.Catalogs = TestCatalogs(rand);
 
             //Parameters
-            rand.RepeatAction(() => templates.Parameters.Add(TestParameters(rand, templates)), 5);
+            rand.RepeatAction(() => templates.Templates.Parameters.Add(TestParameters(rand, templates)), 5);
 
             //Systems
-            rand.RepeatAction(() => templates.SystemTemplates.Add(TestSystem(templates.Catalogs, rand)), 10);
+            rand.RepeatAction(() => templates.Templates.SystemTemplates.Add(TestSystem(templates.Catalogs, rand)), 10);
 
             //Equipment
-            rand.RepeatAction(() => templates.EquipmentTemplates.Add(TestEquipment(templates.Catalogs, rand)), 10);
+            rand.RepeatAction(() => templates.Templates.EquipmentTemplates.Add(TestEquipment(templates.Catalogs, rand)), 10);
 
             //SubScope
-            rand.RepeatAction(() => templates.SubScopeTemplates.Add(TestSubScope(templates.Catalogs, rand)), 10);
+            rand.RepeatAction(() => templates.Templates.SubScopeTemplates.Add(TestSubScope(templates.Catalogs, rand)), 10);
 
             //Controllers
-            rand.RepeatAction(() => templates.ControllerTemplates.Add(TestProvidedController(templates.Catalogs, rand)), 10);
+            rand.RepeatAction(() => templates.Templates.ControllerTemplates.Add(TestProvidedController(templates.Catalogs, rand)), 10);
 
             //Misc Costs
-            rand.RepeatAction(() => templates.MiscCostTemplates.Add(TestMisc(templates.Catalogs, rand, CostType.TEC)), 10);
-            rand.RepeatAction(() => templates.MiscCostTemplates.Add(TestMisc(templates.Catalogs, rand, CostType.Electrical)), 10);
+            rand.RepeatAction(() => templates.Templates.MiscCostTemplates.Add(TestMisc(templates.Catalogs, rand, CostType.TEC)), 10);
+            rand.RepeatAction(() => templates.Templates.MiscCostTemplates.Add(TestMisc(templates.Catalogs, rand, CostType.Electrical)), 10);
 
             //Panels
-            rand.RepeatAction(() => templates.PanelTemplates.Add(TestPanel(templates.Catalogs, rand)), 10);
+            rand.RepeatAction(() => templates.Templates.PanelTemplates.Add(TestPanel(templates.Catalogs, rand)), 10);
 
             return templates;
         }

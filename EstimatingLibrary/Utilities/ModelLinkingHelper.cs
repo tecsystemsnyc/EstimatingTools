@@ -365,8 +365,10 @@ namespace EstimatingLibrary.Utilities
             subScope.Devices = replacements;
         }
 
-        private static void linkTemplateReferences(TECTemplates templates, Dictionary<Guid, List<Guid>> templateReferences)
+        private static void linkTemplateReferences(TECTemplates templatesManager, Dictionary<Guid, List<Guid>> templateReferences)
         {
+            var templates = templatesManager.Templates;
+
             List<TECSubScope> allSubScope = new List<TECSubScope>();
             List<TECEquipment> allEquipment = new List<TECEquipment>();
             foreach(TECEquipment equipment in templates.EquipmentTemplates)
@@ -383,7 +385,7 @@ namespace EstimatingLibrary.Utilities
                 List<TECSubScope> references = findReferences(template, allSubScope, templateReferences);
                 if(references.Count > 0)
                 {
-                    templates.SubScopeSynchronizer.LinkExisting(template, references);
+                    templatesManager.SubScopeSynchronizer.LinkExisting(template, references);
                 }
             }
             foreach(TECEquipment template in templates.EquipmentTemplates)
@@ -391,14 +393,14 @@ namespace EstimatingLibrary.Utilities
                 List<TECEquipment> references = findReferences(template, allEquipment, templateReferences);
                 if (references.Count > 0)
                 {
-                    templates.EquipmentSynchronizer.LinkExisting(template, references);
+                    templatesManager.EquipmentSynchronizer.LinkExisting(template, references);
                 }
                 foreach(TECSubScope subScope in template.SubScope)
                 {
                     List<TECSubScope> subReferences = findReferences(subScope, allSubScope, templateReferences);
                     if(subReferences.Count > 0)
                     {
-                        templates.SubScopeSynchronizer.LinkExisting(subScope, subReferences);
+                        templatesManager.SubScopeSynchronizer.LinkExisting(subScope, subReferences);
                     }
                 }
             }

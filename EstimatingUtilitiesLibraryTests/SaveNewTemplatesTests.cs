@@ -62,13 +62,13 @@ namespace EstimatingUtilitiesLibraryTests
             rand = new Random(0);
             //Arrange
             expectedTemplates = ModelCreation.TestTemplates(rand);
-            expectedSystem = expectedTemplates.SystemTemplates.First();
-            expectedEquipment = expectedTemplates.EquipmentTemplates.First();
-            expectedSubScope = expectedTemplates.SubScopeTemplates.First();
+            expectedSystem = expectedTemplates.Templates.SystemTemplates.First();
+            expectedEquipment = expectedTemplates.Templates.EquipmentTemplates.First();
+            expectedSubScope = expectedTemplates.Templates.SubScopeTemplates.First();
             expectedDevice = expectedTemplates.Catalogs.Devices.First();
             expectedManufacturer = expectedTemplates.Catalogs.Manufacturers.First();
             expectedTag = expectedTemplates.Catalogs.Tags[0];
-            expectedController = (TECProvidedController)expectedTemplates.ControllerTemplates.First(sys => sys is TECProvidedController);
+            expectedController = (TECProvidedController)expectedTemplates.Templates.ControllerTemplates.First(sys => sys is TECProvidedController);
             expectedAssociatedCost = expectedTemplates.Catalogs.AssociatedCosts[0];
             expectedConnectionType = expectedTemplates.Catalogs.ConnectionTypes[0];
             expectedConduitType = expectedTemplates.Catalogs.ConduitTypes[0];
@@ -81,7 +81,7 @@ namespace EstimatingUtilitiesLibraryTests
             Assert.IsTrue(success, "New method in DatabaseManager returned false.");
             actualTemplates = manager.Load();
 
-            if (actualTemplates.SystemTemplates.Count == 0)
+            if (actualTemplates.Templates.SystemTemplates.Count == 0)
             {
                 string failDirectory = Path.GetTempPath() + "Estimating Tools\\";
                 Directory.CreateDirectory(failDirectory);
@@ -94,13 +94,13 @@ namespace EstimatingUtilitiesLibraryTests
                 Assert.Fail(string.Format("No systems loaded into templates. File saved at: {0}", failPath));
             }
 
-            actualSystem = actualTemplates.SystemTemplates.First(x => x.Guid == expectedSystem.Guid);
-            actualEquipment = actualTemplates.EquipmentTemplates.First(x => x.Guid == expectedEquipment.Guid);
-            actualSubScope = actualTemplates.SubScopeTemplates.First(x => x.Guid == expectedSubScope.Guid);
+            actualSystem = actualTemplates.Templates.SystemTemplates.First(x => x.Guid == expectedSystem.Guid);
+            actualEquipment = actualTemplates.Templates.EquipmentTemplates.First(x => x.Guid == expectedEquipment.Guid);
+            actualSubScope = actualTemplates.Templates.SubScopeTemplates.First(x => x.Guid == expectedSubScope.Guid);
             actualDevice = actualTemplates.Catalogs.Devices.First(x => x.Guid == expectedDevice.Guid);
             actualManufacturer = actualTemplates.Catalogs.Manufacturers.First(x => x.Guid == expectedManufacturer.Guid);
             actualTag = actualTemplates.Catalogs.Tags.First(x => x.Guid == expectedTag.Guid);
-            actualController = actualTemplates.ControllerTemplates.First(x => x.Guid == expectedController.Guid) as TECProvidedController;
+            actualController = actualTemplates.Templates.ControllerTemplates.First(x => x.Guid == expectedController.Guid) as TECProvidedController;
             actualAssociatedCost = actualTemplates.Catalogs.AssociatedCosts.First(x => x.Guid == expectedAssociatedCost.Guid);
             actualConnectionType = actualTemplates.Catalogs.ConnectionTypes.First(x => x.Guid == expectedConnectionType.Guid);
             actualConduitType = actualTemplates.Catalogs.ConduitTypes.First(x => x.Guid == expectedConduitType.Guid);
@@ -119,8 +119,8 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void SaveNew_Templates_LaborConstants()
         {
-            TECParameters expectedLabor = expectedTemplates.Parameters[0];
-            TECParameters actualLabor = actualTemplates.Parameters[0];
+            TECParameters expectedLabor = expectedTemplates.Templates.Parameters[0];
+            TECParameters actualLabor = actualTemplates.Templates.Parameters[0];
 
             //Assert
             Assert.AreEqual(expectedLabor.PMCoef, actualLabor.PMCoef);
@@ -142,8 +142,8 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void SaveNew_Templates_SubcontractLaborConstants()
         {
-            TECParameters expectedLabor = expectedTemplates.Parameters[0];
-            TECParameters actualLabor = actualTemplates.Parameters[0];
+            TECParameters expectedLabor = expectedTemplates.Templates.Parameters[0];
+            TECParameters actualLabor = actualTemplates.Templates.Parameters[0];
 
             //Assert
             Assert.AreEqual(expectedLabor.ElectricalRate, actualLabor.ElectricalRate, DELTA);
@@ -363,8 +363,8 @@ namespace EstimatingUtilitiesLibraryTests
         public void SaveNew_Templates_Panel()
         {
             //Arrange
-            TECPanel expectedPanel = expectedTemplates.PanelTemplates.First(item => item.Name == "Test Panel");
-            TECPanel actualPanel = actualTemplates.PanelTemplates.First(item => item.Name == "Test Panel");
+            TECPanel expectedPanel = expectedTemplates.Templates.PanelTemplates.First(item => item.Name == "Test Panel");
+            TECPanel actualPanel = actualTemplates.Templates.PanelTemplates.First(item => item.Name == "Test Panel");
 
             Assert.AreEqual(expectedPanel.Name, actualPanel.Name);
             Assert.AreEqual(expectedPanel.Type.Guid, actualPanel.Type.Guid);
@@ -375,7 +375,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             TECMisc expectedTECCost = null, expectedElecCost = null;
-            foreach(TECMisc misc in expectedTemplates.MiscCostTemplates)
+            foreach(TECMisc misc in expectedTemplates.Templates.MiscCostTemplates)
             {
                 if (misc.Type == CostType.TEC)
                 {
@@ -388,7 +388,7 @@ namespace EstimatingUtilitiesLibraryTests
             }
 
             TECMisc actualTECCost = null, actualElecCost = null;
-            foreach(TECMisc misc in actualTemplates.MiscCostTemplates)
+            foreach(TECMisc misc in actualTemplates.Templates.MiscCostTemplates)
             {
                 if (misc.Guid == expectedTECCost.Guid)
                 {
@@ -444,7 +444,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSubScope expectedRefSSInRef = null, actualRefSSInRef = null;
 
             #region Expected
-            foreach (TECSystem sys in expectedTemplates.SystemTemplates)
+            foreach (TECSystem sys in expectedTemplates.Templates.SystemTemplates)
             {
                 if (sys.Name == "Sync System")
                 {
@@ -454,7 +454,7 @@ namespace EstimatingUtilitiesLibraryTests
             }
             Assert.IsNotNull(expectedSys);
 
-            foreach (TECEquipment equip in expectedTemplates.EquipmentTemplates)
+            foreach (TECEquipment equip in expectedTemplates.Templates.EquipmentTemplates)
             {
                 if (equip.Name == "Sync Equip")
                 {
@@ -474,7 +474,7 @@ namespace EstimatingUtilitiesLibraryTests
             }
             Assert.IsNotNull(expectedRefEquip);
 
-            foreach (TECSubScope ss in expectedTemplates.SubScopeTemplates)
+            foreach (TECSubScope ss in expectedTemplates.Templates.SubScopeTemplates)
             {
                 if (ss.Name == "Sync SS")
                 {
@@ -506,7 +506,7 @@ namespace EstimatingUtilitiesLibraryTests
             #endregion
 
             #region Actual
-            foreach (TECSystem sys in actualTemplates.SystemTemplates)
+            foreach (TECSystem sys in actualTemplates.Templates.SystemTemplates)
             {
                 if (sys.Name == "Sync System" && sys.Guid == expectedSys.Guid)
                 {
@@ -516,7 +516,7 @@ namespace EstimatingUtilitiesLibraryTests
             }
             Assert.IsNotNull(actualSys);
 
-            foreach (TECEquipment equip in actualTemplates.EquipmentTemplates)
+            foreach (TECEquipment equip in actualTemplates.Templates.EquipmentTemplates)
             {
                 if (equip.Name == "Sync Equip" && equip.Guid == expectedTempEquip.Guid)
                 {
@@ -536,7 +536,7 @@ namespace EstimatingUtilitiesLibraryTests
             }
             Assert.IsNotNull(actualRefEquip);
 
-            foreach (TECSubScope ss in actualTemplates.SubScopeTemplates)
+            foreach (TECSubScope ss in actualTemplates.Templates.SubScopeTemplates)
             {
                 if (ss.Name == "Sync SS" && ss.Guid == expectedTempSS.Guid)
                 {

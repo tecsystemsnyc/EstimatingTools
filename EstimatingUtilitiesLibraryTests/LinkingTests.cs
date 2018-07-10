@@ -171,7 +171,7 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Templates_ScopeChildrenLinking()
         {
-            foreach (TECSystem typical in templates.SystemTemplates)
+            foreach (TECSystem typical in templates.Templates.SystemTemplates)
             {
                 checkScopeChildrenCatalogLinks(typical, templates.Catalogs);
                 foreach (TECController control in typical.Controllers)
@@ -191,15 +191,15 @@ namespace EstimatingUtilitiesLibraryTests
                     }
                 }
             }
-            foreach (TECController control in templates.ControllerTemplates)
+            foreach (TECController control in templates.Templates.ControllerTemplates)
             {
                 checkScopeChildrenCatalogLinks(control, templates.Catalogs);
             }
-            foreach (TECPanel panel in templates.PanelTemplates)
+            foreach (TECPanel panel in templates.Templates.PanelTemplates)
             {
                 checkScopeChildrenCatalogLinks(panel, templates.Catalogs);
             }
-            foreach (TECEquipment equip in templates.EquipmentTemplates)
+            foreach (TECEquipment equip in templates.Templates.EquipmentTemplates)
             {
                 checkScopeChildrenCatalogLinks(equip, templates.Catalogs);
                 foreach (TECSubScope ss in equip.SubScope)
@@ -207,7 +207,7 @@ namespace EstimatingUtilitiesLibraryTests
                     checkScopeChildrenCatalogLinks(ss, templates.Catalogs);
                 }
             }
-            foreach (TECSubScope ss in templates.SubScopeTemplates)
+            foreach (TECSubScope ss in templates.Templates.SubScopeTemplates)
             {
                 checkScopeChildrenCatalogLinks(ss, templates.Catalogs);
             }
@@ -457,7 +457,7 @@ namespace EstimatingUtilitiesLibraryTests
         //Checks controller manufacturer is in catalogs.
         public void Templates_ControllerLinking()
         {
-            foreach (TECSystem typical in templates.SystemTemplates)
+            foreach (TECSystem typical in templates.Templates.SystemTemplates)
             {
                 foreach (TECController controller in typical.Controllers)
                 {
@@ -467,7 +467,7 @@ namespace EstimatingUtilitiesLibraryTests
                     }
                 }
             }
-            foreach (TECController controller in templates.ControllerTemplates)
+            foreach (TECController controller in templates.Templates.ControllerTemplates)
             {
                 if(controller is TECProvidedController provided)
                         {
@@ -480,7 +480,7 @@ namespace EstimatingUtilitiesLibraryTests
         //Checks panel connected to a controller in a bid and panel type in panel is in catalogs.
         public void Templates_PanelLinking()
         {
-            foreach (TECSystem typical in templates.SystemTemplates)
+            foreach (TECSystem typical in templates.Templates.SystemTemplates)
             {
                 foreach (TECPanel panel in typical.Panels)
                 {
@@ -491,7 +491,7 @@ namespace EstimatingUtilitiesLibraryTests
                     Assert.IsTrue(templates.Catalogs.PanelTypes.Contains(panel.Type));
                 }
             }
-            foreach(TECPanel panel in templates.PanelTemplates)
+            foreach(TECPanel panel in templates.Templates.PanelTemplates)
             {
                 Assert.IsTrue(templates.Catalogs.PanelTypes.Contains(panel.Type));
             }
@@ -501,7 +501,7 @@ namespace EstimatingUtilitiesLibraryTests
         //Checks every device in subscope is in catalogs.
         public void Templates_SubScopeLinking()
         {
-            foreach (TECSystem typical in templates.SystemTemplates)
+            foreach (TECSystem typical in templates.Templates.SystemTemplates)
             {
                 foreach (TECEquipment equip in typical.Equipment)
                 {
@@ -514,7 +514,7 @@ namespace EstimatingUtilitiesLibraryTests
                     }
                 }
             }
-            foreach (TECEquipment equip in templates.EquipmentTemplates)
+            foreach (TECEquipment equip in templates.Templates.EquipmentTemplates)
             {
                 foreach (TECSubScope ss in equip.SubScope)
                 {
@@ -524,7 +524,7 @@ namespace EstimatingUtilitiesLibraryTests
                     }
                 }
             }
-            foreach (TECSubScope ss in templates.SubScopeTemplates)
+            foreach (TECSubScope ss in templates.Templates.SubScopeTemplates)
             {
                 foreach (TECDevice dev in ss.Devices)
                 {
@@ -617,7 +617,7 @@ namespace EstimatingUtilitiesLibraryTests
         //Checks every conduit type in connection is in catalogs.
         public void Templates_ConnectionLinking()
         {
-            foreach (TECSystem typical in templates.SystemTemplates)
+            foreach (TECSystem typical in templates.Templates.SystemTemplates)
             {
                 foreach (TECController controller in typical.Controllers)
                 {
@@ -627,7 +627,7 @@ namespace EstimatingUtilitiesLibraryTests
                     }
                 }
             }
-            foreach (TECController controller in templates.ControllerTemplates)
+            foreach (TECController controller in templates.Templates.ControllerTemplates)
             {
                 foreach (IControllerConnection connection in controller.ChildrenConnections)
                 {
@@ -639,7 +639,7 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Templates_SubScopeConnectionLinking()
         {
-            foreach (TECSystem typical in templates.SystemTemplates)
+            foreach (TECSystem typical in templates.Templates.SystemTemplates)
             {
                 foreach (TECController controller in typical.Controllers)
                 {

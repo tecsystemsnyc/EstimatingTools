@@ -69,11 +69,11 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Act
             double expectedPM = 0.123;
-            templates.Parameters[0].PMCoef = expectedPM;
+            templates.Templates.Parameters[0].PMCoef = expectedPM;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
-            double actualPM = actualTemplates.Parameters[0].PMCoef;
+            double actualPM = actualTemplates.Templates.Parameters[0].PMCoef;
 
             //Assert
             Assert.AreEqual(expectedPM, actualPM);
@@ -84,11 +84,11 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Act
             double expectedRate = 564.05;
-            templates.Parameters[0].PMRate = expectedRate;
+            templates.Templates.Parameters[0].PMRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
-            double actualRate = actualTemplates.Parameters[0].PMRate;
+            double actualRate = actualTemplates.Templates.Parameters[0].PMRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
@@ -99,11 +99,11 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Act
             double expectedENG = 0.123;
-            templates.Parameters[0].ENGCoef = expectedENG;
+            templates.Templates.Parameters[0].ENGCoef = expectedENG;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
-            double actualENG = actualTemplates.Parameters[0].ENGCoef;
+            double actualENG = actualTemplates.Templates.Parameters[0].ENGCoef;
 
             //Assert
             Assert.AreEqual(expectedENG, actualENG);
@@ -114,11 +114,11 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Act
             double expectedRate = 564.05;
-            templates.Parameters[0].ENGRate = expectedRate;
+            templates.Templates.Parameters[0].ENGRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
-            double actualRate = actualTemplates.Parameters[0].ENGRate;
+            double actualRate = actualTemplates.Templates.Parameters[0].ENGRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
@@ -129,11 +129,11 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Act
             double expectedComm = 0.123;
-            templates.Parameters[0].CommCoef = expectedComm;
+            templates.Templates.Parameters[0].CommCoef = expectedComm;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
-            double actualComm = actualTemplates.Parameters[0].CommCoef;
+            double actualComm = actualTemplates.Templates.Parameters[0].CommCoef;
 
             //Assert
             Assert.AreEqual(expectedComm, actualComm);
@@ -144,11 +144,11 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Act
             double expectedRate = 564.05;
-            templates.Parameters[0].CommRate = expectedRate;
+            templates.Templates.Parameters[0].CommRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
-            double actualRate = actualTemplates.Parameters[0].CommRate;
+            double actualRate = actualTemplates.Templates.Parameters[0].CommRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
@@ -159,11 +159,11 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Act
             double expectedSoft = 0.123;
-            templates.Parameters[0].SoftCoef = expectedSoft;
+            templates.Templates.Parameters[0].SoftCoef = expectedSoft;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
-            double actualSoft = actualTemplates.Parameters[0].SoftCoef;
+            double actualSoft = actualTemplates.Templates.Parameters[0].SoftCoef;
 
             //Assert
             Assert.AreEqual(expectedSoft, actualSoft);
@@ -174,11 +174,11 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Act
             double expectedRate = 564.05;
-            templates.Parameters[0].SoftRate = expectedRate;
+            templates.Templates.Parameters[0].SoftRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
-            double actualRate = actualTemplates.Parameters[0].SoftRate;
+            double actualRate = actualTemplates.Templates.Parameters[0].SoftRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
@@ -189,11 +189,11 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Act
             double expectedGraph = 0.123;
-            templates.Parameters[0].GraphCoef = expectedGraph;
+            templates.Templates.Parameters[0].GraphCoef = expectedGraph;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
-            double actualGraph = actualTemplates.Parameters[0].GraphCoef;
+            double actualGraph = actualTemplates.Templates.Parameters[0].GraphCoef;
 
             //Assert
             Assert.AreEqual(expectedGraph, actualGraph);
@@ -204,11 +204,11 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Act
             double expectedRate = 564.05;
-            templates.Parameters[0].GraphRate = expectedRate;
+            templates.Templates.Parameters[0].GraphRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
-            double actualRate = actualTemplates.Parameters[0].GraphRate;
+            double actualRate = actualTemplates.Templates.Parameters[0].GraphRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
@@ -219,11 +219,11 @@ namespace EstimatingUtilitiesLibraryTests
         {
             ////Act
             double expectedRate = 0.123;
-            templates.Parameters[0].ElectricalRate = expectedRate;
+            templates.Templates.Parameters[0].ElectricalRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
-            double actualRate = actualTemplates.Parameters[0].ElectricalRate;
+            double actualRate = actualTemplates.Templates.Parameters[0].ElectricalRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
@@ -234,11 +234,11 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Act
             double expectedRate = 0.456;
-            templates.Parameters[0].ElectricalNonUnionRate = expectedRate;
+            templates.Templates.Parameters[0].ElectricalNonUnionRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
-            double actualRate = actualTemplates.Parameters[0].ElectricalNonUnionRate;
+            double actualRate = actualTemplates.Templates.Parameters[0].ElectricalNonUnionRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
@@ -249,11 +249,11 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Act
             double expectedRate = 0.123;
-            templates.Parameters[0].ElectricalSuperRate = expectedRate;
+            templates.Templates.Parameters[0].ElectricalSuperRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
-            double actualRate = actualTemplates.Parameters[0].ElectricalSuperRate;
+            double actualRate = actualTemplates.Templates.Parameters[0].ElectricalSuperRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
@@ -264,11 +264,11 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Act
             double expectedRate = 23.94;
-            templates.Parameters[0].ElectricalSuperNonUnionRate = expectedRate;
+            templates.Templates.Parameters[0].ElectricalSuperNonUnionRate = expectedRate;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
-            double actualRate = actualTemplates.Parameters[0].ElectricalSuperNonUnionRate;
+            double actualRate = actualTemplates.Templates.Parameters[0].ElectricalSuperNonUnionRate;
 
             //Assert
             Assert.AreEqual(expectedRate, actualRate);
@@ -287,14 +287,14 @@ namespace EstimatingUtilitiesLibraryTests
             expectedSystem.Name = "New system";
             expectedSystem.Description = "New system desc";
 
-            templates.SystemTemplates.Add(expectedSystem);
+            templates.Templates.SystemTemplates.Add(expectedSystem);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             TECSystem actualSystem = null;
-            foreach (TECSystem system in actualTemplates.SystemTemplates)
+            foreach (TECSystem system in actualTemplates.Templates.SystemTemplates)
             {
                 if (expectedSystem.Guid == system.Guid)
                 {
@@ -312,10 +312,10 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Templates_Remove_System()
         {
             //Act
-            int oldNumSystems = templates.SystemTemplates.Count;
-            TECSystem systemToRemove = templates.SystemTemplates[0];
+            int oldNumSystems = templates.Templates.SystemTemplates.Count;
+            TECSystem systemToRemove = templates.Templates.SystemTemplates[0];
 
-            templates.SystemTemplates.Remove(systemToRemove);
+            templates.Templates.SystemTemplates.Remove(systemToRemove);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -323,7 +323,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECTemplates expectedTemplates = loaded as TECTemplates;
 
             //Assert
-            foreach (TECSystem system in templates.SystemTemplates)
+            foreach (TECSystem system in templates.Templates.SystemTemplates)
             {
                 if (system.Guid == systemToRemove.Guid)
                 {
@@ -331,7 +331,7 @@ namespace EstimatingUtilitiesLibraryTests
                 }
             }
 
-            Assert.AreEqual((oldNumSystems - 1), templates.SystemTemplates.Count);
+            Assert.AreEqual((oldNumSystems - 1), templates.Templates.SystemTemplates.Count);
         }
 
         #region Edit System
@@ -339,14 +339,14 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Templates_System_Name()
         {
             //Act
-            TECSystem expectedSystem = templates.SystemTemplates[0];
+            TECSystem expectedSystem = templates.Templates.SystemTemplates[0];
             expectedSystem.Name = "Save System Name";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             TECSystem actualSystem = null;
-            foreach (TECSystem system in actualTemplates.SystemTemplates)
+            foreach (TECSystem system in actualTemplates.Templates.SystemTemplates)
             {
                 if (system.Guid == expectedSystem.Guid)
                 {
@@ -363,14 +363,14 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Templates_System_Description()
         {
             //Act
-            TECSystem expectedSystem = templates.SystemTemplates[0];
+            TECSystem expectedSystem = templates.Templates.SystemTemplates[0];
             expectedSystem.Description = "Save System Description";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             TECSystem actualSystem = null;
-            foreach (TECSystem system in actualTemplates.SystemTemplates)
+            foreach (TECSystem system in actualTemplates.Templates.SystemTemplates)
             {
                 if (system.Guid == expectedSystem.Guid)
                 {
@@ -394,14 +394,14 @@ namespace EstimatingUtilitiesLibraryTests
             expectedEquipment.Name = "New Equipment";
             expectedEquipment.Description = "New Equipment desc";
 
-            templates.EquipmentTemplates.Add(expectedEquipment);
+            templates.Templates.EquipmentTemplates.Add(expectedEquipment);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             TECEquipment actualEquipment = null;
-            foreach (TECEquipment Equipment in actualTemplates.EquipmentTemplates)
+            foreach (TECEquipment Equipment in actualTemplates.Templates.EquipmentTemplates)
             {
                 if (expectedEquipment.Guid == Equipment.Guid)
                 {
@@ -419,17 +419,17 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Templates_Remove_Equipment()
         {
             //Act
-            int oldNumEquipments = templates.EquipmentTemplates.Count;
-            TECEquipment EquipmentToRemove = templates.EquipmentTemplates[0];
+            int oldNumEquipments = templates.Templates.EquipmentTemplates.Count;
+            TECEquipment EquipmentToRemove = templates.Templates.EquipmentTemplates[0];
 
-            templates.EquipmentTemplates.Remove(EquipmentToRemove);
+            templates.Templates.EquipmentTemplates.Remove(EquipmentToRemove);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             //Assert
-            foreach (TECEquipment Equipment in actualTemplates.EquipmentTemplates)
+            foreach (TECEquipment Equipment in actualTemplates.Templates.EquipmentTemplates)
             {
                 if (Equipment.Guid == EquipmentToRemove.Guid)
                 {
@@ -437,7 +437,7 @@ namespace EstimatingUtilitiesLibraryTests
                 }
             }
 
-            Assert.AreEqual((oldNumEquipments - 1), actualTemplates.EquipmentTemplates.Count);
+            Assert.AreEqual((oldNumEquipments - 1), actualTemplates.Templates.EquipmentTemplates.Count);
         }
 
         [TestMethod]
@@ -448,7 +448,7 @@ namespace EstimatingUtilitiesLibraryTests
             expectedEquipment.Name = "New System Equipment";
             expectedEquipment.Description = "System equipment description";
 
-            TECSystem sysToModify = templates.SystemTemplates[0];
+            TECSystem sysToModify = templates.Templates.SystemTemplates[0];
 
             sysToModify.Equipment.Add(expectedEquipment);
 
@@ -457,7 +457,7 @@ namespace EstimatingUtilitiesLibraryTests
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             TECSystem actualSystem = null;
-            foreach (TECSystem sys in actualTemplates.SystemTemplates)
+            foreach (TECSystem sys in actualTemplates.Templates.SystemTemplates)
             {
                 if (sys.Guid == sysToModify.Guid)
                 {
@@ -480,7 +480,7 @@ namespace EstimatingUtilitiesLibraryTests
             Assert.IsNotNull(actualEquipment);
             Assert.AreEqual(expectedEquipment.Name, actualEquipment.Name);
             Assert.AreEqual(expectedEquipment.Description, actualEquipment.Description);
-            foreach (TECEquipment equip in actualTemplates.EquipmentTemplates)
+            foreach (TECEquipment equip in actualTemplates.Templates.EquipmentTemplates)
             {
                 if (equip.Guid == actualEquipment.Guid) Assert.Fail();
             }
@@ -493,7 +493,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSystem sysToModify = null;
             TECEquipment equipToRemove = null;
             int oldNumEquip = 0;
-            foreach (TECSystem sys in templates.SystemTemplates)
+            foreach (TECSystem sys in templates.Templates.SystemTemplates)
             {
                 if (sys.Equipment.Count > 0)
                 {
@@ -512,7 +512,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Assert
             TECSystem actualSystem = null;
-            foreach (TECSystem sys in actualTemplates.SystemTemplates)
+            foreach (TECSystem sys in actualTemplates.Templates.SystemTemplates)
             {
                 if (sys.Guid == sysToModify.Guid)
                 {
@@ -535,14 +535,14 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Templates_Equipment_Name()
         {
             //Act
-            TECEquipment expectedEquipment = templates.EquipmentTemplates[0];
+            TECEquipment expectedEquipment = templates.Templates.EquipmentTemplates[0];
             expectedEquipment.Name = "Save Equipment Name";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             TECEquipment actualEquipment = null;
-            foreach (TECEquipment Equipment in actualTemplates.EquipmentTemplates)
+            foreach (TECEquipment Equipment in actualTemplates.Templates.EquipmentTemplates)
             {
                 if (Equipment.Guid == expectedEquipment.Guid)
                 {
@@ -559,14 +559,14 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Templates_Equipment_Description()
         {
             //Act
-            TECEquipment expectedEquipment = templates.EquipmentTemplates[0];
+            TECEquipment expectedEquipment = templates.Templates.EquipmentTemplates[0];
             expectedEquipment.Description = "Save Equipment Description";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             TECEquipment actualEquipment = null;
-            foreach (TECEquipment Equipment in actualTemplates.EquipmentTemplates)
+            foreach (TECEquipment Equipment in actualTemplates.Templates.EquipmentTemplates)
             {
                 if (Equipment.Guid == expectedEquipment.Guid)
                 {
@@ -589,14 +589,14 @@ namespace EstimatingUtilitiesLibraryTests
             expectedSubScope.Name = "New SubScope";
             expectedSubScope.Description = "New SubScope desc";
 
-            templates.SubScopeTemplates.Add(expectedSubScope);
+            templates.Templates.SubScopeTemplates.Add(expectedSubScope);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             TECSubScope actualSubScope = null;
-            foreach (TECSubScope subScope in actualTemplates.SubScopeTemplates)
+            foreach (TECSubScope subScope in actualTemplates.Templates.SubScopeTemplates)
             {
                 if (expectedSubScope.Guid == subScope.Guid)
                 {
@@ -614,17 +614,17 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Templates_Remove_SubScope()
         {
             //Act
-            int oldNumSubScopes = templates.SubScopeTemplates.Count;
-            TECSubScope SubScopeToRemove = templates.SubScopeTemplates[0];
+            int oldNumSubScopes = templates.Templates.SubScopeTemplates.Count;
+            TECSubScope SubScopeToRemove = templates.Templates.SubScopeTemplates[0];
 
-            templates.SubScopeTemplates.Remove(SubScopeToRemove);
+            templates.Templates.SubScopeTemplates.Remove(SubScopeToRemove);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             //Assert
-            foreach (TECSubScope SubScope in actualTemplates.SubScopeTemplates)
+            foreach (TECSubScope SubScope in actualTemplates.Templates.SubScopeTemplates)
             {
                 if (SubScope.Guid == SubScopeToRemove.Guid)
                 {
@@ -632,21 +632,21 @@ namespace EstimatingUtilitiesLibraryTests
                 }
             }
 
-            Assert.AreEqual((oldNumSubScopes - 1), actualTemplates.SubScopeTemplates.Count);
+            Assert.AreEqual((oldNumSubScopes - 1), actualTemplates.Templates.SubScopeTemplates.Count);
         }
 
         [TestMethod]
         public void Save_Templates_SubScope_Name()
         {
             //Act
-            TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
+            TECSubScope expectedSubScope = templates.Templates.SubScopeTemplates[0];
             expectedSubScope.Name = "Save SubScope Name";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             TECSubScope actualSubScope = null;
-            foreach (TECSubScope SubScope in actualTemplates.SubScopeTemplates)
+            foreach (TECSubScope SubScope in actualTemplates.Templates.SubScopeTemplates)
             {
                 if (SubScope.Guid == expectedSubScope.Guid)
                 {
@@ -663,14 +663,14 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Templates_SubScope_Description()
         {
             //Act
-            TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
+            TECSubScope expectedSubScope = templates.Templates.SubScopeTemplates[0];
             expectedSubScope.Description = "Save SubScope Description";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             TECSubScope actualSubScope = null;
-            foreach (TECSubScope SubScope in actualTemplates.SubScopeTemplates)
+            foreach (TECSubScope SubScope in actualTemplates.Templates.SubScopeTemplates)
             {
                 if (SubScope.Guid == expectedSubScope.Guid)
                 {
@@ -686,7 +686,7 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Templates_SubScope_AssociatedCosts()
         {
             //Act
-            TECSubScope expectedSubScope = templates.SubScopeTemplates[0];
+            TECSubScope expectedSubScope = templates.Templates.SubScopeTemplates[0];
 
             TECAssociatedCost expectedCost = templates.Catalogs.AssociatedCosts[1];
             expectedSubScope.AssociatedCosts.Add(templates.Catalogs.AssociatedCosts[1]);
@@ -697,7 +697,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             TECSubScope actualSubScope = null;
             TECAssociatedCost actualCost = null;
-            foreach (TECSubScope SubScope in actualTemplates.SubScopeTemplates)
+            foreach (TECSubScope SubScope in actualTemplates.Templates.SubScopeTemplates)
             {
                 if (SubScope.Guid == expectedSubScope.Guid)
                 {
@@ -930,14 +930,14 @@ namespace EstimatingUtilitiesLibraryTests
             expectedController.Name = "Test Controller";
             expectedController.Description = "Test description";
 
-            templates.ControllerTemplates.Add(expectedController);
+            templates.Templates.ControllerTemplates.Add(expectedController);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             TECController actualController = null;
-            foreach (TECController controller in actualTemplates.ControllerTemplates)
+            foreach (TECController controller in actualTemplates.Templates.ControllerTemplates)
             {
                 if (controller.Guid == expectedController.Guid)
                 {
@@ -955,36 +955,36 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Templates_Remove_Controller()
         {
             //Act
-            int oldNumControllers = templates.ControllerTemplates.Count;
-            TECController controllerToRemove = templates.ControllerTemplates[0];
+            int oldNumControllers = templates.Templates.ControllerTemplates.Count;
+            TECController controllerToRemove = templates.Templates.ControllerTemplates[0];
 
-            templates.ControllerTemplates.Remove(controllerToRemove);
+            templates.Templates.ControllerTemplates.Remove(controllerToRemove);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             //Assert
-            foreach (TECController controller in actualTemplates.ControllerTemplates)
+            foreach (TECController controller in actualTemplates.Templates.ControllerTemplates)
             {
                 if (controller.Guid == controllerToRemove.Guid) Assert.Fail();
             }
 
-            Assert.AreEqual((oldNumControllers - 1), actualTemplates.ControllerTemplates.Count);
+            Assert.AreEqual((oldNumControllers - 1), actualTemplates.Templates.ControllerTemplates.Count);
         }
 
         [TestMethod]
         public void Save_Templates_Controller_Name()
         {
             //Act
-            TECController expectedController = templates.ControllerTemplates[0];
+            TECController expectedController = templates.Templates.ControllerTemplates[0];
             expectedController.Name = "Test save controller name";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             TECController actualController = null;
-            foreach (TECController controller in actualTemplates.ControllerTemplates)
+            foreach (TECController controller in actualTemplates.Templates.ControllerTemplates)
             {
                 if (controller.Guid == expectedController.Guid)
                 {
@@ -1001,14 +1001,14 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Templates_Controller_Description()
         {
             //Act
-            TECController expectedController = templates.ControllerTemplates[0];
+            TECController expectedController = templates.Templates.ControllerTemplates[0];
             expectedController.Description = "Save Device Description";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             TECController actualController = null;
-            foreach (TECController controller in actualTemplates.ControllerTemplates)
+            foreach (TECController controller in actualTemplates.Templates.ControllerTemplates)
             {
                 if (controller.Guid == expectedController.Guid)
                 {
@@ -1025,14 +1025,14 @@ namespace EstimatingUtilitiesLibraryTests
         //public void Save_Templates_Controller_Cost()
         //{
         //    //Act
-        //    TECController expectedController = templates.ControllerTemplates[0];
+        //    TECController expectedController = templates.Templates.ControllerTemplates[0];
         //    expectedController.Cost = 46.89;
         //    DatabaseUpdater.Update(path, testStack.CleansedStack());
 
         //    (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
         //    TECController actualController = null;
-        //    foreach (TECController controller in actualTemplates.ControllerTemplates)
+        //    foreach (TECController controller in actualTemplates.Templates.ControllerTemplates)
         //    {
         //        if (controller.Guid == expectedController.Guid)
         //        {
@@ -1049,7 +1049,7 @@ namespace EstimatingUtilitiesLibraryTests
         //public void Save_Templates_Controller_Manufacturer()
         //{
         //    //Act
-        //    TECController expectedController = templates.ControllerTemplates[0];
+        //    TECController expectedController = templates.Templates.ControllerTemplates[0];
         //    var testManufacturer = new TECManufacturer();
         //    templates.Catalogs.Manufacturers.Add(testManufacturer);
         //    expectedController.Manufacturer = testManufacturer;
@@ -1058,7 +1058,7 @@ namespace EstimatingUtilitiesLibraryTests
         //    (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
         //    TECController actualController = null;
-        //    foreach (TECController controller in actualTemplates.ControllerTemplates)
+        //    foreach (TECController controller in actualTemplates.Templates.ControllerTemplates)
         //    {
         //        if (controller.Guid == expectedController.Guid)
         //        {
@@ -1076,7 +1076,7 @@ namespace EstimatingUtilitiesLibraryTests
         //public void Save_Templates_Controller_Add_IO()
         //{
         //    //Act
-        //    TECController expectedController = templates.ControllerTemplates[0];
+        //    TECController expectedController = templates.Templates.ControllerTemplates[0];
         //    var testio = new TECIO();
         //    testio.Type = IOType.BACnetIP;
         //    expectedController.IO.Add(testio);
@@ -1085,7 +1085,7 @@ namespace EstimatingUtilitiesLibraryTests
 
         //    (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
         //    TECController actualController = null;
-        //    foreach (TECController controller in actualTemplates.ControllerTemplates)
+        //    foreach (TECController controller in actualTemplates.Templates.ControllerTemplates)
         //    {
         //        if (controller.Guid == expectedController.Guid)
         //        {
@@ -1111,7 +1111,7 @@ namespace EstimatingUtilitiesLibraryTests
         //public void Save_Templates_Controller_Remove_IO()
         //{
         //    //Act
-        //    TECController expectedController = templates.ControllerTemplates[0];
+        //    TECController expectedController = templates.Templates.ControllerTemplates[0];
         //    int oldNumIO = expectedController.IO.Count;
         //    TECIO ioToRemove = expectedController.IO[0];
 
@@ -1122,7 +1122,7 @@ namespace EstimatingUtilitiesLibraryTests
         //    (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
         //    TECController actualController = null;
-        //    foreach (TECController con in actualTemplates.ControllerTemplates)
+        //    foreach (TECController con in actualTemplates.Templates.ControllerTemplates)
         //    {
         //        if (con.Guid == expectedController.Guid)
         //        {
@@ -1144,7 +1144,7 @@ namespace EstimatingUtilitiesLibraryTests
         //public void Save_Templates_Controller_IO_Quantity()
         //{
         //    //Act
-        //    TECController expectedController = templates.ControllerTemplates[0];
+        //    TECController expectedController = templates.Templates.ControllerTemplates[0];
         //    TECIO ioToChange = expectedController.IO[0];
         //    ioToChange.Quantity = 69;
 
@@ -1153,7 +1153,7 @@ namespace EstimatingUtilitiesLibraryTests
         //    (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
         //    TECController actualController = null;
-        //    foreach (TECController con in actualTemplates.ControllerTemplates)
+        //    foreach (TECController con in actualTemplates.Templates.ControllerTemplates)
         //    {
         //        if (con.Guid == expectedController.Guid)
         //        {
@@ -1599,14 +1599,14 @@ namespace EstimatingUtilitiesLibraryTests
             expectedCost.Cost = 978.3;
             expectedCost.Quantity = 21;
 
-            templates.MiscCostTemplates.Add(expectedCost);
+            templates.Templates.MiscCostTemplates.Add(expectedCost);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             TECMisc actualCost = null;
-            foreach (TECMisc cost in actualTemplates.MiscCostTemplates)
+            foreach (TECMisc cost in actualTemplates.Templates.MiscCostTemplates)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -1626,33 +1626,33 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Templates_Remove_MiscCost()
         {
             //Act
-            TECMisc costToRemove = templates.MiscCostTemplates[0];
-            templates.MiscCostTemplates.Remove(costToRemove);
+            TECMisc costToRemove = templates.Templates.MiscCostTemplates[0];
+            templates.Templates.MiscCostTemplates.Remove(costToRemove);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             //Assert
-            foreach (TECMisc cost in actualTemplates.MiscCostTemplates)
+            foreach (TECMisc cost in actualTemplates.Templates.MiscCostTemplates)
             {
                 if (cost.Guid == costToRemove.Guid) Assert.Fail();
             }
 
-            Assert.AreEqual(templates.MiscCostTemplates.Count, actualTemplates.MiscCostTemplates.Count);
+            Assert.AreEqual(templates.Templates.MiscCostTemplates.Count, actualTemplates.Templates.MiscCostTemplates.Count);
         }
 
         [TestMethod]
         public void Save_Templates_MiscCost_Name()
         {
             //Act
-            TECMisc expectedCost = templates.MiscCostTemplates[0];
+            TECMisc expectedCost = templates.Templates.MiscCostTemplates[0];
             expectedCost.Name = "Test Save Cost Name";
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             TECMisc actualCost = null;
-            foreach (TECMisc cost in actualTemplates.MiscCostTemplates)
+            foreach (TECMisc cost in actualTemplates.Templates.MiscCostTemplates)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -1669,14 +1669,14 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Templates_MiscCost_Cost()
         {
             //Act
-            TECMisc expectedCost = templates.MiscCostTemplates[0];
+            TECMisc expectedCost = templates.Templates.MiscCostTemplates[0];
             expectedCost.Cost = 489.1238;
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             TECMisc actualCost = null;
-            foreach (TECMisc cost in actualTemplates.MiscCostTemplates)
+            foreach (TECMisc cost in actualTemplates.Templates.MiscCostTemplates)
             {
                 if (cost.Guid == expectedCost.Guid)
                 {
@@ -1898,14 +1898,14 @@ namespace EstimatingUtilitiesLibraryTests
             TECPanel expectedPanel = new TECPanel(templates.Catalogs.PanelTypes[0]);
             expectedPanel.Name = "Test Add Controller";
             expectedPanel.Description = "Test description";
-            templates.PanelTemplates.Add(expectedPanel);
+            templates.Templates.PanelTemplates.Add(expectedPanel);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path);
             TECTemplates actualTemplates = loaded as TECTemplates;
 
             TECPanel actualpanel = null;
-            foreach (TECPanel panel in actualTemplates.PanelTemplates)
+            foreach (TECPanel panel in actualTemplates.Templates.PanelTemplates)
             {
                 if (panel.Guid == expectedPanel.Guid)
                 {
@@ -1923,21 +1923,21 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Templates_Remove_Panel()
         {
             //Act
-            int oldNumPanels = templates.PanelTemplates.Count;
-            TECPanel panelToRemove = templates.PanelTemplates[0];
+            int oldNumPanels = templates.Templates.PanelTemplates.Count;
+            TECPanel panelToRemove = templates.Templates.PanelTemplates[0];
 
-            templates.PanelTemplates.Remove(panelToRemove);
+            templates.Templates.PanelTemplates.Remove(panelToRemove);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             //Assert
-            foreach (TECPanel panel in actualTemplates.PanelTemplates)
+            foreach (TECPanel panel in actualTemplates.Templates.PanelTemplates)
             {
                 if (panel.Guid == panelToRemove.Guid) Assert.Fail();
             }
 
-            Assert.AreEqual((oldNumPanels - 1), actualTemplates.PanelTemplates.Count);
+            Assert.AreEqual((oldNumPanels - 1), actualTemplates.Templates.PanelTemplates.Count);
 
         }
 
@@ -1945,13 +1945,13 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Templates_Panel_Name()
         {
             //Act
-            TECPanel expectedPanel = templates.PanelTemplates[0];
+            TECPanel expectedPanel = templates.Templates.PanelTemplates[0];
             expectedPanel.Name = "Test save panel name";
             DatabaseUpdater.Update(path, testStack.CleansedStack());
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path);
             TECTemplates actualTemplates = loaded as TECTemplates;
             TECPanel actualPanel = null;
-            foreach (TECPanel panel in actualTemplates.PanelTemplates)
+            foreach (TECPanel panel in actualTemplates.Templates.PanelTemplates)
             {
                 if (panel.Guid == expectedPanel.Guid)
                 {
@@ -1973,7 +1973,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSystem expectedScope = new TECSystem();
             expectedScope.Name = "New controlled scope";
             expectedScope.Description = "New controlled scope desc";
-            templates.SystemTemplates.Add(expectedScope);
+            templates.Templates.SystemTemplates.Add(expectedScope);
             
             var subScope = new TECSubScope();
             subScope.Devices.Add(templates.Catalogs.Devices.First());
@@ -2000,7 +2000,7 @@ namespace EstimatingUtilitiesLibraryTests
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             TECSystem actualScope = null;
-            foreach (TECSystem scope in actualTemplates.SystemTemplates)
+            foreach (TECSystem scope in actualTemplates.Templates.SystemTemplates)
             {
                 if (expectedScope.Guid == scope.Guid)
                 {
@@ -2033,10 +2033,10 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Templates_Remove_ControlledScope()
         {
             //Act
-            int oldNumScope = templates.SystemTemplates.Count;
-            TECSystem scopeToRemove = templates.SystemTemplates[0];
+            int oldNumScope = templates.Templates.SystemTemplates.Count;
+            TECSystem scopeToRemove = templates.Templates.SystemTemplates[0];
 
-            templates.SystemTemplates.Remove(scopeToRemove);
+            templates.Templates.SystemTemplates.Remove(scopeToRemove);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -2044,7 +2044,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECTemplates expectedTemplates = loaded as TECTemplates;
 
             //Assert
-            foreach (TECSystem scope in templates.SystemTemplates)
+            foreach (TECSystem scope in templates.Templates.SystemTemplates)
             {
                 if (scope.Guid == scopeToRemove.Guid)
                 {
@@ -2052,7 +2052,7 @@ namespace EstimatingUtilitiesLibraryTests
                 }
             }
 
-            Assert.AreEqual((oldNumScope - 1), templates.SystemTemplates.Count);
+            Assert.AreEqual((oldNumScope - 1), templates.Templates.SystemTemplates.Count);
         }
 
         #endregion

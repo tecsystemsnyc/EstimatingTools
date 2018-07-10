@@ -76,7 +76,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             var Template = ModelCreation.TestTemplates(rand);
             ObservableCollection<TECSystem> expected = new ObservableCollection<TECSystem>();
-            foreach (TECSystem item in Template.SystemTemplates)
+            foreach (TECSystem item in Template.Templates.SystemTemplates)
             {
                 expected.Add(item);
             }
@@ -84,12 +84,12 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SystemTemplates.Add(edit);
+            Template.Templates.SystemTemplates.Add(edit);
             Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECSystem> actual = Template.SystemTemplates;
+            ObservableCollection<TECSystem> actual = Template.Templates.SystemTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -100,7 +100,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             var Template = ModelCreation.TestTemplates(rand);
             ObservableCollection<TECEquipment> expected = new ObservableCollection<TECEquipment>();
-            foreach (TECEquipment item in Template.EquipmentTemplates)
+            foreach (TECEquipment item in Template.Templates.EquipmentTemplates)
             {
                 expected.Add(item);
             }
@@ -108,12 +108,12 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.EquipmentTemplates.Add(edit);
+            Template.Templates.EquipmentTemplates.Add(edit);
             Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECEquipment> actual = Template.EquipmentTemplates;
+            ObservableCollection<TECEquipment> actual = Template.Templates.EquipmentTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -124,7 +124,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             var Template = ModelCreation.TestTemplates(rand);
             ObservableCollection<TECSubScope> expected = new ObservableCollection<TECSubScope>();
-            foreach (TECSubScope item in Template.SubScopeTemplates)
+            foreach (TECSubScope item in Template.Templates.SubScopeTemplates)
             {
                 expected.Add(item);
             }
@@ -132,12 +132,12 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SubScopeTemplates.Add(edit);
+            Template.Templates.SubScopeTemplates.Add(edit);
             Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECSubScope> actual = Template.SubScopeTemplates;
+            ObservableCollection<TECSubScope> actual = Template.Templates.SubScopeTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -294,7 +294,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             var Template = ModelCreation.TestTemplates(rand);
-            var system = Template.SystemTemplates[0];
+            var system = Template.Templates.SystemTemplates[0];
             string expected = system.Name;
             string edit = "Edit";
 
@@ -305,7 +305,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Undo();
 
             //assert
-            string actual = Template.SystemTemplates[0].Name;
+            string actual = Template.Templates.SystemTemplates[0].Name;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -315,7 +315,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             var Template = ModelCreation.TestTemplates(rand);
-            var system = Template.SystemTemplates[0];
+            var system = Template.Templates.SystemTemplates[0];
             string expected = system.Description;
             string edit = "Edit";
 
@@ -336,7 +336,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             var Template = ModelCreation.TestTemplates(rand);
-            var system = Template.SystemTemplates[0];
+            var system = Template.Templates.SystemTemplates[0];
             ObservableCollection<TECEquipment> expected = new ObservableCollection<TECEquipment>();
             foreach (TECEquipment item in system.Equipment)
             {
@@ -361,7 +361,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             var Template = ModelCreation.TestTemplates(rand);
-            var equipment = Template.EquipmentTemplates[0];
+            var equipment = Template.Templates.EquipmentTemplates[0];
             string expected = equipment.Name;
             string edit = "Edit";
 
@@ -382,7 +382,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             var Template = ModelCreation.TestTemplates(rand);
-            var equipment = Template.EquipmentTemplates[0];
+            var equipment = Template.Templates.EquipmentTemplates[0];
             string expected = equipment.Description;
             string edit = "Edit";
 
@@ -404,7 +404,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             var Template = ModelCreation.TestTemplates(rand);
-            var equipment = Template.EquipmentTemplates[0];
+            var equipment = Template.Templates.EquipmentTemplates[0];
             ObservableCollection<TECSubScope> expected = new ObservableCollection<TECSubScope>();
             foreach (TECSubScope item in equipment.SubScope)
             {
@@ -429,7 +429,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             var Template = ModelCreation.TestTemplates(rand);
-            var subScope = Template.SubScopeTemplates[0];
+            var subScope = Template.Templates.SubScopeTemplates[0];
             string expected = subScope.Name;
             string edit = "Edit";
 
@@ -450,7 +450,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             var Template = ModelCreation.TestTemplates(rand);
-            var subScope = Template.SubScopeTemplates[0];
+            var subScope = Template.Templates.SubScopeTemplates[0];
             string expected = subScope.Description;
             string edit = "Edit";
 
@@ -471,7 +471,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             var Template = ModelCreation.TestTemplates(rand);
-            var subScope = Template.SubScopeTemplates[0];
+            var subScope = Template.Templates.SubScopeTemplates[0];
             ObservableCollection<TECPoint> expected = new ObservableCollection<TECPoint>();
             foreach (TECPoint item in subScope.Points)
             {
@@ -497,7 +497,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             var Template = ModelCreation.TestTemplates(rand);
-            var subScope = Template.SubScopeTemplates[0];
+            var subScope = Template.Templates.SubScopeTemplates[0];
             ObservableCollection<IEndDevice> expected = new ObservableCollection<IEndDevice>();
             foreach (IEndDevice item in subScope.Devices)
             {
@@ -521,7 +521,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             var Template = ModelCreation.TestTemplates(rand);
-            var subScope = Template.SubScopeTemplates[0];
+            var subScope = Template.Templates.SubScopeTemplates[0];
             int expectedCount = subScope.AssociatedCosts.Count;
             TECAssociatedCost edit = new TECAssociatedCost(CostType.Electrical);
 
@@ -646,17 +646,17 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             var Template = ModelCreation.TestTemplates(rand);
-            string expected = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Label;
+            string expected = Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Label;
             string edit = "Edit";
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Label = edit;
+            Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Label = edit;
             Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            string actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Label;
+            string actual = Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Label;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -666,17 +666,17 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             var Template = ModelCreation.TestTemplates(rand);
-            int expected = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Quantity;
+            int expected = Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Quantity;
             int edit = 3;
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Quantity = edit;
+            Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Quantity = edit;
             Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            int actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Quantity;
+            int actual = Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Quantity;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -686,17 +686,17 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             var Template = ModelCreation.TestTemplates(rand);
-            string expected = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Type.ToString();
+            string expected = Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Type.ToString();
             IOType edit = IOType.AO;
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Type = edit;
+            Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Type = edit;
             Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            string actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Type.ToString(); ;
+            string actual = Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Type.ToString(); ;
             Assert.AreEqual(expected, actual, "Not Undone");
 
         }
@@ -707,7 +707,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             var Template = ModelCreation.TestTemplates(rand);
             ObservableCollection<TECPanel> expected = new ObservableCollection<TECPanel>();
-            foreach (TECPanel item in Template.PanelTemplates)
+            foreach (TECPanel item in Template.Templates.PanelTemplates)
             {
                 expected.Add(item);
             }
@@ -716,12 +716,12 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             int beforeCount = testStack.UndoCount();
-            Template.PanelTemplates.Add(edit);
+            Template.Templates.PanelTemplates.Add(edit);
             Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECPanel> actual = Template.PanelTemplates;
+            ObservableCollection<TECPanel> actual = Template.Templates.PanelTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -731,7 +731,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             var Template = ModelCreation.TestTemplates(rand);
-            TECPanel expected = Template.PanelTemplates[0];
+            TECPanel expected = Template.Templates.PanelTemplates[0];
             string expectedName = expected.Name;
 
             string edit = "edit";
@@ -739,12 +739,12 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             int beforeCount = testStack.UndoCount();
-            Template.PanelTemplates[0].Name = edit;
+            Template.Templates.PanelTemplates[0].Name = edit;
             Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            TECPanel actual = Template.PanelTemplates[0];
+            TECPanel actual = Template.Templates.PanelTemplates[0];
             Assert.AreEqual(expectedName, actual.Name, "Not Undone");
 
         }
@@ -755,7 +755,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             var Template = ModelCreation.TestTemplates(rand);
             ObservableCollection<TECMisc> expected = new ObservableCollection<TECMisc>();
-            foreach (TECMisc item in Template.MiscCostTemplates)
+            foreach (TECMisc item in Template.Templates.MiscCostTemplates)
             {
                 expected.Add(item);
             }
@@ -764,12 +764,12 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             int beforeCount = testStack.UndoCount();
-            Template.MiscCostTemplates.Add(edit);
+            Template.Templates.MiscCostTemplates.Add(edit);
             Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECMisc> actual = Template.MiscCostTemplates;
+            ObservableCollection<TECMisc> actual = Template.Templates.MiscCostTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -837,9 +837,9 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SystemTemplates.Add(edit);
+            Template.Templates.SystemTemplates.Add(edit);
             var expected = new ObservableCollection<TECSystem>();
-            foreach (TECSystem item in Template.SystemTemplates)
+            foreach (TECSystem item in Template.Templates.SystemTemplates)
             {
                 expected.Add(item);
             }
@@ -847,7 +847,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECSystem> actual = Template.SystemTemplates;
+            ObservableCollection<TECSystem> actual = Template.Templates.SystemTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -861,9 +861,9 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.EquipmentTemplates.Add(edit);
+            Template.Templates.EquipmentTemplates.Add(edit);
             var expected = new ObservableCollection<TECEquipment>();
-            foreach (TECEquipment item in Template.EquipmentTemplates)
+            foreach (TECEquipment item in Template.Templates.EquipmentTemplates)
             {
                 expected.Add(item);
             }
@@ -871,7 +871,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECEquipment> actual = Template.EquipmentTemplates;
+            ObservableCollection<TECEquipment> actual = Template.Templates.EquipmentTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -885,9 +885,9 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SubScopeTemplates.Add(edit);
+            Template.Templates.SubScopeTemplates.Add(edit);
             var expected = new ObservableCollection<TECSubScope>();
-            foreach (TECSubScope item in Template.SubScopeTemplates)
+            foreach (TECSubScope item in Template.Templates.SubScopeTemplates)
             {
                 expected.Add(item);
             }
@@ -895,7 +895,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECSubScope> actual = Template.SubScopeTemplates;
+            ObservableCollection<TECSubScope> actual = Template.Templates.SubScopeTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -984,12 +984,12 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SystemTemplates[0].Name = edit;
+            Template.Templates.SystemTemplates[0].Name = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            string actual = Template.SystemTemplates[0].Name;
+            string actual = Template.Templates.SystemTemplates[0].Name;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -1003,12 +1003,12 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SystemTemplates[0].Description = edit;
+            Template.Templates.SystemTemplates[0].Description = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            string actual = Template.SystemTemplates[0].Description;
+            string actual = Template.Templates.SystemTemplates[0].Description;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -1022,9 +1022,9 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SystemTemplates[0].Equipment.Add(edit);
+            Template.Templates.SystemTemplates[0].Equipment.Add(edit);
             var expected = new ObservableCollection<TECEquipment>();
-            foreach (TECEquipment item in Template.SystemTemplates[0].Equipment)
+            foreach (TECEquipment item in Template.Templates.SystemTemplates[0].Equipment)
             {
                 expected.Add(item);
             }
@@ -1032,7 +1032,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECEquipment> actual = Template.SystemTemplates[0].Equipment;
+            ObservableCollection<TECEquipment> actual = Template.Templates.SystemTemplates[0].Equipment;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -1046,12 +1046,12 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SystemTemplates[0].Equipment[0].Name = edit;
+            Template.Templates.SystemTemplates[0].Equipment[0].Name = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            string actual = Template.SystemTemplates[0].Equipment[0].Name;
+            string actual = Template.Templates.SystemTemplates[0].Equipment[0].Name;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -1065,12 +1065,12 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SystemTemplates[0].Equipment[0].Description = edit;
+            Template.Templates.SystemTemplates[0].Equipment[0].Description = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            string actual = Template.SystemTemplates[0].Equipment[0].Description;
+            string actual = Template.Templates.SystemTemplates[0].Equipment[0].Description;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -1084,9 +1084,9 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SystemTemplates[0].Equipment[0].SubScope.Add(edit);
+            Template.Templates.SystemTemplates[0].Equipment[0].SubScope.Add(edit);
             var expected = new ObservableCollection<TECSubScope>();
-            foreach (TECSubScope item in Template.SystemTemplates[0].Equipment[0].SubScope)
+            foreach (TECSubScope item in Template.Templates.SystemTemplates[0].Equipment[0].SubScope)
             {
                 expected.Add(item);
             }
@@ -1094,7 +1094,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECSubScope> actual = Template.SystemTemplates[0].Equipment[0].SubScope;
+            ObservableCollection<TECSubScope> actual = Template.Templates.SystemTemplates[0].Equipment[0].SubScope;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -1108,12 +1108,12 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Name = edit;
+            Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Name = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            string actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Name;
+            string actual = Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Name;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -1127,12 +1127,12 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Description = edit;
+            Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Description = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            string actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Description;
+            string actual = Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Description;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -1147,9 +1147,9 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Points.Add(edit);
+            Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Points.Add(edit);
             var expected = new ObservableCollection<TECPoint>();
-            foreach (TECPoint item in Template.SystemTemplates[0].Equipment[0].SubScope[0].Points)
+            foreach (TECPoint item in Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Points)
             {
                 expected.Add(item);
             }
@@ -1157,7 +1157,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECPoint> actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points;
+            ObservableCollection<TECPoint> actual = Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Points;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -1174,9 +1174,9 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices.Add(edit);
+            Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Devices.Add(edit);
             var expected = new ObservableCollection<IEndDevice>();
-            foreach (IEndDevice item in Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices)
+            foreach (IEndDevice item in Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Devices)
             {
                 expected.Add(item);
             }
@@ -1184,7 +1184,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Redo();
 
             //assert
-            ObservableCollection<IEndDevice> actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices;
+            ObservableCollection<IEndDevice> actual = Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Devices;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -1198,12 +1198,12 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            (Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice).Name = edit;
+            (Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice).Name = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            string actual = (Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice).Name;
+            string actual = (Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice).Name;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -1217,12 +1217,12 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            (Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice).Description = edit;
+            (Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice).Description = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            string actual = (Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice).Description;
+            string actual = (Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice).Description;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -1236,12 +1236,12 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            ((Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice) as TECDevice).Price = edit;
+            ((Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice) as TECDevice).Price = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            double actual = ((Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice) as TECDevice).Price;
+            double actual = ((Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice) as TECDevice).Price;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -1255,12 +1255,12 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            (Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice).Manufacturer = edit;
+            (Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice).Manufacturer = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            TECManufacturer actual = (Template.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice).Manufacturer;
+            TECManufacturer actual = (Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Devices[0] as TECDevice).Manufacturer;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -1274,12 +1274,12 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Label = edit;
+            Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Label = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            string actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Label;
+            string actual = Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Label;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -1293,13 +1293,13 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Quantity = edit;
+            Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Quantity = edit;
             Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            int actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Quantity;
+            int actual = Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Quantity;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -1313,12 +1313,12 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Type = edit;
+            Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Type = edit;
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            IOType actual = Template.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Type;
+            IOType actual = Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Points[0].Type;
             Assert.AreEqual(edit, actual, "Not Redone");
 
         }
@@ -1329,7 +1329,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             var Template = ModelCreation.TestTemplates(rand);
             ObservableCollection<TECPanel> expected = new ObservableCollection<TECPanel>();
-            foreach (TECPanel item in Template.PanelTemplates)
+            foreach (TECPanel item in Template.Templates.PanelTemplates)
             {
                 expected.Add(item);
             }
@@ -1338,13 +1338,13 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             int beforeCount = testStack.UndoCount();
-            Template.PanelTemplates.Add(edit);
+            Template.Templates.PanelTemplates.Add(edit);
             Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECPanel> actual = Template.PanelTemplates;
+            ObservableCollection<TECPanel> actual = Template.Templates.PanelTemplates;
             Assert.AreEqual(expected.Count + 1, actual.Count, "Not Redone");
 
         }
@@ -1354,20 +1354,20 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             var Template = ModelCreation.TestTemplates(rand);
-            TECPanel expected = Template.PanelTemplates[0];
+            TECPanel expected = Template.Templates.PanelTemplates[0];
 
             string edit = "edit";
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             int beforeCount = testStack.UndoCount();
-            Template.PanelTemplates[0].Name = edit;
+            Template.Templates.PanelTemplates[0].Name = edit;
             Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
             testStack.Redo();
 
             //assert
-            TECPanel actual = Template.PanelTemplates[0];
+            TECPanel actual = Template.Templates.PanelTemplates[0];
             Assert.AreEqual(edit, actual.Name, "Not Redone");
         }
 
@@ -1380,9 +1380,9 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.MiscCostTemplates.Add(edit);
+            Template.Templates.MiscCostTemplates.Add(edit);
             var expected = new ObservableCollection<TECMisc>();
-            foreach (TECMisc item in Template.MiscCostTemplates)
+            foreach (TECMisc item in Template.Templates.MiscCostTemplates)
             {
                 expected.Add(item);
             }
@@ -1390,7 +1390,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECMisc> actual = Template.MiscCostTemplates;
+            ObservableCollection<TECMisc> actual = Template.Templates.MiscCostTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }

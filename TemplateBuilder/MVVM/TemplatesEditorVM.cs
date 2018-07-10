@@ -48,7 +48,7 @@ namespace TemplateBuilder.MVVM
         public TemplatesEditorVM(TECTemplates templates)
         {
             Templates = templates;
-            ScopeCollection = new ScopeCollectionsTabVM(templates, templates.Catalogs);
+            ScopeCollection = new ScopeCollectionsTabVM(templates);
             MaterialsTab = new MaterialVM(templates);
             MaterialsTab.SelectionChanged += obj => {
                 Selected = obj;
@@ -82,7 +82,7 @@ namespace TemplateBuilder.MVVM
 
         private void AddParametersExecute()
         {
-            Templates.Parameters.Add(new TECParameters(Guid.NewGuid()));
+            Templates.Templates.Parameters.Add(new TECParameters(Guid.NewGuid()));
         }
     }
 }

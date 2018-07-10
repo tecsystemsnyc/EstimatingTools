@@ -69,6 +69,7 @@ namespace EstimatingUtilitiesLibrary.Database
             TECBid bid = getObjectFromTable(new BidInfoTable(), id => { return new TECBid(id); }, new TECBid());
 
             getScopeManagerProperties(bid);
+            bid.Templates = loadScopeTemplates(bid.Catalogs);
             List<TECLocation> locations = getObjectsFromTable(new LocationTable(), id => new TECLocation(id));
             Dictionary<Guid, List<TECLocation>> bidLocations = getOneToManyRelationships(new BidLocationTable(), locations);
             bid.Locations = bidLocations.ValueOrNew(bid.Guid);
@@ -108,20 +109,30 @@ namespace EstimatingUtilitiesLibrary.Database
             TECTemplates templates = new TECTemplates();
             templates = getObjectFromTable(new TemplatesInfoTable(), id => { return new TECTemplates(id); }, new TECTemplates());
             getScopeManagerProperties(templates);
+            templates.Templates = loadScopeTemplates(templates.Catalogs);
+            
+            Dictionary<Guid, List<Guid>> templateReferences = getTemplateReferences();
+            bool needsSave = ModelLinkingHelper.LinkLoadedTemplates(templates, templateReferences);
+            return (templates, needsSave);
+        }
+        private static ScopeTemplates loadScopeTemplates(TECCatalogs catalogs)
+        {
+            ScopeTemplates templates = new ScopeTemplates();
+            templates = getObjectFromTable(new ScopeTemplatesTable(), id => { return new ScopeTemplates(id); }, new ScopeTemplates());
 
-            Dictionary<Guid, List<TECTag>> tagRelationships = getOneToManyRelationships(new ScopeTagTable(), templates.Catalogs.Tags);
-            Dictionary<Guid, List<TECAssociatedCost>> costRelationships = getOneToManyRelationships(new ScopeAssociatedCostTable(), templates.Catalogs.AssociatedCosts);
+            Dictionary<Guid, List<TECTag>> tagRelationships = getOneToManyRelationships(new ScopeTagTable(), catalogs.Tags);
+            Dictionary<Guid, List<TECAssociatedCost>> costRelationships = getOneToManyRelationships(new ScopeAssociatedCostTable(), catalogs.AssociatedCosts);
 
-            List<IEndDevice> allEndDevices = new List<IEndDevice>(templates.Catalogs.Devices);
-            allEndDevices.AddRange(templates.Catalogs.Valves);
+            List<IEndDevice> allEndDevices = new List<IEndDevice>(catalogs.Devices);
+            allEndDevices.AddRange(catalogs.Valves);
             Dictionary<Guid, List<IEndDevice>> endDevices = getOneToManyRelationships(new SubScopeDeviceTable(), allEndDevices);
-            Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes = getOneToOneRelationships(new ConnectionConduitTypeTable(), templates.Catalogs.ConduitTypes);
-            Dictionary<Guid, List<TECIOModule>> providedControllerModuleRelationships = getOneToManyRelationships(new ProvidedControllerIOModuleTable(), templates.Catalogs.IOModules);
+            Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes = getOneToOneRelationships(new ConnectionConduitTypeTable(), catalogs.ConduitTypes);
+            Dictionary<Guid, List<TECIOModule>> providedControllerModuleRelationships = getOneToManyRelationships(new ProvidedControllerIOModuleTable(), catalogs.IOModules);
 
-            Dictionary<Guid, TECControllerType> providedControllerTypeDictionary = getOneToOneRelationships(new ProvidedControllerControllerTypeTable(), templates.Catalogs.ControllerTypes);
-            Dictionary<Guid, TECPanelType> panelTypeDictionary = getOneToOneRelationships(new PanelPanelTypeTable(), templates.Catalogs.PanelTypes);
-            Dictionary<Guid, TECProtocol> connectionProtocol = getOneToOneRelationships(new NetworkConnectionProtocolTable(), templates.Catalogs.Protocols);
-            Dictionary<Guid, List<TECConnectionType>> hardwiredConnectionTypes = getOneToManyRelationships(new HardwiredConnectionConnectionTypeTable(), templates.Catalogs.ConnectionTypes);
+            Dictionary<Guid, TECControllerType> providedControllerTypeDictionary = getOneToOneRelationships(new ProvidedControllerControllerTypeTable(), catalogs.ControllerTypes);
+            Dictionary<Guid, TECPanelType> panelTypeDictionary = getOneToOneRelationships(new PanelPanelTypeTable(), catalogs.PanelTypes);
+            Dictionary<Guid, TECProtocol> connectionProtocol = getOneToOneRelationships(new NetworkConnectionProtocolTable(), catalogs.Protocols);
+            Dictionary<Guid, List<TECConnectionType>> hardwiredConnectionTypes = getOneToManyRelationships(new HardwiredConnectionConnectionTypeTable(), catalogs.ConnectionTypes);
 
             List<TECSystem> systems = getObjectsFromTable(new SystemTable(), id => new TECSystem(id));
             List<TECEquipment> equipment = getObjectsFromTable(new EquipmentTable(), id => new TECEquipment(id));
@@ -129,7 +140,7 @@ namespace EstimatingUtilitiesLibrary.Database
             List<TECPoint> points = getObjectsFromTable(new PointTable(), id => new TECPoint(id));
             List<TECMisc> misc = getObjectsFromTable(new MiscTable(), data => getMiscFromRow(data));
             List<TECProvidedController> providedControllers = getObjectsFromTable(new ProvidedControllerTable(), data => getProvidedControllerFromRow(data, providedControllerTypeDictionary));
-            List<TECFBOController> fboControllers = getObjectsFromTable(new FBOControllerTable(), id => new TECFBOController(id, templates.Catalogs));
+            List<TECFBOController> fboControllers = getObjectsFromTable(new FBOControllerTable(), id => new TECFBOController(id, catalogs));
             List<TECController> controllers = new List<TECController>(providedControllers);
             controllers.AddRange(fboControllers);
             List<TECPanel> panels = getObjectsFromTable(new PanelTable(), data => getPanelFromRow(data, panelTypeDictionary));
@@ -140,7 +151,7 @@ namespace EstimatingUtilitiesLibrary.Database
             allNetworkConnectable.AddRange(controllers);
             Dictionary<Guid, List<IConnectable>> networkChildrenRelationships = getOneToManyRelationships(new NetworkConnectionChildrenTable(), allNetworkConnectable);
             Dictionary<Guid, TECSubScope> subScopeConnectionChildrenRelationships = getOneToOneRelationships(new SubScopeConnectionChildrenTable(), subScope);
-            
+
             List<TECHardwiredConnection> subScopeConnections = getObjectsFromTable(new SubScopeConnectionTable(), id => new TECHardwiredConnection(id, subScopeConnectionChildrenRelationships[id],
                 connectionParents[id], new TECHardwiredProtocol(hardwiredConnectionTypes[id])));
             List<TECNetworkConnection> networkConnections = getObjectsFromTable(new NetworkConnectionTable(), id => new TECNetworkConnection(id, connectionParents[id], connectionProtocol[id]));
@@ -151,7 +162,7 @@ namespace EstimatingUtilitiesLibrary.Database
             List<TECScopeBranch> scopeBranches = getObjectsFromTable(new ScopeBranchTable(), id => new TECScopeBranch(id));
             scopeBranches.ForEach(x => linkBranchHierarchy(x, scopeBranches, branchHierarchy));
 
-            templates.Parameters = getObjectsFromTable(new ParametersTable(), id => new TECParameters(id)).ToOC();    
+            templates.Parameters = getObjectsFromTable(new ParametersTable(), id => new TECParameters(id)).ToOC();
 
             Dictionary<Guid, List<TECEquipment>> systemEquipment = getOneToManyRelationships(new SystemEquipmentTable(), equipment);
             Dictionary<Guid, List<TECController>> systemController = getOneToManyRelationships(new SystemControllerTable(), controllers);
@@ -161,7 +172,7 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<Guid, List<TECSubScope>> equipmentSubScope = getOneToManyRelationships(new EquipmentSubScopeTable(), subScope);
             Dictionary<Guid, List<TECPoint>> subScopePoint = getOneToManyRelationships(new SubScopePointTable(), points);
             Dictionary<Guid, List<IControllerConnection>> controllerConnection = getOneToManyRelationships(new ControllerConnectionTable(), connections);
-            
+
             subScope.ForEach(item => item.Points = subScopePoint.ValueOrNew(item.Guid));
             equipment.ForEach(item => item.SubScope = equipmentSubScope.ValueOrNew(item.Guid));
             foreach (TECSystem system in systems)
@@ -175,16 +186,17 @@ namespace EstimatingUtilitiesLibrary.Database
             controllers.ForEach(item => {
                 item.ChildrenConnections = controllerConnection.ValueOrNew(item.Guid);
             });
-            
+
             Dictionary<Guid, List<TECController>> panelControllerDictionary = getOneToManyRelationships(new PanelControllerTable(), controllers);
-            controllers.ForEach(item => { if (item is TECProvidedController provided) provided.IOModules = providedControllerModuleRelationships.ValueOrNew(provided.Guid);});
+            controllers.ForEach(item => { if (item is TECProvidedController provided) provided.IOModules = providedControllerModuleRelationships.ValueOrNew(provided.Guid); });
 
             subScope.ForEach(item => item.Devices = endDevices.ValueOrNew(item.Guid));
             panels.ForEach(item => item.Controllers = panelControllerDictionary.ValueOrNew(item.Guid));
-            
+
             subScopeConnections.ForEach(item => { populateSubScopeConnectionProperties(item, connectionConduitTypes); });
-            networkConnections.ForEach(item => { populateNetworkConnectionProperties(item, networkChildrenRelationships, 
-                connectionConduitTypes); });
+            networkConnections.ForEach(item => {
+                populateNetworkConnectionProperties(item, networkChildrenRelationships, connectionConduitTypes);
+            });
 
             Dictionary<Guid, List<Guid>> systemTemplates = getOneToManyRelationships(new TemplatesSystemTable());
             Dictionary<Guid, List<Guid>> equipmentTemplates = getOneToManyRelationships(new TemplatesEquipmentTable());
@@ -199,15 +211,13 @@ namespace EstimatingUtilitiesLibrary.Database
             templates.ControllerTemplates = getRelatedReferences(controllerTemplates.ContainsKey(templates.Guid) ? controllerTemplates[templates.Guid] : new List<Guid>(), controllers).ToOC();
             templates.PanelTemplates = getRelatedReferences(panelTemplates.ContainsKey(templates.Guid) ? panelTemplates[templates.Guid] : new List<Guid>(), panels).ToOC();
             templates.MiscCostTemplates = getRelatedReferences(miscTemplates.ContainsKey(templates.Guid) ? miscTemplates[templates.Guid] : new List<Guid>(), misc).ToOC();
-            
+
             List<TECScope> allScope = templates.GetAll<TECScope>();
             allScope.ForEach(item => populateScopeProperties(item, tagRelationships, costRelationships));
 
-            Dictionary<Guid, List<Guid>> templateReferences = getTemplateReferences();
-            bool needsSave = ModelLinkingHelper.LinkLoadedTemplates(templates, templateReferences);
-            return (templates, needsSave);
+            return templates;
         }
-
+        
         private static void getScopeManagerProperties(TECScopeManager scopeManager)
         {
             scopeManager.Catalogs = getCatalogs();

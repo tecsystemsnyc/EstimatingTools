@@ -19,13 +19,14 @@ namespace TECUserControlLibraryTests
         public void DeleteDeviceUserInputYes()
         {
             //Arrange
-            TECTemplates templates = new TECTemplates();
+            TECTemplates templatesManager = new TECTemplates();
+            ScopeTemplates templates = templatesManager.Templates;
 
             TECManufacturer man = new TECManufacturer();
-            templates.Catalogs.Manufacturers.Add(man);
+            templatesManager.Catalogs.Manufacturers.Add(man);
 
             TECDevice dev = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), man);
-            templates.Catalogs.Devices.Add(dev);
+            templatesManager.Catalogs.Devices.Add(dev);
 
             TECSystem sys = new TECSystem();
             templates.SystemTemplates.Add(sys);
@@ -51,12 +52,12 @@ namespace TECUserControlLibraryTests
                 .Setup(x => x.Show(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<MessageBoxButton>(), It.IsAny<MessageBoxImage>()))
                 .Returns(MessageBoxResult.Yes);
 
-            DeleteEndDeviceVM vm = new DeleteEndDeviceVM(dev, templates);
+            DeleteEndDeviceVM vm = new DeleteEndDeviceVM(dev, templatesManager);
             vm.messageBox = mockMessageBox.Object;
             vm.DeleteCommand.Execute(null);
 
             //Assert
-            Assert.IsFalse(templates.Catalogs.Devices.Contains(dev), "Device not removed from device templates properly.");
+            Assert.IsFalse(templatesManager.Catalogs.Devices.Contains(dev), "Device not removed from device templates properly.");
             Assert.IsFalse(sysSS.Devices.Contains(dev), "Device not removed from system template properly.");
             Assert.IsFalse(equipSS.Devices.Contains(dev), "Device not removed from equipment template properly.");
             Assert.IsFalse(ss.Devices.Contains(dev), "Device not removed from subscope template properly.");
@@ -66,13 +67,14 @@ namespace TECUserControlLibraryTests
         public void DeleteDeviceUserInputNo()
         {
             //Arrange
-            TECTemplates templates = new TECTemplates();
+            TECTemplates templatesManager = new TECTemplates();
+            ScopeTemplates templates = templatesManager.Templates;
 
             TECManufacturer man = new TECManufacturer();
-            templates.Catalogs.Manufacturers.Add(man);
+            templatesManager.Catalogs.Manufacturers.Add(man);
 
             TECDevice dev = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), man);
-            templates.Catalogs.Devices.Add(dev);
+            templatesManager.Catalogs.Devices.Add(dev);
 
             TECSystem sys = new TECSystem();
             templates.SystemTemplates.Add(sys);
@@ -98,12 +100,12 @@ namespace TECUserControlLibraryTests
                 .Setup(x => x.Show(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<MessageBoxButton>(), It.IsAny<MessageBoxImage>()))
                 .Returns(MessageBoxResult.No);
 
-            DeleteEndDeviceVM vm = new DeleteEndDeviceVM(dev, templates);
+            DeleteEndDeviceVM vm = new DeleteEndDeviceVM(dev, templatesManager);
             vm.messageBox = mockMessageBox.Object;
             vm.DeleteCommand.Execute(null);
 
             //Assert
-            Assert.IsTrue(templates.Catalogs.Devices.Contains(dev), "Device not removed from device templates properly.");
+            Assert.IsTrue(templatesManager.Catalogs.Devices.Contains(dev), "Device not removed from device templates properly.");
             Assert.IsTrue(sysSS.Devices.Contains(dev), "Device not removed from system template properly.");
             Assert.IsTrue(equipSS.Devices.Contains(dev), "Device not removed from equipment template properly.");
             Assert.IsTrue(ss.Devices.Contains(dev), "Device not removed from subscope template properly.");

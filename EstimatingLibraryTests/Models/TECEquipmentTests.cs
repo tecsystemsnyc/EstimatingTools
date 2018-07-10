@@ -19,11 +19,11 @@ namespace Models
             TECTemplates templates = new TECTemplates();
 
             TECEquipment tempEquip = new TECEquipment();
-            templates.EquipmentTemplates.Add(tempEquip);
+            templates.Templates.EquipmentTemplates.Add(tempEquip);
 
             TECSubScope tempSS = new TECSubScope();
             tempSS.Name = "Template SS";
-            templates.SubScopeTemplates.Add(tempSS);
+            templates.Templates.SubScopeTemplates.Add(tempSS);
             tempEquip.SubScope.Add(templates.SubScopeSynchronizer.NewItem(tempSS));
 
             TECSubScope equipSS = new TECSubScope();

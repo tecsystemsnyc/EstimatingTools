@@ -101,6 +101,36 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+    internal class ScopeTemplatesTable : TableBase
+    {
+        #region static
+        public static string TableName = "ScopeTemplates";
+        public static Type ObjectType = typeof(ScopeTemplates);
+
+        public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
+        #endregion
+
+        private List<TableField> fields = new List<TableField>()
+        {
+            ID
+        };
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ID
+        };
+        private List<Type> types = new List<Type>() {
+            ObjectType
+        };
+        private List<string> propertyNames = new List<string>();
+
+        public override string NameString { get { return TableName; } }
+        public override List<TableField> Fields { get { return fields; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+
+    }
+
     internal class ParametersTable : TableBase
     {
         public static string TableName = "Parameters";
@@ -2929,7 +2959,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class TemplatesSystemTable : TableBase
     {
         public static string TableName = "TemplatesSystem";
-        public static Type TemplatesType = typeof(TECTemplates);
+        public static Type TemplatesType = typeof(ScopeTemplates);
         public static Type ScopeType = typeof(TECSystem);
 
         public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
@@ -2964,7 +2994,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class TemplatesEquipmentTable : TableBase
     {
         public static string TableName = "TemplatesEquipment";
-        public static Type TemplatesType = typeof(TECTemplates);
+        public static Type TemplatesType = typeof(ScopeTemplates);
         public static Type ScopeType = typeof(TECEquipment);
 
         public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
@@ -2999,7 +3029,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class TemplatesSubScopeTable : TableBase
     {
         public static string TableName = "TemplatesSubScope";
-        public static Type TemplatesType = typeof(TECTemplates);
+        public static Type TemplatesType = typeof(ScopeTemplates);
         public static Type ScopeType = typeof(TECSubScope);
 
         public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
@@ -3034,7 +3064,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class TemplatesControllerTable : TableBase
     {
         public static string TableName = "TemplatesController";
-        public static Type TemplatesType = typeof(TECTemplates);
+        public static Type TemplatesType = typeof(ScopeTemplates);
         public static Type ScopeType = typeof(TECController);
 
         public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
@@ -3069,7 +3099,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class TemplatesMiscCostTable : TableBase
     {
         public static string TableName = "TemplatesMiscCost";
-        public static Type TemplatesType = typeof(TECTemplates);
+        public static Type TemplatesType = typeof(ScopeTemplates);
         public static Type ScopeType = typeof(TECMisc);
 
         public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
@@ -3104,7 +3134,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class TemplatesPanelTable : TableBase
     {
         public static string TableName = "TemplatesPanel";
-        public static Type TemplatesType = typeof(TECTemplates);
+        public static Type TemplatesType = typeof(ScopeTemplates);
         public static Type ScopeType = typeof(TECPanel);
 
         public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
@@ -3328,6 +3358,47 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+    internal class ManagerTemplatesTable : TableBase
+    {
+        public static string TableName = "ManagerTemplates";
+        public static Type ObjectType = typeof(TECScopeManager);
+        public static Type ReferenceType = typeof(ScopeTemplates);
+
+        public static TableField ManagerID = new TableField("ManagerID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", ReferenceType.GetProperty("Guid"));
+
+        public static Type HelperType = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"), "Templates", "0");
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ManagerID,
+            TemplatesID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ManagerID,
+            TemplatesID,
+            Index
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Templates"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    
     #endregion
 
     internal static class AllBidTables
@@ -3365,6 +3436,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new InternalNoteTable(),
             new ProtocolTable(),
             new InterlockConnectionTable(),
+            new ScopeTemplatesTable(),
           
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -3414,7 +3486,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new HardwiredConnectionConnectionTypeTable(),
             new InterlockableInterlockTable(),
             new InterlockConnectionConnectionTypeTable(),
-            new ScheduleItemLocationTable()
+            new ScheduleItemLocationTable(),
+            new ManagerTemplatesTable()
             };
     }
 
@@ -3444,6 +3517,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new ValveTable(),
             new ProtocolTable(),
             new InterlockConnectionTable(),
+            new ScopeTemplatesTable(),
 
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -3491,7 +3565,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new IOProtocolTable(),
             new HardwiredConnectionConnectionTypeTable(),
             new InterlockableInterlockTable(),
-            new InterlockConnectionConnectionTypeTable()
+            new InterlockConnectionConnectionTypeTable(),
+            new ManagerTemplatesTable()
         };
     }
 

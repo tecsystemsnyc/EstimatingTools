@@ -140,24 +140,12 @@ namespace TECUserControlLibrary.ViewModels
         #endregion //Properties
 
         #region Methods
-        public void Refresh(TECBid bid, TECTemplates templates, ChangeWatcher watcher)
-        {
-            Bid = bid;
-            Templates = templates;
-
-            ScopeCollection.Refresh(Templates, bid.Catalogs);
-            ControllersPanelsTab.Refresh(Bid);
-            MiscVM.Refresh(Bid);
-            TypicalEditVM.Refresh(Bid);
-            PropertiesVM.Refresh(bid.Catalogs, bid);
-            WorkBoxVM.Refresh(bid);
-        }
 
         #region Setup Extensions
 
         private void setupScopeCollection()
         {
-            ScopeCollection = new ScopeCollectionsTabVM(Templates, Bid.Catalogs);
+            ScopeCollection = new ScopeCollectionsTabVM(Bid);
             ScopeCollection.DragHandler += DragOver;
             ScopeCollection.DropHandler += Drop;
         }

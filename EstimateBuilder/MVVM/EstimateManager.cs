@@ -448,9 +448,9 @@ namespace EstimateBuilder.MVVM
         protected override TECBid getNewWorkingScope()
         {
             TECBid outBid = new TECBid();
-            if(templates!= null && templates.Parameters.Count > 0)
+            if(templates!= null && templates.Templates.Parameters.Count > 0)
             {
-                outBid.Parameters = templates.Parameters[0];
+                outBid.Parameters = templates.Templates.Parameters[0];
             }
             return outBid;
         }
