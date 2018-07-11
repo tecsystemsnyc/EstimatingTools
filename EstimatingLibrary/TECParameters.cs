@@ -6,21 +6,21 @@ namespace EstimatingLibrary
     public class TECParameters : TECLabeled
     {
         #region Properties
-        private double _escalation;
-        private double _subcontractorEscalation;
-        private double _warranty;
-        private double _shipping;
-        private double _tax;
-        private double _subcontractorWarranty;
-        private double _subcontractorShipping;
-        private double _bondRate;
-        private double _overtimeRatio;
-        private double _markup;
+        private double _escalation = 0;
+        private double _subcontractorEscalation = 0;
+        private double _warranty = 5.0;
+        private double _shipping = 3.0;
+        private double _tax = 8.75;
+        private double _subcontractorWarranty = 5.0;
+        private double _subcontractorShipping = 3.0;
+        private double _bondRate = 0;
+        private double _overtimeRatio = 1.5;
+        private double _markup = 20.0;
 
-        private bool _isTaxExempt;
-        private bool _requiresBond;
-        private bool _requiresWrapUp;
-        private bool _hasBMS;
+        private bool _isTaxExempt = false;
+        private bool _requiresBond = false;
+        private bool _requiresWrapUp = false;
+        private bool _hasBMS = true;
 
         public double Escalation
         {
@@ -166,7 +166,7 @@ namespace EstimatingLibrary
         #endregion
         #region Labor
 
-        private Confidence _desiredConfidence;
+        private Confidence _desiredConfidence = Confidence.NinetyFive;
         public Confidence DesiredConfidence
         {
             get { return _desiredConfidence; }
@@ -184,7 +184,7 @@ namespace EstimatingLibrary
         }
 
         #region PM
-        private double _pmCoef;
+        private double _pmCoef = 1;
         public double PMCoef
         {
             get { return _pmCoef; }
@@ -196,7 +196,7 @@ namespace EstimatingLibrary
             }
         }
 
-        private double _pmCoefStdError;
+        private double _pmCoefStdError = 1;
         public double PMCoefStdError
         {
             get { return _pmCoefStdError; }
@@ -208,7 +208,7 @@ namespace EstimatingLibrary
             }
         }
 
-        private double _pmRate;
+        private double _pmRate = 0;
         public double PMRate
         {
             get { return _pmRate; }
@@ -229,7 +229,7 @@ namespace EstimatingLibrary
         #endregion PM
 
         #region ENG
-        private double _engCoef;
+        private double _engCoef = 1;
         public double ENGCoef
         {
             get { return _engCoef; }
@@ -243,7 +243,7 @@ namespace EstimatingLibrary
             }
         }
 
-        private double _engCoefStdError;
+        private double _engCoefStdError = 1;
         public double ENGCoefStdError
         {
             get { return _engCoefStdError; }
@@ -255,7 +255,7 @@ namespace EstimatingLibrary
             }
         }
 
-        private double _engRate;
+        private double _engRate = 0;
         public double ENGRate
         {
             get { return _engRate; }
@@ -277,7 +277,7 @@ namespace EstimatingLibrary
         #endregion ENG
 
         #region Comm
-        private double _commCoef;
+        private double _commCoef = 1;
         public double CommCoef
         {
             get { return _commCoef; }
@@ -292,7 +292,7 @@ namespace EstimatingLibrary
             }
         }
 
-        private double _commCoefStdError;
+        private double _commCoefStdError = 1;
         public double CommCoefStdError
         {
             get { return _commCoefStdError; }
@@ -304,7 +304,7 @@ namespace EstimatingLibrary
             }
         }
 
-        private double _commRate;
+        private double _commRate = 0;
         public double CommRate
         {
             get { return _commRate; }
@@ -326,7 +326,7 @@ namespace EstimatingLibrary
         #endregion Comm
 
         #region Soft
-        private double _softCoef;
+        private double _softCoef = 1;
         public double SoftCoef
         {
             get { return _softCoef; }
@@ -341,7 +341,7 @@ namespace EstimatingLibrary
             }
         }
 
-        private double _softCoefStdError;
+        private double _softCoefStdError = 1;
         public double SoftCoefStdError
         {
             get { return _softCoefStdError; }
@@ -353,7 +353,7 @@ namespace EstimatingLibrary
             }
         }
 
-        private double _softRate;
+        private double _softRate = 0;
         public double SoftRate
         {
             get { return _softRate; }
@@ -373,7 +373,7 @@ namespace EstimatingLibrary
         #endregion Soft
 
         #region Graph
-        private double _graphCoef;
+        private double _graphCoef = 1;
         public double GraphCoef
         {
             get { return _graphCoef; }
@@ -386,7 +386,7 @@ namespace EstimatingLibrary
             }
         }
 
-        private double _graphCoefStdError;
+        private double _graphCoefStdError = 1;
         public double GraphCoefStdError
         {
             get { return _graphCoefStdError; }
@@ -398,7 +398,7 @@ namespace EstimatingLibrary
             }
         }
 
-        private double _graphRate;
+        private double _graphRate = 0;
         public double GraphRate
         {
             get { return _graphRate; }
@@ -418,7 +418,7 @@ namespace EstimatingLibrary
         #endregion Graph
 
         #region Electrical
-        private double _electricalRate;
+        private double _electricalRate = 0;
         public double ElectricalRate
         {
             get { return _electricalRate; }
@@ -431,7 +431,7 @@ namespace EstimatingLibrary
             }
         }
 
-        private double _electricalNonUnionRate;
+        private double _electricalNonUnionRate = 0;
         public double ElectricalNonUnionRate
         {
             get { return _electricalNonUnionRate; }
@@ -469,7 +469,7 @@ namespace EstimatingLibrary
             }
         }
 
-        private double _electricalSuperRate;
+        private double _electricalSuperRate = 0;
         public double ElectricalSuperRate
         {
             get { return _electricalSuperRate; }
@@ -482,7 +482,7 @@ namespace EstimatingLibrary
             }
         }
 
-        private double _electricalSuperNonUnionRate;
+        private double _electricalSuperNonUnionRate = 0;
         public double ElectricalSuperNonUnionRate
         {
             get { return _electricalSuperNonUnionRate; }
@@ -520,7 +520,7 @@ namespace EstimatingLibrary
             }
         }
 
-        private bool _electricalIsOnOvertime;
+        private bool _electricalIsOnOvertime = false;
         public bool ElectricalIsOnOvertime
         {
             get { return _electricalIsOnOvertime; }
@@ -533,7 +533,7 @@ namespace EstimatingLibrary
             }
         }
 
-        private bool _electricalIsUnion;
+        private bool _electricalIsUnion = true;
         public bool ElectricalIsUnion
         {
             get { return _electricalIsUnion; }
@@ -546,7 +546,7 @@ namespace EstimatingLibrary
             }
         }
 
-        private double _electricalSuperRatio;
+        private double _electricalSuperRatio = 0.1429;
         public double ElectricalSuperRatio
         {
             get { return _electricalSuperRatio; }
@@ -563,49 +563,6 @@ namespace EstimatingLibrary
         #endregion
         public TECParameters(Guid guid) : base(guid)
         {
-            _isTaxExempt = false;
-            _requiresBond = false;
-            _requiresWrapUp = false;
-            _hasBMS = true;
-
-            _desiredConfidence = Confidence.NinetyFive;
-
-            _escalation = 0;
-            _subcontractorEscalation = 0;
-            _warranty = 5.0;
-            _shipping = 3.0;
-            _tax = 8.75;
-
-            _subcontractorShipping = 3.0;
-            _subcontractorWarranty = 5.0;
-
-            _pmCoef = 1.0;
-            _pmCoefStdError = 1.0;
-            _pmRate = 0;
-
-            _engCoef = 1.0;
-            _engCoefStdError = 1.0;
-            _engRate = 0;
-
-            _commCoef = 1.0;
-            _commCoefStdError = 1.0;
-            _commRate = 0;
-
-            _softCoef = 1.0;
-            _softCoefStdError = 1.0;
-            _softRate = 0;
-
-            _graphCoef = 1.0;
-            _graphCoefStdError = 1.0;
-            _graphRate = 0;
-
-            _electricalRate = 0;
-            _electricalNonUnionRate = 0;
-            _electricalSuperRate = 0;
-            _electricalSuperNonUnionRate = 0;
-
-            _electricalIsOnOvertime = false;
-            _electricalIsUnion = true;
         }
 
         public TECParameters(TECParameters parametersSource) : this(parametersSource.Guid)
@@ -617,7 +574,15 @@ namespace EstimatingLibrary
 
             _escalation = parametersSource.Escalation;
             _subcontractorEscalation = parametersSource.SubcontractorEscalation;
-
+            _warranty = parametersSource.Warranty;
+            _shipping = parametersSource.Shipping;
+            _tax = parametersSource.Tax;
+            _subcontractorWarranty = parametersSource.SubcontractorWarranty;
+            _subcontractorShipping = parametersSource.SubcontractorShipping;
+            _bondRate = parametersSource.BondRate;
+            _overtimeRatio = parametersSource.OvertimeRatio;
+            _markup = parametersSource.Markup;
+            
             _desiredConfidence = parametersSource.DesiredConfidence;
 
             _pmCoef = parametersSource.PMCoef;
