@@ -24,7 +24,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             XLWorkbook workbook = new XLWorkbook();
 
             createSummarySheet(workbook, bid, estimate);
-            MaterialSummaryExport.AddControllersSheet(workbook, bid, "Controller Hardware");
+            MaterialSummaryExport.AddControllersSheet(workbook, bid, estimate, "Controller Hardware");
             MaterialSummaryExport.AddPanelsSheet(workbook, bid, "Panel Hardware");
             MaterialSummaryExport.AddDevicesSheet(workbook, bid);
             MaterialSummaryExport.AddValvesSheet(workbook, bid);
