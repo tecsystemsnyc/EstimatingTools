@@ -12,8 +12,9 @@ namespace TemplateBuilder.MVVM
 {
     public class TemplatesEditorVM : ViewModelBase, EditorVM, IDropTarget
     {
-        private TECTemplates _templates;
+        private ScopeTemplates _templates;
         private object _selected;
+        private TECTemplates manager;
 
         public ScopeCollectionsTabVM ScopeCollection { get; }
         public MaterialVM MaterialsTab { get; }
@@ -23,7 +24,7 @@ namespace TemplateBuilder.MVVM
         public PropertiesVM PropertiesVM { get; }
         public MiscCostsVM MiscVM { get; }
 
-        public TECTemplates Templates
+        public ScopeTemplates Templates
         {
             get { return _templates; }
             set
@@ -45,25 +46,26 @@ namespace TemplateBuilder.MVVM
         }
         public ICommand AddParameterCommand { get; private set; }
 
-        public TemplatesEditorVM(TECTemplates templates)
+        public TemplatesEditorVM(TECTemplates templatesManager)
         {
-            Templates = templates;
-            ScopeCollection = new ScopeCollectionsTabVM(templates);
-            MaterialsTab = new MaterialVM(templates);
+            manager = templatesManager;
+            Templates = templatesManager.Templates;
+            ScopeCollection = new ScopeCollectionsTabVM(templatesManager);
+            MaterialsTab = new MaterialVM(templatesManager);
             MaterialsTab.SelectionChanged += obj => {
                 Selected = obj;
             };
-            SystemHierarchyVM = new SystemHierarchyVM(templates, true);
+            SystemHierarchyVM = new SystemHierarchyVM(templatesManager, true);
             SystemHierarchyVM.Selected += obj => { Selected = obj; };
-            EquipmentHierarchyVM = new EquipmentHierarchyVM(templates);
+            EquipmentHierarchyVM = new EquipmentHierarchyVM(templatesManager);
             EquipmentHierarchyVM.Selected += obj => { Selected = obj; };
-            SubScopeHierarchyVM = new SubScopeHierarchyVM(templates);
+            SubScopeHierarchyVM = new SubScopeHierarchyVM(templatesManager);
             SubScopeHierarchyVM.Selected += obj => { Selected = obj; };
 
-            MiscVM = new MiscCostsVM(templates);
+            MiscVM = new MiscCostsVM(templatesManager);
             MiscVM.SelectionChanged += obj => { Selected = obj; };
             
-            PropertiesVM = new PropertiesVM(templates.Catalogs, templates);
+            PropertiesVM = new PropertiesVM(templatesManager.Catalogs, templatesManager);
 
             AddParameterCommand = new RelayCommand(AddParametersExecute);
 
@@ -77,12 +79,12 @@ namespace TemplateBuilder.MVVM
         }
         public void Drop(IDropInfo dropInfo)
         {
-            UIHelpers.StandardDrop(dropInfo, Templates);
+            UIHelpers.StandardDrop(dropInfo, manager);
         }
 
         private void AddParametersExecute()
         {
-            Templates.Templates.Parameters.Add(new TECParameters(Guid.NewGuid()));
+            Templates.Parameters.Add(new TECParameters(Guid.NewGuid()));
         }
     }
 }
