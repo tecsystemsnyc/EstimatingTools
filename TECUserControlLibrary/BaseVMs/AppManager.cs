@@ -167,6 +167,7 @@ namespace TECUserControlLibrary.BaseVMs
                     databaseManager = new DatabaseManager<T>(loadFilePath);
                     databaseManager.LoadComplete += handleLoadComplete;
                     databaseManager.AsyncLoad();
+                    setDefaultDirectory(loadFilePath);
                 }
                 else
                 {
@@ -237,6 +238,7 @@ namespace TECUserControlLibrary.BaseVMs
                 databaseManager.SaveComplete += handleSaveNewComplete;
                 databaseManager.AsyncNew(getWorkingScope());
                 buildTitleString(saveFilePath, appName);
+                setDefaultDirectory(saveFilePath);
             }
             else
             {
@@ -503,6 +505,7 @@ namespace TECUserControlLibrary.BaseVMs
             logger.Warn(message);
             MessageBox.Show(message, "File Locked", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
+        protected abstract void setDefaultDirectory(string path);
     }
     
 }
