@@ -3,6 +3,7 @@ using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
 using EstimatingUtilitiesLibrary.Database;
 using EstimatingUtilitiesLibrary.Exports;
+using GalaSoft.MvvmLight.CommandWpf;
 using NLog;
 using System;
 using System.IO;
@@ -25,6 +26,43 @@ namespace EstimateBuilder.MVVM
 
         private string currentBidPath = "";
         private string currentTemplatesPath = "";
+
+        private bool showPopup;
+        public bool ShowPopup
+        {
+            get
+            {
+                return showPopup;
+            }
+            set
+            {
+                showPopup = value;
+                RaisePropertyChanged("ShowPopup");
+            }
+        }
+
+        private bool replaceScope = true;
+        private bool replaceCatalogs = false;
+        public bool ReplaceScope
+        {
+            get { return replaceScope; }
+            set
+            {
+                replaceScope = value;
+                RaisePropertyChanged("ReplaceScope");
+            }
+        }
+        public bool ReplaceCatalogs
+        {
+            get { return replaceCatalogs; }
+            set
+            {
+                replaceCatalogs = value;
+                RaisePropertyChanged("ReplaceCatalogs");
+            }
+        }
+        public RelayCommand LoadTemplatesCommand { get; private set; }
+        public RelayCommand CancelLoadTemplatesCommand { get; private set; }
 
         /// <summary>
         /// Estimate-typed splash vm for manipulation
@@ -79,13 +117,15 @@ namespace EstimateBuilder.MVVM
         {
             get { return EBSettings.TemplatesDirectory; }
         }
+
+        
         #endregion
 
         public EstimateManager() : base("Estimate Builder", 
-            new EstimateSplashVM(templatesPath: EBSettings.FirstRecentTemplates, defaultDirectory: EBSettings.BidDirectory, defaultTemplatesDirectory: EBSettings.TemplatesDirectory),
+            new EstimateSplashVM(defaultDirectory: EBSettings.BidDirectory, defaultTemplatesDirectory: EBSettings.TemplatesDirectory),
             new EstimateMenuVM())
         {
-            splashVM.BidPath = EBSettings.StartUpFilePath;
+            splashVM.FilePath = EBSettings.StartUpFilePath;
             splashVM.EditorStarted += userStartedEditorHandler;
             TitleString = "Estimate Builder";
             setupCommands();
@@ -97,7 +137,6 @@ namespace EstimateBuilder.MVVM
             this.currentTemplatesPath = templatesFilePath;
             
             updateRecentBidSettings(bidFilePath);
-            updateRecentTemplatesSettings(templatesFilePath);
 
             buildTitleString(bidFilePath, "Estimate Builder");
             DatabaseManager<TECTemplates> templatesDatabaseManager = null;
@@ -157,8 +196,22 @@ namespace EstimateBuilder.MVVM
         }
         private void handleLoadedTemplates(TECTemplates templates)
         {
-            bid.Catalogs.Fill(templates.Catalogs);
-            bid.Templates.Fill(templates.Templates);
+            if (ReplaceScope)
+            {
+                bid.Templates.Unionize(templates.Templates);
+            }
+            else
+            {
+                bid.Templates.Fill(templates.Templates);
+            }
+            if (ReplaceCatalogs)
+            {
+                bid.Catalogs.Unionize(templates.Catalogs);
+            }
+            else
+            {
+                bid.Catalogs.Fill(templates.Catalogs);
+            }
             ModelLinkingHelper.LinkBidToCatalogs(bid);
             estimate = new TECEstimator(bid, watcher);
             EditorVM = new EstimateEditorVM(bid, watcher, estimate);
@@ -167,7 +220,10 @@ namespace EstimateBuilder.MVVM
         #region Menu Commands Methods
         private void setupCommands()
         {
-            menuVM.SetLoadTemplatesCommand(loadTemplatesExecute, canLoadTemplates);
+            LoadTemplatesCommand = new RelayCommand(loadTemplatesExecute, canLoadTemplates);
+            CancelLoadTemplatesCommand = new RelayCommand(cancelLoadTemplatesExecute);
+
+            menuVM.SetLoadTemplatesCommand(openLoadTemplatesPopup, canLoadTemplates);
             menuVM.SetRefreshBidCommand(refreshExecute, canRefresh);
             menuVM.SetExportProposalCommand(exportProposalExecute, canExportProposal);
             menuVM.SetExportTurnoverCommand(exportTurnoverExecute, canExportTurnover);
@@ -180,12 +236,19 @@ namespace EstimateBuilder.MVVM
         }
         
         //Load Templates
+        private void openLoadTemplatesPopup()
+        {
+            ShowPopup = true;
+        }
+        private void cancelLoadTemplatesExecute()
+        {
+            ShowPopup = false;
+        }
         private void loadTemplatesExecute()
         {
+            ShowPopup = false;
             string message = "Would you like to save your changes before loading new templates?";
-
             checkForChanges(message, loadTemplates);
-
             void loadTemplates()
             {
                 string loadFilePath = UIHelpers.GetLoadPath(FileDialogParameters.TemplatesFileParameters, defaultTemplatesDirectory);
@@ -466,75 +529,6 @@ namespace EstimateBuilder.MVVM
                 else
                 {
                     EBSettings.FifthRecentBid = limbo;
-                }
-
-                EBSettings.Save();
-            }
-        }
-        private void updateRecentTemplatesSettings(string templatesPath)
-        {
-            if (templatesPath != null && templatesPath != "")
-            {
-                string first = EBSettings.FirstRecentTemplates;
-                string second = EBSettings.SecondRecentTemplates;
-                string third = EBSettings.ThirdRecentTemplates;
-                string fourth = EBSettings.FourthRecentTemplates;
-                string fifth = EBSettings.FifthRecentTemplates;
-
-                string limbo = templatesPath;
-
-                if (limbo == first)
-                {
-                    EBSettings.Save();
-                    return;
-                }
-                else
-                {
-                    EBSettings.FirstRecentTemplates = limbo;
-                    limbo = first;
-                }
-
-                if (limbo == second)
-                {
-                    EBSettings.Save();
-                    return;
-                }
-                else
-                {
-                    EBSettings.SecondRecentTemplates = limbo;
-                    limbo = second;
-                }
-
-                if (limbo == third)
-                {
-                    EBSettings.Save();
-                    return;
-                }
-                else
-                {
-                    EBSettings.ThirdRecentTemplates = limbo;
-                    limbo = third;
-                }
-
-                if (limbo == fourth)
-                {
-                    EBSettings.Save();
-                    return;
-                }
-                else
-                {
-                    EBSettings.FourthRecentTemplates = limbo;
-                    limbo = fourth;
-                }
-
-                if (limbo == fifth)
-                {
-                    EBSettings.Save();
-                    return;
-                }
-                else
-                {
-                    EBSettings.FifthRecentTemplates = limbo;
                 }
 
                 EBSettings.Save();

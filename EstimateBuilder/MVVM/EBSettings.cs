@@ -55,30 +55,10 @@ namespace EstimateBuilder.MVVM
         }
 
         //Template Files
-        public static string FirstRecentTemplates
+        public static string DefaultTemplatesPath
         {
-            get { return Properties.Settings.Default.FirstRecentTemplates; }
-            set { Properties.Settings.Default.FirstRecentTemplates = value; }
-        }
-        public static string SecondRecentTemplates
-        {
-            get { return Properties.Settings.Default.SecondRecentTemplates; }
-            set { Properties.Settings.Default.SecondRecentTemplates = value; }
-        }
-        public static string ThirdRecentTemplates
-        {
-            get { return Properties.Settings.Default.ThirdRecentTemplates; }
-            set { Properties.Settings.Default.ThirdRecentTemplates = value; }
-        }
-        public static string FourthRecentTemplates
-        {
-            get { return Properties.Settings.Default.FourthRecentTemplates; }
-            set { Properties.Settings.Default.FourthRecentTemplates = value; }
-        }
-        public static string FifthRecentTemplates
-        {
-            get { return Properties.Settings.Default.FifthRecentTemplates; }
-            set { Properties.Settings.Default.FifthRecentTemplates = value; }
+            get { return Properties.Settings.Default.DefaultTemplatesPath; }
+            set { Properties.Settings.Default.DefaultTemplatesPath = value; }
         }
         #endregion
 

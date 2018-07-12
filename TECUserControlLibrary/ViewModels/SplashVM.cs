@@ -14,7 +14,7 @@ namespace TECUserControlLibrary.ViewModels
         private string _titleText;
         private string _subtitleText;
         private string _loadingText;
-        private string _templatesPath;
+        private string _filePath;
 
         public string TitleText
         {
@@ -44,29 +44,30 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         public string Version { get; set; }
-        public string TemplatesPath
+        public string FilePath
         {
-            get { return _templatesPath; }
+            get { return _filePath; }
             set
             {
-                _templatesPath = value;
-                RaisePropertyChanged("TemplatesPath");
+                _filePath = value;
+                RaisePropertyChanged("FilePath");
             }
         }
+        abstract public string FileText { get; }
 
-        public ICommand GetTemplatesPathCommand { get; protected set; }
-        public ICommand ClearTemplatesPathCommand { get; protected set; }
+        public ICommand GetPathCommand { get; protected set; }
+        public ICommand ClearPathCommand { get; protected set; }
         public ICommand OpenExistingCommand { get; protected set; }
         public ICommand CreateNewCommand { get; protected set; }
 
         #region Recent Files Properties
-        public abstract string FirstRecentTemplates { get; }
-        public abstract string SecondRecentTemplates { get; }
-        public abstract string ThirdRecentTemplates { get; }
-        public abstract string FourthRecentTemplates { get; }
-        public abstract string FifthRecentTemplates { get; }
+        public abstract string FirstRecentFile{ get; }
+        public abstract string SecondRecentFile{ get; }
+        public abstract string ThirdRecentFile { get; }
+        public abstract string FourthRecentFile { get; }
+        public abstract string FifthRecentFile { get; }
 
-        public ICommand ChooseRecentTemplatesCommand { get; }
+        public ICommand ChooseRecentFileCommand { get; }
         #endregion
 
         public SplashVM(string titleText, string subtitleText, string defaultDirectory)
@@ -76,15 +77,15 @@ namespace TECUserControlLibrary.ViewModels
             _titleText = titleText;
             _subtitleText = subtitleText;
 
-            ChooseRecentTemplatesCommand = new RelayCommand<string>(chooseRecentTemplatesExecute, chooseRecentCanExecute);
+            ChooseRecentFileCommand = new RelayCommand<string>(chooseRecentFileExecute, chooseRecentCanExecute);
         }
 
         public abstract void DragOver(IDropInfo dropInfo);
         public abstract void Drop(IDropInfo dropInfo);
 
-        private void chooseRecentTemplatesExecute(string path)
+        private void chooseRecentFileExecute(string path)
         {
-            TemplatesPath = path;
+            FilePath = path;
         }
         protected bool chooseRecentCanExecute(string path)
         {

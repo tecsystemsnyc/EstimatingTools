@@ -60,7 +60,7 @@ namespace TemplateBuilder.MVVM
             string startUpFilePath = getStartUpFilePath();
             if (startUpFilePath != null && startUpFilePath != "")
             {
-                splashVM.TemplatesPath = startUpFilePath;
+                splashVM.FilePath = startUpFilePath;
             }
             splashVM.EditorStarted += userStartedEditorHandler;
             TitleString = "Template Builder";

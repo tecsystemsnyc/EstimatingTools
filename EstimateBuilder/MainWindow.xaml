@@ -77,20 +77,20 @@
                         </Grid.ColumnDefinitions>
 
                         <Image Source="{Binding ElementName=mainWindow, Path=DataContext.TECLogo}"
-                           Grid.Column="2"
-                           Grid.RowSpan="2"/>
+                               Grid.Column="2"
+                               Grid.RowSpan="2"/>
 
                         <TabControl Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3">
                             <TabItem Header="Scope Editor">
                                 <views:ScopeEditorView
-                                ViewModel="{Binding ScopeEditorVM}"/>
+                                    ViewModel="{Binding ScopeEditorVM}"/>
                             </TabItem>
                             <TabItem Header="Riser">
                                 <views:RiserView ViewModel="{Binding RiserVM}"/>
                             </TabItem>
                             <TabItem Header="Proposal">
                                 <views:ProposalView
-                                ViewModel="{Binding ProposalVM}"/>
+                                    ViewModel="{Binding ProposalVM}"/>
                             </TabItem>
                             <TabItem Header="Schedule">
                                 <views:ScheduleView
@@ -107,25 +107,78 @@
                             </TabItem>
                         </TabControl>
                         <views:StatusBarView ViewModel="{Binding ElementName=mainWindow, Path=DataContext.StatusBarVM}"
-                                                   Grid.Row="3" Grid.ColumnSpan="3"
-                                                   dd:DragDrop.IsDropTarget="True"
-                                                   dd:DragDrop.DropHandler="{Binding}"/>
+                                             Grid.Row="3" Grid.ColumnSpan="3"
+                                             dd:DragDrop.IsDropTarget="True"
+                                             dd:DragDrop.DropHandler="{Binding}"/>
+                        <Popup IsOpen="{Binding ElementName=mainWindow, Path=DataContext.ShowPopup}"
+                               Width="240" Height="200"
+                               PlacementTarget="{Binding ElementName=LayoutRoot}"
+                               Placement="Center"
+                               PopupAnimation="Slide"
+                               AllowsTransparency="True">
+                            <Border Style="{StaticResource ItemsAreaBorder}"
+                                    Background="{StaticResource SectionBackgroundBrush}">
+                                <Grid DataContext="{Binding ElementName=mainWindow, Path=DataContext}">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="30"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Style="{StaticResource HeaderBorder}" Grid.ColumnSpan="2">
+                                        <TextBlock Text="Load Templates"
+                                                   Style="{StaticResource ListHeader}"/>
+                                    </Border>
+                                    <TextBlock Text="Replace Existing Template Data?"
+                                               Grid.Row="1"/>
+                                    <CheckBox IsChecked="{Binding ReplaceScope}"
+                                              Grid.Row="1"
+                                              Grid.Column="1"
+                                              HorizontalAlignment="Center"/>
+                                    <TextBlock Text="Replace Existing Catalog Data?"
+                                               Grid.Row="2"/>
+                                    <CheckBox IsChecked="{Binding ReplaceCatalogs}"
+                                              Grid.Row="2"
+                                              Grid.Column="1"
+                                              HorizontalAlignment="Center"/>
+                                    <Grid Grid.Row="3" Grid.ColumnSpan="2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Button Content="Load File..."
+                                            Command="{Binding LoadTemplatesCommand}"
+                                            Margin="2"/>
+                                        <Button Content="Cancel"
+                                            Command="{Binding CancelLoadTemplatesCommand}"
+                                            Grid.Column="1"
+                                            Margin="2"/>
+                                    </Grid>
+                                    
+                                </Grid>
+                            </Border>
+                        </Popup>
                     </Grid>
+                    
                 </DockPanel>
             </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:SplashVM}">
-            <views:SplashView ViewModel="{Binding}"
-                              BidVisibility="Visible" 
-                              BidPath="{Binding BidPath}"
-                              GetBidPathCommand="{Binding GetBidPathCommand}" 
-                              ClearBidPathCommand="{Binding ClearBidPathCommand}"
-                              FirstRecentBid="{Binding FirstRecentBid}"
-                              SecondRecentBid="{Binding SecondRecentBid}"
-                              ThirdRecentBid="{Binding ThirdRecentBid}"
-                              FourthRecentBid="{Binding FourthRecentBid}"
-                              FifthRecentBid="{Binding FifthRecentBid}"
-                              ChooseRecentBidCommand="{Binding ChooseRecentBidCommand}"/>
-        </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:SplashVM}">
+                <views:SplashView ViewModel="{Binding}"
+                                  BidVisibility="Visible" 
+                                  BidPath="{Binding BidPath}"
+                                  GetBidPathCommand="{Binding GetBidPathCommand}" 
+                                  ClearBidPathCommand="{Binding ClearBidPathCommand}"
+                                  FirstRecentBid="{Binding FirstRecentBid}"
+                                  SecondRecentBid="{Binding SecondRecentBid}"
+                                  ThirdRecentBid="{Binding ThirdRecentBid}"
+                                  FourthRecentBid="{Binding FourthRecentBid}"
+                                  FifthRecentBid="{Binding FifthRecentBid}"
+                                  ChooseRecentBidCommand="{Binding ChooseRecentBidCommand}"/>
+            </DataTemplate>
         </ContentControl.Resources>
     </ContentControl>
 
