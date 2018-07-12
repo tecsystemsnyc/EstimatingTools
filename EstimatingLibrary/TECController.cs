@@ -133,6 +133,7 @@ namespace EstimatingLibrary
         }
         public IControllerConnection Connect(IConnectable connectable, IProtocol protocol, bool attemptExisiting = false)
         {
+            if (!CanConnect(connectable)) throw new Exception("Connectable not compatible.");
             IControllerConnection connection;
             bool isNew = true;
             bool isTypical = (connectable as ITypicalable)?.IsTypical ?? false;
@@ -157,7 +158,7 @@ namespace EstimatingLibrary
             }
             else
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException("Unrecognized type implements IProtocol");
             }
             if (isNew)
             {
