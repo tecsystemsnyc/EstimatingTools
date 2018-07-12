@@ -168,16 +168,7 @@
             </DataTemplate>
             <DataTemplate DataType="{x:Type vm:SplashVM}">
                 <views:SplashView ViewModel="{Binding}"
-                                  BidVisibility="Visible" 
-                                  BidPath="{Binding BidPath}"
-                                  GetBidPathCommand="{Binding GetBidPathCommand}" 
-                                  ClearBidPathCommand="{Binding ClearBidPathCommand}"
-                                  FirstRecentBid="{Binding FirstRecentBid}"
-                                  SecondRecentBid="{Binding SecondRecentBid}"
-                                  ThirdRecentBid="{Binding ThirdRecentBid}"
-                                  FourthRecentBid="{Binding FourthRecentBid}"
-                                  FifthRecentBid="{Binding FifthRecentBid}"
-                                  ChooseRecentBidCommand="{Binding ChooseRecentBidCommand}"/>
+                                  BidVisibility="Visible"/>
             </DataTemplate>
         </ContentControl.Resources>
     </ContentControl>
