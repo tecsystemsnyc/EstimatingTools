@@ -142,10 +142,10 @@ namespace Models
         [TestMethod]
         public void CompatibleProtocols()
         {
-            Random random = new Random(5);
-
             //Arrange
             TECControllerMock testController = new TECControllerMock();
+
+
 
             throw new NotImplementedException();
         }
