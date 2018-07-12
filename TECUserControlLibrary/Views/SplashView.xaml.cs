@@ -34,7 +34,25 @@ namespace TECUserControlLibrary.Views
         // Using a DependencyProperty as the backing store for BidVisibility.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty BidVisibilityProperty =
             DependencyProperty.Register("BidVisibility", typeof(Visibility), typeof(SplashView));
-        
+
+
+        public string DefaultTemplatesPath
+        {
+            get { return (string)GetValue(DefaultTemplatesPathProperty); }
+            set { SetValue(DefaultTemplatesPathProperty, value); }
+        }
+        // Using a DependencyProperty as the backing store for BidPath.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DefaultTemplatesPathProperty =
+        DependencyProperty.Register("DefaultTemplatesPath", typeof(string), typeof(SplashView), new PropertyMetadata(""));
+
+        public ICommand GetDefaultTemplatesPathCommand
+        {
+            get { return (ICommand)GetValue(GetDefaultTemplatesPathCommandProperty); }
+            set { SetValue(GetDefaultTemplatesPathCommandProperty, value); }
+        }
+        // Using a DependencyProperty as the backing store for GetBidPathCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty GetDefaultTemplatesPathCommandProperty =
+        DependencyProperty.Register("GetDefaultTemplatesPathCommand", typeof(ICommand), typeof(SplashView));
 
         public SplashView()
         {

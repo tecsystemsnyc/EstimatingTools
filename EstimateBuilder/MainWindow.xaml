@@ -168,7 +168,9 @@
             </DataTemplate>
             <DataTemplate DataType="{x:Type vm:SplashVM}">
                 <views:SplashView ViewModel="{Binding}"
-                                  BidVisibility="Visible"/>
+                                  BidVisibility="Visible"
+                                  DefaultTemplatesPath="{Binding DefaultTemplatesPath}"
+                                  GetDefaultTemplatesPathCommand="{Binding GetDefaultTemplatesPathCommand}"/>
             </DataTemplate>
         </ContentControl.Resources>
     </ContentControl>

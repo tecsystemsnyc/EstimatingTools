@@ -113,10 +113,10 @@
             </Grid.ColumnDefinitions>
             <Button Content="Default Templates..."
                     Margin="5"
-                    Command="{Binding GetDefaultTemplatesPathCommand}"/>
+                    Command="{Binding ElementName=splashView, Path=GetDefaultTemplatesPathCommand}"/>
             <Border Style="{StaticResource ListItemBorder}" Grid.Column="1" Margin="5,0,5,0">
-                <TextBlock Text="{Binding DefaultTemplatesPath, Converter={utilities:FullPathToNameConverter}}"
-                       ToolTip="{Binding DefaultTemplatesPath}"/>
+                <TextBlock Text="{Binding ElementName=splashView, Path=DefaultTemplatesPath, Converter={utilities:FullPathToNameConverter}}"
+                       ToolTip="{Binding ElementName=splashView, Path=DefaultTemplatesPath}"/>
             </Border>
             
         </Grid>
