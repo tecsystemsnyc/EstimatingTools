@@ -57,24 +57,8 @@ namespace EstimatingLibrary
         
         private void Branches_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach (object item in e.NewItems)
-                {
-                    notifyCombinedChanged(Change.Add, "Branches", this, item);
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (object item in e.OldItems)
-                {
-                    notifyCombinedChanged(Change.Remove, "Branches", this, item);
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
-            {
-                notifyCombinedChanged(Change.Edit, "Branches", this, sender, sender);
-            }
+            CollectionChangedHandlers.CollectionChangedHandler(sender, e, "Branches", this,
+                notifyCombinedChanged);
         }
 
         private SaveableMap propertyObjects()

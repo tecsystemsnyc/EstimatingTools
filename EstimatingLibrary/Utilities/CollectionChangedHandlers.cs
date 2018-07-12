@@ -15,7 +15,7 @@ namespace EstimatingLibrary.Utilities
             Action<CostBatch> notifyCost = null, Action<int> notifyPoint = null,
             Action<object> onAdd = null,
             Action<object> onRemove = null,
-            bool notifyReorder = false)
+            bool notifyReorder = true)
         {
             CostBatch costs = new CostBatch();
             int pointNumber = 0;
@@ -25,6 +25,7 @@ namespace EstimatingLibrary.Utilities
             {
                 foreach (TECObject item in e.NewItems)
                 {
+                    if(parent is ITypicalable parentTypical && parentTypical.IsTypical && item is ITypicalable typ) { typ.MakeTypical(); }
                     onAdd?.Invoke(item);
                     if (item is INotifyCostChanged cost)
                     {

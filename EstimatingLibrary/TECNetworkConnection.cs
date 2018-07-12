@@ -71,24 +71,8 @@ namespace EstimatingLibrary
         #region Event Handlers
         private void Children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach (object item in e.NewItems)
-                {
-                    notifyCombinedChanged(Change.Add, "Children", this, item);
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (object item in e.OldItems)
-                {
-                    notifyCombinedChanged(Change.Remove, "Children", this, item);
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
-            {
-                notifyCombinedChanged(Change.Edit, "Children", this, sender, sender);
-            }
+            CollectionChangedHandlers.CollectionChangedHandler(sender, e, "Children", this,
+                notifyCombinedChanged);
         }
 
         protected override void notifyCostChanged(CostBatch costs)

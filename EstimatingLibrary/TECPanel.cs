@@ -98,24 +98,8 @@ namespace EstimatingLibrary
 
         private void controllersCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach (object item in e.NewItems)
-                {
-                    notifyCombinedChanged(Change.Add, "Controllers", this, item);
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (object item in e.OldItems)
-                {
-                    notifyCombinedChanged(Change.Remove, "Controllers", this, item);
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
-            {
-                notifyCombinedChanged(Change.Edit, "Controllers", this, sender, sender);
-            }
+            CollectionChangedHandlers.CollectionChangedHandler(sender, e, "Controllers", this,
+                notifyCombinedChanged);
         }
 
         ITECObject ITypicalable.CreateInstance(ObservableListDictionary<ITECObject> typicalDictionary)

@@ -3,6 +3,7 @@ using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 
 namespace EstimatingLibrary
@@ -271,36 +272,10 @@ namespace EstimatingLibrary
         public abstract TECController CopyController(Dictionary<Guid, Guid> guidDictionary = null);
 
         #region Event Handlers
-        protected void collectionChanged(object sender,
-            System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
+        protected void collectionChanged(object sender, NotifyCollectionChangedEventArgs e, string propertyName)
         {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach (object item in e.NewItems)
-                {
-                    if (this.IsTypical && item is ITypicalable typ) { typ.MakeTypical(); }
-                    notifyCombinedChanged(Change.Add, propertyName, this, item);
-                    if (item is INotifyCostChanged cost && !(item is IControllerConnection) && !this.IsTypical)
-                    {
-                        notifyCostChanged(cost.CostBatch);
-                    }
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (object item in e.OldItems)
-                {
-                    notifyCombinedChanged(Change.Remove, propertyName, this, item);
-                    if (item is INotifyCostChanged cost && !(item is IControllerConnection) && !this.IsTypical)
-                    {
-                        notifyCostChanged(cost.CostBatch * -1);
-                    }
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
-            {
-                notifyCombinedChanged(Change.Edit, propertyName, this, sender, sender);
-            }
+            CollectionChangedHandlers.CollectionChangedHandler(sender, e, propertyName, this, notifyCombinedChanged, notifyCostChanged);
+
             if (propertyName == "ChildrenConnections")
             {
                 raisePropertyChanged("ChildNetworkConnections");

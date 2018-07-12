@@ -124,12 +124,12 @@ namespace EstimatingLibrary
         #region Event Handlers
         private void PointsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            collectionChanged(sender, e, "Points");
+            CollectionChangedHandlers.CollectionChangedHandler(sender, e, "Points", this, notifyCombinedChanged, notifyCostChanged, notifyPointChanged);
         }
         private void DevicesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            collectionChanged(sender, e, "Devices");
-            if(e.Action == NotifyCollectionChangedAction.Remove)
+            CollectionChangedHandlers.CollectionChangedHandler(sender, e, "Devices", this, notifyCombinedChanged, notifyCostChanged, notifyPointChanged);
+            if (e.Action == NotifyCollectionChangedAction.Remove)
             {
                 if(this.Connection != null && !this.AvailableProtocols.Contains(this.Connection.Protocol))
                 {
@@ -139,64 +139,9 @@ namespace EstimatingLibrary
         }
         private void InterlocksCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            collectionChanged(sender, e, "Interlocks");
+            CollectionChangedHandlers.CollectionChangedHandler(sender, e, "Interlocks", this, notifyCombinedChanged, notifyCostChanged, notifyPointChanged);
         }
-
-        private void collectionChanged(object sender, NotifyCollectionChangedEventArgs e, string propertyName)
-        {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                CostBatch costs = new CostBatch();
-                int pointNumber = 0;
-                bool costChanged = false;
-
-                foreach (TECObject item in e.NewItems)
-                {
-                    if (this.IsTypical && item is ITypicalable typ) { typ.MakeTypical(); }
-                    if (item is INotifyCostChanged cost)
-                    {
-                        costs += cost.CostBatch;
-                        costChanged = true;
-                    }
-                    if(item is INotifyPointChanged pointed)
-                    {
-                        pointNumber += pointed.PointNumber;
-                    }
-                    
-                    notifyCombinedChanged(Change.Add, propertyName, this, item);
-                }
-                if(costChanged) notifyCostChanged(costs);
-                if(pointNumber != 0) notifyPointChanged(pointNumber);
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                CostBatch costs = new CostBatch();
-                int pointNumber = 0;
-                bool costChanged = false;
-
-                foreach (TECObject item in e.OldItems)
-                {
-                    if (item is INotifyCostChanged cost)
-                    {
-                        costs += cost.CostBatch;
-                        costChanged = true;
-                    }
-                    if (item is INotifyPointChanged pointed)
-                    {
-                        pointNumber += pointed.PointNumber;
-                    }
-
-                    notifyCombinedChanged(Change.Remove, propertyName, this, item);
-                }
-                if (costChanged) notifyCostChanged(costs * -1);
-                if (pointNumber != 0) notifyPointChanged(pointNumber * -1);
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
-            {
-                notifyCombinedChanged(Change.Edit, propertyName, this, sender, sender);
-            }
-        }
-
+        
         #endregion
 
         #region Methods

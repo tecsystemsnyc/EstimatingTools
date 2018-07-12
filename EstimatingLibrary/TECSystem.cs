@@ -293,66 +293,29 @@ namespace EstimatingLibrary
         }
         
         #region Event Handlers
-        protected virtual void handleCollectionChanged(object sender,
-            NotifyCollectionChangedEventArgs e, string propertyName)
+        protected virtual void handleCollectionChanged(object sender, NotifyCollectionChangedEventArgs e, string propertyName)
         {
-            if (e.Action == NotifyCollectionChangedAction.Add)
+            CollectionChangedHandlers.CollectionChangedHandler(sender, e, propertyName, this, 
+                notifyCombinedChanged, notifyCostChanged, notifyPointChanged,
+                onAdd, onRemove);
+
+            void onAdd(object obj)
             {
-                CostBatch costs = new CostBatch();
-                int pointNum = 0;
-                foreach (object item in e.NewItems)
+                if (obj is TECEquipment equip)
                 {
-                    if(this.IsTypical && item is ITypicalable typ) { typ.MakeTypical(); }
-                    if (item != null)
-                    {
-                        if (item is INotifyCostChanged costItem) { costs += costItem.CostBatch; }
-                        if (item is INotifyPointChanged pointItem)
-                        {
-                            pointNum += pointItem.PointNumber;
-                        }
-                        notifyTECChanged(Change.Add, propertyName, this, item);
-                        if (item is TECEquipment equip)
-                        {
-                            equip.SubScopeCollectionChanged += handleSubScopeCollectionChanged;
-                        }
-                    }
-                }
-                notifyCostChanged(costs);
-                if (pointNum != 0)
-                {
-                    notifyPointChanged(pointNum);
+                    equip.SubScopeCollectionChanged += handleSubScopeCollectionChanged;
                 }
             }
-            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            void onRemove(object obj)
             {
-                CostBatch costs = new CostBatch();
-                int pointNum = 0;
-                foreach (object item in e.OldItems)
+                if (obj is TECEquipment equip)
                 {
-                    if (item != null)
+                    equip.SubScopeCollectionChanged -= handleSubScopeCollectionChanged;
+                    foreach (TECSubScope ss in equip.SubScope)
                     {
-                        if (item is INotifyCostChanged costItem) { costs += costItem.CostBatch; }
-                        if (item is INotifyPointChanged pointItem) { pointNum += pointItem.PointNumber; }
-                        notifyTECChanged(Change.Remove, propertyName, this, item);
-                        if (item is TECEquipment equip)
-                        {
-                            equip.SubScopeCollectionChanged -= handleSubScopeCollectionChanged;
-                            foreach(TECSubScope ss in equip.SubScope)
-                            {
-                                handleSubScopeRemoval(ss);
-                            }
-                        }
+                        handleSubScopeRemoval(ss);
                     }
                 }
-                notifyCostChanged(costs * -1);
-                if (pointNum != 0)
-                {
-                    notifyPointChanged(pointNum * -1);
-                }
-            }
-            else if (e.Action == NotifyCollectionChangedAction.Move)
-            {
-                notifyTECChanged(Change.Edit, propertyName, this, e.NewItems, e.OldItems);
             }
         }
 

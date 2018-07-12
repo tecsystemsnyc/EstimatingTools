@@ -84,44 +84,9 @@ namespace EstimatingLibrary
 
         private void SubScope_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            SubScopeCollectionChanged?.Invoke(sender, e);
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                int pointNumber = 0;
-                CostBatch costs = new CostBatch();
-                foreach (TECSubScope item in e.NewItems)
-                {
-                    if (this.IsTypical && item is ITypicalable typ) { typ.MakeTypical(); }
-                    pointNumber += item.PointNumber;
-                    costs += item.CostBatch;
-                    if ((item as TECSubScope).Location == null)
-                    {
-                        (item as TECSubScope).Location = this.Location;
-                    }
-                    notifyCombinedChanged(Change.Add, "SubScope", this, item);
-                }
-                notifyPointChanged(pointNumber);
-                notifyCostChanged(costs);
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                int pointNumber = 0;
-                CostBatch costs = new CostBatch();
-                foreach (TECSubScope item in e.OldItems)
-                {
-                    pointNumber += item.PointNumber;
-                    costs += item.CostBatch;
-                    notifyCombinedChanged(Change.Remove, "SubScope", this, item);
-                }
-                notifyPointChanged(pointNumber * -1);
-                notifyCostChanged(costs * -1);
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
-            {
-                notifyCombinedChanged(Change.Edit, "SubScope", this, sender, sender);
-            }
+            CollectionChangedHandlers.CollectionChangedHandler(sender, e, "SubScope", this, notifyCombinedChanged, notifyCostChanged, notifyPointChanged);
         }
-        
+
         private void TECEquipment_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Location")
