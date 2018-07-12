@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -79,10 +80,20 @@ namespace Models
             var system = new TECTypical();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
-            var dev = bid.Catalogs.Devices.First();
+            TECDevice dev = bid.Catalogs.Devices.First(x => x.HardwiredConnectionTypes.Count > 0);
             subScope.Devices.Add(dev);
             system.Equipment.Add(equipment);
             equipment.SubScope.Add(subScope);
+            Console.WriteLine("Num SubScope Protocol: {0}", subScope.AvailableProtocols.Count);
+            Console.WriteLine("Num Controller Protocol: {0}", bidController.AvailableProtocols.Count);
+            foreach (IProtocol prot in subScope.AvailableProtocols)
+            {
+                Console.WriteLine("SubScope Protocol: {0}", prot.Label);
+            }
+            foreach (IProtocol prot in bidController.AvailableProtocols)
+            {
+                Console.WriteLine("Controller Protocol: {0}", prot.Label);
+            }
             bidController.Connect(subScope, subScope.AvailableProtocols.First());
             var instance = system.AddInstance(bid);
             var instanceSubScope = instance.GetAllSubScope().First();
