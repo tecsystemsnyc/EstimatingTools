@@ -221,7 +221,7 @@ namespace TECUserControlLibrary.ViewModels
             Bid = bid;
         }
         public ControllersPanelsVM(TECTemplates templates) 
-            : this(templates, templates.ControllerTemplates, templates.PanelTemplates)
+            : this(templates, templates.Templates.ControllerTemplates, templates.Templates.PanelTemplates)
         {
             PanelSelectionReadOnly = false;
             PanelSelectionVisibility = Visibility.Collapsed;
@@ -270,7 +270,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             Templates.TECChanged -= parentChanged;
             Templates = templates;
-            Refresh(templates, templates.ControllerTemplates, templates.PanelTemplates);
+            Refresh(templates, templates.Templates.ControllerTemplates, templates.Templates.PanelTemplates);
         }
         public void Refresh(TECSystem system, TECScopeManager manager = null)
         {
@@ -320,13 +320,13 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void setupAddRemoveMethods(TECTemplates templates)
         {
-            addControllerMethod = templates.ControllerTemplates.Add;
-            addPanelMethod = templates.PanelTemplates.Add;
+            addControllerMethod = templates.Templates.ControllerTemplates.Add;
+            addPanelMethod = templates.Templates.PanelTemplates.Add;
             deleteControllerMethod = controller => {
                 controller.DisconnectAll();
-                templates.ControllerTemplates.Remove(controller);
+                templates.Templates.ControllerTemplates.Remove(controller);
             };
-            deletePanelMethod = panel => { templates.PanelTemplates.Remove(panel); };
+            deletePanelMethod = panel => { templates.Templates.PanelTemplates.Remove(panel); };
         }
         private void setupAddRemoveMethods(TECSystem system)
         {

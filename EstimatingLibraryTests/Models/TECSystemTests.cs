@@ -21,16 +21,16 @@ namespace Models
             TemplateSynchronizer<TECSubScope> ssSync = templates.SubScopeSynchronizer;
 
             TECSystem templateSys = new TECSystem();
-            templates.SystemTemplates.Add(templateSys);
+            templates.Templates.SystemTemplates.Add(templateSys);
 
             TECEquipment templateEquip = new TECEquipment();
             templateEquip.Name = "Template Equip"; 
-            templates.EquipmentTemplates.Add(templateEquip);
+            templates.Templates.EquipmentTemplates.Add(templateEquip);
             templateSys.Equipment.Add(equipSync.NewItem(templateEquip));
 
             TECSubScope templateSS = new TECSubScope();
             templateSS.Name = "Template SS";
-            templates.SubScopeTemplates.Add(templateSS);
+            templates.Templates.SubScopeTemplates.Add(templateSS);
             templateEquip.SubScope.Add(ssSync.NewItem(templateSS));
 
             TECSubScope equipSS = new TECSubScope();

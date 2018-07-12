@@ -72,11 +72,6 @@ namespace EstimateBuilder.MVVM
                 logger.Debug("No debug window to set command to.");
             }
         }
-        public void SetUpdateCatalogsCommand(Action execute, Func<bool> canExecute)
-        {
-            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
-            setCommand("Update Catalogs", command);
-        }
 
         private void setupMenu()
         {
@@ -94,7 +89,6 @@ namespace EstimateBuilder.MVVM
 
             //Templates menu items
             addMenuItem("Load Templates", BUSY_TEXT, parentItemName: "Templates");
-            addMenuItem("Update Catalogs", BUSY_TEXT, parentItemName: "Templates");
 
 #if DEBUG
             addMenuItem("Debug");

@@ -73,9 +73,9 @@ namespace EstimatingLibrary.Utilities
                 }
                 systems.AddRange(bid.Systems);
             }
-            else if (manager is TECTemplates templates)
+            else if (manager is TECTemplates)
             {
-                systems.AddRange(templates.SystemTemplates);
+                systems.AddRange(manager.Templates.SystemTemplates);
             }
             return systems;
         }
@@ -94,13 +94,13 @@ namespace EstimatingLibrary.Utilities
                     equip.AddRange(typ.Equipment);
                 }
             }
-            else if (manager is TECTemplates templates)
+            else if (manager is TECTemplates)
             {
-                foreach(TECSystem sys in templates.SystemTemplates)
+                foreach(TECSystem sys in manager.Templates.SystemTemplates)
                 {
                     equip.AddRange(sys.Equipment);
                 }
-                equip.AddRange(templates.EquipmentTemplates);
+                equip.AddRange(manager.Templates.EquipmentTemplates);
             }
             return equip;
         }

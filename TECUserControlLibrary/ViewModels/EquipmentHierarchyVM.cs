@@ -119,7 +119,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             SelectedVM = new AddEquipmentVM(toAdd =>
             {
-                (scopeManager as TECTemplates).EquipmentTemplates.Add(toAdd);
+                scopeManager.Templates.EquipmentTemplates.Add(toAdd);
             }, scopeManager);
         }
         private bool canAddEquipment()
@@ -148,7 +148,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void deleteEquipmentExecute(TECEquipment obj)
         {
-            (scopeManager as TECTemplates).EquipmentTemplates.Remove(obj);
+            scopeManager.Templates.EquipmentTemplates.Remove(obj);
         }
 
         private bool canDeleteEquipment(TECEquipment arg)
@@ -197,7 +197,7 @@ namespace TECUserControlLibrary.ViewModels
             if (dropInfo.Data is TECEquipment equipment)
             {
                 SelectedVM = new AddEquipmentVM(toAdd => {
-                    (scopeManager as TECTemplates).EquipmentTemplates.Add(toAdd);
+                    (scopeManager as TECTemplates).Templates.EquipmentTemplates.Add(toAdd);
                 }, scopeManager);
                 ((AddEquipmentVM)SelectedVM).SetTemplate(equipment);
             }

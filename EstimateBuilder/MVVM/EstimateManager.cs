@@ -3,6 +3,7 @@ using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary;
 using EstimatingUtilitiesLibrary.Database;
 using EstimatingUtilitiesLibrary.Exports;
+using GalaSoft.MvvmLight.CommandWpf;
 using NLog;
 using System;
 using System.IO;
@@ -21,13 +22,47 @@ namespace EstimateBuilder.MVVM
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         private TECBid bid;
-        private TECTemplates templates;
         private TECEstimator estimate;
-
-        private DatabaseManager<TECTemplates> templatesDatabaseManager;
 
         private string currentBidPath = "";
         private string currentTemplatesPath = "";
+
+        private bool showPopup;
+        public bool ShowPopup
+        {
+            get
+            {
+                return showPopup;
+            }
+            set
+            {
+                showPopup = value;
+                RaisePropertyChanged("ShowPopup");
+            }
+        }
+
+        private bool replaceScope = true;
+        private bool replaceCatalogs = false;
+        public bool ReplaceScope
+        {
+            get { return replaceScope; }
+            set
+            {
+                replaceScope = value;
+                RaisePropertyChanged("ReplaceScope");
+            }
+        }
+        public bool ReplaceCatalogs
+        {
+            get { return replaceCatalogs; }
+            set
+            {
+                replaceCatalogs = value;
+                RaisePropertyChanged("ReplaceCatalogs");
+            }
+        }
+        public RelayCommand LoadTemplatesCommand { get; private set; }
+        public RelayCommand CancelLoadTemplatesCommand { get; private set; }
 
         /// <summary>
         /// Estimate-typed splash vm for manipulation
@@ -82,13 +117,15 @@ namespace EstimateBuilder.MVVM
         {
             get { return EBSettings.TemplatesDirectory; }
         }
+
+        
         #endregion
 
         public EstimateManager() : base("Estimate Builder", 
-            new EstimateSplashVM(templatesPath: EBSettings.FirstRecentTemplates, defaultDirectory: EBSettings.BidDirectory, defaultTemplatesDirectory: EBSettings.TemplatesDirectory),
+            new EstimateSplashVM(defaultDirectory: EBSettings.BidDirectory, defaultTemplatesDirectory: EBSettings.TemplatesDirectory),
             new EstimateMenuVM())
         {
-            splashVM.BidPath = EBSettings.StartUpFilePath;
+            splashVM.FilePath = EBSettings.StartUpFilePath;
             splashVM.EditorStarted += userStartedEditorHandler;
             TitleString = "Estimate Builder";
             setupCommands();
@@ -100,10 +137,10 @@ namespace EstimateBuilder.MVVM
             this.currentTemplatesPath = templatesFilePath;
             
             updateRecentBidSettings(bidFilePath);
-            updateRecentTemplatesSettings(templatesFilePath);
 
             buildTitleString(bidFilePath, "Estimate Builder");
-            if(templatesFilePath != "")
+            DatabaseManager<TECTemplates> templatesDatabaseManager = null;
+            if (templatesFilePath != "")
             {
                 templatesDatabaseManager = new DatabaseManager<TECTemplates>(templatesFilePath);
                 templatesDatabaseManager.LoadComplete += assignData;
@@ -122,7 +159,7 @@ namespace EstimateBuilder.MVVM
                     templatesDatabaseManager.LoadComplete -= assignData;
                 }
 
-                templates = loadedTemplates;
+                var templates = loadedTemplates;
                 if (bidFilePath != "")
                 {
                     ViewEnabled = false;
@@ -139,17 +176,16 @@ namespace EstimateBuilder.MVVM
 
         protected override void handleLoaded(TECBid loadedBid)
         {
-            if (loadedBid != null && templates != null)
+            if (loadedBid != null)
             {
                 bid = loadedBid;
                 watcher = new ChangeWatcher(bid);
                 doStack = new DoStacker(watcher);
                 deltaStack = new DeltaStacker(watcher, bid);
-                bid.Catalogs.Fill(templates.Catalogs);
 
                 estimate = new TECEstimator(bid, watcher);
 
-                EditorVM = new EstimateEditorVM(bid, templates, watcher, estimate);
+                EditorVM = new EstimateEditorVM(bid, watcher, estimate);
                 CurrentVM = EditorVM;
             }
             else
@@ -160,19 +196,35 @@ namespace EstimateBuilder.MVVM
         }
         private void handleLoadedTemplates(TECTemplates templates)
         {
-            this.templates = templates;
-            bid.Catalogs.Fill(templates.Catalogs);
+            if (ReplaceScope)
+            {
+                bid.Templates.Unionize(templates.Templates);
+            }
+            else
+            {
+                bid.Templates.Fill(templates.Templates);
+            }
+            if (ReplaceCatalogs)
+            {
+                bid.Catalogs.Unionize(templates.Catalogs);
+            }
+            else
+            {
+                bid.Catalogs.Fill(templates.Catalogs);
+            }
             ModelLinkingHelper.LinkBidToCatalogs(bid);
             estimate = new TECEstimator(bid, watcher);
-            EditorVM = new EstimateEditorVM(bid, templates, watcher, estimate);
+            EditorVM = new EstimateEditorVM(bid, watcher, estimate);
         }
         
         #region Menu Commands Methods
         private void setupCommands()
         {
-            menuVM.SetLoadTemplatesCommand(loadTemplatesExecute, canLoadTemplates);
+            LoadTemplatesCommand = new RelayCommand(loadTemplatesExecute, canLoadTemplates);
+            CancelLoadTemplatesCommand = new RelayCommand(cancelLoadTemplatesExecute);
+
+            menuVM.SetLoadTemplatesCommand(openLoadTemplatesPopup, canLoadTemplates);
             menuVM.SetRefreshBidCommand(refreshExecute, canRefresh);
-            menuVM.SetRefreshTemplatesCommand(refreshTemplatesExecute, canRefreshTemplates);
             menuVM.SetExportProposalCommand(exportProposalExecute, canExportProposal);
             menuVM.SetExportTurnoverCommand(exportTurnoverExecute, canExportTurnover);
             menuVM.SetExportPointsListExcelCommand(exportPointsListExcelExecute, canExportPointsListExcel);
@@ -181,16 +233,22 @@ namespace EstimateBuilder.MVVM
             menuVM.SetExportBudgetCommand(exportBudgetExecute, canExportBudget);
             menuVM.SetExportBOMCommand(exportBOMExecute, canExportBOM);
             menuVM.SetDebugWindowCommand(debugWindowExecute, canDebugWindow);
-            menuVM.SetUpdateCatalogsCommand(updateCatalogsExecute, canUpdateCatalogs);
         }
         
         //Load Templates
+        private void openLoadTemplatesPopup()
+        {
+            ShowPopup = true;
+        }
+        private void cancelLoadTemplatesExecute()
+        {
+            ShowPopup = false;
+        }
         private void loadTemplatesExecute()
         {
+            ShowPopup = false;
             string message = "Would you like to save your changes before loading new templates?";
-
             checkForChanges(message, loadTemplates);
-
             void loadTemplates()
             {
                 string loadFilePath = UIHelpers.GetLoadPath(FileDialogParameters.TemplatesFileParameters, defaultTemplatesDirectory);
@@ -198,7 +256,7 @@ namespace EstimateBuilder.MVVM
                 {
                     ViewEnabled = false;
                     StatusBarVM.CurrentStatusText = "Loading Templates...";
-                    templatesDatabaseManager = new DatabaseManager<TECTemplates>(loadFilePath);
+                    var templatesDatabaseManager = new DatabaseManager<TECTemplates>(loadFilePath);
                     templatesDatabaseManager.LoadComplete += handleTemplatesLoadComplete;
                     templatesDatabaseManager.AsyncLoad();
                 }
@@ -213,49 +271,6 @@ namespace EstimateBuilder.MVVM
             handleLoadedTemplates(templates);
             StatusBarVM.CurrentStatusText = "Ready";
             ViewEnabled = true;
-        }
-        //Refresh Templates
-        private void refreshTemplatesExecute()
-        {
-            string message = "Would you like to save your changes before refreshing?";
-            checkForChanges(message, refreshTemplates, () => { ViewEnabled = true; });
-
-            void refreshTemplates()
-            {
-                ViewEnabled = false;
-                StatusBarVM.CurrentStatusText = "Loading...";
-                templatesDatabaseManager.LoadComplete += handleTemplatesLoadComplete;
-                templatesDatabaseManager.AsyncLoad();
-            }
-        }
-        private bool canRefreshTemplates()
-        {
-            return templatesDatabaseManager != null && databaseReady();
-        }
-        //Update Catalogs
-        private void updateCatalogsExecute()
-        {
-            string message = "Updating catalogs could change pricing. Continue?";
-            MessageBoxResult result = MessageBox.Show(message, "Save", MessageBoxButton.YesNo,
-                    MessageBoxImage.Exclamation);
-            switch (result)
-            {
-                case MessageBoxResult.Yes:
-                    bid.Catalogs.Unionize(templates.Catalogs);
-                    ModelLinkingHelper.LinkBidToCatalogs(bid);
-                    estimate = new TECEstimator(bid, watcher);
-                    EditorVM = new EstimateEditorVM(bid, templates, watcher, estimate);
-                    break;
-                case MessageBoxResult.No:
-                    return;
-                default:
-                    return;
-            }
-
-        }
-        private bool canUpdateCatalogs()
-        {
-            return templates != null;
         }
         //Export Proposal
         private void exportProposalExecute()
@@ -447,12 +462,7 @@ namespace EstimateBuilder.MVVM
         }
         protected override TECBid getNewWorkingScope()
         {
-            TECBid outBid = new TECBid();
-            if(templates!= null && templates.Parameters.Count > 0)
-            {
-                outBid.Parameters = templates.Parameters[0];
-            }
-            return outBid;
+            return new TECBid();
         }
 
         private void updateRecentBidSettings(string bidPath)
@@ -519,75 +529,6 @@ namespace EstimateBuilder.MVVM
                 else
                 {
                     EBSettings.FifthRecentBid = limbo;
-                }
-
-                EBSettings.Save();
-            }
-        }
-        private void updateRecentTemplatesSettings(string templatesPath)
-        {
-            if (templatesPath != null && templatesPath != "")
-            {
-                string first = EBSettings.FirstRecentTemplates;
-                string second = EBSettings.SecondRecentTemplates;
-                string third = EBSettings.ThirdRecentTemplates;
-                string fourth = EBSettings.FourthRecentTemplates;
-                string fifth = EBSettings.FifthRecentTemplates;
-
-                string limbo = templatesPath;
-
-                if (limbo == first)
-                {
-                    EBSettings.Save();
-                    return;
-                }
-                else
-                {
-                    EBSettings.FirstRecentTemplates = limbo;
-                    limbo = first;
-                }
-
-                if (limbo == second)
-                {
-                    EBSettings.Save();
-                    return;
-                }
-                else
-                {
-                    EBSettings.SecondRecentTemplates = limbo;
-                    limbo = second;
-                }
-
-                if (limbo == third)
-                {
-                    EBSettings.Save();
-                    return;
-                }
-                else
-                {
-                    EBSettings.ThirdRecentTemplates = limbo;
-                    limbo = third;
-                }
-
-                if (limbo == fourth)
-                {
-                    EBSettings.Save();
-                    return;
-                }
-                else
-                {
-                    EBSettings.FourthRecentTemplates = limbo;
-                    limbo = fourth;
-                }
-
-                if (limbo == fifth)
-                {
-                    EBSettings.Save();
-                    return;
-                }
-                else
-                {
-                    EBSettings.FifthRecentTemplates = limbo;
                 }
 
                 EBSettings.Save();

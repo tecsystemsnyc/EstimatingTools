@@ -139,22 +139,11 @@ namespace TECUserControlLibrary.ViewModels
                 bid.Locations.Add(newLocation);
             }
         }
-
         private bool canAddPattern()
         {
             return PatternEnd > PatternStart;
         }
-
-        public void Refresh(TECBid bid, ChangeWatcher watcher)
-        {
-            this.bid = bid;
-            this.watcher.Changed -= changed;
-            this.watcher = watcher;
-            this.watcher.Changed += changed;
-            populateBidLocations(bid);
-            PropertiesVM.Refresh(bid.Catalogs, bid);
-        }
-
+        
         private void addLocationExecute()
         {
             TECLocation newLocation = new TECLocation();
@@ -270,7 +259,6 @@ namespace TECUserControlLibrary.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
-
             UIHelpers.DragOver(dropInfo, dropCondition, null);
 
             bool dropCondition(object data, Type sourceType, Type targetType)
@@ -285,7 +273,6 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void Drop(IDropInfo dropInfo)
         {
-
             UIHelpers.Drop(dropInfo, dropMethod, false);
             object dropMethod(object dropped)
             {
@@ -301,7 +288,6 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 return true;
             }
-            
         }
     }
 

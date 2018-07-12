@@ -195,7 +195,7 @@ namespace TECUserControlLibrary.ViewModels
 
             this.root = root;
             this.Catalogs = catalogs;
-            this.Locations = new ObservableCollection<TECLocation>(locations);
+            this.Locations = locations != null ? new ObservableCollection<TECLocation>(locations) : new ObservableCollection<TECLocation>();
             if(this.Catalogs.ConduitTypes.Count > 0)
             {
                 this.DefaultConduitType = this.Catalogs.ConduitTypes[0];

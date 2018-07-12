@@ -13,27 +13,8 @@ namespace TECUserControlLibrary.ViewModels
     /// </summary>
     public class ReviewVM : ViewModelBase
     {
-        private TECEstimator _estimate;
-        public TECEstimator Estimate
-        {
-            get { return _estimate; }
-            set
-            {
-                _estimate = value;
-                RaisePropertyChanged("Estimate");
-            }
-        }
-
-        private TECBid _bid;
-        public TECBid Bid
-        {
-            get { return _bid; }
-            set
-            {
-                _bid = value;
-                RaisePropertyChanged("Bid");
-            }
-        }
+        public TECEstimator Estimate { get; }
+        public TECBid Bid { get; }
 
         private double _userPrice;
         public double UserPrice
@@ -55,18 +36,11 @@ namespace TECUserControlLibrary.ViewModels
 
         public ReviewVM(TECBid bid, TECEstimator estimate)
         {
-            _bid = bid;
-            _estimate = estimate;
-            Estimate.PropertyChanged += estimatePropertyChanged;
-        }
-
-        public void Refresh(TECEstimator estimate, TECBid bid)
-        {
-            Estimate.PropertyChanged -= estimatePropertyChanged;
+            Bid = bid;
             Estimate = estimate;
             Estimate.PropertyChanged += estimatePropertyChanged;
-            Bid = bid;
         }
+        
 
         private void estimatePropertyChanged(object sender, PropertyChangedEventArgs e)
         {

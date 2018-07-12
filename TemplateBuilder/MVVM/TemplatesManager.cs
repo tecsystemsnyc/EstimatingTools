@@ -60,7 +60,7 @@ namespace TemplateBuilder.MVVM
             string startUpFilePath = getStartUpFilePath();
             if (startUpFilePath != null && startUpFilePath != "")
             {
-                splashVM.TemplatesPath = startUpFilePath;
+                splashVM.FilePath = startUpFilePath;
             }
             splashVM.EditorStarted += userStartedEditorHandler;
             TitleString = "Template Builder";
@@ -99,7 +99,6 @@ namespace TemplateBuilder.MVVM
         #region Menu Commands Methods
         private void setupCommands()
         {
-            menuVM.SetRefreshTemplatesCommand(refreshExecute, canRefresh);
             menuVM.SetExportTemplatesCommand(exportTemplatesExecute);
         }
 

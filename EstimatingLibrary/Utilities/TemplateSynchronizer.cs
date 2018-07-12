@@ -33,8 +33,7 @@ namespace EstimatingLibrary.Utilities
             ChangeWatcher watcher = new ChangeWatcher(templates);
             watcher.Changed += handleTemplatesChanged;
         }
-
-
+        
         public event Action<TECChangedEventArgs> TECChanged;
 
         public void NewGroup(T template)
@@ -186,7 +185,7 @@ namespace EstimatingLibrary.Utilities
         {
             if (obj.Value is T item && obj.Change == Change.Remove)
             {
-                if (obj.Sender is TECTemplates && dictionary.ContainsKey(item))
+                if (obj.Sender is ScopeTemplates && dictionary.ContainsKey(item))
                 {
                     RemoveGroup(item);
                 }

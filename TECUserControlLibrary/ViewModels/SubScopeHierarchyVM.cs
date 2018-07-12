@@ -98,7 +98,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             SelectedVM = new AddSubScopeVM(toAdd =>
             {
-                (scopeManager as TECTemplates).SubScopeTemplates.Add(toAdd);
+                scopeManager.Templates.SubScopeTemplates.Add(toAdd);
             }, scopeManager);
         }
         private bool canAddSubScope()
@@ -117,7 +117,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void deleteSubScopeExecute(TECSubScope obj)
         {
-            (scopeManager as TECTemplates).SubScopeTemplates.Remove(obj);
+            scopeManager.Templates.SubScopeTemplates.Remove(obj);
         }
 
         private bool canDeleteSubScope(TECSubScope arg)
@@ -156,7 +156,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 SelectedVM = new AddSubScopeVM(toAdd =>
                 {
-                    (scopeManager as TECTemplates).SubScopeTemplates.Add(toAdd);
+                    scopeManager.Templates.SubScopeTemplates.Add(toAdd);
                 }, scopeManager);
                 ((AddSubScopeVM)SelectedVM).SetTemplate(subScope);
             }

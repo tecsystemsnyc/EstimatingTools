@@ -439,7 +439,7 @@ namespace TECUserControlLibrary.ViewModels
                 bid.Systems.Remove(obj as TECTypical);
             } else if(scopeManager is TECTemplates templates)
             {
-                templates.SystemTemplates.Remove(obj);
+                templates.Templates.SystemTemplates.Remove(obj);
             }
         }
         private bool canDeleteSystem(TECSystem arg)

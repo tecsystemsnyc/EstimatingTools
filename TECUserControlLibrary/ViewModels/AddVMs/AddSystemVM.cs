@@ -57,7 +57,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                     bid.Systems.Add(typical);
                     Added?.Invoke(typical);
                 }
-                else if (parent is TECTemplates templates)
+                else if (parent is TECTemplates)
                 {
                     TECSystem system = null;
                     if(underlyingTemplate != null)
@@ -70,7 +70,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                         system = ToAdd;
                     }
                     
-                    templates.SystemTemplates.Add(system);
+                    parent.Templates.SystemTemplates.Add(system);
                     Added?.Invoke(system);
                 }
             }
