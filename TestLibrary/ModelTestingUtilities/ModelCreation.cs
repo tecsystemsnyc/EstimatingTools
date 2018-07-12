@@ -230,6 +230,7 @@ namespace TestLibrary.ModelTestingUtilities
             type.IO.Add(TestIO(rand, IOType.AO));
             type.IO.Add(TestIO(rand, IOType.DI));
             type.IO.Add(TestIO(rand, IOType.DO));
+            type.IO.Add(TestIO(rand, catalogs.Protocols.RandomElement(rand)));
             type.AssignRandomCostProperties(catalogs, rand);
             return type;
         }
@@ -387,7 +388,14 @@ namespace TestLibrary.ModelTestingUtilities
         {
             return new TECIO(type)
             {
-                Quantity = rand.Next(100),
+                Quantity = rand.Next(100)
+            };
+        }
+        public static TECIO TestIO(Random rand, TECProtocol protocol)
+        {
+            return new TECIO(protocol)
+            {
+                Quantity = rand.Next(5)
             };
         }
         public static TECPoint TestPoint(Random rand, IOType type = IOType.Protocol)

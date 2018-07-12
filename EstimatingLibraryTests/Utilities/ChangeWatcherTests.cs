@@ -1654,7 +1654,7 @@ namespace Utilities
             TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
 
             TECNetworkConnection netConnect = parentController.Connect(childController, childController.AvailableProtocols.First(x => x is TECProtocol) as TECProtocol) as TECNetworkConnection;
-            netConnect.AddChild(childController);
+            netConnect.AssignRandomConnectionProperties(rand);
 
             resetRaised();
 

@@ -112,6 +112,11 @@ namespace TestLibrary.ModelTestingUtilities
             rand.RepeatAction(() => sys.ScopeBranches.Add(ModelCreation.TestScopeBranch(rand, 3)), 5);
             sys.ProposeEquipment = rand.NextBool();
         }
+        public static void AssignRandomConnectionProperties(this TECConnection connection, Random rand)
+        {
+            connection.Length = (rand.NextDouble() * 100);
+            connection.ConduitLength = (rand.NextDouble() * 100);
+        }
         #endregion
 
         #region IRelatableExtension
