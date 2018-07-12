@@ -405,11 +405,12 @@ namespace Tests
             //Arrange
             TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
             bid.Catalogs.ControllerTypes.Add(controllerType);
-            TECController controller = new TECProvidedController(controllerType);
-            bid.AddController(controller);
-
+            
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
+
+            TECController controller = new TECProvidedController(controllerType);
+            typical.AddController(controller);
 
             TECEquipment typEquip = new TECEquipment();
             typical.Equipment.Add(typEquip);
@@ -433,11 +434,7 @@ namespace Tests
 
             TECSystem instance = typical.AddInstance(bid);
             TECSubScope instanceSubScope = instance.GetAllSubScope()[0];
-            IControllerConnection instanceConnection = controller.Connect(instanceSubScope, (instanceSubScope as IConnectable).AvailableProtocols.First());
-            instanceConnection.Length = 50;
-            instanceConnection.ConduitLength = 50;
-            instanceConnection.ConduitType = bid.Catalogs.ConduitTypes[0];
-
+            
             Total totalTEC = CalculateTotal(connection, CostType.TEC);
             Total totalElec = CalculateTotal(connection, CostType.Electrical);
 

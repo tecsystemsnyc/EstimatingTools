@@ -427,7 +427,7 @@ namespace EstimatingLibrary
             {
                 return Panels.Remove(panel);
             }
-            else if (property == "Misc" && item is TECMisc misc)
+            else if (property == "MiscCosts" && item is TECMisc misc)
             {
                 return MiscCosts.Remove(misc);
             }
@@ -455,7 +455,7 @@ namespace EstimatingLibrary
             {
                 return Panels.Contains(panel);
             }
-            else if (property == "Misc" && item is TECMisc misc)
+            else if (property == "MiscCosts" && item is TECMisc misc)
             {
                 return MiscCosts.Contains(misc);
             }

@@ -85,6 +85,14 @@ namespace EstimatingLibrary
             saveList.AddRange(this.ConnectionTypes, "ConnectionTypes");
             return saveList;
         }
+
+        protected override void notifyCostChanged(CostBatch costs)
+        {
+            if (!this.IsTypical)
+            {
+                base.notifyCostChanged(costs);
+            }
+        }
         #endregion
 
         #region ITypicalable

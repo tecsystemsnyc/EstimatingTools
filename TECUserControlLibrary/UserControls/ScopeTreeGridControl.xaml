@@ -31,8 +31,8 @@
                    Grid.Row="1">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="..." CellTemplate="{DynamicResource ExpandDetails}" Width="30" IsReadOnly="True" />
-                <DataGridTextColumn Binding="{Binding Label}" Header="Text" Width="Auto"  MinWidth="40"/>
-                <DataGridTextColumn Binding="{Binding Branches.Count}" Header="# Branches" Width="Auto" MinWidth="70" IsReadOnly="True"
+                <DataGridTextColumn Binding="{Binding Label}" Header="Text" Width="Auto"  MinWidth="120"/>
+                <DataGridTextColumn Binding="{Binding Branches.Count}" Header="Children" Width="Auto" MinWidth="70" IsReadOnly="True"
                                     ElementStyle="{StaticResource RightCell}"/>
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>

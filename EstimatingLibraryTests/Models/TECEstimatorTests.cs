@@ -965,7 +965,7 @@ namespace Models
             var subScope = new TECSubScope();
 
             var controller = new TECProvidedController(controllerType);
-            bid.AddController(controller);
+            system.AddController(controller);
 
             system.Equipment.Add(equipment);
             equipment.SubScope.Add(subScope);
@@ -1081,7 +1081,7 @@ namespace Models
             var subScope = new TECSubScope();
 
             var controller = new TECProvidedController(controllerType);
-            bid.AddController(controller);
+            system.AddController(controller);
 
             system.Equipment.Add(equipment);
             equipment.SubScope.Add(subScope);
@@ -2197,7 +2197,7 @@ namespace Models
             bid.Catalogs = ModelCreation.TestCatalogs(rand);
             TECControllerType type = new TECControllerType(new TECManufacturer());
 
-            TECController controller = new TECProvidedController(type);
+            TECProvidedController controller = new TECProvidedController(type);
             bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
@@ -2210,7 +2210,9 @@ namespace Models
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
 
-            IControllerConnection ssConnect = controller.Connect(subScope, subScope.AvailableProtocols.First());
+            TECSubScope instanceSubScope = typical.GetInstancesFromTypical(subScope).First();
+
+            IControllerConnection ssConnect = controller.Connect(instanceSubScope, instanceSubScope.AvailableProtocols.First());
             ssConnect.Length = 50;
 
             typical.Instances.Remove(instance);
