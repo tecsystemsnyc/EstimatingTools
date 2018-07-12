@@ -306,7 +306,9 @@ namespace TestLibrary.ModelTestingUtilities
             branch.AssignTestLabel();
             if(maxDepth > 0)
             {
-                rand.RepeatAction(() => branch.Branches.Add(TestScopeBranch(rand, rand.Next(1, maxDepth))), rand.Next(1, 5));
+                int nextMaxDepth = rand.Next(maxDepth);
+                if (nextMaxDepth >= maxDepth) throw new Exception("This may cause an infinite loop.");
+                rand.RepeatAction(() => branch.Branches.Add(TestScopeBranch(rand, nextMaxDepth)), rand.Next(1, 5));
             }
             return branch;
         }
