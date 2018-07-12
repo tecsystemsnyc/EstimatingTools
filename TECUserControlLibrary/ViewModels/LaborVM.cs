@@ -14,37 +14,9 @@ namespace TECUserControlLibrary.ViewModels
     /// </summary>
     public class LaborVM : ViewModelBase
     {
-        private TECBid _bid;
-        public TECBid Bid
-        {
-            get { return _bid; }
-            set
-            {
-                _bid = value;
-                RaisePropertyChanged("Bid");
-            }
-        }
-        private TECTemplates _templates;
-        public TECTemplates Templates
-        {
-            get { return _templates; }
-            set
-            {
-                _templates = value;
-                RaisePropertyChanged("Templates");
-            }
-        }
-        private TECEstimator _estimate;
-        public TECEstimator Estimate
-        {
-            get { return _estimate; }
-            set
-            {
-                _estimate = value;
-                RaisePropertyChanged("Estimate");
-            }
-        }
-        public bool TemplatesLoaded;
+        public TECBid Bid { get; }
+        public ScopeTemplates Templates { get { return Bid.Templates; } }
+        public TECEstimator Estimate { get; }
         public ICommand ReloadCommand { get; private set; }
         public RelayCommand<TECParameters> SetParametersCommand { get; private set; }
         public RelayCommand SetDesiredConfidenceCommand { get; private set; }
@@ -59,17 +31,10 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("DesiredConfidence");
             }
         }
-
-        public Action LoadTemplates;
-
-        /// <summary>
-        /// Initializes a new instance of the LaborViewModel class.
-        /// </summary>
-        /// 
-        public LaborVM(TECBid bid, TECTemplates templates, TECEstimator estimate)
+        
+        public LaborVM(TECBid bid, TECEstimator estimate)
         {
             Bid = bid;
-            Templates = templates;
             Estimate = estimate;
             DesiredConfidence = bid.Parameters.DesiredConfidence;
 
@@ -85,13 +50,6 @@ namespace TECUserControlLibrary.ViewModels
         private bool CanSetConfidence()
         {
             return DesiredConfidence != Bid.Parameters.DesiredConfidence;
-        }
-
-        public void Refresh(TECBid bid, TECEstimator estimate, TECTemplates templates)
-        {
-            Bid = bid;
-            Estimate = estimate;
-            Templates = templates;
         }
         
         private void SetParametersExecute(TECParameters obj)

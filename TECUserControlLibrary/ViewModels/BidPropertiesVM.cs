@@ -10,27 +10,12 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class BidPropertiesVM : ViewModelBase
     {
-
-        private TECBid _bid;
-
-        public TECBid Bid
-        {
-            get { return _bid; }
-            set
-            {
-                _bid = value;
-                RaisePropertyChanged("Bid");
-            }
-        }
+        public TECBid Bid { get; }
 
         public BidPropertiesVM(TECBid bid)
         {
             Bid = bid;
         }
-
-        public void Refresh(TECBid bid)
-        {
-            Bid = bid;
-        }
+        
     }
 }

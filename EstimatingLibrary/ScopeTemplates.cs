@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static EstimatingLibrary.Utilities.CommonUtilities;
 
 namespace EstimatingLibrary
 {
@@ -113,6 +114,27 @@ namespace EstimatingLibrary
             MiscCostTemplates.CollectionChanged += (sender, args) => collectionChanged(sender, args, "MiscCostTemplates");
             PanelTemplates.CollectionChanged += (sender, args) => collectionChanged(sender, args, "PanelTemplates");
             Parameters.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Parameters");
+        }
+
+        public void Fill(ScopeTemplates templatesToAdd)
+        {
+            FillScopeCollection(this.SystemTemplates, templatesToAdd.SystemTemplates);
+            FillScopeCollection(this.EquipmentTemplates, templatesToAdd.EquipmentTemplates);
+            FillScopeCollection(this.SubScopeTemplates, templatesToAdd.SubScopeTemplates);
+            FillScopeCollection(this.ControllerTemplates, templatesToAdd.ControllerTemplates);
+            FillScopeCollection(this.MiscCostTemplates, templatesToAdd.MiscCostTemplates);
+            FillScopeCollection(this.PanelTemplates, templatesToAdd.PanelTemplates);
+            FillScopeCollection(this.Parameters, templatesToAdd.Parameters);
+        }
+        public void Unionize(ScopeTemplates templatesToAdd)
+        {
+            UnionizeScopeColelction(this.SystemTemplates, templatesToAdd.SystemTemplates);
+            UnionizeScopeColelction(this.EquipmentTemplates, templatesToAdd.EquipmentTemplates);
+            UnionizeScopeColelction(this.SubScopeTemplates, templatesToAdd.SubScopeTemplates);
+            UnionizeScopeColelction(this.ControllerTemplates, templatesToAdd.ControllerTemplates);
+            UnionizeScopeColelction(this.MiscCostTemplates, templatesToAdd.MiscCostTemplates);
+            UnionizeScopeColelction(this.PanelTemplates, templatesToAdd.PanelTemplates);
+            UnionizeScopeColelction(this.Parameters, templatesToAdd.Parameters);
         }
 
         #region Collection Changed

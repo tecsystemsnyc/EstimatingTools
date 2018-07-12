@@ -21,10 +21,7 @@ namespace EstimateBuilder.MVVM
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         private TECBid bid;
-        private TECTemplates templates;
         private TECEstimator estimate;
-
-        private DatabaseManager<TECTemplates> templatesDatabaseManager;
 
         private string currentBidPath = "";
         private string currentTemplatesPath = "";
@@ -103,7 +100,8 @@ namespace EstimateBuilder.MVVM
             updateRecentTemplatesSettings(templatesFilePath);
 
             buildTitleString(bidFilePath, "Estimate Builder");
-            if(templatesFilePath != "")
+            DatabaseManager<TECTemplates> templatesDatabaseManager = null;
+            if (templatesFilePath != "")
             {
                 templatesDatabaseManager = new DatabaseManager<TECTemplates>(templatesFilePath);
                 templatesDatabaseManager.LoadComplete += assignData;
@@ -122,7 +120,7 @@ namespace EstimateBuilder.MVVM
                     templatesDatabaseManager.LoadComplete -= assignData;
                 }
 
-                templates = loadedTemplates;
+                var templates = loadedTemplates;
                 if (bidFilePath != "")
                 {
                     ViewEnabled = false;
@@ -139,17 +137,16 @@ namespace EstimateBuilder.MVVM
 
         protected override void handleLoaded(TECBid loadedBid)
         {
-            if (loadedBid != null && templates != null)
+            if (loadedBid != null)
             {
                 bid = loadedBid;
                 watcher = new ChangeWatcher(bid);
                 doStack = new DoStacker(watcher);
                 deltaStack = new DeltaStacker(watcher, bid);
-                bid.Catalogs.Fill(templates.Catalogs);
 
                 estimate = new TECEstimator(bid, watcher);
 
-                EditorVM = new EstimateEditorVM(bid, templates, watcher, estimate);
+                EditorVM = new EstimateEditorVM(bid, watcher, estimate);
                 CurrentVM = EditorVM;
             }
             else
@@ -160,11 +157,11 @@ namespace EstimateBuilder.MVVM
         }
         private void handleLoadedTemplates(TECTemplates templates)
         {
-            this.templates = templates;
             bid.Catalogs.Fill(templates.Catalogs);
+            bid.Templates.Fill(templates.Templates);
             ModelLinkingHelper.LinkBidToCatalogs(bid);
             estimate = new TECEstimator(bid, watcher);
-            EditorVM = new EstimateEditorVM(bid, templates, watcher, estimate);
+            EditorVM = new EstimateEditorVM(bid, watcher, estimate);
         }
         
         #region Menu Commands Methods
@@ -172,7 +169,6 @@ namespace EstimateBuilder.MVVM
         {
             menuVM.SetLoadTemplatesCommand(loadTemplatesExecute, canLoadTemplates);
             menuVM.SetRefreshBidCommand(refreshExecute, canRefresh);
-            menuVM.SetRefreshTemplatesCommand(refreshTemplatesExecute, canRefreshTemplates);
             menuVM.SetExportProposalCommand(exportProposalExecute, canExportProposal);
             menuVM.SetExportTurnoverCommand(exportTurnoverExecute, canExportTurnover);
             menuVM.SetExportPointsListExcelCommand(exportPointsListExcelExecute, canExportPointsListExcel);
@@ -181,7 +177,6 @@ namespace EstimateBuilder.MVVM
             menuVM.SetExportBudgetCommand(exportBudgetExecute, canExportBudget);
             menuVM.SetExportBOMCommand(exportBOMExecute, canExportBOM);
             menuVM.SetDebugWindowCommand(debugWindowExecute, canDebugWindow);
-            menuVM.SetUpdateCatalogsCommand(updateCatalogsExecute, canUpdateCatalogs);
         }
         
         //Load Templates
@@ -198,7 +193,7 @@ namespace EstimateBuilder.MVVM
                 {
                     ViewEnabled = false;
                     StatusBarVM.CurrentStatusText = "Loading Templates...";
-                    templatesDatabaseManager = new DatabaseManager<TECTemplates>(loadFilePath);
+                    var templatesDatabaseManager = new DatabaseManager<TECTemplates>(loadFilePath);
                     templatesDatabaseManager.LoadComplete += handleTemplatesLoadComplete;
                     templatesDatabaseManager.AsyncLoad();
                 }
@@ -213,49 +208,6 @@ namespace EstimateBuilder.MVVM
             handleLoadedTemplates(templates);
             StatusBarVM.CurrentStatusText = "Ready";
             ViewEnabled = true;
-        }
-        //Refresh Templates
-        private void refreshTemplatesExecute()
-        {
-            string message = "Would you like to save your changes before refreshing?";
-            checkForChanges(message, refreshTemplates, () => { ViewEnabled = true; });
-
-            void refreshTemplates()
-            {
-                ViewEnabled = false;
-                StatusBarVM.CurrentStatusText = "Loading...";
-                templatesDatabaseManager.LoadComplete += handleTemplatesLoadComplete;
-                templatesDatabaseManager.AsyncLoad();
-            }
-        }
-        private bool canRefreshTemplates()
-        {
-            return templatesDatabaseManager != null && databaseReady();
-        }
-        //Update Catalogs
-        private void updateCatalogsExecute()
-        {
-            string message = "Updating catalogs could change pricing. Continue?";
-            MessageBoxResult result = MessageBox.Show(message, "Save", MessageBoxButton.YesNo,
-                    MessageBoxImage.Exclamation);
-            switch (result)
-            {
-                case MessageBoxResult.Yes:
-                    bid.Catalogs.Unionize(templates.Catalogs);
-                    ModelLinkingHelper.LinkBidToCatalogs(bid);
-                    estimate = new TECEstimator(bid, watcher);
-                    EditorVM = new EstimateEditorVM(bid, templates, watcher, estimate);
-                    break;
-                case MessageBoxResult.No:
-                    return;
-                default:
-                    return;
-            }
-
-        }
-        private bool canUpdateCatalogs()
-        {
-            return templates != null;
         }
         //Export Proposal
         private void exportProposalExecute()
@@ -447,12 +399,7 @@ namespace EstimateBuilder.MVVM
         }
         protected override TECBid getNewWorkingScope()
         {
-            TECBid outBid = new TECBid();
-            if(templates!= null && templates.Templates.Parameters.Count > 0)
-            {
-                outBid.Parameters = templates.Templates.Parameters[0];
-            }
-            return outBid;
+            return new TECBid();
         }
 
         private void updateRecentBidSettings(string bidPath)

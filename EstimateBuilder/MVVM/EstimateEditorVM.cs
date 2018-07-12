@@ -19,10 +19,10 @@ namespace EstimateBuilder.MVVM
         public BidPropertiesVM BidPropertiesVM { get; }
         public InternalNotesVM InternalNotesVM { get; }
         
-        public EstimateEditorVM(TECBid bid, TECTemplates templates, ChangeWatcher watcher, TECEstimator estimate)
+        public EstimateEditorVM(TECBid bid, ChangeWatcher watcher, TECEstimator estimate)
         {
-            ScopeEditorVM = new ScopeEditorVM(bid, templates, watcher);
-            LaborVM = new LaborVM(bid, templates, estimate);
+            ScopeEditorVM = new ScopeEditorVM(bid, watcher);
+            LaborVM = new LaborVM(bid, estimate);
             ReviewVM = new ReviewVM(bid, estimate);
             ProposalVM = new ProposalVM(bid);
             ItemizedSummaryVM = new ItemizedSummaryVM(bid, watcher);

@@ -17,10 +17,9 @@ namespace TECUserControlLibrary.ViewModels
     public class ScopeEditorVM : ViewModelBase, IDropTarget
     {
         //Initializer
-        public ScopeEditorVM(TECBid bid, TECTemplates templates, ChangeWatcher watcher)
+        public ScopeEditorVM(TECBid bid, ChangeWatcher watcher)
         {
             Bid = bid;
-            Templates = templates;
 
             setupScopeCollection();
             setupControllersPanelsTab();
@@ -97,27 +96,9 @@ namespace TECUserControlLibrary.ViewModels
         #region Interface Properties
 
         #region Scope Properties
-        public TECTemplates Templates
-        {
-            get { return _templates; }
-            set
-            {
-                _templates = value;
-                RaisePropertyChanged("Templates");
-            }
-        }
-        private TECTemplates _templates;
+        public ScopeTemplates Templates { get { return Bid.Templates; } }
 
-        public TECBid Bid
-        {
-            get { return _bid; }
-            set
-            {
-                _bid = value;
-                RaisePropertyChanged("Bid");
-            }
-        }
-        private TECBid _bid;
+        public TECBid Bid { get; }
         #endregion Scope Properties
 
         #endregion //Interface Properties
