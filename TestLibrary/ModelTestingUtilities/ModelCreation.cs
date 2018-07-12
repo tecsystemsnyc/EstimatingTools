@@ -35,7 +35,7 @@ namespace TestLibrary.ModelTestingUtilities
 
             //Devices
             rand.RepeatAction(() => catalogs.Devices.Add(TestDevice(catalogs, rand)), 10);
-            if(catalogs.Devices.Count == 0) { catalogs.Devices.Add(TestDevice(catalogs, rand)); }
+
             //IO Modules
             rand.RepeatAction(() => catalogs.IOModules.Add(TestIOModule(catalogs, rand)), 10);
 
@@ -48,7 +48,6 @@ namespace TestLibrary.ModelTestingUtilities
             //Valves
             rand.RepeatAction(() => catalogs.Valves.Add(TestValve(catalogs, rand)), 10);
             
-
             return catalogs;
         }
 
@@ -59,9 +58,9 @@ namespace TestLibrary.ModelTestingUtilities
             //Bid Info
             bid.Name = "Randomized Test Bid";
             bid.BidNumber = string.Format("{0}-{1}", rand.Next(1000, 9999), rand.Next(1000, 9999));
-            bid.DueDate = new DateTime(rand.Next(2000, 3000), rand.Next(1,12), rand.Next(1,28));
-            bid.Salesperson = string.Format("Salesperson #{0}", rand.Next(100));
-            bid.Estimator = string.Format("Estimator #{0}", rand.Next(100));
+            bid.DueDate = new DateTime(rand.Next(2000, 3000), rand.Next(1, 12), rand.Next(1, 28));
+            bid.Salesperson = string.Format("Salesperson #{0}", rand.Next(1, 100));
+            bid.Estimator = string.Format("Estimator #{0}", rand.Next(1, 100));
 
             //Bid Objects
             bid.ExtraLabor = TestLabor(rand, bid);
@@ -69,7 +68,7 @@ namespace TestLibrary.ModelTestingUtilities
             bid.Catalogs = TestCatalogs(rand);
 
             //Locations
-            int numFloors = rand.Next(100);
+            int numFloors = rand.Next(1, 100);
             for (int floor = 1; floor < numFloors; floor++)
             {
                 bid.Locations.Add(new TECLocation()
@@ -194,7 +193,7 @@ namespace TestLibrary.ModelTestingUtilities
         public static TECProtocol TestProtocol(TECCatalogs catalogs, Random rand)
         {
             List<TECConnectionType> connectionTypes = new List<TECConnectionType>();
-            rand.RepeatAction(() => connectionTypes.Add(catalogs.ConnectionTypes.RandomElement(rand)), connectionTypes.Count());
+            rand.RepeatAction(() => connectionTypes.Add(catalogs.ConnectionTypes.RandomElement(rand)), 5);
             TECProtocol prot = new TECProtocol(connectionTypes);
             prot.AssignTestLabel();
             return prot;
@@ -307,7 +306,7 @@ namespace TestLibrary.ModelTestingUtilities
             branch.AssignTestLabel();
             if(maxDepth > 0)
             {
-                rand.RepeatAction(() => branch.Branches.Add(TestScopeBranch(rand, rand.Next(maxDepth))), rand.Next(5));
+                rand.RepeatAction(() => branch.Branches.Add(TestScopeBranch(rand, rand.Next(1, maxDepth))), rand.Next(1, 5));
             }
             return branch;
         }
@@ -321,7 +320,7 @@ namespace TestLibrary.ModelTestingUtilities
         {
             TECMisc misc = new TECMisc(type);
             misc.Description = string.Format("Test Misc {0}", type.ToString());
-            misc.Quantity = rand.Next(10);
+            misc.Quantity = rand.Next(1, 10);
             misc.AssignRandomCostProperties(catalogs, rand);
             return misc;
         }
@@ -348,7 +347,7 @@ namespace TestLibrary.ModelTestingUtilities
         }
         public static IOType TestIOType(Random rand)
         {
-            int randInt = rand.Next(6);
+            int randInt = rand.Next(1, 6);
             switch (randInt)
             {
                 case 0:
@@ -369,7 +368,7 @@ namespace TestLibrary.ModelTestingUtilities
         }
         public static IOType TestPointType(Random rand)
         {
-            int randInt = rand.Next(3);
+            int randInt = rand.Next(1, 3);
             switch (randInt)
             {
                 case 0:
@@ -388,14 +387,14 @@ namespace TestLibrary.ModelTestingUtilities
         {
             return new TECIO(type)
             {
-                Quantity = rand.Next(100)
+                Quantity = rand.Next(1, 100)
             };
         }
         public static TECIO TestIO(Random rand, TECProtocol protocol)
         {
             return new TECIO(protocol)
             {
-                Quantity = rand.Next(5)
+                Quantity = rand.Next(1, 5)
             };
         }
         public static TECPoint TestPoint(Random rand, IOType type = IOType.Protocol)
@@ -406,7 +405,7 @@ namespace TestLibrary.ModelTestingUtilities
             {
                 point.Type = TestPointType(rand);
             }
-            point.Quantity = rand.Next(100);
+            point.Quantity = rand.Next(1, 100);
             return point;
         }
         public static TECSubScope TestSubScope(TECCatalogs catalogs, Random rand)

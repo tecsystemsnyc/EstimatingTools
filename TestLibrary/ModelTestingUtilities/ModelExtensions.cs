@@ -42,13 +42,13 @@ namespace TestLibrary.ModelTestingUtilities
                 //Make sure the number of items to be returned is a random distribution to the least value
                 //comparing maxItems and the count of the source collection
                 int numItems;
-                if (maxItems < 0)
+                if (maxItems < 1)
                 {
-                    numItems = rand.Next(items.Count());
+                    numItems = rand.Next(1, items.Count());
                 }
                 else
                 {
-                    numItems = (maxItems < items.Count()) ? rand.Next(maxItems) : rand.Next(items.Count());
+                    numItems = (maxItems < items.Count()) ? rand.Next(1, maxItems) : rand.Next(1, items.Count());
                 }
 
                 //Add items to the out list making sure there are no repeats.

@@ -34,11 +34,19 @@ namespace Models
             TECDevice device = null;
             foreach(TECDevice item in bid.Catalogs.Devices)
             {
-                if (item.PossibleProtocols.Count > 0 && controller.AvailableProtocols.Contains(item.PossibleProtocols.First()))
+                foreach(TECProtocol prot in item.PossibleProtocols)
                 {
-                    device = item;
-                    break;
+                    if (controller.AvailableProtocols.Contains(prot))
+                    {
+                        device = item;
+                        break;
+                    }
                 }
+                if (device != null) break;
+            }
+            if (device == null)
+            {
+                throw new NullReferenceException("Device is Null");
             }
             subScope.Devices.Add(device);
             equipment.SubScope.Add(subScope);
