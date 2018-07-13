@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -53,20 +54,8 @@ namespace EstimatingLibrary
 
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach (object obj in e.NewItems)
-                {
-                    notifyCombinedChanged(Change.Add, propertyName, this, obj);
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (object obj in e.OldItems)
-                {
-                    notifyCombinedChanged(Change.Remove, propertyName, this, obj);
-                }
-            }
+            CollectionChangedHandlers.CollectionChangedHandler(sender, e, propertyName, this,
+                notifyCombinedChanged, notifyReorder: true);
         }
 
         protected override SaveableMap propertyObjects()

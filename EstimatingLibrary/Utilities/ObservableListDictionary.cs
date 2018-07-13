@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EstimatingLibrary.Utilities
 {
@@ -33,6 +34,13 @@ namespace EstimatingLibrary.Utilities
         {
             dictionary[key].Remove(value);
             CollectionChanged?.Invoke(new Tuple<Change, T, T>(Change.Remove, key, value));
+        }
+        public void RemoveKey(T key)
+        {
+            foreach(T value in dictionary[key])
+            {
+                RemoveItem(key, value);
+            }
         }
 
         public Y GetTypical<Y>(Y instance) where Y : class
@@ -111,6 +119,17 @@ namespace EstimatingLibrary.Utilities
         public int Count
         {
             get { return dictionary.Count; }
+        }
+
+        public void RemoveValuesForKeys(IEnumerable<T> values, IEnumerable<T> keys)
+        {
+            foreach (T key in keys)
+            {
+                foreach (T value in values.Where(x => this.GetInstances(key).Contains(x)))
+                {
+                    this.RemoveItem(key, value);
+                }
+            }
         }
         #endregion
     }

@@ -15,7 +15,7 @@ namespace Utilities
         #region Base Class Tests
         private TECSubScope copySubScope(TECSubScope template)
         {
-            return new TECSubScope(template, false);
+            return new TECSubScope(template);
         }
         private void syncSubScope(TemplateSynchronizer<TECSubScope> synchronizer, 
             TECSubScope templateSS, TECSubScope toSync, TECChangedEventArgs args)
@@ -36,7 +36,7 @@ namespace Utilities
             TemplateSynchronizer<TECSubScope> synchronizer = 
                 new TemplateSynchronizer<TECSubScope>(copySubScope, item => { }, syncSubScope, templates);
 
-            TECSubScope templateSS = new TECSubScope(false);
+            TECSubScope templateSS = new TECSubScope();
             templateSS.Name = "Template SubScope";
             
             synchronizer.NewGroup(templateSS);
@@ -58,7 +58,7 @@ namespace Utilities
             TemplateSynchronizer<TECSubScope> synchronizer = 
                 new TemplateSynchronizer<TECSubScope>(copySubScope, item => { }, syncSubScope, templates);
 
-            TECSubScope templateSS = new TECSubScope(false);
+            TECSubScope templateSS = new TECSubScope();
             templateSS.Name = "Template SubScope";
 
             //Act
@@ -78,7 +78,7 @@ namespace Utilities
             TemplateSynchronizer<TECSubScope> synchronizer =
                 new TemplateSynchronizer<TECSubScope>(copySubScope, item => { }, syncSubScope, templates);
 
-            TECSubScope templateSS = new TECSubScope(false);
+            TECSubScope templateSS = new TECSubScope();
             templateSS.Name = "Template SubScope";
 
             TECSubScope copySS = synchronizer.NewItem(templateSS);
@@ -99,7 +99,7 @@ namespace Utilities
             TemplateSynchronizer<TECSubScope> synchronizer =
                 new TemplateSynchronizer<TECSubScope>(copySubScope, item => { }, syncSubScope, templates);
 
-            TECSubScope templateSS = new TECSubScope(false);
+            TECSubScope templateSS = new TECSubScope();
             templateSS.Name = "Template SubScope";
 
             TECSubScope copySS = synchronizer.NewItem(templateSS);
@@ -120,12 +120,12 @@ namespace Utilities
             TemplateSynchronizer<TECSubScope> synchronizer =
                 new TemplateSynchronizer<TECSubScope>(copySubScope, item => { }, syncSubScope, templates);
 
-            TECSubScope templateSS = new TECSubScope(false);
+            TECSubScope templateSS = new TECSubScope();
             templateSS.Name = "Template SubScope";
 
             List<TECSubScope> newReferenceSS = new List<TECSubScope>();
-            newReferenceSS.Add(new TECSubScope(false));
-            newReferenceSS.Add(new TECSubScope(false));
+            newReferenceSS.Add(new TECSubScope());
+            newReferenceSS.Add(new TECSubScope());
 
             //Act
             synchronizer.LinkExisting(templateSS, newReferenceSS);
@@ -147,15 +147,15 @@ namespace Utilities
             //Arrange
             TECTemplates templates = new TECTemplates();
 
-            TECSubScope templateSS = new TECSubScope(false);
+            TECSubScope templateSS = new TECSubScope();
             templateSS.Name = "Template SubScope";
-            templates.SubScopeTemplates.Add(templateSS);
+            templates.Templates.SubScopeTemplates.Add(templateSS);
 
             TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
             TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
 
-            TECEquipment equip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(equip);
+            TECEquipment equip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(equip);
             equip.SubScope.Add(refSS);
 
             TECDevice dev = new TECDevice(new List<TECConnectionType>(),
@@ -163,7 +163,7 @@ namespace Utilities
                 new TECManufacturer());
             templates.Catalogs.Devices.Add(dev);
 
-            TECPoint point = new TECPoint(false);
+            TECPoint point = new TECPoint();
             point.Label = "Test Point";
             point.Type = IOType.AI;
             point.Quantity = 5;
@@ -197,15 +197,15 @@ namespace Utilities
             //Arrange
             TECTemplates templates = new TECTemplates();
 
-            TECSubScope templateSS = new TECSubScope(false);
+            TECSubScope templateSS = new TECSubScope();
             templateSS.Name = "Template SubScope";
-            templates.SubScopeTemplates.Add(templateSS);
+            templates.Templates.SubScopeTemplates.Add(templateSS);
 
             TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
             TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
 
-            TECEquipment equip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(equip);
+            TECEquipment equip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(equip);
             equip.SubScope.Add(refSS);
 
             TECDevice dev = new TECDevice(new List<TECConnectionType>(),
@@ -213,7 +213,7 @@ namespace Utilities
                 new TECManufacturer());
             templates.Catalogs.Devices.Add(dev);
 
-            TECPoint point = new TECPoint(false);
+            TECPoint point = new TECPoint();
             point.Label = "Test Point";
             point.Type = IOType.AI;
             point.Quantity = 5;
@@ -246,15 +246,15 @@ namespace Utilities
             //Arrange
             TECTemplates templates = new TECTemplates();
 
-            TECEquipment templateEquip = new TECEquipment(false);
+            TECEquipment templateEquip = new TECEquipment();
             templateEquip.Name = "Template Equip";
-            templates.EquipmentTemplates.Add(templateEquip);
+            templates.Templates.EquipmentTemplates.Add(templateEquip);
 
             TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
             TECEquipment refEquip = equipSynchronizer.NewItem(templateEquip);
 
-            TECSystem sys = new TECSystem(false);
-            templates.SystemTemplates.Add(sys);
+            TECSystem sys = new TECSystem();
+            templates.Templates.SystemTemplates.Add(sys);
             sys.Equipment.Add(refEquip);
 
             TECDevice dev = new TECDevice(new List<TECConnectionType>(),
@@ -262,7 +262,7 @@ namespace Utilities
                 new TECManufacturer());
             templates.Catalogs.Devices.Add(dev);
 
-            TECPoint point = new TECPoint(false);
+            TECPoint point = new TECPoint();
             point.Label = "Test Point";
             point.Type = IOType.AI;
             point.Quantity = 5;
@@ -273,14 +273,14 @@ namespace Utilities
             TECTag tag = new TECTag();
             templates.Catalogs.Tags.Add(tag);
 
-            TECSubScope ss = new TECSubScope(false);
+            TECSubScope ss = new TECSubScope();
             ss.Description = "Test Description";
             ss.Devices.Add(dev);
             ss.AddPoint(point);
             ss.AssociatedCosts.Add(cost);
             ss.Tags.Add(tag);
 
-            templates.SubScopeTemplates.Add(ss);
+            templates.Templates.SubScopeTemplates.Add(ss);
 
             //Act
             templateEquip.Description = "Test Description";
@@ -314,15 +314,15 @@ namespace Utilities
             //Arrange
             TECTemplates templates = new TECTemplates();
 
-            TECEquipment templateEquip = new TECEquipment(false);
+            TECEquipment templateEquip = new TECEquipment();
             templateEquip.Name = "Template Equip";
-            templates.EquipmentTemplates.Add(templateEquip);
+            templates.Templates.EquipmentTemplates.Add(templateEquip);
 
             TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
             TECEquipment refEquip = equipSynchronizer.NewItem(templateEquip);
 
-            TECSystem sys = new TECSystem(false);
-            templates.SystemTemplates.Add(sys);
+            TECSystem sys = new TECSystem();
+            templates.Templates.SystemTemplates.Add(sys);
             sys.Equipment.Add(refEquip);
 
             TECDevice dev = new TECDevice(new List<TECConnectionType>(),
@@ -330,7 +330,7 @@ namespace Utilities
                 new TECManufacturer());
             templates.Catalogs.Devices.Add(dev);
 
-            TECPoint point = new TECPoint(false);
+            TECPoint point = new TECPoint();
             point.Label = "Test Point";
             point.Type = IOType.AI;
             point.Quantity = 5;
@@ -341,14 +341,14 @@ namespace Utilities
             TECTag tag = new TECTag();
             templates.Catalogs.Tags.Add(tag);
 
-            TECSubScope ss = new TECSubScope(false);
+            TECSubScope ss = new TECSubScope();
             ss.Description = "Test Description";
             ss.Devices.Add(dev);
             ss.AddPoint(point);
             ss.AssociatedCosts.Add(cost);
             ss.Tags.Add(tag);
 
-            templates.SubScopeTemplates.Add(ss);
+            templates.Templates.SubScopeTemplates.Add(ss);
 
             //Act
             refEquip.Description = "Test Description";
@@ -383,19 +383,19 @@ namespace Utilities
             TECTemplates templates = new TECTemplates();
             TemplateSynchronizer<TECSubScope> synchronizer = templates.SubScopeSynchronizer;
 
-            TECSubScope templateSS = new TECSubScope(false);
+            TECSubScope templateSS = new TECSubScope();
             templateSS.Name = "First Name";
-            templates.SubScopeTemplates.Add(templateSS);
+            templates.Templates.SubScopeTemplates.Add(templateSS);
 
-            TECEquipment templateEquip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(templateEquip);
+            TECEquipment templateEquip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(templateEquip);
             TECSubScope ss1 = synchronizer.NewItem(templateSS);
             TECSubScope ss2 = synchronizer.NewItem(templateSS);
             templateEquip.SubScope.Add(ss1);
             templateEquip.SubScope.Add(ss2);
 
             //Act
-            templates.SubScopeTemplates.Remove(templateSS);
+            templates.Templates.SubScopeTemplates.Remove(templateSS);
 
             ss2.Name = "Second Name";
 
@@ -414,11 +414,11 @@ namespace Utilities
             TECTemplates templates = new TECTemplates();
             TemplateSynchronizer<TECSubScope> synchronizer = templates.SubScopeSynchronizer;
 
-            TECSubScope templateSS = new TECSubScope(false);
-            templates.SubScopeTemplates.Add(templateSS);
+            TECSubScope templateSS = new TECSubScope();
+            templates.Templates.SubScopeTemplates.Add(templateSS);
 
-            TECEquipment templateEquip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(templateEquip);
+            TECEquipment templateEquip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(templateEquip);
             TECSubScope refSS = synchronizer.NewItem(templateSS);
             templateEquip.SubScope.Add(refSS);
 
@@ -437,19 +437,19 @@ namespace Utilities
             TECTemplates templates = new TECTemplates();
             TemplateSynchronizer<TECEquipment> synchronizer = templates.EquipmentSynchronizer;
 
-            TECEquipment templateEquip = new TECEquipment(false);
+            TECEquipment templateEquip = new TECEquipment();
             templateEquip.Name = "First Name";
-            templates.EquipmentTemplates.Add(templateEquip);
+            templates.Templates.EquipmentTemplates.Add(templateEquip);
 
-            TECSystem templateSys = new TECSystem(false);
-            templates.SystemTemplates.Add(templateSys);
+            TECSystem templateSys = new TECSystem();
+            templates.Templates.SystemTemplates.Add(templateSys);
             TECEquipment equip1 = synchronizer.NewItem(templateEquip);
             TECEquipment equip2 = synchronizer.NewItem(templateEquip);
             templateSys.Equipment.Add(equip1);
             templateSys.Equipment.Add(equip2);
 
             //Act
-            templates.EquipmentTemplates.Remove(templateEquip);
+            templates.Templates.EquipmentTemplates.Remove(templateEquip);
 
             equip2.Name = "Second Name";
 
@@ -468,11 +468,11 @@ namespace Utilities
             TECTemplates templates = new TECTemplates();
             TemplateSynchronizer<TECEquipment> synchronizer = templates.EquipmentSynchronizer;
 
-            TECEquipment templateEquip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(templateEquip);
+            TECEquipment templateEquip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(templateEquip);
 
-            TECSystem templateSys = new TECSystem(false);
-            templates.SystemTemplates.Add(templateSys);
+            TECSystem templateSys = new TECSystem();
+            templates.Templates.SystemTemplates.Add(templateSys);
             TECEquipment refEquip = synchronizer.NewItem(templateEquip);
             templateSys.Equipment.Add(refEquip);
 
@@ -492,17 +492,17 @@ namespace Utilities
             TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
             TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
 
-            TECEquipment templateEquip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(templateEquip);
+            TECEquipment templateEquip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(templateEquip);
 
-            TECSubScope templateSS = new TECSubScope(false);
-            templates.SubScopeTemplates.Add(templateSS);
+            TECSubScope templateSS = new TECSubScope();
+            templates.Templates.SubScopeTemplates.Add(templateSS);
 
             TECSubScope instanceSS = ssSynchronizer.NewItem(templateSS);
             templateEquip.SubScope.Add(instanceSS);
 
             TECEquipment instanceEquip = equipSynchronizer.NewItem(templateEquip);
-            templates.EquipmentTemplates.Add(instanceEquip);
+            templates.Templates.EquipmentTemplates.Add(instanceEquip);
 
             //Act
             templateEquip.SubScope.Remove(instanceSS);
@@ -522,10 +522,10 @@ namespace Utilities
             TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
             TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
 
-            TECEquipment templateEquip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(templateEquip);
+            TECEquipment templateEquip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(templateEquip);
 
-            TECSubScope ss = new TECSubScope(false);
+            TECSubScope ss = new TECSubScope();
             templateEquip.SubScope.Add(ss);
 
             TECEquipment refEquip = equipSynchronizer.NewItem(templateEquip);
@@ -549,14 +549,14 @@ namespace Utilities
             TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
             TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
 
-            TECEquipment templateEquip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(templateEquip);
+            TECEquipment templateEquip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(templateEquip);
 
-            TECSubScope templateSS = new TECSubScope(false);
-            templates.SubScopeTemplates.Add(templateSS);
+            TECSubScope templateSS = new TECSubScope();
+            templates.Templates.SubScopeTemplates.Add(templateSS);
 
-            TECSystem system = new TECSystem(false);
-            templates.SystemTemplates.Add(system);
+            TECSystem system = new TECSystem();
+            templates.Templates.SystemTemplates.Add(system);
 
             TECEquipment refEquip = equipSynchronizer.NewItem(templateEquip);
             system.Equipment.Add(refEquip);
@@ -584,10 +584,10 @@ namespace Utilities
             TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
             TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
 
-            TECEquipment templateEquip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(templateEquip);
+            TECEquipment templateEquip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(templateEquip);
 
-            TECSubScope ss = new TECSubScope(false);
+            TECSubScope ss = new TECSubScope();
             templateEquip.SubScope.Add(ss);
 
             TECEquipment refEqiup = equipSynchronizer.NewItem(templateEquip);

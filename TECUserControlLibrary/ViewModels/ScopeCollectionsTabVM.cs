@@ -15,7 +15,7 @@ namespace TECUserControlLibrary.ViewModels
     public class ScopeCollectionsTabVM : ViewModelBase, IDropTarget
     {
         #region Properties
-        public TECTemplates Templates
+        public ScopeTemplates Templates
         {
             get { return _templates; }
             set
@@ -45,7 +45,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         
         private ObservableCollection<TECObject> _resultCollection;
-        private TECTemplates _templates;
+        private ScopeTemplates _templates;
         private AllSearchableObjects _chosenType;
         private TECCatalogs catalogs;
 
@@ -72,10 +72,10 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
         #endregion
         
-        public ScopeCollectionsTabVM(TECTemplates templates, TECCatalogs catalogs)
+        public ScopeCollectionsTabVM(TECScopeManager manager)
         {
-            Templates = templates;
-            this.catalogs = catalogs; 
+            Templates = manager.Templates;
+            this.catalogs = manager.Catalogs; 
             SearchCollectionCommand = new RelayCommand(SearchCollectionExecute, SearchCanExecute);
             EndSearchCommand = new RelayCommand(EndSearchExecute);
             SearchString = "";
@@ -83,13 +83,7 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         #region Methods
-
-        public void Refresh(TECTemplates templates, TECCatalogs catalogs)
-        {
-            Templates = templates;
-            this.catalogs = catalogs;
-            SearchCollectionExecute();
-        }
+        
 
         #region Commands
         private void SearchCollectionExecute()

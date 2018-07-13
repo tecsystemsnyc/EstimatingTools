@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
 
-namespace Tests
+namespace EstimatingUtilitiesLibraryTests
 {
     [TestClass]
     public class LoadTemplatesTests
@@ -46,28 +46,28 @@ namespace Tests
             //Assert
             double expectedPMCoef = 2;
             double expectedPMRate = 30;
-            Assert.AreEqual(expectedPMCoef, actualTemplates.Parameters[0].PMCoef, "PM Coefficient didn't load properly.");
-            Assert.AreEqual(expectedPMRate, actualTemplates.Parameters[0].PMRate, "PM Rate didn't load properly.");
+            Assert.AreEqual(expectedPMCoef, actualTemplates.Templates.Parameters[0].PMCoef, "PM Coefficient didn't load properly.");
+            Assert.AreEqual(expectedPMRate, actualTemplates.Templates.Parameters[0].PMRate, "PM Rate didn't load properly.");
 
             double expectedENGCoef = 2;
             double expectedENGRate = 40;
-            Assert.AreEqual(expectedENGCoef, actualTemplates.Parameters[0].ENGCoef, "ENG Coefficient didn't load properly.");
-            Assert.AreEqual(expectedENGRate, actualTemplates.Parameters[0].ENGRate, "ENG Rate didn't load properly.");
+            Assert.AreEqual(expectedENGCoef, actualTemplates.Templates.Parameters[0].ENGCoef, "ENG Coefficient didn't load properly.");
+            Assert.AreEqual(expectedENGRate, actualTemplates.Templates.Parameters[0].ENGRate, "ENG Rate didn't load properly.");
 
             double expectedCommCoef = 2;
             double expectedCommRate = 50;
-            Assert.AreEqual(expectedCommCoef, actualTemplates.Parameters[0].CommCoef, "Comm Coefficient didn't load properly.");
-            Assert.AreEqual(expectedCommRate, actualTemplates.Parameters[0].CommRate, "Comm Rate didn't load properly.");
+            Assert.AreEqual(expectedCommCoef, actualTemplates.Templates.Parameters[0].CommCoef, "Comm Coefficient didn't load properly.");
+            Assert.AreEqual(expectedCommRate, actualTemplates.Templates.Parameters[0].CommRate, "Comm Rate didn't load properly.");
 
             double expectedSoftCoef = 2;
             double expectedSoftRate = 60;
-            Assert.AreEqual(expectedSoftCoef, actualTemplates.Parameters[0].SoftCoef, "Software Coefficient didn't load properly.");
-            Assert.AreEqual(expectedSoftRate, actualTemplates.Parameters[0].SoftRate, "Software Rate didn't load properly.");
+            Assert.AreEqual(expectedSoftCoef, actualTemplates.Templates.Parameters[0].SoftCoef, "Software Coefficient didn't load properly.");
+            Assert.AreEqual(expectedSoftRate, actualTemplates.Templates.Parameters[0].SoftRate, "Software Rate didn't load properly.");
 
             double expectedGraphCoef = 2;
             double expectedGraphRate = 70;
-            Assert.AreEqual(expectedGraphCoef, actualTemplates.Parameters[0].GraphCoef, "Graphics Coefficient didn't load properly.");
-            Assert.AreEqual(expectedGraphRate, actualTemplates.Parameters[0].GraphRate, "Graphics Rate didn't load properly.");
+            Assert.AreEqual(expectedGraphCoef, actualTemplates.Templates.Parameters[0].GraphCoef, "Graphics Coefficient didn't load properly.");
+            Assert.AreEqual(expectedGraphRate, actualTemplates.Templates.Parameters[0].GraphRate, "Graphics Rate didn't load properly.");
         }
 
         [TestMethod]
@@ -81,13 +81,13 @@ namespace Tests
             double expectedElectricalSuperRatio = 0.25;
             bool expectedOT = false;
             bool expectedUnion = true;
-            Assert.AreEqual(expectedElectricalRate, actualTemplates.Parameters[0].ElectricalRate, "Electrical rate didn't load properly.");
-            Assert.AreEqual(expectedElectricalSuperRate, actualTemplates.Parameters[0].ElectricalSuperRate, "Electrical Supervision rate didn't load properly.");
-            Assert.AreEqual(expectedElectricalNonUnionRate, actualTemplates.Parameters[0].ElectricalNonUnionRate, "Electrical Non-Union rate didn't load properly.");
-            Assert.AreEqual(expectedElectricalSuperNonUnionRate, actualTemplates.Parameters[0].ElectricalSuperNonUnionRate, "Electrical Supervision Non-Union rate didn't load properly.");
-            Assert.AreEqual(expectedElectricalSuperRatio, actualTemplates.Parameters[0].ElectricalSuperRatio, "Electrical Supervision time ratio didn't load properly.");
-            Assert.AreEqual(expectedOT, actualTemplates.Parameters[0].ElectricalIsOnOvertime, "Electrical overtime bool didn't load properly.");
-            Assert.AreEqual(expectedUnion, actualTemplates.Parameters[0].ElectricalIsUnion, "Electrical union bool didn't load properly.");
+            Assert.AreEqual(expectedElectricalRate, actualTemplates.Templates.Parameters[0].ElectricalRate, "Electrical rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalSuperRate, actualTemplates.Templates.Parameters[0].ElectricalSuperRate, "Electrical Supervision rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalNonUnionRate, actualTemplates.Templates.Parameters[0].ElectricalNonUnionRate, "Electrical Non-Union rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalSuperNonUnionRate, actualTemplates.Templates.Parameters[0].ElectricalSuperNonUnionRate, "Electrical Supervision Non-Union rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalSuperRatio, actualTemplates.Templates.Parameters[0].ElectricalSuperRatio, "Electrical Supervision time ratio didn't load properly.");
+            Assert.AreEqual(expectedOT, actualTemplates.Templates.Parameters[0].ElectricalIsOnOvertime, "Electrical overtime bool didn't load properly.");
+            Assert.AreEqual(expectedUnion, actualTemplates.Templates.Parameters[0].ElectricalIsUnion, "Electrical union bool didn't load properly.");
         }
 
         [TestMethod]
@@ -105,7 +105,7 @@ namespace Tests
             Guid childScopeBranch = new Guid("814710f1-f2dd-4ae6-9bc4-9279288e4994");
 
             TECSystem actualSystem = null;
-            foreach (TECSystem system in actualTemplates.SystemTemplates)
+            foreach (TECSystem system in actualTemplates.Templates.SystemTemplates)
             {
                 if (system.Guid == expectedGuid)
                 {
@@ -182,7 +182,7 @@ namespace Tests
             Guid childSubScope = new Guid("214dc8d1-22be-4fbf-8b6b-d66c21105f61");
 
             TECEquipment actualEquipment = null;
-            foreach(TECEquipment equip in actualTemplates.EquipmentTemplates)
+            foreach(TECEquipment equip in actualTemplates.Templates.EquipmentTemplates)
             {
                 if (equip.Guid == expectedGuid)
                 {
@@ -223,7 +223,7 @@ namespace Tests
             Guid childDevice = new Guid("95135fdf-7565-4d22-b9e4-1f177febae15");
 
             TECSubScope actualSubScope = null;
-            foreach(TECSubScope ss in actualTemplates.SubScopeTemplates)
+            foreach(TECSubScope ss in actualTemplates.Templates.SubScopeTemplates)
             {
                 if (ss.Guid == expectedGuid)
                 {
@@ -503,7 +503,7 @@ namespace Tests
             double expectedQuantity = 2;
             CostType expectedType = CostType.Electrical;
             TECMisc actualMisc = null;
-            foreach (TECMisc misc in actualTemplates.MiscCostTemplates)
+            foreach (TECMisc misc in actualTemplates.Templates.MiscCostTemplates)
             {
                 if (misc.Guid == expectedGuid)
                 {
@@ -581,7 +581,7 @@ namespace Tests
             Guid expectedTypeGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
 
             TECPanel actualPanel = null;
-            foreach (TECPanel panel in actualTemplates.PanelTemplates)
+            foreach (TECPanel panel in actualTemplates.Templates.PanelTemplates)
             {
                 if (panel.Guid == expectedGuid)
                 {
@@ -606,7 +606,7 @@ namespace Tests
             Guid childGuid = new Guid("542802f6-a7b1-4020-9be4-e58225c433a8");
 
             TECScopeBranch actualBranch = null;
-            foreach(TECSystem system in actualTemplates.SystemTemplates)
+            foreach(TECSystem system in actualTemplates.Templates.SystemTemplates)
             {
                 foreach(TECScopeBranch branch in system.ScopeBranches)
                 {
@@ -646,7 +646,7 @@ namespace Tests
             Guid expectedSubScopeGuid = new Guid("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
 
             TECHardwiredConnection actualSSConnect = null;
-            foreach (TECSystem typical in actualTemplates.SystemTemplates)
+            foreach (TECSystem typical in actualTemplates.Templates.SystemTemplates)
             {
                 foreach (TECController controller in typical.Controllers)
                 {
@@ -680,7 +680,7 @@ namespace Tests
             Guid expectedReferenceGuid = new Guid("020f58a8-afe0-409c-ab32-043297dba625");
 
             TECEquipment actualEquipment = null;
-            foreach(TECEquipment equipment in actualTemplates.EquipmentTemplates)
+            foreach(TECEquipment equipment in actualTemplates.Templates.EquipmentTemplates)
             {
                 if(equipment.Guid == expectedEquipmentGuid)
                 {
@@ -700,7 +700,7 @@ namespace Tests
             }
             Assert.IsNotNull(actualReferenceSubScope, "SubScope not found in equipment");
             TECSubScope actualTemplateSubScope = null;
-            foreach (TECSubScope subScope in actualTemplates.SubScopeTemplates)
+            foreach (TECSubScope subScope in actualTemplates.Templates.SubScopeTemplates)
             {
                 if (subScope.Guid == expectedTemplateGuid)
                 {
@@ -725,7 +725,7 @@ namespace Tests
             Guid expectedReferenceGuid = new Guid("87d06d89-10b7-49c7-8b08-65707a5967a4");
 
             TECSystem actualSystem = null;
-            foreach (TECSystem system in actualTemplates.SystemTemplates)
+            foreach (TECSystem system in actualTemplates.Templates.SystemTemplates)
             {
                 if (system.Guid == expectedSystemGuid)
                 {
@@ -745,7 +745,7 @@ namespace Tests
             }
             Assert.IsNotNull(actualReferenceEquipment, "Equipment not found in system");
             TECEquipment actualTemplateEquipment = null;
-            foreach (TECEquipment equipment in actualTemplates.EquipmentTemplates)
+            foreach (TECEquipment equipment in actualTemplates.Templates.EquipmentTemplates)
             {
                 if (equipment.Guid == expectedTemplateGuid)
                 {
@@ -775,7 +775,7 @@ namespace Tests
             Guid subScopeChildReferenceGuid = new Guid("c96120a1-b9e7-40e8-b015-e7383feca57d");
 
             TECSystem actualSystem = null;
-            foreach (TECSystem system in actualTemplates.SystemTemplates)
+            foreach (TECSystem system in actualTemplates.Templates.SystemTemplates)
             {
                 if (system.Guid == parentSystemGuid)
                 {
@@ -786,7 +786,7 @@ namespace Tests
             Assert.IsNotNull(actualSystem, "Parent system not found.");
 
             TECEquipment actualTemplateEquip = null;
-            foreach(TECEquipment equip in actualTemplates.EquipmentTemplates)
+            foreach(TECEquipment equip in actualTemplates.Templates.EquipmentTemplates)
             {
                 if (equip.Guid == equipmentTemplateGuid)
                 {
@@ -808,7 +808,7 @@ namespace Tests
             Assert.IsNotNull(actualRefEquip, "Equipment reference not found.");
 
             TECSubScope actualTemplateSS = null;
-            foreach(TECSubScope ss in actualTemplates.SubScopeTemplates)
+            foreach(TECSubScope ss in actualTemplates.Templates.SubScopeTemplates)
             {
                 if (ss.Guid == subScopeTemplateGuid)
                 {

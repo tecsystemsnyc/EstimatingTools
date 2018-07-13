@@ -14,88 +14,60 @@ namespace EstimateBuilder.MVVM
     public class EstimateSplashVM : SplashVM
     {
         const string SPLASH_TITLE = "Welcome to Estimate Builder";
-        const string SPLASH_SUBTITLE = "Please select object templates and select and existing file or create a new bid";
+        const string SPLASH_SUBTITLE = "Please select an existing file or create a new bid";
 
         private List<string> fileExtensions = new List<string> { ".edb", ".tdb" };
 
         private string defaultTemplatesDirectory;
+        
+        public override string FileText { get { return "Bid File:"; } }
 
-        private string _bidPath = "";
+        public ICommand GetDefaultTemplatesPathCommand { get; protected set; }
 
-        public string BidPath
+        public string DefaultTemplatesPath
         {
-            get { return _bidPath; }
+            get { return EBSettings.FirstRecentBid; }
             set
             {
-                _bidPath = value;
-                RaisePropertyChanged("BidPath");
+                EBSettings.FirstRecentBid = value;
+                RaisePropertyChanged("DefaultTemplatesPath");
+                EBSettings.Save();
             }
         }
 
-        public ICommand GetBidPathCommand { get; private set; }
-        public ICommand ClearBidPathCommand { get; private set; }
-
-        public string FirstRecentBid
+        public override string FirstRecentFile
         {
             get { return EBSettings.FirstRecentBid; }
         }
-        public string SecondRecentBid
+        public override string SecondRecentFile
         {
             get { return EBSettings.SecondRecentBid; }
         }
-        public string ThirdRecentBid
+        public override string ThirdRecentFile
         {
             get { return EBSettings.ThirdRecentBid; }
         }
-        public string FourthRecentBid
+        public override string FourthRecentFile
         {
             get { return EBSettings.FourthRecentBid; }
         }
-        public string FifthRecentBid
+        public override string FifthRecentFile
         {
             get { return EBSettings.FifthRecentBid; }
         }
-
-        public override string FirstRecentTemplates
-        {
-            get { return EBSettings.FirstRecentTemplates; }
-        }
-        public override string SecondRecentTemplates
-        {
-            get { return EBSettings.SecondRecentTemplates; }
-        }
-        public override string ThirdRecentTemplates
-        {
-            get { return EBSettings.ThirdRecentTemplates; }
-        }
-        public override string FourthRecentTemplates
-        {
-            get { return EBSettings.FourthRecentTemplates; }
-        }
-        public override string FifthRecentTemplates
-        {
-            get { return EBSettings.FifthRecentTemplates; }
-        }
-
-        public ICommand ChooseRecentBidCommand { get; }
         
         public event Action<string, string> EditorStarted;
 
-        public EstimateSplashVM(string templatesPath, string defaultDirectory, string defaultTemplatesDirectory) :
+        public EstimateSplashVM(string defaultDirectory, string defaultTemplatesDirectory) :
             base(SPLASH_TITLE, SPLASH_SUBTITLE, defaultDirectory)
         {
-            this.defaultTemplatesDirectory = defaultTemplatesDirectory; 
-
-            TemplatesPath = templatesPath;
+            this.defaultTemplatesDirectory = defaultTemplatesDirectory;
             
-            GetBidPathCommand = new RelayCommand(getBidPathExecute);
-            ClearBidPathCommand = new RelayCommand(clearBidPathExecute);
-            GetTemplatesPathCommand = new RelayCommand(getTemplatesPathExecute);
-            ClearTemplatesPathCommand = new RelayCommand(clearTemplatesPathExecute);
+            GetPathCommand = new RelayCommand(getBidPathExecute);
+            ClearPathCommand = new RelayCommand(clearBidPathExecute);
+            GetDefaultTemplatesPathCommand= new RelayCommand(getTemplatesPathExecute);
             OpenExistingCommand = new RelayCommand(openExistingExecute, openExistingCanExecute);
             CreateNewCommand = new RelayCommand(createNewExecute, createNewCanExecute);
-
-            ChooseRecentBidCommand = new RelayCommand<string>(chooseRecentBidExecute, chooseRecentCanExecute);
         }
         
         private void getBidPathExecute()
@@ -103,88 +75,56 @@ namespace EstimateBuilder.MVVM
             string path = UIHelpers.GetLoadPath(FileDialogParameters.EstimateFileParameters, defaultDirectory);
             if(path != null)
             {
-                BidPath = path;
+                FilePath = path;
             }
         }
         private void clearBidPathExecute()
         {
-            BidPath = "";
+            FilePath = "";
         }
         private void getTemplatesPathExecute()
         {
             string path = UIHelpers.GetLoadPath(FileDialogParameters.TemplatesFileParameters, defaultTemplatesDirectory);
             if(path != null)
             {
-                TemplatesPath = path;
+                DefaultTemplatesPath = path;
             }
-        }
-        private void clearTemplatesPathExecute()
-        {
-            TemplatesPath = "";
         }
 
         private void openExistingExecute()
         {
             LoadingText = "Loading...";
-            if (!File.Exists(BidPath))
+            if (!File.Exists(FilePath))
             {
                 MessageBox.Show("Bid file no longer exists at that path.");
                 LoadingText = "";
             }
-            else if (TemplatesPath == "" || TemplatesPath == null)
-            {
-                MessageBoxResult result = MessageBox.Show("No templates have been selected. Would you like to continue?", "Continue?", MessageBoxButton.YesNo,
-                    MessageBoxImage.Exclamation);
-                switch (result)
-                {
-                    case MessageBoxResult.Yes:
-                        EditorStarted?.Invoke(BidPath, "");
-                        break;
-                    default:
-                        LoadingText = "";
-                        break;
-                }
-            }
-            else if (!File.Exists(TemplatesPath))
+            else if (!File.Exists(DefaultTemplatesPath))
             {
                 MessageBox.Show("Templates file no longer exist at that path.");
                 LoadingText = "";
             }
             else
             {
-                EditorStarted?.Invoke(BidPath, TemplatesPath);
+                EditorStarted?.Invoke(FilePath, DefaultTemplatesPath);
             }
         }
         private bool openExistingCanExecute()
         {
-            return (BidPath != "" && BidPath != null);
+            return (FilePath != "" && FilePath != null);
         }
     
         private void createNewExecute()
         {
             LoadingText = "Loading...";
-            if (TemplatesPath == "" || TemplatesPath == null)
-            {
-                MessageBoxResult result = MessageBox.Show("No templates have been selected. Would you like to continue?", "Continue?", MessageBoxButton.YesNo,
-                    MessageBoxImage.Exclamation);
-                switch (result)
-                {
-                    case MessageBoxResult.Yes:
-                        EditorStarted?.Invoke("", "");
-                        break;
-                    default:
-                        LoadingText = "";
-                        break;
-                }
-            }
-            else if (!File.Exists(TemplatesPath))
+            if (!File.Exists(DefaultTemplatesPath))
             {
                 MessageBox.Show("Templates file no longer exist at that path.");
                 LoadingText = "";
             }
             else
             {
-                EditorStarted?.Invoke("", TemplatesPath);
+                EditorStarted?.Invoke("", DefaultTemplatesPath);
             }
         }
         private bool createNewCanExecute()
@@ -194,7 +134,7 @@ namespace EstimateBuilder.MVVM
 
         private void chooseRecentBidExecute(string path)
         {
-            BidPath = path;
+            FilePath = path;
         }
 
         public override void DragOver(IDropInfo dropInfo)
@@ -211,10 +151,10 @@ namespace EstimateBuilder.MVVM
                 switch(ext)
                 {
                     case ".edb":
-                        BidPath = path;
+                        FilePath = path;
                         break;
                     case ".tdb":
-                        TemplatesPath = path;
+                        DefaultTemplatesPath = path;
                         break;
                     default:
                         break;

@@ -126,30 +126,7 @@ namespace EstimatingLibrary
         protected virtual void scopeCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
             //Is virtual so that it can be overridden in TECTypical
         {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                List<TECCost> costs = new List<TECCost>();
-                foreach (object item in e.NewItems)
-                {
-                    if(item is TECCost cost) { costs.Add(cost); }
-                    notifyCombinedChanged(Change.Add, propertyName, this, item);
-                }
-                notifyCostChanged(new CostBatch(costs));
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                List<TECCost> costs = new List<TECCost>();
-                foreach (object item in e.OldItems)
-                {
-                    if (item is TECCost cost) { costs.Add(cost); }
-                    notifyCombinedChanged(Change.Remove, propertyName, this, item);
-                }
-                notifyCostChanged(new CostBatch(costs) * -1);
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
-            {
-                notifyCombinedChanged(Change.Edit, propertyName, this, sender, sender);
-            }
+            CollectionChangedHandlers.CollectionChangedHandler(sender, e, propertyName, this, notifyCombinedChanged, notifyCostChanged);
         }
         
         protected virtual void notifyCostChanged(CostBatch costs)

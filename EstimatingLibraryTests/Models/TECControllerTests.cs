@@ -3,19 +3,28 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Tests;
+using TestLibrary.MockClasses;
+using TestLibrary.ModelTestingUtilities;
 
 namespace Models
 {
     [TestClass]
     public class TECControllerTests
     {
+        Random rand;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            rand = new Random(0);
+        }
+
         [TestMethod]
         public void Controller_AddSubScope()
         {
-            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
-            TECController controller = new TECProvidedController(new TECControllerType(new TECManufacturer()), false);
-            TECSubScope subScope = new TECSubScope(false);
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
+            TECController controller = ModelCreation.TestProvidedController(catalogs, rand);
+            TECSubScope subScope = new TECSubScope();
             TECDevice dev = catalogs.Devices.First();
             subScope.Devices.Add(dev);
 
@@ -28,9 +37,9 @@ namespace Models
         [TestMethod]
         public void Controller_RemoveSubScope()
         {
-            TECCatalogs catalogs = TestHelper.CreateTestCatalogs();
-            TECController controller = new TECProvidedController(new TECControllerType(new TECManufacturer()), false);
-            TECSubScope subScope = new TECSubScope(false);
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
+            TECController controller = ModelCreation.TestProvidedController(catalogs, rand);
+            TECSubScope subScope = new TECSubScope();
             TECDevice dev = catalogs.Devices.First();
             subScope.Devices.Add(dev);
 
@@ -47,8 +56,8 @@ namespace Models
             TECControllerType type = new TECControllerType(new TECManufacturer());
             type.IO.Add(new TECIO(IOType.AI));
 
-            TECController controller = new TECProvidedController(type, false);
-            TECController childController = new TECProvidedController(type, false);
+            TECController controller = new TECProvidedController(type);
+            TECController childController = new TECProvidedController(type);
 
             TECProtocol protocol = new TECProtocol(new List<TECConnectionType> { });
             type.IO.Add(new TECIO(protocol));
@@ -66,8 +75,8 @@ namespace Models
             TECControllerType type = new TECControllerType(new TECManufacturer());
             type.IO.Add(new TECIO(IOType.AI));
 
-            TECController controller = new TECProvidedController(type, false);
-            TECController childController = new TECProvidedController(type, false);
+            TECController controller = new TECProvidedController(type);
+            TECController childController = new TECProvidedController(type);
 
             TECProtocol protocol = new TECProtocol(new List<TECConnectionType> { });
             type.IO.Add(new TECIO(protocol));
@@ -87,8 +96,8 @@ namespace Models
             TECControllerType type = new TECControllerType(new TECManufacturer());
             type.IO.Add(new TECIO(IOType.AI));
 
-            TECController controller = new TECProvidedController(type, false);
-            TECController childController = new TECProvidedController(type, false);
+            TECController controller = new TECProvidedController(type);
+            TECController childController = new TECProvidedController(type);
 
             TECProtocol protocol = new TECProtocol(new List<TECConnectionType> { });
             type.IO.Add(new TECIO(protocol));
@@ -109,9 +118,9 @@ namespace Models
             type.IO.Add(new TECIO(IOType.AI));
             type.IO.Add(new TECIO(IOType.AI));
 
-            TECController controller = new TECProvidedController(type, false);
-            TECController childController = new TECProvidedController(type, false);
-            TECController childestController = new TECProvidedController(type, false);
+            TECController controller = new TECProvidedController(type);
+            TECController childController = new TECProvidedController(type);
+            TECController childestController = new TECProvidedController(type);
 
             TECProtocol protocol = new TECProtocol(new List<TECConnectionType> { });
             type.IO.Add(new TECIO(protocol));
@@ -133,6 +142,11 @@ namespace Models
         [TestMethod]
         public void CompatibleProtocols()
         {
+            Random random = new Random(5);
+
+            //Arrange
+            TECControllerMock testController = new TECControllerMock();
+
             throw new NotImplementedException();
         }
 

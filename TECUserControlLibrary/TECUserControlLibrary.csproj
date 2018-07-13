@@ -260,6 +260,7 @@
     <Compile Include="Utilities\DropTargets\ProtocolToIODropTarget.cs" />
     <Compile Include="Utilities\QuantityCollection.cs" />
     <Compile Include="Utilities\SearchUtilities.cs" />
+    <Compile Include="ViewModels\AddVMs\AddInterlockVM.cs" />
     <Compile Include="ViewModels\AddVMs\AddVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\AssociatedCostsCatalogVM.cs" />
     <Compile Include="ViewModels\CatalogVMs\CatalogVMBase.cs" />
@@ -288,6 +289,9 @@
     <Compile Include="ViewModels\ValveSelectionVM.cs" />
     <Compile Include="ViewModels\ValveSummaryVM.cs" />
     <Compile Include="ViewModels\WorkBoxVM.cs" />
+    <Compile Include="Views\AddViews\AddInterlockView.xaml.cs">
+      <DependentUpon>AddInterlockView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CatalogViews\AssociatedCostsCatalogView.xaml.cs">
       <DependentUpon>AssociatedCostsCatalogView.xaml</DependentUpon>
     </Compile>
@@ -782,6 +786,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ValveGridControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddViews\AddInterlockView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

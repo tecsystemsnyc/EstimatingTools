@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace EstimatingLibrary
 {
-    public class TECBid : TECScopeManager, INotifyCostChanged, INotifyPointChanged, IRelatable
+    public class TECBid : TECScopeManager, INotifyCostChanged, INotifyPointChanged
     {
         #region Fields
         private string _name = "";
@@ -249,22 +249,6 @@ namespace EstimatingLibrary
                 return pointNumber();
             }
         }
-
-        public SaveableMap PropertyObjects
-        {
-            get
-            {
-                return propertyObjects();
-            }
-        }
-
-        public SaveableMap LinkedObjects
-        {
-            get
-            {
-                return new SaveableMap();
-            }
-        }
         #endregion //Properties
 
         #region Constructors
@@ -287,9 +271,9 @@ namespace EstimatingLibrary
         {
             foreach (string item in Defaults.Scope)
             {
-                var branchToAdd = new TECScopeBranch(false);
+                var branchToAdd = new TECScopeBranch();
                 branchToAdd.Label = item;
-                ScopeTree.Add(new TECScopeBranch(branchToAdd, false));
+                ScopeTree.Add(new TECScopeBranch(branchToAdd));
             }
             foreach (string item in Defaults.Exclusions)
             {
@@ -455,11 +439,10 @@ namespace EstimatingLibrary
             }
             return costs;
         }
-        private SaveableMap propertyObjects()
+        protected override SaveableMap propertyObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            SaveableMap saveList = base.propertyObjects();
             saveList.Add(this.Parameters, "Parameters");
-            saveList.Add(this.Catalogs, "Catalogs");
             saveList.Add(this.ExtraLabor, "ExtraLabor");
             saveList.Add(this.Schedule, "Schedule");
             saveList.AddRange(this.ScopeTree, "ScopeTree");

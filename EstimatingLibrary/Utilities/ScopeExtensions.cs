@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -72,9 +73,9 @@ namespace EstimatingLibrary.Utilities
                 }
                 systems.AddRange(bid.Systems);
             }
-            else if (manager is TECTemplates templates)
+            else if (manager is TECTemplates)
             {
-                systems.AddRange(templates.SystemTemplates);
+                systems.AddRange(manager.Templates.SystemTemplates);
             }
             return systems;
         }
@@ -93,13 +94,13 @@ namespace EstimatingLibrary.Utilities
                     equip.AddRange(typ.Equipment);
                 }
             }
-            else if (manager is TECTemplates templates)
+            else if (manager is TECTemplates)
             {
-                foreach(TECSystem sys in templates.SystemTemplates)
+                foreach(TECSystem sys in manager.Templates.SystemTemplates)
                 {
                     equip.AddRange(sys.Equipment);
                 }
-                equip.AddRange(templates.EquipmentTemplates);
+                equip.AddRange(manager.Templates.EquipmentTemplates);
             }
             return equip;
         }
@@ -144,6 +145,57 @@ namespace EstimatingLibrary.Utilities
                 }
             }
             return null;
+        }
+    }
+
+    public static class TypicalScopeExtensions 
+    {
+        public static void AddChildForScopeProperty<T>(this T typ, String property, ITECObject item) where T : TECScope, ITypicalable
+        {
+            if (property == "AssociatedCosts" && item is TECAssociatedCost cost)
+            {
+                typ.AssociatedCosts.Add(cost);
+            }
+            else if (property == "Tags" && item is TECTag tag)
+            {
+                typ.Tags.Add(tag);
+            }
+            else
+            {
+                throw new Exception(String.Format("There is no compatible add method for the property {0} with an object of type {1}", property, item.GetType().ToString()));
+            }
+        }
+
+        public static bool RemoveChildForScopeProperty<T>(this T typ, String property, ITECObject item) where T : TECScope, ITypicalable
+        {
+            if (property == "AssociatedCosts" && item is TECAssociatedCost cost)
+            {
+                return typ.AssociatedCosts.Remove(cost);
+            }
+            else if (property == "Tags" && item is TECTag tag)
+            {
+                return typ.Tags.Remove(tag);
+            }
+            else
+            {
+                throw new Exception(String.Format("There is no compatible remove method for the property {0} with an object of type {1}", property, item.GetType().ToString()));
+            }
+        }
+
+        public static bool ContainsChildForScopeProperty<T>(this T typ, string property, ITECObject item) where T : TECScope, ITypicalable
+        {
+            if (property == "AssociatedCosts" && item is TECAssociatedCost cost)
+            {
+                return typ.AssociatedCosts.Contains(cost);
+            }
+            else if (property == "Tags" && item is TECTag tag)
+            {
+                return typ.Tags.Contains(tag);
+            }
+            else
+            {
+                throw new Exception(String.Format("There is no compatible property {0} with an object of type {1}", property, item.GetType().ToString()));
+            }
         }
     }
 }

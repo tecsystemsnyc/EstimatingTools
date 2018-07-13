@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.ObjectModel;
 
@@ -30,24 +31,25 @@ namespace EstimatingLibrary
         }
 
         public bool IsTypical { get; private set; }
+
         #endregion //Properites
 
         #region Constructors
-        public TECScopeBranch(Guid guid, bool isTypical) : base(guid)
+        public TECScopeBranch(Guid guid) : base(guid)
         {
-            IsTypical = isTypical;
+            IsTypical = false;
             _branches = new ObservableCollection<TECScopeBranch>();
             Branches.CollectionChanged += Branches_CollectionChanged;
         }
 
-        public TECScopeBranch(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
+        public TECScopeBranch() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
-        public TECScopeBranch(TECScopeBranch scopeBranchSource, bool isTypical) : this(isTypical)
+        public TECScopeBranch(TECScopeBranch scopeBranchSource) : this()
         {
             foreach (TECScopeBranch branch in scopeBranchSource.Branches)
             {
-                Branches.Add(new TECScopeBranch(branch, isTypical));
+                Branches.Add(new TECScopeBranch(branch));
             }
             _label = scopeBranchSource.Label;
         }
@@ -55,24 +57,8 @@ namespace EstimatingLibrary
         
         private void Branches_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach (object item in e.NewItems)
-                {
-                    notifyCombinedChanged(Change.Add, "Branches", this, item);
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (object item in e.OldItems)
-                {
-                    notifyCombinedChanged(Change.Remove, "Branches", this, item);
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
-            {
-                notifyCombinedChanged(Change.Edit, "Branches", this, sender, sender);
-            }
+            CollectionChangedHandlers.CollectionChangedHandler(sender, e, "Branches", this,
+                notifyCombinedChanged);
         }
 
         private SaveableMap propertyObjects()
@@ -81,6 +67,41 @@ namespace EstimatingLibrary
             saveList.AddRange(this.Branches, "Branches");
             return saveList;
         }
+        
+        #region ITypicalable
+        ITECObject ITypicalable.CreateInstance(ObservableListDictionary<ITECObject> typicalDictionary)
+        {
+            if (!this.IsTypical)
+            {
+                throw new Exception("Attempted to create an instance of an object which is already instanced.");
+            }
+            else
+            {
+                return new TECScopeBranch(this);
+            }
+        }
+
+        void ITypicalable.AddChildForProperty(string property, ITECObject item)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool ITypicalable.RemoveChildForProperty(string property, ITECObject item)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool ITypicalable.ContainsChildForProperty(string property, ITECObject item)
+        {
+            throw new NotImplementedException();
+        }
+
+        void ITypicalable.MakeTypical()
+        {
+            this.IsTypical = true;
+            TypicalableUtilities.MakeChildrenTypical(this);
+        }
+        #endregion
 
     }
 }

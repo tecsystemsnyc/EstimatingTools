@@ -58,19 +58,19 @@ namespace TECUserControlLibrary.Debug
 
             bid.Catalogs.ControllerTypes.Add(type);
 
-            TECProvidedController controller = new TECProvidedController(type, false);
+            TECProvidedController controller = new TECProvidedController(type);
             controller.Name = "Test Server";
             controller.Description = "For testing.";
             controller.IsServer = true;
 
             bid.AddController(controller);
 
-            TECProvidedController child = new TECProvidedController(type, false);
+            TECProvidedController child = new TECProvidedController(type);
             child.Name = "Child";
 
             bid.AddController(child);
 
-            TECProvidedController emptyController = new TECProvidedController(type, false);
+            TECProvidedController emptyController = new TECProvidedController(type);
             emptyController.Name = "EmptyController";
 
             bid.AddController(emptyController);
@@ -80,11 +80,11 @@ namespace TECUserControlLibrary.Debug
             connection.AddChild(child);
 
             TECTypical typical = new TECTypical();
-            TECEquipment equip = new TECEquipment(true);
-            TECSubScope ss = new TECSubScope(true);
+            TECEquipment equip = new TECEquipment();
+            TECSubScope ss = new TECSubScope();
             ss.Name = "Test Subscope";
             ss.Devices.Add(bid.Catalogs.Devices[0]);
-            TECPoint point = new TECPoint(true);
+            TECPoint point = new TECPoint();
             point.Type = IOType.AI;
             point.Quantity = 1;
             ss.Points.Add(point);
@@ -98,31 +98,31 @@ namespace TECUserControlLibrary.Debug
         {
             TECTypical typical = new TECTypical();
             typical.Name = "test";
-            TECEquipment equipment = new TECEquipment(true);
+            TECEquipment equipment = new TECEquipment();
             equipment.Name = "test equipment";
-            TECSubScope ss = new TECSubScope(true);
+            TECSubScope ss = new TECSubScope();
             ss.Name = "Test Subscope";
             ss.Devices.Add(bid.Catalogs.Devices[0]);
-            TECPoint point = new TECPoint(true);
+            TECPoint point = new TECPoint();
             point.Type = IOType.AI;
             point.Quantity = 1;
             ss.Points.Add(point);
             equipment.SubScope.Add(ss);
             typical.Equipment.Add(equipment);
 
-            TECSubScope connected = new TECSubScope(true);
+            TECSubScope connected = new TECSubScope();
             connected.Name = "Connected";
             connected.Devices.Add(bid.Catalogs.Devices[0]);
-            TECPoint point2 = new TECPoint(true);
+            TECPoint point2 = new TECPoint();
             point2.Type = IOType.AI;
             point2.Quantity = 1;
             connected.Points.Add(point2);
             equipment.SubScope.Add(connected);
 
-            TECSubScope toConnect = new TECSubScope(true);
+            TECSubScope toConnect = new TECSubScope();
             toConnect.Name = "To Connect";
             toConnect.Devices.Add(bid.Catalogs.Devices[0]);
-            TECPoint point3 = new TECPoint(true);
+            TECPoint point3 = new TECPoint();
             point3.Type = IOType.AI;
             point3.Quantity = 1;
             toConnect.Points.Add(point3);
@@ -136,11 +136,11 @@ namespace TECUserControlLibrary.Debug
             bid.Catalogs.IOModules[0].IO.Add(io);
             controllerType.Name = "Test Type";
 
-            TECProvidedController controller = new TECProvidedController(controllerType, true);
+            TECProvidedController controller = new TECProvidedController(controllerType);
             controller.IOModules.Add(bid.Catalogs.IOModules[0]);
             controller.Name = "Test Controller";
             typical.AddController(controller);
-            TECProvidedController otherController = new TECProvidedController(controllerType, true);
+            TECProvidedController otherController = new TECProvidedController(controllerType);
             otherController.Name = "Other Controller";
             typical.AddController(otherController);
             IControllerConnection connection = controller.Connect(connected, (connected as IConnectable).AvailableProtocols.First());
@@ -151,11 +151,11 @@ namespace TECUserControlLibrary.Debug
             TECPanelType panelType = new TECPanelType(new TECManufacturer());
             panelType.Name = "test type";
 
-            TECPanel panel = new TECPanel(panelType, true);
+            TECPanel panel = new TECPanel(panelType);
             panel.Name = "Test Panel";
             typical.Panels.Add(panel);
 
-            TECMisc misc = new TECMisc(CostType.TEC, true);
+            TECMisc misc = new TECMisc(CostType.TEC);
             misc.Name = "test Misc";
             typical.MiscCosts.Add(misc);
 

@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 
 namespace EstimatingLibrary
@@ -55,15 +56,15 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "IsNetwork", this, value, old);
             }
         }
-        
-        public bool IsTypical { get; private set; }
+
+        public bool IsTypical { get; private set; } = false;
         #endregion //Properties
 
         #region Constructors
-        public TECPoint(Guid guid, bool isTypical) : base(guid) { IsTypical = isTypical; }
-        public TECPoint(bool isTypical) : this(Guid.NewGuid(), isTypical) { }
+        public TECPoint(Guid guid) : base(guid) { }
+        public TECPoint() : this(Guid.NewGuid()) { }
 
-        public TECPoint(TECPoint pointSource, bool isTypical) : this(isTypical)
+        public TECPoint(TECPoint pointSource) : this()
         {
             _type = pointSource.Type;
             _label = pointSource.Label;
@@ -79,6 +80,7 @@ namespace EstimatingLibrary
                 PointChanged?.Invoke(numPoints);
             }
         }
+
         #endregion
 
         #region INotityPointChanged
@@ -88,6 +90,41 @@ namespace EstimatingLibrary
             {
                 return Quantity;
             }
+        }
+        #endregion
+
+        #region ITypicalable
+
+        ITECObject ITypicalable.CreateInstance(ObservableListDictionary<ITECObject> typicalDictionary)
+        {
+            if (!this.IsTypical)
+            {
+                throw new Exception("Attempted to create an instance of an object which is already instanced.");
+            }
+            else
+            {
+                return new TECPoint(this);
+            }
+        }
+
+        void ITypicalable.AddChildForProperty(string property, ITECObject item)
+        {
+            throw new Exception(String.Format("There is no compatible add method for the property {0} with an object of type {1}", property, item.GetType().ToString()));
+        }
+
+        bool ITypicalable.RemoveChildForProperty(string property, ITECObject item)
+        {
+            throw new Exception(String.Format("There is no compatible remove method for the property {0} with an object of type {1}", property, item.GetType().ToString()));
+        }
+
+        bool ITypicalable.ContainsChildForProperty(string property, ITECObject item)
+        {
+            throw new Exception(String.Format("There is no compatible property {0} with an object of type {1}", property, item.GetType().ToString()));
+        }
+
+        void ITypicalable.MakeTypical()
+        {
+            this.IsTypical = true;
         }
         #endregion
 

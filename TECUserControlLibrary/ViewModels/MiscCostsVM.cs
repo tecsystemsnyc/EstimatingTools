@@ -158,12 +158,12 @@ namespace TECUserControlLibrary.ViewModels
                 QuantityVisibility = Visibility.Collapsed;
                 if (templates != null)
                 {
-                    templates.MiscCostTemplates.CollectionChanged -= MiscCosts_CollectionChanged;
+                    templates.Templates.MiscCostTemplates.CollectionChanged -= MiscCosts_CollectionChanged;
                 }
 
-                templates.MiscCostTemplates.CollectionChanged += MiscCosts_CollectionChanged;
+                templates.Templates.MiscCostTemplates.CollectionChanged += MiscCosts_CollectionChanged;
                 _templates = templates;
-                sourceCollection = templates.MiscCostTemplates;
+                sourceCollection = templates.Templates.MiscCostTemplates;
                 populateCollections();
             }
 
@@ -200,8 +200,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void addNewExecute()
         {
-            bool isTypical = (_system != null && _system is TECTypical);
-            TECMisc newMisc = new TECMisc(MiscType, isTypical);
+            TECMisc newMisc = new TECMisc(MiscType);
             newMisc.Name = MiscName;
             newMisc.Cost = Cost;
             newMisc.Labor = Labor;
@@ -322,14 +321,13 @@ namespace TECUserControlLibrary.ViewModels
             {
                 scopeManager = _bid;
             }
-            bool isTypical = (_system != null && _system is TECTypical);
             TECMisc newMisc = null;
             if(dropInfo.Data is TECMisc misc)
             {
-                newMisc = new TECMisc(misc, isTypical);
+                newMisc = new TECMisc(misc);
             } else if (dropInfo.Data is TECCost cost)
             {
-                newMisc = new TECMisc(cost, isTypical);
+                newMisc = new TECMisc(cost);
             } else
             {
                 throw new NotImplementedException();

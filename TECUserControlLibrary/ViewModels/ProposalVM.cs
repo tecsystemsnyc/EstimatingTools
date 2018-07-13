@@ -13,16 +13,7 @@ namespace TECUserControlLibrary.ViewModels
     /// </summary>
     public class ProposalVM : ViewModelBase
     {
-        private TECBid _bid;
-        public TECBid Bid
-        {
-            get { return _bid; }
-            set
-            {
-                _bid = value;
-                RaisePropertyChanged("Bid");
-            }
-        }
+        public TECBid Bid { get; }
 
         public RelayCommand<TECScopeBranch> AddScopeBranchCommand { get; private set; }
         public RelayCommand<TECSystem> AddSystemNoteCommand { get; private set; }
@@ -40,32 +31,24 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addSystemNoteExecute(TECSystem obj)
         {
-            obj.ScopeBranches.Add(new TECScopeBranch(obj.IsTypical));
+            obj.ScopeBranches.Add(new TECScopeBranch());
         }
-
         private void addNoteExecute()
         {
             Bid.Notes.Add(new TECLabeled());
         }
-
         private void addExclusionExecute()
         {
             Bid.Exclusions.Add(new TECLabeled());
         }
-
-        public void Refresh(TECBid bid)
-        {
-            Bid = bid;
-        }
-
         private void addScopBranchExecute(TECScopeBranch obj)
         {
             if(obj == null)
             {
-                Bid.ScopeTree.Add(new TECScopeBranch(false));
+                Bid.ScopeTree.Add(new TECScopeBranch());
             } else
             {
-                obj.Branches.Add(new TECScopeBranch(obj.IsTypical));
+                obj.Branches.Add(new TECScopeBranch());
             }
         }
     }

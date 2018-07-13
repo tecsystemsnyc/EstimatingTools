@@ -1,8 +1,10 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using static EstimatingLibrary.Utilities.CommonUtilities;
 
 namespace EstimatingLibrary
 {
@@ -181,24 +183,8 @@ namespace EstimatingLibrary
 
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach (object item in e.NewItems)
-                {
-                    notifyCombinedChanged(Change.Add, propertyName, this, item);
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (object item in e.OldItems)
-                {
-                    notifyCombinedChanged(Change.Remove, propertyName, this, item);
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
-            {
-                notifyCombinedChanged(Change.Edit, propertyName, this, sender, sender);
-            }
+
+            CollectionChangedHandlers.CollectionChangedHandler(sender, e, propertyName, this, notifyCombinedChanged);
         }
 
         private void ScopeChildren_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -235,65 +221,32 @@ namespace EstimatingLibrary
 
         public void Unionize(TECCatalogs catalogToAdd)
         {
-            unionizeScope(this.ConnectionTypes, catalogToAdd.ConnectionTypes);
-            unionizeScope(this.ConduitTypes, catalogToAdd.ConduitTypes);
-            unionizeScope(this.AssociatedCosts, catalogToAdd.AssociatedCosts);
-            unionizeScope(this.PanelTypes, catalogToAdd.PanelTypes);
-            unionizeScope(this.ControllerTypes, catalogToAdd.ControllerTypes);
-            unionizeScope(this.IOModules, catalogToAdd.IOModules);
-            unionizeScope(this.Devices, catalogToAdd.Devices);
-            unionizeScope(this.Valves, catalogToAdd.Valves);
-            unionizeScope(this.Manufacturers, catalogToAdd.Manufacturers);
-            unionizeScope(this.Tags, catalogToAdd.Tags);
-            unionizeScope(this.Protocols, catalogToAdd.Protocols);
-        }
-        private static void unionizeScope<T>(IList<T> bidItems, IList<T> templateItems) where T : TECObject
-        {                       
-            List<T> itemsToRemove = new List<T>();
-
-            foreach (T templateItem in templateItems)
-            {
-                foreach (T item in bidItems)
-                {
-                    if (item.Guid == templateItem.Guid)
-                    {
-                        itemsToRemove.Add(item);
-                    }
-                }
-            }
-            foreach (T item in itemsToRemove)
-            {
-                bidItems.Remove(item);
-            }
-            foreach (T item in templateItems)
-            {
-                bidItems.Add(item);
-            }
+            UnionizeScopeColelction(this.ConnectionTypes, catalogToAdd.ConnectionTypes);
+            UnionizeScopeColelction(this.ConduitTypes, catalogToAdd.ConduitTypes);
+            UnionizeScopeColelction(this.AssociatedCosts, catalogToAdd.AssociatedCosts);
+            UnionizeScopeColelction(this.PanelTypes, catalogToAdd.PanelTypes);
+            UnionizeScopeColelction(this.ControllerTypes, catalogToAdd.ControllerTypes);
+            UnionizeScopeColelction(this.IOModules, catalogToAdd.IOModules);
+            UnionizeScopeColelction(this.Devices, catalogToAdd.Devices);
+            UnionizeScopeColelction(this.Valves, catalogToAdd.Valves);
+            UnionizeScopeColelction(this.Manufacturers, catalogToAdd.Manufacturers);
+            UnionizeScopeColelction(this.Tags, catalogToAdd.Tags);
+            UnionizeScopeColelction(this.Protocols, catalogToAdd.Protocols);
         }
 
         public void Fill(TECCatalogs catalogToAdd)
         {
-            fillScope(this.ConnectionTypes, catalogToAdd.ConnectionTypes);
-            fillScope(this.ConduitTypes, catalogToAdd.ConduitTypes);
-            fillScope(this.AssociatedCosts, catalogToAdd.AssociatedCosts);
-            fillScope(this.PanelTypes, catalogToAdd.PanelTypes);
-            fillScope(this.ControllerTypes, catalogToAdd.ControllerTypes);
-            fillScope(this.IOModules, catalogToAdd.IOModules);
-            fillScope(this.Devices, catalogToAdd.Devices);
-            fillScope(this.Valves, catalogToAdd.Valves);
-            fillScope(this.Manufacturers, catalogToAdd.Manufacturers);
-            fillScope(this.Tags, catalogToAdd.Tags);
-            fillScope(this.Protocols, catalogToAdd.Protocols);
-        }
-        private static void fillScope<T>(IList<T> bidItems, IList<T> templateItems) where T : TECObject
-        {
-            foreach(T templateItem in templateItems)
-            {
-                if(!bidItems.Any(item => item.Guid == templateItem.Guid))
-                {
-                    bidItems.Add(templateItem);
-                }
-            }
+            FillScopeCollection(this.ConnectionTypes, catalogToAdd.ConnectionTypes);
+            FillScopeCollection(this.ConduitTypes, catalogToAdd.ConduitTypes);
+            FillScopeCollection(this.AssociatedCosts, catalogToAdd.AssociatedCosts);
+            FillScopeCollection(this.PanelTypes, catalogToAdd.PanelTypes);
+            FillScopeCollection(this.ControllerTypes, catalogToAdd.ControllerTypes);
+            FillScopeCollection(this.IOModules, catalogToAdd.IOModules);
+            FillScopeCollection(this.Devices, catalogToAdd.Devices);
+            FillScopeCollection(this.Valves, catalogToAdd.Valves);
+            FillScopeCollection(this.Manufacturers, catalogToAdd.Manufacturers);
+            FillScopeCollection(this.Tags, catalogToAdd.Tags);
+            FillScopeCollection(this.Protocols, catalogToAdd.Protocols);
         }
     }
 }

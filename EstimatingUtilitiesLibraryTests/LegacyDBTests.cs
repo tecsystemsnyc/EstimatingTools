@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
 
-namespace EstimatingUtilitiesLibraryTests
+namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
 {
     /// <summary>
     /// Summary description for LegacyDBTests

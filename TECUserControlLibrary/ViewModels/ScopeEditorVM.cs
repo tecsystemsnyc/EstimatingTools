@@ -17,10 +17,9 @@ namespace TECUserControlLibrary.ViewModels
     public class ScopeEditorVM : ViewModelBase, IDropTarget
     {
         //Initializer
-        public ScopeEditorVM(TECBid bid, TECTemplates templates, ChangeWatcher watcher)
+        public ScopeEditorVM(TECBid bid, ChangeWatcher watcher)
         {
             Bid = bid;
-            Templates = templates;
 
             setupScopeCollection();
             setupControllersPanelsTab();
@@ -97,27 +96,9 @@ namespace TECUserControlLibrary.ViewModels
         #region Interface Properties
 
         #region Scope Properties
-        public TECTemplates Templates
-        {
-            get { return _templates; }
-            set
-            {
-                _templates = value;
-                RaisePropertyChanged("Templates");
-            }
-        }
-        private TECTemplates _templates;
+        public ScopeTemplates Templates { get { return Bid.Templates; } }
 
-        public TECBid Bid
-        {
-            get { return _bid; }
-            set
-            {
-                _bid = value;
-                RaisePropertyChanged("Bid");
-            }
-        }
-        private TECBid _bid;
+        public TECBid Bid { get; }
         #endregion Scope Properties
 
         #endregion //Interface Properties
@@ -140,24 +121,12 @@ namespace TECUserControlLibrary.ViewModels
         #endregion //Properties
 
         #region Methods
-        public void Refresh(TECBid bid, TECTemplates templates, ChangeWatcher watcher)
-        {
-            Bid = bid;
-            Templates = templates;
-
-            ScopeCollection.Refresh(Templates, bid.Catalogs);
-            ControllersPanelsTab.Refresh(Bid);
-            MiscVM.Refresh(Bid);
-            TypicalEditVM.Refresh(Bid);
-            PropertiesVM.Refresh(bid.Catalogs, bid);
-            WorkBoxVM.Refresh(bid);
-        }
 
         #region Setup Extensions
 
         private void setupScopeCollection()
         {
-            ScopeCollection = new ScopeCollectionsTabVM(Templates, Bid.Catalogs);
+            ScopeCollection = new ScopeCollectionsTabVM(Bid);
             ScopeCollection.DragHandler += DragOver;
             ScopeCollection.DropHandler += Drop;
         }

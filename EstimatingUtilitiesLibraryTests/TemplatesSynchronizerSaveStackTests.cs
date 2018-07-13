@@ -36,22 +36,22 @@ namespace EstimatingUtilitiesLibraryTests
             TECDevice testDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), testMan);
             templates.Catalogs.Devices.Add(testDevice);
 
-            TECPoint testPoint = new TECPoint(false);
+            TECPoint testPoint = new TECPoint();
             testPoint.Label = "Test Point";
             testPoint.Type = IOType.AI;
             testPoint.Quantity = 5;
 
-            TECSubScope templateSS = new TECSubScope(false);
+            TECSubScope templateSS = new TECSubScope();
             templateSS.Name = "Test SS";
             templateSS.Description = "Test Desc";
-            templates.SubScopeTemplates.Add(templateSS);
+            templates.Templates.SubScopeTemplates.Add(templateSS);
             templateSS.AssociatedCosts.Add(testCost);
             templateSS.Tags.Add(testTag);
             templateSS.Devices.Add(testDevice);
             templateSS.Points.Add(testPoint);
 
-            TECEquipment equip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(equip);
+            TECEquipment equip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(equip);
 
             DeltaStacker stack = new DeltaStacker(watcher, templates);
 
@@ -148,22 +148,22 @@ namespace EstimatingUtilitiesLibraryTests
             TECDevice testDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), testMan);
             templates.Catalogs.Devices.Add(testDevice);
 
-            TECPoint testPoint = new TECPoint(false);
+            TECPoint testPoint = new TECPoint();
             testPoint.Label = "Test Point";
             testPoint.Type = IOType.AI;
             testPoint.Quantity = 5;
 
-            TECSubScope templateSS = new TECSubScope(false);
+            TECSubScope templateSS = new TECSubScope();
             templateSS.Name = "Test SS";
             templateSS.Description = "Test Desc";
-            templates.SubScopeTemplates.Add(templateSS);
+            templates.Templates.SubScopeTemplates.Add(templateSS);
             templateSS.AssociatedCosts.Add(testCost);
             templateSS.Tags.Add(testTag);
             templateSS.Devices.Add(testDevice);
             templateSS.Points.Add(testPoint);
 
-            TECEquipment equip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(equip);
+            TECEquipment equip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(equip);
 
             TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
             TECPoint newPoint = refSS.Points[0];
@@ -241,13 +241,13 @@ namespace EstimatingUtilitiesLibraryTests
             TECAssociatedCost testCost = new TECAssociatedCost(CostType.TEC);
             templates.Catalogs.AssociatedCosts.Add(testCost);
 
-            TECSubScope templateSS = new TECSubScope(false);
-            templates.SubScopeTemplates.Add(templateSS);
+            TECSubScope templateSS = new TECSubScope();
+            templates.Templates.SubScopeTemplates.Add(templateSS);
 
             TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
 
-            TECEquipment equip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(equip);
+            TECEquipment equip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(equip);
 
             equip.SubScope.Add(refSS);
 
@@ -291,14 +291,14 @@ namespace EstimatingUtilitiesLibraryTests
             TECAssociatedCost testCost = new TECAssociatedCost(CostType.TEC);
             templates.Catalogs.AssociatedCosts.Add(testCost);
 
-            TECSubScope templateSS = new TECSubScope(false);
-            templates.SubScopeTemplates.Add(templateSS);
+            TECSubScope templateSS = new TECSubScope();
+            templates.Templates.SubScopeTemplates.Add(templateSS);
             templateSS.AssociatedCosts.Add(testCost);
 
             TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
 
-            TECEquipment equip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(equip);
+            TECEquipment equip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(equip);
 
             equip.SubScope.Add(refSS);
 
@@ -340,13 +340,13 @@ namespace EstimatingUtilitiesLibraryTests
             TECTag testTag = new TECTag();
             templates.Catalogs.Tags.Add(testTag);
 
-            TECSubScope templateSS = new TECSubScope(false);
-            templates.SubScopeTemplates.Add(templateSS);
+            TECSubScope templateSS = new TECSubScope();
+            templates.Templates.SubScopeTemplates.Add(templateSS);
 
             TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
 
-            TECEquipment equip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(equip);
+            TECEquipment equip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(equip);
 
             equip.SubScope.Add(refSS);
 
@@ -388,14 +388,14 @@ namespace EstimatingUtilitiesLibraryTests
             TECTag testTag = new TECTag();
             templates.Catalogs.Tags.Add(testTag);
 
-            TECSubScope templateSS = new TECSubScope(false);
-            templates.SubScopeTemplates.Add(templateSS);
+            TECSubScope templateSS = new TECSubScope();
+            templates.Templates.SubScopeTemplates.Add(templateSS);
             templateSS.Tags.Add(testTag);
 
             TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
 
-            TECEquipment equip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(equip);
+            TECEquipment equip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(equip);
 
             equip.SubScope.Add(refSS);
 
@@ -440,13 +440,13 @@ namespace EstimatingUtilitiesLibraryTests
             TECDevice testDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), testMan);
             templates.Catalogs.Devices.Add(testDevice);
 
-            TECSubScope templateSS = new TECSubScope(false);
-            templates.SubScopeTemplates.Add(templateSS);
+            TECSubScope templateSS = new TECSubScope();
+            templates.Templates.SubScopeTemplates.Add(templateSS);
 
             TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
 
-            TECEquipment equip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(equip);
+            TECEquipment equip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(equip);
 
             equip.SubScope.Add(refSS);
 
@@ -495,14 +495,14 @@ namespace EstimatingUtilitiesLibraryTests
             TECDevice testDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), testMan);
             templates.Catalogs.Devices.Add(testDevice);
 
-            TECSubScope templateSS = new TECSubScope(false);
-            templates.SubScopeTemplates.Add(templateSS);
+            TECSubScope templateSS = new TECSubScope();
+            templates.Templates.SubScopeTemplates.Add(templateSS);
             templateSS.Devices.Add(testDevice);
 
             TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
 
-            TECEquipment equip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(equip);
+            TECEquipment equip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(equip);
 
             equip.SubScope.Add(refSS);
 
@@ -541,18 +541,18 @@ namespace EstimatingUtilitiesLibraryTests
 
             TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
 
-            TECPoint testPoint = new TECPoint(false);
+            TECPoint testPoint = new TECPoint();
             testPoint.Label = "Test Point";
             testPoint.Type = IOType.AI;
             testPoint.Quantity = 5;
 
-            TECSubScope templateSS = new TECSubScope(false);
-            templates.SubScopeTemplates.Add(templateSS);
+            TECSubScope templateSS = new TECSubScope();
+            templates.Templates.SubScopeTemplates.Add(templateSS);
 
             TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
 
-            TECEquipment equip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(equip);
+            TECEquipment equip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(equip);
 
             equip.SubScope.Add(refSS);
 
@@ -611,21 +611,21 @@ namespace EstimatingUtilitiesLibraryTests
 
             TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
 
-            TECPoint testPoint = new TECPoint(false);
+            TECPoint testPoint = new TECPoint();
             testPoint.Label = "Test Point";
             testPoint.Type = IOType.AI;
             testPoint.Quantity = 5;
 
-            TECSubScope templateSS = new TECSubScope(false);
-            templates.SubScopeTemplates.Add(templateSS);
+            TECSubScope templateSS = new TECSubScope();
+            templates.Templates.SubScopeTemplates.Add(templateSS);
             templateSS.Points.Add(testPoint);
 
             TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
 
             TECPoint refPoint = refSS.Points[0];
 
-            TECEquipment equip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(equip);
+            TECEquipment equip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(equip);
 
             equip.SubScope.Add(refSS);
 
@@ -674,21 +674,21 @@ namespace EstimatingUtilitiesLibraryTests
 
             TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
 
-            TECPoint testPoint = new TECPoint(false);
+            TECPoint testPoint = new TECPoint();
             testPoint.Label = "Test Point";
             testPoint.Type = IOType.AI;
             testPoint.Quantity = 5;
 
-            TECSubScope templateSS = new TECSubScope(false);
-            templates.SubScopeTemplates.Add(templateSS);
+            TECSubScope templateSS = new TECSubScope();
+            templates.Templates.SubScopeTemplates.Add(templateSS);
             templateSS.Points.Add(testPoint);
 
             TECSubScope refSS = ssSynchronizer.NewItem(templateSS);
 
             TECPoint refPoint = refSS.Points[0];
 
-            TECEquipment equip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(equip);
+            TECEquipment equip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(equip);
 
             equip.SubScope.Add(refSS);
 
@@ -831,20 +831,20 @@ namespace EstimatingUtilitiesLibraryTests
             TECTag testTag = new TECTag();
             templates.Catalogs.Tags.Add(testTag);
 
-            TECSubScope testSS = new TECSubScope(false);
+            TECSubScope testSS = new TECSubScope();
             testSS.Name = "Test SS";
             testSS.Description = "SS Desc";
 
-            TECEquipment templateEquip = new TECEquipment(false);
+            TECEquipment templateEquip = new TECEquipment();
             templateEquip.Name = "Test Equip";
             templateEquip.Description = "Test Desc";
-            templates.EquipmentTemplates.Add(templateEquip);
+            templates.Templates.EquipmentTemplates.Add(templateEquip);
             templateEquip.AssociatedCosts.Add(testCost);
             templateEquip.Tags.Add(testTag);
             templateEquip.SubScope.Add(testSS);
 
-            TECSystem sys = new TECSystem(false);
-            templates.SystemTemplates.Add(sys);
+            TECSystem sys = new TECSystem();
+            templates.Templates.SystemTemplates.Add(sys);
 
             DeltaStacker stack = new DeltaStacker(watcher, templates);
 
@@ -932,20 +932,20 @@ namespace EstimatingUtilitiesLibraryTests
             TECTag testTag = new TECTag();
             templates.Catalogs.Tags.Add(testTag);
 
-            TECSubScope testSS = new TECSubScope(false);
+            TECSubScope testSS = new TECSubScope();
             testSS.Name = "Test SS";
             testSS.Description = "SS Desc";
 
-            TECEquipment templateEquip = new TECEquipment(false);
+            TECEquipment templateEquip = new TECEquipment();
             templateEquip.Name = "Test Equip";
             templateEquip.Description = "Test Desc";
-            templates.EquipmentTemplates.Add(templateEquip);
+            templates.Templates.EquipmentTemplates.Add(templateEquip);
             templateEquip.AssociatedCosts.Add(testCost);
             templateEquip.Tags.Add(testTag);
             templateEquip.SubScope.Add(testSS);
 
-            TECSystem sys = new TECSystem(false);
-            templates.SystemTemplates.Add(sys);
+            TECSystem sys = new TECSystem();
+            templates.Templates.SystemTemplates.Add(sys);
 
             TECEquipment refEquip = equipSynchronizer.NewItem(templateEquip);
             sys.Equipment.Add(refEquip);
@@ -1025,13 +1025,13 @@ namespace EstimatingUtilitiesLibraryTests
             TECAssociatedCost testCost = new TECAssociatedCost(CostType.TEC);
             templates.Catalogs.AssociatedCosts.Add(testCost);
 
-            TECEquipment templateEquip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(templateEquip);
+            TECEquipment templateEquip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(templateEquip);
 
             TECEquipment refEquip = equipSynchronizer.NewItem(templateEquip);
 
-            TECSystem sys = new TECSystem(false);
-            templates.SystemTemplates.Add(sys);
+            TECSystem sys = new TECSystem();
+            templates.Templates.SystemTemplates.Add(sys);
 
             sys.Equipment.Add(refEquip);
 
@@ -1075,14 +1075,14 @@ namespace EstimatingUtilitiesLibraryTests
             TECAssociatedCost testCost = new TECAssociatedCost(CostType.TEC);
             templates.Catalogs.AssociatedCosts.Add(testCost);
 
-            TECEquipment templateEquip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(templateEquip);
+            TECEquipment templateEquip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(templateEquip);
             templateEquip.AssociatedCosts.Add(testCost);
 
             TECEquipment refEquip = equipSynchronizer.NewItem(templateEquip);
 
-            TECSystem sys = new TECSystem(false);
-            templates.SystemTemplates.Add(sys);
+            TECSystem sys = new TECSystem();
+            templates.Templates.SystemTemplates.Add(sys);
 
             sys.Equipment.Add(refEquip);
 
@@ -1124,13 +1124,13 @@ namespace EstimatingUtilitiesLibraryTests
             TECTag testTag = new TECTag();
             templates.Catalogs.Tags.Add(testTag);
 
-            TECEquipment templateEquip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(templateEquip);
+            TECEquipment templateEquip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(templateEquip);
 
             TECEquipment refEquip = equipSynchronizer.NewItem(templateEquip);
 
-            TECSystem sys = new TECSystem(false);
-            templates.SystemTemplates.Add(sys);
+            TECSystem sys = new TECSystem();
+            templates.Templates.SystemTemplates.Add(sys);
 
             sys.Equipment.Add(refEquip);
 
@@ -1172,13 +1172,13 @@ namespace EstimatingUtilitiesLibraryTests
             TECTag testTag = new TECTag();
             templates.Catalogs.Tags.Add(testTag);
 
-            TECEquipment templateEquip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(templateEquip);
+            TECEquipment templateEquip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(templateEquip);
 
             TECEquipment refEquip = equipSynchronizer.NewItem(templateEquip);
 
-            TECSystem sys = new TECSystem(false);
-            templates.SystemTemplates.Add(sys);
+            TECSystem sys = new TECSystem();
+            templates.Templates.SystemTemplates.Add(sys);
 
             sys.Equipment.Add(refEquip);
 
@@ -1217,17 +1217,17 @@ namespace EstimatingUtilitiesLibraryTests
 
             TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
 
-            TECEquipment templateEquip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(templateEquip);
+            TECEquipment templateEquip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(templateEquip);
 
-            TECSubScope ss = new TECSubScope(false);
+            TECSubScope ss = new TECSubScope();
             ss.Name = "Test SubScope";
             ss.Description = "SS Desc";
 
             TECEquipment refEquip = equipSynchronizer.NewItem(templateEquip);
 
-            TECSystem sys = new TECSystem(false);
-            templates.SystemTemplates.Add(sys);
+            TECSystem sys = new TECSystem();
+            templates.Templates.SystemTemplates.Add(sys);
 
             sys.Equipment.Add(refEquip);
 
@@ -1291,20 +1291,20 @@ namespace EstimatingUtilitiesLibraryTests
 
             TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
 
-            TECSubScope ss = new TECSubScope(false);
+            TECSubScope ss = new TECSubScope();
             ss.Name = "Test SubScope";
             ss.Description = "SS Desc";
 
-            TECEquipment templateEquip = new TECEquipment(false);
-            templates.EquipmentTemplates.Add(templateEquip);
+            TECEquipment templateEquip = new TECEquipment();
+            templates.Templates.EquipmentTemplates.Add(templateEquip);
             templateEquip.SubScope.Add(ss);
 
             TECEquipment refEquip = equipSynchronizer.NewItem(templateEquip);
 
             TECSubScope refSS = refEquip.SubScope[0];
 
-            TECSystem sys = new TECSystem(false);
-            templates.SystemTemplates.Add(sys);
+            TECSystem sys = new TECSystem();
+            templates.Templates.SystemTemplates.Add(sys);
 
             sys.Equipment.Add(refEquip);
 

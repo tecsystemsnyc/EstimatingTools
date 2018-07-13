@@ -68,11 +68,6 @@ namespace TECUserControlLibrary.ViewModels
             RedoCommand = new RelayCommand(execute, forceNullToTrue(canExecute));
             setCommand("Redo", RedoCommand);
         }
-        public void SetRefreshTemplatesCommand(Action execute, Func<bool> canExecute = null)
-        {
-            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
-            setCommand("Refresh Templates", command);
-        }
         public void SetWikiCommand(Action execute, Func<bool> canExecute = null)
         {
             RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
@@ -168,10 +163,7 @@ namespace TECUserControlLibrary.ViewModels
             //Edit menu items
             addMenuItem("Undo", "Nothing to undo", parentItemName: "Edit");
             addMenuItem("Redo", "Nothing to redo", parentItemName: "Edit");
-
-            //Templates menu items
-            addMenuItem("Refresh Templates", BUSY_TEXT, parentItemName: "Templates");
-
+            
             //Help menu items
             addMenuItem("Wiki", parentItemName: "Help");
             addMenuItem("Report Bug", parentItemName: "Help");

@@ -53,13 +53,13 @@ namespace EstimatingLibrary
         #endregion
 
         #region Constructors
-        public TECProvidedController(Guid guid, TECControllerType type, bool isTypical) : base(guid, isTypical)
+        public TECProvidedController(Guid guid, TECControllerType type) : base(guid)
         {
             _type = type;
             this.IOModules.CollectionChanged += handleModulesChanged;
         }
-        public TECProvidedController(TECControllerType type, bool isTypical) : this(Guid.NewGuid(), type, isTypical) { }
-        public TECProvidedController(TECProvidedController controllerSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : base(controllerSource, isTypical, guidDictionary)
+        public TECProvidedController(TECControllerType type) : this(Guid.NewGuid(), type) { }
+        public TECProvidedController(TECProvidedController controllerSource, Dictionary<Guid, Guid> guidDictionary = null) : base(controllerSource, guidDictionary)
         {
             this._type = controllerSource.Type;
             foreach (TECIOModule module in controllerSource.IOModules)
@@ -70,9 +70,9 @@ namespace EstimatingLibrary
         #endregion
 
         #region Methods
-        public override TECController CopyController(bool isTypical, Dictionary<Guid, Guid> guidDictionary)
+        public override TECController CopyController(Dictionary<Guid, Guid> guidDictionary)
         {
-            return new TECProvidedController(this, isTypical, guidDictionary);
+            return new TECProvidedController(this, guidDictionary);
         }
 
         #region Module Methods
@@ -157,7 +157,7 @@ namespace EstimatingLibrary
         public bool CanChangeType(TECControllerType newType)
         {
             if (newType == null) return false;
-            TECProvidedController possibleController = new TECProvidedController(newType, false);
+            TECProvidedController possibleController = new TECProvidedController(newType);
             IOCollection necessaryIO = this.UsedIO;
             IOCollection possibleIO = possibleController.getPotentialIO() + possibleController.AvailableIO;
             return possibleIO.Contains(necessaryIO);
@@ -233,16 +233,64 @@ namespace EstimatingLibrary
             collectionChanged(sender, e, "IOModules");
         }
         #endregion
-
-        #region Interfaces
+        
         #region IDDCopiable
         Object IDDCopiable.DragDropCopy(TECScopeManager scopeManager)
         {
-            var outController = new TECProvidedController(this, this.IsTypical);
+            var outController = new TECProvidedController(this);
+            outController.IsTypical = this.IsTypical;
             ModelLinkingHelper.LinkScopeItem(outController, scopeManager);
             return outController;
         }
         #endregion
+
+        #region ITypicalable
+        protected override ITECObject createInstance(ObservableListDictionary<ITECObject> typicalDictionary)
+        {
+            if (!this.IsTypical)
+            {
+                throw new Exception("Attempted to create an instance of an object which is already instanced.");
+            }
+            else
+            {
+                return new TECProvidedController(this);
+            }
+        }
+
+        protected override void addChildForProperty(string property, ITECObject item)
+        {
+            if(property == "ChildrenConnections") { }
+            else
+            {
+                this.AddChildForScopeProperty(property, item);
+            }
+        }
+
+        protected override bool removeChildForProperty(string property, ITECObject item)
+        {
+            if (property == "ChildrenConnections") { return true; }
+
+            else
+            {
+                return this.RemoveChildForScopeProperty(property, item);
+            }
+        }
+
+        protected override bool containsChildForProperty(string property, ITECObject item)
+        {
+            if (property == "ChildrenConnections") { return true; }
+
+            else
+            {
+                return this.ContainsChildForScopeProperty(property, item);
+            }
+        }
+
+        protected override void makeTypical()
+        {
+            this.IsTypical = true;
+            TypicalableUtilities.MakeChildrenTypical(this);
+        }
         #endregion
     }
 }

@@ -426,10 +426,39 @@
                     </Grid>
                 </Grid>
                 <Grid Grid.Row="3">
-                    <local:InterlocksView/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <Border BorderBrush="DarkGray" BorderThickness="0,1,0,0" Margin="5,0,5,0" Grid.ColumnSpan="2"/>
+                    <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="1"
+                            Margin="35,0,35,0" Grid.ColumnSpan="2">
+                        <TextBlock Text="{Binding ElementName=subScopeList, Path=SelectedItem.Name, StringFormat=Interlocks in {0}}"
+                                   Style="{StaticResource ListHeader}"/>
+                    </Border>
+
+                    <listControls:InterlocksListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Interlocks}"
+                                                   x:Name="interlockList"
+                                                   Grid.Row="2" Grid.ColumnSpan="2"
+                                                   SelectedItem="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedInterlock}"
+                                                   DeleteCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.DeleteInterlockCommand}"
+                                                   IsDragSource="True"/>
+                    <Grid  Grid.Column="1" Grid.Row="3"
+                           Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSubScope, Converter={utilities:NullToCollapsedConverter}}">
+                        <Button Content="Add" x:Name="addInterlock" Width="50" HorizontalAlignment="Right"
+                                Command="{Binding ViewModel.AddInterlockCommand}"
+                                CommandParameter="{Binding ViewModel.SelectedSubScope}"
+                                Style="{StaticResource AddButtonStyle}" />
+                    </Grid>
                 </Grid>
-                    
-                
+
+
             </Grid>
 
         </Grid>
@@ -478,6 +507,9 @@
                         </DataTemplate>
                         <DataTemplate DataType="{x:Type addVMs:AddInstanceVM}">
                             <addViews:AddInstanceView ViewModel="{Binding}"/>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type addVMs:AddInterlockVM}">
+                            <addViews:AddInterlockView ViewModel="{Binding}"/>
                         </DataTemplate>
                         <!--TODO: UpdateConnectionsView/VM-->
                     </ContentPresenter.Resources>

@@ -1,8 +1,7 @@
-﻿using EstimatingUtilitiesLibraryTests.LegacyDB_1_6;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace EstimatingUtilitiesLibraryTests
+namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
 {
     internal class LegacyDBGenerator
     {

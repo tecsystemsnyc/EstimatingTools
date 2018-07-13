@@ -6,12 +6,22 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using TestLibrary.ModelTestingUtilities;
+using System.Linq;
 
-namespace Tests
+namespace EstimatingUtilitiesLibraryTests
 {
     [TestClass]
     public class BidStackTests
     {
+        private Random rand;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            rand = new Random(0);
+        }
+
         #region Undo
 
         #region Bid Properties
@@ -19,7 +29,7 @@ namespace Tests
         public void Undo_Bid_Name()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             string expected = Bid.Name;
             string edit = "Edit";
 
@@ -41,7 +51,7 @@ namespace Tests
         public void Undo_Bid_Number()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             string expected = Bid.BidNumber;
             string edit = "Edit";
 
@@ -62,7 +72,7 @@ namespace Tests
         public void Undo_Bid_DueDate()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             string expected = Bid.DueDate.ToString();
             DateTime edit = new DateTime(2000, 1, 1);
 
@@ -83,7 +93,7 @@ namespace Tests
         public void Undo_Bid_Salesperson()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             string expected = Bid.Salesperson;
             string edit = "Edit";
 
@@ -104,7 +114,7 @@ namespace Tests
         public void Undo_Bid_Estimator()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             string expected = Bid.Estimator;
             string edit = "Edit";
 
@@ -125,13 +135,13 @@ namespace Tests
         public void Undo_Bid_ScopeTree()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             ObservableCollection<TECScopeBranch> expected = new ObservableCollection<TECScopeBranch>();
             foreach (TECScopeBranch item in Bid.ScopeTree)
             {
                 expected.Add(item);
             }
-            TECScopeBranch edit = new TECScopeBranch(false);
+            TECScopeBranch edit = new TECScopeBranch();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -150,7 +160,7 @@ namespace Tests
         public void Undo_Bid_Systems()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             ObservableCollection<TECSystem> expected = new ObservableCollection<TECSystem>();
             foreach (TECSystem item in Bid.Systems)
             {
@@ -175,7 +185,7 @@ namespace Tests
         public void Undo_Bid_Notes()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             ObservableCollection<TECLabeled> expected = new ObservableCollection<TECLabeled>();
             foreach (TECLabeled item in Bid.Notes)
             {
@@ -200,7 +210,7 @@ namespace Tests
         public void Undo_Bid_Exclusions()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             ObservableCollection<TECLabeled> expected = new ObservableCollection<TECLabeled>();
             foreach (TECLabeled item in Bid.Exclusions)
             {
@@ -226,7 +236,7 @@ namespace Tests
         public void Undo_Bid_Locations()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             ObservableCollection<TECLabeled> expected = new ObservableCollection<TECLabeled>();
             foreach (TECLabeled item in Bid.Locations)
             {
@@ -253,13 +263,13 @@ namespace Tests
         public void Undo_Bid_MiscCost()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             ObservableCollection<TECMisc> expected = new ObservableCollection<TECMisc>();
             foreach (TECMisc item in Bid.MiscCosts)
             {
                 expected.Add(item);
             }
-            TECMisc edit = new TECMisc(CostType.TEC, false);
+            TECMisc edit = new TECMisc(CostType.TEC);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -278,13 +288,13 @@ namespace Tests
         public void Undo_Bid_Panel()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             ObservableCollection<TECPanel> expected = new ObservableCollection<TECPanel>();
             foreach (TECPanel item in Bid.Panels)
             {
                 expected.Add(item);
             }
-            TECPanel edit = new TECPanel(Bid.Catalogs.PanelTypes[0], false);
+            TECPanel edit = new TECPanel(Bid.Catalogs.PanelTypes[0]);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -306,7 +316,7 @@ namespace Tests
         public void Undo_Labor_Soft()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             double expected = Bid.Parameters.SoftCoef;
 
             //Act
@@ -325,7 +335,7 @@ namespace Tests
         public void Undo_Labor_PM()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             double expected = Bid.Parameters.PMCoef;
 
             //Act
@@ -344,7 +354,7 @@ namespace Tests
         public void Undo_Labor_ENG()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             double expected = Bid.Parameters.ENGCoef;
 
             //Act
@@ -363,7 +373,7 @@ namespace Tests
         public void Undo_Labor_Comm()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             double expected = Bid.Parameters.CommCoef;
 
             //Act
@@ -382,7 +392,7 @@ namespace Tests
         public void Undo_Labor_Graph()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             double expected = Bid.Parameters.GraphCoef;
 
             //Act
@@ -401,7 +411,7 @@ namespace Tests
         public void Undo_Labor_Electrical()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             double expected = Bid.Parameters.ElectricalRate;
 
             //Act
@@ -420,7 +430,7 @@ namespace Tests
         public void Undo_Labor_ElectricalModifier()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             bool expected = Bid.Parameters.ElectricalIsOnOvertime;
 
             //Act
@@ -443,7 +453,7 @@ namespace Tests
         public void Undo_Location_Name()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             string expected = Bid.Locations[0].Label;
             string edit = "Edit";
 
@@ -468,7 +478,7 @@ namespace Tests
         public void Undo_System_Name()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             var system = Bid.Systems[0];
             string expected = system.Name;
             string edit = "Edit";
@@ -490,7 +500,7 @@ namespace Tests
         public void Undo_System_Description()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             var system = Bid.Systems[0];
             string expected = system.Description;
             string edit = "Edit";
@@ -513,14 +523,14 @@ namespace Tests
         public void Undo_System_Equipment()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             var system = Bid.Systems[0];
             ObservableCollection<TECEquipment> expected = new ObservableCollection<TECEquipment>();
             foreach (TECEquipment item in system.Equipment)
             {
                 expected.Add(item);
             }
-            TECEquipment edit = new TECEquipment(true);
+            TECEquipment edit = new TECEquipment();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -539,7 +549,7 @@ namespace Tests
         public void Undo_System_Location()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             TECTypical system = null;
             foreach(TECTypical item in Bid.Systems)
             {
@@ -574,7 +584,7 @@ namespace Tests
         public void Undo_Equipment_Name()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             var equipment = Bid.Systems[0].Equipment[0];
             string expected = equipment.Name;
             string edit = "Edit";
@@ -596,7 +606,7 @@ namespace Tests
         public void Undo_Equipment_Description()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             var equipment = Bid.Systems[0].Equipment[0];
             string expected = equipment.Description;
             string edit = "Edit";
@@ -618,14 +628,14 @@ namespace Tests
         public void Undo_Equipment_SubScope()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             var equipment = Bid.Systems[0].Equipment[0];
             ObservableCollection<TECSubScope> expected = new ObservableCollection<TECSubScope>();
             foreach (TECSubScope item in equipment.SubScope)
             {
                 expected.Add(item);
             }
-            TECSubScope edit = new TECSubScope(true);
+            TECSubScope edit = new TECSubScope();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -648,7 +658,7 @@ namespace Tests
         public void Undo_SubScope_Name()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             var subScope = Bid.Systems[0].Equipment[0].SubScope[0];
             string expected = subScope.Name;
             string edit = "Edit";
@@ -670,7 +680,7 @@ namespace Tests
         public void Undo_SubScope_Description()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             var subScope = Bid.Systems[0].Equipment[0].SubScope[0];
             string expected = subScope.Description;
             string edit = "Edit";
@@ -693,14 +703,14 @@ namespace Tests
         public void Undo_SubScope_Points()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             var subScope = Bid.Systems[0].Equipment[0].SubScope[0];
             ObservableCollection<TECPoint> expected = new ObservableCollection<TECPoint>();
             foreach (TECPoint item in subScope.Points)
             {
                 expected.Add(item);
             }
-            TECPoint edit = new TECPoint(true);
+            TECPoint edit = new TECPoint();
             edit.Type = IOType.AI;
 
             //Act
@@ -720,14 +730,14 @@ namespace Tests
         public void Undo_SubScope_Device()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             var subScope = Bid.Systems[0].Equipment[0].SubScope[0];
-            ObservableCollection<TECDevice> expected = new ObservableCollection<TECDevice>();
-            foreach (TECDevice item in subScope.Devices)
+            List<IEndDevice> expected = new List<IEndDevice>();
+            foreach (IEndDevice item in subScope.Devices)
             {
                 expected.Add(item);
             }
-            ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
+            List<TECConnectionType> types = new List<TECConnectionType>();
             types.Add(Bid.Catalogs.ConnectionTypes[0]);
             TECDevice edit = new TECDevice(types, new List<TECProtocol>(), Bid.Catalogs.Manufacturers[0]);
 
@@ -747,8 +757,8 @@ namespace Tests
         public void Undo_Bid_Connection_ConduitType()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            TECElectricalMaterial expected = Bid.Controllers[0].ChildrenConnections[0].ConduitType;
+            var Bid = ModelCreation.TestBid(rand);
+            TECElectricalMaterial expected = Bid.Controllers.First( x => x.ChildrenConnections.Count != 0).ChildrenConnections[0].ConduitType;
             TECElectricalMaterial edit = Bid.Catalogs.ConduitTypes[1];
 
             //Act
@@ -766,7 +776,7 @@ namespace Tests
         public void Undo_Bid_SubScope_AssociatedCost()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             TECSubScope testSubScope = Bid.Systems[0].Equipment[0].SubScope[0];
             int expected = testSubScope.AssociatedCosts.Count;
             TECAssociatedCost edit = Bid.Catalogs.AssociatedCosts[0];
@@ -791,7 +801,7 @@ namespace Tests
         public void Undo_Point_Name()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             var point = Bid.Systems[0].Equipment[0].SubScope[0].Points[0];
             string expected = point.Label;
             string edit = "Edit";
@@ -813,7 +823,7 @@ namespace Tests
         public void Undo_Point_Quantity()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             var point = Bid.Systems[0].Equipment[0].SubScope[0].Points[0];
             int expected = point.Quantity;
             int edit = 3;
@@ -835,7 +845,7 @@ namespace Tests
         public void Undo_Point_Type()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             var point = Bid.Systems[0].Equipment[0].SubScope[0].Points[0];
             string expected = point.Type.ToString();
             IOType edit = IOType.AO;
@@ -860,7 +870,7 @@ namespace Tests
         public void Undo_MiscCost_Name()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             string expected = Bid.MiscCosts[0].Name;
             string edit = "changedName";
 
@@ -883,7 +893,7 @@ namespace Tests
         public void Undo_Controller_Type()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             TECProvidedController provided = null;
             foreach(TECController controller in Bid.Controllers)
             {
@@ -917,7 +927,7 @@ namespace Tests
         public void Redo_Bid_Name()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             string edit = "Edit";
 
             //Act
@@ -937,7 +947,7 @@ namespace Tests
         public void Redo_Bid_Number()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             string edit = "Edit";
 
             //Act
@@ -956,7 +966,7 @@ namespace Tests
         public void Redo_Bid_DueDate()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             DateTime edit = new DateTime(2000, 1, 1);
 
             //Act
@@ -975,7 +985,7 @@ namespace Tests
         public void Redo_Bid_Salesperson()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             string expected = Bid.Salesperson;
             string edit = "Edit";
 
@@ -995,7 +1005,7 @@ namespace Tests
         public void Redo_Bid_Estimator()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             string edit = "Edit";
 
             //Act
@@ -1014,8 +1024,8 @@ namespace Tests
         public void Redo_Bid_ScopeTree()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            TECScopeBranch edit = new TECScopeBranch(false);
+            var Bid = ModelCreation.TestBid(rand);
+            TECScopeBranch edit = new TECScopeBranch();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -1038,7 +1048,7 @@ namespace Tests
         public void Redo_Bid_Systems()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             TECTypical edit = new TECTypical();
 
             //Act
@@ -1063,7 +1073,7 @@ namespace Tests
         public void Redo_Bid_Notes()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             TECLabeled edit = new TECLabeled();
 
             //Act
@@ -1087,7 +1097,7 @@ namespace Tests
         public void Redo_Bid_Exclusions()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             TECLabeled edit = new TECLabeled();
 
             //Act
@@ -1111,8 +1121,8 @@ namespace Tests
         public void Redo_Bid_MiscCost()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            TECMisc edit = new TECMisc(CostType.TEC, false);
+            var Bid = ModelCreation.TestBid(rand);
+            TECMisc edit = new TECMisc(CostType.TEC);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -1135,7 +1145,7 @@ namespace Tests
         public void Redo_Bid_Locations()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             TECLocation edit = new TECLocation();
             edit.Name = "This";
             edit.Label = "T";
@@ -1161,7 +1171,7 @@ namespace Tests
         public void Redo_Location_Name()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             string edit = "Edit";
 
             //Act
@@ -1180,7 +1190,7 @@ namespace Tests
         public void Redo_Labor_PM()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
             Bid.Parameters.PMCoef = 1.1;
             double expected = 1.1;
@@ -1199,7 +1209,7 @@ namespace Tests
         public void Redo_Labor_ENG()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
             Bid.Parameters.ENGCoef = 1.1;
             double expected = 1.1;
@@ -1218,7 +1228,7 @@ namespace Tests
         public void Redo_Labor_Comm()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
             Bid.Parameters.CommCoef = 1.1;
             double expected = 1.1;
@@ -1237,7 +1247,7 @@ namespace Tests
         public void Redo_Labor_Soft()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
             Bid.Parameters.SoftCoef = 1.1;
             double expected = 1.1;
@@ -1256,7 +1266,7 @@ namespace Tests
         public void Redo_Labor_Graph()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
             Bid.Parameters.GraphCoef = 1.1;
             double expected = 1.1;
@@ -1275,7 +1285,7 @@ namespace Tests
         public void Redo_Labor_Electrical()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
             Bid.Parameters.ElectricalRate = 1.1;
             double expected = 1.1;
@@ -1294,7 +1304,7 @@ namespace Tests
         public void Redo_Labor_ElectricalModifier()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
             Bid.Parameters.ElectricalIsOnOvertime = !Bid.Parameters.ElectricalIsOnOvertime;
             bool expected = Bid.Parameters.ElectricalIsOnOvertime;
@@ -1313,7 +1323,7 @@ namespace Tests
         public void Redo_System_Name()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             string edit = "Edit";
 
             //Act
@@ -1333,7 +1343,7 @@ namespace Tests
         public void Redo_System_Description()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             string edit = "Edit";
 
             //Act
@@ -1353,8 +1363,8 @@ namespace Tests
         public void Redo_System_Equipment()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            TECEquipment edit = new TECEquipment(true);
+            var Bid = ModelCreation.TestBid(rand);
+            TECEquipment edit = new TECEquipment();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -1378,7 +1388,7 @@ namespace Tests
         public void Redo_System_Location()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             TECLocation edit = new TECLocation();
             edit.Name = "Floor 42";
             edit.Label = "42";
@@ -1406,7 +1416,7 @@ namespace Tests
         public void Redo_Equipment_Name()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             string edit = "Edit";
 
             //Act
@@ -1426,7 +1436,7 @@ namespace Tests
         public void Redo_Equipment_Description()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             string edit = "Edit";
 
             //Act
@@ -1446,8 +1456,8 @@ namespace Tests
         public void Redo_Equipment_SubScope()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            TECSubScope edit = new TECSubScope(true);
+            var Bid = ModelCreation.TestBid(rand);
+            TECSubScope edit = new TECSubScope();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
@@ -1473,7 +1483,7 @@ namespace Tests
         public void Redo_SubScope_Name()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             string edit = "Edit";
 
             //Act
@@ -1493,7 +1503,7 @@ namespace Tests
         public void Redo_SubScope_Description()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             string edit = "Edit";
 
             //Act
@@ -1513,8 +1523,8 @@ namespace Tests
         public void Redo_SubScope_Points()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
-            TECPoint edit = new TECPoint(true);
+            var Bid = ModelCreation.TestBid(rand);
+            TECPoint edit = new TECPoint();
             edit.Type = IOType.AI;
 
             //Act
@@ -1539,7 +1549,7 @@ namespace Tests
         public void Redo_SubScope_Device()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             ObservableCollection<TECConnectionType> types = new ObservableCollection<TECConnectionType>();
             types.Add(Bid.Catalogs.ConnectionTypes[0]);
             TECDevice edit = new TECDevice(types, new List<TECProtocol>(), Bid.Catalogs.Manufacturers[0]);
@@ -1548,8 +1558,8 @@ namespace Tests
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
             var subscope = Bid.Systems[0].Equipment[0].SubScope[0];
             subscope.Devices.Add(edit);
-            var expected = new ObservableCollection<TECDevice>();
-            foreach (TECDevice item in subscope.Devices)
+            var expected = new ObservableCollection<IEndDevice>();
+            foreach (IEndDevice item in subscope.Devices)
             {
                 expected.Add(item);
             }
@@ -1569,7 +1579,7 @@ namespace Tests
         public void Redo_Point_Name()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             string edit = "Edit";
 
             //Act
@@ -1589,7 +1599,7 @@ namespace Tests
         public void Redo_Point_Quantity()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             int edit = 3;
 
             //Act
@@ -1611,7 +1621,7 @@ namespace Tests
         public void Redo_Point_Type()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             IOType edit = IOType.AO;
 
             //Act
@@ -1634,7 +1644,7 @@ namespace Tests
         public void Redo_Panel_Name()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             string edit = "Edit";
 
             //Act
@@ -1654,7 +1664,7 @@ namespace Tests
         public void Redo_Panel_PanelType()
         {
             //Arrange
-            var Bid = TestHelper.CreateTestBid();
+            var Bid = ModelCreation.TestBid(rand);
             TECPanelType edit = new TECPanelType(Bid.Catalogs.Manufacturers[0]);
 
             //Act

@@ -44,6 +44,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToControllerTypeTable();
             addToInternalNoteTable();
             addToProtocolTable();
+            addToScopeTemplatesTable();
 
             addToBidScopeBranchTable();
             addToBidMiscTable();
@@ -83,6 +84,15 @@ namespace EstimatingUtilitiesLibraryTests
             addToConnectionProtocolTable();
             addToHardwiredConnectionConnectionTypeTable();
 
+            addToTemplatesSystemTable();
+            addToTemplatesEquipmentTable();
+            addToTemplatesSubScopeTable();
+            addToTemplatesControllerTable();
+            addToTemplatesPanelTable();
+            addToTemplatesMiscTable();
+
+            addToManagerScopeTemplatesTable();
+
             SQLiteDB.NonQueryCommand("END TRANSACTION");
             SQLiteDB.Connection.Close();
         }
@@ -117,6 +127,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToControllerTypeTable();
             addToParametersTable();
             addToProtocolTable();
+            addToScopeTemplatesTable();
 
             addToHardwareManufacturerTable();
             addToIOModuleIOTable();
@@ -156,6 +167,8 @@ namespace EstimatingUtilitiesLibraryTests
             addToTemplatesControllerTable();
             addToTemplatesPanelTable();
             addToTemplatesMiscTable();
+
+            addToManagerScopeTemplatesTable();
 
             addTemplateSynchronizerData();
 
@@ -683,8 +696,15 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("Note Body");
             addDataToTable(new InternalNoteTable(), values);
         }
-        #endregion
+        private static void addToScopeTemplatesTable()
+        {
+            List<string> values = new List<string>();
+            values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
+            addDataToTable(new ScopeTemplatesTable(), values);
+        }
         
+        #endregion
+
         #region Relationship Tables
         private static void addToBidScopeBranchTable()
         {
@@ -1696,44 +1716,62 @@ namespace EstimatingUtilitiesLibraryTests
         private static void addToTemplatesSystemTable()
         {
             List<string> values = new List<string>();
-            values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+            values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("ebdbcc85-10f4-46b3-99e7-d896679f874a");
             addDataToTable(new TemplatesSystemTable(), values);
         }
         private static void addToTemplatesEquipmentTable()
         {
             List<string> values = new List<string>();
-            values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+            values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("1645886c-fce7-4380-a5c3-295f91961d16");
             addDataToTable(new TemplatesEquipmentTable(), values);
         }
         private static void addToTemplatesSubScopeTable()
         {
             List<string> values = new List<string>();
-            values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+            values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("3ebdfd64-5249-4332-a832-ff3cc0cdb309");
             addDataToTable(new TemplatesSubScopeTable(), values);
         }
         private static void addToTemplatesControllerTable()
         {
             List<string> values = new List<string>();
-            values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+            values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
             addDataToTable(new TemplatesControllerTable(), values);
         }
         private static void addToTemplatesPanelTable()
         {
             List<string> values = new List<string>();
-            values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+            values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("a8cdd31c-e690-4eaa-81ea-602c72904391");
             addDataToTable(new TemplatesPanelTable(), values);
         }
         private static void addToTemplatesMiscTable()
         {
             List<string> values = new List<string>();
-            values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+            values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("5df99701-1d7b-4fbe-843d-40793f4145a8");
             addDataToTable(new TemplatesMiscCostTable(), values);
+        }
+
+        private static void addToManagerScopeTemplatesTable()
+        {
+            if (isBid)
+            {
+                List<string> values = new List<string>();
+                values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
+                values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
+                addDataToTable(new ManagerTemplatesTable(), values);
+            }
+            else
+            {
+                List<string> values = new List<string>();
+                values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+                values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
+                addDataToTable(new ManagerTemplatesTable(), values);
+            }
         }
         #endregion
 
@@ -1748,7 +1786,7 @@ namespace EstimatingUtilitiesLibraryTests
             addDataToTable(new EquipmentTable(), values);
 
             values = new List<string>();
-            values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+            values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("7e61613f-62ec-4b06-b875-84b14e432758");
             addDataToTable(new TemplatesEquipmentTable(), values);
 
@@ -1771,7 +1809,7 @@ namespace EstimatingUtilitiesLibraryTests
             addDataToTable(new SubScopeTable(), values);
 
             values = new List<string>();
-            values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+            values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("826ae232-c1c5-4924-8e10-cf2d7a1d1ec4");
             addDataToTable(new TemplatesSubScopeTable(), values);
 
@@ -1790,7 +1828,7 @@ namespace EstimatingUtilitiesLibraryTests
             addDataToTable(new SystemTable(), values);
 
             values = new List<string>();
-            values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+            values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("e096ffb5-82f3-41c2-b767-c73b22c6875b");
             addDataToTable(new TemplatesSystemTable(), values);
 
@@ -1813,7 +1851,7 @@ namespace EstimatingUtilitiesLibraryTests
             addDataToTable(new EquipmentTable(), values);
 
             values = new List<string>();
-            values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+            values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("5e5c034a-8c88-4ae4-92a8-a1bac716af82");
             addDataToTable(new TemplatesEquipmentTable(), values);
 
@@ -1833,7 +1871,7 @@ namespace EstimatingUtilitiesLibraryTests
             addDataToTable(new SystemTable(), values);
 
             values = new List<string>();
-            values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+            values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("d562049c-ea9e-449c-8c1f-eaa7fbcb70d3");
             addDataToTable(new TemplatesSystemTable(), values);
 
@@ -1845,7 +1883,7 @@ namespace EstimatingUtilitiesLibraryTests
             addDataToTable(new EquipmentTable(), values);
 
             values = new List<string>();
-            values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+            values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("adced9c6-41c1-478b-b9db-3833f1618378");
             addDataToTable(new TemplatesEquipmentTable(), values);
 
@@ -1857,7 +1895,7 @@ namespace EstimatingUtilitiesLibraryTests
             addDataToTable(new SubScopeTable(), values);
 
             values = new List<string>();
-            values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
+            values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("59d6adb3-7f48-4448-82fa-f77cdfac47ad");
             addDataToTable(new TemplatesSubScopeTable(), values);
 

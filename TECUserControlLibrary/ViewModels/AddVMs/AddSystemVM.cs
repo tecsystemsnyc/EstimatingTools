@@ -39,7 +39,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             Quantity = 1;
             parent = scopeManager;
-            toAdd = new TECSystem(false);
+            toAdd = new TECSystem();
             AddCommand = new RelayCommand(addExecute, addCanExecute);
         }
 
@@ -57,12 +57,12 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                     bid.Systems.Add(typical);
                     Added?.Invoke(typical);
                 }
-                else if (parent is TECTemplates templates)
+                else if (parent is TECTemplates)
                 {
                     TECSystem system = null;
                     if(underlyingTemplate != null)
                     {
-                        system = new TECSystem(underlyingTemplate, ToAdd.IsTypical, templates,
+                        system = new TECSystem(underlyingTemplate, templates,
                         synchronizers: new Tuple<TemplateSynchronizer<TECEquipment>, TemplateSynchronizer<TECSubScope>>(templates.EquipmentSynchronizer, templates.SubScopeSynchronizer));
                         system.CopyPropertiesFromScope(ToAdd);
                     } else
@@ -70,7 +70,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                         system = ToAdd;
                     }
                     
-                    templates.SystemTemplates.Add(system);
+                    parent.Templates.SystemTemplates.Add(system);
                     Added?.Invoke(system);
                 }
             }
@@ -80,7 +80,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         internal void SetTemplate(TECSystem system)
         {
             underlyingTemplate = system;
-            ToAdd = new TECSystem(system, false, parent);
+            ToAdd = new TECSystem(system, parent);
         }
     }
 }

@@ -28,7 +28,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             this.scopeManager = scopeManager;
             parent = parentSystem;
-            ToAdd = new TECMisc(CostType.TEC, parentSystem.IsTypical);
+            ToAdd = new TECMisc(CostType.TEC);
             AddCommand = new RelayCommand(addExecute, addCanExecute);
         }
 
@@ -44,7 +44,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
 
         internal void SetTemplate(TECMisc misc)
         {
-            ToAdd = new TECMisc(misc, parent.IsTypical);
+            ToAdd = new TECMisc(misc);
         }
     }
 }

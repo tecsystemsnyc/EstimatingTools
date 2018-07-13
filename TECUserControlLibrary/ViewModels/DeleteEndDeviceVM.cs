@@ -58,7 +58,7 @@ namespace TECUserControlLibrary.ViewModels
 
             if (result == MessageBoxResult.Yes)
             {
-                foreach (TECSubScope ss in templates.SubScopeTemplates)
+                foreach (TECSubScope ss in templates.Templates.SubScopeTemplates)
                 {
                     while (ss.Devices.Contains(EndDevice))
                     {
@@ -66,7 +66,7 @@ namespace TECUserControlLibrary.ViewModels
                     }
                 }
 
-                foreach (TECEquipment equip in templates.EquipmentTemplates)
+                foreach (TECEquipment equip in templates.Templates.EquipmentTemplates)
                 {
                     foreach (TECSubScope ss in equip.SubScope)
                     {
@@ -77,7 +77,7 @@ namespace TECUserControlLibrary.ViewModels
                     }
                 }
 
-                foreach (TECSystem sys in templates.SystemTemplates)
+                foreach (TECSystem sys in templates.Templates.SystemTemplates)
                 {
                     foreach (TECEquipment equip in sys.Equipment)
                     {
@@ -104,7 +104,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void deleteAndReplaceExecute()
         {
-            foreach (TECSubScope ss in templates.SubScopeTemplates)
+            foreach (TECSubScope ss in templates.Templates.SubScopeTemplates)
             {
                 while (ss.Devices.Contains(EndDevice))
                 {
@@ -113,7 +113,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
 
-            foreach (TECEquipment equip in templates.EquipmentTemplates)
+            foreach (TECEquipment equip in templates.Templates.EquipmentTemplates)
             {
                 foreach (TECSubScope ss in equip.SubScope)
                 {
@@ -125,7 +125,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
 
-            foreach (TECSystem sys in templates.SystemTemplates)
+            foreach (TECSystem sys in templates.Templates.SystemTemplates)
             {
                 foreach (TECEquipment equip in sys.Equipment)
                 {
@@ -157,7 +157,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void populatePotentialReplacements()
         {
-            foreach (TECSystem sys in templates.SystemTemplates)
+            foreach (TECSystem sys in templates.Templates.SystemTemplates)
             {
                 foreach (TECEquipment equip in sys.Equipment)
                 {

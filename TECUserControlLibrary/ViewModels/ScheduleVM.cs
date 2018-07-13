@@ -15,8 +15,6 @@ namespace TECUserControlLibrary.ViewModels
     public class ScheduleVM : ViewModelBase
     {
         private String _tableName = "";
-        private TECSchedule _schedule;
-        private ObservableCollection<TECScope> _scopeCollection;
         
         public String TableName
         {
@@ -27,45 +25,32 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("TableName");
             }
         }
-        public TECSchedule Schedule
-        {
-            get { return _schedule; }
-            set
-            {
-                _schedule = value;
-                RaisePropertyChanged("Schedule");
-            }
-        }
-        public ObservableCollection<TECScope> ScopeCollection
-        {
-            get { return _scopeCollection; }
-            set
-            {
-                _scopeCollection = value;
-                RaisePropertyChanged("ScopeCollection");
-            }
-        }
+        public TECSchedule Schedule { get; }
+        public ObservableCollection<TECScope> ScopeCollection { get; }
+        public ObservableCollection<TECLocation> Locations { get; }
 
         public ICommand AddTableCommand { get; private set; }
 
         public ScheduleVM(TECBid bid, ChangeWatcher watcher)
         {
-            _schedule = bid.Schedule;
-            AddTableCommand = new RelayCommand(addTableExecute, canAddTable);
+            this.Schedule = bid.Schedule;
+            this.AddTableCommand = new RelayCommand(addTableExecute, canAddTable);
             watcher.Changed += changed;
-            populateScopeCollection(bid);
+            this.ScopeCollection = populateScopeCollection(bid);
+            this.Locations = bid.Locations;
         }
 
-        private void populateScopeCollection(TECBid bid)
+        private ObservableCollection<TECScope> populateScopeCollection(TECBid bid)
         {
-            ScopeCollection = new ObservableCollection<TECScope>();
+            var outCollection = new ObservableCollection<TECScope>();
             foreach(TECTypical typical in bid.Systems)
             {
                 foreach(TECSystem system in typical.Instances)
                 {
-                    ScopeCollection.Add(system);
+                    outCollection.Add(system);
                 }
             }
+            return outCollection;
         }
 
         private void changed(TECChangedEventArgs e)
@@ -82,14 +67,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-
-        public void Refresh(TECBid bid, ChangeWatcher watcher)
-        {
-            Schedule = bid.Schedule;
-            watcher.Changed += changed;
-            populateScopeCollection(bid);
-        }
-
+        
         private void addTableExecute()
         {
             TECScheduleTable table = new TECScheduleTable();
@@ -98,7 +76,6 @@ namespace TECUserControlLibrary.ViewModels
             TableName = "";
 
         }
-
         private bool canAddTable()
         {
             return TableName != "";

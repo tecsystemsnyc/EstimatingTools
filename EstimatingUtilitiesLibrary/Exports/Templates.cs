@@ -193,7 +193,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             int x = 1, y = 2;
             x = addSubScopeHeader(worksheet, x, y).nextRow;
 
-            foreach(TECSubScope scope in templates.SubScopeTemplates)
+            foreach(TECSubScope scope in templates.Templates.SubScopeTemplates)
             {
                 x = addSubScopeRow(worksheet, scope, x, y).nextRow;
             }
@@ -209,7 +209,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             int x = 1, y = 2;
             y = addScopeHeader(worksheet, x, y).nextColumn;
             x = addSubScopeHeader(worksheet, x, y).nextRow;
-            foreach(TECEquipment equipment in templates.EquipmentTemplates)
+            foreach(TECEquipment equipment in templates.Templates.EquipmentTemplates)
             {
 
                 foreach (TECSubScope scope in equipment.SubScope)
@@ -233,7 +233,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             y = addScopeHeader(worksheet, x, y).nextColumn;
             y = addScopeHeader(worksheet, x, y).nextColumn;
             x = addSubScopeHeader(worksheet, x, y).nextRow;
-            foreach (TECSystem system in templates.SystemTemplates)
+            foreach (TECSystem system in templates.Templates.SystemTemplates)
             {
                 foreach (TECEquipment equipment in system.Equipment)
                 {

@@ -1,17 +1,22 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary.Database;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
 using System.Linq;
-using static Tests.CostTestingUtilities;
+using TestLibrary;
+using TestLibrary.ModelTestingUtilities;
+using static TestLibrary.GeneralTestingUtilities;
 
-namespace Tests
+namespace EstimatingUtilitiesLibraryTests
 {
     [TestClass]
     public class SaveNewTemplatesTests
     {
+        static Random rand;
+
         static TECTemplates expectedTemplates;
         static TECSystem expectedSystem;
         static TECEquipment expectedEquipment;
@@ -54,15 +59,16 @@ namespace Tests
         [ClassInitialize]
         public static void ClassInitialize(TestContext TestContext)
         {
+            rand = new Random(0);
             //Arrange
-            expectedTemplates = TestHelper.CreateTestTemplates();
-            expectedSystem = expectedTemplates.SystemTemplates.First(sys => sys.Name == "Test System");
-            expectedEquipment = expectedTemplates.EquipmentTemplates.First(sys => sys.Name == "Test Equipment");
-            expectedSubScope = expectedTemplates.SubScopeTemplates.First(sys => sys.Name == "Test SubScope");
-            expectedDevice = expectedTemplates.Catalogs.Devices.First(item => item.Name == "Test Device");
-            expectedManufacturer = expectedTemplates.Catalogs.Manufacturers.First(item => item.Label == "Test Manufacturer");
+            expectedTemplates = ModelCreation.TestTemplates(rand);
+            expectedSystem = expectedTemplates.Templates.SystemTemplates.First();
+            expectedEquipment = expectedTemplates.Templates.EquipmentTemplates.First();
+            expectedSubScope = expectedTemplates.Templates.SubScopeTemplates.First();
+            expectedDevice = expectedTemplates.Catalogs.Devices.First();
+            expectedManufacturer = expectedTemplates.Catalogs.Manufacturers.First();
             expectedTag = expectedTemplates.Catalogs.Tags[0];
-            expectedController = (TECProvidedController)expectedTemplates.ControllerTemplates.First(sys => sys.Name == "Test Controller" && sys is TECProvidedController);
+            expectedController = (TECProvidedController)expectedTemplates.Templates.ControllerTemplates.First(sys => sys is TECProvidedController);
             expectedAssociatedCost = expectedTemplates.Catalogs.AssociatedCosts[0];
             expectedConnectionType = expectedTemplates.Catalogs.ConnectionTypes[0];
             expectedConduitType = expectedTemplates.Catalogs.ConduitTypes[0];
@@ -75,7 +81,7 @@ namespace Tests
             Assert.IsTrue(success, "New method in DatabaseManager returned false.");
             actualTemplates = manager.Load();
 
-            if (actualTemplates.SystemTemplates.Count == 0)
+            if (actualTemplates.Templates.SystemTemplates.Count == 0)
             {
                 string failDirectory = Path.GetTempPath() + "Estimating Tools\\";
                 Directory.CreateDirectory(failDirectory);
@@ -88,95 +94,17 @@ namespace Tests
                 Assert.Fail(string.Format("No systems loaded into templates. File saved at: {0}", failPath));
             }
 
-            foreach (TECSystem sys in actualTemplates.SystemTemplates)
-            {
-                if (sys.Guid == expectedSystem.Guid)
-                {
-                    actualSystem = sys;
-                    break;
-                }
-            }
-
-            foreach (TECEquipment equip in actualTemplates.EquipmentTemplates)
-            {
-                if (equip.Guid == expectedEquipment.Guid)
-                {
-                    actualEquipment = equip;
-                    break;
-                }
-            }
-
-            foreach (TECSubScope ss in actualTemplates.SubScopeTemplates)
-            {
-                if (ss.Guid == expectedSubScope.Guid)
-                {
-                    actualSubScope = ss;
-                    break;
-                }
-            }
-
-            foreach (TECDevice dev in actualTemplates.Catalogs.Devices)
-            {
-                if (dev.Guid == expectedDevice.Guid)
-                {
-                    actualDevice = dev;
-                    break;
-                }
-            }
-
-            foreach (TECManufacturer man in actualTemplates.Catalogs.Manufacturers)
-            {
-                if (man.Guid == expectedManufacturer.Guid)
-                {
-                    actualManufacturer = man;
-                    break;
-                }
-            }
-
-            foreach (TECTag tag in actualTemplates.Catalogs.Tags)
-            {
-                if (tag.Guid == expectedTag.Guid)
-                {
-                    actualTag = tag;
-                    break;
-                }
-            }
-
-            foreach (TECProvidedController controller in actualTemplates.ControllerTemplates)
-            {
-                if (controller?.Guid == expectedController.Guid)
-                {
-                    actualController = controller;
-                    break;
-                }
-            }
-
-            foreach (TECCost cost in actualTemplates.Catalogs.AssociatedCosts)
-            {
-                if (cost.Guid == expectedAssociatedCost.Guid)
-                {
-                    actualAssociatedCost = cost;
-                    break;
-                }
-            }
-
-            foreach (TECElectricalMaterial connectionType in actualTemplates.Catalogs.ConnectionTypes)
-            {
-                if (connectionType.Guid == expectedConnectionType.Guid)
-                {
-                    actualConnectionType = connectionType;
-                    break;
-                }
-            }
-
-            foreach (TECElectricalMaterial conduitType in actualTemplates.Catalogs.ConduitTypes)
-            {
-                if (conduitType.Guid == expectedConduitType.Guid)
-                {
-                    actualConduitType = conduitType;
-                    break;
-                }
-            }
+            actualSystem = actualTemplates.Templates.SystemTemplates.First(x => x.Guid == expectedSystem.Guid);
+            actualEquipment = actualTemplates.Templates.EquipmentTemplates.First(x => x.Guid == expectedEquipment.Guid);
+            actualSubScope = actualTemplates.Templates.SubScopeTemplates.First(x => x.Guid == expectedSubScope.Guid);
+            actualDevice = actualTemplates.Catalogs.Devices.First(x => x.Guid == expectedDevice.Guid);
+            actualManufacturer = actualTemplates.Catalogs.Manufacturers.First(x => x.Guid == expectedManufacturer.Guid);
+            actualTag = actualTemplates.Catalogs.Tags.First(x => x.Guid == expectedTag.Guid);
+            actualController = actualTemplates.Templates.ControllerTemplates.First(x => x.Guid == expectedController.Guid) as TECProvidedController;
+            actualAssociatedCost = actualTemplates.Catalogs.AssociatedCosts.First(x => x.Guid == expectedAssociatedCost.Guid);
+            actualConnectionType = actualTemplates.Catalogs.ConnectionTypes.First(x => x.Guid == expectedConnectionType.Guid);
+            actualConduitType = actualTemplates.Catalogs.ConduitTypes.First(x => x.Guid == expectedConduitType.Guid);
+            
         }
 
         [ClassCleanup]
@@ -191,8 +119,8 @@ namespace Tests
         [TestMethod]
         public void SaveNew_Templates_LaborConstants()
         {
-            TECParameters expectedLabor = expectedTemplates.Parameters[0];
-            TECParameters actualLabor = actualTemplates.Parameters[0];
+            TECParameters expectedLabor = expectedTemplates.Templates.Parameters[0];
+            TECParameters actualLabor = actualTemplates.Templates.Parameters[0];
 
             //Assert
             Assert.AreEqual(expectedLabor.PMCoef, actualLabor.PMCoef);
@@ -214,30 +142,30 @@ namespace Tests
         [TestMethod]
         public void SaveNew_Templates_SubcontractLaborConstants()
         {
-            TECParameters expectedLabor = expectedTemplates.Parameters[0];
-            TECParameters actualLabor = actualTemplates.Parameters[0];
+            TECParameters expectedLabor = expectedTemplates.Templates.Parameters[0];
+            TECParameters actualLabor = actualTemplates.Templates.Parameters[0];
 
             //Assert
-            Assert.AreEqual(expectedLabor.ElectricalRate, actualLabor.ElectricalRate);
-            Assert.AreEqual(expectedLabor.ElectricalSuperRate, actualLabor.ElectricalSuperRate);
-            Assert.AreEqual(expectedLabor.ElectricalNonUnionRate, actualLabor.ElectricalNonUnionRate);
-            Assert.AreEqual(expectedLabor.ElectricalSuperNonUnionRate, actualLabor.ElectricalSuperNonUnionRate);
+            Assert.AreEqual(expectedLabor.ElectricalRate, actualLabor.ElectricalRate, DELTA);
+            Assert.AreEqual(expectedLabor.ElectricalSuperRate, actualLabor.ElectricalSuperRate, DELTA);
+            Assert.AreEqual(expectedLabor.ElectricalNonUnionRate, actualLabor.ElectricalNonUnionRate, DELTA);
+            Assert.AreEqual(expectedLabor.ElectricalSuperNonUnionRate, actualLabor.ElectricalSuperNonUnionRate, DELTA);
         }
 
         [TestMethod]
         public void SaveNew_Templates_System()
         {
             //Arrange
-            TECEquipment expectedSysEquipment = expectedSystem.Equipment.First(item => item.Name == "System Equipment");
-            TECSubScope expectedSysSubScope = expectedSysEquipment.SubScope.First(item => item.Name == "System SubScope");
+            TECEquipment expectedSysEquipment = expectedSystem.Equipment.First();
+            TECSubScope expectedSysSubScope = expectedSysEquipment.SubScope.First();
             TECDevice expectedChildDevice = expectedSysSubScope.Devices[0] as TECDevice;
-            TECPoint expectedSysPoint = expectedSysSubScope.Points.First(item => item.Label == "System Point");
+            TECPoint expectedSysPoint = expectedSysSubScope.Points.First();
             TECManufacturer expectedChildMan = expectedChildDevice.Manufacturer;
 
-            TECEquipment actualSysEquipment = actualSystem.Equipment.First(item => item.Name == "System Equipment");
-            TECSubScope actualSysSubScope = actualSysEquipment.SubScope.First(item => item.Name == "System SubScope");
+            TECEquipment actualSysEquipment = actualSystem.Equipment.First(item => item.Guid == expectedSysEquipment.Guid);
+            TECSubScope actualSysSubScope = actualSysEquipment.SubScope.First(item => item.Guid == expectedSysSubScope.Guid);
             TECDevice actualChildDevice = actualSysSubScope.Devices[0] as TECDevice;
-            TECPoint actualSysPoint = actualSysSubScope.Points.First(item => item.Label == "System Point");
+            TECPoint actualSysPoint = actualSysSubScope.Points.First(item => item.Guid == expectedSysPoint.Guid);
             TECManufacturer actualChildMan = actualChildDevice.Manufacturer;
 
             //Assert
@@ -255,7 +183,7 @@ namespace Tests
 
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
             Assert.AreEqual(expectedChildDevice.Description, actualChildDevice.Description);
-            Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost);
+            Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost, DELTA);
             Assert.AreEqual(expectedChildDevice.HardwiredConnectionTypes[0].Guid, actualChildDevice.HardwiredConnectionTypes[0].Guid);
             Assert.AreEqual(expectedChildDevice.Tags[0].Label, actualChildDevice.Tags[0].Label);
 
@@ -264,7 +192,7 @@ namespace Tests
             Assert.AreEqual(expectedSysPoint.Type, actualSysPoint.Type);
 
             Assert.AreEqual(expectedChildMan.Label, actualChildMan.Label);
-            Assert.AreEqual(expectedChildMan.Multiplier, actualChildMan.Multiplier);
+            Assert.AreEqual(expectedChildMan.Multiplier, actualChildMan.Multiplier, DELTA);
 
             ////Controlled scope tests]
             //TECSystem expectedConScope = expectedSystem;
@@ -281,12 +209,12 @@ namespace Tests
         public void SaveNew_Templates_Equipment()
         {
             //Arrange
-            TECSubScope actualEquipSubScope = actualEquipment.SubScope.First(item => item.Name == "Equipment SubScope");
+            TECSubScope actualEquipSubScope = actualEquipment.SubScope.First(item => item.Devices.Count > 0 && item.Points.Count > 0);
             TECDevice actualChildDevice = actualEquipSubScope.Devices[0] as TECDevice;
             TECPoint actualEquipPoint = actualEquipSubScope.Points[0];
             TECManufacturer actualChildMan = actualChildDevice.Manufacturer;
 
-            TECSubScope expectedEquipSubScope = expectedEquipment.SubScope.First(item => item.Name == "Equipment SubScope");
+            TECSubScope expectedEquipSubScope = expectedEquipment.SubScope.First(item => item.Guid == actualEquipSubScope.Guid);
             TECDevice expectedChildDevice = expectedEquipSubScope.Devices[0] as TECDevice;
             TECPoint expectedEquipPoint = expectedEquipSubScope.Points[0];
             TECManufacturer expectedChildMan = expectedChildDevice.Manufacturer;
@@ -318,13 +246,13 @@ namespace Tests
         public void SaveNew_Templates_SubScope()
         {
             //Arrange
-            TECDevice actualChildDevice = actualSubScope.Devices[0] as TECDevice;
+            IEndDevice actualChildDevice = actualSubScope.Devices[0];
             TECPoint actualSSPoint = actualSubScope.Points[0];
-            TECManufacturer actualChildMan = actualChildDevice.Manufacturer;
+            TECManufacturer actualChildMan = (actualChildDevice as TECHardware).Manufacturer;
 
-            TECDevice expectedChildDevice = expectedSubScope.Devices[0] as TECDevice;
-            TECPoint expectedSSPoint = expectedSubScope.Points[0];
-            TECManufacturer expectedChildMan = expectedChildDevice.Manufacturer;
+            IEndDevice expectedChildDevice = expectedSubScope.Devices.First(x => x.Guid == actualChildDevice.Guid);
+            TECPoint expectedSSPoint = expectedSubScope.Points.First(x => x.Guid == actualSSPoint.Guid);
+            TECManufacturer expectedChildMan = (expectedChildDevice as TECHardware).Manufacturer;
 
             //Assert
             Assert.AreEqual(expectedSubScope.Name, actualSubScope.Name);
@@ -334,9 +262,9 @@ namespace Tests
 
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
             Assert.AreEqual(expectedChildDevice.Description, actualChildDevice.Description);
-            Assert.AreEqual(expectedChildDevice.Cost, actualChildDevice.Cost, DELTA);
+            Assert.AreEqual((expectedChildDevice as TECHardware).Cost, (actualChildDevice as TECHardware).Cost, DELTA);
             Assert.AreEqual(expectedChildDevice.HardwiredConnectionTypes[0].Guid, actualChildDevice.HardwiredConnectionTypes[0].Guid);
-            Assert.AreEqual(expectedChildDevice.Tags[0].Label, actualChildDevice.Tags[0].Label);
+            Assert.AreEqual((expectedChildDevice as TECHardware).Tags[0].Label, (actualChildDevice as TECHardware).Tags[0].Label);
 
             Assert.AreEqual(expectedSSPoint.Label, actualSSPoint.Label);
             Assert.AreEqual(expectedSSPoint.Quantity, actualSSPoint.Quantity);
@@ -417,7 +345,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedConnectionType.Name, actualConnectionType.Name);
             Assert.AreEqual(expectedConnectionType.Cost, actualConnectionType.Cost, DELTA);
-            Assert.AreEqual(expectedConnectionType.Labor, actualConnectionType.Labor);
+            Assert.AreEqual(expectedConnectionType.Labor, actualConnectionType.Labor, DELTA);
             Assert.AreEqual(expectedConnectionType.RatedCosts.Count, actualConnectionType.RatedCosts.Count);
         }
 
@@ -427,7 +355,7 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedConduitType.Name, actualConduitType.Name);
             Assert.AreEqual(expectedConduitType.Cost, actualConduitType.Cost, DELTA);
-            Assert.AreEqual(expectedConduitType.Labor, actualConduitType.Labor);
+            Assert.AreEqual(expectedConduitType.Labor, actualConduitType.Labor, DELTA);
             Assert.AreEqual(expectedConnectionType.RatedCosts.Count, actualConnectionType.RatedCosts.Count);
         }
 
@@ -435,8 +363,8 @@ namespace Tests
         public void SaveNew_Templates_Panel()
         {
             //Arrange
-            TECPanel expectedPanel = expectedTemplates.PanelTemplates.First(item => item.Name == "Test Panel");
-            TECPanel actualPanel = actualTemplates.PanelTemplates.First(item => item.Name == "Test Panel");
+            TECPanel expectedPanel = expectedTemplates.Templates.PanelTemplates.First();
+            TECPanel actualPanel = actualTemplates.Templates.PanelTemplates.First(item => item.Guid == expectedPanel.Guid);
 
             Assert.AreEqual(expectedPanel.Name, actualPanel.Name);
             Assert.AreEqual(expectedPanel.Type.Guid, actualPanel.Type.Guid);
@@ -447,7 +375,7 @@ namespace Tests
         {
             //Arrange
             TECMisc expectedTECCost = null, expectedElecCost = null;
-            foreach(TECMisc misc in expectedTemplates.MiscCostTemplates)
+            foreach(TECMisc misc in expectedTemplates.Templates.MiscCostTemplates)
             {
                 if (misc.Type == CostType.TEC)
                 {
@@ -460,7 +388,7 @@ namespace Tests
             }
 
             TECMisc actualTECCost = null, actualElecCost = null;
-            foreach(TECMisc misc in actualTemplates.MiscCostTemplates)
+            foreach(TECMisc misc in actualTemplates.Templates.MiscCostTemplates)
             {
                 if (misc.Guid == expectedTECCost.Guid)
                 {
@@ -516,7 +444,7 @@ namespace Tests
             TECSubScope expectedRefSSInRef = null, actualRefSSInRef = null;
 
             #region Expected
-            foreach (TECSystem sys in expectedTemplates.SystemTemplates)
+            foreach (TECSystem sys in expectedTemplates.Templates.SystemTemplates)
             {
                 if (sys.Name == "Sync System")
                 {
@@ -526,7 +454,7 @@ namespace Tests
             }
             Assert.IsNotNull(expectedSys);
 
-            foreach (TECEquipment equip in expectedTemplates.EquipmentTemplates)
+            foreach (TECEquipment equip in expectedTemplates.Templates.EquipmentTemplates)
             {
                 if (equip.Name == "Sync Equip")
                 {
@@ -546,7 +474,7 @@ namespace Tests
             }
             Assert.IsNotNull(expectedRefEquip);
 
-            foreach (TECSubScope ss in expectedTemplates.SubScopeTemplates)
+            foreach (TECSubScope ss in expectedTemplates.Templates.SubScopeTemplates)
             {
                 if (ss.Name == "Sync SS")
                 {
@@ -578,7 +506,7 @@ namespace Tests
             #endregion
 
             #region Actual
-            foreach (TECSystem sys in actualTemplates.SystemTemplates)
+            foreach (TECSystem sys in actualTemplates.Templates.SystemTemplates)
             {
                 if (sys.Name == "Sync System" && sys.Guid == expectedSys.Guid)
                 {
@@ -588,7 +516,7 @@ namespace Tests
             }
             Assert.IsNotNull(actualSys);
 
-            foreach (TECEquipment equip in actualTemplates.EquipmentTemplates)
+            foreach (TECEquipment equip in actualTemplates.Templates.EquipmentTemplates)
             {
                 if (equip.Name == "Sync Equip" && equip.Guid == expectedTempEquip.Guid)
                 {
@@ -608,7 +536,7 @@ namespace Tests
             }
             Assert.IsNotNull(actualRefEquip);
 
-            foreach (TECSubScope ss in actualTemplates.SubScopeTemplates)
+            foreach (TECSubScope ss in actualTemplates.Templates.SubScopeTemplates)
             {
                 if (ss.Name == "Sync SS" && ss.Guid == expectedTempSS.Guid)
                 {

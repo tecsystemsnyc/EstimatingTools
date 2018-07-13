@@ -20,25 +20,25 @@ namespace Models
             TemplateSynchronizer<TECEquipment> equipSync = templates.EquipmentSynchronizer;
             TemplateSynchronizer<TECSubScope> ssSync = templates.SubScopeSynchronizer;
 
-            TECSystem templateSys = new TECSystem(false);
-            templates.SystemTemplates.Add(templateSys);
+            TECSystem templateSys = new TECSystem();
+            templates.Templates.SystemTemplates.Add(templateSys);
 
-            TECEquipment templateEquip = new TECEquipment(false);
+            TECEquipment templateEquip = new TECEquipment();
             templateEquip.Name = "Template Equip"; 
-            templates.EquipmentTemplates.Add(templateEquip);
+            templates.Templates.EquipmentTemplates.Add(templateEquip);
             templateSys.Equipment.Add(equipSync.NewItem(templateEquip));
 
-            TECSubScope templateSS = new TECSubScope(false);
+            TECSubScope templateSS = new TECSubScope();
             templateSS.Name = "Template SS";
-            templates.SubScopeTemplates.Add(templateSS);
+            templates.Templates.SubScopeTemplates.Add(templateSS);
             templateEquip.SubScope.Add(ssSync.NewItem(templateSS));
 
-            TECSubScope equipSS = new TECSubScope(false);
+            TECSubScope equipSS = new TECSubScope();
             equipSS.Name = "Equip SS";
             templateEquip.SubScope.Add(equipSS);
 
             //Act
-            TECSystem sysCopy = new TECSystem(templateSys, false, templates, synchronizers: new Tuple<TemplateSynchronizer<TECEquipment>, TemplateSynchronizer<TECSubScope>>(equipSync, ssSync));
+            TECSystem sysCopy = new TECSystem(templateSys, templates, synchronizers: new Tuple<TemplateSynchronizer<TECEquipment>, TemplateSynchronizer<TECSubScope>>(equipSync, ssSync));
 
             //Assert
             TECEquipment tempEquipCopy = sysCopy.Equipment[0];

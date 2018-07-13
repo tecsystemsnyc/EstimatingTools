@@ -30,8 +30,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         public AddPointVM(TECSubScope parentSubScope, TECScopeManager scopeManager) : base(scopeManager)
         {
             parent = parentSubScope;
-            isTypical = parentSubScope.IsTypical;
-            toAdd = new TECPoint(parentSubScope.IsTypical);
+            toAdd = new TECPoint();
             ToAdd.Quantity = 1;
             AddCommand = new RelayCommand(addExecute, addCanExecute);
         }
@@ -54,7 +53,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         }
         private void addExecute()
         {
-            var newPoint = new TECPoint(ToAdd, isTypical);
+            var newPoint = new TECPoint(ToAdd);
             parent.Points.Add(newPoint);
             if (parent.Connection != null && parent.Connection is TECHardwiredConnection hardwiredConnection)
             {
@@ -81,7 +80,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
 
         internal void SetTemplate(TECPoint point)
         {
-            ToAdd = new TECPoint(point, isTypical);
+            ToAdd = new TECPoint(point);
         }
     }
 }

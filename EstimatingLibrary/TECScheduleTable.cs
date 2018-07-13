@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -49,16 +50,8 @@ namespace EstimatingLibrary
         
         private void items_collectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach (TECScheduleItem item in e.NewItems)
-                    notifyTECChanged(Change.Add, "Items", this, item);
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (TECScheduleItem item in e.OldItems)
-                    notifyTECChanged(Change.Remove, "Items", this, item);
-            }
+            CollectionChangedHandlers.CollectionChangedHandler(sender, e, "Items", this,
+                notifyCombinedChanged, notifyReorder: false);
         }
         private SaveableMap propertyObjects()
         {

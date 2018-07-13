@@ -19,34 +19,36 @@ namespace TemplateBuilder.MVVM
         
         public event Action<string> EditorStarted;
 
-        public override string FirstRecentTemplates
+        public override string FirstRecentFile
         {
             get { return TBSettings.FirstRecentTemplates; }
         }
-        public override string SecondRecentTemplates
+        public override string SecondRecentFile
         {
             get { return TBSettings.SecondRecentTemplates; }
         }
-        public override string ThirdRecentTemplates
+        public override string ThirdRecentFile
         {
             get { return TBSettings.ThirdRecentTemplates; }
         }
-        public override string FourthRecentTemplates
+        public override string FourthRecentFile
         {
             get { return TBSettings.FourthRecentTemplates; }
         }
-        public override string FifthRecentTemplates
+        public override string FifthRecentFile
         {
             get { return TBSettings.FifthRecentTemplates; }
         }
 
+        public override string FileText => "Templates File:";
+        
         public TemplatesSplashVM(string templatesPath, string defaultDirectory) :
             base(SPLASH_TITLE, SPLASH_SUBTITLE, defaultDirectory)
         {
-            TemplatesPath = templatesPath;
+            FilePath = templatesPath;
 
-            GetTemplatesPathCommand = new RelayCommand(getTemplatesPathExecute);
-            ClearTemplatesPathCommand = new RelayCommand(clearTemplatesPathExecute);
+            GetPathCommand = new RelayCommand(getTemplatesPathExecute);
+            ClearPathCommand = new RelayCommand(clearTemplatesPathExecute);
             OpenExistingCommand = new RelayCommand(openExistingExecute, openExistingCanExecute);
             CreateNewCommand = new RelayCommand(createNewExecute, createNewCanExecute);
         }
@@ -56,30 +58,30 @@ namespace TemplateBuilder.MVVM
             string path = UIHelpers.GetLoadPath(FileDialogParameters.TemplatesFileParameters, defaultDirectory);
             if (path != null)
             {
-                TemplatesPath = path;
+                FilePath = path;
             }
         }
         private void clearTemplatesPathExecute()
         {
-            TemplatesPath = "";
+            FilePath = "";
         }
 
         private void openExistingExecute()
         {
             LoadingText = "Loading...";
-            if (!File.Exists(TemplatesPath))
+            if (!File.Exists(FilePath))
             {
                 MessageBox.Show("Templates file no longer exist at that path.");
                 LoadingText = "";
             }
             else
             {
-                EditorStarted?.Invoke(TemplatesPath);
+                EditorStarted?.Invoke(FilePath);
             }
         }
         private bool openExistingCanExecute()
         {
-            return (TemplatesPath != "" && TemplatesPath != null);
+            return (FilePath != "" && FilePath != null);
         }
 
         private void createNewExecute()
@@ -106,7 +108,7 @@ namespace TemplateBuilder.MVVM
                 switch (ext)
                 {
                     case ".tdb":
-                        TemplatesPath = path;
+                        FilePath = path;
                         break;
                     default:
                         break;

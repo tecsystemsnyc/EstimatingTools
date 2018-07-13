@@ -3,11 +3,12 @@ using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 
 namespace EstimatingLibrary
 {
-    public abstract class TECController : TECLocated, ITypicalable, IConnectable
+    public abstract class TECController : TECLocated, IConnectable, ITypicalable
     {
         #region Properties
         //---Stored---
@@ -46,7 +47,7 @@ namespace EstimatingLibrary
 
         public bool IsTypical
         {
-            get; private set;
+            get; protected set;
         }
 
         //---Derived---
@@ -72,16 +73,16 @@ namespace EstimatingLibrary
         #endregion
 
         #region Constructors
-        public TECController(Guid guid, bool isTypical) : base(guid)
+        public TECController(Guid guid) : base(guid)
         {
             _isServer = false;
-            IsTypical = isTypical;
+            IsTypical = false;
             _childrenConnections = new ObservableCollection<IControllerConnection>();
             ChildrenConnections.CollectionChanged += handleChildrenChanged;
         }
 
-        public TECController( bool isTypical) : this(Guid.NewGuid(), isTypical) { }
-        public TECController(TECController controllerSource, bool isTypical, Dictionary<Guid, Guid> guidDictionary = null) : this(isTypical)
+        public TECController() : this(Guid.NewGuid()) { }
+        public TECController(TECController controllerSource, Dictionary<Guid, Guid> guidDictionary = null) : this()
         {
             if (guidDictionary != null)
             { guidDictionary[_guid] = controllerSource.Guid; }
@@ -90,13 +91,13 @@ namespace EstimatingLibrary
             {
                 if (connection is TECHardwiredConnection)
                 {
-                    TECHardwiredConnection connectionToAdd = new TECHardwiredConnection(connection as TECHardwiredConnection, this, isTypical, guidDictionary);
+                    TECHardwiredConnection connectionToAdd = new TECHardwiredConnection(connection as TECHardwiredConnection, this, guidDictionary);
                     _childrenConnections.Add(connectionToAdd);
                 }
                 else if (connection is TECNetworkConnection)
                 {
 
-                    TECNetworkConnection connectionToAdd = new TECNetworkConnection(connection as TECNetworkConnection, this, isTypical, guidDictionary);
+                    TECNetworkConnection connectionToAdd = new TECNetworkConnection(connection as TECNetworkConnection, this, guidDictionary);
                     _childrenConnections.Add(connectionToAdd);
                 }
             }
@@ -135,9 +136,10 @@ namespace EstimatingLibrary
         {
             IControllerConnection connection;
             bool isNew = true;
-            if(protocol is TECHardwiredProtocol wired)
+            bool isTypical = (connectable as ITypicalable)?.IsTypical ?? false;
+            if (protocol is TECHardwiredProtocol wired)
             {
-                connection = new TECHardwiredConnection(connectable, this, wired, connectable.IsTypical);
+                connection = new TECHardwiredConnection(connectable, this, wired);
             }
             else if (protocol is TECProtocol network)
             {
@@ -149,7 +151,7 @@ namespace EstimatingLibrary
                 }
                 if(netConnect == null)
                 {
-                    netConnect = new TECNetworkConnection(this, network, connectable.IsTypical);
+                    netConnect = new TECNetworkConnection(this, network);
                 }
                 netConnect.AddChild(connectable);
                 connection = netConnect;
@@ -206,7 +208,7 @@ namespace EstimatingLibrary
         }
         public TECNetworkConnection AddNetworkConnection(TECProtocol protocol)
         {
-            TECNetworkConnection netConnect = new TECNetworkConnection(this, protocol, this.IsTypical);
+            TECNetworkConnection netConnect = new TECNetworkConnection(this, protocol);
             addChildConnection(netConnect);
             return netConnect;
         }
@@ -267,38 +269,13 @@ namespace EstimatingLibrary
         #endregion
 
         #region Methods
-        public abstract TECController CopyController(bool isTypical, Dictionary<Guid, Guid> guidDictionary = null);
+        public abstract TECController CopyController(Dictionary<Guid, Guid> guidDictionary = null);
 
         #region Event Handlers
-        protected void collectionChanged(object sender,
-            System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
+        protected void collectionChanged(object sender, NotifyCollectionChangedEventArgs e, string propertyName)
         {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach (object item in e.NewItems)
-                {
-                    notifyCombinedChanged(Change.Add, propertyName, this, item);
-                    if (item is INotifyCostChanged cost && !(item is IControllerConnection) && !this.IsTypical)
-                    {
-                        notifyCostChanged(cost.CostBatch);
-                    }
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (object item in e.OldItems)
-                {
-                    notifyCombinedChanged(Change.Remove, propertyName, this, item);
-                    if (item is INotifyCostChanged cost && !(item is IControllerConnection) && !this.IsTypical)
-                    {
-                        notifyCostChanged(cost.CostBatch * -1);
-                    }
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
-            {
-                notifyCombinedChanged(Change.Edit, propertyName, this, sender, sender);
-            }
+            CollectionChangedHandlers.CollectionChangedHandler(sender, e, propertyName, this, notifyCombinedChanged, notifyCostChanged);
+
             if (propertyName == "ChildrenConnections")
             {
                 raisePropertyChanged("ChildNetworkConnections");
@@ -366,8 +343,7 @@ namespace EstimatingLibrary
             collectionChanged(sender, e, "ChildrenConnections");
         }
         #endregion
-
-        #region Interfaces
+        
         #region IConnectable
         List<IProtocol> IConnectable.AvailableProtocols
         {
@@ -380,10 +356,10 @@ namespace EstimatingLibrary
         {
             get { return new IOCollection(); }
         }
-
-        IConnectable IConnectable.Copy(bool isTypical, Dictionary<Guid, Guid> guidDictionary)
+        
+        IConnectable IConnectable.Copy(Dictionary<Guid, Guid> guidDictionary)
         {
-            return CopyController(isTypical, guidDictionary);
+            return CopyController(guidDictionary);
         }
         IControllerConnection IConnectable.GetParentConnection()
         {
@@ -411,6 +387,37 @@ namespace EstimatingLibrary
             return (connection is TECNetworkConnection);
         }
         #endregion
+
+        #region ITypicalable
+        ITECObject ITypicalable.CreateInstance(ObservableListDictionary<ITECObject> typicalDictionary)
+        {
+            return this.createInstance(typicalDictionary);
+        }
+        protected abstract ITECObject createInstance(ObservableListDictionary<ITECObject> typicalDictionary);
+
+        void ITypicalable.AddChildForProperty(string property, ITECObject item)
+        {
+            this.addChildForProperty(property, item);
+        }
+        protected abstract void addChildForProperty(string property, ITECObject item);
+
+        bool ITypicalable.RemoveChildForProperty(string property, ITECObject item)
+        {
+            return this.removeChildForProperty(property, item);
+        }
+        protected abstract bool removeChildForProperty(string property, ITECObject item);
+
+        bool ITypicalable.ContainsChildForProperty(string property, ITECObject item)
+        {
+            return this.containsChildForProperty(property, item);
+        }
+        protected abstract bool containsChildForProperty(string property, ITECObject item);
+
+        void ITypicalable.MakeTypical()
+        {
+            this.makeTypical();
+        }
+        protected abstract void makeTypical();
         #endregion
     }
 }
