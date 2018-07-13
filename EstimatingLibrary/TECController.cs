@@ -63,7 +63,6 @@ namespace EstimatingLibrary
         }
         public IOCollection AvailableIO
         {
-
             get
             {
                 IOCollection io = new IOCollection(this.IO);

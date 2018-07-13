@@ -74,36 +74,31 @@ namespace Models
         {
             var bid = new TECBid();
             bid.Catalogs = ModelCreation.TestCatalogs(rand);
-            var bidController = new TECProvidedController(new TECControllerType(new TECManufacturer()));
+            var bidController = new TECProvidedController(bid.Catalogs.ControllerTypes.RandomElement(rand));
             bid.AddController(bidController);
 
             var system = new TECTypical();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
+
             TECDevice dev = bid.Catalogs.Devices.First(x => x.HardwiredConnectionTypes.Count > 0);
+
             subScope.Devices.Add(dev);
+
+            TECHardwiredProtocol hardProt = subScope.AvailableProtocols.First(x => x is TECHardwiredProtocol) as TECHardwiredProtocol;
+
             system.Equipment.Add(equipment);
             equipment.SubScope.Add(subScope);
-            Console.WriteLine("Num SubScope Protocol: {0}", subScope.AvailableProtocols.Count);
-            Console.WriteLine("Num Controller Protocol: {0}", bidController.AvailableProtocols.Count);
-            foreach (IProtocol prot in subScope.AvailableProtocols)
-            {
-                Console.WriteLine("SubScope Protocol: {0}", prot.Label);
-            }
-            foreach (IProtocol prot in bidController.AvailableProtocols)
-            {
-                Console.WriteLine("Controller Protocol: {0}", prot.Label);
-            }
-            bidController.Connect(subScope, subScope.AvailableProtocols.First());
             var instance = system.AddInstance(bid);
             var instanceSubScope = instance.GetAllSubScope().First();
-            bidController.Connect(instanceSubScope, instanceSubScope.AvailableProtocols.First());
+
+            bidController.Connect(instanceSubScope, hardProt);
             
-            Assert.AreEqual(2, bidController.ChildrenConnections.Count, "Connection not added");
+            Assert.AreEqual(1, bidController.ChildrenConnections.Count, "Connection not added");
 
             system.Instances.Remove(instance);
 
-            Assert.AreEqual(1, bidController.ChildrenConnections.Count, "Connection not removed");
+            Assert.AreEqual(0, bidController.ChildrenConnections.Count, "Connection not removed");
         }
 
         [TestMethod]
