@@ -766,7 +766,7 @@ namespace EstimatingUtilitiesLibraryTests
             connection.ConduitType = Bid.Catalogs.ConduitTypes.First();
 
             TECElectricalMaterial expected = connection.ConduitType;
-            TECElectricalMaterial edit = Bid.Catalogs.ConduitTypes[1];
+            TECElectricalMaterial edit = Bid.Catalogs.ConduitTypes.First(x => x != expected);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
