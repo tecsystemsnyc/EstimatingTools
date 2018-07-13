@@ -555,14 +555,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else
                 {
-                    if (availableIO.Contains(connectable.HardwiredIO))
-                    {
-                        availableIO -= connectable.HardwiredIO;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    if (!availableIO.Remove(connectable.HardwiredIO)) return false;
                 }
             }
 
@@ -582,15 +575,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 if(canConnect == false)
                 {
-                    if(connectable.AvailableProtocols.Any(x => x is TECHardwiredProtocol) 
-                        && availableIO.Contains(connectable.HardwiredIO))
-                    {
-                        availableIO -= connectable.HardwiredIO;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    if (!(connectable.AvailableProtocols.Any(x => x is TECHardwiredProtocol) && availableIO.Remove(connectable.HardwiredIO))) return false;
                 }
             }
             

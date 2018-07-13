@@ -63,7 +63,14 @@ namespace EstimatingLibrary
         }
         public IOCollection AvailableIO
         {
-            get { return IO - UsedIO; }
+
+            get
+            {
+                IOCollection io = new IOCollection(this.IO);
+                IOCollection usedIO = new IOCollection(this.UsedIO);
+                if (!io.Remove(usedIO.ToList())) throw new Exception("This controller has used more IO than has available.");
+                return io;
+            }
         }
         public List<IProtocol> AvailableProtocols
         {
