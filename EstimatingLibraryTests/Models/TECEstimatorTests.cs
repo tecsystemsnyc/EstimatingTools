@@ -697,6 +697,7 @@ namespace Models
             bid.Catalogs.Devices.Add(device);
             bid.Catalogs.ConnectionTypes.Add(connectionType);
             bid.Catalogs.ConduitTypes.Add(conduitType);
+            bid.Catalogs.AssociatedCosts.Add(assCost);
             bid.Catalogs.AssociatedCosts.Add(ratedCost);
             bid.Catalogs.Manufacturers.Add(manufacturer);
             bid.Catalogs.ControllerTypes.Add(controllerType);
@@ -712,21 +713,23 @@ namespace Models
             equipment.SubScope.Add(subScope);
             subScope.Devices.Add(device);
             bid.Systems.Add(system);
-
-            system.AddInstance(bid);
-            system.AddInstance(bid);
             
+            system.AddInstance(bid);
+            system.AddInstance(bid);
+
             var connection = controller.Connect(subScope, subScope.AvailableProtocols.First());
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
             
+            Assert.AreEqual(0, estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
+            Assert.AreEqual(0, estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
 
             foreach (TECSystem instance in system.Instances)
             {
-                foreach(TECController instanceController in instance.Controllers)
+                foreach (TECController instanceController in instance.Controllers)
                 {
-                    foreach(TECSubScope instanceSubScope in instance.GetAllSubScope())
+                    foreach (TECSubScope instanceSubScope in instance.GetAllSubScope())
                     {
                         var instanceConnection = instanceController.Connect(instanceSubScope, instanceSubScope.AvailableProtocols.First());
                         instanceConnection.Length = 10;
@@ -736,8 +739,7 @@ namespace Models
                 }
             }
 
-
-            //For Both Conduit and Wire: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor + AssCost.Cost/Labor) = 2*(10 * 1 +10 * 1 + 2) + 2 * (5 * 1 + 5 * 1 + 2) = 40 + 10 = 54
+            //For Both Conduit and Wire: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor + AssCost.Cost/Labor) = 2 * ( (10*1 + 10*1 + 1) + (5*1 + 5*1 + 1) ) = 2 * ( 21 + 11 ) = 64
             Assert.AreEqual(64, estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
             Assert.AreEqual(64, estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
 
