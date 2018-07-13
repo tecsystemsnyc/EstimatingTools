@@ -758,18 +758,25 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             var Bid = ModelCreation.TestBid(rand);
-            TECElectricalMaterial expected = Bid.Controllers.First( x => x.ChildrenConnections.Count != 0).ChildrenConnections[0].ConduitType;
+
+            TECController controller1 = Bid.Controllers.First();
+            TECController controller2 = Bid.Controllers.First(x => controller1.CanConnect(x));
+
+            IControllerConnection connection = controller1.Connect(controller2, controller1.AvailableProtocols.First());
+            connection.ConduitType = Bid.Catalogs.ConduitTypes.First();
+
+            TECElectricalMaterial expected = connection.ConduitType;
             TECElectricalMaterial edit = Bid.Catalogs.ConduitTypes[1];
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            Bid.Controllers[0].ChildrenConnections[0].ConduitType = edit;
+            connection.ConduitType = edit;
             testStack.Undo();
 
             //assert
-            TECElectricalMaterial actual = Bid.Controllers[0].ChildrenConnections[0].ConduitType;
-            Assert.AreEqual(expected.Guid, actual.Guid, "Not Undone");
-
+            TECElectricalMaterial actual = connection.ConduitType;
+            Assert.IsNotNull(expected);
+            Assert.AreEqual(expected, actual, "Not Undone");
         }
 
         [TestMethod]
