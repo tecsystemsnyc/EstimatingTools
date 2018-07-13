@@ -140,7 +140,7 @@ namespace EstimatingLibrary
         }
         public IControllerConnection Connect(IConnectable connectable, IProtocol protocol, bool attemptExisiting = false)
         {
-            if (!CanConnect(connectable)) throw new Exception("Connectable not compatible.");
+            if (!CanConnect(connectable)) return null;
             IControllerConnection connection;
             bool isNew = true;
             bool isTypical = (connectable as ITypicalable)?.IsTypical ?? false;

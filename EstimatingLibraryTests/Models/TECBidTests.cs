@@ -71,18 +71,24 @@ namespace Models
 
             bid.Catalogs = ModelCreation.TestCatalogs(rand);
 
-            TECController controller = ModelCreation.TestProvidedController(bid.Catalogs, rand);
+            TECControllerType type = bid.Catalogs.ControllerTypes.RandomElement(rand);
+
+            TECController controller = new TECProvidedController(type);
             bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
-            TECController typicalController = ModelCreation.TestProvidedController(bid.Catalogs, rand);
+            TECController typicalController = new TECProvidedController(type);
 
             typical.AddController(typicalController);
 
             bid.Systems.Add(typical);
             TECSystem system = typical.AddInstance(bid);
             TECController instanceController = typical.GetInstancesFromTypical(typicalController).First();
+
+            Assert.IsTrue(controller.CanConnect(instanceController));
+
             IControllerConnection connection = controller.Connect(instanceController, instanceController.AvailableProtocols.First());
+
             Assert.IsTrue(connection is TECNetworkConnection);
 
             typical.Instances.Remove(system);
