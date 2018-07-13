@@ -5,9 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls.ItemControls"
                        xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+                       xmlns:usercontrols="clr-namespace:TECUserControlLibrary.UserControls"
                        x:Name="controllerInPanelControl"
              mc:Ignorable="d" 
-             d:DesignHeight="90" d:DesignWidth="300">
+             d:DesignHeight="200" d:DesignWidth="300">
     <local:BaseItemControl.Resources>
         <ResourceDictionary>
             <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=controllerInPanelControl}"/>
@@ -32,6 +33,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="20"/>
+                <RowDefinition Height="30"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <TextBlock FontSize="14" Text="{Binding Controller.Name}" Background="Transparent" FontWeight="DemiBold"/>
@@ -48,7 +50,6 @@
                         Click="changeType_Click"/>
             </Grid>
             
-
             <TextBlock Text="{Binding Controller.Description}" Grid.Row="1" Grid.ColumnSpan="2"/>
             
             <TextBlock Text="Containing Panel: " Grid.Row="2"
@@ -67,6 +68,25 @@
                     </MultiBinding>
                 </ComboBox.SelectedItem>
             </ComboBox>
+            <Grid Grid.Row="3"
+                  Grid.ColumnSpan="2">
+                <Expander Header="Network Points">
+                    <Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <usercontrols:LabeledTextBox LabelText="Label:" InputText="{Binding PointLabel}" InputWidth="80"/>
+                            <ComboBox ItemsSource="{Binding PointTypes}"
+                                      SelectedItem="{Binding SelectedPointType}"
+                                      Grid.Column="2"/>
+                            
+                        </Grid>
+                    </Grid>
+                </Expander>
+            </Grid>
         </Grid>
     </Border>
 </local:BaseItemControl>

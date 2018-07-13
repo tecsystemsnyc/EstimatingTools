@@ -150,6 +150,9 @@
     <Compile Include="UserControls\ItemControls\ValveScopeItemControl.xaml.cs">
       <DependentUpon>ValveScopeItemControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\LabeledTextBox.xaml.cs">
+      <DependentUpon>LabeledTextBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ListControls\BaseListControl.cs" />
     <Compile Include="UserControls\AddAssociatedCostsControl.xaml.cs">
       <DependentUpon>AddAssociatedCostsControl.xaml</DependentUpon>
@@ -698,6 +701,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ItemControls\ValveScopeItemControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\LabeledTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
