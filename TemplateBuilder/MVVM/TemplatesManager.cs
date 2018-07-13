@@ -71,7 +71,7 @@ namespace TemplateBuilder.MVVM
         {
             updateRecentTemplatesSettings(path);
             buildTitleString(path, "TemplateBuilder");
-            if(path != "")
+            if (path != "")
             {
                 databaseManager = new DatabaseManager<TECTemplates>(path);
                 databaseManager.LoadComplete += handleLoaded;
@@ -223,11 +223,6 @@ namespace TemplateBuilder.MVVM
 
                 TBSettings.Save();
             }
-        }
-
-        protected override void setDefaultDirectory(string path)
-        {
-            TBSettings.TemplatesDirectory = Path.GetDirectoryName(path);
         }
     }
 }
