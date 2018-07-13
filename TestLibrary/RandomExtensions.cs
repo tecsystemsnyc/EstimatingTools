@@ -13,10 +13,10 @@ namespace TestLibrary
         /// </summary>
         /// <param name="rand"></param>
         /// <param name="act"></param>
-        /// <param name="maxTimes">Defines a maximum number of times the action should be allowed. A negative integer will use Random.Next()</param>
-        public static void RepeatAction(this Random rand, Action act, int maxTimes = -1)
+        /// <param name="maxTimes">Defines a maximum number of times the action should be allowed.</param>
+        public static void RepeatAction(this Random rand, Action act, int maxTimes, int minTimes = 1)
         {
-            int numTimes = maxTimes < 0 ? rand.Next() : rand.Next(maxTimes);
+            int numTimes = rand.Next(minTimes, maxTimes);
             for(int i = 0; i <= numTimes; i++)
             {
                 act.Invoke();

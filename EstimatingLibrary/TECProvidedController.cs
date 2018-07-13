@@ -109,7 +109,10 @@ namespace EstimatingLibrary
         /// <returns>Nessessary modules. Returns empty list if no collection of modules exists.</returns>
         private List<TECIOModule> getModulesForIO(IOCollection io)
         {
-            IOCollection nessessaryIO = io - (io | AvailableIO);
+            IOCollection nessessaryIO = new IOCollection(io);
+            IOCollection relevantAvailableIO = (io | AvailableIO);
+
+            if (!nessessaryIO.Remove(relevantAvailableIO)) throw new Exception("NessessaryIO collection is having trouble removing subset of itself.");
 
             List<TECIOModule> potentialModules = getPotentialModules();
 
@@ -208,22 +211,19 @@ namespace EstimatingLibrary
             return saveList;
         }
 
+        /// <summary>
+        /// Returns non actualized but potential IO. All IO compatible with the controller type that doesn't exist on this controller.
+        /// </summary>
         private IOCollection getPotentialIO()
         {
             IOCollection potentialIO = new IOCollection();
-            foreach (TECIOModule module in Type.IOModules)
+            foreach (TECIOModule module in this.Type.IOModules)
             {
-                foreach (TECIO io in module.IO)
-                {
-                    potentialIO.Add(io);
-                }
+                potentialIO.Add(module.IO);
             }
-            foreach (TECIOModule module in IOModules)
+            foreach (TECIOModule module in this.IOModules)
             {
-                foreach (TECIO io in module.IO)
-                {
-                    potentialIO.Remove(io);
-                }
+                if (!potentialIO.Remove(module.IO)) throw new Exception("Controller has incompatible IO with its controller type.");
             }
             return potentialIO;
         }

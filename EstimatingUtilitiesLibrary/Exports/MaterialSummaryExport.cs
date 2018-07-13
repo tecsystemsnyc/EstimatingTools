@@ -12,7 +12,7 @@ namespace EstimatingUtilitiesLibrary.Exports
 {
     internal static class MaterialSummaryExport
     {
-        internal static void AddControllersSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Controllers")
+        internal static void AddControllersSheet(XLWorkbook workbook, TECBid bid, TECEstimator estimate, string sheetName = "Controllers")
         {
             List<TECController> controllers = getAllControllers(bid);
             List<TECProvidedController> providedControllers = new List<TECProvidedController>();
@@ -61,6 +61,14 @@ namespace EstimatingUtilitiesLibrary.Exports
             }
             row++;
 
+            row = worksheet.insertCostHeaders(row);
+            TECCost softwareCost = new TECAssociatedCost(CostType.TEC);
+            softwareCost.Name = "Software Point License";
+            softwareCost.Cost = estimate.TECSoftwareCost;
+            CostSummaryItem softwareSummary = new CostSummaryItem(softwareCost);
+            row = worksheet.insertCostItem(softwareSummary, row);
+            row++;
+                
             worksheet.formatFinal();
         }
         internal static void AddPanelsSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Panels")

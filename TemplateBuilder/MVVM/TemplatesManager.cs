@@ -224,5 +224,10 @@ namespace TemplateBuilder.MVVM
                 TBSettings.Save();
             }
         }
+
+        protected override void setDefaultDirectory(string path)
+        {
+            TBSettings.TemplatesDirectory = Path.GetDirectoryName(path);
+        }
     }
 }

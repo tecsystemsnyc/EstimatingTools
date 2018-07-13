@@ -253,14 +253,7 @@ namespace EstimatingLibrary
 
             foreach (TECIO ioToCheck in ioCollection.ToList())
             {
-                if (thisCollection.Contains(ioToCheck))
-                {
-                    thisCollection.Remove(ioToCheck);
-                }
-                else
-                {
-                    return false;
-                }
+                if (!thisCollection.Remove(ioToCheck)) return false;
             }
             return true;
         }
@@ -309,12 +302,9 @@ namespace EstimatingLibrary
                 Add(io);
             }
         }
-        public void Remove(IOType type)
+        public bool Remove(TECIO io)
         {
-            this.Remove(new TECIO(type));
-        }
-        public void Remove(TECIO io)
-        {
+            if (!this.Contains(io)) return false;
             if(io.Type == IOType.Protocol)
             {
                 for(int x = 0; x < io.Quantity; x++)
@@ -329,32 +319,32 @@ namespace EstimatingLibrary
                     remove(io.Type);
                 }
             }
+            return true;
         }
-        public void Remove(IEnumerable<TECIO> ioList)
+        public bool Remove(IEnumerable<TECIO> ioList)
         {
             if (this.Contains(ioList))
             {
                 foreach (TECIO io in ioList)
                 {
-                    Remove(io);
+                    if (!Remove(io)) throw new Exception("This IO Collection is corrupt. Could not remove TECIO from collection previously confirmed as containing TECIO.");
                 }
+                return true;
             }
             else
             {
-                throw new InvalidOperationException("IOCollection does not contain enough IO.");
+                return false;
             }
+        }
+        public bool Remove(IOCollection ioCollection)
+        {
+            return this.Remove(ioCollection.ToList());
         }
 
         public static IOCollection operator +(IOCollection left, IOCollection right)
         {
             IOCollection newCollection = new IOCollection(left);
             newCollection.Add(right.ToList());
-            return newCollection;
-        }
-        public static IOCollection operator -(IOCollection left, IOCollection right)
-        {
-            IOCollection newCollection = new IOCollection(left);
-            newCollection.Remove(right.ToList());
             return newCollection;
         }
 
@@ -380,11 +370,11 @@ namespace EstimatingLibrary
             return intersection;
         }
         
-        private void remove(IOType type)
+        private bool remove(IOType type)
         {
             if (type == IOType.Protocol)
             {
-                throw new Exception("Cannot remove .Protocol as IOType");
+                throw new Exception("Cannot remove Protocol as IOType");
             }
             if (ioDictionary.ContainsKey(type))
             {
@@ -394,6 +384,7 @@ namespace EstimatingLibrary
                 {
                     ioDictionary.Remove(io.Type);
                 }
+                return true;
             }
             else
             {
@@ -408,19 +399,20 @@ namespace EstimatingLibrary
                         {
                             ioDictionary.Remove(universalIO.Type);
                         }
+                        return true;
                     }
                     else
                     {
-                        throw new InvalidOperationException("IOCollection does not contain IOType.");
+                        return false;
                     }
                 }
                 else
                 {
-                    throw new InvalidOperationException("IOCollection does not contain IOType.");
+                    return false;
                 }
             }
         }
-        private void remove(TECProtocol protocol)
+        private bool remove(TECProtocol protocol)
         {
             if (protocolDictionary.ContainsKey(protocol))
             {
@@ -430,10 +422,11 @@ namespace EstimatingLibrary
                 {
                     protocolDictionary.Remove(io.Protocol);
                 }
+                return true;
             }
             else
             {
-                throw new InvalidOperationException("IOCollection does not contain Protocol.");
+                return false;
             }
         }
     }

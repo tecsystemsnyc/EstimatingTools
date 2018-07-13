@@ -874,32 +874,6 @@ namespace Utilities
         }
 
         [TestMethod]
-        public void AddTypicalSubScopeConnectionToBidController()
-        {
-            //Arrange
-            TECTypical system = new TECTypical();
-            TECEquipment equipment = new TECEquipment();
-            TECSubScope subScope = new TECSubScope();
-            TECDevice dev = bid.Catalogs.Devices.First();
-            subScope.Devices.Add(dev);
-            equipment.SubScope.Add(subScope);
-            system.Equipment.Add(equipment);
-            bid.Systems.Add(system);
-
-            TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0]);
-            bid.AddController(controller);
-
-            resetRaised();
-
-            //Act
-            IControllerConnection connection = controller.Connect(subScope, subScope.AvailableProtocols.First());
-
-            //Assert
-            checkRaised(false, false, false, false);
-            checkChangedArgs(Change.Add, "ChildrenConnections", controller, connection);
-        }
-
-        [TestMethod]
         public void AddInstanceSubScopeConnectionToInstanceController()
         {
             //Arrange
@@ -942,8 +916,8 @@ namespace Utilities
 
             TECController daisyController = new TECProvidedController(type);
 
-            TECNetworkConnection netConnect = parentController.Connect(daisyController, daisyController.AvailableProtocols.First(x => x is TECProtocol) as TECProtocol) as TECNetworkConnection;
-            netConnect.AddChild(childController);
+            TECNetworkConnection netConnect = parentController.Connect(childController, childController.AvailableProtocols.First(x => x is TECProtocol) as TECProtocol) as TECNetworkConnection;
+            netConnect.AssignRandomConnectionProperties(rand);
 
             resetRaised();
 
@@ -1654,7 +1628,7 @@ namespace Utilities
             TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
 
             TECNetworkConnection netConnect = parentController.Connect(childController, childController.AvailableProtocols.First(x => x is TECProtocol) as TECProtocol) as TECNetworkConnection;
-            netConnect.AddChild(childController);
+            netConnect.AssignRandomConnectionProperties(rand);
 
             resetRaised();
 
@@ -1685,7 +1659,6 @@ namespace Utilities
             TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
 
             TECNetworkConnection netConnect = parentController.Connect(childController, childController.AvailableProtocols.First(x => x is TECProtocol) as TECProtocol) as TECNetworkConnection;
-            netConnect.AddChild(childController);
             netConnect.Length = 10;
 
             resetRaised();
@@ -1759,33 +1732,6 @@ namespace Utilities
         }
 
         [TestMethod]
-        public void RemoveBidSubScopeConnectionFromTypicalController()
-        {
-            //Arrange
-            TECTypical system = new TECTypical();
-            TECEquipment equipment = new TECEquipment();
-            TECSubScope subScope = new TECSubScope();
-            TECDevice dev = bid.Catalogs.Devices.First();
-            subScope.Devices.Add(dev);
-            equipment.SubScope.Add(subScope);
-            system.Equipment.Add(equipment);
-            bid.Systems.Add(system);
-
-            TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0]);
-            bid.AddController(controller);
-            IControllerConnection connection = controller.Connect(subScope, subScope.AvailableProtocols.First());
-            connection.Length = 10;
-            resetRaised();
-
-            //Act
-            controller.Disconnect(subScope);
-
-            //Assert
-            checkRaised(false, false, false, false);
-            checkChangedArgs(Change.Remove, "ChildrenConnections", controller, connection);
-        }
-
-        [TestMethod]
         public void RemoveSubScopeConnectionFromInstanceController()
         {
             //Arrange
@@ -1830,8 +1776,7 @@ namespace Utilities
             TECController daisyController = new TECProvidedController(type);
 
             TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
-            TECNetworkConnection netConnect = parentController.Connect(daisyController, daisyController.AvailableProtocols.First(x => x is TECProtocol) as TECProtocol) as TECNetworkConnection;
-            netConnect.AddChild(childController);
+            TECNetworkConnection netConnect = parentController.Connect(childController, childController.AvailableProtocols.First(x => x is TECProtocol) as TECProtocol) as TECNetworkConnection;
             netConnect.AddChild(daisyController);
 
             resetRaised();
@@ -1908,21 +1853,20 @@ namespace Utilities
         public void EditBidNetworkConnection()
         {
             //Arrange
-            Double original = 10;
-            Double edited = 12;
+            Double original = (rand.NextDouble() * 100);
+            Double edited = (rand.NextDouble() * 100);
 
             TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0]);
             TECController child = new TECProvidedController(bid.Catalogs.ControllerTypes[0]);
             bid.AddController(controller);
             bid.AddController(child);
             TECNetworkConnection connection = controller.Connect(child, child.AvailableProtocols.First(x => x is TECProtocol) as TECProtocol) as TECNetworkConnection;
-            connection.AddChild(child);
             connection.Length = original;
 
             resetRaised();
 
             //Act
-            connection.Length = 12;
+            connection.Length = edited;
 
             //Assert
             checkRaised(instanceChanged: true, costChanged: true, pointChanged: false, instanceConstituentChanged: false);
@@ -1942,7 +1886,6 @@ namespace Utilities
             bid.AddController(controller);
             bid.AddController(child);
             TECNetworkConnection connection = controller.Connect(child, child.AvailableProtocols.First(x => x is TECProtocol) as TECProtocol) as TECNetworkConnection;
-            connection.AddChild(child);
             connection.ConduitType = original;
             resetRaised();
 
@@ -2258,38 +2201,6 @@ namespace Utilities
             //Assert
             checkRaised(instanceChanged: false, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
             checkChangedArgs(Change.Edit, "Label", point, edited, original);
-        }
-
-        [TestMethod]
-        public void EditTypicalSubScopeConnectionInBidController()
-        {
-            //Arrange
-            TECTypical typical = new TECTypical();
-            TECEquipment equip = new TECEquipment();
-            TECSubScope ss = new TECSubScope();
-            TECDevice dev = bid.Catalogs.Devices[0];
-            ss.Devices.Add(dev);
-            equip.SubScope.Add(ss);
-            typical.Equipment.Add(equip);
-
-            TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0]);
-            bid.AddController(controller);
-
-            TECElectricalMaterial conduitType = bid.Catalogs.ConduitTypes[0];
-
-            bid.Systems.Add(typical);
-            IControllerConnection connection = controller.Connect(ss, ss.AvailableProtocols.First());
-            connection.Length = 16.46;
-            connection.ConduitLength = 81.64;
-
-            resetRaised();
-
-            //Act
-            connection.ConduitType = conduitType;
-
-            //Assert
-            checkRaised(instanceChanged: false, costChanged: false, pointChanged: false, instanceConstituentChanged: false);
-            checkChangedArgs(Change.Edit, "ConduitType", connection, conduitType, null);
         }
 
         [TestMethod]

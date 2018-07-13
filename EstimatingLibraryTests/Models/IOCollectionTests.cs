@@ -471,46 +471,6 @@ namespace Models
 
         #region RemoveIO Tests
         [TestMethod]
-        public void RemoveType()
-        {
-            TECIO ai = new TECIO(IOType.AI);
-            ai.Quantity = 5;
-            TECIO ao = new TECIO(IOType.AO);
-            ao.Quantity = 5;
-            TECIO di = new TECIO(IOType.DI);
-            di.Quantity = 5;
-            TECIO ioDO = new TECIO(IOType.DO);
-            ioDO.Quantity = 5;
-            List<TECIO> io = new List<TECIO>
-            {
-                ai,
-                ao,
-                di,
-                ioDO
-            };
-            IOCollection collection = new IOCollection(io);
-
-            collection.Remove(IOType.AI);
-
-            Assert.AreEqual(4, collection.IONumber(IOType.AI));
-        }
-        [TestMethod]
-        public void RemoveSpecificTypeFromUniversal()
-        {
-            TECIO ui = new TECIO(IOType.UI);
-            ui.Quantity = 5;
-            List<TECIO> io = new List<TECIO>
-            {
-                ui
-            };
-            IOCollection collection = new IOCollection(io);
-
-            collection.Remove(IOType.AI);
-
-            Assert.AreEqual(4, collection.IONumber(IOType.UI));
-        }
-
-        [TestMethod]
         public void RemoveIO()
         {
             TECIO ai = new TECIO(IOType.AI);

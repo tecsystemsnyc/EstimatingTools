@@ -52,7 +52,7 @@
                                               LabeledSource="{Binding Tags}"
                                               DropHandler="{Binding ElementName=scopePropertiesControl, Path=DropHandler}"
                                               Grid.Row="1"
-                                              ReadOnly="True">
+                                              ReadOnly="{Binding ElementName=scopePropertiesControl, Path=ReadOnly}">
                         <i:Interaction.Behaviors>
                             <utilities:BubbleScrollEvent/>
                         </i:Interaction.Behaviors>
@@ -68,7 +68,7 @@
                     </Grid.RowDefinitions>
                     <local:AssociatedCostsGridControl CostsSource="{Binding AssociatedCosts}"
                                                       DropHandler="{Binding ElementName=scopePropertiesControl, Path=DropHandler}"
-                                                      ReadOnly="True"
+                                                      ReadOnly="{Binding ElementName=scopePropertiesControl, Path=ReadOnly}"
                                                       Grid.Row="1">
                         <i:Interaction.Behaviors>
                             <utilities:BubbleScrollEvent/>

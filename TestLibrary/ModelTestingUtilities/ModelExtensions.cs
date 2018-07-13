@@ -42,13 +42,13 @@ namespace TestLibrary.ModelTestingUtilities
                 //Make sure the number of items to be returned is a random distribution to the least value
                 //comparing maxItems and the count of the source collection
                 int numItems;
-                if (maxItems < 0)
+                if (maxItems < 1)
                 {
-                    numItems = rand.Next(items.Count());
+                    numItems = rand.Next(1, items.Count());
                 }
                 else
                 {
-                    numItems = (maxItems < items.Count()) ? rand.Next(maxItems) : rand.Next(items.Count());
+                    numItems = (maxItems < items.Count()) ? rand.Next(1, maxItems) : rand.Next(1, items.Count());
                 }
 
                 //Add items to the out list making sure there are no repeats.
@@ -111,6 +111,11 @@ namespace TestLibrary.ModelTestingUtilities
             rand.RepeatAction(() => sys.MiscCosts.Add(ModelCreation.TestMisc(catalogs, rand, CostType.Electrical)), 5);
             rand.RepeatAction(() => sys.ScopeBranches.Add(ModelCreation.TestScopeBranch(rand, 3)), 5);
             sys.ProposeEquipment = rand.NextBool();
+        }
+        public static void AssignRandomConnectionProperties(this TECConnection connection, Random rand)
+        {
+            connection.Length = (rand.NextDouble() * 100);
+            connection.ConduitLength = (rand.NextDouble() * 100);
         }
         #endregion
 
