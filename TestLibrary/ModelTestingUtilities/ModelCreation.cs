@@ -108,15 +108,24 @@ namespace TestLibrary.ModelTestingUtilities
             //Assign Locations
             foreach (TECController controller in bid.Controllers)
             {
-                controller.Location = bid.Locations.RandomElement(rand);
+                if (rand.NextBool())
+                {
+                    controller.Location = bid.Locations.RandomElement(rand);
+                }
             }
             foreach (TECPanel panel in bid.Panels)
             {
-                panel.Location = bid.Locations.RandomElement(rand);
+                if (rand.NextBool())
+                {
+                    panel.Location = bid.Locations.RandomElement(rand);
+                }
             }
             foreach (TECTypical typ in bid.Systems)
             {
-                typ.Location = bid.Locations.RandomElement(rand);
+                if (rand.NextBool())
+                {
+                    typ.Location = bid.Locations.RandomElement(rand);
+                }
             }
 
             return bid;

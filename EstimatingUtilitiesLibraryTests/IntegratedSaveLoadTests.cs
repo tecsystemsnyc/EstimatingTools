@@ -22,7 +22,6 @@ namespace EstimatingUtilitiesLibraryTests
         [TestInitialize]
         public void TestInitialize()
         {
-
             rand = new Random();
             path = Path.GetTempFileName();
             bid = ModelCreation.TestBid(rand);
