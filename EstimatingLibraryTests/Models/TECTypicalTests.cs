@@ -100,37 +100,6 @@ namespace Models
 
             Assert.AreEqual(0, bidController.ChildrenConnections.Count, "Connection not removed");
         }
-
-        [TestMethod]
-        public void RemoveTypicalSubScopeFromBidController()
-        {
-            //Arrange
-            TECBid bid = new TECBid();
-            bid.Catalogs = ModelCreation.TestCatalogs(rand);
-            TECController controller = new TECProvidedController(new TECControllerType(new TECManufacturer()));
-            bid.AddController(controller);
-
-            TECTypical typical = new TECTypical();
-            TECEquipment equip = new TECEquipment();
-            TECSubScope ss = new TECSubScope();
-            TECDevice dev = bid.Catalogs.Devices.First();
-            ss.Devices.Add(dev);
-            typical.Equipment.Add(equip);
-            equip.SubScope.Add(ss);
-            bid.Systems.Add(typical);
-
-            TECSystem instance = typical.AddInstance(bid);
-            TECSubScope instanceSS = instance.Equipment[0].SubScope[0];
-
-            controller.Connect(ss, ss.AvailableProtocols.First());
-
-            //Act
-            controller.Disconnect(ss);
-
-            //Assert
-            Assert.IsTrue(instanceSS.Connection == null, "Instance subscope connection wasn't removed.");
-            Assert.AreEqual(0, controller.ChildrenConnections.Count, "Bid controller still contains connections.");
-        }
         
         [TestMethod]
         public void RemoveControllerFromTypicalWithInstanceConnections()
