@@ -118,10 +118,10 @@ namespace EstimateBuilder.MVVM
             get { return EBSettings.TemplatesDirectory; }
         }
 
-        
+
         #endregion
 
-        public EstimateManager() : base("Estimate Builder", 
+        public EstimateManager() : base("Estimate Builder",
             new EstimateSplashVM(defaultDirectory: EBSettings.BidDirectory, defaultTemplatesDirectory: EBSettings.TemplatesDirectory),
             new EstimateMenuVM())
         {
@@ -130,12 +130,12 @@ namespace EstimateBuilder.MVVM
             TitleString = "Estimate Builder";
             setupCommands();
         }
-        
+
         private void userStartedEditorHandler(string bidFilePath, string templatesFilePath)
         {
             this.currentBidPath = bidFilePath;
             this.currentTemplatesPath = templatesFilePath;
-            
+
             updateRecentBidSettings(bidFilePath);
 
             buildTitleString(bidFilePath, "Estimate Builder");
@@ -216,7 +216,7 @@ namespace EstimateBuilder.MVVM
             estimate = new TECEstimator(bid, watcher);
             EditorVM = new EstimateEditorVM(bid, watcher, estimate);
         }
-        
+
         #region Menu Commands Methods
         private void setupCommands()
         {
@@ -234,7 +234,7 @@ namespace EstimateBuilder.MVVM
             menuVM.SetExportBOMCommand(exportBOMExecute, canExportBOM);
             menuVM.SetDebugWindowCommand(debugWindowExecute, canDebugWindow);
         }
-        
+
         //Load Templates
         private void openLoadTemplatesPopup()
         {
@@ -275,7 +275,7 @@ namespace EstimateBuilder.MVVM
         //Export Proposal
         private void exportProposalExecute()
         {
-            string path = UIHelpers.GetSavePath(FileDialogParameters.WordDocumentFileParameters, 
+            string path = UIHelpers.GetSavePath(FileDialogParameters.WordDocumentFileParameters,
                 Exporter.ProposalDefaultName(bid), defaultDirectory);
 
             if (path != null)
@@ -381,7 +381,7 @@ namespace EstimateBuilder.MVVM
         }
         private bool canExportSummary()
         {
-            return true; 
+            return true;
         }
         //Export Budget
         private void exportBudgetExecute()
@@ -481,7 +481,7 @@ namespace EstimateBuilder.MVVM
                 {
                     EBSettings.Save();
                     return;
-                } 
+                }
                 else
                 {
                     EBSettings.FirstRecentBid = limbo;
@@ -529,75 +529,6 @@ namespace EstimateBuilder.MVVM
                 else
                 {
                     EBSettings.FifthRecentBid = limbo;
-                }
-
-                EBSettings.Save();
-            }
-        }
-        private void updateRecentTemplatesSettings(string templatesPath)
-        {
-            if (templatesPath != null && templatesPath != "")
-            {
-                string first = EBSettings.FirstRecentTemplates;
-                string second = EBSettings.SecondRecentTemplates;
-                string third = EBSettings.ThirdRecentTemplates;
-                string fourth = EBSettings.FourthRecentTemplates;
-                string fifth = EBSettings.FifthRecentTemplates;
-
-                string limbo = templatesPath;
-
-                if (limbo == first)
-                {
-                    EBSettings.Save();
-                    return;
-                }
-                else
-                {
-                    EBSettings.FirstRecentTemplates = limbo;
-                    limbo = first;
-                }
-
-                if (limbo == second)
-                {
-                    EBSettings.Save();
-                    return;
-                }
-                else
-                {
-                    EBSettings.SecondRecentTemplates = limbo;
-                    limbo = second;
-                }
-
-                if (limbo == third)
-                {
-                    EBSettings.Save();
-                    return;
-                }
-                else
-                {
-                    EBSettings.ThirdRecentTemplates = limbo;
-                    limbo = third;
-                }
-
-                if (limbo == fourth)
-                {
-                    EBSettings.Save();
-                    return;
-                }
-                else
-                {
-                    EBSettings.FourthRecentTemplates = limbo;
-                    limbo = fourth;
-                }
-
-                if (limbo == fifth)
-                {
-                    EBSettings.Save();
-                    return;
-                }
-                else
-                {
-                    EBSettings.FifthRecentTemplates = limbo;
                 }
 
                 EBSettings.Save();

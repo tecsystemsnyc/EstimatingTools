@@ -21,7 +21,7 @@ using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.BaseVMs
 {
-    abstract public class AppManager<T>  : ViewModelBase where T : TECScopeManager
+    abstract public class AppManager<T> : ViewModelBase where T : TECScopeManager
     {
         private const string WIKI_URL = "https://github.com/tecsystemsnyc/EstimatingTools/wiki";
         private const string BUG_REPORT_URL = "https://goo.gl/forms/FvbdNI8gMHmmKcvn2";
@@ -116,7 +116,7 @@ namespace TECUserControlLibrary.BaseVMs
             StatusBarVM.CurrentStatusText = "Ready";
             setupCommands();
             CurrentVM = SplashVM;
-            ClosingCommand = new RelayCommand<(CancelEventArgs, Window)>(((CancelEventArgs, Window) tup) 
+            ClosingCommand = new RelayCommand<(CancelEventArgs, Window)>(((CancelEventArgs, Window) tup)
                 => closingExecute(tup.Item1, tup.Item2));
         }
 
@@ -158,7 +158,7 @@ namespace TECUserControlLibrary.BaseVMs
             checkForChanges(message, () =>
             {
                 loadFilePath = UIHelpers.GetLoadPath(workingFileParameters, defaultDirectory);
-                if(loadFilePath != null)
+                if (loadFilePath != null)
                 {
                     logger.Info("User chose load path: {0}, loading...", loadFilePath);
                     ViewEnabled = false;
@@ -167,7 +167,6 @@ namespace TECUserControlLibrary.BaseVMs
                     databaseManager = new DatabaseManager<T>(loadFilePath);
                     databaseManager.LoadComplete += handleLoadComplete;
                     databaseManager.AsyncLoad();
-                    setDefaultDirectory(loadFilePath);
                 }
                 else
                 {
@@ -224,13 +223,13 @@ namespace TECUserControlLibrary.BaseVMs
                 databaseManager.SaveComplete += handleSaveNewComplete;
                 databaseManager.AsyncNew(getWorkingScope());
             }
-        }        
+        }
         //Save New
         private void saveNewExecute()
         {
             logger.Info("User clicked File->Save As");
             string saveFilePath = UIHelpers.GetSavePath(workingFileParameters, defaultFileName, defaultDirectory);
-            if(saveFilePath != null)
+            if (saveFilePath != null)
             {
                 logger.Info("Saving new file...");
                 StatusBarVM.CurrentStatusText = "Saving...";
@@ -238,7 +237,6 @@ namespace TECUserControlLibrary.BaseVMs
                 databaseManager.SaveComplete += handleSaveNewComplete;
                 databaseManager.AsyncNew(getWorkingScope());
                 buildTitleString(saveFilePath, appName);
-                setDefaultDirectory(saveFilePath);
             }
             else
             {
@@ -341,12 +339,12 @@ namespace TECUserControlLibrary.BaseVMs
 
             return Imaging.CreateBitmapSourceFromHBitmap(Properties.Resources.TECLogo.GetHbitmap(),
                 IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-                
+
         }
         protected void buildTitleString(string filePath, string appName)
         {
             string title = Path.GetFileNameWithoutExtension(filePath);
-            if(title == "")
+            if (title == "")
             {
                 title = "New Document";
             }
@@ -414,7 +412,7 @@ namespace TECUserControlLibrary.BaseVMs
         }
         protected bool databaseReady()
         {
-            if(databaseManager == null || !databaseManager.IsBusy)
+            if (databaseManager == null || !databaseManager.IsBusy)
             {
                 return true;
             }
@@ -423,10 +421,10 @@ namespace TECUserControlLibrary.BaseVMs
 
         protected abstract T getWorkingScope();
         protected abstract T getNewWorkingScope();
-        
+
         private void closingExecute(CancelEventArgs e, Window window)
         {
-            
+
             logger.Info("App manager recieved command to close.");
             if (databaseManager == null || !databaseManager.IsBusy)
             {
@@ -447,7 +445,7 @@ namespace TECUserControlLibrary.BaseVMs
                                 databaseManager = new DatabaseManager<T>(saveFilePath);
                                 databaseManager.SaveComplete += closeWindowOnSuccess;
                                 databaseManager.AsyncNew(getWorkingScope());
-                            } 
+                            }
                             else
                             {
                                 e.Cancel = true;
@@ -505,7 +503,6 @@ namespace TECUserControlLibrary.BaseVMs
             logger.Warn(message);
             MessageBox.Show(message, "File Locked", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
-        protected abstract void setDefaultDirectory(string path);
     }
-    
+
 }
