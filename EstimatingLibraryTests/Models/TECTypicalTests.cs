@@ -162,5 +162,49 @@ namespace Models
             Assert.IsTrue(instanceEquipment.SubScope.Contains(instanceSubScope));
         }
 
+        [TestMethod]
+        public void MakeTypical()
+        {
+            TECBid bid = ModelCreation.TestBid(rand);
+
+            TECTypical typ = bid.Systems.First();
+
+            Assert.IsTrue(typ.Equipment.Count > 0);
+            foreach (TECEquipment equip in typ.Equipment)
+            {
+                Assert.IsTrue(equip.IsTypical);
+                Assert.IsTrue(equip.SubScope.Count > 0);
+                foreach (TECSubScope ss in equip.SubScope)
+                {
+                    Assert.IsTrue(ss.IsTypical);
+                    Assert.IsTrue(ss.Points.Count > 0);
+                    foreach (TECPoint point in ss.Points)
+                    {
+                        Assert.IsTrue(point.IsTypical);
+                    }
+                }
+            }
+            Assert.IsTrue(typ.Controllers.Count > 0);
+            foreach (TECController controller in typ.Controllers)
+            {
+                Assert.IsTrue(controller.IsTypical);
+            }
+            Assert.IsTrue(typ.Panels.Count > 0);
+            foreach (TECPanel panel in typ.Panels)
+            {
+                Assert.IsTrue(panel.IsTypical);
+            }
+            Assert.IsTrue(typ.MiscCosts.Count > 0);
+            foreach (TECMisc misc in typ.MiscCosts)
+            {
+                Assert.IsTrue(misc.IsTypical);
+            }
+            Assert.IsTrue(typ.Instances.Count > 0);
+            foreach (TECSystem sys in typ.Instances)
+            {
+                Assert.IsFalse(sys.IsTypical);
+            }
+        }
+
     }
 }
