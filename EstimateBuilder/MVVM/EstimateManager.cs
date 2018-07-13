@@ -593,5 +593,10 @@ namespace EstimateBuilder.MVVM
                 EBSettings.Save();
             }
         }
+
+        protected override void setDefaultDirectory(string path)
+        {
+            EBSettings.BidDirectory = Path.GetDirectoryName(path);
+        }
     }
 }
