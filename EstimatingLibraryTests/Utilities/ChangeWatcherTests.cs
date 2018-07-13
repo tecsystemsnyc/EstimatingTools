@@ -1680,8 +1680,11 @@ namespace Utilities
             TECTypical system = new TECTypical();
             TECEquipment equipment = new TECEquipment();
             TECSubScope subScope = new TECSubScope();
-            TECDevice dev = bid.Catalogs.Devices.First();
+            TECDevice dev = bid.Catalogs.Devices.First(x => x.HardwiredConnectionTypes.Count > 1);
             subScope.Devices.Add(dev);
+
+            TECHardwiredProtocol hardProt = subScope.AvailableProtocols.First(x => x is TECHardwiredProtocol) as TECHardwiredProtocol;
+
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
@@ -1690,7 +1693,7 @@ namespace Utilities
 
             TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0]);
             bid.AddController(controller);
-            IControllerConnection connection = controller.Connect(instanceSubScope, instanceSubScope.AvailableProtocols.First());
+            IControllerConnection connection = controller.Connect(instanceSubScope, hardProt);
             connection.Length = 10;
             resetRaised();
 
@@ -1711,15 +1714,16 @@ namespace Utilities
             TECTypical system = new TECTypical();
             TECEquipment equipment = new TECEquipment();
             TECSubScope subScope = new TECSubScope();
-            TECDevice dev = bid.Catalogs.Devices.First();
+            TECDevice dev = bid.Catalogs.Devices.First(x => x.HardwiredConnectionTypes.Count > 1);
             subScope.Devices.Add(dev);
+            TECHardwiredProtocol hardProt = subScope.AvailableProtocols.First(x => x is TECHardwiredProtocol) as TECHardwiredProtocol;
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
 
             TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0]);
             system.AddController(controller);
-            IControllerConnection connection = controller.Connect(subScope, subScope.AvailableProtocols.First());
+            IControllerConnection connection = controller.Connect(subScope, hardProt);
             connection.Length = 10;
             resetRaised();
 
@@ -1738,8 +1742,11 @@ namespace Utilities
             TECTypical system = new TECTypical();
             TECEquipment equipment = new TECEquipment();
             TECSubScope subScope = new TECSubScope();
-            TECDevice dev = bid.Catalogs.Devices.First();
+            TECDevice dev = bid.Catalogs.Devices.First(x => x.HardwiredConnectionTypes.Count > 1);
             subScope.Devices.Add(dev);
+
+            TECHardwiredProtocol hardProt = subScope.AvailableProtocols.First(x => x is TECHardwiredProtocol) as TECHardwiredProtocol;
+
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0]);
@@ -1748,7 +1755,7 @@ namespace Utilities
             TECSystem instance = system.AddInstance(bid);
             TECSubScope instanceSubScope = instance.Equipment[0].SubScope[0];
             TECController instanceController = instance.Controllers[0];
-            IControllerConnection connection = instanceController.Connect(instanceSubScope, instanceSubScope.AvailableProtocols.First());
+            IControllerConnection connection = instanceController.Connect(instanceSubScope, hardProt);
             connection.Length = 10;
             resetRaised();
 
