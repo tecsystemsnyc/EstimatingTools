@@ -534,5 +534,74 @@ namespace EstimateBuilder.MVVM
                 EBSettings.Save();
             }
         }
+        private void updateRecentTemplatesSettings(string templatesPath)
+        {
+            if (templatesPath != null && templatesPath != "")
+            {
+                string first = EBSettings.FirstRecentTemplates;
+                string second = EBSettings.SecondRecentTemplates;
+                string third = EBSettings.ThirdRecentTemplates;
+                string fourth = EBSettings.FourthRecentTemplates;
+                string fifth = EBSettings.FifthRecentTemplates;
+
+                string limbo = templatesPath;
+
+                if (limbo == first)
+                {
+                    EBSettings.Save();
+                    return;
+                }
+                else
+                {
+                    EBSettings.FirstRecentTemplates = limbo;
+                    limbo = first;
+                }
+
+                if (limbo == second)
+                {
+                    EBSettings.Save();
+                    return;
+                }
+                else
+                {
+                    EBSettings.SecondRecentTemplates = limbo;
+                    limbo = second;
+                }
+
+                if (limbo == third)
+                {
+                    EBSettings.Save();
+                    return;
+                }
+                else
+                {
+                    EBSettings.ThirdRecentTemplates = limbo;
+                    limbo = third;
+                }
+
+                if (limbo == fourth)
+                {
+                    EBSettings.Save();
+                    return;
+                }
+                else
+                {
+                    EBSettings.FourthRecentTemplates = limbo;
+                    limbo = fourth;
+                }
+
+                if (limbo == fifth)
+                {
+                    EBSettings.Save();
+                    return;
+                }
+                else
+                {
+                    EBSettings.FifthRecentTemplates = limbo;
+                }
+
+                EBSettings.Save();
+            }
+        }
     }
 }
