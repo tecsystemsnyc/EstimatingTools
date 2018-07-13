@@ -27,6 +27,7 @@ namespace EstimatingLibrary.Utilities
                 {
                     if(parent is ITypicalable parentTypical && parentTypical.IsTypical && item is ITypicalable typ) { typ.MakeTypical(); }
                     onAdd?.Invoke(item);
+                    if (item is ITypicalable typItem && typItem.IsTypical) { notifyCost = null; }
                     if (item is INotifyCostChanged cost)
                     {
                         costs += cost.CostBatch;
@@ -43,6 +44,7 @@ namespace EstimatingLibrary.Utilities
             {
                 foreach (TECObject item in e.OldItems)
                 {
+                    if (item is ITypicalable typItem && typItem.IsTypical) { notifyCost = null; }
                     if (item is INotifyCostChanged cost)
                     {
                         costs += cost.CostBatch;

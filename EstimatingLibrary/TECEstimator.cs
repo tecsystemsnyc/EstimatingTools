@@ -290,10 +290,6 @@ namespace EstimatingLibrary
         
         private void costChanged(CostBatch change)
         {
-            double tecCost = change.GetCost(CostType.TEC);
-            double elecCost = change.GetCost(CostType.Electrical);
-            double tecLabor = change.GetLabor(CostType.TEC);
-            double elecLabor = change.GetLabor(CostType.Electrical);
             addCost(change);
         }
         private void pointChanged(int pointNum)

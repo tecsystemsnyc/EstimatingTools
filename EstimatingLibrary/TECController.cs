@@ -169,7 +169,7 @@ namespace EstimatingLibrary
             }
             if (isNew)
             {
-                this.addChildConnection(connection);
+                this.ChildrenConnections.Add(connection);
             }
             return connection;
         }
@@ -204,7 +204,7 @@ namespace EstimatingLibrary
             }
             if (connectionToRemove != null)
             {
-                removeChildConnection(connectionToRemove);
+                this.ChildrenConnections.Remove(connectionToRemove);
             }
             return null;
         }
@@ -216,7 +216,7 @@ namespace EstimatingLibrary
         public TECNetworkConnection AddNetworkConnection(TECProtocol protocol)
         {
             TECNetworkConnection netConnect = new TECNetworkConnection(this, protocol);
-            addChildConnection(netConnect);
+            this.ChildrenConnections.Add(netConnect);
             return netConnect;
         }
         public void RemoveNetworkConnection(TECNetworkConnection connection)
@@ -228,7 +228,7 @@ namespace EstimatingLibrary
                 {
                     connection.RemoveChild(child);
                 }
-                removeChildConnection(connection);
+                this.ChildrenConnections.Remove(connection);
             }
             else
             {
@@ -325,23 +325,6 @@ namespace EstimatingLibrary
             if (!IsTypical)
             {
                 base.notifyCostChanged(costs);
-            }
-        }
-
-        private void addChildConnection(IControllerConnection connection)
-        {
-            ChildrenConnections.Add(connection);
-            if (!connection.IsTypical && !connection.IsTypical)
-            {
-                notifyCostChanged(connection.CostBatch);
-            }
-        }
-        private void removeChildConnection(IControllerConnection connection)
-        {
-            ChildrenConnections.Remove(connection);
-            if (!connection.IsTypical && !connection.IsTypical)
-            {
-                notifyCostChanged(connection.CostBatch * -1);
             }
         }
 
