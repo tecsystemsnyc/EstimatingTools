@@ -34,11 +34,19 @@ namespace Models
             TECDevice device = null;
             foreach(TECDevice item in bid.Catalogs.Devices)
             {
-                if (item.PossibleProtocols.Count > 0 && controller.AvailableProtocols.Contains(item.PossibleProtocols.First()))
+                foreach(TECProtocol prot in item.PossibleProtocols)
                 {
-                    device = item;
-                    break;
+                    if (controller.AvailableProtocols.Contains(prot))
+                    {
+                        device = item;
+                        break;
+                    }
                 }
+                if (device != null) break;
+            }
+            if (device == null)
+            {
+                throw new NullReferenceException("Device is Null");
             }
             subScope.Devices.Add(device);
             equipment.SubScope.Add(subScope);
@@ -63,18 +71,24 @@ namespace Models
 
             bid.Catalogs = ModelCreation.TestCatalogs(rand);
 
-            TECController controller = ModelCreation.TestProvidedController(bid.Catalogs, rand);
+            TECControllerType type = bid.Catalogs.ControllerTypes.RandomElement(rand);
+
+            TECController controller = new TECProvidedController(type);
             bid.AddController(controller);
 
             TECTypical typical = new TECTypical();
-            TECController typicalController = ModelCreation.TestProvidedController(bid.Catalogs, rand);
+            TECController typicalController = new TECProvidedController(type);
 
             typical.AddController(typicalController);
 
             bid.Systems.Add(typical);
             TECSystem system = typical.AddInstance(bid);
             TECController instanceController = typical.GetInstancesFromTypical(typicalController).First();
+
+            Assert.IsTrue(controller.CanConnect(instanceController));
+
             IControllerConnection connection = controller.Connect(instanceController, instanceController.AvailableProtocols.First());
+
             Assert.IsTrue(connection is TECNetworkConnection);
 
             typical.Instances.Remove(system);

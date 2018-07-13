@@ -2212,7 +2212,7 @@ namespace Models
 
             TECSubScope instanceSubScope = typical.GetInstancesFromTypical(subScope).First();
 
-            IControllerConnection ssConnect = controller.Connect(instanceSubScope, instanceSubScope.AvailableProtocols.First());
+            IControllerConnection ssConnect = controller.Connect(instanceSubScope, instanceSubScope.AvailableProtocols.First(x => x is TECHardwiredProtocol));
             ssConnect.Length = 50;
 
             typical.Instances.Remove(instance);

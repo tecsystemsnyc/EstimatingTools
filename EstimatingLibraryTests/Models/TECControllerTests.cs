@@ -37,6 +37,7 @@ namespace Models
         [TestMethod]
         public void Controller_RemoveSubScope()
         {
+            //Arrange
             TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
             TECController controller = ModelCreation.TestProvidedController(catalogs, rand);
             TECSubScope subScope = new TECSubScope();
@@ -44,9 +45,12 @@ namespace Models
             subScope.Devices.Add(dev);
 
             controller.Connect(subScope, subScope.AvailableProtocols.First());
-            controller.Disconnect(subScope);
 
-            Assert.AreEqual(0, controller.ChildrenConnections.Count, "Connection not removed from controller");
+            //Act
+            TECNetworkConnection netConnect = controller.Disconnect(subScope);
+
+            //Assert
+            Assert.AreEqual(0, netConnect.Children.Count(), "SubScope not removed from connection");
             Assert.AreEqual(null, subScope.Connection, "Connection not removed from subscope");
         }
 
@@ -136,78 +140,6 @@ namespace Models
             Assert.AreEqual(0, childController.ChildrenConnections.Count, "Connection not removed from controller");
             Assert.AreEqual(null, childController.ParentConnection, "Connection not removed from child");
             Assert.AreEqual(null, childestController.ParentConnection, "Connection not removed from childest");
-        }
-
-        //New Tests
-        [TestMethod]
-        public void CompatibleProtocols()
-        {
-            Random random = new Random(5);
-
-            //Arrange
-            TECControllerMock testController = new TECControllerMock();
-
-            throw new NotImplementedException();
-        }
-
-        [TestMethod]
-        public void CanConnect()
-        {
-            throw new NotImplementedException();
-        }
-
-        [TestMethod]
-        public void Connect()
-        {
-            throw new NotImplementedException();
-        }
-
-        [TestMethod]
-        public void Disconnect()
-        {
-            throw new NotImplementedException();
-        }
-
-        [TestMethod]
-        public void CanAddNetworkConnection()
-        {
-            throw new NotImplementedException();
-        }
-
-        [TestMethod]
-        public void AddNetworkConnection()
-        {
-            throw new NotImplementedException();
-        }
-
-        [TestMethod]
-        public void RemoveNetworkConnection()
-        {
-            throw new NotImplementedException();
-        }
-
-        [TestMethod]
-        public void DisconnectAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        [TestMethod]
-        public void RemoveAllChildNetworkConnections()
-        {
-            throw new NotImplementedException();
-        }
-
-        [TestMethod]
-        public void RemoveAllChildHardwiredConnections()
-        {
-            throw new NotImplementedException();
-        }
-
-        [TestMethod]
-        public void RemoveAllChildConnections()
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -64,7 +64,13 @@ namespace EstimatingLibrary
         }
         public IOCollection AvailableIO
         {
-            get { return IO - UsedIO; }
+            get
+            {
+                IOCollection io = new IOCollection(this.IO);
+                IOCollection usedIO = new IOCollection(this.UsedIO);
+                if (!io.Remove(usedIO.ToList())) throw new Exception("This controller has used more IO than has available.");
+                return io;
+            }
         }
         public List<IProtocol> AvailableProtocols
         {
@@ -134,6 +140,7 @@ namespace EstimatingLibrary
         }
         public IControllerConnection Connect(IConnectable connectable, IProtocol protocol, bool attemptExisiting = false)
         {
+            if (!CanConnect(connectable)) return null;
             IControllerConnection connection;
             bool isNew = true;
             bool isTypical = (connectable as ITypicalable)?.IsTypical ?? false;
@@ -158,7 +165,7 @@ namespace EstimatingLibrary
             }
             else
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException("Unrecognized type implements IProtocol");
             }
             if (isNew)
             {
