@@ -81,30 +81,31 @@
                                Grid.RowSpan="2"/>
 
                         <TabControl Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3">
+                            <TabItem Header="Properties">
+                                <views:BidPropertiesView ViewModel="{Binding BidPropertiesVM}"/>
+                            </TabItem>
                             <TabItem Header="Scope Editor">
                                 <views:ScopeEditorView
                                     ViewModel="{Binding ScopeEditorVM}"/>
                             </TabItem>
+                            <TabItem Header="Notes">
+                                <views:InternalNotesView ViewModel="{Binding InternalNotesVM}"/>
+                            </TabItem>
                             <TabItem Header="Riser">
                                 <views:RiserView ViewModel="{Binding RiserVM}"/>
-                            </TabItem>
-                            <TabItem Header="Proposal">
-                                <views:ProposalView
-                                    ViewModel="{Binding ProposalVM}"/>
                             </TabItem>
                             <TabItem Header="Schedule">
                                 <views:ScheduleView
                                     ViewModel="{Binding ScheduleVM}"/>
                             </TabItem>
-                            <TabItem Header="Properties">
-                                <views:BidPropertiesView ViewModel="{Binding BidPropertiesVM}"/>
-                            </TabItem>
                             <TabItem Header="Review">
                                 <controls:ReviewTabControl ViewModel="{Binding}"/>
                             </TabItem>
-                            <TabItem Header="Notes">
-                                <views:InternalNotesView ViewModel="{Binding InternalNotesVM}"/>
+                            <TabItem Header="Proposal">
+                                <views:ProposalView
+                                    ViewModel="{Binding ProposalVM}"/>
                             </TabItem>
+                            
                         </TabControl>
                         <views:StatusBarView ViewModel="{Binding ElementName=mainWindow, Path=DataContext.StatusBarVM}"
                                              Grid.Row="3" Grid.ColumnSpan="3"

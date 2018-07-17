@@ -32,8 +32,8 @@
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="..." CellTemplate="{DynamicResource ExpandDetails}" Width="30" IsReadOnly="True" />
                 <DataGridTextColumn Binding="{Binding Label}" Header="Text" Width="Auto"  MinWidth="120"/>
-                <DataGridTextColumn Binding="{Binding Branches.Count}" Header="Children" Width="Auto" MinWidth="70" IsReadOnly="True"
-                                    ElementStyle="{StaticResource RightCell}"/>
+                <!--<DataGridTextColumn Binding="{Binding Branches.Count}" Header="Children" Width="Auto" MinWidth="70" IsReadOnly="True"
+                                    ElementStyle="{StaticResource RightCell}"/>-->
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <HierarchicalDataTemplate>
@@ -64,7 +64,7 @@
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Header="" CellTemplate="{DynamicResource ExpandDetails}" Width="30" IsReadOnly="True"/>
                                 <DataGridTextColumn Binding="{Binding Label}" Header="Text" Width="Auto" MinWidth="100"/>
-                                <DataGridTextColumn Binding="{Binding Branches.Count}" Header="# Branches" Width="Auto" MinWidth="20" IsReadOnly="True"/>
+                                <!--<DataGridTextColumn Binding="{Binding Branches.Count}" Header="# Branches" Width="Auto" MinWidth="20" IsReadOnly="True"/>-->
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>
