@@ -117,6 +117,7 @@ namespace TECUserControlLibrary.ViewModels
         
         public ICommand AddLocationCommand { get; private set; }
         public ICommand AddPatternCommand { get; private set; }
+        public RelayCommand<LocationContainer> DeleteCommand { get; private set; }
         
         public RiserVM(TECBid bid, ChangeWatcher watcher)
         {
@@ -127,8 +128,19 @@ namespace TECUserControlLibrary.ViewModels
             AddLocationCommand = new RelayCommand(addLocationExecute, canAddLocation);
             AddPatternCommand = new RelayCommand(addPatternExecute, canAddPattern);
             PropertiesVM = new PropertiesVM(bid.Catalogs, bid);
+            DeleteCommand = new RelayCommand<LocationContainer>(deleteLocationExecute, canDeleteLocation);
         }
-        
+
+        private void deleteLocationExecute(LocationContainer obj)
+        {
+            Locations.Remove(obj.Location);
+        }
+
+        private bool canDeleteLocation(LocationContainer arg)
+        {
+            return true;
+        }
+
         private void addPatternExecute()
         {
             for(int x = PatternStart; x <= PatternEnd; x++)

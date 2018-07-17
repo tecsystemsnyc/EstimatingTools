@@ -13,13 +13,13 @@
              d:DesignHeight="640" d:DesignWidth="960">
     <UserControl.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/TECUserControlLibrary;component/TECResourceDictionary.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
             <Style TargetType="TextBlock">
                 <Setter Property="Foreground" Value="Black"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
             </Style>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TECUserControlLibrary;component/TECResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=riserView, Path=ViewModel}" Background="{StaticResource SectionBackgroundBrush}">
@@ -63,6 +63,9 @@
         </Grid>
         <Grid Grid.Column="1">
             <Grid>
+                <Grid.Resources>
+                    <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=riserView, Path=ViewModel}"/>
+                </Grid.Resources>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
@@ -146,6 +149,12 @@
                         <DataTemplate>
                             <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1">
                                 <Grid>
+                                    <Grid.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Delete" Command="{Binding Data.DeleteCommand, Source={StaticResource proxy}}"
+                                                CommandParameter="{Binding}"/>
+                                        </ContextMenu>
+                                    </Grid.ContextMenu>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="30"/>
                                         <RowDefinition MinHeight="60"/>
