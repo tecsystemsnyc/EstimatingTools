@@ -72,7 +72,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
             List<TECLocation> locations = getObjectsFromTable(new LocationTable(), id => new TECLocation(id));
             Dictionary<Guid, List<TECLocation>> bidLocations = getOneToManyRelationships(new BidLocationTable(), locations);
-            bid.Locations = bidLocations.ValueOrNew(bid.Guid);
+            bid.Locations.AddRange(bidLocations.ValueOrNew(bid.Guid));
             Dictionary<Guid, TECLocation> locationDictionary = getOneToOneRelationships(new LocatedLocationTable(), locations);
 
             List<TECScopeBranch> branches = getObjectsFromTable(new ScopeBranchTable(), id => new TECScopeBranch(id));
@@ -82,17 +82,17 @@ namespace EstimatingUtilitiesLibrary.Database
 
             bid.Parameters = getObjectFromTable(new ParametersTable(), id => { return new TECParameters(id); }, new TECParameters(bid.Guid));
             bid.ExtraLabor = getObjectFromTable(new ExtraLaborTable(), id => { return new TECExtraLabor(id); }, new TECExtraLabor(bid.Guid));
-            bid.ScopeTree = getChildObjects(new BidScopeBranchTable(), new ScopeBranchTable(), bid.Guid, id => new TECScopeBranch(id)).ToOC();
+            bid.ScopeTree.AddRange(getChildObjects(new BidScopeBranchTable(), new ScopeBranchTable(), bid.Guid, id => new TECScopeBranch(id)));
             bid.ScopeTree.ForEach(item => linkBranchHierarchy(item, branches, branchHierarchy));
             (var typicals, var controllers, var panels)  = getScopeHierarchy(bid.Guid, bid.Catalogs);
-            bid.Systems = typicals.ToOC();
+            bid.Systems.AddRange(typicals);
             bid.SetControllers(controllers);
-            bid.Panels = panels.ToOC();
-            bid.Notes = getObjectsFromTable(new NoteTable(), id => new TECLabeled(id)).ToOC();
-            bid.Exclusions = getObjectsFromTable(new ExclusionTable(), id => new TECLabeled(id)).ToOC();
-            bid.MiscCosts = getChildObjects(new BidMiscTable(), new MiscTable(), bid.Guid, data => getMiscFromRow(data)).ToOC();
+            bid.Panels.AddRange(panels);
+            bid.Notes.AddRange(getObjectsFromTable(new NoteTable(), id => new TECLabeled(id)));
+            bid.Exclusions.AddRange(getObjectsFromTable(new ExclusionTable(), id => new TECLabeled(id)));
+            bid.MiscCosts.AddRange(getChildObjects(new BidMiscTable(), new MiscTable(), bid.Guid, data => getMiscFromRow(data)));
             bid.Schedule = getSchedule(bid);
-            bid.InternalNotes = getChildObjects(new BidInternalNoteTable(), new InternalNoteTable(), bid.Guid, id => { return new TECInternalNote(id); }).ToOC();
+            bid.InternalNotes.AddRange(getChildObjects(new BidInternalNoteTable(), new InternalNoteTable(), bid.Guid, id => { return new TECInternalNote(id); }));
             
             List<TECLocated> allLocated = bid.GetAll<TECLocated>();
             allLocated.ForEach(item => item.Location = locationDictionary.ValueOrDefault(item.Guid, null));
@@ -196,7 +196,7 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<Guid, List<TECController>> panelControllers = getOneToManyRelationships(new PanelControllerTable(), controllers);
 
             controllers.ForEach(item => { if (item is TECProvidedController provided) provided.IOModules = controllerModuleRelationships.ValueOrNew(provided.Guid); });
-            subScope.ForEach(item => item.Devices = endDevices.ValueOrNew(item.Guid));
+            subScope.ForEach(item => item.Devices.AddRange(endDevices.ValueOrNew(item.Guid)));
             
             foreach(IControllerConnection item in allConnections)
             {
@@ -262,22 +262,22 @@ namespace EstimatingUtilitiesLibrary.Database
         private static TECCatalogs getCatalogs()
         {
             TECCatalogs catalogs = new TECCatalogs();
-            catalogs.Manufacturers = getObjectsFromTable(new ManufacturerTable(), id => new TECManufacturer(id)).ToOC();
-            catalogs.ConnectionTypes = getObjectsFromTable(new ConnectionTypeTable(), id => new TECConnectionType(id)).ToOC();
-            catalogs.ConduitTypes = getObjectsFromTable(new ConduitTypeTable(), id => new TECElectricalMaterial(id)).ToOC();
+            catalogs.Manufacturers.AddRange(getObjectsFromTable(new ManufacturerTable(), id => new TECManufacturer(id)));
+            catalogs.ConnectionTypes.AddRange(getObjectsFromTable(new ConnectionTypeTable(), id => new TECConnectionType(id)));
+            catalogs.ConduitTypes.AddRange(getObjectsFromTable(new ConduitTypeTable(), id => new TECElectricalMaterial(id)));
             Dictionary<Guid, List<TECConnectionType>> protocolConnectionType = getOneToManyRelationships(new ProtocolConnectionTypeTable(), catalogs.ConnectionTypes);
-            catalogs.Protocols = getObjectsFromTable(new ProtocolTable(), id => new TECProtocol(id, protocolConnectionType[id])).ToOC();
+            catalogs.Protocols.AddRange(getObjectsFromTable(new ProtocolTable(), id => new TECProtocol(id, protocolConnectionType[id])));
             Dictionary<Guid, TECManufacturer> hardwareManufacturer = getOneToOneRelationships(new HardwareManufacturerTable(), catalogs.Manufacturers);
             Dictionary<Guid, List<TECConnectionType>> deviceConnectionType = getOneToManyRelationships(new DeviceConnectionTypeTable(), catalogs.ConnectionTypes);
             Dictionary<Guid, List<TECProtocol>> deviceProtocols = getOneToManyRelationships(new DeviceProtocolTable(), catalogs.Protocols);
-            catalogs.Devices = getObjectsFromTable(new DeviceTable(), id => new TECDevice(id, deviceConnectionType.ValueOrNew(id), deviceProtocols.ValueOrNew(id), hardwareManufacturer[id])).ToOC();
+            catalogs.Devices.AddRange(getObjectsFromTable(new DeviceTable(), id => new TECDevice(id, deviceConnectionType.ValueOrNew(id), deviceProtocols.ValueOrNew(id), hardwareManufacturer[id])));
             Dictionary<Guid, TECDevice> actuators = getOneToOneRelationships(new ValveActuatorTable(), catalogs.Devices);
-            catalogs.Valves = getObjectsFromTable(new ValveTable(), id => new TECValve(id, hardwareManufacturer[id], actuators[id])).ToOC();
-            catalogs.AssociatedCosts = getObjectsFromTable(new AssociatedCostTable(), getAssociatedCostFromRow).ToOC();
-            catalogs.PanelTypes = getObjectsFromTable(new PanelTypeTable(), data => getPanelTypeFromRow(data, hardwareManufacturer)).ToOC();
-            catalogs.IOModules = getObjectsFromTable(new IOModuleTable(), id => new TECIOModule(id, hardwareManufacturer[id])).ToOC();
-            catalogs.ControllerTypes = getObjectsFromTable(new ControllerTypeTable(), id => new TECControllerType(id, hardwareManufacturer[id])).ToOC();
-            catalogs.Tags = getObjectsFromTable(new TagTable(), id => new TECTag(id)).ToOC();
+            catalogs.Valves.AddRange(getObjectsFromTable(new ValveTable(), id => new TECValve(id, hardwareManufacturer[id], actuators[id])));
+            catalogs.AssociatedCosts.AddRange(getObjectsFromTable(new AssociatedCostTable(), getAssociatedCostFromRow));
+            catalogs.PanelTypes.AddRange(getObjectsFromTable(new PanelTypeTable(), data => getPanelTypeFromRow(data, hardwareManufacturer)));
+            catalogs.IOModules.AddRange(getObjectsFromTable(new IOModuleTable(), id => new TECIOModule(id, hardwareManufacturer[id])));
+            catalogs.ControllerTypes.AddRange(getObjectsFromTable(new ControllerTypeTable(), id => new TECControllerType(id, hardwareManufacturer[id])));
+            catalogs.Tags.AddRange(getObjectsFromTable(new TagTable(), id => new TECTag(id)));
             Dictionary<Guid, TECProtocol> ioProtocols = getOneToOneRelationships(new IOProtocolTable(), catalogs.Protocols);
 
             List<TECIO> io = getObjectsFromTable(new IOTable(), row => getIOFromRow(row, ioProtocols)).ToList();
@@ -292,10 +292,10 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<Guid, List<TECTag>> tagRelationships = getOneToManyRelationships(new ScopeTagTable(), catalogs.Tags);
             Dictionary<Guid, List<TECAssociatedCost>> costRelationships = getOneToManyRelationships(new ScopeAssociatedCostTable(), catalogs.AssociatedCosts);
 
-            catalogs.IOModules.ForEach(item => item.IO = moduleIORelationships.ValueOrNew(item.Guid));
+            catalogs.IOModules.ForEach(item => item.IO.AddRange(moduleIORelationships.ValueOrNew(item.Guid)));
             catalogs.ControllerTypes.ForEach(item => populateControllerTypeProperties(item, controllerTypeModuleRelationships, controllerTypeIORelationships));
-            catalogs.ConnectionTypes.ForEach(item => item.RatedCosts = ratedCostsRelationShips.ValueOrNew(item.Guid));
-            catalogs.ConduitTypes.ForEach(item => item.RatedCosts = ratedCostsRelationShips.ValueOrNew(item.Guid));
+            catalogs.ConnectionTypes.ForEach(item => item.RatedCosts.AddRange(ratedCostsRelationShips.ValueOrNew(item.Guid)));
+            catalogs.ConduitTypes.ForEach(item => item.RatedCosts.AddRange(ratedCostsRelationShips.ValueOrNew(item.Guid)));
 
             List<TECScope> allScope = catalogs.GetAll<TECScope>();
             allScope.ForEach(item => populateScopeProperties(item, tagRelationships, costRelationships));
@@ -360,24 +360,24 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<Guid, List<TECPoint>> subScopePoint = getOneToManyRelationships(new SubScopePointTable(), points);
             Dictionary<Guid, List<IControllerConnection>> controllerConnection = getOneToManyRelationships(new ControllerConnectionTable(), connections);
 
-            subScope.ForEach(item => item.Points = subScopePoint.ValueOrNew(item.Guid));
-            equipment.ForEach(item => item.SubScope = equipmentSubScope.ValueOrNew(item.Guid));
+            subScope.ForEach(item => item.Points.AddRange(subScopePoint.ValueOrNew(item.Guid)));
+            equipment.ForEach(item => item.SubScope.AddRange(equipmentSubScope.ValueOrNew(item.Guid)));
             foreach (TECSystem system in systems)
             {
-                system.Equipment = systemEquipment.ValueOrNew(system.Guid);
+                system.Equipment.AddRange(systemEquipment.ValueOrNew(system.Guid));
                 system.SetControllers(systemController.ValueOrNew(system.Guid));
-                system.Panels = systemPanels.ValueOrNew(system.Guid);
-                system.MiscCosts = systemMisc.ValueOrNew(system.Guid);
-                system.ScopeBranches = systemScopeBranch.ValueOrNew(system.Guid);
+                system.Panels.AddRange(systemPanels.ValueOrNew(system.Guid));
+                system.MiscCosts.AddRange(systemMisc.ValueOrNew(system.Guid));
+                system.ScopeBranches.AddRange(systemScopeBranch.ValueOrNew(system.Guid));
             }
             controllers.ForEach(item => {
-                item.ChildrenConnections = controllerConnection.ValueOrNew(item.Guid);
+                item.ChildrenConnections.AddRange(controllerConnection.ValueOrNew(item.Guid));
             });
 
             Dictionary<Guid, List<TECController>> panelControllerDictionary = getOneToManyRelationships(new PanelControllerTable(), controllers);
             controllers.ForEach(item => { if (item is TECProvidedController provided) provided.IOModules = providedControllerModuleRelationships.ValueOrNew(provided.Guid); });
 
-            subScope.ForEach(item => item.Devices = endDevices.ValueOrNew(item.Guid));
+            subScope.ForEach(item => item.Devices.AddRange(endDevices.ValueOrNew(item.Guid)));
             panels.ForEach(item => item.Controllers = panelControllerDictionary.ValueOrNew(item.Guid));
 
             subScopeConnections.ForEach(item => { populateSubScopeConnectionProperties(item, connectionConduitTypes); });
@@ -458,13 +458,13 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 List<TECTag> allTags = new List<TECTag>();
                 tags[scope.Guid].ForEach(item => allTags.Add(item));
-                scope.Tags = allTags.ToOC();
+                scope.Tags.AddRange(allTags);
             }
             if (costs.ContainsKey(scope.Guid))
             {
                 List<TECAssociatedCost> allCosts = new List<TECAssociatedCost>();
                 costs[scope.Guid].ForEach(item => allCosts.Add(item));
-                scope.AssociatedCosts = allCosts.ToOC();
+                scope.AssociatedCosts.AddRange(allCosts);
             }
         }
         private static void populateSubScopeConnectionProperties(TECHardwiredConnection connection, Dictionary<Guid, TECElectricalMaterial> connectionConduitTypes)
@@ -497,7 +497,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             if (scopeBranchHierarchy.ContainsKey(branch.Guid))
             {
-                branch.Branches = getRelatedReferences(scopeBranchHierarchy[branch.Guid], branches).ToOC();
+                branch.Branches.AddRange(getRelatedReferences(scopeBranchHierarchy[branch.Guid], branches));
                 foreach (var subBranch in branch.Branches)
                 {
                     linkBranchHierarchy(subBranch, branches, scopeBranchHierarchy);
