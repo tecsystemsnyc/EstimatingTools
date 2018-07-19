@@ -863,9 +863,9 @@ namespace EstimatingUtilitiesLibraryTests
             double expectedElectricalLabor = 24;
             CostType expectedElectricalType = CostType.Electrical;
 
-            TECCost actualTECCost = null;
-            TECCost actualElectricalCost = null;
-            foreach(TECCost cost in actualBid.Catalogs.AssociatedCosts)
+            TECAssociatedCost actualTECCost = null;
+            TECAssociatedCost actualElectricalCost = null;
+            foreach(TECAssociatedCost cost in actualBid.Catalogs.AssociatedCosts)
             {
                 if (cost.Guid == expectedTECGuid)
                 {
@@ -1795,7 +1795,7 @@ namespace EstimatingUtilitiesLibraryTests
             bool foundTECCost = false;
             bool foundElectricalCost = false;
 
-            foreach (TECCost cost in scope.AssociatedCosts)
+            foreach (TECAssociatedCost cost in scope.AssociatedCosts)
             {
                 if (cost.Guid == TEST_TEC_COST_GUID)
                 {
@@ -1803,7 +1803,7 @@ namespace EstimatingUtilitiesLibraryTests
                     break;
                 }
             }
-            foreach (TECCost cost in scope.AssociatedCosts)
+            foreach (TECAssociatedCost cost in scope.AssociatedCosts)
             {
                 if (cost.Guid == TEST_ELECTRICAL_COST_GUID)
                 {
@@ -1825,7 +1825,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             bool foundCost = false;
             
-            foreach (TECCost cost in component.RatedCosts)
+            foreach (TECAssociatedCost cost in component.RatedCosts)
             {
                 if (cost.Guid == TEST_RATED_COST_GUID)
                 {

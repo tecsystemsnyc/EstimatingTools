@@ -827,7 +827,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         {
             Guid expectedTECGuid = new Guid("1c2a7631-9e3b-4006-ada7-12d6cee52f08");
             string expectedTECName = "Test TEC Associated Cost";
-            double expectedTECCost = 31;
+            double expectedICost = 31;
             double expectedTECLabor = 13;
             CostType expectedTECType = CostType.TEC;
 
@@ -837,29 +837,29 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             double expectedElectricalLabor = 24;
             CostType expectedElectricalType = CostType.Electrical;
 
-            TECCost actualTECCost = null;
-            TECCost actualElectricalCost = null;
-            foreach (TECCost cost in actualBid.Catalogs.AssociatedCosts)
+            ICost actualICost = null;
+            ICost actualElectricalCost = null;
+            foreach (ICost cost in actualBid.Catalogs.AssociatedCosts)
             {
                 if (cost.Guid == expectedTECGuid)
                 {
-                    actualTECCost = cost;
+                    actualICost = cost;
                 }
                 else if (cost.Guid == expectedElectricalGuid)
                 {
                     actualElectricalCost = cost;
                 }
-                if (actualTECCost != null && actualElectricalCost != null)
+                if (actualICost != null && actualElectricalCost != null)
                 {
                     break;
                 }
             }
 
             //Assert
-            Assert.AreEqual(expectedTECName, actualTECCost.Name, "TEC cost name didn't load properly.");
-            Assert.AreEqual(expectedTECCost, actualTECCost.Cost, "TEC cost cost didn't load properly.");
-            Assert.AreEqual(expectedTECLabor, actualTECCost.Labor, "TEC cost labor didn't load properly.");
-            Assert.AreEqual(expectedTECType, actualTECCost.Type, "TEC cost type didn't load properly.");
+            Assert.AreEqual(expectedTECName, actualICost.Name, "TEC cost name didn't load properly.");
+            Assert.AreEqual(expectedICost, actualICost.Cost, "TEC cost cost didn't load properly.");
+            Assert.AreEqual(expectedTECLabor, actualICost.Labor, "TEC cost labor didn't load properly.");
+            Assert.AreEqual(expectedTECType, actualICost.Type, "TEC cost type didn't load properly.");
 
             Assert.AreEqual(expectedElectricalName, actualElectricalCost.Name, "Electrical cost name didn't load properly.");
             Assert.AreEqual(expectedElectricalCost, actualElectricalCost.Cost, "Electrical cost cost didn't load properly.");
@@ -1574,18 +1574,18 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         }
         private void testForCosts(TECScope scope)
         {
-            bool foundTECCost = false;
+            bool foundICost = false;
             bool foundElectricalCost = false;
 
-            foreach (TECCost cost in scope.AssociatedCosts)
+            foreach (ICost cost in scope.AssociatedCosts)
             {
                 if (cost.Guid == TEST_TEC_COST_GUID)
                 {
-                    foundTECCost = true;
+                    foundICost = true;
                     break;
                 }
             }
-            foreach (TECCost cost in scope.AssociatedCosts)
+            foreach (ICost cost in scope.AssociatedCosts)
             {
                 if (cost.Guid == TEST_ELECTRICAL_COST_GUID)
                 {
@@ -1594,7 +1594,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
                 }
             }
 
-            Assert.IsTrue(foundTECCost, "TEC Cost not loaded properly into scope.");
+            Assert.IsTrue(foundICost, "TEC Cost not loaded properly into scope.");
             Assert.IsTrue(foundElectricalCost, "Electrical Cost not loaded properly into scope.");
         }
         private void testForLocation(TECLocated scope)
@@ -1607,7 +1607,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         {
             bool foundCost = false;
 
-            foreach (TECCost cost in component.RatedCosts)
+            foreach (ICost cost in component.RatedCosts)
             {
                 if (cost.Guid == TEST_RATED_COST_GUID)
                 {

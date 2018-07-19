@@ -2013,7 +2013,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class ScopeTagTable : TableBase
     {
         public static string TableName = "ScopeTag";
-        public static Type ObjectType = typeof(TECScope);
+        public static Type ObjectType = typeof(TECTagged);
         public static Type ReferenceType = typeof(TECTag);
 
         public static TableField ScopeID = new TableField("ScopeID", "TEXT", ObjectType.GetProperty("Guid"));
