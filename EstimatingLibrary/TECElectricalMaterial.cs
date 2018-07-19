@@ -34,12 +34,12 @@ namespace EstimatingLibrary
         public CostBatch GetCosts(double length)
         {
             CostBatch costBatch = new CostBatch(Cost, Labor, Type);
-            foreach (TECAssociatedCost ratedCost in RatedCosts)
+            foreach (ICost ratedCost in RatedCosts)
             {
                 costBatch.AddCost(ratedCost);
             }
             costBatch *= length;
-            foreach (TECAssociatedCost assocCost in AssociatedCosts)
+            foreach (ICost assocCost in AssociatedCosts)
             {
                 costBatch.AddCost(assocCost);
             }
