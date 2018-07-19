@@ -660,12 +660,16 @@ namespace EstimatingUtilitiesLibraryTests
             TECPoint actualPoint = null;
             foreach (TECTypical typical in actualBid.Systems)
             {
+                Assert.IsTrue(typical.IsTypical);
                 foreach (TECEquipment equip in typical.Equipment)
                 {
+                    Assert.IsTrue(equip.IsTypical);
                     foreach (TECSubScope ss in equip.SubScope)
                     {
+                        Assert.IsTrue(ss.IsTypical);
                         foreach (TECPoint point in ss.Points)
                         {
+                            Assert.IsTrue(point.IsTypical);
                             if (point.Guid == expectedGuid)
                             {
                                 actualPoint = point;

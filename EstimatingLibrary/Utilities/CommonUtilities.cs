@@ -20,6 +20,14 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
+        public static void AddRange<T>(this ObservableCollection<T> collection, IEnumerable<T> range)
+        {
+            foreach(T item in range)
+            {
+                collection.Add(item);
+            }
+        }
+
         public static bool Matches<T>(this IEnumerable<T> first, IEnumerable<T> second)
         {
             return (first.Except(second).Count() == 0)
