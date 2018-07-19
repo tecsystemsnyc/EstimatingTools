@@ -54,7 +54,7 @@ namespace TECUserControlLibrary.Debug
         {
             TECControllerType type = new TECControllerType(bid.Catalogs.Manufacturers[0]);
             type.Name = "Controller Type";
-            type.IO = new System.Collections.ObjectModel.ObservableCollection<TECIO>() { new TECIO(IOType.AI) };
+            type.IO.Add(new TECIO(IOType.AI) );
 
             bid.Catalogs.ControllerTypes.Add(type);
 
