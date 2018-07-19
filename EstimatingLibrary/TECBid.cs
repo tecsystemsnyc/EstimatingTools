@@ -18,6 +18,7 @@ namespace EstimatingLibrary
         private double _duration = 0.0;
         private TECParameters _parameters;
         private TECExtraLabor _extraLabor;
+        private TECSchedule _schedule;
 
         public event Action<CostBatch> CostChanged;
         public event Action<int> PointChanged;
@@ -116,7 +117,16 @@ namespace EstimatingLibrary
             }
 
         }
-        public TECSchedule Schedule { get; } = new TECSchedule();
+        public TECSchedule Schedule
+        {
+            get { return _schedule; }
+            set
+            {
+                var old = _schedule;
+                _schedule = value;
+                notifyCombinedChanged(Change.Edit, "Schedule", this, value, old);
+            }
+        }
 
         public ObservableCollection<TECScopeBranch> ScopeTree { get; } = new ObservableCollection<TECScopeBranch>();
         public ObservableCollection<TECTypical> Systems { get; } = new ObservableCollection<TECTypical>();
