@@ -68,8 +68,7 @@ namespace EstimatingLibrary
         
         protected override CostBatch getCosts()
         {
-            CostBatch costs = base.getCosts();
-            costs += Type.CostBatch;
+            CostBatch costs = base.getCosts() + Type.CostBatch;
             return costs;
         }
         protected override SaveableMap propertyObjects()
