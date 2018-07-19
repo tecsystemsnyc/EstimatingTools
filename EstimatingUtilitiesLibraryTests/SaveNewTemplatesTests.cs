@@ -25,7 +25,7 @@ namespace EstimatingUtilitiesLibraryTests
         static TECManufacturer expectedManufacturer;
         static TECLabeled expectedTag;
         static TECProvidedController expectedController;
-        static TECCost expectedAssociatedCost;
+        static TECAssociatedCost expectedAssociatedCost;
         static TECElectricalMaterial expectedConnectionType;
         static TECElectricalMaterial expectedConduitType;
 
@@ -39,7 +39,7 @@ namespace EstimatingUtilitiesLibraryTests
         static TECManufacturer actualManufacturer;
         static TECLabeled actualTag;
         static TECProvidedController actualController;
-        static TECCost actualAssociatedCost;
+        static TECAssociatedCost actualAssociatedCost;
         static TECElectricalMaterial actualConnectionType;
         static TECElectricalMaterial actualConduitType;
 
