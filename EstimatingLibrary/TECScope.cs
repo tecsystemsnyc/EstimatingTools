@@ -14,9 +14,6 @@ namespace EstimatingLibrary
         protected string _name;
         protected string _description;
 
-        protected ObservableCollection<TECTag> _tags;
-        protected ObservableCollection<TECAssociatedCost> _associatedCosts;
-
         public event Action<CostBatch> CostChanged;
 
         public string Name
@@ -46,30 +43,8 @@ namespace EstimatingLibrary
             }
         }
 
-        public ObservableCollection<TECTag> Tags
-        {
-            get { return _tags; }
-            set
-            {
-                var old = Tags;
-                Tags.CollectionChanged -= (sender, args) => scopeCollectionChanged(sender, args, "Tags");
-                _tags = value;
-                notifyCombinedChanged(Change.Edit, "Tags", this, value, old);
-                Tags.CollectionChanged += (sender, args) => scopeCollectionChanged(sender, args, "Tags");
-            }
-        }
-        public ObservableCollection<TECAssociatedCost> AssociatedCosts
-        {
-            get { return _associatedCosts; }
-            set
-            {
-                var old = AssociatedCosts;
-                AssociatedCosts.CollectionChanged -= (sender, args) => scopeCollectionChanged(sender, args, "AssociatedCosts");
-                _associatedCosts = value;
-                notifyCombinedChanged(Change.Edit, "AssociatedCosts", this, value, old);
-                AssociatedCosts.CollectionChanged += (sender, args) => scopeCollectionChanged(sender, args, "AssociatedCosts");
-            }
-        }
+        public ObservableCollection<TECTag> Tags { get; } = new ObservableCollection<TECTag>();
+        public ObservableCollection<TECAssociatedCost> AssociatedCosts { get; } = new ObservableCollection<TECAssociatedCost>();
 
         public virtual CostBatch CostBatch
         {
@@ -102,9 +77,7 @@ namespace EstimatingLibrary
             _name = "";
             _description = "";
             _guid = guid;
-
-            _tags = new ObservableCollection<TECTag>();
-            _associatedCosts = new ObservableCollection<TECAssociatedCost>();
+            
             Tags.CollectionChanged += (sender, args) => scopeCollectionChanged(sender, args, "Tags");
             AssociatedCosts.CollectionChanged += (sender, args) => scopeCollectionChanged(sender, args, "AssociatedCosts");
         }
@@ -116,12 +89,11 @@ namespace EstimatingLibrary
         {
             _name = scope.Name;
             _description = scope.Description;
-            var tags = new ObservableCollection<TECTag>();
+            Tags.ObservablyClear();
             foreach (TECTag tag in scope.Tags)
-            { tags.Add(tag); }
-            Tags = tags;
-            var associatedCosts = new ObservableCollection<TECAssociatedCost>(scope.AssociatedCosts);
-            AssociatedCosts = associatedCosts;
+            { Tags.Add(tag); }
+            AssociatedCosts.ObservablyClear();
+            scope.AssociatedCosts.ForEach(item => this.AssociatedCosts.Add(item));
         }
         protected virtual void scopeCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
             //Is virtual so that it can be overridden in TECTypical

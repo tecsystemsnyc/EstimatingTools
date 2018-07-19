@@ -12,8 +12,6 @@ namespace EstimatingLibrary
     public class TECTypical : TECSystem
     {
         #region Fields
-        private ObservableCollection<TECSystem> _instances = new ObservableCollection<TECSystem>();
-        private ObservableListDictionary<ITECObject> _typicalInstanceDictionary = new ObservableListDictionary<ITECObject>();
         private TypicalWatcherFilter watcher;
         #endregion
 
@@ -22,8 +20,8 @@ namespace EstimatingLibrary
         {
             this.IsTypical = true;
             
-            _instances.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Instances");
-            _typicalInstanceDictionary.CollectionChanged += typicalInstanceDictionary_CollectionChanged;
+            Instances.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Instances");
+            TypicalInstanceDictionary.CollectionChanged += typicalInstanceDictionary_CollectionChanged;
 
             watcher = new TypicalWatcherFilter(new ChangeWatcher(this));
             watcher.TypicalChanged += handleSystemChanged;
@@ -111,37 +109,8 @@ namespace EstimatingLibrary
         #endregion
 
         #region Properties
-        public ObservableCollection<TECSystem> Instances
-        {
-            get { return _instances; }
-            set
-            {
-                var old = _instances;
-                _instances.CollectionChanged -= (sender, args) => handleCollectionChanged(sender, args, "Instances");
-                _instances = value;
-                notifyTECChanged(Change.Edit, "Instances", this, value, old);
-                _instances.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Instances");
-            }
-        }
-        public ObservableListDictionary<ITECObject> TypicalInstanceDictionary
-        {
-            get
-            {
-                return _typicalInstanceDictionary;
-            }
-            set
-            {
-                if (_typicalInstanceDictionary != null)
-                {
-                    _typicalInstanceDictionary.CollectionChanged -= typicalInstanceDictionary_CollectionChanged;
-                }
-                _typicalInstanceDictionary = value;
-                if (_typicalInstanceDictionary != null)
-                {
-                    _typicalInstanceDictionary.CollectionChanged += typicalInstanceDictionary_CollectionChanged;
-                }
-            }
-        }
+        public ObservableCollection<TECSystem> Instances { get; } = new ObservableCollection<TECSystem>();
+        public ObservableListDictionary<ITECObject> TypicalInstanceDictionary { get; } = new ObservableListDictionary<ITECObject>();
         #endregion
 
         #region Methods
@@ -153,31 +122,31 @@ namespace EstimatingLibrary
             foreach (TECEquipment equipment in Equipment)
             {
                 var toAdd = new TECEquipment(equipment, guidDictionary, TypicalInstanceDictionary);
-                _typicalInstanceDictionary.AddItem(equipment, toAdd);
+                TypicalInstanceDictionary.AddItem(equipment, toAdd);
                 newSystem.Equipment.Add(toAdd);
             }
             foreach (TECController controller in Controllers)
             {
                 var toAdd = controller.CopyController(guidDictionary);
-                _typicalInstanceDictionary.AddItem(controller, toAdd);
+                TypicalInstanceDictionary.AddItem(controller, toAdd);
                 newSystem.AddController(toAdd);
             }
             foreach (TECPanel panel in Panels)
             {
                 var toAdd = new TECPanel(panel, guidDictionary);
-                _typicalInstanceDictionary.AddItem(panel, toAdd);
+                TypicalInstanceDictionary.AddItem(panel, toAdd);
                 newSystem.Panels.Add(toAdd);
             }
             foreach (TECMisc misc in MiscCosts)
             {
                 var toAdd = new TECMisc(misc);
-                _typicalInstanceDictionary.AddItem(misc, toAdd);
+                TypicalInstanceDictionary.AddItem(misc, toAdd);
                 newSystem.MiscCosts.Add(toAdd);
             }
             foreach (TECScopeBranch branch in ScopeBranches)
             {
                 var toAdd = new TECScopeBranch(branch);
-                _typicalInstanceDictionary.AddItem(branch, toAdd);
+                TypicalInstanceDictionary.AddItem(branch, toAdd);
                 newSystem.ScopeBranches.Add(toAdd);
             }
             ModelLinkingHelper.LinkSystem(newSystem, bid, guidDictionary);

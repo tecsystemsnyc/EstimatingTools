@@ -10,142 +10,17 @@ namespace EstimatingLibrary
 {
     public class TECCatalogs : TECObject, IRelatable
     {
-        private ObservableCollection<TECConnectionType> _connectionTypes = new ObservableCollection<TECConnectionType>();
-        private ObservableCollection<TECElectricalMaterial> _conduitTypes = new ObservableCollection<TECElectricalMaterial>();
-        private ObservableCollection<TECAssociatedCost> _associatedCosts = new ObservableCollection<TECAssociatedCost>();
-        private ObservableCollection<TECPanelType> _panelTypes = new ObservableCollection<TECPanelType>();
-        private ObservableCollection<TECControllerType> _controllerTypes = new ObservableCollection<TECControllerType>();
-        private ObservableCollection<TECIOModule> _ioModules = new ObservableCollection<TECIOModule>();
-        private ObservableCollection<TECDevice> _devices = new ObservableCollection<TECDevice>();
-        private ObservableCollection<TECValve> _valves = new ObservableCollection<TECValve>();
-        private ObservableCollection<TECManufacturer> _manufacturers = new ObservableCollection<TECManufacturer>();
-        private ObservableCollection<TECTag> _tags = new ObservableCollection<TECTag>();
-        private ObservableCollection<TECProtocol> _protocols = new ObservableCollection<TECProtocol>();
-
-        public ObservableCollection<TECIOModule> IOModules
-        {
-            get { return _ioModules; }
-            set
-            {
-                var old = IOModules;
-                _ioModules = value;
-                IOModules.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "IOModules");
-                notifyCombinedChanged(Change.Edit, "IOModules", this, value, old);
-            }
-        }
-        public ObservableCollection<TECDevice> Devices
-        {
-            get { return _devices; }
-            set
-            {
-                var old = Devices;
-                _devices = value;
-                Devices.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Devices");
-                notifyCombinedChanged(Change.Edit, "Devices", this, value, old);
-            }
-        }
-        public ObservableCollection<TECValve> Valves
-        {
-            get { return _valves; }
-            set
-            {
-                var old = Valves;
-                _valves = value;
-                Valves.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Valves");
-                notifyCombinedChanged(Change.Edit, "Valves", this, value, old);
-            }
-        }
-        public ObservableCollection<TECManufacturer> Manufacturers
-        {
-            get { return _manufacturers; }
-            set
-            {
-                var old = Manufacturers;
-                _manufacturers = value;
-                Manufacturers.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Manufacturers");
-                notifyCombinedChanged(Change.Edit, "Manufacturers", this, value, old);
-            }
-        }
-        public ObservableCollection<TECPanelType> PanelTypes
-        {
-            get { return _panelTypes; }
-            set
-            {
-                var old = PanelTypes;
-                _panelTypes = value;
-                PanelTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "PanelTypes");
-                notifyCombinedChanged(Change.Edit, "PanelTypes", this, value, old);
-            }
-        }
-        public ObservableCollection<TECControllerType> ControllerTypes
-        {
-            
-            get { return _controllerTypes; }
-            set
-            {
-                var old = ControllerTypes;
-                _controllerTypes = value;
-                ControllerTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ControllerTypes");
-                notifyCombinedChanged(Change.Edit, "ControllerTypes", this, value, old);
-            }
-        }
-        public ObservableCollection<TECConnectionType> ConnectionTypes
-        {
-            get { return _connectionTypes; }
-            set
-            {
-                var old = ConnectionTypes;
-                _connectionTypes = value;
-                ConnectionTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ConnectionTypes");
-                notifyCombinedChanged(Change.Edit, "ConnectionTypes", this, value, old);
-            }
-        }
-        public ObservableCollection<TECElectricalMaterial> ConduitTypes
-        {
-            get { return _conduitTypes; }
-            set
-            {
-                var old = ConduitTypes;
-                _conduitTypes = value;
-                ConduitTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ConduitTypes");
-                notifyCombinedChanged(Change.Edit, "ConduitTypes", this, value, old);
-            }
-        }
-        public ObservableCollection<TECAssociatedCost> AssociatedCosts
-        {
-            get { return _associatedCosts; }
-            set
-            {
-                var old = AssociatedCosts;
-                _associatedCosts = value;
-                AssociatedCosts.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "AssociatedCosts");
-                AssociatedCosts.CollectionChanged += ScopeChildren_CollectionChanged;
-                notifyCombinedChanged(Change.Edit, "AssociatedCosts", this, value, old);
-            }
-        }
-        public ObservableCollection<TECTag> Tags
-        {
-            get { return _tags; }
-            set
-            {
-                var old = Tags;
-                _tags = value;
-                Tags.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Tags");
-                Tags.CollectionChanged += ScopeChildren_CollectionChanged;
-                notifyCombinedChanged(Change.Edit, "Tags", this, value, old);
-            }
-        }
-        public ObservableCollection<TECProtocol> Protocols
-        {
-            get { return _protocols; }
-            set
-            {
-                var old = Protocols;
-                _protocols = value;
-                Protocols.CollectionChanged += (sender, e) => CollectionChanged(sender, e,  "Protocols");
-                notifyCombinedChanged(Change.Edit, "Protocols", this, value, old);
-            }
-        }
+        public ObservableCollection<TECIOModule> IOModules { get; } = new ObservableCollection<TECIOModule>();
+        public ObservableCollection<TECDevice> Devices { get; } = new ObservableCollection<TECDevice>();
+        public ObservableCollection<TECValve> Valves { get; } = new ObservableCollection<TECValve>();
+        public ObservableCollection<TECManufacturer> Manufacturers { get; } = new ObservableCollection<TECManufacturer>();
+        public ObservableCollection<TECPanelType> PanelTypes { get; } = new ObservableCollection<TECPanelType>();
+        public ObservableCollection<TECControllerType> ControllerTypes { get; } = new ObservableCollection<TECControllerType>();
+        public ObservableCollection<TECConnectionType> ConnectionTypes { get; } = new ObservableCollection<TECConnectionType>();
+        public ObservableCollection<TECElectricalMaterial> ConduitTypes { get; } = new ObservableCollection<TECElectricalMaterial>();
+        public ObservableCollection<TECAssociatedCost> AssociatedCosts { get; } = new ObservableCollection<TECAssociatedCost>();
+        public ObservableCollection<TECTag> Tags { get; } = new ObservableCollection<TECTag>();
+        public ObservableCollection<TECProtocol> Protocols { get; } = new ObservableCollection<TECProtocol>();
 
         public SaveableMap PropertyObjects
         {

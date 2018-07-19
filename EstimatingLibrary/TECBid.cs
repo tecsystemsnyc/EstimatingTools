@@ -22,16 +22,7 @@ namespace EstimatingLibrary
         public event Action<CostBatch> CostChanged;
         public event Action<int> PointChanged;
         
-        private ObservableCollection<TECScopeBranch> _scopeTree = new ObservableCollection<TECScopeBranch>();
-        private ObservableCollection<TECTypical> _systems = new ObservableCollection<TECTypical>();
-        private ObservableCollection<TECLabeled> _notes = new ObservableCollection<TECLabeled>();
-        private ObservableCollection<TECLabeled> _exclusions = new ObservableCollection<TECLabeled>();
-        private ObservableCollection<TECLocation> _locations = new ObservableCollection<TECLocation>();
         private ObservableCollection<TECController> _controllers = new ObservableCollection<TECController>();
-        private ObservableCollection<TECMisc> _miscCosts = new ObservableCollection<TECMisc>();
-        private ObservableCollection<TECPanel> _panels = new ObservableCollection<TECPanel>();
-        private ObservableCollection<TECInternalNote> _internalNotes = new ObservableCollection<TECInternalNote>();
-        private TECSchedule _schedule = new TECSchedule();
         #endregion
 
         #region Properties
@@ -125,118 +116,21 @@ namespace EstimatingLibrary
             }
 
         }
-        public TECSchedule Schedule
-        {
-            get { return _schedule; }
-            set
-            {
-                var old = _schedule;
-                _schedule = value;
-                notifyCombinedChanged(Change.Edit, "Schedule", this, value, old);
-            }
-        }
+        public TECSchedule Schedule { get; } = new TECSchedule();
 
-        public ObservableCollection<TECScopeBranch> ScopeTree
-        {
-            get { return _scopeTree; }
-            set
-            {
-                var old = ScopeTree;
-                ScopeTree.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "ScopeTree");
-                _scopeTree = value;
-                ScopeTree.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ScopeTree");
-                notifyCombinedChanged(Change.Edit, "ScopeTree", this, value, old);
-            }
-        }
-        public ObservableCollection<TECTypical> Systems
-        {
-            get { return _systems; }
-            set
-            {
-                var old = Systems;
-                Systems.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "Systems");
-                _systems = value;
-                Systems.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Systems");
-                notifyCombinedChanged(Change.Edit, "Systems", this, value, old);
-            }
-        }
-        public ObservableCollection<TECLabeled> Notes
-        {
-            get { return _notes; }
-            set
-            {
-                var old = Notes;
-                Notes.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "Notes");
-                _notes = value;
-                Notes.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Notes");
-                notifyCombinedChanged(Change.Edit, "Notes", this, value, old);
-            }
-        }
-        public ObservableCollection<TECLabeled> Exclusions
-        {
-            get { return _exclusions; }
-            set
-            {
-                var old = Exclusions;
-                Exclusions.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "Exclusions");
-                _exclusions = value;
-                Exclusions.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Exclusions");
-                notifyCombinedChanged(Change.Edit, "Exclusions", this, value, old);
-            }
-        }
-        public ObservableCollection<TECLocation> Locations
-        {
-            get { return _locations; }
-            set
-            {
-                var old = Locations;
-                Locations.CollectionChanged -= locationsCollectionChanged;
-                _locations = value;
-                Locations.CollectionChanged += locationsCollectionChanged;
-                notifyCombinedChanged(Change.Edit, "Locations", this, value, old);
-            }
-        }
+        public ObservableCollection<TECScopeBranch> ScopeTree { get; } = new ObservableCollection<TECScopeBranch>();
+        public ObservableCollection<TECTypical> Systems { get; } = new ObservableCollection<TECTypical>();
+        public ObservableCollection<TECLabeled> Notes { get; } = new ObservableCollection<TECLabeled>();
+        public ObservableCollection<TECLabeled> Exclusions { get; } = new ObservableCollection<TECLabeled>();
+        public ObservableCollection<TECLocation> Locations { get; } = new ObservableCollection<TECLocation>();
         
         public ReadOnlyObservableCollection<TECController> Controllers
         {
             get { return new ReadOnlyObservableCollection<TECController>(_controllers); }
         }
-        public ObservableCollection<TECMisc> MiscCosts
-        {
-            get { return _miscCosts; }
-            set
-            {
-                var old = MiscCosts;
-                MiscCosts.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "MiscCosts");
-                _miscCosts = value;
-                MiscCosts.CollectionChanged += (sender, args) => collectionChanged(sender, args, "MiscCosts");
-                notifyCombinedChanged(Change.Edit, "MiscCosts", this, value, old);
-            }
-        }
-        public ObservableCollection<TECPanel> Panels
-        {
-            get { return _panels; }
-            set
-            {
-                var old = Panels;
-                Panels.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "Panels");
-                _panels = value;
-                Panels.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Panels");
-                notifyCombinedChanged(Change.Edit, "Panels", this, value, old);
-            }
-        }
-        public ObservableCollection<TECInternalNote> InternalNotes
-        {
-            get { return _internalNotes; }
-            set
-            {
-                var old = InternalNotes;
-                InternalNotes.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "InternalNotes");
-                _internalNotes = value;
-                InternalNotes.CollectionChanged += (sender, args) => collectionChanged(sender, args, "InternalNotes");
-                notifyCombinedChanged(Change.Edit, "InternalNotes", this, value, old);
-            }
-        }
+        public ObservableCollection<TECMisc> MiscCosts { get; } = new ObservableCollection<TECMisc>();
+        public ObservableCollection<TECPanel> Panels { get; } = new ObservableCollection<TECPanel>();
+        public ObservableCollection<TECInternalNote> InternalNotes { get; } = new ObservableCollection<TECInternalNote>();
 
         public CostBatch CostBatch
         {

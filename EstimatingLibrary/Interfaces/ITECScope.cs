@@ -7,13 +7,13 @@ namespace EstimatingLibrary.Interfaces
 {
     public interface ITECScope : ITECObject
     {
-        ObservableCollection<TECAssociatedCost> AssociatedCosts { get; set; }
+        ObservableCollection<TECAssociatedCost> AssociatedCosts { get; }
         CostBatch CostBatch { get; }
         string Description { get; set; }
         SaveableMap LinkedObjects { get; }
         string Name { get; set; }
         SaveableMap PropertyObjects { get; }
-        ObservableCollection<TECTag> Tags { get; set; }
+        ObservableCollection<TECTag> Tags { get; }
 
         event Action<CostBatch> CostChanged;
     }

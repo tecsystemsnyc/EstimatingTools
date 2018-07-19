@@ -11,39 +11,13 @@ namespace EstimatingLibrary
         private const CostType COST_TYPE = CostType.TEC;
 
         #region Properties
-        private ObservableCollection<TECIO> _io;
-        private ObservableCollection<TECIOModule> _ioModules;
-        
-        public ObservableCollection<TECIO> IO
-        {
-            get { return _io; }
-            set
-            {
-                var old = IO;
-                IO.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "IO");
-                _io = value;
-                notifyCombinedChanged(Change.Edit,"IO", this, value, old);
-                IO.CollectionChanged += (sender, args) => collectionChanged(sender, args, "IO");
-            }
-        }
-        public ObservableCollection<TECIOModule> IOModules
-        {
-            get { return _ioModules; }
-            set
-            {
-                var old = IOModules;
-                IOModules.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "IOModules");
-                _ioModules = value;
-                IOModules.CollectionChanged += (sender, args) => collectionChanged(sender, args, "IOModules");
-                notifyCombinedChanged(Change.Edit, "IOModules", this, value, old);
-            }
-        }
+
+        public ObservableCollection<TECIO> IO { get; } = new ObservableCollection<TECIO>();
+        public ObservableCollection<TECIOModule> IOModules { get; } = new ObservableCollection<TECIOModule>();
         #endregion
 
         public TECControllerType(Guid guid, TECManufacturer manufacturer) : base(guid, manufacturer, COST_TYPE)
         {
-            _io = new ObservableCollection<TECIO>();
-            _ioModules = new ObservableCollection<TECIOModule>();
             IO.CollectionChanged += (sender, args) => collectionChanged(sender, args, "IO");
             IOModules.CollectionChanged += (sender, args) => collectionChanged(sender, args, "IOModules");
 
@@ -55,11 +29,11 @@ namespace EstimatingLibrary
             foreach (TECIO io in typeSource.IO)
             {
                 TECIO ioToAdd = new TECIO(io);
-                _io.Add(new TECIO(io));
+                IO.Add(new TECIO(io));
             }
             foreach (TECIOModule module in typeSource.IOModules)
             {
-                _ioModules.Add(module);
+                IOModules.Add(module);
             }
         }
 

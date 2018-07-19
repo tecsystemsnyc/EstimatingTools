@@ -15,22 +15,7 @@ namespace EstimatingLibrary
         #region Properties
         private readonly TECCatalogs catalogs;
 
-        private ObservableCollection<TECPoint> _points = new ObservableCollection<TECPoint>();
-        public ObservableCollection<TECPoint> Points
-        {
-            get { return _points; }
-            set
-            {
-                if (Points != null)
-                {
-                    Points.CollectionChanged -= pointsCollectionChanged;
-                }
-                var old = Points;
-                _points = value;
-                Points.CollectionChanged += pointsCollectionChanged;
-                notifyCombinedChanged(Change.Edit, "Points", this, value, old);
-            }
-        }
+        public ObservableCollection<TECPoint> Points { get; } = new ObservableCollection<TECPoint>();
 
         //---Derived---
         public override IOCollection IO { get; }

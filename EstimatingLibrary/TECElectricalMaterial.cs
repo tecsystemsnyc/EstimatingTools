@@ -9,24 +9,11 @@ namespace EstimatingLibrary
     public class TECElectricalMaterial : TECCost, ICatalog<TECElectricalMaterial>, IDDCopiable
     {
         #region Properties
-        private ObservableCollection<TECAssociatedCost> _ratedCosts;
-        public ObservableCollection<TECAssociatedCost> RatedCosts
-        {
-            get { return _ratedCosts; }
-            set
-            {
-                var old = RatedCosts;
-                RatedCosts.CollectionChanged -= (sender, args) => RatedCosts_CollectionChanged(sender, args, "RatedCosts");
-                _ratedCosts = value;
-                RatedCosts.CollectionChanged += (sender, args) => RatedCosts_CollectionChanged(sender, args, "RatedCosts");
-                notifyCombinedChanged(Change.Edit, "RatedCosts", this, value, old);
-            }
-        }
+        public ObservableCollection<TECAssociatedCost> RatedCosts { get; } = new ObservableCollection<TECAssociatedCost>();
         #endregion
 
         public TECElectricalMaterial(Guid guid) : base(guid, CostType.Electrical)
         {
-            _ratedCosts = new ObservableCollection<TECAssociatedCost>();
             RatedCosts.CollectionChanged += (sender, args) => RatedCosts_CollectionChanged(sender, args, "RatedCosts");
         }
         public TECElectricalMaterial() : this(Guid.NewGuid()) { }
@@ -35,7 +22,7 @@ namespace EstimatingLibrary
             copyPropertiesFromCost(materialSource);
             var ratedCosts = new ObservableCollection<TECAssociatedCost>(materialSource.RatedCosts);
             RatedCosts.CollectionChanged -= (sender, args) => RatedCosts_CollectionChanged(sender, args, "RatedCosts");
-            _ratedCosts = ratedCosts;
+            RatedCosts = ratedCosts;
             RatedCosts.CollectionChanged += (sender, args) => RatedCosts_CollectionChanged(sender, args, "RatedCosts");
         }
 
