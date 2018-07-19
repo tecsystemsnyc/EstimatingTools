@@ -39,7 +39,7 @@ namespace EstimatingLibrary
                 costBatch.AddCost(ratedCost);
             }
             costBatch *= length;
-            foreach (TECAssociatedCost assocCost in AssociatedCosts)
+            foreach (ICost assocCost in AssociatedCosts)
             {
                 costBatch.AddCost(assocCost);
             }
