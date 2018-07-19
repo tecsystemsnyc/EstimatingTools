@@ -57,6 +57,7 @@ namespace EstimatingLibrary.Utilities
             }
         }
         
+
         #region Linking Scope
         public static void LinkScopeItem(TECSystem scope, TECBid bid)
         {
@@ -335,7 +336,8 @@ namespace EstimatingLibrary.Utilities
                
 
             }
-            subScope.Devices = replacements;
+            subScope.Devices.ObservablyClear();
+            subScope.Devices.AddRange(replacements);
         }
 
         private static void linkTemplateReferences(TECTemplates templatesManager, Dictionary<Guid, List<Guid>> templateReferences)
