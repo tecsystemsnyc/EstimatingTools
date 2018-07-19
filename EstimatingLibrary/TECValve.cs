@@ -64,51 +64,6 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "Style", this, _style, old);
             }
         }
-
-        public override double Cost
-        {
-            get
-            {
-                return base.Cost + Actuator.Cost;
-            }
-            set
-            {
-                base.Cost = value - Actuator.Cost;
-            }
-        }
-        public override double Labor
-        {
-            get
-            {
-                return base.Labor + Actuator.Labor;
-            }
-            set
-            {
-                base.Labor = value - Actuator.Labor;
-            }
-        }
-        public double RawCost
-        {
-            get
-            {
-                return base.Cost;
-            }
-            set
-            {
-                base.Cost = value;
-            }
-        }
-        public double RawLabor
-        {
-            get
-            {
-                return base.Labor;
-            }
-            set
-            {
-                base.Labor = value;
-            }
-        }
         #endregion
 
         public TECValve(TECManufacturer manufacturer, TECDevice actuator) : this (Guid.NewGuid(), manufacturer, actuator) {}

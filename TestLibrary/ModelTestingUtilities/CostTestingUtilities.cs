@@ -67,8 +67,8 @@ namespace TestLibrary.ModelTestingUtilities
             Total total = new Total();
             if (type == valve.Type)
             {
-                total.Cost = valve.RawCost;
-                total.Labor = valve.RawLabor;
+                total.Cost = valve.Cost;
+                total.Labor = valve.Labor;
             }
             total += CalculateTotal(valve as TECScope, type);
             total += CalculateTotal(valve.Actuator as TECHardware, type);

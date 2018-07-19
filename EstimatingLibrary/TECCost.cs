@@ -18,10 +18,10 @@ namespace EstimatingLibrary
             get { return _cost; }
             set
             {
-                var old = Cost;
+                var old = this.CostBatch;
                 _cost = value;
                 notifyCombinedChanged(Change.Edit, "Cost", this, value, old);
-                notifyCostChanged(new CostBatch(value - old, 0, Type));
+                notifyCostChanged(this.CostBatch - old);
             }
         }
         public virtual double Labor
@@ -29,10 +29,10 @@ namespace EstimatingLibrary
             get { return _labor; }
             set
             {
-                var old = Labor;
+                var old = this.CostBatch;
                 _labor = value;
                 notifyCombinedChanged(Change.Edit, "Labor", this, value, old);
-                notifyCostChanged(new CostBatch(0, value - old, Type));
+                notifyCostChanged(this.CostBatch - old);
             }
         }
         public virtual CostType Type
@@ -40,11 +40,10 @@ namespace EstimatingLibrary
             get { return _type; }
             set
             {
-                var old = Type;
+                var old = this.CostBatch;
                 _type = value;
                 notifyCombinedChanged(Change.Edit, "Type", this, value, old);
-                notifyCostChanged(new CostBatch(-Cost, -Labor, old));
-                notifyCostChanged(new CostBatch(Cost, Labor, value));
+                notifyCostChanged(this.CostBatch - old);
             }
         }
         
