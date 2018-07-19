@@ -206,5 +206,54 @@ namespace Models
             }
         }
 
+        [TestMethod]
+        public void AddPointToTypicalSubScope()
+        {
+            TECBid bid = ModelCreation.TestBid(rand);
+
+            TECTypical typical = null;
+            TECSubScope typSS = null;
+
+            foreach(TECTypical typ in bid.Systems)
+            {
+                if (typ.Instances.Count > 0)
+                {
+                    foreach (TECEquipment equip in typ.Equipment)
+                    {
+                        if (equip.SubScope.Count > 0)
+                        {
+                            typical = typ;
+                            typSS = equip.SubScope[0];
+                        }
+                    }
+                }
+            }
+
+            Assert.IsNotNull(typical);
+            Assert.IsNotNull(typSS);
+
+            TECPoint newPoint  = ModelCreation.TestPoint(rand, IOType.AI);
+            newPoint.Label = "New Point";
+
+            typSS.Points.Add(newPoint);
+
+            List<TECSubScope> instanceSubScope = typical.GetInstancesFromTypical(typSS);
+            List<TECPoint> instancePoints = typical.GetInstancesFromTypical(newPoint);
+
+            foreach(TECSubScope instanceSS in instanceSubScope)
+            {
+                TECPoint newInstancePoint = null;
+                foreach (TECPoint point in instanceSS.Points)
+                {
+                    if (point.Label == newPoint.Label)
+                    {
+                        newInstancePoint = point;
+                    }
+                }
+
+                Assert.IsNotNull(newInstancePoint);
+                Assert.IsTrue(instancePoints.Contains(newInstancePoint));
+            }
+        }
     }
 }
