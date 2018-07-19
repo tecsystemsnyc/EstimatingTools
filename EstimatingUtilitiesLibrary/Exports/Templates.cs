@@ -140,7 +140,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             (x, y) = addCostHeader(worksheet, x, y);
 
             int startY = 2;
-            foreach (TECCost item in templates.Catalogs.AssociatedCosts)
+            foreach (TECAssociatedCost item in templates.Catalogs.AssociatedCosts)
             {
                 int rowY = startY;
                 x = addCostRow(worksheet, item, x, rowY).nextRow;
@@ -347,7 +347,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             y++;
             return (x + 1, y);
         }
-        private static (int nextRow, int nextColumn) addCostRow(IXLWorksheet worksheet, TECCost cost, int startRow, int startColumn)
+        private static (int nextRow, int nextColumn) addCostRow(IXLWorksheet worksheet, ICost cost, int startRow, int startColumn)
         {
             int x = startRow;
             int y = startColumn;
