@@ -60,7 +60,7 @@ namespace TestLibrary.MockClasses
         #region Interfaces
         bool ITypicalable.IsTypical => throw new NotImplementedException();
 
-        ObservableCollection<TECAssociatedCost> ITECScope.AssociatedCosts { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        ObservableCollection<TECAssociatedCost> ITECScope.AssociatedCosts { get => throw new NotImplementedException(); }
 
         CostBatch ITECScope.CostBatch => throw new NotImplementedException();
 
@@ -72,7 +72,7 @@ namespace TestLibrary.MockClasses
 
         SaveableMap ITECScope.PropertyObjects => throw new NotImplementedException();
 
-        ObservableCollection<TECTag> ITECScope.Tags { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        ObservableCollection<TECTag> ITECScope.Tags { get => throw new NotImplementedException(); }
 
         Guid ITECObject.Guid => throw new NotImplementedException();
 
