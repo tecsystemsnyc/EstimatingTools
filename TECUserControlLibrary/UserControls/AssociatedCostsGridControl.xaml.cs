@@ -43,7 +43,7 @@ namespace TECUserControlLibrary.UserControls
               typeof(AssociatedCostsGridControl));
 
 
-        public TECCost Selected
+        public TECAssociatedCost Selected
         {
             get { return (TECAssociatedCost)GetValue(SelectedProperty); }
             set { SetValue(SelectedProperty, value); }

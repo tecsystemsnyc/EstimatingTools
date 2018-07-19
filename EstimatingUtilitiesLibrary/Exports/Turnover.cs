@@ -79,7 +79,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             List<String> sheetNames = new List<string>();
             foreach (TECTypical typical in bid.Systems.Where(typ => typ.Instances.Count > 0))
             {
-                List<TECCost> associatedCosts = new List<TECCost>();
+                List<ICost> associatedCosts = new List<ICost>();
                 string sheetName = typical.Instances.Count > 1 ? typical.Name : typical.Instances[0].Name;
                 if (sheetName == "")
                 {
@@ -218,7 +218,7 @@ namespace EstimatingUtilitiesLibrary.Exports
 
         private static void createMiscBOMSheet(XLWorkbook workbook, TECBid bid)
         {
-            List<TECCost> associatedCosts = new List<TECCost>();
+            List<ICost> associatedCosts = new List<ICost>();
             IXLWorksheet worksheet = workbook.Worksheets.Add("Misc.");
             worksheet.Cell(1, 4).Value = "Misc.";
             worksheet.Cell(1, 4).Style.Font.SetBold();
