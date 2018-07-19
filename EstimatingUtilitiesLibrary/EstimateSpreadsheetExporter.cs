@@ -2,6 +2,7 @@
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -187,7 +188,7 @@ namespace EstimatingUtilitiesLibrary
             if (subScope.SubScope.Connection.ConduitType != null)
             {
                 conduitString = subScope.SubScope.Connection.ConduitType.Name;
-                foreach (TECCost cost in subScope.SubScope.Connection.ConduitType.AssociatedCosts)
+                foreach (ICost cost in subScope.SubScope.Connection.ConduitType.AssociatedCosts)
                 {
                     if (cost.Name.ToUpper().Contains("FLEX"))
                     {

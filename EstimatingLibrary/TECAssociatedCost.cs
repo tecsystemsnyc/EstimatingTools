@@ -61,7 +61,7 @@ namespace EstimatingLibrary
         }
         public TECAssociatedCost(CostType type) : this(Guid.NewGuid(), type) { }
 
-        public CostBatch CostBatch => new CostBatch(this.Cost, this.Labor, this.Type);
+        public CostBatch CostBatch => new CostBatch(this);
 
         public TECAssociatedCost CatalogCopy()
         {

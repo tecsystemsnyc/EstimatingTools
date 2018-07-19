@@ -62,7 +62,7 @@ namespace EstimatingUtilitiesLibrary.Exports
             row++;
 
             row = worksheet.insertCostHeaders(row);
-            TECCost softwareCost = new TECAssociatedCost(CostType.TEC);
+            TECAssociatedCost softwareCost = new TECAssociatedCost(CostType.TEC);
             softwareCost.Name = "Software Point License";
             softwareCost.Cost = estimate.TECSoftwareCost;
             CostSummaryItem softwareSummary = new CostSummaryItem(softwareCost);
