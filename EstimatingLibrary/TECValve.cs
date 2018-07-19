@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -97,6 +98,11 @@ namespace EstimatingLibrary
         public TECValve CatalogCopy()
         {
             return new TECValve(this);
+        }
+
+        protected override CostBatch getCosts()
+        {
+            return base.getCosts() + Actuator.CostBatch;
         }
 
         #region IEndDevice
