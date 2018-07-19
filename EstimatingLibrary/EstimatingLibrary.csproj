@@ -135,6 +135,7 @@
     <Compile Include="TECScheduleTable.cs" />
     <Compile Include="TECLocation.cs" />
     <Compile Include="TECTag.cs" />
+    <Compile Include="TECTagged.cs" />
     <Compile Include="TECTypical.cs" />
     <Compile Include="TECValve.cs" />
     <Compile Include="Utilities\CollectionChangedHandlers.cs" />
