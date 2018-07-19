@@ -11,7 +11,6 @@ namespace Models
     [TestClass]
     public class TECTypicalTests
     {
-
         Random rand;
 
         [TestInitialize]
