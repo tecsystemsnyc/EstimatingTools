@@ -75,18 +75,25 @@ namespace TestLibrary.ModelTestingUtilities
             return total;
         }
 
-        static public Total CalculateTotal(TECCost cost, CostType type)
+        static public Total CalculateTotal(TECAssociatedCost cost, CostType type)
         {
-            int qty = 1;
-            if (cost is TECMisc misc)
-            {
-                qty = misc.Quantity;
-            }
             if (cost.Type == type)
             {
+                return new Total(cost.Cost, cost.Labor);
+            }
+            else
+            {
+                return new Total();
+            }
+        }
+
+        static public Total CalculateTotal(TECMisc misc, CostType type)
+        {
+            if (misc.Type == type)
+            {
                 Total total = new Total();
-                total.Cost = cost.Cost * qty;
-                total.Labor = cost.Labor * qty;
+                total.Cost = misc.Cost * misc.Quantity;
+                total.Labor = misc.Labor * misc.Quantity;
                 return total;
             }
             else
@@ -98,7 +105,7 @@ namespace TestLibrary.ModelTestingUtilities
         static public Total CalculateTotal(TECScope scope, CostType type)
         {
             Total total = new Total();
-            foreach (TECCost cost in scope.AssociatedCosts)
+            foreach (TECAssociatedCost cost in scope.AssociatedCosts)
             {
                 total += CalculateTotal(cost, type);
             }
@@ -164,7 +171,7 @@ namespace TestLibrary.ModelTestingUtilities
                 {
                     total += CalculateTotal(conType, type) * connection.Length;
                     total += CalculateTotal(conType as TECScope, type);
-                    foreach (TECCost cost in conType.RatedCosts)
+                    foreach (TECAssociatedCost cost in conType.RatedCosts)
                     {
                         total += CalculateTotal(cost, type) * connection.Length;
                     }
@@ -177,7 +184,7 @@ namespace TestLibrary.ModelTestingUtilities
                 {
                     total += CalculateTotal(connType, type) * connection.Length;
                     total += CalculateTotal(connType as TECScope, type);
-                    foreach (TECCost cost in connType.RatedCosts)
+                    foreach (TECAssociatedCost cost in connType.RatedCosts)
                     {
                         total += CalculateTotal(cost, type) * connection.Length;
                     }
@@ -188,7 +195,7 @@ namespace TestLibrary.ModelTestingUtilities
             {
                 total += CalculateTotal(connection.ConduitType, type) * connection.ConduitLength;
                 total += CalculateTotal(connection.ConduitType as TECScope, type);
-                foreach (TECCost cost in connection.ConduitType.RatedCosts)
+                foreach (TECAssociatedCost cost in connection.ConduitType.RatedCosts)
                 {
                     total += CalculateTotal(cost, type) * connection.ConduitLength;
                 }

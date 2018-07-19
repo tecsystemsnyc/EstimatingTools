@@ -78,18 +78,29 @@ namespace TestLibrary.ModelTestingUtilities
         {
             labeled.Label = labeled.Guid.ToString().Substring(0, 5);
         }
+        public static void AssignRandomTaggedProperties(this TECTagged tagged, TECCatalogs catalogs, Random rand)
+        {
+            tagged.Name = tagged.Guid.ToString().Substring(0, 5);
+            tagged.Tags.Add(catalogs.Tags.RandomElement(rand));
+        }
         public static void AssignRandomScopeProperties(this TECScope scope, TECCatalogs catalogs, Random rand)
         {
-            scope.Name = scope.Guid.ToString().Substring(0, 5);
-            scope.Tags.Add(catalogs.Tags.RandomElement(rand));
+            scope.AssignRandomTaggedProperties(catalogs, rand);
             TECAssociatedCost randTECCost = catalogs.RandomCost(rand, CostType.TEC);
             TECAssociatedCost randElecCost = catalogs.RandomCost(rand, CostType.Electrical);
             if (randTECCost != null) scope.AssociatedCosts.Add(randTECCost);
             if (randElecCost != null) scope.AssociatedCosts.Add(randElecCost);
         }
-        public static void AssignRandomCostProperties(this TECCost cost, TECCatalogs catalogs, Random rand)
+        public static void AssignRandomCostProperties(this ICost cost, TECCatalogs catalogs, Random rand)
         {
-            cost.AssignRandomScopeProperties(catalogs, rand);
+            if (cost is TECScope scope)
+            {
+                scope.AssignRandomScopeProperties(catalogs, rand);
+            }
+            else if (cost is TECTagged tagged)
+            {
+                tagged.AssignRandomTaggedProperties(catalogs, rand);
+            }
             cost.Cost = (rand.NextDouble() * 100);
             cost.Labor = (rand.NextDouble() * 100);
         }
