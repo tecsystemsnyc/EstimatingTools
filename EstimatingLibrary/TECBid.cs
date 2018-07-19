@@ -18,7 +18,7 @@ namespace EstimatingLibrary
         private double _duration = 0.0;
         private TECParameters _parameters;
         private TECExtraLabor _extraLabor;
-        private TECSchedule _schedule;
+        private TECSchedule _schedule = new TECSchedule();
 
         public event Action<CostBatch> CostChanged;
         public event Action<int> PointChanged;
