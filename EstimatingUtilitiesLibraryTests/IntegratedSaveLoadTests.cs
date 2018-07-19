@@ -1099,17 +1099,12 @@ namespace EstimatingUtilitiesLibraryTests
                 }
                 if (ssToModify != null) break;
             }
-            IEndDevice deviceToRemove = (ssToModify.Devices[0] as IEndDevice);
+            IEndDevice deviceToRemove = (ssToModify.Devices.First() as IEndDevice);
 
-            int oldNumDevices = 0;
-
-            foreach (IEndDevice dev in ssToModify.Devices)
-            {
-                if (dev.Guid == deviceToRemove.Guid) oldNumDevices++;
-            }
+            int oldNumDevices = ssToModify.Devices.Count;
 
             ssToModify.Devices.Remove(deviceToRemove);
-
+            
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
@@ -1135,6 +1130,10 @@ namespace EstimatingUtilitiesLibraryTests
             //Assert
             bool devFound = false;
             foreach (IEndDevice dev in actualBid.Catalogs.Devices)
+            {
+                if (deviceToRemove.Guid == dev.Guid) devFound = true;
+            }
+            foreach (IEndDevice dev in actualBid.Catalogs.Valves)
             {
                 if (deviceToRemove.Guid == dev.Guid) devFound = true;
             }
@@ -1962,17 +1961,9 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             int expectedNumLocations = bid.Locations.Count;
 
-            TECSystem expectedSys = null;
-            foreach (TECSystem sys in bid.Systems)
-            {
-                if (sys.Description == "Locations all the way")
-                {
-                    expectedSys = sys;
-                    break;
-                }
-            }
-            TECEquipment expectedEquip = expectedSys.Equipment[0];
-            TECSubScope expectedSS = expectedEquip.SubScope[0];
+            TECSystem expectedSys = bid.Systems.First(x => x.Equipment.Count > 0 && x.Equipment.Any(y => y.SubScope.Count > 0));
+            TECEquipment expectedEquip = expectedSys.Equipment.First(x => x.SubScope.Count > 0);
+            TECSubScope expectedSS = expectedEquip.SubScope.First();
 
             expectedSys.Location = null;
             expectedEquip.Location = null;
@@ -1984,17 +1975,9 @@ namespace EstimatingUtilitiesLibraryTests
 
             int actualNumLocations = actualBid.Locations.Count;
 
-            TECSystem actualSys = null;
-            foreach (TECSystem sys in actualBid.Systems)
-            {
-                if (sys.Guid == expectedSys.Guid)
-                {
-                    actualSys = sys;
-                    break;
-                }
-            }
-            TECEquipment actualEquip = actualSys.Equipment[0];
-            TECSubScope actualSS = actualEquip.SubScope[0];
+            TECSystem actualSys = actualBid.Systems.First(x => x.Guid == expectedSys.Guid);
+            TECEquipment actualEquip = actualSys.Equipment.First(x => x.Guid == expectedEquip.Guid);
+            TECSubScope actualSS = actualEquip.SubScope.First(x => x.Guid == expectedSS.Guid);
 
             //Assert
             Assert.AreEqual(expectedNumLocations, actualNumLocations);
@@ -2010,25 +1993,8 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             int expectedNumLocations = bid.Locations.Count;
 
-            TECLocation expectedLocation = null;
-            foreach (TECLocation loc in bid.Locations)
-            {
-                if (loc.Name == "Cellar")
-                {
-                    expectedLocation = loc;
-                    break;
-                }
-            }
-
-            TECSystem expectedSystem = null;
-            foreach (TECSystem sys in bid.Systems)
-            {
-                if (sys.Name == "System 1")
-                {
-                    expectedSystem = sys;
-                    break;
-                }
-            }
+            TECLocation expectedLocation = bid.Locations.First();
+            TECSystem expectedSystem = bid.Systems.First(x => x.Location != expectedLocation);
 
             expectedSystem.Location = expectedLocation;
 

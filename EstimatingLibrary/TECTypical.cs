@@ -311,7 +311,7 @@ namespace EstimatingLibrary
         #region Event Handlers
         private void handleSystemChanged(TECChangedEventArgs args)
         {
-            if (Instances.Count > 0 && args.Value.GetType() != typeof(TECSystem))
+            if (Instances.Count > 0 && args.Value?.GetType() != typeof(TECSystem))
             {
                 if (args.Change == Change.Add)
                 {
