@@ -109,10 +109,7 @@ namespace EstimatingLibrary
         protected virtual CostBatch getCosts()
         {
             CostBatch costs = new CostBatch();
-            foreach (TECCost assocCost in AssociatedCosts)
-            {
-                costs.AddCost(assocCost);
-            }
+            this.AssociatedCosts.ForEach(item => costs += item.CostBatch);
             return costs;
         }
         protected virtual SaveableMap propertyObjects()
