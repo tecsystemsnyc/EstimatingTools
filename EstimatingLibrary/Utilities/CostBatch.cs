@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EstimatingLibrary.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace EstimatingLibrary.Utilities
@@ -15,13 +16,13 @@ namespace EstimatingLibrary.Utilities
         {
             typeDictionary.Add(type, new CostObject(cost, labor));
         }
-        public CostBatch(TECCost cost) : this()
+        public CostBatch(ICost cost) : this()
         {
             typeDictionary.Add(cost.Type, new CostObject(cost));
         }
-        public CostBatch(List<TECCost> costs) : this()
+        public CostBatch(List<ICost> costs) : this()
         {
-            foreach(TECCost cost in costs)
+            foreach(ICost cost in costs)
             {
                 AddCost(cost);
             }
@@ -105,7 +106,7 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        public void AddCost(TECCost cost)
+        public void AddCost(ICost cost)
         {
             if (typeDictionary.ContainsKey(cost.Type))
             {
@@ -116,7 +117,7 @@ namespace EstimatingLibrary.Utilities
                 typeDictionary.Add(cost.Type, new CostObject(cost));
             }
         }
-        public void RemoveCost(TECCost cost)
+        public void RemoveCost(ICost cost)
         {
             if (typeDictionary.ContainsKey(cost.Type))
             {
@@ -161,7 +162,7 @@ namespace EstimatingLibrary.Utilities
                 Labor = labor;
             }
 
-            public CostObject(TECCost cost)
+            public CostObject(ICost cost)
             {
                 Cost = cost.Cost;
                 Labor = cost.Labor;
