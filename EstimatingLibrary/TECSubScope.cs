@@ -13,7 +13,7 @@ namespace EstimatingLibrary
         #region Properties
         public ObservableCollection<IEndDevice> Devices { get; } = new ObservableCollection<IEndDevice>();
         public ObservableCollection<TECPoint> Points { get; } = new ObservableCollection<TECPoint>();
-        public ObservableCollection<TECInterlockConnection> Interlocks { get; }
+        public ObservableCollection<TECInterlockConnection> Interlocks { get; } = new ObservableCollection<TECInterlockConnection>();
         
         public IControllerConnection Connection { get; private set; }
         public int PointNumber
