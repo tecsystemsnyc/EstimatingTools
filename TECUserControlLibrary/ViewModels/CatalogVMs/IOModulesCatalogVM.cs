@@ -155,7 +155,7 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
             ioModule.Name = this.IOModuleName;
             ioModule.Price = this.IOModuleCost;
             ioModule.Description = this.IOModuleDescription;
-            ioModule.IO = new ObservableCollection<TECIO>(this.ModuleIO);
+            ioModule.IO.AddRange(this.ModuleIO);
 
             this.Templates.Catalogs.IOModules.Add(ioModule);
             
