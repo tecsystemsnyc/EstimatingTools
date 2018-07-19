@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\TECValveTests.cs" />
     <Compile Include="Utilities\ChangeWatcherTests.cs" />
     <Compile Include="Models\TECControllerTests.cs" />
     <Compile Include="Interfaces\INotifyCostChangedTests.cs" />
