@@ -564,7 +564,8 @@ namespace EstimatingLibrary.Utilities
                     throw new Exception("Associated cost not found.");
                 }
             }
-            scope.AssociatedCosts = costsToAssign;
+            scope.AssociatedCosts.ObservablyClear();
+            scope.AssociatedCosts.AddRange(costsToAssign);
         }
         static private void linkTagsInScope(IEnumerable<TECTag> tags, TECScope scope)
         {
@@ -586,7 +587,8 @@ namespace EstimatingLibrary.Utilities
                     throw new Exception("Tag not found.");
                 }
             }
-            scope.Tags = linkedTags;
+            scope.Tags.ObservablyClear();
+            scope.Tags.AddRange(linkedTags);
         }
         #endregion
 
