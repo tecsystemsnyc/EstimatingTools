@@ -221,11 +221,11 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             foreach(TECEquipment item in equipment.Where(x => equipmentSubScope.ContainsKey(x.Guid)))
             {
-                item.SubScope = getRelatedReferences(equipmentSubScope[item.Guid], subScope).ToOC();
+                item.SubScope.AddRange(getRelatedReferences(equipmentSubScope[item.Guid], subScope));
             }
             foreach(TECController item in controllers.Where(x => controllerConnections.ContainsKey(x.Guid)))
             {
-                item.ChildrenConnections = getRelatedReferences(controllerConnections[item.Guid], allConnections).ToOC();
+                item.ChildrenConnections.AddRange(getRelatedReferences(controllerConnections[item.Guid], allConnections));
             }
             panels.ForEach(item => item.Controllers = panelControllers.ValueOrNew(item.Guid));
             foreach(TECSystem item in systems)
@@ -236,7 +236,7 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 setSystemChildren(item);
                 if (typicalSystems.ContainsKey(item.Guid)) 
-                    item.Instances = getRelatedReferences(typicalSystems[item.Guid], systems).ToOC();
+                    item.Instances.AddRange(getRelatedReferences(typicalSystems[item.Guid], systems));
             }
 
             var outControllers = new List<TECController>(controllers.Where(x => !systemControllers.Any(pair => pair.Value.Contains(x.Guid))));
@@ -247,15 +247,15 @@ namespace EstimatingUtilitiesLibrary.Database
             void setSystemChildren(TECSystem item)
             {
                 if (systemEquipment.ContainsKey(item.Guid))
-                    item.Equipment = getRelatedReferences(systemEquipment[item.Guid], equipment).ToOC();
+                    item.Equipment.AddRange(getRelatedReferences(systemEquipment[item.Guid], equipment));
                 if (systemControllers.ContainsKey(item.Guid))
                     item.SetControllers(getRelatedReferences(systemControllers[item.Guid], controllers));
                 if (systemPanels.ContainsKey(item.Guid))
-                    item.Panels = getRelatedReferences(systemPanels[item.Guid], panels).ToOC();
+                    item.Panels.AddRange(getRelatedReferences(systemPanels[item.Guid], panels));
                 if (systemMisc.ContainsKey(item.Guid))
-                    item.MiscCosts = getRelatedReferences(systemMisc[item.Guid], misc).ToOC();
+                    item.MiscCosts.AddRange(getRelatedReferences(systemMisc[item.Guid], misc));
                 if (systemScopeBranches.ContainsKey(item.Guid))
-                    item.ScopeBranches = getRelatedReferences(systemScopeBranches[item.Guid], scopeBranches).ToOC();
+                    item.ScopeBranches.AddRange(getRelatedReferences(systemScopeBranches[item.Guid], scopeBranches));
                 item.ScopeBranches.ForEach(branch => linkBranchHierarchy(branch, scopeBranches, scopeBranchHierarchy));
             }
         }
