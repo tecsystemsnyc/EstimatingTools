@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECAssociatedCost : TECTagged, INotifyCostChanged, ICatalog<TECAssociatedCost>, IDDCopiable
+    public class TECAssociatedCost : TECTagged, INotifyCostChanged, ICatalog<TECAssociatedCost>, IDDCopiable, ICost
     {
         protected double _cost = 0;
         protected double _labor = 0;

@@ -6,7 +6,7 @@ namespace EstimatingLibrary
 {
     public enum CostType { TEC, Electrical }
 
-    public abstract class TECCost : TECScope
+    public abstract class TECCost : TECScope, ICost
     { 
         #region Properties
         protected double _cost = 0;
