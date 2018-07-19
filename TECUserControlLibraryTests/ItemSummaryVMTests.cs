@@ -34,7 +34,7 @@ namespace Tests
 
             Total assocTECTotal = new Total();
             Total assocElecTotal = new Total();
-            foreach (TECCost cost in controllerType.AssociatedCosts)
+            foreach (TECAssociatedCost cost in controllerType.AssociatedCosts)
             {
                 assocTECTotal += CalculateTotal(cost, CostType.TEC);
                 assocElecTotal += CalculateTotal(cost, CostType.Electrical);
@@ -101,7 +101,7 @@ namespace Tests
 
             Total assocTECTotal = new Total();
             Total assocElecTotal = new Total();
-            foreach (TECCost cost in panelType.AssociatedCosts)
+            foreach (TECAssociatedCost cost in panelType.AssociatedCosts)
             {
                 assocTECTotal += CalculateTotal(cost, CostType.TEC);
                 assocElecTotal += CalculateTotal(cost, CostType.Electrical);
@@ -168,7 +168,7 @@ namespace Tests
 
             Total assocTECTotal = new Total();
             Total assocElecTotal = new Total();
-            foreach (TECCost cost in device.AssociatedCosts)
+            foreach (TECAssociatedCost cost in device.AssociatedCosts)
             {
                 assocTECTotal += CalculateTotal(cost, CostType.TEC);
                 assocElecTotal += CalculateTotal(cost, CostType.Electrical);
@@ -228,8 +228,8 @@ namespace Tests
             //Arrange
             HardwareSummaryVM hardwareVM = new HardwareSummaryVM();
             TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
-            TECCost tecCost = null;
-            foreach (TECCost cost in catalogs.AssociatedCosts)
+            TECAssociatedCost tecCost = null;
+            foreach (TECAssociatedCost cost in catalogs.AssociatedCosts)
             {
                 if (cost.Type == CostType.TEC)
                 {
@@ -262,8 +262,8 @@ namespace Tests
             //Arrange
             HardwareSummaryVM hardwareVM = new HardwareSummaryVM();
             TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
-            TECCost tecCost = null;
-            foreach (TECCost cost in catalogs.AssociatedCosts)
+            TECAssociatedCost tecCost = null;
+            foreach (TECAssociatedCost cost in catalogs.AssociatedCosts)
             {
                 if (cost.Type == CostType.TEC)
                 {
@@ -297,8 +297,8 @@ namespace Tests
             //Arrange
             HardwareSummaryVM hardwareVM = new HardwareSummaryVM();
             TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
-            TECCost elecCost = null;
-            foreach (TECCost cost in catalogs.AssociatedCosts)
+            TECAssociatedCost elecCost = null;
+            foreach (TECAssociatedCost cost in catalogs.AssociatedCosts)
             {
                 if (cost.Type == CostType.Electrical)
                 {
@@ -331,8 +331,8 @@ namespace Tests
             //Arrange
             HardwareSummaryVM hardwareVM = new HardwareSummaryVM();
             TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
-            TECCost elecCost = null;
-            foreach (TECCost cost in catalogs.AssociatedCosts)
+            TECAssociatedCost elecCost = null;
+            foreach (TECAssociatedCost cost in catalogs.AssociatedCosts)
             {
                 if (cost.Type == CostType.Electrical)
                 {
@@ -383,7 +383,7 @@ namespace Tests
 
             Total expectedAssocTECTotal = new Total();
             Total expectedAssocElecTotal = new Total();
-            foreach (TECCost cost in elecMat.AssociatedCosts)
+            foreach (TECAssociatedCost cost in elecMat.AssociatedCosts)
             {
                 expectedAssocTECTotal += CalculateTotal(cost, CostType.TEC);
                 expectedAssocElecTotal += CalculateTotal(cost, CostType.Electrical);
@@ -391,7 +391,7 @@ namespace Tests
 
             Total expectedRatedTECTotal = new Total();
             Total expectedRatedElecTotal = new Total();
-            foreach (TECCost cost in elecMat.RatedCosts)
+            foreach (TECAssociatedCost cost in elecMat.RatedCosts)
             {
                 expectedRatedTECTotal += CalculateTotal(cost, CostType.TEC);
                 expectedRatedElecTotal += CalculateTotal(cost, CostType.Electrical);
@@ -449,7 +449,7 @@ namespace Tests
 
             Total removedAssocTECTotal = new Total();
             Total removedAssocElecTotal = new Total();
-            foreach (TECCost cost in elecMat.AssociatedCosts)
+            foreach (TECAssociatedCost cost in elecMat.AssociatedCosts)
             {
                 removedAssocTECTotal += CalculateTotal(cost, CostType.TEC);
                 removedAssocElecTotal += CalculateTotal(cost, CostType.Electrical);
@@ -457,7 +457,7 @@ namespace Tests
 
             Total ratedTECTotal = new Total();
             Total ratedElecTotal = new Total();
-            foreach (TECCost cost in elecMat.RatedCosts)
+            foreach (TECAssociatedCost cost in elecMat.RatedCosts)
             {
                 ratedTECTotal += CalculateTotal(cost, CostType.TEC);
                 ratedElecTotal += CalculateTotal(cost, CostType.Electrical);
@@ -512,7 +512,7 @@ namespace Tests
 
             Total expectedRatedTECTotal = new Total();
             Total expectedRatedElecTotal = new Total();
-            foreach (TECCost cost in elecMat.RatedCosts)
+            foreach (TECAssociatedCost cost in elecMat.RatedCosts)
             {
                 expectedRatedTECTotal += CalculateTotal(cost, CostType.TEC);
                 expectedRatedElecTotal += CalculateTotal(cost, CostType.Electrical);
@@ -570,7 +570,7 @@ namespace Tests
 
             Total expectedAssocTECTotal = new Total();
             Total expectedAssocElecTotal = new Total();
-            foreach (TECCost cost in elecMat.AssociatedCosts)
+            foreach (TECAssociatedCost cost in elecMat.AssociatedCosts)
             {
                 expectedAssocTECTotal += CalculateTotal(cost, CostType.TEC);
                 expectedAssocElecTotal += CalculateTotal(cost, CostType.Electrical);
@@ -578,7 +578,7 @@ namespace Tests
 
             Total ratedTECTotal = new Total();
             Total ratedElecTotal = new Total();
-            foreach (TECCost cost in elecMat.RatedCosts)
+            foreach (TECAssociatedCost cost in elecMat.RatedCosts)
             {
                 ratedTECTotal += CalculateTotal(cost, CostType.TEC);
                 ratedElecTotal += CalculateTotal(cost, CostType.Electrical);
@@ -622,8 +622,8 @@ namespace Tests
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
             TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
-            TECCost tecCost = null;
-            foreach (TECCost cost in catalogs.AssociatedCosts)
+            TECAssociatedCost tecCost = null;
+            foreach (TECAssociatedCost cost in catalogs.AssociatedCosts)
             {
                 if (cost.Type == CostType.TEC)
                 {
@@ -658,8 +658,8 @@ namespace Tests
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
             TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
-            TECCost tecCost = null;
-            foreach (TECCost cost in catalogs.AssociatedCosts)
+            TECAssociatedCost tecCost = null;
+            foreach (TECAssociatedCost cost in catalogs.AssociatedCosts)
             {
                 if (cost.Type == CostType.TEC)
                 {
@@ -695,8 +695,8 @@ namespace Tests
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
             TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
-            TECCost elecCost = null;
-            foreach (TECCost cost in catalogs.AssociatedCosts)
+            TECAssociatedCost elecCost = null;
+            foreach (TECAssociatedCost cost in catalogs.AssociatedCosts)
             {
                 if (cost.Type == CostType.Electrical)
                 {
@@ -731,8 +731,8 @@ namespace Tests
             //Arrange
             MiscCostsSummaryVM miscVM = new MiscCostsSummaryVM();
             TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
-            TECCost elecCost = null;
-            foreach (TECCost cost in catalogs.AssociatedCosts)
+            TECAssociatedCost elecCost = null;
+            foreach (TECAssociatedCost cost in catalogs.AssociatedCosts)
             {
                 if (cost.Type == CostType.Electrical)
                 {
