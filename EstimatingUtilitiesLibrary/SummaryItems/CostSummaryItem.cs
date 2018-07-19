@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using System;
 
@@ -6,8 +7,8 @@ namespace EstimatingUtilitiesLibrary.SummaryItems
 {
     public class CostSummaryItem : TECObject
     {
-        private TECCost _cost;
-        public TECCost Cost
+        private ICost _cost;
+        public ICost Cost
         {
             get { return _cost; }
         }
@@ -51,7 +52,7 @@ namespace EstimatingUtilitiesLibrary.SummaryItems
             }
         }
 
-        public CostSummaryItem(TECCost cost) : base(Guid.NewGuid())
+        public CostSummaryItem(ICost cost) : base(Guid.NewGuid())
         {
             _cost = cost;
             if (cost is TECMisc misc)

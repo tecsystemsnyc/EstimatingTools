@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using System;
 
@@ -7,7 +8,7 @@ namespace EstimatingUtilitiesLibrary.SummaryItems
     public class RatedCostSummaryItem : TECObject
     {
         #region Fields
-        private TECCost _ratedCost;
+        private ICost _ratedCost;
 
         private double _length;
 
@@ -16,7 +17,7 @@ namespace EstimatingUtilitiesLibrary.SummaryItems
         #endregion
 
         //Constructor
-        public RatedCostSummaryItem(TECCost ratedCost, double length) : base(Guid.NewGuid())
+        public RatedCostSummaryItem(ICost ratedCost, double length) : base(Guid.NewGuid())
         {
             _ratedCost = ratedCost;
             _length = length;
@@ -24,7 +25,7 @@ namespace EstimatingUtilitiesLibrary.SummaryItems
         }
 
         #region Properties
-        public TECCost RatedCost
+        public ICost RatedCost
         {
             get { return _ratedCost; }
         }
