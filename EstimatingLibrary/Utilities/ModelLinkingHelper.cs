@@ -117,34 +117,7 @@ namespace EstimatingLibrary.Utilities
                 linkPanelToCatalogs(panel, bid.Catalogs);
             }
         }
-
-        public static void LinkTypicalInstanceDictionary(ObservableListDictionary<ITECObject > oldDictionary, TECTypical newTypical)
-        {
-            ObservableListDictionary<ITECObject > newCharacteristicInstances = new ObservableListDictionary<ITECObject >();
-            foreach (TECSystem instance in newTypical.Instances)
-            {
-                linkCharacteristicCollections(newTypical.Equipment, instance.Equipment, oldDictionary, newCharacteristicInstances);
-                foreach (TECEquipment equipment in newTypical.Equipment)
-                {
-                    foreach (TECEquipment instanceEquipment in instance.Equipment)
-                    {
-                        linkCharacteristicCollections(equipment.SubScope, instanceEquipment.SubScope, oldDictionary, newCharacteristicInstances);
-                        foreach (TECSubScope subscope in equipment.SubScope)
-                        {
-                            foreach (TECSubScope instanceSubScope in instanceEquipment.SubScope)
-                            {
-                                linkCharacteristicCollections(subscope.Points, instanceSubScope.Points, oldDictionary, newCharacteristicInstances);
-                            }
-                        }
-                    }
-                }
-                linkCharacteristicCollections(newTypical.Controllers, instance.Controllers, oldDictionary, newCharacteristicInstances);
-                linkCharacteristicCollections(newTypical.Panels, instance.Panels, oldDictionary, newCharacteristicInstances);
-                linkCharacteristicCollections(newTypical.MiscCosts, instance.MiscCosts, oldDictionary, newCharacteristicInstances);
-                linkCharacteristicCollections(newTypical.ScopeBranches, instance.ScopeBranches, oldDictionary, newCharacteristicInstances);
-            }
-            newTypical.TypicalInstanceDictionary = newCharacteristicInstances;
-        }
+        
         #endregion
 
         #region Private Methods
