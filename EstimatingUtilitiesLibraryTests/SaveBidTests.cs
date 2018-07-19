@@ -1085,15 +1085,9 @@ namespace EstimatingUtilitiesLibraryTests
                 }
                 if (ssToModify != null) break;
             }
-            IEndDevice deviceToRemove = (ssToModify.Devices[0] as IEndDevice);
+            IEndDevice deviceToRemove = (ssToModify.Devices.First() as IEndDevice);
 
-            int oldNumDevices = 0;
-
-            foreach (IEndDevice dev in ssToModify.Devices)
-            {
-                if (dev.Guid == deviceToRemove.Guid)
-                    oldNumDevices++;
-            }
+            int oldNumDevices = ssToModify.Devices.Count;        
 
             ssToModify.Devices.Remove(deviceToRemove);
 
@@ -1130,16 +1124,10 @@ namespace EstimatingUtilitiesLibraryTests
                 if (deviceToRemove.Guid == dev.Guid) devFound = true;
             }
             if (!devFound) Assert.Fail();
-
-            int numDevices = 0;
-            foreach (IEndDevice dev in modifiedSubScope.Devices)
-            {
-                if (dev.Guid == deviceToRemove.Guid)
-                    numDevices++;
-            }
+            
 
             Assert.AreEqual(bid.Catalogs.Devices.Count(), actualBid.Catalogs.Devices.Count());
-            Assert.AreEqual((oldNumDevices - 1), numDevices);
+            Assert.AreEqual((oldNumDevices - 1), modifiedSubScope.Devices.Count);
         }
 
         #region Edit Device
@@ -1901,17 +1889,9 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             int expectedNumLocations = bid.Locations.Count;
 
-            TECSystem expectedSys = null;
-            foreach (TECSystem sys in bid.Systems)
-            {
-                if (sys.Description == "Locations all the way")
-                {
-                    expectedSys = sys;
-                    break;
-                }
-            }
-            TECEquipment expectedEquip = expectedSys.Equipment[0];
-            TECSubScope expectedSS = expectedEquip.SubScope[0];
+            TECSystem expectedSys = bid.Systems.First(x => x.Equipment.Count > 0 && x.Equipment.Any(y => y.SubScope.Count > 0));
+            TECEquipment expectedEquip = expectedSys.Equipment.First(x => x.SubScope.Count > 0);
+            TECSubScope expectedSS = expectedEquip.SubScope.First();
 
             expectedSys.Location = null;
             expectedEquip.Location = null;
@@ -1923,34 +1903,9 @@ namespace EstimatingUtilitiesLibraryTests
 
             int actualNumLocations = actualBid.Locations.Count;
 
-            TECSystem actualSys = null;
-            foreach (TECSystem sys in actualBid.Systems)
-            {
-                if (sys.Guid == expectedSys.Guid)
-                {
-                    actualSys = sys;
-                    break;
-                }
-            }
-            TECEquipment actualEquip = null;
-            foreach(TECEquipment equipment in actualSys.Equipment)
-            {
-                if(equipment.Guid == expectedEquip.Guid)
-                {
-                    actualEquip = equipment;
-                    break;
-                }
-            }
-
-            TECSubScope actualSS = null;
-            foreach (TECSubScope subScope in actualEquip.SubScope)
-            {
-                if (subScope.Guid == expectedSS.Guid)
-                {
-                    actualSS = subScope;
-                    break;
-                }
-            }
+            TECSystem actualSys = actualBid.Systems.First(x => x.Guid == expectedSys.Guid);
+            TECEquipment actualEquip = actualSys.Equipment.First(x => x.Guid == expectedEquip.Guid);
+            TECSubScope actualSS = actualEquip.SubScope.First(x => x.Guid == expectedSS.Guid);
 
             //Assert
             Assert.AreEqual(expectedNumLocations, actualNumLocations);
@@ -1966,25 +1921,8 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             int expectedNumLocations = bid.Locations.Count;
 
-            TECLocation expectedLocation = null;
-            foreach (TECLocation loc in bid.Locations)
-            {
-                if (loc.Name == "Cellar")
-                {
-                    expectedLocation = loc;
-                    break;
-                }
-            }
-
-            TECSystem expectedSystem = null;
-            foreach (TECSystem sys in bid.Systems)
-            {
-                if (sys.Name == "System 1")
-                {
-                    expectedSystem = sys;
-                    break;
-                }
-            }
+            TECLocation expectedLocation = bid.Locations.First();
+            TECSystem expectedSystem = bid.Systems.First(x => x.Location != expectedLocation);
 
             expectedSystem.Location = expectedLocation;
 

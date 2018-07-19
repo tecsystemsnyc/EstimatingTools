@@ -82,10 +82,13 @@ namespace TestLibrary.ModelTestingUtilities
             rand.RepeatAction(() => bid.ScopeTree.Add(TestScopeBranch(rand, 5)), 10);
 
             //Notes
-            rand.RepeatAction(() => bid.Notes.Add(TestLabel(rand, "Note")), 10);
+            rand.RepeatAction(() => bid.Notes.Add(TestLabel(rand)), 10);
+
+            //Internal Notes
+            rand.RepeatAction(() => bid.InternalNotes.Add(TestInternalNote(rand)), 10);
 
             //Exclusions
-            rand.RepeatAction(() => bid.Exclusions.Add(TestLabel(rand, "Exclusion")), 10);
+            rand.RepeatAction(() => bid.Exclusions.Add(TestLabel(rand)), 10);
 
             //Misc Costs
             rand.RepeatAction(() => bid.MiscCosts.Add(TestMisc(bid.Catalogs, rand, CostType.TEC)), 10);
@@ -321,9 +324,15 @@ namespace TestLibrary.ModelTestingUtilities
             }
             return branch;
         }
-        public static TECLabeled TestLabel(Random rand, string type)
+        public static TECLabeled TestLabel(Random rand)
         {
             TECLabeled labeled = new TECLabeled();
+            labeled.AssignTestLabel();
+            return labeled;
+        }
+        public static TECInternalNote TestInternalNote(Random rand)
+        {
+            TECInternalNote labeled = new TECInternalNote();
             labeled.AssignTestLabel();
             return labeled;
         }

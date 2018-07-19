@@ -141,7 +141,7 @@ namespace EstimatingUtilitiesLibrary.Database
             logger.Trace("Finished backup. Backup path: " + backupPath);
         }
 
-        public static List<TableBase> GetTables(List<ITECObject > items, string propertyName, DBType type = 0)
+        public static List<TableBase> GetTables(List<ITECObject> items, string propertyName, DBType type = 0)
         {
             List<TableBase> tables = new List<TableBase>();
             if (items.Count > 2 || items.Count == 0)
