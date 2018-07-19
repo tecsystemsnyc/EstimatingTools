@@ -9,6 +9,7 @@ namespace EstimatingLibrary.Interfaces
     public interface ICost: ITECObject
     {
         string Name { get; }
+        string Description { get; }
         double Cost { get; set; }
         double Labor { get; set; }
         CostType Type { get; set; }

@@ -230,7 +230,7 @@ namespace EstimatingUtilitiesLibrary.Exports
         }
         internal static void AddMiscCostsSheet(XLWorkbook workbook, TECBid bid, string sheetName = "Misc Costs")
         {
-            List<TECCost> miscCosts = getAllMiscCosts(bid);
+            List<ICost> miscCosts = getAllMiscCosts(bid);
             List<CostSummaryItem> miscItems = consolidateMiscCosts(miscCosts);
 
             IXLWorksheet worksheet = workbook.Worksheets.Add(sheetName);
@@ -478,9 +478,9 @@ namespace EstimatingUtilitiesLibrary.Exports
             }
             return connections;
         }
-        private static List<TECCost> getAllMiscCosts(TECBid bid)
+        private static List<ICost> getAllMiscCosts(TECBid bid)
         {
-            List<TECCost> costs = new List<TECCost>();
+            List<ICost> costs = new List<ICost>();
             costs.AddRange(bid.MiscCosts);
             foreach(TECTypical typ in bid.Systems)
             {
@@ -591,10 +591,10 @@ namespace EstimatingUtilitiesLibrary.Exports
         }
         private static List<CostSummaryItem> consolidateCostInControllers(IEnumerable<TECController> controllers)
         {
-            Dictionary<TECCost, CostSummaryItem> dictionary = new Dictionary<TECCost, CostSummaryItem>();
+            Dictionary<ICost, CostSummaryItem> dictionary = new Dictionary<ICost, CostSummaryItem>();
             List<CostSummaryItem> items = new List<CostSummaryItem>();
 
-            List<TECCost> costs = new List<TECCost>();
+            List<ICost> costs = new List<ICost>();
             foreach(TECController controller in controllers)
             {
                 costs.AddRange(controller.AssociatedCosts);
@@ -622,10 +622,10 @@ namespace EstimatingUtilitiesLibrary.Exports
         }
         private static List<CostSummaryItem> consolidateCostInPanels(IEnumerable<TECPanel> panels)
         {
-            Dictionary<TECCost, CostSummaryItem> dictionary = new Dictionary<TECCost, CostSummaryItem>();
+            Dictionary<ICost, CostSummaryItem> dictionary = new Dictionary<ICost, CostSummaryItem>();
             List<CostSummaryItem> items = new List<CostSummaryItem>();
 
-            List<TECCost> costs = new List<TECCost>();
+            List<ICost> costs = new List<ICost>();
             foreach (TECPanel panel in panels)
             {
                 costs.AddRange(panel.AssociatedCosts);
@@ -650,10 +650,10 @@ namespace EstimatingUtilitiesLibrary.Exports
         }
         private static List<CostSummaryItem> consolidateCostInDevices(IEnumerable<TECDevice> devices)
         {
-            Dictionary<TECCost, CostSummaryItem> dictionary = new Dictionary<TECCost, CostSummaryItem>();
+            Dictionary<ICost, CostSummaryItem> dictionary = new Dictionary<ICost, CostSummaryItem>();
             List<CostSummaryItem> items = new List<CostSummaryItem>();
 
-            List<TECCost> costs = new List<TECCost>();
+            List<ICost> costs = new List<ICost>();
             foreach(TECDevice device in devices)
             {
                 costs.AddRange(device.AssociatedCosts);
@@ -676,10 +676,10 @@ namespace EstimatingUtilitiesLibrary.Exports
         }
         private static List<CostSummaryItem> consolidateCostInValves(IEnumerable<TECValve> valves)
         {
-            Dictionary<TECCost, CostSummaryItem> dictionary = new Dictionary<TECCost, CostSummaryItem>();
+            Dictionary<ICost, CostSummaryItem> dictionary = new Dictionary<ICost, CostSummaryItem>();
             List<CostSummaryItem> items = new List<CostSummaryItem>();
 
-            List<TECCost> costs = new List<TECCost>();
+            List<ICost> costs = new List<ICost>();
             foreach (TECValve valve in valves)
             {
                 costs.AddRange(valve.AssociatedCosts);
@@ -703,10 +703,10 @@ namespace EstimatingUtilitiesLibrary.Exports
         }
         private static List<CostSummaryItem> consolidateCostInConnections(IEnumerable<IControllerConnection> connections)
         {
-            Dictionary<TECCost, CostSummaryItem> dictionary = new Dictionary<TECCost, CostSummaryItem>();
+            Dictionary<ICost, CostSummaryItem> dictionary = new Dictionary<ICost, CostSummaryItem>();
             List<CostSummaryItem> items = new List<CostSummaryItem>();
 
-            List<TECCost> costs = new List<TECCost>();
+            List<ICost> costs = new List<ICost>();
             foreach(IControllerConnection connection in connections)
             {
                 foreach(TECElectricalMaterial mat in connection.Protocol.ConnectionTypes)
@@ -736,29 +736,29 @@ namespace EstimatingUtilitiesLibrary.Exports
         }
         private static List<RatedCostSummaryItem> consolidateRatedCostInConnections(IEnumerable<IControllerConnection> connections)
         {
-            Dictionary<TECCost, RatedCostSummaryItem> dictionary = new Dictionary<TECCost, RatedCostSummaryItem>();
+            Dictionary<ICost, RatedCostSummaryItem> dictionary = new Dictionary<ICost, RatedCostSummaryItem>();
             List<RatedCostSummaryItem> items = new List<RatedCostSummaryItem>();
 
-            List<Tuple<TECCost, double>> costs = new List<Tuple<TECCost, double>>();
+            List<Tuple<ICost, double>> costs = new List<Tuple<ICost, double>>();
             foreach (IControllerConnection connection in connections)
             {
                 foreach(TECElectricalMaterial mat in connection.Protocol.ConnectionTypes)
                 {
-                    foreach(TECCost rated in mat.RatedCosts)
+                    foreach(ICost rated in mat.RatedCosts)
                     {
-                        costs.Add(new Tuple<TECCost, double>(rated, connection.Length));
+                        costs.Add(new Tuple<ICost, double>(rated, connection.Length));
                     }
                 }
                 if (connection.ConduitType != null)
                 {
-                    foreach (TECCost rated in connection.ConduitType.RatedCosts)
+                    foreach (ICost rated in connection.ConduitType.RatedCosts)
                     {
-                        costs.Add(new Tuple<TECCost, double>(rated, connection.ConduitLength));
+                        costs.Add(new Tuple<ICost, double>(rated, connection.ConduitLength));
                     }
                 }
             }
 
-            foreach(Tuple<TECCost, double> cost in costs)
+            foreach(Tuple<ICost, double> cost in costs)
             {
                 if (dictionary.ContainsKey(cost.Item1))
                 {
@@ -773,12 +773,12 @@ namespace EstimatingUtilitiesLibrary.Exports
             }
             return items;
         }
-        private static List<CostSummaryItem> consolidateMiscCosts(IEnumerable<TECCost> costs)
+        private static List<CostSummaryItem> consolidateMiscCosts(IEnumerable<ICost> costs)
         {
-            Dictionary<TECCost, CostSummaryItem> dictionary = new Dictionary<TECCost, CostSummaryItem>();
+            Dictionary<ICost, CostSummaryItem> dictionary = new Dictionary<ICost, CostSummaryItem>();
             List<CostSummaryItem> items = new List<CostSummaryItem>();
 
-            foreach(TECCost cost in costs)
+            foreach(ICost cost in costs)
             {
                 int quantity = 1;
                 if (cost is TECMisc misc)
