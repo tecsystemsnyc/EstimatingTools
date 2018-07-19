@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary.SummaryItems;
 using GalaSoft.MvvmLight;
@@ -134,7 +135,7 @@ namespace TECUserControlLibrary.ViewModels
             }
 
             deltas += AddActuator(valve.Actuator);
-            foreach(TECCost cost in valve.AssociatedCosts)
+            foreach(ICost cost in valve.AssociatedCosts)
             {
                 deltas += AddCost(cost);
             }
@@ -159,7 +160,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
 
                 deltas += RemoveActuator(valve.Actuator);
-                foreach(TECCost cost in valve.AssociatedCosts)
+                foreach(ICost cost in valve.AssociatedCosts)
                 {
                     deltas += RemoveCost(cost);
                 }

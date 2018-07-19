@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary.SummaryItems;
 using GalaSoft.MvvmLight;
@@ -177,7 +178,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         
         #region Methods
-        public CostBatch AddCost(TECCost cost)
+        public CostBatch AddCost(ICost cost)
         {
             bool containsItem = costDictionary.ContainsKey(cost.Guid);
             if (containsItem)
@@ -214,10 +215,6 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         AssocElecCostTotal += delta.GetCost(CostType.Electrical);
                         AssocElecLaborTotal += delta.GetLabor(CostType.Electrical);
-                    }
-                    foreach (TECAssociatedCost extraCost in cost.AssociatedCosts)
-                    {
-                        delta += AddCost(extraCost);
                     }
                     return delta;
                 }
@@ -257,14 +254,10 @@ namespace TECUserControlLibrary.ViewModels
                     }
                 }
                 CostBatch delta = new CostBatch(item.TotalCost, item.TotalLabor, cost.Type);
-                foreach (TECAssociatedCost extraCost in cost.AssociatedCosts)
-                {
-                    delta += AddCost(extraCost);
-                }
                 return delta;
             }
         }
-        public CostBatch RemoveCost(TECCost cost)
+        public CostBatch RemoveCost(ICost cost)
         {
             CostBatch delta;
             bool containsItem = costDictionary.ContainsKey(cost.Guid);

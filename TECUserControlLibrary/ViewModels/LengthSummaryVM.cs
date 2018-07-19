@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary.SummaryItems;
 using GalaSoft.MvvmLight;
@@ -214,7 +215,7 @@ namespace TECUserControlLibrary.ViewModels
         public CostBatch AddRun(TECElectricalMaterial material, double length)
         {
             CostBatch deltas = AddLength(material, length);
-            foreach (TECCost cost in material.AssociatedCosts)
+            foreach (ICost cost in material.AssociatedCosts)
             {
                 deltas += addAssocCost(cost);
             }
@@ -223,7 +224,7 @@ namespace TECUserControlLibrary.ViewModels
         public CostBatch RemoveRun(TECElectricalMaterial material, double length)
         {
             CostBatch deltas = RemoveLength(material, length);
-            foreach (TECCost cost in material.AssociatedCosts)
+            foreach (ICost cost in material.AssociatedCosts)
             {
                 deltas += removeAssocCost(cost);
             }
@@ -250,7 +251,7 @@ namespace TECUserControlLibrary.ViewModels
                 LengthLaborTotal += item.TotalLabor;
                 deltas += new CostBatch(item.TotalCost, item.TotalLabor, CostType.Electrical);
             }
-            foreach(TECCost cost in material.RatedCosts)
+            foreach(ICost cost in material.RatedCosts)
             {
                 deltas += addRatedCost(cost, length);
             }
@@ -275,7 +276,7 @@ namespace TECUserControlLibrary.ViewModels
                         _lengthSummaryItems.Remove(item);
                         lengthDictionary.Remove(material.Guid);
                     }
-                    foreach (TECCost cost in material.RatedCosts)
+                    foreach (ICost cost in material.RatedCosts)
                     {
                         deltas += removeRatedCost(cost, length);
                     }
@@ -292,7 +293,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private CostBatch addAssocCost(TECCost cost)
+        private CostBatch addAssocCost(ICost cost)
         {
             CostBatch deltas = new CostBatch();
             bool containsItem = assocCostDictionary.ContainsKey(cost.Guid);
@@ -326,7 +327,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             return deltas;
         }
-        private CostBatch removeAssocCost(TECCost cost)
+        private CostBatch removeAssocCost(ICost cost)
         {
             bool containsItem = assocCostDictionary.ContainsKey(cost.Guid);
             if (containsItem)
@@ -359,7 +360,7 @@ namespace TECUserControlLibrary.ViewModels
                 throw new NullReferenceException("Cost item not present in dictionary.");
             }
         }
-        private CostBatch addRatedCost(TECCost cost, double length)
+        private CostBatch addRatedCost(ICost cost, double length)
         {
             bool containsItem = ratedCostDictionary.ContainsKey(cost.Guid);
             if (containsItem)
@@ -397,7 +398,7 @@ namespace TECUserControlLibrary.ViewModels
                 return new CostBatch(item.TotalCost, item.TotalLabor, cost.Type);
             }
         }
-        private CostBatch removeRatedCost(TECCost cost, double length)
+        private CostBatch removeRatedCost(ICost cost, double length)
         {
             if (length > 0)
             {

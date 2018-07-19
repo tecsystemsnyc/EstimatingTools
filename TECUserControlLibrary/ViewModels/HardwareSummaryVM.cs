@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary.SummaryItems;
 using GalaSoft.MvvmLight;
@@ -170,7 +171,7 @@ namespace TECUserControlLibrary.ViewModels
                 HardwareLabor += item.TotalLabor;
                 deltas += new CostBatch(item.TotalCost, item.TotalLabor, hardware.Type);
             }
-            foreach (TECCost cost in hardware.AssociatedCosts)
+            foreach (ICost cost in hardware.AssociatedCosts)
             {
                 deltas += AddCost(cost);
             }
@@ -193,7 +194,7 @@ namespace TECUserControlLibrary.ViewModels
                     _hardwareItems.Remove(item);
                     hardwareDictionary.Remove(hardware.Guid);
                 }
-                foreach (TECCost cost in hardware.AssociatedCosts)
+                foreach (ICost cost in hardware.AssociatedCosts)
                 {
                     deltas += RemoveCost(cost);
                 }
@@ -205,7 +206,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public CostBatch AddCost(TECCost cost)
+        public CostBatch AddCost(ICost cost)
         {
             bool containsItem = assocCostDictionary.ContainsKey(cost.Guid);
             if (containsItem)
@@ -243,7 +244,7 @@ namespace TECUserControlLibrary.ViewModels
                 return new CostBatch(item.TotalCost, item.TotalLabor, cost.Type);
             }
         }
-        public CostBatch RemoveCost(TECCost cost)
+        public CostBatch RemoveCost(ICost cost)
         {
             bool containsItem = assocCostDictionary.ContainsKey(cost.Guid);
             if (containsItem)

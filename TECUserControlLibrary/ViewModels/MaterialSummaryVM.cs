@@ -301,7 +301,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 deltas += (MiscSummaryVM.AddCost(misc));
             }
-            foreach(TECCost cost in system.AssociatedCosts)
+            foreach(ICost cost in system.AssociatedCosts)
             {
                 deltas += (MiscSummaryVM.AddCost(cost));
             }
@@ -314,7 +314,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 deltas += (addSubScope(ss));
             }
-            foreach(TECCost cost in equip.AssociatedCosts)
+            foreach(ICost cost in equip.AssociatedCosts)
             {
                 deltas += (MiscSummaryVM.AddCost(cost));
             }
@@ -338,7 +338,7 @@ namespace TECUserControlLibrary.ViewModels
                     throw new DataMisalignedException("End device isn't recognized. Not valve or device.");
                 }
             }
-            foreach(TECCost cost in ss.AssociatedCosts)
+            foreach(ICost cost in ss.AssociatedCosts)
             {
                 deltas += (MiscSummaryVM.AddCost(cost));
             }
@@ -355,7 +355,7 @@ namespace TECUserControlLibrary.ViewModels
                     deltas += (addIOModule(module));
                 }
             }
-            foreach(TECCost cost in controller.AssociatedCosts)
+            foreach(ICost cost in controller.AssociatedCosts)
             {
                 deltas += (ControllerSummaryVM.AddCost(cost));
             }
@@ -371,7 +371,7 @@ namespace TECUserControlLibrary.ViewModels
             //Costs associated with IO Modules will fall under controller associated costs.
             CostBatch deltas = new CostBatch();
             deltas += (ControllerSummaryVM.AddCost(module));
-            foreach(TECCost cost in module.AssociatedCosts)
+            foreach(ICost cost in module.AssociatedCosts)
             {
                 deltas += (ControllerSummaryVM.AddCost(cost));
             }
@@ -381,7 +381,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             CostBatch deltas = new CostBatch();
             deltas += (PanelSummaryVM.AddHardware(panel.Type));
-            foreach(TECCost cost in panel.AssociatedCosts)
+            foreach(ICost cost in panel.AssociatedCosts)
             {
                 deltas += (PanelSummaryVM.AddCost(cost));
             }
@@ -427,7 +427,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 deltas += (MiscSummaryVM.RemoveCost(misc));
             }
-            foreach(TECCost cost in system.AssociatedCosts) {
+            foreach(ICost cost in system.AssociatedCosts) {
                 deltas += (MiscSummaryVM.RemoveCost(cost));
             }
             return deltas;
@@ -439,7 +439,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 deltas += (removeSubScope(ss));
             }
-            foreach(TECCost cost in equip.AssociatedCosts)
+            foreach(ICost cost in equip.AssociatedCosts)
             {
                 deltas += (MiscSummaryVM.RemoveCost(cost));
             }
@@ -463,7 +463,7 @@ namespace TECUserControlLibrary.ViewModels
                     throw new DataMisalignedException("End device isn't recognized. Not valve or device.");
                 }
             }
-            foreach(TECCost cost in ss.AssociatedCosts)
+            foreach(ICost cost in ss.AssociatedCosts)
             {
                 deltas += (MiscSummaryVM.RemoveCost(cost));
             }
@@ -480,7 +480,7 @@ namespace TECUserControlLibrary.ViewModels
                     deltas += (removeIOModule(module));
                 }
             }
-            foreach(TECCost cost in controller.AssociatedCosts)
+            foreach(ICost cost in controller.AssociatedCosts)
             {
                 deltas += (ControllerSummaryVM.RemoveCost(cost));
             }
@@ -495,7 +495,7 @@ namespace TECUserControlLibrary.ViewModels
             //Costs associated with IO Modules will fall under controller associated costs.
             CostBatch deltas = new CostBatch();
             deltas += (ControllerSummaryVM.RemoveCost(module));
-            foreach(TECCost cost in module.AssociatedCosts)
+            foreach(ICost cost in module.AssociatedCosts)
             {
                 deltas += (ControllerSummaryVM.RemoveCost(cost));
             }
@@ -505,7 +505,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             CostBatch deltas = new CostBatch();
             deltas += (PanelSummaryVM.RemoveHardware(panel.Type));
-            foreach(TECCost cost in panel.AssociatedCosts)
+            foreach(ICost cost in panel.AssociatedCosts)
             {
                 deltas += (PanelSummaryVM.RemoveCost(cost));
             }
