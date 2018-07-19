@@ -9,8 +9,8 @@ namespace EstimatingLibrary
     public abstract class TECCost : TECScope
     { 
         #region Properties
-        protected double _cost;
-        protected double _labor;
+        protected double _cost = 0;
+        protected double _labor = 0;
         protected CostType _type;
         
         public virtual double Cost
@@ -53,8 +53,6 @@ namespace EstimatingLibrary
         #region Constructors
         public TECCost(Guid guid, CostType type) : base(guid)
         {
-            _cost = 0;
-            _labor = 0;
             _type = type;
         }
         public TECCost(TECCost cost) : this(cost.Type)

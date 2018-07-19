@@ -10,29 +10,11 @@ namespace EstimatingLibrary
 {
     public abstract class TECController : TECLocated, IConnectable, ITypicalable
     {
-        #region Properties
-        //---Stored---
-        private TECNetworkConnection _parentConnection;
-        private ObservableCollection<IControllerConnection> _childrenConnections = new ObservableCollection<IControllerConnection>();
-        private bool _isServer;
 
-        public TECNetworkConnection ParentConnection
-        {
-            get { return _parentConnection; }
-        }
-        public ObservableCollection<IControllerConnection> ChildrenConnections
-        {
-            get { return _childrenConnections; }
-            set
-            {
-                var old = ChildrenConnections;
-                ChildrenConnections.CollectionChanged -= handleChildrenChanged;
-                _childrenConnections = value;
-                ChildrenConnections.CollectionChanged += handleChildrenChanged;
-                notifyCombinedChanged(Change.Edit, "ChildrenConnections", this, value, old);
-                raisePropertyChanged("ChildNetworkConnections");
-            }
-        }
+        private bool _isServer;
+        #region Properties
+        public TECNetworkConnection ParentConnection { get; private set; }
+        public ObservableCollection<IControllerConnection> ChildrenConnections { get; } = new ObservableCollection<IControllerConnection>();
         
         public bool IsServer
         {
@@ -83,7 +65,6 @@ namespace EstimatingLibrary
         {
             _isServer = false;
             IsTypical = false;
-            _childrenConnections = new ObservableCollection<IControllerConnection>();
             ChildrenConnections.CollectionChanged += handleChildrenChanged;
         }
 
@@ -98,13 +79,13 @@ namespace EstimatingLibrary
                 if (connection is TECHardwiredConnection)
                 {
                     TECHardwiredConnection connectionToAdd = new TECHardwiredConnection(connection as TECHardwiredConnection, this, guidDictionary);
-                    _childrenConnections.Add(connectionToAdd);
+                    ChildrenConnections.Add(connectionToAdd);
                 }
                 else if (connection is TECNetworkConnection)
                 {
 
                     TECNetworkConnection connectionToAdd = new TECNetworkConnection(connection as TECNetworkConnection, this, guidDictionary);
-                    _childrenConnections.Add(connectionToAdd);
+                    ChildrenConnections.Add(connectionToAdd);
                 }
             }
         }
@@ -359,12 +340,12 @@ namespace EstimatingLibrary
         {
             if (connection == null)
             {
-                _parentConnection = null;
+                ParentConnection = null;
                 raisePropertyChanged("ParentConnection");
             }
             else if (connection is TECNetworkConnection networkConnection)
             {
-                _parentConnection = networkConnection;
+                ParentConnection = networkConnection;
                 raisePropertyChanged("ParentConnection");
             }
             else

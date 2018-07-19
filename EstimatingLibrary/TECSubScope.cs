@@ -11,55 +11,9 @@ namespace EstimatingLibrary
     public class TECSubScope : TECLocated, INotifyPointChanged, IDDCopiable, ITypicalable, IConnectable, IInterlockable
     {
         #region Properties
-        private ObservableCollection<IEndDevice> _devices = new ObservableCollection<IEndDevice>();
-        private ObservableCollection<TECPoint> _points = new ObservableCollection<TECPoint>();
-        private ObservableCollection<TECInterlockConnection> _interlocks = new ObservableCollection<TECInterlockConnection>();
-
-        public ObservableCollection<IEndDevice> Devices
-        {
-            get { return _devices; }
-            set
-            {
-                if (Devices != null)
-                {
-                    Devices.CollectionChanged -= DevicesCollectionChanged;
-                }
-                var old = Devices;
-                _devices = value;
-                notifyCombinedChanged(Change.Edit, "Devices", this, value, old);
-                Devices.CollectionChanged += DevicesCollectionChanged;
-            }
-        }
-        public ObservableCollection<TECPoint> Points
-        {
-            get { return _points; }
-            set
-            {
-                if (Points != null)
-                {
-                    Points.CollectionChanged -= PointsCollectionChanged;
-                }
-                var old = Points;
-                _points = value;
-                Points.CollectionChanged += PointsCollectionChanged;
-                notifyCombinedChanged(Change.Edit, "Points", this, value, old);
-            }
-        }
-        public ObservableCollection<TECInterlockConnection> Interlocks
-        {
-            get { return _interlocks; }
-            set
-            {
-                if (Points != null)
-                {
-                    Interlocks.CollectionChanged -= InterlocksCollectionChanged;
-                }
-                var old = Interlocks;
-                _interlocks = value;
-                Points.CollectionChanged += InterlocksCollectionChanged;
-                notifyCombinedChanged(Change.Edit, "Interlocks", this, value, old);
-            }
-        }
+        public ObservableCollection<IEndDevice> Devices { get; } = new ObservableCollection<IEndDevice>();
+        public ObservableCollection<TECPoint> Points { get; } = new ObservableCollection<TECPoint>();
+        public ObservableCollection<TECInterlockConnection> Interlocks { get; }
         
         public IControllerConnection Connection { get; private set; }
         public int PointNumber
@@ -100,7 +54,7 @@ namespace EstimatingLibrary
             if (guidDictionary != null)
             { guidDictionary[_guid] = sourceSubScope.Guid; }
             foreach (IEndDevice device in sourceSubScope.Devices)
-            { _devices.Add(device); }
+            { Devices.Add(device); }
             foreach (TECPoint point in sourceSubScope.Points)
             {
                 var toAdd = new TECPoint(point);

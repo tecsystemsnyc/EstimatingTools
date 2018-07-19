@@ -8,18 +8,7 @@ namespace EstimatingLibrary
     public class TECScopeBranch : TECLabeled, IRelatable, ITypicalable
     {//TECScopeBranch exists as an alternate object to TECSystem. It's purpose is to serve as a non-specific scope object with unlimited branches in both depth and breadth.
         #region Properties
-        private ObservableCollection<TECScopeBranch> _branches;
-        public ObservableCollection<TECScopeBranch> Branches
-        {
-            get { return _branches; }
-            set
-            {
-                var old = Branches;
-                _branches = value;
-                notifyCombinedChanged(Change.Edit, "Branches", this, value, old);
-                Branches.CollectionChanged += Branches_CollectionChanged;
-            }
-        }
+        public ObservableCollection<TECScopeBranch> Branches { get; } = new ObservableCollection<TECScopeBranch>();
 
         public SaveableMap PropertyObjects
         {
@@ -38,7 +27,6 @@ namespace EstimatingLibrary
         public TECScopeBranch(Guid guid) : base(guid)
         {
             IsTypical = false;
-            _branches = new ObservableCollection<TECScopeBranch>();
             Branches.CollectionChanged += Branches_CollectionChanged;
         }
 

@@ -49,7 +49,6 @@ namespace TECUserControlLibrary.Models
             }
         }
         
-
         public void UpdatePanel(TECPanel panel)
         {
             _panel = panel;

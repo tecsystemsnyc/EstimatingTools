@@ -9,26 +9,11 @@ namespace EstimatingLibrary
     public class TECEquipment : TECLocated, INotifyPointChanged, IDDCopiable, ITypicalable
     {
         #region Properties
-        private ObservableCollection<TECSubScope> _subScope;
 
         public event Action<int> PointChanged;
         public event Action<object, System.Collections.Specialized.NotifyCollectionChangedEventArgs> SubScopeCollectionChanged;
 
-        public ObservableCollection<TECSubScope> SubScope
-        {
-            get { return _subScope; }
-            set
-            {
-                var old = SubScope;
-                if (SubScope != null)
-                {
-                    SubScope.CollectionChanged -= SubScope_CollectionChanged;
-                }
-                _subScope = value;
-                SubScope.CollectionChanged += SubScope_CollectionChanged;
-                notifyCombinedChanged(Change.Edit, "SubScope", this, value, old);
-            }
-        }
+        public ObservableCollection<TECSubScope> SubScope { get; } = new ObservableCollection<TECSubScope>();
         
         public int PointNumber
         {
@@ -46,7 +31,6 @@ namespace EstimatingLibrary
         public TECEquipment(Guid guid) : base(guid)
         {
             IsTypical = false;
-            _subScope = new ObservableCollection<TECSubScope>();
             SubScope.CollectionChanged += SubScope_CollectionChanged;
             base.PropertyChanged += TECEquipment_PropertyChanged;
         }
