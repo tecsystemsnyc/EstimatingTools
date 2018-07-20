@@ -14,43 +14,38 @@ namespace EstimatingUtilitiesLibraryTests
     [TestClass]
     public class IntegratedSaveLoadTests
     {
-        TECBid bid;
-        DeltaStacker testStack;
-        string path;
         Random rand;
+        string path;
 
         [TestInitialize]
         public void TestInitialize()
         {
             rand = new Random();
+        }
+
+        public (TECBid bid, DeltaStacker stack) SaveLoadBid(TECBid bid)
+        {
             path = Path.GetTempFileName();
-            bid = ModelCreation.TestBid(rand);
             DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
             manager.New(bid);
             bid = manager.Load() as TECBid;
             ChangeWatcher watcher = new ChangeWatcher(bid);
-            testStack = new DeltaStacker(watcher, bid);
+            DeltaStacker testStack = new DeltaStacker(watcher, bid);
+            return (bid, testStack);
         }
-
         [TestCleanup]
         public void TestCleanup()
         {
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
             File.Delete(path);
-        }
-
-        [ClassCleanup]
-        public static void ClassCleanup()
-        {
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
         }
 
         #region Save BidInfo
         [TestMethod]
         public void Save_BidInfo_Name()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             string expectedName = "Save Name";
             bid.Name = expectedName;
@@ -67,6 +62,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_BidInfo_BidNo()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             string expectedBidNo = "Save BidNo";
             bid.BidNumber = expectedBidNo;
@@ -82,6 +80,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_BidInfo_DueDate()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             DateTime expectedDueDate = DateTime.Now;
             bid.DueDate = expectedDueDate;
@@ -97,6 +98,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_BidInfo_Salesperson()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             string expectedSalesperson = "Save Salesperson";
             bid.Salesperson = expectedSalesperson;
@@ -112,6 +116,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_BidInfo_Estimator()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             string expectedEstimator = "Save Estimator";
             bid.Estimator = expectedEstimator;
@@ -129,6 +136,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Labor_PMCoef()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             double expectedPM = 0.123;
             bid.Parameters.PMCoef = expectedPM;
@@ -144,6 +154,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Labor_PMRate()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             double expectedRate = 564.05;
             bid.Parameters.PMRate = expectedRate;
@@ -159,6 +172,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Labor_PMExtraHours()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             double expectedHours = 457.69;
             bid.ExtraLabor.PMExtraHours = expectedHours;
@@ -174,6 +190,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Labor_ENGCoef()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             double expectedENG = 0.123;
             bid.Parameters.ENGCoef = expectedENG;
@@ -189,6 +208,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Labor_ENGRate()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             double expectedRate = 564.05;
             bid.Parameters.ENGRate = expectedRate;
@@ -204,6 +226,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Labor_ENGExtraHours()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             double expectedHours = 457.69;
             bid.ExtraLabor.ENGExtraHours = expectedHours;
@@ -219,6 +244,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Labor_CommCoef()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             double expectedComm = 0.123;
             bid.Parameters.CommCoef = expectedComm;
@@ -234,6 +262,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Labor_CommRate()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             double expectedRate = 564.05;
             bid.Parameters.CommRate = expectedRate;
@@ -249,6 +280,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Labor_CommExtraHours()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             double expectedHours = 457.69;
             bid.ExtraLabor.CommExtraHours = expectedHours;
@@ -264,6 +298,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Labor_SoftCoef()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             double expectedSoft = 0.123;
             bid.Parameters.SoftCoef = expectedSoft;
@@ -279,6 +316,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Labor_SoftRate()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             double expectedRate = 564.05;
             bid.Parameters.SoftRate = expectedRate;
@@ -294,6 +334,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Labor_SoftExtraHours()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             double expectedHours = 457.69;
             bid.ExtraLabor.SoftExtraHours = expectedHours;
@@ -309,6 +352,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Labor_GraphCoef()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             double expectedGraph = 0.123;
             bid.Parameters.GraphCoef = expectedGraph;
@@ -324,6 +370,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Labor_GraphRate()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             double expectedRate = 564.05;
             bid.Parameters.GraphRate = expectedRate;
@@ -339,6 +388,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Labor_GraphExtraHours()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             double expectedHours = 457.69;
             bid.ExtraLabor.GraphExtraHours = expectedHours;
@@ -354,6 +406,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Labor_ElecRate()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             double expectedRate = 0.123;
             bid.Parameters.ElectricalRate = expectedRate;
@@ -369,6 +424,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Labor_ElecNonUnionRate()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             double expectedRate = 0.456;
             bid.Parameters.ElectricalNonUnionRate = expectedRate;
@@ -384,6 +442,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Labor_ElecSuperRate()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             double expectedRate = 0.123;
             bid.Parameters.ElectricalSuperRate = expectedRate;
@@ -399,6 +460,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Labor_ElecSuperNonUnionRate()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             double expectedRate = 23.94;
             bid.Parameters.ElectricalSuperNonUnionRate = expectedRate;
@@ -414,6 +478,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Labor_ElecIsOnOT()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             bid.Parameters.ElectricalIsOnOvertime = !bid.Parameters.ElectricalIsOnOvertime;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
@@ -427,6 +494,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Labor_ElecIsUnion()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             bid.Parameters.ElectricalIsUnion = !bid.Parameters.ElectricalIsUnion;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
@@ -443,6 +513,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Add_System()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             TECTypical expectedSystem = new TECTypical();
             expectedSystem.Name = "New system";
@@ -473,6 +546,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Add_System_Instance()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECTypical typical = bid.Systems[0];
 
@@ -504,6 +580,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Add_System_Instance_Edit()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECTypical typical = bid.Systems[0];
 
@@ -536,6 +615,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Remove_System()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             int oldNumSystems = bid.Systems.Count;
             TECTypical systemToRemove = bid.Systems[0];
@@ -563,6 +645,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_System_Name()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECSystem expectedSystem = bid.Systems[0];
             expectedSystem.Name = "Save System Name";
@@ -587,6 +672,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_System_Description()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECSystem expectedSystem = bid.Systems[0];
             expectedSystem.Description = "Save System Description";
@@ -610,6 +698,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_System_Misc()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECSystem expectedSystem = bid.Systems[0];
             var expectedMisc = new TECMisc(CostType.TEC);
@@ -647,6 +738,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Add_Equipment()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECEquipment expectedEquipment = new TECEquipment();
             expectedEquipment.Name = "New Equipment";
@@ -685,6 +779,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Remove_Equipment()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECSystem systemToModify = null;
             foreach (TECSystem system in bid.Systems)
@@ -730,6 +827,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Equipment_Name()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
             expectedEquip.Name = "Save Equip Name";
@@ -758,6 +858,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Equipment_Description()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECEquipment expectedEquip = bid.Systems[0].Equipment[0];
             expectedEquip.Description = "Save Equip Description";
@@ -791,6 +894,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Add_SubScope()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECSubScope expectedSubScope = new TECSubScope();
             expectedSubScope.Name = "New SubScope";
@@ -829,6 +935,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Remove_SubScope()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECEquipment equipToModify = bid.Systems[0].Equipment[0];
             int oldNumSubScope = equipToModify.SubScope.Count();
@@ -867,6 +976,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_SubScope_Name()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECSubScope expectedSubScope = bid.Systems[0].Equipment[0].SubScope[0];
             expectedSubScope.Name = "Save SubScope Name";
@@ -899,6 +1011,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_SubScope_Description()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECSubScope expectedSubScope = bid.Systems[0].Equipment[0].SubScope[0];
             expectedSubScope.Description = "Save SubScope Description";
@@ -936,6 +1051,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Add_Device()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             IEndDevice expectedDevice = bid.Catalogs.Devices[0];
 
@@ -996,6 +1114,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Remove_Device()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECSubScope ssToModify = null;
             bool foundSub = false;
@@ -1081,6 +1202,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_LowerQuantity_Device()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECSubScope ssToModify = null;
             foreach (TECSystem sys in bid.Systems)
@@ -1147,6 +1271,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Device_Quantity()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECSubScope ssToModify = null;
             foreach (TECSystem sys in bid.Systems)
@@ -1231,6 +1358,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Add_Point()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECPoint expectedPoint = new TECPoint();
             expectedPoint.Type = IOType.DO;
@@ -1291,6 +1421,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Remove_Point()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECSubScope ssToModify = null;
             foreach(TECSystem system in bid.Systems)
@@ -1345,6 +1478,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Point_Name()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECPoint expectedPoint = null;
             foreach(TECSystem system in bid.Systems)
@@ -1398,6 +1534,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Point_Quantity()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECPoint expectedPoint = null;
             TECSubScope ssToModify = null;
@@ -1449,6 +1588,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Point_Type()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECPoint expectedPoint = null;
             TECSubScope ssToModify = null;
@@ -1503,6 +1645,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToSystem()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             TECSystem systemToEdit = bid.Systems[0];
             TECTag tagToAdd = null;
             foreach (TECTag tag in bid.Catalogs.Tags)
@@ -1540,6 +1685,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToEquipment()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             TECEquipment equipmentToEdit = bid.Systems[0].Equipment[0];
             TECTag tagToAdd = null;
             foreach (TECTag tag in bid.Catalogs.Tags)
@@ -1585,6 +1733,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToSubScope()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             TECSubScope subScopeToEdit = bid.Systems[0].Equipment[0].SubScope[0];
             TECTag tagToAdd = null;
             foreach (TECTag tag in bid.Catalogs.Tags)
@@ -1631,6 +1782,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Add_Tag_ToController()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             TECController ControllerToEdit = bid.Controllers[0];
             TECTag tagToAdd = null;
             foreach (TECTag tag in bid.Catalogs.Tags)
@@ -1673,6 +1827,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Add_Branch()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             int oldNumBranches = bid.ScopeTree.Count();
             TECScopeBranch expectedBranch = new TECScopeBranch();
@@ -1701,6 +1858,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Add_Branch_InBranch()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECScopeBranch expectedBranch = new TECScopeBranch();
             expectedBranch.Label = "New Child";
@@ -1738,6 +1898,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Remove_Branch()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             int oldNumBranches = bid.ScopeTree.Count();
             TECScopeBranch branchToRemove = bid.ScopeTree[0];
@@ -1759,6 +1922,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Remove_Branch_FromBranch()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECScopeBranch branchToModify = null;
 
@@ -1801,6 +1967,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Branch_Name()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             TECScopeBranch expectedBranch = bid.ScopeTree[0];
             expectedBranch.Label = "Test Branch Save";
 
@@ -1827,6 +1996,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Add_Location()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             TECLocation expectedLocation = new TECLocation();
             expectedLocation.Name = "New Location";
@@ -1855,6 +2027,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Remove_Location()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             int oldNumLocations = bid.Locations.Count;
             TECLocation locationToRemove = bid.Locations[0];
@@ -1876,6 +2051,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Edit_Location_Name()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECLabeled expectedLocation = bid.Locations[0];
             expectedLocation.Label = "Location Name Save";
@@ -1901,6 +2079,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Add_Location_ToScope()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECLocation expectedLocation = bid.Locations[0];
 
@@ -1958,6 +2139,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Remove_Location_FromScope()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             int expectedNumLocations = bid.Locations.Count;
 
@@ -1990,6 +2174,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Edit_Location_InScope()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             int expectedNumLocations = bid.Locations.Count;
 
@@ -2036,6 +2223,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Add_Note()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             TECLabeled expectedNote = new TECLabeled();
             expectedNote.Label = "New Note";
@@ -2062,6 +2252,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Remove_Note()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             int oldNumNotes = bid.Notes.Count;
             TECLabeled noteToRemove = bid.Notes[0];
@@ -2083,6 +2276,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Note_Text()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECLabeled expectedNote = bid.Notes[0];
             expectedNote.Label = "Test Save Text";
@@ -2111,6 +2307,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Add_Exclusion()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             TECLabeled expectedExclusion = new TECLabeled();
             expectedExclusion.Label = "New Exclusion";
@@ -2137,6 +2336,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Remove_Exclusion()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             int oldNumExclusions = bid.Exclusions.Count;
             TECLabeled ExclusionToRemove = bid.Exclusions[0];
@@ -2158,6 +2360,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Exclusion_Text()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECLabeled expectedExclusion = bid.Exclusions[0];
             expectedExclusion.Label = "Test Save Text";
@@ -2181,130 +2386,13 @@ namespace EstimatingUtilitiesLibraryTests
         }
         #endregion Save Exclusion
 
-        #region Save Drawing
-        //[TestMethod]
-        //public void Save_Bid_Add_Drawing()
-        //{
-        //    //Act
-        //    TECDrawing expectedDrawing = PDFConverter.convertPDFToDrawing(TestHelper.TestPDF2);
-        //    expectedDrawing.Name = "New Drawing";
-        //    expectedDrawing.Description = "New Drawing Description";
-
-        //    bid.Drawings.Add(expectedDrawing);
-
-        //    EstimatingLibraryDatabase.Update(path, testStack, false);
-
-        //    TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-        //    TECDrawing actualDrawing = null;
-        //    foreach (TECDrawing drawing in actualBid.Drawings)
-        //    {
-        //        if (drawing.Guid == expectedDrawing.Guid)
-        //        {
-        //            actualDrawing = drawing;
-        //            break;
-        //        }
-        //    }
-
-        //    //Assert
-        //    Assert.AreEqual(expectedDrawing.Name, actualDrawing.Name);
-        //    Assert.AreEqual(expectedDrawing.Description, actualDrawing.Description);
-        //    Assert.AreEqual(expectedDrawing.Pages.Count, actualDrawing.Pages.Count);
-
-        //    byte[] expectedBytes = File.ReadAllBytes(expectedDrawing.Pages[0].Path);
-        //    byte[] actualBytes = File.ReadAllBytes(actualDrawing.Pages[0].Path);
-
-        //    Assert.AreEqual(expectedBytes.Length, actualBytes.Length);
-
-        //    bool pagesAreEqual = true;
-        //    int i = 0;
-        //    foreach (byte b in expectedBytes)
-        //    {
-        //        if (b != actualBytes[i])
-        //        {
-        //            pagesAreEqual = false;
-        //            break;
-        //        }
-        //        i++;
-        //    }
-
-        //    Assert.IsTrue(pagesAreEqual);
-        //}
-        #endregion Save Drawing
-
-        #region Save Visual Scope
-        //[TestMethod]
-        //public void Save_Bid_Add_VS()
-        //{
-        //    //Act
-        //    TECScope expectedScope = bid.Systems[0];
-        //    TECVisualScope expectedVS = new TECVisualScope(expectedScope, 15, 743);
-        //    bid.Drawings[0].Pages[0].PageScope.Add(expectedVS);
-
-        //    EstimatingLibraryDatabase.Update(path, testStack, false);
-
-        //    TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-        //    TECVisualScope actualVS = null;
-        //    foreach (TECVisualScope vs in actualBid.Drawings[0].Pages[0].PageScope)
-        //    {
-        //        if (expectedVS.Guid == vs.Guid)
-        //        {
-        //            actualVS = vs;
-        //            break;
-        //        }
-        //    }
-
-        //    //Assert
-        //    Assert.AreEqual(expectedScope.Guid, actualVS.Scope.Guid);
-        //    Assert.AreEqual(expectedVS.X, actualVS.X);
-        //    Assert.AreEqual(expectedVS.Y, actualVS.Y);
-        //}
-
-        //[TestMethod]
-        //public void Save_Bid_Remove_VS()
-        //{
-        //    //Act
-        //    TECPage pageToModify = bid.Drawings[0].Pages[0];
-        //    int oldNumVS = pageToModify.PageScope.Count;
-        //    TECVisualScope vsToRemove = pageToModify.PageScope[0];
-        //    bid.Drawings[0].Pages[0].PageScope.Remove(vsToRemove);
-
-        //    EstimatingLibraryDatabase.Update(path, testStack, false);
-
-        //    TECBid actualBid = EstimatingLibraryDatabase.Load(path) as TECBid;
-
-        //    TECPage actualPage = null;
-        //    foreach (TECDrawing drawing in bid.Drawings)
-        //    {
-        //        foreach (TECPage page in drawing.Pages)
-        //        {
-        //            if (page.Guid == pageToModify.Guid)
-        //            {
-        //                actualPage = page;
-        //                break;
-        //            }
-        //        }
-        //        if (actualPage != null)
-        //        {
-        //            break;
-        //        }
-        //    }
-
-        //    //Assert
-        //    foreach (TECVisualScope vs in actualPage.PageScope)
-        //    {
-        //        if (vs.Guid == vsToRemove.Guid) Assert.Fail();
-        //    }
-
-        //    Assert.AreEqual((oldNumVS - 1), actualPage.PageScope.Count);
-        //}
-        #endregion Save Visual Scope
-
         #region Save Controller
         [TestMethod]
         public void Save_Bid_Add_Controller()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid() { Catalogs = ModelCreation.TestCatalogs(rand) });
+
             //Act
             TECController expectedController = new TECProvidedController(Guid.NewGuid(), bid.Catalogs.ControllerTypes[0]);
             expectedController.Name = "Test Add Controller";
@@ -2334,6 +2422,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Remove_Controller()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             int oldNumControllers = bid.Controllers.Count;
             TECController controllerToRemove = bid.Controllers[0];
@@ -2357,6 +2448,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Controller_Name()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECController expectedController = bid.Controllers[0];
             expectedController.Name = "Test save controller name";
@@ -2381,6 +2475,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Controller_Description()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECController expectedController = bid.Controllers[0];
             expectedController.Description = "Save Device Description";
@@ -2401,30 +2498,15 @@ namespace EstimatingUtilitiesLibraryTests
             //Assert
             Assert.AreEqual(expectedController.Description, actualController.Description);
         }
-        
-        #region Controller IO
-        //[TestMethod]
-        //public void Save_Bid_Controller_Add_IO()
-        //{
-        //}
-
-        //[TestMethod]
-        //public void Save_Bid_Controller_Remove_IO()
-        //{
-        //}
-
-        //[TestMethod]
-        //public void Save_Bid_Controller_IO_Quantity()
-        //{
-        //}
-        #endregion Controller IO
-
         #endregion
 
         #region Save Misc Cost
         [TestMethod]
         public void Save_Bid_Add_MiscCost()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid());
+
             //Act
             TECMisc expectedCost = new TECMisc(CostType.TEC);
             expectedCost.Name = "Add cost addition";
@@ -2456,6 +2538,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Remove_MiscCost()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECMisc costToRemove = bid.MiscCosts[0];
             bid.MiscCosts.Remove(costToRemove);
@@ -2476,6 +2561,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_MiscCost_Name()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECMisc expectedCost = bid.MiscCosts[0];
             expectedCost.Name = "Test Save Cost Name";
@@ -2501,6 +2589,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_MiscCost_Cost()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECMisc expectedCost = bid.MiscCosts[0];
             expectedCost.Cost = 489.1238;
@@ -2526,6 +2617,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_MiscCost_Quantity()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECMisc expectedCost = bid.MiscCosts[0];
             expectedCost.Quantity = 492;
@@ -2553,6 +2647,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Add_PanelType()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid() { Catalogs = ModelCreation.TestCatalogs(rand) });
+
             //Act
             TECPanelType expectedCost = new TECPanelType(bid.Catalogs.Manufacturers[0]);
             expectedCost.Name = "Add cost addition";
@@ -2585,6 +2682,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Add_Panel()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid() { Catalogs = ModelCreation.TestCatalogs(rand) });
+
             //Act
             TECPanel expectedPanel = new TECPanel(bid.Catalogs.PanelTypes[0]);
             expectedPanel.Name = "Test Add Controller";
@@ -2613,6 +2713,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Remove_Panel()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             int oldNumPanels = bid.Panels.Count;
             TECPanel panelToRemove = bid.Panels[0];
@@ -2636,6 +2739,9 @@ namespace EstimatingUtilitiesLibraryTests
         [TestMethod]
         public void Save_Bid_Panel_Name()
         {
+            //Arrange
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+
             //Act
             TECPanel expectedPanel = bid.Panels[0];
             expectedPanel.Name = "Test save panel name";
@@ -2655,14 +2761,6 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Assert
             Assert.AreEqual(expectedPanel.Name, actualPanel.Name);
-        }
-        #endregion
-
-        #region Add Controlled Scope
-        [TestMethod]
-        public void Save_Bid_Add_ControlledScope()
-        {
-
         }
         #endregion
     }
