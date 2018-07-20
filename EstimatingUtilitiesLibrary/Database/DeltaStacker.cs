@@ -171,21 +171,29 @@ namespace EstimatingUtilitiesLibrary.Database
             
         }
         
-        private static List<UpdateItem> tableObjectStack(Change change, List<TableBase> tables, ITECObject  item, ITECObject  child = null)
+        private static List<UpdateItem> tableObjectStack(Change change, List<TableBase> tables, ITECObject  item, ITECObject child = null)
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
             foreach (TableBase table in tables)
             {
-                List<TableField> fields = new List<TableField>();
-                if(change == Change.Remove)
+                if(table.QuantityString != "")
                 {
-                    fields = table.PrimaryKeys;
+                    var qtyField = table.Fields.First(x => x.Name == table.QuantityString);
+                    if (((int)DatabaseHelper.HelperObject(qtyField, item, child)) > 0)
+                    {
+                        change = Change.Add;
+                    }
+                }
+                List<TableField> fields = new List<TableField>();
+                if (change == Change.Remove)
+                {
+                    fields.AddRange(table.PrimaryKeys);
                 }
                 else
                 {
-                    fields = table.Fields;
+                    fields.AddRange(table.Fields);
                 }
-
+                
                 Dictionary<string, string> data = new Dictionary<string, string>();
                 if(table.Types.Count > 1)
                 {
