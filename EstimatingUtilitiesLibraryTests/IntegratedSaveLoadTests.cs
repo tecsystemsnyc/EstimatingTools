@@ -2052,7 +2052,8 @@ namespace EstimatingUtilitiesLibraryTests
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
-            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path); TECBid actualBid = loaded as TECBid;
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path);
+            TECBid actualBid = loaded as TECBid;
 
             //Assert
             foreach (TECLabeled loc in actualBid.Locations)
@@ -2061,6 +2062,37 @@ namespace EstimatingUtilitiesLibraryTests
             }
 
             Assert.AreEqual((oldNumLocations - 1), actualBid.Locations.Count);
+        }
+
+        [TestMethod]
+        public void Save_Bid_Remove_Location_FromBid_InScope()
+        {
+            //Arrange
+            TECBid unsavedBid = ModelCreation.TestBid(rand);
+            TECLocation unsavedLocation = unsavedBid.Locations.First();
+            unsavedBid.Systems.First().Location = unsavedLocation;
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(unsavedBid);
+
+            //Act
+            int oldNumLocations = bid.Locations.Count;
+            TECLocation locationToRemove = bid.Locations.First(x => x.Guid == unsavedLocation.Guid);
+            TECSystem expectedSystem = bid.Systems.First(x => x.Location == locationToRemove);
+            bid.Locations.Remove(locationToRemove);
+
+            DatabaseUpdater.Update(path, testStack.CleansedStack());
+
+            (TECScopeManager loaded, bool needsUpdate) = DatabaseLoader.Load(path);
+            TECBid actualBid = loaded as TECBid;
+            TECSystem actualSystem = actualBid.Systems.First(x => x.Guid == expectedSystem.Guid);
+
+            //Assert
+            foreach (TECLabeled loc in actualBid.Locations)
+            {
+                if (loc.Guid == locationToRemove.Guid) Assert.Fail();
+            }
+
+            Assert.AreEqual((oldNumLocations - 1), actualBid.Locations.Count);
+            Assert.IsNull(actualSystem.Location);
         }
 
         [TestMethod]
@@ -2095,22 +2127,17 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Bid_Add_Location_ToScope()
         {
             //Arrange
-            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+            TECBid unsavedBid = ModelCreation.TestBid(rand);
+            TECSystem unsavedSystem = unsavedBid.Systems.First(x => x.Equipment.First()?.SubScope.First() != null);
+            unsavedSystem.Location = null;
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(unsavedBid);
 
             //Act
-            TECLocation expectedLocation = bid.Locations[0];
+            TECLocation expectedLocation = bid.Locations.First();
 
-            TECSystem sysToModify = null;
-            foreach (TECSystem sys in bid.Systems.Where(x => x.Equipment.Count > 0))
-            {
-                if (sys.Location == null)
-                {
-                    sysToModify = sys;
-                    break;
-                }
-            }
-            TECEquipment equipToModify = sysToModify.Equipment[0];
-            TECSubScope ssToModify = equipToModify.SubScope[0];
+            TECSystem sysToModify = bid.Systems.First(x => x.Guid == unsavedSystem.Guid);
+            TECEquipment equipToModify = sysToModify.Equipment.First();
+            TECSubScope ssToModify = equipToModify.SubScope.First();
 
             sysToModify.Location = expectedLocation;
             equipToModify.Location = expectedLocation;
@@ -2190,12 +2217,15 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Bid_Edit_Location_InScope()
         {
             //Arrange
-            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+            TECBid unsavedBid = ModelCreation.TestBid(rand);
+            TECLocation newLocation = new TECLocation() { Name = "New Location" };
+            unsavedBid.Locations.Add(newLocation);
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(unsavedBid);
 
             //Act
             int expectedNumLocations = bid.Locations.Count;
 
-            TECLocation expectedLocation = bid.Locations.First();
+            TECLocation expectedLocation = bid.Locations.First(x => (x.Guid == newLocation.Guid));
             TECSystem expectedSystem = bid.Systems.First(x => x.Location != expectedLocation);
 
             expectedSystem.Location = expectedLocation;
