@@ -20,7 +20,7 @@ namespace EstimatingUtilitiesLibraryTests
         [TestInitialize]
         public void TestInitialize()
         {
-            rand = new Random();
+            rand = new Random(0);
         }
 
         public (TECBid bid, DeltaStacker stack) SaveLoadBid(TECBid bid)
@@ -1203,6 +1203,11 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Bid_LowerQuantity_Device()
         {
             //Arrange
+            TECBid unsavedBid = ModelCreation.TestBid(rand);
+            TECSubScope unsavedSS = unsavedBid.Systems.First().Equipment.First().SubScope.First();
+            IEndDevice unsavedDevice = unsavedSS.Devices.First();
+            unsavedSS.Devices.Add(unsavedDevice);
+
             (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
 
             //Act
@@ -1213,7 +1218,7 @@ namespace EstimatingUtilitiesLibraryTests
                 {
                     foreach (TECSubScope ss in equip.SubScope)
                     {
-                        if (ss.Devices.Count > 0)
+                        if (ss.Guid == unsavedSS.Guid)
                         {
                             ssToModify = ss;
                             break;
@@ -1223,7 +1228,16 @@ namespace EstimatingUtilitiesLibraryTests
                 }
                 if (ssToModify != null) break;
             }
-            IEndDevice deviceToRemove = (ssToModify.Devices.First() as IEndDevice);
+
+            IEndDevice deviceToRemove = null;
+            foreach(TECDevice dev in ssToModify.Devices)
+            {
+                if (dev.Guid == unsavedDevice.Guid)
+                {
+                    deviceToRemove = dev;
+                    break;
+                }
+            }
 
             int oldNumDevices = ssToModify.Devices.Count;
 
@@ -1252,17 +1266,18 @@ namespace EstimatingUtilitiesLibraryTests
             }
 
             //Assert
-            bool devFound = false;
+            IEndDevice loadedDev = null;
             foreach (IEndDevice dev in actualBid.Catalogs.Devices)
             {
-                if (deviceToRemove.Guid == dev.Guid) devFound = true;
+                if (deviceToRemove.Guid == dev.Guid) loadedDev = dev;
             }
             foreach (IEndDevice dev in actualBid.Catalogs.Valves)
             {
-                if (deviceToRemove.Guid == dev.Guid) devFound = true;
+                if (deviceToRemove.Guid == dev.Guid) loadedDev = dev;
             }
-            if (!devFound) Assert.Fail();
 
+            Assert.IsNotNull(loadedDev);
+            Assert.IsTrue(modifiedSubScope.Devices.Contains(loadedDev));
             Assert.AreEqual(bid.Catalogs.Devices.Count(), actualBid.Catalogs.Devices.Count());
             Assert.AreEqual((oldNumDevices - 1), modifiedSubScope.Devices.Count);
         }
