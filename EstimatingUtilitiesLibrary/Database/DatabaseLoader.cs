@@ -96,8 +96,18 @@ namespace EstimatingUtilitiesLibrary.Database
             
             List<TECLocated> allLocated = bid.GetAll<TECLocated>();
             allLocated.ForEach(item => item.Location = locationDictionary.ValueOrDefault(item.Guid, null));
-            List<TECScope> allScope = bid.GetAll<TECScope>();
-            allScope.ForEach(item => populateScopeProperties(item, tagRelationships, costRelationships));
+            List<TECTagged> allTagged = bid.GetAll<TECTagged>();
+            foreach(var item in allTagged)
+            {
+                if( item is TECScope scope)
+                {
+                    populateScopeProperties(scope, tagRelationships, costRelationships);
+                }
+                else
+                {
+                    populateTaggedProperties(item, tagRelationships);
+                }
+            }
             
             var placeholderDict = getCharacteristicInstancesList();
             bool needsSave = ModelLinkingHelper.LinkLoadedBid(bid, placeholderDict);
@@ -110,6 +120,22 @@ namespace EstimatingUtilitiesLibrary.Database
             templates = getObjectFromTable(new TemplatesInfoTable(), id => { return new TECTemplates(id); }, new TECTemplates());
             getScopeManagerProperties(templates);
             
+            Dictionary<Guid, List<TECTag>> tagRelationships = getOneToManyRelationships(new ScopeTagTable(), templates.Catalogs.Tags);
+            Dictionary<Guid, List<TECAssociatedCost>> costRelationships = getOneToManyRelationships(new ScopeAssociatedCostTable(), templates.Catalogs.AssociatedCosts);
+
+            List<TECTagged> allTagged = templates.GetAll<TECTagged>();
+            foreach (var item in allTagged)
+            {
+                if (item is TECScope scope)
+                {
+                    populateScopeProperties(scope, tagRelationships, costRelationships);
+                }
+                else
+                {
+                    populateTaggedProperties(item, tagRelationships);
+                }
+            }
+
             Dictionary<Guid, List<Guid>> templateReferences = getTemplateReferences();
             bool needsSave = ModelLinkingHelper.LinkLoadedTemplates(templates, templateReferences);
             return (templates, needsSave);
@@ -289,27 +315,18 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<Guid, List<TECIO>> controllerTypeIORelationships = getOneToManyRelationships(new ControllerTypeIOTable(), io);
             Dictionary<Guid, List<TECIO>> moduleIORelationships = getOneToManyRelationships(new IOModuleIOTable(), io);
 
-            Dictionary<Guid, List<TECTag>> tagRelationships = getOneToManyRelationships(new ScopeTagTable(), catalogs.Tags);
-            Dictionary<Guid, List<TECAssociatedCost>> costRelationships = getOneToManyRelationships(new ScopeAssociatedCostTable(), catalogs.AssociatedCosts);
-
             catalogs.IOModules.ForEach(item => item.IO.AddRange(moduleIORelationships.ValueOrNew(item.Guid)));
             catalogs.ControllerTypes.ForEach(item => populateControllerTypeProperties(item, controllerTypeModuleRelationships, controllerTypeIORelationships));
             catalogs.ConnectionTypes.ForEach(item => item.RatedCosts.AddRange(ratedCostsRelationShips.ValueOrNew(item.Guid)));
             catalogs.ConduitTypes.ForEach(item => item.RatedCosts.AddRange(ratedCostsRelationShips.ValueOrNew(item.Guid)));
-
-            List<TECScope> allScope = catalogs.GetAll<TECScope>();
-            allScope.ForEach(item => populateScopeProperties(item, tagRelationships, costRelationships));
-
+            
             return catalogs;
         }
         private static ScopeTemplates getScopeTemplates(TECCatalogs catalogs)
         {
             ScopeTemplates templates = new ScopeTemplates();
             templates = getObjectFromTable(new ScopeTemplatesTable(), id => { return new ScopeTemplates(id); }, new ScopeTemplates());
-
-            Dictionary<Guid, List<TECTag>> tagRelationships = getOneToManyRelationships(new ScopeTagTable(), catalogs.Tags);
-            Dictionary<Guid, List<TECAssociatedCost>> costRelationships = getOneToManyRelationships(new ScopeAssociatedCostTable(), catalogs.AssociatedCosts);
-
+            
             List<IEndDevice> allEndDevices = new List<IEndDevice>(catalogs.Devices);
             allEndDevices.AddRange(catalogs.Valves);
             Dictionary<Guid, List<IEndDevice>> endDevices = getOneToManyRelationships(new SubScopeDeviceTable(), allEndDevices);
@@ -398,10 +415,7 @@ namespace EstimatingUtilitiesLibrary.Database
             templates.ControllerTemplates = getRelatedReferences(controllerTemplates.ContainsKey(templates.Guid) ? controllerTemplates[templates.Guid] : new List<Guid>(), controllers).ToOC();
             templates.PanelTemplates = getRelatedReferences(panelTemplates.ContainsKey(templates.Guid) ? panelTemplates[templates.Guid] : new List<Guid>(), panels).ToOC();
             templates.MiscCostTemplates = getRelatedReferences(miscTemplates.ContainsKey(templates.Guid) ? miscTemplates[templates.Guid] : new List<Guid>(), misc).ToOC();
-
-            List<TECScope> allScope = templates.GetAll<TECScope>();
-            allScope.ForEach(item => populateScopeProperties(item, tagRelationships, costRelationships));
-
+            
             return templates;
         }
         
@@ -452,14 +466,18 @@ namespace EstimatingUtilitiesLibrary.Database
             return schedule;
         }
 
-        private static void populateScopeProperties(TECScope scope, Dictionary<Guid, List<TECTag>> tags, Dictionary<Guid, List<TECAssociatedCost>> costs)
+        private static void populateTaggedProperties(TECTagged tagged, Dictionary<Guid, List<TECTag>> tags)
         {
-            if (tags.ContainsKey(scope.Guid))
+            if (tags.ContainsKey(tagged.Guid))
             {
                 List<TECTag> allTags = new List<TECTag>();
-                tags[scope.Guid].ForEach(item => allTags.Add(item));
-                scope.Tags.AddRange(allTags);
+                tags[tagged.Guid].ForEach(item => allTags.Add(item));
+                tagged.Tags.AddRange(allTags);
             }
+        }
+        private static void populateScopeProperties(TECScope scope, Dictionary<Guid, List<TECTag>> tags, Dictionary<Guid, List<TECAssociatedCost>> costs)
+        {
+            populateTaggedProperties(scope, tags);
             if (costs.ContainsKey(scope.Guid))
             {
                 List<TECAssociatedCost> allCosts = new List<TECAssociatedCost>();

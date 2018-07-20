@@ -82,7 +82,7 @@ namespace EstimatingUtilitiesLibraryTests
             expectedSubScope = expectedEquipment.SubScope.First();
             expectedDevice = expectedBid.Catalogs.Devices.Where(x => x.Tags.Count > 0).First();
 
-            expectedManufacturer = expectedBid.Catalogs.Manufacturers[0];
+            expectedManufacturer = expectedDevice.Manufacturer;
             expectedPoint = expectedSubScope.Points[0];
 
             expectedBranch = expectedBid.ScopeTree.First();
