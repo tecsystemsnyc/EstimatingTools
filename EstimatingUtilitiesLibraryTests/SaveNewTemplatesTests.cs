@@ -239,7 +239,7 @@ namespace EstimatingUtilitiesLibraryTests
             Assert.AreEqual(expectedEquipPoint.Type, actualEquipPoint.Type);
 
             Assert.AreEqual(expectedChildMan.Label, actualChildMan.Label);
-            Assert.AreEqual(expectedChildMan.Multiplier, actualChildMan.Multiplier);
+            Assert.AreEqual(expectedChildMan.Multiplier, actualChildMan.Multiplier, DELTA);
         }
 
         [TestMethod]
