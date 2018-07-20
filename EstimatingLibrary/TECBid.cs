@@ -314,7 +314,7 @@ namespace EstimatingLibrary
             collectionChanged(sender, e, "Locations");
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                foreach (TECLabeled location in e.OldItems)
+                foreach (TECLocation location in e.OldItems)
                 {
                     removeLocationFromScope(location);
                 }
@@ -371,7 +371,7 @@ namespace EstimatingLibrary
             return totalPoints;
         }
         
-        private void removeLocationFromScope(TECLabeled location)
+        private void removeLocationFromScope(TECLocation location)
         {
             foreach(TECLocated located in this.GetAll<TECLocated>())
             {
