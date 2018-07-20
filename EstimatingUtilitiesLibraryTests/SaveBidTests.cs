@@ -2103,12 +2103,12 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Bid_Edit_Location_InScope()
         {
             TECBid bid = ModelCreation.TestBid(rand);
+            TECLocation expectedLocation = new TECLocation() { Name = "New Location" };
+            bid.Locations.Add(expectedLocation);
             DeltaStacker testStack = SaveBid(bid);
 
             //Act
             int expectedNumLocations = bid.Locations.Count;
-
-            TECLocation expectedLocation = bid.Locations.First();
             TECSystem expectedSystem = bid.Systems.First(x => x.Location != expectedLocation);
 
             expectedSystem.Location = expectedLocation;
@@ -2150,6 +2150,7 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Bid_Move_Location()
         {
             TECBid bid = ModelCreation.TestBid(rand);
+            bid.Locations.Add(new TECLocation() { Name = "New Location" });
             DeltaStacker testStack = SaveBid(bid);
 
             int initialIndex = 0;
