@@ -314,7 +314,7 @@ namespace EstimatingLibrary
             collectionChanged(sender, e, "Locations");
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                foreach (TECLabeled location in e.OldItems)
+                foreach (TECLocation location in e.OldItems)
                 {
                     removeLocationFromScope(location);
                 }
@@ -371,31 +371,12 @@ namespace EstimatingLibrary
             return totalPoints;
         }
         
-        private void removeLocationFromScope(TECLabeled location)
+        private void removeLocationFromScope(TECLocation location)
         {
-            foreach(TECTypical typical in this.Systems)
+            foreach(TECLocated located in this.GetAll<TECLocated>())
             {
-                if (typical.Location == location) typical.Location = null;
-                foreach(TECSystem instance in typical.Instances)
-                {
-                    if (instance.Location == location) instance.Location = null;
-                    foreach(TECEquipment equip in instance.Equipment)
-                    {
-                        if (equip.Location == location) equip.Location = null;
-                        foreach(TECSubScope ss in equip.SubScope)
-                        {
-                            if (ss.Location == location) ss.Location = null;
-                        }
-                    }
-                }
-                foreach (TECEquipment equip in typical.Equipment)
-                {
-                    if (equip.Location == location) equip.Location = null;
-                    foreach (TECSubScope ss in equip.SubScope)
-                    {
-                        if (ss.Location == location) ss.Location = null;
-                    }
-                }
+                if (located.Location == location) located.Location = null;
+
             }
         }
         #endregion

@@ -251,7 +251,7 @@ namespace EstimatingUtilitiesLibrary.Database
             {
                 if (field.Property.ReflectedType == typeof(HelperProperties))
                 {
-                    var dataString = objectToDBString(helperObject(field, item, child));
+                    var dataString = objectToDBString(HelperObject(field, item, child));
                     fieldData.Add(field.Name, dataString);
                 }
             }
@@ -341,7 +341,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
             return outstring;
         }
-        private static object helperObject(TableField field, object item, object child)
+        internal static object HelperObject(TableField field, object item, object child)
         {
             if (field.Property.Name == "Quantity")
             {
