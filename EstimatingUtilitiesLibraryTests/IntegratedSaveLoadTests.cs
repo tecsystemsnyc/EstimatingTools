@@ -1208,7 +1208,7 @@ namespace EstimatingUtilitiesLibraryTests
             IEndDevice unsavedDevice = unsavedSS.Devices.First();
             unsavedSS.Devices.Add(unsavedDevice);
 
-            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(ModelCreation.TestBid(rand));
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(unsavedBid);
 
             //Act
             TECSubScope ssToModify = null;
