@@ -253,7 +253,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             TECBid bid = new TECBid();
-            bid.Catalogs = ModelCreation.TestCatalogs(rand);
+            bid.Catalogs = ModelCreation.TestCatalogs(rand, 5);
             TECTypical expectedSystem = ModelCreation.TestTypical(bid.Catalogs, rand);
             bid.Systems.Add(expectedSystem);
             expectedSystem.AddInstance(bid);
@@ -295,7 +295,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Arrange
             TECBid bid = new TECBid();
-            bid.Catalogs = ModelCreation.TestCatalogs(rand);
+            bid.Catalogs = ModelCreation.TestCatalogs(rand, 5);
             TECTypical system = new TECTypical();
             TECEquipment expectedEquipment = ModelCreation.TestEquipment(bid.Catalogs, rand);
             system.Equipment.Add(expectedEquipment);
@@ -321,7 +321,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Arrange
             TECBid bid = new TECBid();
-            bid.Catalogs = ModelCreation.TestCatalogs(rand);
+            bid.Catalogs = ModelCreation.TestCatalogs(rand, 5);
             TECTypical system = new TECTypical();
             TECEquipment expectedEquipment = new TECEquipment();
             TECSubScope expectedSubScope = ModelCreation.TestSubScope(bid.Catalogs, rand);
@@ -700,7 +700,7 @@ namespace EstimatingUtilitiesLibraryTests
         public void SaveAs_Bid_SystemInstances()
         {
             TECBid saveBid = new TECBid();
-            saveBid.Catalogs = ModelCreation.TestCatalogs(rand);
+            saveBid.Catalogs = ModelCreation.TestCatalogs(rand, 5);
             TECTypical system = ModelCreation.TestTypical(saveBid.Catalogs, rand);
             saveBid.Systems.Add(system);
 

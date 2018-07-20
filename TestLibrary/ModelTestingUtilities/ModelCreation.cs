@@ -10,48 +10,48 @@ namespace TestLibrary.ModelTestingUtilities
 {
     public static class ModelCreation
     {
-        public static TECCatalogs TestCatalogs(Random rand)
+        public static TECCatalogs TestCatalogs(Random rand, int maxEachItem = 3)
         {
             TECCatalogs catalogs = new TECCatalogs();
 
             //Tags
-            rand.RepeatAction(() => catalogs.Tags.Add(TestTag(rand)), 10);
+            rand.RepeatAction(() => catalogs.Tags.Add(TestTag(rand)), maxEachItem);
 
             //Associated Costs
-            rand.RepeatAction(() => catalogs.AssociatedCosts.Add(TestCost(catalogs, rand, CostType.TEC)), 10);
-            rand.RepeatAction(() => catalogs.AssociatedCosts.Add(TestCost(catalogs, rand, CostType.Electrical)), 10);
+            rand.RepeatAction(() => catalogs.AssociatedCosts.Add(TestCost(catalogs, rand, CostType.TEC)), maxEachItem);
+            rand.RepeatAction(() => catalogs.AssociatedCosts.Add(TestCost(catalogs, rand, CostType.Electrical)), maxEachItem);
 
             //Conduit Types
-            rand.RepeatAction(() => catalogs.ConduitTypes.Add(TestElectricalMaterial(catalogs, rand, "Conduit Type")), 10);
+            rand.RepeatAction(() => catalogs.ConduitTypes.Add(TestElectricalMaterial(catalogs, rand, "Conduit Type")), maxEachItem);
 
             //ConnectionTypes
-            rand.RepeatAction(() => catalogs.ConnectionTypes.Add(TestConnectionType(catalogs, rand)), 10);
+            rand.RepeatAction(() => catalogs.ConnectionTypes.Add(TestConnectionType(catalogs, rand)), maxEachItem);
 
             //Manufacturers
-            rand.RepeatAction(() => catalogs.Manufacturers.Add(TestManufacturer(rand)), 10);
+            rand.RepeatAction(() => catalogs.Manufacturers.Add(TestManufacturer(rand)), maxEachItem);
 
             //Protocols
-            rand.RepeatAction(() => catalogs.Protocols.Add(TestProtocol(catalogs, rand)), 10);
+            rand.RepeatAction(() => catalogs.Protocols.Add(TestProtocol(catalogs, rand)), maxEachItem);
 
             //Devices
-            rand.RepeatAction(() => catalogs.Devices.Add(TestDevice(catalogs, rand)), 10);
+            rand.RepeatAction(() => catalogs.Devices.Add(TestDevice(catalogs, rand)), maxEachItem);
 
             //IO Modules
-            rand.RepeatAction(() => catalogs.IOModules.Add(TestIOModule(catalogs, rand)), 10);
+            rand.RepeatAction(() => catalogs.IOModules.Add(TestIOModule(catalogs, rand)), maxEachItem);
 
             //Controller Types
-            rand.RepeatAction(() => catalogs.ControllerTypes.Add(TestControllerType(catalogs, rand)), 10);
+            rand.RepeatAction(() => catalogs.ControllerTypes.Add(TestControllerType(catalogs, rand)), maxEachItem);
 
             //Panel Types
-            rand.RepeatAction(() => catalogs.PanelTypes.Add(TestPanelType(catalogs, rand)), 10);
+            rand.RepeatAction(() => catalogs.PanelTypes.Add(TestPanelType(catalogs, rand)), maxEachItem);
 
             //Valves
-            rand.RepeatAction(() => catalogs.Valves.Add(TestValve(catalogs, rand)), 10);
+            rand.RepeatAction(() => catalogs.Valves.Add(TestValve(catalogs, rand)), maxEachItem);
             
             return catalogs;
         }
 
-        public static TECBid TestBid(Random rand)
+        public static TECBid TestBid(Random rand, int maxEachItem = 3)
         {
             TECBid bid = new TECBid();
 
@@ -65,10 +65,10 @@ namespace TestLibrary.ModelTestingUtilities
             //Bid Objects
             bid.ExtraLabor = TestLabor(rand, bid);
             bid.Parameters = TestParameters(rand, bid);
-            bid.Catalogs = TestCatalogs(rand);
+            bid.Catalogs = TestCatalogs(rand, maxEachItem);
 
             //Locations
-            int numFloors = rand.Next(1, 100);
+            int numFloors = rand.Next(1, maxEachItem);
             for (int floor = 1; floor < numFloors; floor++)
             {
                 bid.Locations.Add(new TECLocation()
@@ -79,33 +79,33 @@ namespace TestLibrary.ModelTestingUtilities
             }
 
             //Scope Branches
-            rand.RepeatAction(() => bid.ScopeTree.Add(TestScopeBranch(rand, 5)), 10);
+            rand.RepeatAction(() => bid.ScopeTree.Add(TestScopeBranch(rand, maxEachItem)), maxEachItem);
 
             //Notes
-            rand.RepeatAction(() => bid.Notes.Add(TestLabel(rand)), 10);
+            rand.RepeatAction(() => bid.Notes.Add(TestLabel(rand)), maxEachItem);
 
             //Internal Notes
-            rand.RepeatAction(() => bid.InternalNotes.Add(TestInternalNote(rand)), 10);
+            rand.RepeatAction(() => bid.InternalNotes.Add(TestInternalNote(rand)), maxEachItem);
 
             //Exclusions
-            rand.RepeatAction(() => bid.Exclusions.Add(TestLabel(rand)), 10);
+            rand.RepeatAction(() => bid.Exclusions.Add(TestLabel(rand)), maxEachItem);
 
             //Misc Costs
-            rand.RepeatAction(() => bid.MiscCosts.Add(TestMisc(bid.Catalogs, rand, CostType.TEC)), 10);
-            rand.RepeatAction(() => bid.MiscCosts.Add(TestMisc(bid.Catalogs, rand, CostType.Electrical)), 10);
+            rand.RepeatAction(() => bid.MiscCosts.Add(TestMisc(bid.Catalogs, rand, CostType.TEC)), maxEachItem);
+            rand.RepeatAction(() => bid.MiscCosts.Add(TestMisc(bid.Catalogs, rand, CostType.Electrical)), maxEachItem);
 
             //Controllers
-            rand.RepeatAction(() => bid.AddController(TestProvidedController(bid.Catalogs, rand)), 10);
-            rand.RepeatAction(() => bid.AddController(TestFBOController(bid.Catalogs, rand)), 10);
+            rand.RepeatAction(() => bid.AddController(TestProvidedController(bid.Catalogs, rand)), maxEachItem);
+            rand.RepeatAction(() => bid.AddController(TestFBOController(bid.Catalogs, rand)), maxEachItem);
 
             //Panels
-            rand.RepeatAction(() => bid.Panels.Add(TestPanel(bid.Catalogs, rand)), 10);
+            rand.RepeatAction(() => bid.Panels.Add(TestPanel(bid.Catalogs, rand)), maxEachItem);
 
             //Systems
-            rand.RepeatAction(() => bid.Systems.Add(TestTypical(bid.Catalogs, rand)), 10);
+            rand.RepeatAction(() => bid.Systems.Add(TestTypical(bid.Catalogs, rand)), maxEachItem);
             foreach (TECTypical typ in bid.Systems)
             {
-                rand.RepeatAction(() => typ.AddInstance(bid), 5);
+                rand.RepeatAction(() => typ.AddInstance(bid), maxEachItem);
             }
 
             //Assign Locations
@@ -138,7 +138,7 @@ namespace TestLibrary.ModelTestingUtilities
         {
             TECTemplates templates = new TECTemplates();
 
-            templates.Catalogs = TestCatalogs(rand);
+            templates.Catalogs = TestCatalogs(rand, 5);
 
             //Parameters
             rand.RepeatAction(() => templates.Templates.Parameters.Add(TestParameters(rand, templates)), 5);
