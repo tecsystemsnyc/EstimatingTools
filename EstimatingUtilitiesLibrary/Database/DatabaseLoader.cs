@@ -84,7 +84,7 @@ namespace EstimatingUtilitiesLibrary.Database
             bid.ExtraLabor = getObjectFromTable(new ExtraLaborTable(), id => { return new TECExtraLabor(id); }, new TECExtraLabor(bid.Guid));
             bid.ScopeTree.AddRange(getChildObjects(new BidScopeBranchTable(), new ScopeBranchTable(), bid.Guid, id => new TECScopeBranch(id)));
             bid.ScopeTree.ForEach(item => linkBranchHierarchy(item, branches, branchHierarchy));
-            (var typicals, var controllers, var panels)  = getScopeHierarchy(bid.Guid, bid.Catalogs);
+            (var typicals, var controllers, var panels, var typicalSystems, var instances)  = getScopeHierarchy(bid.Guid, bid.Catalogs);
             bid.Systems.AddRange(typicals);
             bid.SetControllers(controllers);
             bid.Panels.AddRange(panels);
@@ -93,11 +93,14 @@ namespace EstimatingUtilitiesLibrary.Database
             bid.MiscCosts.AddRange(getChildObjects(new BidMiscTable(), new MiscTable(), bid.Guid, data => getMiscFromRow(data)));
             bid.Schedule = getSchedule(bid);
             bid.InternalNotes.AddRange(getChildObjects(new BidInternalNoteTable(), new InternalNoteTable(), bid.Guid, id => { return new TECInternalNote(id); }));
-            
+
             List<TECLocated> allLocated = bid.GetAll<TECLocated>();
+            instances.ForEach(x => allLocated.AddRange(x.GetAll<TECLocated>()));
             allLocated.ForEach(item => item.Location = locationDictionary.ValueOrDefault(item.Guid, null));
             List<TECTagged> allTagged = bid.GetAll<TECTagged>();
-            foreach(var item in allTagged)
+            instances.ForEach(x => allTagged.AddRange(x.GetAll<TECTagged>()));
+
+            foreach (var item in allTagged)
             {
                 if( item is TECScope scope)
                 {
@@ -108,7 +111,12 @@ namespace EstimatingUtilitiesLibrary.Database
                     populateTaggedProperties(item, tagRelationships);
                 }
             }
-            
+
+            foreach (TECTypical item in bid.Systems)
+            {
+                if (typicalSystems.ContainsKey(item.Guid))
+                    item.Instances.AddRange(getRelatedReferences(typicalSystems[item.Guid], instances));
+            }
             var placeholderDict = getCharacteristicInstancesList();
             bool needsSave = ModelLinkingHelper.LinkLoadedBid(bid, placeholderDict);
 
@@ -154,7 +162,7 @@ namespace EstimatingUtilitiesLibrary.Database
                 scopeManager.Catalogs.Protocols.Add(tempProtocol);
             }
         }
-        private static (List<TECTypical> typicals, List<TECController> controllers, List<TECPanel> panels) getScopeHierarchy(Guid bidID, TECCatalogs catalogs)
+        private static (List<TECTypical> typicals, List<TECController> controllers, List<TECPanel> panels, Dictionary<Guid, List<Guid>> typicalSystems, List<TECSystem> instances) getScopeHierarchy(Guid bidID, TECCatalogs catalogs)
         {
             Dictionary<Guid, List<Guid>> bidTypicals = getOneToManyRelationships(new BidSystemTable());
             List<Guid> typicalIDs = bidTypicals.Count > 0 ? bidTypicals[bidID] : new List<Guid>();
@@ -261,14 +269,12 @@ namespace EstimatingUtilitiesLibrary.Database
             foreach(TECTypical item in typicals)
             {
                 setSystemChildren(item);
-                if (typicalSystems.ContainsKey(item.Guid)) 
-                    item.Instances.AddRange(getRelatedReferences(typicalSystems[item.Guid], systems));
             }
 
             var outControllers = new List<TECController>(controllers.Where(x => !systemControllers.Any(pair => pair.Value.Contains(x.Guid))));
             var outPanels = new List<TECPanel>(panels.Where(x => !systemPanels.Any(pair => pair.Value.Contains(x.Guid))));
 
-            return (typicals, outControllers, outPanels);
+            return (typicals, outControllers, outPanels, typicalSystems, systems);
             
             void setSystemChildren(TECSystem item)
             {
