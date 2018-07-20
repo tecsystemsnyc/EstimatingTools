@@ -170,12 +170,8 @@ namespace EstimatingUtilitiesLibrary.Database
             }
             
         }
-
-        private static List<UpdateItem> tableObjectStack(Change change, List<TableBase> tables, ITECObject  item)
-        {
-            return tableObjectStack(change, tables, item, null);
-        }
-        private static List<UpdateItem> tableObjectStack(Change change, List<TableBase> tables, ITECObject  item, ITECObject  child)
+        
+        private static List<UpdateItem> tableObjectStack(Change change, List<TableBase> tables, ITECObject  item, ITECObject  child = null)
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
             foreach (TableBase table in tables)
