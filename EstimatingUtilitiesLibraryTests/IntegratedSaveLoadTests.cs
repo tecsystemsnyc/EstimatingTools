@@ -23,6 +23,12 @@ namespace EstimatingUtilitiesLibraryTests
             rand = new Random(0);
         }
 
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            File.Delete(path);
+        }
+
         public (TECBid bid, DeltaStacker stack) SaveLoadBid(TECBid bid)
         {
             path = Path.GetTempFileName();
@@ -32,11 +38,6 @@ namespace EstimatingUtilitiesLibraryTests
             ChangeWatcher watcher = new ChangeWatcher(bid);
             DeltaStacker testStack = new DeltaStacker(watcher, bid);
             return (bid, testStack);
-        }
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            File.Delete(path);
         }
 
         #region Save BidInfo
