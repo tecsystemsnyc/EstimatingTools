@@ -2406,7 +2406,7 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Bid_Add_Controller()
         {
             //Arrange
-            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid() { Catalogs = ModelCreation.TestCatalogs(rand) });
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid() { Catalogs = ModelCreation.TestCatalogs(rand, 1) });
 
             //Act
             TECController expectedController = new TECProvidedController(Guid.NewGuid(), bid.Catalogs.ControllerTypes[0]);
@@ -2663,7 +2663,7 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Bid_Add_PanelType()
         {
             //Arrange
-            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid() { Catalogs = ModelCreation.TestCatalogs(rand) });
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid() { Catalogs = ModelCreation.TestCatalogs(rand, 1) });
 
             //Act
             TECPanelType expectedCost = new TECPanelType(bid.Catalogs.Manufacturers[0]);
@@ -2698,7 +2698,7 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Bid_Add_Panel()
         {
             //Arrange
-            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid() { Catalogs = ModelCreation.TestCatalogs(rand) });
+            (TECBid bid, DeltaStacker testStack) = SaveLoadBid(new TECBid() { Catalogs = ModelCreation.TestCatalogs(rand, 1) });
 
             //Act
             TECPanel expectedPanel = new TECPanel(bid.Catalogs.PanelTypes[0]);
