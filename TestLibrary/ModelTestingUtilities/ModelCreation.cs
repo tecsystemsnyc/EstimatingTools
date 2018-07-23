@@ -141,7 +141,7 @@ namespace TestLibrary.ModelTestingUtilities
             templates.Catalogs = TestCatalogs(rand, 5);
 
             //Parameters
-            rand.RepeatAction(() => templates.Templates.Parameters.Add(TestParameters(rand, templates)), 5);
+            rand.RepeatAction(() => templates.Templates.Parameters.Add(TestParameters(rand)), 5);
 
             //Systems
             rand.RepeatAction(() => templates.Templates.SystemTemplates.Add(TestSystem(templates.Catalogs, rand)), 10);
@@ -276,9 +276,10 @@ namespace TestLibrary.ModelTestingUtilities
                 GraphExtraHours = rand.NextDouble()
             };
         }
-        public static TECParameters TestParameters(Random rand, TECScopeManager scopeManager)
+        public static TECParameters TestParameters(Random rand, TECScopeManager scopeManager = null)
         {
-            return new TECParameters(scopeManager.Guid)
+            Guid guid = scopeManager?.Guid ?? Guid.NewGuid();
+            return new TECParameters()
             {
                 PMCoef = rand.NextDouble(),
                 PMCoefStdError = rand.NextDouble(),

@@ -372,7 +372,7 @@ namespace EstimatingUtilitiesLibrary.Database
             List<TECScopeBranch> scopeBranches = getObjectsFromTable(new ScopeBranchTable(), id => new TECScopeBranch(id));
             scopeBranches.ForEach(x => linkBranchHierarchy(x, scopeBranches, branchHierarchy));
 
-            templates.Parameters = getObjectsFromTable(new ParametersTable(), id => new TECParameters(id)).ToOC();
+            templates.Parameters.AddRange(getObjectsFromTable(new ParametersTable(), id => new TECParameters(id)));
 
             Dictionary<Guid, List<TECEquipment>> systemEquipment = getOneToManyRelationships(new SystemEquipmentTable(), equipment);
             Dictionary<Guid, List<TECController>> systemController = getOneToManyRelationships(new SystemControllerTable(), controllers);
@@ -415,12 +415,12 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<Guid, List<Guid>> panelTemplates = getOneToManyRelationships(new TemplatesPanelTable());
             Dictionary<Guid, List<Guid>> miscTemplates = getOneToManyRelationships(new TemplatesMiscCostTable());
 
-            templates.SystemTemplates = getRelatedReferences(systemTemplates.ContainsKey(templates.Guid) ? systemTemplates[templates.Guid] : new List<Guid>(), systems).ToOC();
-            templates.EquipmentTemplates = getRelatedReferences(equipmentTemplates.ContainsKey(templates.Guid) ? equipmentTemplates[templates.Guid] : new List<Guid>(), equipment).ToOC();
-            templates.SubScopeTemplates = getRelatedReferences(subScopeTemplates.ContainsKey(templates.Guid) ? subScopeTemplates[templates.Guid] : new List<Guid>(), subScope).ToOC();
-            templates.ControllerTemplates = getRelatedReferences(controllerTemplates.ContainsKey(templates.Guid) ? controllerTemplates[templates.Guid] : new List<Guid>(), controllers).ToOC();
-            templates.PanelTemplates = getRelatedReferences(panelTemplates.ContainsKey(templates.Guid) ? panelTemplates[templates.Guid] : new List<Guid>(), panels).ToOC();
-            templates.MiscCostTemplates = getRelatedReferences(miscTemplates.ContainsKey(templates.Guid) ? miscTemplates[templates.Guid] : new List<Guid>(), misc).ToOC();
+            templates.SystemTemplates.AddRange(getRelatedReferences(systemTemplates.ContainsKey(templates.Guid) ? systemTemplates[templates.Guid] : new List<Guid>(), systems));
+            templates.EquipmentTemplates.AddRange(getRelatedReferences(equipmentTemplates.ContainsKey(templates.Guid) ? equipmentTemplates[templates.Guid] : new List<Guid>(), equipment));
+            templates.SubScopeTemplates.AddRange(getRelatedReferences(subScopeTemplates.ContainsKey(templates.Guid) ? subScopeTemplates[templates.Guid] : new List<Guid>(), subScope));
+            templates.ControllerTemplates.AddRange(getRelatedReferences(controllerTemplates.ContainsKey(templates.Guid) ? controllerTemplates[templates.Guid] : new List<Guid>(), controllers));
+            templates.PanelTemplates.AddRange(getRelatedReferences(panelTemplates.ContainsKey(templates.Guid) ? panelTemplates[templates.Guid] : new List<Guid>(), panels));
+            templates.MiscCostTemplates.AddRange(getRelatedReferences(miscTemplates.ContainsKey(templates.Guid) ? miscTemplates[templates.Guid] : new List<Guid>(), misc));
             
             return templates;
         }

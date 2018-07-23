@@ -561,10 +561,9 @@ namespace EstimatingLibrary
         #endregion Electrical
 
         #endregion
-        public TECParameters(Guid guid) : base(guid)
-        {
-        }
 
+        public TECParameters() : this(Guid.NewGuid()) { }
+        public TECParameters(Guid guid) : base(guid) { }
         public TECParameters(TECParameters parametersSource) : this(parametersSource.Guid)
         {
             _isTaxExempt = parametersSource.IsTaxExempt;

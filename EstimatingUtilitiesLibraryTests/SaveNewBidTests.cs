@@ -85,7 +85,7 @@ namespace EstimatingUtilitiesLibraryTests
             expectedManufacturer = expectedDevice.Manufacturer;
             expectedPoint = expectedSubScope.Points[0];
 
-            expectedBranch = expectedBid.ScopeTree.First();
+            expectedBranch = expectedBid.ScopeTree.First(x => x.Branches.Count > 0 && x.Branches[0].Branches.Count > 0);
             expectedNote = expectedBid.Notes[0];
             expectedExclusion = expectedBid.Exclusions[0];
             expectedTag = expectedBid.Catalogs.Tags[0];
@@ -751,6 +751,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToCost(loadCostDictionary, loadedBid, loadedBid);
 
             compareCosts(saveCostDictionary, loadCostDictionary);
+            compareEstimators(estimate, loadedEstimate);
             Assert.AreEqual(expectedTotalCost, loadedEstimate.TotalCost, delta);
             
         }
@@ -790,7 +791,7 @@ namespace EstimatingUtilitiesLibraryTests
             }
             if(item is IRelatable saveable)
             {
-                foreach(TECObject child in saveable.PropertyObjects.Objects)
+                foreach(ITECObject child in saveable.PropertyObjects.Objects)
                 {
                     if (!saveable.LinkedObjects.Contains(child))
                     {
@@ -811,6 +812,15 @@ namespace EstimatingUtilitiesLibraryTests
             {
                 return false;
             }
+        }
+
+        private void compareEstimators(TECEstimator expected, TECEstimator actual)
+        {
+            Assert.AreEqual(expected.TotalPointNumber, actual.TotalPointNumber);
+            Assert.AreEqual(expected.TECCost, actual.TECCost);
+            Assert.AreEqual(expected.TECLaborHours, actual.TECLaborHours);
+            Assert.AreEqual(expected.SubcontractorCost, actual.SubcontractorCost);
+            Assert.AreEqual(expected.SubcontractorLaborHours, actual.SubcontractorLaborHours);
         }
     }
 }

@@ -12,98 +12,13 @@ namespace EstimatingLibrary
 {
     public class ScopeTemplates : TECObject, IRelatable
     {
-        private ObservableCollection<TECSystem> _systemTemplates = new ObservableCollection<TECSystem>();
-        private ObservableCollection<TECEquipment> _equipmentTemplates = new ObservableCollection<TECEquipment>();
-        private ObservableCollection<TECSubScope> _subScopeTemplates = new ObservableCollection<TECSubScope>();
-        private ObservableCollection<TECController> _controllerTemplates = new ObservableCollection<TECController>();
-        private ObservableCollection<TECMisc> _miscCostTemplates = new ObservableCollection<TECMisc>();
-        private ObservableCollection<TECPanel> _panelTemplates = new ObservableCollection<TECPanel>();
-        private ObservableCollection<TECParameters> _parameters = new ObservableCollection<TECParameters>();
-
-        public ObservableCollection<TECSystem> SystemTemplates
-        {
-            get { return _systemTemplates; }
-            set
-            {
-                var old = SystemTemplates;
-                SystemTemplates.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "SystemTemplates");
-                _systemTemplates = value;
-                SystemTemplates.CollectionChanged += (sender, args) => collectionChanged(sender, args, "SystemTemplates");
-                notifyCombinedChanged(Change.Edit, "SystemTemplates", this, value, old);
-            }
-        }
-        public ObservableCollection<TECEquipment> EquipmentTemplates
-        {
-            get { return _equipmentTemplates; }
-            set
-            {
-                var old = EquipmentTemplates;
-                EquipmentTemplates.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "EquipmentTemplates");
-                _equipmentTemplates = value;
-                EquipmentTemplates.CollectionChanged += (sender, args) => collectionChanged(sender, args, "EquipmentTemplates");
-                notifyCombinedChanged(Change.Edit, "EquipmentTemplates", this, value, old);
-            }
-        }
-        public ObservableCollection<TECSubScope> SubScopeTemplates
-        {
-            get { return _subScopeTemplates; }
-            set
-            {
-                var old = SubScopeTemplates;
-                SubScopeTemplates.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "SubScopeTemplates");
-                _subScopeTemplates = value;
-                SubScopeTemplates.CollectionChanged += (sender, args) => collectionChanged(sender, args, "SubScopeTemplates");
-                notifyCombinedChanged(Change.Edit, "SubScopeTemplates", this, value, old);
-            }
-        }
-        public ObservableCollection<TECController> ControllerTemplates
-        {
-            get { return _controllerTemplates; }
-            set
-            {
-                var old = ControllerTemplates;
-                ControllerTemplates.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "ControllerTemplates");
-                _controllerTemplates = value;
-                ControllerTemplates.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ControllerTemplates");
-                notifyCombinedChanged(Change.Edit, "ControllerTemplates", this, value, old);
-            }
-        }
-        public ObservableCollection<TECMisc> MiscCostTemplates
-        {
-            get { return _miscCostTemplates; }
-            set
-            {
-                var old = MiscCostTemplates;
-                MiscCostTemplates.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "MiscCostTemplates");
-                _miscCostTemplates = value;
-                MiscCostTemplates.CollectionChanged += (sender, args) => collectionChanged(sender, args, "MiscCostTemplates");
-                notifyCombinedChanged(Change.Edit, "MiscCostTemplates", this, value, old);
-            }
-        }
-        public ObservableCollection<TECPanel> PanelTemplates
-        {
-            get { return _panelTemplates; }
-            set
-            {
-                var old = PanelTemplates;
-                PanelTemplates.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "PanelTemplates");
-                _panelTemplates = value;
-                PanelTemplates.CollectionChanged += (sender, args) => collectionChanged(sender, args, "PanelTemplates");
-                notifyCombinedChanged(Change.Edit, "PanelTemplates", this, value, old);
-            }
-        }
-        public ObservableCollection<TECParameters> Parameters
-        {
-            get { return _parameters; }
-            set
-            {
-                var old = Parameters;
-                Parameters.CollectionChanged -= (sender, args) => collectionChanged(sender, args, "Parameters");
-                _parameters = value;
-                Parameters.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Parameters");
-                notifyCombinedChanged(Change.Edit, "Parameters", this, value, old);
-            }
-        }
+        public ObservableCollection<TECSystem> SystemTemplates { get; } = new ObservableCollection<TECSystem>();
+        public ObservableCollection<TECEquipment> EquipmentTemplates { get; } = new ObservableCollection<TECEquipment>();
+        public ObservableCollection<TECSubScope> SubScopeTemplates { get; } = new ObservableCollection<TECSubScope>();
+        public ObservableCollection<TECController> ControllerTemplates { get; } = new ObservableCollection<TECController>();
+        public ObservableCollection<TECMisc> MiscCostTemplates { get; } = new ObservableCollection<TECMisc>();
+        public ObservableCollection<TECPanel> PanelTemplates { get; } = new ObservableCollection<TECPanel>();
+        public ObservableCollection<TECParameters> Parameters { get; } = new ObservableCollection<TECParameters>();
         
         public ScopeTemplates() : this(Guid.NewGuid()) { }
         public ScopeTemplates(Guid guid) : base(guid)

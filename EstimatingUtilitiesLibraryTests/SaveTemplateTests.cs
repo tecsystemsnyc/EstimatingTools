@@ -1989,7 +1989,8 @@ namespace EstimatingUtilitiesLibraryTests
             var scopeController = new TECProvidedController(templates.Catalogs.ControllerTypes[0]);
             scopeController.Name = "Test Scope Controller";
             expectedScope.AddController(scopeController);
-            scopeController.Connect(scopeEquipment.SubScope[0], (scopeEquipment.SubScope[0] as IConnectable).AvailableProtocols.First());
+            var connectedSubScope = scopeEquipment.SubScope.First(x => x.AvailableProtocols.Any(y => y is TECHardwiredProtocol));
+            scopeController.Connect(connectedSubScope, connectedSubScope.AvailableProtocols.First(y => y is TECHardwiredProtocol));
 
             var scopePanel = new TECPanel(templates.Catalogs.PanelTypes[0]);
             scopePanel.Name = "Test Scope Name";
@@ -2026,7 +2027,7 @@ namespace EstimatingUtilitiesLibraryTests
             Assert.AreEqual(expectedScope.Controllers.Count, actualScope.Controllers.Count);
             Assert.AreEqual(expectedScope.Controllers[0].ChildrenConnections.Count, actualScope.Controllers[0].ChildrenConnections.Count);
             Assert.AreEqual(expectedScope.Panels.Count, actualScope.Panels.Count);
-            Assert.IsTrue(actualSSConnection.Child == actualScope.Equipment[0].SubScope[0]);
+            Assert.IsTrue(actualSSConnection.Child == actualScope.Equipment[0].SubScope.First(x=> x.Guid == connectedSubScope.Guid));
         }
 
         [TestMethod]

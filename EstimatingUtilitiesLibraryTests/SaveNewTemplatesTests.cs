@@ -120,30 +120,30 @@ namespace EstimatingUtilitiesLibraryTests
         public void SaveNew_Templates_LaborConstants()
         {
             TECParameters expectedLabor = expectedTemplates.Templates.Parameters[0];
-            TECParameters actualLabor = actualTemplates.Templates.Parameters[0];
+            TECParameters actualLabor = actualTemplates.Templates.Parameters.First(x => x.Guid == expectedLabor.Guid);
 
             //Assert
-            Assert.AreEqual(expectedLabor.PMCoef, actualLabor.PMCoef);
-            Assert.AreEqual(expectedLabor.PMRate, actualLabor.PMRate);
+            Assert.AreEqual(expectedLabor.PMCoef, actualLabor.PMCoef, DELTA);
+            Assert.AreEqual(expectedLabor.PMRate, actualLabor.PMRate, DELTA);
 
-            Assert.AreEqual(expectedLabor.ENGCoef, actualLabor.ENGCoef);
-            Assert.AreEqual(expectedLabor.ENGRate, actualLabor.ENGRate);
+            Assert.AreEqual(expectedLabor.ENGCoef, actualLabor.ENGCoef, DELTA);
+            Assert.AreEqual(expectedLabor.ENGRate, actualLabor.ENGRate, DELTA);
 
-            Assert.AreEqual(expectedLabor.CommCoef, actualLabor.CommCoef);
-            Assert.AreEqual(expectedLabor.CommRate, actualLabor.CommRate);
+            Assert.AreEqual(expectedLabor.CommCoef, actualLabor.CommCoef, DELTA);
+            Assert.AreEqual(expectedLabor.CommRate, actualLabor.CommRate, DELTA);
 
-            Assert.AreEqual(expectedLabor.SoftCoef, actualLabor.SoftCoef);
-            Assert.AreEqual(expectedLabor.SoftRate, actualLabor.SoftRate);
+            Assert.AreEqual(expectedLabor.SoftCoef, actualLabor.SoftCoef, DELTA);
+            Assert.AreEqual(expectedLabor.SoftRate, actualLabor.SoftRate, DELTA);
 
-            Assert.AreEqual(expectedLabor.GraphCoef, actualLabor.GraphCoef);
-            Assert.AreEqual(expectedLabor.GraphRate, actualLabor.GraphRate);
+            Assert.AreEqual(expectedLabor.GraphCoef, actualLabor.GraphCoef, DELTA);
+            Assert.AreEqual(expectedLabor.GraphRate, actualLabor.GraphRate, DELTA);
         }
 
         [TestMethod]
         public void SaveNew_Templates_SubcontractLaborConstants()
         {
             TECParameters expectedLabor = expectedTemplates.Templates.Parameters[0];
-            TECParameters actualLabor = actualTemplates.Templates.Parameters[0];
+            TECParameters actualLabor = actualTemplates.Templates.Parameters.First(x => x.Guid == expectedLabor.Guid);
 
             //Assert
             Assert.AreEqual(expectedLabor.ElectricalRate, actualLabor.ElectricalRate, DELTA);
@@ -271,7 +271,7 @@ namespace EstimatingUtilitiesLibraryTests
             Assert.AreEqual(expectedSSPoint.Type, actualSSPoint.Type);
 
             Assert.AreEqual(expectedChildMan.Label, actualChildMan.Label);
-            Assert.AreEqual(expectedChildMan.Multiplier, actualChildMan.Multiplier);
+            Assert.AreEqual(expectedChildMan.Multiplier, actualChildMan.Multiplier, DELTA);
         }
 
         [TestMethod]
