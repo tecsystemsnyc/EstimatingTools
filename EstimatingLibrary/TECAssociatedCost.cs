@@ -14,7 +14,9 @@ namespace EstimatingLibrary
         protected double _labor = 0;
         protected CostType _type;
 
-        public virtual double Cost
+        public event Action<CostBatch> CostChanged;
+
+        public double Cost
         {
             get { return _cost; }
             set
@@ -25,7 +27,8 @@ namespace EstimatingLibrary
                 notifyCostChanged(this.CostBatch - old);
             }
         }
-        public virtual double Labor
+        
+        public double Labor
         {
             get { return _labor; }
             set
@@ -36,7 +39,7 @@ namespace EstimatingLibrary
                 notifyCostChanged(this.CostBatch - old);
             }
         }
-        public virtual CostType Type
+        public CostType Type
         {
             get { return _type; }
             set
@@ -71,6 +74,11 @@ namespace EstimatingLibrary
         public object DragDropCopy(TECScopeManager scopeManager)
         {
             return this;
+        }
+
+        private void notifyCostChanged(CostBatch costBatch)
+        {
+            CostChanged?.Invoke(costBatch);
         }
     }
 }

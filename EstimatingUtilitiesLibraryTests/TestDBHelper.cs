@@ -90,6 +90,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToTemplatesControllerTable();
             addToTemplatesPanelTable();
             addToTemplatesMiscTable();
+            addToTemplatesParametersTable();
 
             addToManagerScopeTemplatesTable();
 
@@ -167,6 +168,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToTemplatesControllerTable();
             addToTemplatesPanelTable();
             addToTemplatesMiscTable();
+            addToTemplatesParametersTable();
 
             addToManagerScopeTemplatesTable();
 
@@ -222,8 +224,98 @@ namespace EstimatingUtilitiesLibraryTests
         private static void addToParametersTable()
         {
             List<string> values = new List<string>();
+            values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
+            values.Add("TEST");
+            values.Add("10");
+            values.Add("20");
+            values.Add("10");
+            values.Add("0");
+            values.Add("0");
+            values.Add("0");
+            values.Add("0.05");
+            values.Add("0.03");
+            values.Add("1.5");
+
+            values.Add("0.0875");
+            values.Add("0.05");
+            values.Add("0.03");
+            values.Add("0.13");
+
+            values.Add("NinetyFive");
+            values.Add("2");
+            values.Add("2");
+            values.Add("30");
+            values.Add("2");
+            values.Add("2");
+            values.Add("40");
+            values.Add("2");
+            values.Add("2");
+            values.Add("50");
+            values.Add("2");
+            values.Add("2");
+            values.Add("60");
+            values.Add("2");
+            values.Add("2");
+            values.Add("70");
+
+            values.Add("50");
+            values.Add("60");
+            values.Add("30");
+            values.Add("40");
+
+            values.Add("0.25");
+            values.Add("0");
+            values.Add("1");
+            addDataToTable(new ParametersTable(), values);
+
+            values = new List<string>();
             values.Add("655ed4a6-4ce4-431f-ae4b-7185e28d20ef");
             values.Add("TEST");
+            values.Add("10");
+            values.Add("20");
+            values.Add("10");
+            values.Add("0");
+            values.Add("0");
+            values.Add("0");
+            values.Add("0.05");
+            values.Add("0.03");
+            values.Add("1.5");
+
+            values.Add("0.0875");
+            values.Add("0.05");
+            values.Add("0.03");
+            values.Add("0.13");
+
+            values.Add("NinetyFive");
+            values.Add("2");
+            values.Add("2");
+            values.Add("30");
+            values.Add("2");
+            values.Add("2");
+            values.Add("40");
+            values.Add("2");
+            values.Add("2");
+            values.Add("50");
+            values.Add("2");
+            values.Add("2");
+            values.Add("60");
+            values.Add("2");
+            values.Add("2");
+            values.Add("70");
+
+            values.Add("50");
+            values.Add("60");
+            values.Add("30");
+            values.Add("40");
+
+            values.Add("0.25");
+            values.Add("0");
+            values.Add("1");
+            addDataToTable(new ParametersTable(), values);
+
+            values = new List<string>();
+            values.Add("7d3e8604-7bbb-4fe1-b3c4-5fb7f254d486");
+            values.Add("Templates Test");
             values.Add("10");
             values.Add("20");
             values.Add("10");
@@ -1755,7 +1847,14 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("5df99701-1d7b-4fbe-843d-40793f4145a8");
             addDataToTable(new TemplatesMiscCostTable(), values);
         }
-
+        private static void addToTemplatesParametersTable()
+        {
+            List<string> values = new List<string>();
+            values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
+            values.Add("7d3e8604-7bbb-4fe1-b3c4-5fb7f254d486");
+            addDataToTable(new TemplatesParametersTable(), values);
+        }
+        
         private static void addToManagerScopeTemplatesTable()
         {
             if (isBid)

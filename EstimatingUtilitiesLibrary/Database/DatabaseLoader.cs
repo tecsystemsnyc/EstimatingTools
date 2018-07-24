@@ -80,7 +80,8 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<Guid, List<TECTag>> tagRelationships = getOneToManyRelationships(new ScopeTagTable(), bid.Catalogs.Tags);
             Dictionary<Guid, List<TECAssociatedCost>> costRelationships = getOneToManyRelationships(new ScopeAssociatedCostTable(), bid.Catalogs.AssociatedCosts);
 
-            bid.Parameters = getObjectFromTable(new ParametersTable(), id => { return new TECParameters(id); }, new TECParameters(bid.Guid));
+            var parameters = getObjectsFromTable(new ParametersTable(), id => new TECParameters(id));
+            bid.Parameters = parameters.First(x => x.Guid == bid.Guid);
             bid.ExtraLabor = getObjectFromTable(new ExtraLaborTable(), id => { return new TECExtraLabor(id); }, new TECExtraLabor(bid.Guid));
             bid.ScopeTree.AddRange(getChildObjects(new BidScopeBranchTable(), new ScopeBranchTable(), bid.Guid, id => new TECScopeBranch(id)));
             bid.ScopeTree.ForEach(item => linkBranchHierarchy(item, branches, branchHierarchy));
@@ -354,6 +355,7 @@ namespace EstimatingUtilitiesLibrary.Database
             List<TECController> controllers = new List<TECController>(providedControllers);
             controllers.AddRange(fboControllers);
             List<TECPanel> panels = getObjectsFromTable(new PanelTable(), data => getPanelFromRow(data, panelTypeDictionary));
+            List<TECParameters> parameters = getObjectsFromTable(new ParametersTable(), id => new TECParameters(id));
 
             Dictionary<Guid, TECController> connectionParents = getChildIDToParentRelationships(new ControllerConnectionTable(), controllers);
 
@@ -372,8 +374,6 @@ namespace EstimatingUtilitiesLibrary.Database
             List<TECScopeBranch> scopeBranches = getObjectsFromTable(new ScopeBranchTable(), id => new TECScopeBranch(id));
             scopeBranches.ForEach(x => linkBranchHierarchy(x, scopeBranches, branchHierarchy));
 
-            templates.Parameters.AddRange(getObjectsFromTable(new ParametersTable(), id => new TECParameters(id)));
-
             Dictionary<Guid, List<TECEquipment>> systemEquipment = getOneToManyRelationships(new SystemEquipmentTable(), equipment);
             Dictionary<Guid, List<TECController>> systemController = getOneToManyRelationships(new SystemControllerTable(), controllers);
             Dictionary<Guid, List<TECPanel>> systemPanels = getOneToManyRelationships(new SystemPanelTable(), panels);
@@ -382,7 +382,8 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<Guid, List<TECSubScope>> equipmentSubScope = getOneToManyRelationships(new EquipmentSubScopeTable(), subScope);
             Dictionary<Guid, List<TECPoint>> subScopePoint = getOneToManyRelationships(new SubScopePointTable(), points);
             Dictionary<Guid, List<IControllerConnection>> controllerConnection = getOneToManyRelationships(new ControllerConnectionTable(), connections);
-
+            Dictionary<Guid, List<TECParameters>> templateParameters = getOneToManyRelationships(new TemplatesParametersTable(), parameters);
+            
             subScope.ForEach(item => item.Points.AddRange(subScopePoint.ValueOrNew(item.Guid)));
             equipment.ForEach(item => item.SubScope.AddRange(equipmentSubScope.ValueOrNew(item.Guid)));
             foreach (TECSystem system in systems)
@@ -420,8 +421,9 @@ namespace EstimatingUtilitiesLibrary.Database
             templates.SubScopeTemplates.AddRange(getRelatedReferences(subScopeTemplates.ContainsKey(templates.Guid) ? subScopeTemplates[templates.Guid] : new List<Guid>(), subScope));
             templates.ControllerTemplates.AddRange(getRelatedReferences(controllerTemplates.ContainsKey(templates.Guid) ? controllerTemplates[templates.Guid] : new List<Guid>(), controllers));
             templates.PanelTemplates.AddRange(getRelatedReferences(panelTemplates.ContainsKey(templates.Guid) ? panelTemplates[templates.Guid] : new List<Guid>(), panels));
-            templates.MiscCostTemplates.AddRange(getRelatedReferences(miscTemplates.ContainsKey(templates.Guid) ? miscTemplates[templates.Guid] : new List<Guid>(), misc));
-            
+            templates.MiscCostTemplates.AddRange(getRelatedReferences(miscTemplates.ValueOrDefault(templates.Guid, new List<Guid>()), misc));
+            templates.Parameters.AddRange(templateParameters.ValueOrNew(templates.Guid));
+
             return templates;
         }
         

@@ -505,42 +505,6 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> Fields { get { return fields; } }
 
     }
-    internal class DeviceTable : TableBase
-    {
-        public static string TableName = "Device";
-        public static Type ObjectType = typeof(TECDevice);
-
-        public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
-        public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
-        public static TableField Price = new TableField("Price", "REAL", ObjectType.GetProperty("Price"));
-
-        private List<TableField> primaryKeys = new List<TableField>() {
-            ID
-            };
-        private List<Type> types = new List<Type>()
-        {
-            ObjectType
-        };
-        private List<TableField> fields = new List<TableField>()
-        {
-            ID,
-            Name,
-            Description,
-            Price
-        };
-        private List<string> propertyNames = new List<string>()
-        {
-            "Devices"
-        };
-
-        public override string NameString { get { return TableName; } }
-        public override List<Type> Types { get { return types; } }
-        public override List<string> PropertyNames { get { return propertyNames; } }
-        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
-        public override List<TableField> Fields { get { return fields; } }
-
-    }
     internal class PointTable : TableBase
     {
         public static string TableName = "Point";
@@ -675,120 +639,6 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
 
-    }
-    internal class ConnectionTypeTable : TableBase
-    {
-        public static string TableName = "ConnectionType";
-        public static Type ObjectType = typeof(TECConnectionType);
-
-        public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
-        public static TableField Cost = new TableField("Cost", "REAL", ObjectType.GetProperty("Cost"));
-        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
-        public static TableField PlenumCost = new TableField("PlenumCost", "REAL", ObjectType.GetProperty("PlenumCost"), defaultValue: "0.0");
-        public static TableField PlenumLabor = new TableField("PlenumLabor", "REAL", ObjectType.GetProperty("PlenumLabor"), defaultValue: "0.0");
-        
-        private List<TableField> primaryKeys = new List<TableField>()
-        {
-            ID
-        };
-        private List<Type> types = new List<Type>()
-        {
-            ObjectType
-        };
-        private List<TableField> fields = new List<TableField>()
-        {
-            ID,
-            Name,
-            Cost,
-            Labor,
-            PlenumCost,
-            PlenumLabor
-        };
-        private List<string> propertyNames = new List<string>()
-        {
-            "ConnectionTypes"
-        };
-
-        public override string NameString { get { return TableName; } }
-        public override List<Type> Types { get { return types; } }
-        public override List<string> PropertyNames { get { return propertyNames; } }
-        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
-        public override List<TableField> Fields { get { return fields; } }
-    }
-    internal class ConduitTypeTable : TableBase
-    {
-        public static string TableName = "ConduitType";
-        public static Type ObjectType = typeof(TECElectricalMaterial);
-
-        public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
-        public static TableField Cost = new TableField("Cost", "REAL", ObjectType.GetProperty("Cost"));
-        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
-
-        private List<TableField> primaryKeys = new List<TableField>()
-        {
-            ID
-        };
-        private List<Type> types = new List<Type>()
-        {
-            ObjectType
-        };
-        private List<TableField> fields = new List<TableField>()
-        {
-            ID,
-            Name,
-            Cost,
-            Labor
-        };
-        private List<string> propertyNames = new List<string>()
-        {
-            "ConduitTypes"
-        };
-
-        public override string NameString { get { return TableName; } }
-        public override List<Type> Types { get { return types; } }
-        public override List<string> PropertyNames { get { return propertyNames; } }
-        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
-        public override List<TableField> Fields { get { return fields; } }
-    }
-    internal class AssociatedCostTable : TableBase
-    {
-        public static string TableName = "AssociatedCost";
-        public static Type ObjectType = typeof(TECAssociatedCost);
-
-        public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
-        public static TableField Cost = new TableField("Cost", "REAL", ObjectType.GetProperty("Cost"));
-        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
-        public static TableField Type = new TableField("Type", "TEXT", ObjectType.GetProperty("Type"));
-
-        private List<TableField> primaryKeys = new List<TableField>()
-        {
-            ID
-        };
-        private List<Type> types = new List<Type>()
-        {
-            ObjectType
-        };
-        private List<TableField> fields = new List<TableField>()
-        {
-            ID,
-            Name,
-            Cost,
-            Labor,
-            Type
-        };
-        private List<string> propertyNames = new List<string>()
-        {
-            "AssociatedCosts"
-        };
-
-        public override string NameString { get { return TableName; } }
-        public override List<Type> Types { get { return types; } }
-        public override List<string> PropertyNames { get { return propertyNames; } }
-        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
-        public override List<TableField> Fields { get { return fields; } }
     }
     internal class SubScopeConnectionTable : TableBase
     {
@@ -967,87 +817,6 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
-    internal class MiscTable : TableBase
-    {
-        public static string TableName = "Misc";
-        public static Type ObjectType = typeof(TECMisc);
-
-        public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
-        public static TableField Cost = new TableField("Cost", "REAL", ObjectType.GetProperty("Cost"));
-        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
-        public static TableField Quantity = new TableField("Quantity", "INTEGER", ObjectType.GetProperty("Quantity"));
-        public static TableField Type = new TableField("Type", "TEXT", ObjectType.GetProperty("Type"));
-
-        private List<TableField> primaryKeys = new List<TableField>()
-        {
-            ID
-        };
-
-        private List<Type> types = new List<Type>()
-        {
-            ObjectType
-        };
-        private List<TableField> fields = new List<TableField>()
-        {
-            ID,
-            Name,
-            Cost,
-            Labor,
-            Quantity,
-            Type
-        };
-        private List<string> propertyNames = new List<string>()
-        {
-            "MiscCosts",
-            "MiscCostTemplates"
-        };
-
-        public override string NameString { get { return TableName; } }
-        public override List<Type> Types { get { return types; } }
-        public override List<string> PropertyNames { get { return propertyNames; } }
-        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
-        public override List<TableField> Fields { get { return fields; } }
-    }
-    internal class PanelTypeTable : TableBase
-    {
-        public static string TableName = "PanelType";
-        public static Type ObjectType = typeof(TECPanelType);
-
-        public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
-        public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"), defaultValue: "");
-        public static TableField Price = new TableField("Price", "REAL", ObjectType.GetProperty("Price"));
-        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
-
-        private List<TableField> primaryKeys = new List<TableField>()
-        {
-            ID
-        };
-
-        private List<Type> types = new List<Type>()
-        {
-            ObjectType
-        };
-        private List<TableField> fields = new List<TableField>()
-        {
-            ID,
-            Name,
-            Description,
-            Price,
-            Labor
-        };
-        private List<string> propertyNames = new List<string>()
-        {
-            "PanelTypes"
-        };
-
-        public override string NameString { get { return TableName; } }
-        public override List<Type> Types { get { return types; } }
-        public override List<string> PropertyNames { get { return propertyNames; } }
-        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
-        public override List<TableField> Fields { get { return fields; } }
-    }
     internal class PanelTable : TableBase
     {
         public static string TableName = "Panel";
@@ -1084,44 +853,6 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
-    internal class IOModuleTable : TableBase
-    {
-        public static string TableName = "IOModule";
-        public static Type IOModuleType = typeof(TECIOModule);
-
-        public static TableField ID = new TableField("ID", "TEXT", IOModuleType.GetProperty("Guid"));
-        public static TableField Name = new TableField("Name", "TEXT", IOModuleType.GetProperty("Name"));
-        public static TableField Description = new TableField("Description", "TEXT", IOModuleType.GetProperty("Description"));
-        public static TableField Price = new TableField("Price", "REAL", IOModuleType.GetProperty("Price"));
-
-        private List<TableField> primaryKeys = new List<TableField>()
-        {
-            ID
-        };
-
-        private List<Type> types = new List<Type>()
-        {
-            IOModuleType
-        };
-        private List<TableField> fields = new List<TableField>()
-        {
-            ID,
-            Name,
-            Description,
-            Price
-        };
-        private List<string> propertyNames = new List<string>()
-        {
-            "IOModules"
-        };
-
-        public override string NameString { get { return TableName; } }
-        public override List<Type> Types { get { return types; } }
-        public override List<string> PropertyNames { get { return propertyNames; } }
-        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
-        public override List<TableField> Fields { get { return fields; } }
-
-    }
     internal class IOTable : TableBase
     {
         public static string TableName = "IO";
@@ -1147,90 +878,6 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<string> propertyNames = new List<string>()
         {
             "IO"
-        };
-
-        public override string NameString { get { return TableName; } }
-        public override List<Type> Types { get { return types; } }
-        public override List<string> PropertyNames { get { return propertyNames; } }
-        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
-        public override List<TableField> Fields { get { return fields; } }
-    }
-    internal class ControllerTypeTable : TableBase
-    {
-        public static string TableName = "ControllerType";
-        public static Type ObjectType = typeof(TECControllerType);
-
-        public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
-        public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
-        public static TableField Price = new TableField("Price", "REAL", ObjectType.GetProperty("Price"));
-        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
-        public static TableField Type = new TableField("Type", "TEXT", ObjectType.GetProperty("Type"));
-        
-        private List<TableField> primaryKeys = new List<TableField>() {
-            ID
-            };
-        private List<Type> types = new List<Type>()
-        {
-            ObjectType
-        };
-        private List<TableField> fields = new List<TableField>()
-        {
-            ID,
-            Name,
-            Description,
-            Price,
-            Labor,
-            Type
-        };
-        private List<string> propertyNames = new List<string>()
-        {
-            "ControllerTypes"
-        };
-
-        public override string NameString { get { return TableName; } }
-        public override List<Type> Types { get { return types; } }
-        public override List<string> PropertyNames { get { return propertyNames; } }
-        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
-        public override List<TableField> Fields { get { return fields; } }
-    }
-    internal class ValveTable : TableBase
-    {
-        public static string TableName = "Valve";
-        public static Type ObjectType = typeof(TECValve);
-
-        public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
-        public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
-        public static TableField Price = new TableField("Price", "REAL", ObjectType.GetProperty("Price"));
-        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
-        public static TableField Type = new TableField("Type", "TEXT", ObjectType.GetProperty("Type"));
-        public static TableField Cv = new TableField("Cv", "Real", ObjectType.GetProperty("Cv"));
-        public static TableField Size = new TableField("Size", "Real", ObjectType.GetProperty("Size"));
-        public static TableField Style = new TableField("Style", "TEXT", ObjectType.GetProperty("Style"));
-        
-        private List<TableField> primaryKeys = new List<TableField>() {
-            ID
-        };
-        private List<Type> types = new List<Type>()
-        {
-            ObjectType
-        };
-        private List<TableField> fields = new List<TableField>()
-        {
-            ID,
-            Name,
-            Description,
-            Price,
-            Labor,
-            Type,
-            Cv,
-            Size,
-            Style
-        };
-        private List<string> propertyNames = new List<string>()
-        {
-            "Valves"
         };
 
         public override string NameString { get { return TableName; } }
@@ -1335,6 +982,372 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+
+    #region ICost
+    internal class MiscTable : TableBase
+    {
+        public static string TableName = "Misc";
+        public static Type ObjectType = typeof(TECMisc);
+
+        public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
+        public static TableField Cost = new TableField("Cost", "REAL", ObjectType.GetProperty("Cost"));
+        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
+        public static TableField Quantity = new TableField("Quantity", "INTEGER", ObjectType.GetProperty("Quantity"));
+        public static TableField Type = new TableField("Type", "TEXT", ObjectType.GetProperty("Type"));
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ID
+        };
+
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ID,
+            Name,
+            Cost,
+            Labor,
+            Quantity,
+            Type
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "MiscCosts",
+            "MiscCostTemplates"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class AssociatedCostTable : TableBase
+    {
+        public static string TableName = "AssociatedCost";
+        public static Type ObjectType = typeof(TECAssociatedCost);
+
+        public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
+        public static TableField Cost = new TableField("Cost", "REAL", ObjectType.GetProperty("Cost"));
+        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
+        public static TableField Type = new TableField("Type", "TEXT", ObjectType.GetProperty("Type"));
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ID,
+            Name,
+            Cost,
+            Labor,
+            Type
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "AssociatedCosts"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class ConnectionTypeTable : TableBase
+    {
+        public static string TableName = "ConnectionType";
+        public static Type ObjectType = typeof(TECConnectionType);
+
+        public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
+        public static TableField Cost = new TableField("Cost", "REAL", ObjectType.GetProperty("Cost"));
+        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
+        public static TableField PlenumCost = new TableField("PlenumCost", "REAL", ObjectType.GetProperty("PlenumCost"), defaultValue: "0.0");
+        public static TableField PlenumLabor = new TableField("PlenumLabor", "REAL", ObjectType.GetProperty("PlenumLabor"), defaultValue: "0.0");
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ID,
+            Name,
+            Cost,
+            Labor,
+            PlenumCost,
+            PlenumLabor
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "ConnectionTypes"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class ConduitTypeTable : TableBase
+    {
+        public static string TableName = "ConduitType";
+        public static Type ObjectType = typeof(TECElectricalMaterial);
+
+        public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
+        public static TableField Cost = new TableField("Cost", "REAL", ObjectType.GetProperty("Cost"));
+        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ID,
+            Name,
+            Cost,
+            Labor
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "ConduitTypes"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    
+    #region TECHardware
+    internal class DeviceTable : TableBase
+    {
+        public static string TableName = "Device";
+        public static Type ObjectType = typeof(TECDevice);
+
+        public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
+        public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
+        public static TableField Price = new TableField("Price", "REAL", ObjectType.GetProperty("Price"));
+        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
+
+        private List<TableField> primaryKeys = new List<TableField>() {
+            ID
+            };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ID,
+            Name,
+            Description,
+            Price,
+            Labor
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Devices"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+
+    }
+    internal class ValveTable : TableBase
+    {
+        public static string TableName = "Valve";
+        public static Type ObjectType = typeof(TECValve);
+
+        public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
+        public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
+        public static TableField Price = new TableField("Price", "REAL", ObjectType.GetProperty("Price"));
+        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
+        public static TableField Type = new TableField("Type", "TEXT", ObjectType.GetProperty("Type"));
+        public static TableField Cv = new TableField("Cv", "Real", ObjectType.GetProperty("Cv"));
+        public static TableField Size = new TableField("Size", "Real", ObjectType.GetProperty("Size"));
+        public static TableField Style = new TableField("Style", "TEXT", ObjectType.GetProperty("Style"));
+
+        private List<TableField> primaryKeys = new List<TableField>() {
+            ID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ID,
+            Name,
+            Description,
+            Price,
+            Labor,
+            Type,
+            Cv,
+            Size,
+            Style
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Valves"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class PanelTypeTable : TableBase
+    {
+        public static string TableName = "PanelType";
+        public static Type ObjectType = typeof(TECPanelType);
+
+        public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
+        public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"), defaultValue: "");
+        public static TableField Price = new TableField("Price", "REAL", ObjectType.GetProperty("Price"));
+        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ID
+        };
+
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ID,
+            Name,
+            Description,
+            Price,
+            Labor
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "PanelTypes"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class ControllerTypeTable : TableBase
+    {
+        public static string TableName = "ControllerType";
+        public static Type ObjectType = typeof(TECControllerType);
+
+        public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
+        public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
+        public static TableField Price = new TableField("Price", "REAL", ObjectType.GetProperty("Price"));
+        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
+        public static TableField Type = new TableField("Type", "TEXT", ObjectType.GetProperty("Type"));
+
+        private List<TableField> primaryKeys = new List<TableField>() {
+            ID
+            };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ID,
+            Name,
+            Description,
+            Price,
+            Labor,
+            Type
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "ControllerTypes"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class IOModuleTable : TableBase
+    {
+        public static string TableName = "IOModule";
+        public static Type IOModuleType = typeof(TECIOModule);
+
+        public static TableField ID = new TableField("ID", "TEXT", IOModuleType.GetProperty("Guid"));
+        public static TableField Name = new TableField("Name", "TEXT", IOModuleType.GetProperty("Name"));
+        public static TableField Description = new TableField("Description", "TEXT", IOModuleType.GetProperty("Description"));
+        public static TableField Price = new TableField("Price", "REAL", IOModuleType.GetProperty("Price"));
+        public static TableField Labor = new TableField("Labor", "REAL", IOModuleType.GetProperty("Labor"));
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ID
+        };
+
+        private List<Type> types = new List<Type>()
+        {
+            IOModuleType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ID,
+            Name,
+            Description,
+            Price,
+            Labor
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "IOModules"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+
+    }
+
+    #endregion
+    #endregion
+
+
 
     internal class InternalNoteTable : TableBase
     {
@@ -3169,6 +3182,41 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+    internal class TemplatesParametersTable : TableBase
+    {
+        public static string TableName = "TemplatesParameters";
+        public static Type TemplatesType = typeof(ScopeTemplates);
+        public static Type ParametersType = typeof(TECParameters);
+
+        public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
+        public static TableField ParametersID = new TableField("ParametersID", "TEXT", ParametersType.GetProperty("Guid"));
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            TemplatesID,
+            ParametersID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            TemplatesType,
+            ParametersType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            TemplatesID,
+            ParametersID
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Parameters"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
 
     internal class TemplateReferenceTable : TableBase
     {
@@ -3496,7 +3544,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new TemplatesSubScopeTable(),
             new TemplatesControllerTable(),
             new TemplatesMiscCostTable(),
-            new TemplatesPanelTable()
+            new TemplatesPanelTable(),
+            new TemplatesParametersTable()
 
             };
     }
@@ -3576,7 +3625,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new HardwiredConnectionConnectionTypeTable(),
             new InterlockableInterlockTable(),
             new InterlockConnectionConnectionTypeTable(),
-            new ManagerTemplatesTable()
+            new ManagerTemplatesTable(),
+            new TemplatesParametersTable()
         };
     }
 

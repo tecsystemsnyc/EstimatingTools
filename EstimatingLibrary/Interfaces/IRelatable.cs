@@ -38,7 +38,11 @@ namespace EstimatingLibrary.Interfaces
             }
             return list;
         }
-        
+        /// <summary>
+        /// All the objects which are direct children to the parent relatable.
+        /// </summary>
+        /// <param name="relatable"></param>
+        /// <returns></returns>
         public static List<ITECObject> GetDirectChildren(this IRelatable relatable)
         {
             List<ITECObject> list = new List<ITECObject>();

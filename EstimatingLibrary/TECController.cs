@@ -10,7 +10,6 @@ namespace EstimatingLibrary
 {
     public abstract class TECController : TECLocated, IConnectable, ITypicalable
     {
-
         private bool _isServer;
         #region Properties
         public TECNetworkConnection ParentConnection { get; private set; }

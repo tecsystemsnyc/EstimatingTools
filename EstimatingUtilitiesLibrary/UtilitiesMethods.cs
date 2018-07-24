@@ -302,6 +302,10 @@ namespace EstimatingUtilitiesLibrary
         {
             return dictionary.ContainsKey(id) ? new ObservableCollection<T>(dictionary[id]) : new ObservableCollection<T>();
         }
+        public static T ValueOrNew<T>(this Dictionary<Guid, T> dictionary, Guid id) where T : new()
+        {
+            return dictionary.ContainsKey(id) ? dictionary[id] : new T();
+        }
         public static T ValueOrDefault<T>(this Dictionary<Guid, T> dictionary, Guid id, T defaultValue)
         {
             return dictionary.ContainsKey(id) ? dictionary[id] : defaultValue;

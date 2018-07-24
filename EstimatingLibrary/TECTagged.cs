@@ -13,9 +13,7 @@ namespace EstimatingLibrary
 
         protected string _name;
         protected string _description;
-
-        public event Action<CostBatch> CostChanged;
-
+        
         public string Name
         {
             get { return _name; }
@@ -57,7 +55,7 @@ namespace EstimatingLibrary
             get
             {
                 SaveableMap map = linkedObjects();
-                return linkedObjects();
+                return map;
             }
         }
         #endregion
@@ -86,14 +84,9 @@ namespace EstimatingLibrary
         protected virtual void taggedCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         //Is virtual so that it can be overridden in TECTypical
         {
-            CollectionChangedHandlers.CollectionChangedHandler(sender, e, propertyName, this, notifyCombinedChanged, notifyCostChanged);
+            CollectionChangedHandlers.CollectionChangedHandler(sender, e, propertyName, this, notifyCombinedChanged);
         }
-
-        protected virtual void notifyCostChanged(CostBatch costs)
-        {
-            CostChanged?.Invoke(costs);
-        }
-
+        
         protected virtual SaveableMap propertyObjects()
         {
             SaveableMap saveList = new SaveableMap();

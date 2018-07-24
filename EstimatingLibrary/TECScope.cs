@@ -20,6 +20,9 @@ namespace EstimatingLibrary
                 return getCosts();
             }
         }
+
+        public event Action<CostBatch> CostChanged;
+
         #endregion
 
         #region Constructors
@@ -42,7 +45,12 @@ namespace EstimatingLibrary
         {
             CollectionChangedHandlers.CollectionChangedHandler(sender, e, propertyName, this, notifyCombinedChanged, notifyCostChanged);
         }
-        
+
+        protected virtual void notifyCostChanged(CostBatch costs)
+        {
+            CostChanged?.Invoke(costs);
+        }
+
         protected virtual CostBatch getCosts()
         {
             CostBatch costs = new CostBatch();

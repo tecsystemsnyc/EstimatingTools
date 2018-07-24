@@ -111,23 +111,27 @@ namespace TestLibrary.ModelTestingUtilities
             //Assign Locations
             foreach (TECController controller in bid.Controllers)
             {
-                if (rand.NextBool())
-                {
-                    controller.Location = bid.Locations.RandomElement(rand);
-                }
+                setLocation(controller, rand);
             }
             foreach (TECPanel panel in bid.Panels)
             {
-                if (rand.NextBool())
-                {
-                    panel.Location = bid.Locations.RandomElement(rand);
-                }
+                setLocation(panel, rand);
+
             }
             foreach (TECTypical typ in bid.Systems)
             {
-                if (rand.NextBool())
+                setLocation(typ, rand);
+            }
+
+            void setLocation(TECLocated located, Random randNum)
+            {
+                if (randNum.NextBool())
                 {
-                    typ.Location = bid.Locations.RandomElement(rand);
+                    located.Location = bid.Locations.RandomElement(randNum);
+                }
+                foreach(TECLocated child in located.GetDirectChildren().Where(x => x is TECLocated))
+                {
+                    setLocation(child, randNum);
                 }
             }
 
@@ -279,7 +283,7 @@ namespace TestLibrary.ModelTestingUtilities
         public static TECParameters TestParameters(Random rand, TECScopeManager scopeManager = null)
         {
             Guid guid = scopeManager?.Guid ?? Guid.NewGuid();
-            return new TECParameters()
+            return new TECParameters(guid)
             {
                 PMCoef = rand.NextDouble(),
                 PMCoefStdError = rand.NextDouble(),

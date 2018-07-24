@@ -78,8 +78,8 @@ namespace EstimatingUtilitiesLibraryTests
             expectedSystem = expectedBid.Systems.First();
             expectedSystem1 = expectedBid.Systems.First(x => x != expectedSystem);
 
-            expectedEquipment = expectedSystem.Equipment.First(x => x.SubScope.Count > 0);
-            expectedSubScope = expectedEquipment.SubScope.First();
+            expectedEquipment = expectedSystem.Equipment.First(x => x.SubScope.Count > 0 && x.Location != null);
+            expectedSubScope = expectedEquipment.SubScope.First(x => x.Location != null);
             expectedDevice = expectedBid.Catalogs.Devices.Where(x => x.Tags.Count > 0).First();
 
             expectedManufacturer = expectedDevice.Manufacturer;
@@ -744,12 +744,12 @@ namespace EstimatingUtilitiesLibraryTests
             DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
             manager.New(saveBid);
             TECBid loadedBid = manager.Load() as TECBid;
-            var loadedWatcher = new ChangeWatcher(saveBid);
+            var loadedWatcher = new ChangeWatcher(loadedBid);
             TECEstimator loadedEstimate = new TECEstimator(loadedBid, loadedWatcher);
 
             Dictionary<Guid, INotifyCostChanged> loadCostDictionary = new Dictionary<Guid, INotifyCostChanged>();
             addToCost(loadCostDictionary, loadedBid, loadedBid);
-
+            
             compareCosts(saveCostDictionary, loadCostDictionary);
             compareEstimators(estimate, loadedEstimate);
             Assert.AreEqual(expectedTotalCost, loadedEstimate.TotalCost, delta);
@@ -791,12 +791,9 @@ namespace EstimatingUtilitiesLibraryTests
             }
             if(item is IRelatable saveable)
             {
-                foreach(ITECObject child in saveable.PropertyObjects.Objects)
+                foreach(ITECObject child in saveable.GetDirectChildren())
                 {
-                    if (!saveable.LinkedObjects.Contains(child))
-                    {
-                        addToCost(costDictionary, child, referenceBid);
-                    }
+                    addToCost(costDictionary, child, referenceBid);
                 }
             }
         } 
@@ -804,7 +801,9 @@ namespace EstimatingUtilitiesLibraryTests
         public bool compareCosts(CostBatch expected, CostBatch actual)
         {
             if (Math.Abs(expected.GetCost(CostType.Electrical) - actual.GetCost(CostType.Electrical)) < DELTA &&
-                Math.Abs(expected.GetCost(CostType.TEC) - actual.GetCost(CostType.TEC)) < DELTA)
+                Math.Abs(expected.GetCost(CostType.TEC) - actual.GetCost(CostType.TEC)) < DELTA &&
+                Math.Abs(expected.GetLabor(CostType.Electrical) - actual.GetLabor(CostType.Electrical)) < DELTA &&
+                Math.Abs(expected.GetLabor(CostType.TEC) - actual.GetLabor(CostType.TEC)) < DELTA)
             {
                 return true;
             }
@@ -817,10 +816,10 @@ namespace EstimatingUtilitiesLibraryTests
         private void compareEstimators(TECEstimator expected, TECEstimator actual)
         {
             Assert.AreEqual(expected.TotalPointNumber, actual.TotalPointNumber);
-            Assert.AreEqual(expected.TECCost, actual.TECCost);
-            Assert.AreEqual(expected.TECLaborHours, actual.TECLaborHours);
-            Assert.AreEqual(expected.SubcontractorCost, actual.SubcontractorCost);
-            Assert.AreEqual(expected.SubcontractorLaborHours, actual.SubcontractorLaborHours);
+            Assert.AreEqual(expected.TECCost, actual.TECCost, DELTA);
+            Assert.AreEqual(expected.TECLaborHours, actual.TECLaborHours, DELTA);
+            Assert.AreEqual(expected.SubcontractorCost, actual.SubcontractorCost, DELTA);
+            Assert.AreEqual(expected.SubcontractorLaborHours, actual.SubcontractorLaborHours, DELTA);
         }
     }
 }
