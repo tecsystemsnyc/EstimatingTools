@@ -16,7 +16,6 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private TECEquipment toAdd;
         private int quantity;
         private Action<TECEquipment> add;
-        private bool isTypical = false;
         private TECEquipment underlyingTemplate;
         private bool _displayReferenceProperty = false;
         private ConnectOnAddVM _connectVM;

@@ -475,6 +475,7 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("Test Device");
             values.Add("Test Device Description");
             values.Add("123.45");
+            values.Add("543.21");
             addDataToTable(new DeviceTable(), values);
         }
         private static void addToPointTable()
@@ -738,6 +739,7 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("Test IO Module");
             values.Add("Test IO Module Description");
             values.Add("2233");
+            values.Add("3322");
             addDataToTable(new IOModuleTable(), values);
 
         }

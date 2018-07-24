@@ -18,7 +18,6 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private TECSubScope toAdd;
         private int quantity = 1;
         private Action<TECSubScope> add;
-        private bool isTypical = false;
         private string _pointName = "";
         private int _pointQuantity = 1;
         private IOType _pointType = IOType.AI;

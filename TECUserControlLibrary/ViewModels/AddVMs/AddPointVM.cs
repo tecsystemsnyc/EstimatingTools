@@ -14,7 +14,6 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
     {
         private TECSubScope parent;
         private TECPoint toAdd;
-        private bool isTypical;
 
         public TECPoint ToAdd
         {
