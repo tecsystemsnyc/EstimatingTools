@@ -1477,12 +1477,12 @@ namespace EstimatingUtilitiesLibraryTests
             List<string> values = new List<string>();
             values.Add("5723e279-ac5c-4ee0-ae01-494a0c524b5c");
             values.Add("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
-            addDataToTable(new SubScopeConnectionChildrenTable(), values);
+            addDataToTable(new HardwiredConnectionChildrenTable(), values);
             
                 values = new List<string>();
                 values.Add("560ffd84-444d-4611-a346-266074f62f6f");
                 values.Add("94726d87-b468-46a8-9421-3ff9725d5239");
-                addDataToTable(new SubScopeConnectionChildrenTable(), values);
+                addDataToTable(new HardwiredConnectionChildrenTable(), values);
             
         }
         private static void addToPanelPanelTypeTable()

@@ -178,7 +178,7 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<Guid, List<Guid>> systemScopeBranches = getOneToManyRelationships(new SystemScopeBranchTable());
             Dictionary<Guid, List<Guid>> scopeBranchHierarchy = getOneToManyRelationships(new ScopeBranchHierarchyTable());
             Dictionary<Guid, List<Guid>> networkChildren = getOneToManyRelationships(new NetworkConnectionChildrenTable());
-            Dictionary<Guid, Guid> subScopeConnectionChildren = getOneToOneRelationships(new SubScopeConnectionChildrenTable());
+            Dictionary<Guid, Guid> subScopeConnectionChildren = getOneToOneRelationships(new HardwiredConnectionChildrenTable());
             Dictionary<Guid, List<Guid>> subScopeInterlocks = getOneToManyRelationships(new InterlockableInterlockTable());
 
             Dictionary<Guid, TECControllerType> controllerTypes = getOneToOneRelationships(new ProvidedControllerControllerTypeTable(), catalogs.ControllerTypes);
@@ -214,7 +214,7 @@ namespace EstimatingUtilitiesLibrary.Database
             connectables.AddRange(subScope);
 
             Dictionary<Guid, TECController> connectionParents = getChildIDToParentRelationships(new ControllerConnectionTable(), controllers);
-            Dictionary<Guid, TECSubScope> subScopeConnectionChildrenRelationships = getOneToOneRelationships(new SubScopeConnectionChildrenTable(), subScope);
+            Dictionary<Guid, TECSubScope> subScopeConnectionChildrenRelationships = getOneToOneRelationships(new HardwiredConnectionChildrenTable(), subScope);
 
             List<TECHardwiredConnection> subScopeConnections = getObjectsFromTable(new SubScopeConnectionTable(), 
                 id => new TECHardwiredConnection(id, subScopeConnectionChildrenRelationships[id], connectionParents[id],
@@ -362,7 +362,7 @@ namespace EstimatingUtilitiesLibrary.Database
             List<IConnectable> allNetworkConnectable = new List<IConnectable>(subScope);
             allNetworkConnectable.AddRange(controllers);
             Dictionary<Guid, List<IConnectable>> networkChildrenRelationships = getOneToManyRelationships(new NetworkConnectionChildrenTable(), allNetworkConnectable);
-            Dictionary<Guid, TECSubScope> subScopeConnectionChildrenRelationships = getOneToOneRelationships(new SubScopeConnectionChildrenTable(), subScope);
+            Dictionary<Guid, TECSubScope> subScopeConnectionChildrenRelationships = getOneToOneRelationships(new HardwiredConnectionChildrenTable(), subScope);
 
             List<TECHardwiredConnection> subScopeConnections = getObjectsFromTable(new SubScopeConnectionTable(), id => new TECHardwiredConnection(id, subScopeConnectionChildrenRelationships[id],
                 connectionParents[id], new TECHardwiredProtocol(hardwiredConnectionTypes[id])));

@@ -121,10 +121,12 @@ namespace TestLibrary.ModelTestingUtilities
             rand.RepeatAction(() => sys.MiscCosts.Add(ModelCreation.TestMisc(catalogs, rand, CostType.TEC)), 5);
             rand.RepeatAction(() => sys.MiscCosts.Add(ModelCreation.TestMisc(catalogs, rand, CostType.Electrical)), 5);
             rand.RepeatAction(() => sys.ScopeBranches.Add(ModelCreation.TestScopeBranch(rand, 3)), 5);
+            rand.RepeatAction(() => ModelCreation.AddSystemConnections(sys, catalogs, rand), 5);
             sys.ProposeEquipment = rand.NextBool();
         }
-        public static void AssignRandomConnectionProperties(this TECConnection connection, Random rand)
+        public static void AssignRandomConnectionProperties(this IConnection connection, TECCatalogs catalogs, Random rand)
         {
+            connection.ConduitType = catalogs.ConduitTypes.RandomElement(rand);
             connection.Length = (rand.NextDouble() * 100);
             connection.ConduitLength = (rand.NextDouble() * 100);
         }

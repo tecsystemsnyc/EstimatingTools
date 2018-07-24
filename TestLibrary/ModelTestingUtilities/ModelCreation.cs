@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -108,6 +109,10 @@ namespace TestLibrary.ModelTestingUtilities
                 rand.RepeatAction(() => typ.AddInstance(bid), maxEachItem);
             }
 
+            //Connections
+            rand.RepeatAction(() => AddBidConnections(bid, bid.Systems, bid.Catalogs, rand), 5);
+
+
             //Assign Locations
             foreach (TECController controller in bid.Controllers)
             {
@@ -116,7 +121,6 @@ namespace TestLibrary.ModelTestingUtilities
             foreach (TECPanel panel in bid.Panels)
             {
                 setLocation(panel, rand);
-
             }
             foreach (TECTypical typ in bid.Systems)
             {
@@ -125,11 +129,12 @@ namespace TestLibrary.ModelTestingUtilities
 
             void setLocation(TECLocated located, Random randNum)
             {
-                if (randNum.NextBool())
-                {
-                    located.Location = bid.Locations.RandomElement(randNum);
-                }
-                foreach(TECLocated child in located.GetDirectChildren().Where(x => x is TECLocated))
+                //if (randNum.NextBool())
+                //{
+                //    located.Location = bid.Locations.RandomElement(randNum);
+                //}
+                located.Location = bid.Locations.RandomElement(randNum);
+                foreach (TECLocated child in located.GetDirectChildren().Where(x => x is TECLocated))
                 {
                     setLocation(child, randNum);
                 }
@@ -430,7 +435,7 @@ namespace TestLibrary.ModelTestingUtilities
             {
                 point.Type = TestPointType(rand);
             }
-            point.Quantity = rand.Next(1, 100);
+            point.Quantity = rand.Next(1, 5);
             return point;
         }
         public static TECSubScope TestSubScope(TECCatalogs catalogs, Random rand)
@@ -465,6 +470,120 @@ namespace TestLibrary.ModelTestingUtilities
             typ.Description = "Typical";
             typ.AssignRandomSystemProperties(catalogs, rand);
             return typ;
+        }
+
+        #endregion
+
+        #region Case Setup
+        public static void AddSystemConnections(TECSystem system, TECCatalogs catalogs, Random rand)
+        {
+            var hardwiredDevice = catalogs.Devices.Where(x => x.HardwiredConnectionTypes.Count > 0).RandomElement(rand) ??
+                new TECDevice(catalogs.ConnectionTypes.RandomElements(rand, false), new List<TECProtocol>(), catalogs.Manufacturers.RandomElement(rand));
+            if (!catalogs.Devices.Contains(hardwiredDevice)) catalogs.Devices.Add(hardwiredDevice);
+            var networkDevice = catalogs.Devices.Where(x => x.PossibleProtocols.Count > 0 && x != hardwiredDevice).RandomElement(rand) ??
+                new TECDevice(new List<TECConnectionType>(), new List<TECProtocol> { catalogs.Protocols.RandomElement(rand) }, catalogs.Manufacturers.RandomElement(rand));
+
+            var hardwiredSubScope = new TECSubScope();
+            hardwiredSubScope.Devices.Add(hardwiredDevice);
+            hardwiredSubScope.AddPoint(TestPoint(rand));
+
+            var hardwiredProtocol = hardwiredSubScope.AvailableProtocols.Where(x => x is TECHardwiredProtocol).RandomElement(rand) as TECHardwiredProtocol;
+
+            var networkSubScope = new TECSubScope();
+            networkSubScope.Devices.Add(networkDevice);
+            networkSubScope.AddPoint(TestPoint(rand));
+
+            var networkProtocol = networkSubScope.AvailableProtocols.Where(x => x is TECProtocol).RandomElement(rand) as TECProtocol;
+
+            system.Equipment.RandomElement(rand).SubScope.Add(hardwiredSubScope);
+            system.Equipment.RandomElement(rand).SubScope.Add(networkSubScope);
+
+            var hardwiredControllerType = catalogs.ControllerTypes.Where(x => new TECProvidedController(x).AvailableIO.Contains((hardwiredSubScope as IConnectable).HardwiredIO)).RandomElement(rand) ??
+                new TECControllerType(catalogs.Manufacturers.RandomElement(rand));
+            if (!catalogs.ControllerTypes.Contains(hardwiredControllerType))
+            {
+                catalogs.ControllerTypes.Add(hardwiredControllerType);
+                hardwiredControllerType.IO.AddRange((hardwiredSubScope as IConnectable).HardwiredIO.ToList());
+            }
+            var hardwiredController = system.Controllers.Where(x => x is TECProvidedController y && y.Type == hardwiredControllerType).RandomElement(rand) ??
+                new TECProvidedController(hardwiredControllerType);
+            if (!system.Controllers.Contains(hardwiredController)) system.AddController(hardwiredController);
+
+            var networkControllerType = catalogs.ControllerTypes.Where(x => new TECProvidedController(x).AvailableProtocols.Any(y => y == networkProtocol)).RandomElement(rand) ??
+                new TECControllerType(catalogs.Manufacturers.RandomElement(rand));
+            if (!catalogs.ControllerTypes.Contains(networkControllerType))
+            {
+                catalogs.ControllerTypes.Add(networkControllerType);
+                networkControllerType.IO.Add(new TECIO(networkProtocol));
+            }
+            var networkController = system.Controllers.Where(x => x is TECProvidedController y && y.Type == networkControllerType && y.AvailableProtocols.Contains(networkProtocol)).RandomElement(rand) ??
+                new TECProvidedController(networkControllerType);
+            if (!system.Controllers.Contains(networkController)) system.AddController(networkController);
+
+            var hardwiredConnection = hardwiredController.Connect(hardwiredSubScope, hardwiredProtocol);
+            var networkConnection = networkController.Connect(networkSubScope, networkProtocol);
+
+            hardwiredConnection.AssignRandomConnectionProperties(catalogs, rand);
+            networkConnection.AssignRandomConnectionProperties(catalogs, rand);
+
+        }
+        public static void AddBidConnections(TECBid bid, IEnumerable<TECTypical> typicals, TECCatalogs catalogs, Random rand)
+        {
+            var typ = typicals.Where(x => x.Instances.Count > 0).RandomElement(rand);
+            var system = typ.Instances.RandomElement(rand);
+
+            var hardwiredDevice = catalogs.Devices.Where(x => x.HardwiredConnectionTypes.Count > 0).RandomElement(rand) ??
+                new TECDevice(catalogs.ConnectionTypes.RandomElements(rand, false), new List<TECProtocol>(), catalogs.Manufacturers.RandomElement(rand));
+            if (!catalogs.Devices.Contains(hardwiredDevice)) catalogs.Devices.Add(hardwiredDevice);
+            var networkDevice = catalogs.Devices.Where(x => x.PossibleProtocols.Count > 0 && x != hardwiredDevice).RandomElement(rand) ??
+                new TECDevice(new List<TECConnectionType>(), new List<TECProtocol> { catalogs.Protocols.RandomElement(rand) }, catalogs.Manufacturers.RandomElement(rand));
+
+            var hardwiredSubScope = new TECSubScope();
+            hardwiredSubScope.Devices.Add(hardwiredDevice);
+            hardwiredSubScope.AddPoint(TestPoint(rand));
+
+            var hardwiredProtocol = hardwiredSubScope.AvailableProtocols.Where(x => x is TECHardwiredProtocol).RandomElement(rand) as TECHardwiredProtocol;
+
+            var networkSubScope = new TECSubScope();
+            networkSubScope.Devices.Add(networkDevice);
+            networkSubScope.AddPoint(TestPoint(rand));
+
+            var networkProtocol = networkSubScope.AvailableProtocols.Where(x => x is TECProtocol).RandomElement(rand) as TECProtocol;
+
+            typ.Equipment.RandomElement(rand).SubScope.Add(hardwiredSubScope);
+            typ.Equipment.RandomElement(rand).SubScope.Add(networkSubScope);
+
+            networkSubScope = system.GetAllSubScope().First(x => typ.GetInstancesFromTypical(networkSubScope).Contains(x));
+            hardwiredSubScope = system.GetAllSubScope().First(x => typ.GetInstancesFromTypical(hardwiredSubScope).Contains(x));
+
+            var hardwiredControllerType = catalogs.ControllerTypes.Where(x => new TECProvidedController(x).AvailableIO.Contains((hardwiredSubScope as IConnectable).HardwiredIO)).RandomElement(rand) ??
+                new TECControllerType(catalogs.Manufacturers.RandomElement(rand));
+            if (!catalogs.ControllerTypes.Contains(hardwiredControllerType))
+            {
+                catalogs.ControllerTypes.Add(hardwiredControllerType);
+                hardwiredControllerType.IO.AddRange((hardwiredSubScope as IConnectable).HardwiredIO.ToList());
+            }
+            var hardwiredController = bid.Controllers.Where(x => x is TECProvidedController y && y.Type == hardwiredControllerType).RandomElement(rand) ??
+                new TECProvidedController(hardwiredControllerType);
+            if (!bid.Controllers.Contains(hardwiredController)) bid.AddController(hardwiredController);
+
+            var networkControllerType = catalogs.ControllerTypes.Where(x => new TECProvidedController(x).AvailableProtocols.Any(y => y == networkProtocol)).RandomElement(rand) ??
+                new TECControllerType(catalogs.Manufacturers.RandomElement(rand));
+            if (!catalogs.ControllerTypes.Contains(networkControllerType))
+            {
+                catalogs.ControllerTypes.Add(networkControllerType);
+                networkControllerType.IO.Add(new TECIO(networkProtocol));
+            }
+            var networkController = bid.Controllers.Where(x => x is TECProvidedController y && y.Type == networkControllerType && y.AvailableProtocols.Contains(networkProtocol)).RandomElement(rand) ??
+                new TECProvidedController(networkControllerType);
+            if (!bid.Controllers.Contains(networkController)) bid.AddController(networkController);
+
+            var hardwiredConnection = hardwiredController.Connect(hardwiredSubScope, hardwiredProtocol);
+            var networkConnection = networkController.Connect(networkSubScope, networkProtocol);
+
+            hardwiredConnection.AssignRandomConnectionProperties(catalogs, rand);
+            networkConnection.AssignRandomConnectionProperties(catalogs, rand);
+
         }
         #endregion
     }

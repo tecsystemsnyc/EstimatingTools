@@ -44,6 +44,7 @@ namespace EstimatingLibrary.Utilities
             {
                 foreach (TECObject item in e.OldItems)
                 {
+                    onRemove?.Invoke(item);
                     if (item is ITypicalable typItem && typItem.IsTypical) { notifyCost = null; }
                     if (item is INotifyCostChanged cost)
                     {

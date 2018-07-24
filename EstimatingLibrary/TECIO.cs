@@ -128,7 +128,7 @@ namespace EstimatingLibrary
         }
         public TECIO(Guid guid, TECProtocol protocol) : this(guid, IOType.Protocol)
         {
-            _protocol = protocol;
+            _protocol = protocol ?? throw new Exception();
         }
 
         public TECIO(IOType type) : this(Guid.NewGuid(), type) { }

@@ -2351,14 +2351,14 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
-    internal class SubScopeConnectionChildrenTable : TableBase
+    internal class HardwiredConnectionChildrenTable : TableBase
     {
-        public static string TableName = "SubScopeConnectionChild";
+        public static string TableName = "HardwiredConnectionChild";
         public static Type ConnectionType = typeof(TECHardwiredConnection);
-        public static Type ChildType = typeof(TECSubScope);
+        public static Type ChildType = typeof(IConnectable);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ConnectionType.GetProperty("Guid"));
-        public static TableField ChildID = new TableField("ScopeID", "TEXT", ChildType.GetProperty("Guid"));
+        public static TableField ChildID = new TableField("ConnectableID", "TEXT", ChildType.GetProperty("Guid"));
         
         private List<TableField> primaryKeys = new List<TableField>() {
             ConnectionID,
@@ -3523,7 +3523,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new BidMiscTable(),
             new PanelPanelTypeTable(),
             new PanelControllerTable(),
-            new SubScopeConnectionChildrenTable(),
+            new HardwiredConnectionChildrenTable(),
             new NetworkConnectionChildrenTable(),
             new ValveActuatorTable(),
             new ScheduleScheduleTableTable(),
@@ -3608,7 +3608,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new SystemScopeBranchTable(),
             new SystemMiscTable(),
             new PanelControllerTable(),
-            new SubScopeConnectionChildrenTable(),
+            new HardwiredConnectionChildrenTable(),
             new NetworkConnectionChildrenTable(),
             new ScopeBranchHierarchyTable(),
             new ValveActuatorTable(),

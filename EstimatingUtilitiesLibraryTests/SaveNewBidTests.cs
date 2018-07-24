@@ -75,7 +75,7 @@ namespace EstimatingUtilitiesLibraryTests
             expectedBid = ModelCreation.TestBid(rand);
             expectedLabor = expectedBid.ExtraLabor;
             expectedParameters = expectedBid.Parameters;
-            expectedSystem = expectedBid.Systems.First();
+            expectedSystem = expectedBid.Systems.First(x => x.Location != null);
             expectedSystem1 = expectedBid.Systems.First(x => x != expectedSystem);
 
             expectedEquipment = expectedSystem.Equipment.First(x => x.SubScope.Count > 0 && x.Location != null);
@@ -548,7 +548,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Assert
             Assert.AreEqual(expectedConnection.Guid, actualConnection.Guid);
             Assert.AreEqual(expectedConnection.ConduitType.Guid, actualConnection.ConduitType.Guid);
-            Assert.AreEqual(expectedConnection.Length, actualConnection.Length);
+            Assert.AreEqual(expectedConnection.Length, actualConnection.Length, DELTA);
             Assert.AreEqual(expectedConnection.ParentController.Guid, actualConnection.ParentController.Guid);
             Assert.AreEqual(expectedConnection.Child.Guid, actualConnection.Child.Guid);
             Assert.IsTrue(compareCosts(expectedConnection.CostBatch, actualConnection.CostBatch));

@@ -917,7 +917,7 @@ namespace Utilities
             TECController daisyController = new TECProvidedController(type);
 
             TECNetworkConnection netConnect = parentController.Connect(childController, childController.AvailableProtocols.First(x => x is TECProtocol) as TECProtocol) as TECNetworkConnection;
-            netConnect.AssignRandomConnectionProperties(rand);
+            netConnect.AssignRandomConnectionProperties(bid.Catalogs, rand);
 
             resetRaised();
 
@@ -1628,7 +1628,7 @@ namespace Utilities
             TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
 
             TECNetworkConnection netConnect = parentController.Connect(childController, childController.AvailableProtocols.First(x => x is TECProtocol) as TECProtocol) as TECNetworkConnection;
-            netConnect.AssignRandomConnectionProperties(rand);
+            netConnect.AssignRandomConnectionProperties(bid.Catalogs, rand);
 
             resetRaised();
 

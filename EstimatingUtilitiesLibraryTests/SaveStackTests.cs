@@ -2199,9 +2199,9 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
             
             data = new Dictionary<string, string>();
-            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[SubScopeConnectionChildrenTable.ChildID.Name] = subScope.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionChildrenTable.TableName, data));
+            data[HardwiredConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[HardwiredConnectionChildrenTable.ChildID.Name] = subScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, HardwiredConnectionChildrenTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
@@ -2263,9 +2263,9 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
-            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[SubScopeConnectionChildrenTable.ChildID.Name] = instanceSubScope.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionChildrenTable.TableName, data));
+            data[HardwiredConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[HardwiredConnectionChildrenTable.ChildID.Name] = instanceSubScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, HardwiredConnectionChildrenTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
@@ -2324,9 +2324,9 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
-            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[SubScopeConnectionChildrenTable.ChildID.Name] = subScope.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionChildrenTable.TableName, data));
+            data[HardwiredConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[HardwiredConnectionChildrenTable.ChildID.Name] = subScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, HardwiredConnectionChildrenTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
@@ -2389,9 +2389,9 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
-            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[SubScopeConnectionChildrenTable.ChildID.Name] = subScope.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionChildrenTable.TableName, data));
+            data[HardwiredConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[HardwiredConnectionChildrenTable.ChildID.Name] = subScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, HardwiredConnectionChildrenTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
@@ -2412,9 +2412,9 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
             
             data = new Dictionary<string, string>();
-            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
-            data[SubScopeConnectionChildrenTable.ChildID.Name] = instanceSubScope.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionChildrenTable.TableName, data));
+            data[HardwiredConnectionChildrenTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
+            data[HardwiredConnectionChildrenTable.ChildID.Name] = instanceSubScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, HardwiredConnectionChildrenTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
@@ -4333,9 +4333,9 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
-            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[SubScopeConnectionChildrenTable.ChildID.Name] = subScope.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionChildrenTable.TableName, data));
+            data[HardwiredConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[HardwiredConnectionChildrenTable.ChildID.Name] = subScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, HardwiredConnectionChildrenTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
@@ -4394,9 +4394,9 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
-            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[SubScopeConnectionChildrenTable.ChildID.Name] = instanceSubScope.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionChildrenTable.TableName, data));
+            data[HardwiredConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[HardwiredConnectionChildrenTable.ChildID.Name] = instanceSubScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, HardwiredConnectionChildrenTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
@@ -4456,9 +4456,9 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
-            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[SubScopeConnectionChildrenTable.ChildID.Name] = subScope.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionChildrenTable.TableName, data));
+            data[HardwiredConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[HardwiredConnectionChildrenTable.ChildID.Name] = subScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, HardwiredConnectionChildrenTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
@@ -4521,9 +4521,9 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
-            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[SubScopeConnectionChildrenTable.ChildID.Name] = subScope.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionChildrenTable.TableName, data));
+            data[HardwiredConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[HardwiredConnectionChildrenTable.ChildID.Name] = subScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, HardwiredConnectionChildrenTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
@@ -4540,9 +4540,9 @@ namespace EstimatingUtilitiesLibraryTests
             expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionTable.TableName, data));
 
             data = new Dictionary<string, string>();
-            data[SubScopeConnectionChildrenTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
-            data[SubScopeConnectionChildrenTable.ChildID.Name] = instanceSubScope.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionChildrenTable.TableName, data));
+            data[HardwiredConnectionChildrenTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
+            data[HardwiredConnectionChildrenTable.ChildID.Name] = instanceSubScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, HardwiredConnectionChildrenTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
