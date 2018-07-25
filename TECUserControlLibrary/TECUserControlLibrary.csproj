@@ -107,6 +107,7 @@
     <Compile Include="Interfaces\IUserConfirmable.cs" />
     <Compile Include="Models\ControllerPropertiesItem.cs" />
     <Compile Include="Models\ControllerTypePropertiesItem.cs" />
+    <Compile Include="Models\FBOControllerInPanel.cs" />
     <Compile Include="Models\FilteredConnectablesGroup.cs" />
     <Compile Include="Models\IOModulePropertiesItem.cs" />
     <Compile Include="Models\NetworkConnectionVM.cs" />
@@ -134,6 +135,9 @@
     <Compile Include="UserControls\ItemControls\BaseItemControl.cs" />
     <Compile Include="UserControls\ItemControls\ControllerInPanelControl.xaml.cs">
       <DependentUpon>ControllerInPanelControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ItemControls\FBOControllerInPanelControl.xaml.cs">
+      <DependentUpon>FBOControllerInPanelControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ItemControls\MiscControl.xaml.cs">
       <DependentUpon>MiscControl.xaml</DependentUpon>
@@ -641,6 +645,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ItemControls\ControllerInPanelControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ItemControls\FBOControllerInPanelControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

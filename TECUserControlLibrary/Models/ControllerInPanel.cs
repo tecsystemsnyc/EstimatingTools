@@ -1,5 +1,7 @@
 ﻿using EstimatingLibrary;
+using GalaSoft.MvvmLight.CommandWpf;
 using System;
+using System.Collections.Generic;
 
 namespace TECUserControlLibrary.Models
 {
@@ -11,7 +13,7 @@ namespace TECUserControlLibrary.Models
             get { return _panel; }
             set
             {
-                if(value != Panel)
+                if (value != Panel)
                 {
                     handlePanelSelection(_panel, value);
                     _panel = value;
@@ -30,13 +32,13 @@ namespace TECUserControlLibrary.Models
                 raisePropertyChanged("Controller");
             }
         }
-
+        
         public ControllerInPanel(TECController controller, TECPanel panel) : base(Guid.NewGuid())
         {
             _controller = controller;
             _panel = panel;
         }
-
+        
         private void handlePanelSelection(TECPanel originalPanel, TECPanel selectedPanel)
         {
             if (originalPanel != null)

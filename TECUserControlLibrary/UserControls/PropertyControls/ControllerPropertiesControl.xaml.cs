@@ -51,7 +51,7 @@ namespace TECUserControlLibrary.UserControls.PropertyControls
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if(value != null)
+            if(value as TECProvidedController != null)
             {
                 return new ProvidedControllerPropertiesItem(value as TECProvidedController);
 

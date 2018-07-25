@@ -9,15 +9,16 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
     public class AddControllerVM : AddVM
     {
         private TECSystem parent;
-        private TECProvidedController toAdd;
+        private TECController toAdd;
         private int quantity;
         private Action<TECController> add;
         private TECControllerType noneControllerType;
         private string _hintText;
         private TECControllerType _selectedType;
         private bool isTypical = false;
-
-        public TECProvidedController ToAdd
+        private bool isFBO = false;
+        
+        public TECController ToAdd
         {
             get { return toAdd; }
             private set
@@ -51,9 +52,26 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             {
                 _selectedType = value;
                 RaisePropertyChanged("SelectedType");
-                if (value != null)
+                if (value != null && ToAdd is TECProvidedController provided)
                 {
-                    ToAdd.Type = SelectedType;
+                    provided.Type = SelectedType;
+                }
+            }
+        }
+        public bool IsFBO
+        {
+            get { return isFBO; }
+            set
+            {
+                isFBO = value;
+                RaisePropertyChanged("IsFBO");
+                if (value)
+                {
+                    ToAdd = new TECFBOController(PropertiesVM.Catalogs);
+                }
+                else
+                {
+                    ToAdd = new TECProvidedController(SelectedType);
                 }
             }
         }
@@ -99,7 +117,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         
         private bool addCanExecute()
         {
-            bool canAdd = toAdd.Type != noneControllerType;
+            bool canAdd = (ToAdd is TECProvidedController provided && provided.Type != noneControllerType) || ToAdd is TECFBOController;
             if (canAdd)
             {
                 HintText = null;
@@ -114,7 +132,18 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             for(int x = 0; x < Quantity; x++)
             {
-                var controller = AsReference ? ToAdd : new TECProvidedController(ToAdd);
+                var controller = ToAdd;
+                if (!AsReference)
+                {
+                    if(ToAdd is TECProvidedController provided)
+                    {
+                        controller = new TECProvidedController(provided);
+                    }
+                    else
+                    {
+                        controller = new TECFBOController((TECFBOController)ToAdd);
+                    }
+                }
                 add(controller);
                 Added?.Invoke(controller);
             }

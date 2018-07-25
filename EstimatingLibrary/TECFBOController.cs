@@ -28,11 +28,11 @@ namespace EstimatingLibrary
         /// General constructor for TECFBOController.
         /// </summary>
         /// <param name="guid"></param>
-        /// <param name="isTypical"></param>
         public TECFBOController(Guid guid, TECCatalogs catalogs) : base(guid)
         {
             this.catalogs = catalogs;
             this.IO = getInitialIO();
+            this.Points.CollectionChanged += pointsCollectionChanged;
         }
         /// <summary>
         /// Constructor for new TECFBOController with generated GUID.
@@ -43,12 +43,12 @@ namespace EstimatingLibrary
         /// Copy constructor for TECFBOController
         /// </summary>
         /// <param name="controllerSource"></param>
-        /// <param name="isTypical"></param>
         /// <param name="guidDictionary"></param>
         public TECFBOController(TECFBOController controllerSource, Dictionary<Guid, Guid> guidDictionary = null) : base(controllerSource, guidDictionary)
         {
             this.catalogs = controllerSource.catalogs;
             this.IO = getInitialIO();
+            this.Points.CollectionChanged += pointsCollectionChanged;
         }
         #endregion
 
@@ -76,10 +76,10 @@ namespace EstimatingLibrary
 
         private void pointsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            collectionChanged(sender, e, "Points");
+            CollectionChangedHandlers.CollectionChangedHandler(sender, e, "Points", this, notifyCombinedChanged, notifyPoint: notifyPointChanged);
         }
         #endregion
-        
+
         #region IDDCopiable
         Object IDDCopiable.DragDropCopy(TECScopeManager scopeManager)
         {

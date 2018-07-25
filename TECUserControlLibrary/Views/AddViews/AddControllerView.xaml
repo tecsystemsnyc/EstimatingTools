@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views.AddViews"
                    xmlns:views="clr-namespace:TECUserControlLibrary.Views"
+                   xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              mc:Ignorable="d" 
                    x:Name="addControllerView"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -29,6 +30,8 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <TextBlock Text="Controller: "/>
@@ -40,7 +43,12 @@
             <ComboBox ItemsSource="{Binding ElementName=addControllerView, Path=ViewModel.ControllerTypes}"
                       SelectedItem="{Binding ElementName=addControllerView, Path=ViewModel.SelectedType}"
                       DisplayMemberPath="Name" 
-                      Grid.Row="2" Grid.Column="1"/>
+                      Grid.Row="2" Grid.Column="1"
+                      IsEnabled="{Binding ElementName=FBOCheckBox, Path=IsChecked, Converter={utilities:InvertBoolConverter}}"/>
+            <TextBlock Text="FBO: " Grid.Row="3"/>
+            <CheckBox IsChecked="{Binding ElementName=addControllerView, Path=ViewModel.IsFBO}"
+                      Grid.Row="3" Grid.Column="1"
+                      x:Name="FBOCheckBox"/>
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>

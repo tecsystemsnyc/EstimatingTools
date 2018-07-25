@@ -19,9 +19,9 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Text="{Binding ElementName=labeledTextBox, Path=LabelText}"
+        <TextBlock Text="{Binding ElementName=labeledTextBox, Path=LabelText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                    Margin="0,0,5,0"/>
-        <TextBox Text="{Binding ElementName=labeledTextBox, Path=InputText}"
+        <TextBox Text="{Binding ElementName=labeledTextBox, Path=InputText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                  Grid.Column="1" Height="30" Width="{Binding ElementName=labeledTextBox, Path=InputWidth}"
                  Margin="2"/>
     </Grid>

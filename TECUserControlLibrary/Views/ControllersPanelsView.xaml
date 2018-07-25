@@ -86,7 +86,7 @@
                     <TextBlock Text="Controllers" Style="{StaticResource ListHeader}"/>
                 </Border>
                 <listControls:ControllerInPanelListControl Source="{Binding ViewModel.ControllerCollection}"
-                                                       ViewModel="{Binding ViewModel}" 
+                                                            ViewModel="{Binding ViewModel}" 
                                                            SelectedItem="{Binding ViewModel.SelectedControllerInPanel}"
                                                           DeleteCommand="{Binding ViewModel.DeleteControllerCommand}"
                                                            Grid.Row="1"

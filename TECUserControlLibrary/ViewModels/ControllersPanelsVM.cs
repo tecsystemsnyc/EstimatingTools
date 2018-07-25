@@ -65,16 +65,7 @@ namespace TECUserControlLibrary.ViewModels
         public Visibility PanelSelectionVisibility { get; private set; }
 
         private ObservableCollection<TECController> sourceControllers;
-        private ObservableCollection<TECPanel> sourcePanels;
-        public ObservableCollection<TECPanel> PanelsSource
-        {
-            get { return sourcePanels; }
-            set
-            {
-                sourcePanels = value;
-                RaisePropertyChanged("PanelsSource");
-            }
-        }
+        public ObservableCollection<TECPanel> PanelsSource { get; } = new ObservableCollection<TECPanel>();
 
         private TECController _selectedController;
         public TECController SelectedController
@@ -190,7 +181,19 @@ namespace TECUserControlLibrary.ViewModels
             DeletePanelCommand = new RelayCommand<TECPanel>(deletePanelExecute);
             ChangeTypeCommand = new RelayCommand<TECProvidedController>(changeTypeExecute, canChangeType);
 
-            Refresh(parent, controllers, panels);
+            setupAddRemoveMethods(parent);
+            
+            sourceControllers = new ObservableCollection<TECController>(controllers);
+            PanelsSource = panels;
+
+            populateControllerCollection();
+            populatePanelSelections();
+
+            sourceControllers.CollectionChanged += collectionChanged;
+            PanelsSource.CollectionChanged += collectionChanged;
+
+            this.parent = parent;
+            parent.TECChanged += parentChanged;
         }
 
         private void changeTypeExecute(TECProvidedController obj)
@@ -246,49 +249,6 @@ namespace TECUserControlLibrary.ViewModels
         #endregion
 
         #region Methods
-        private void Refresh(TECObject parent, IEnumerable<TECController> controllers, ObservableCollection<TECPanel> panels)
-        {
-            setupAddRemoveMethods(parent);
-
-            unregisterChanges();
-            sourceControllers = new ObservableCollection<TECController>(controllers);
-            PanelsSource = panels;
-
-            populateControllerCollection();
-            populatePanelSelections();
-            registerChanges();
-            this.parent = parent;
-            parent.TECChanged += parentChanged;
-        }
-        public void Refresh(TECBid bid)
-        {
-            Bid.TECChanged -= parentChanged;
-            Bid = bid;
-            Refresh(bid, bid.Controllers, bid.Panels);
-        }
-        public void Refresh(TECTemplates templates)
-        {
-            Templates.TECChanged -= parentChanged;
-            Templates = templates;
-            Refresh(templates, templates.Templates.ControllerTemplates, templates.Templates.PanelTemplates);
-        }
-        public void Refresh(TECSystem system, TECScopeManager manager = null)
-        {
-            parent.TECChanged -= parentChanged;
-            if (manager != null)
-            {
-                if (manager is TECBid)
-                {
-                    _bid = manager as TECBid;
-                }
-                else
-                {
-                    _templates = manager as TECTemplates;
-                }
-            }
-            SelectedSystem = system;
-            Refresh(system, system.Controllers, system.Panels);
-        }
 
         private void setupAddRemoveMethods(TECObject obj)
         {
@@ -379,10 +339,13 @@ namespace TECUserControlLibrary.ViewModels
             controllersIndex = new Dictionary<TECController, ControllerInPanel>();
             foreach (TECController controller in sourceControllers)
             {
-                TECController controllerToAdd = controller;
-                TECPanel panelToAdd = sourcePanels.FirstOrDefault(panel =>
+                TECPanel panelToAdd = PanelsSource.FirstOrDefault(panel =>
                     { return panel.Controllers.Contains(controller); });
-                var controllerInPanelToAdd = new ControllerInPanel(controllerToAdd, panelToAdd);
+                var controllerInPanelToAdd = new ControllerInPanel(controller, panelToAdd);
+                if (controller is TECFBOController fbo)
+                {
+                    controllerInPanelToAdd = new FBOControllerInPanel(fbo, panelToAdd);
+                }
                 ControllerCollection.Add(controllerInPanelToAdd);
                 controllersIndex[controller] = controllerInPanelToAdd;
             }
@@ -394,26 +357,12 @@ namespace TECUserControlLibrary.ViewModels
             nonePanel.Name = "None";
             NonePanel = nonePanel;
             PanelSelections.Add(NonePanel);
-            foreach (TECPanel panel in sourcePanels)
+            foreach (TECPanel panel in PanelsSource)
             {
                 PanelSelections.Add(panel);
             }
         }
         
-        private void registerChanges()
-        {
-            sourceControllers.CollectionChanged += collectionChanged;
-            sourcePanels.CollectionChanged += collectionChanged;
-        }
-        private void unregisterChanges()
-        {
-            if(sourceControllers != null && sourcePanels != null)
-            {
-                sourceControllers.CollectionChanged -= collectionChanged;
-                sourcePanels.CollectionChanged -= collectionChanged;
-            }
-        }
-
         private void collectionChanged(object sender, 
             System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
@@ -516,10 +465,13 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addController(TECController controller)
         {
-            TECController controllerToAdd = controller;
             TECPanel panelToAdd = null;
             
-            var controllerInPanelToAdd = new ControllerInPanel(controllerToAdd, panelToAdd);
+            var controllerInPanelToAdd = new ControllerInPanel(controller, panelToAdd);
+            if(controller is TECFBOController fbo)
+            {
+                controllerInPanelToAdd = new FBOControllerInPanel(fbo, panelToAdd);
+            }
             ControllerCollection.Add(controllerInPanelToAdd);
             controllersIndex[controller] = controllerInPanelToAdd;
         }

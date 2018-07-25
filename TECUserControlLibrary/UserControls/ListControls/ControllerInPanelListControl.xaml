@@ -1,4 +1,5 @@
-﻿<local:BaseListControl x:TypeArguments="models:ControllerInPanel"  x:Class="TECUserControlLibrary.UserControls.ListControls.ControllerInPanelListControl"
+﻿<local:BaseListControl x:TypeArguments="models:ControllerInPanel" 
+                       x:Class="TECUserControlLibrary.UserControls.ListControls.ControllerInPanelListControl"
              xmlns:models="clr-namespace:TECUserControlLibrary.Models"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -20,15 +21,21 @@
                   AllowDrop="True"
                   Drop="ListView_Dropped"
                   HorizontalContentAlignment="Stretch">
-            <ListView.ItemTemplate>
-                <DataTemplate>
+            <ListView.Resources>
+                <DataTemplate DataType="{x:Type models:FBOControllerInPanel}">
+                    <itemControls:FBOControllerInPanelControl Controller="{Binding}"
+                                                            ViewModel="{Binding ElementName=controllerInPanelListControl, Path=ViewModel}"
+                                                            DeleteCommand="{Binding ElementName=controllerInPanelListControl, Path=DeleteCommand}"
+                                                           MouseUp="ItemControl_MouseUp"/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type models:ControllerInPanel}">
                     <itemControls:ControllerInPanelControl Controller="{Binding}"
                                                             ViewModel="{Binding ElementName=controllerInPanelListControl, Path=ViewModel}"
                                                             DeleteCommand="{Binding ElementName=controllerInPanelListControl, Path=DeleteCommand}"
                                                            ChangeTypeCommand="{Binding ElementName=controllerInPanelListControl, Path=ChangeTypeCommand}"
                                                            MouseUp="ItemControl_MouseUp"/>
                 </DataTemplate>
-            </ListView.ItemTemplate>
+            </ListView.Resources>
         </ListView>
     </Grid>
 </local:BaseListControl>
