@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECProposalItem : TECObject
+    public class TECProposalItem : TECObject, IRelatable
     {
         private TECEquipment _displayScope;
 
@@ -38,13 +38,46 @@ namespace EstimatingLibrary
         public TECProposalItem(Guid guid, TECEquipment dislpayScope) : base(guid)
         {
             this.DisplayScope = dislpayScope;
+            this.ContainingScope.Add(DisplayScope);
             ContainingScope.CollectionChanged += containingScopeCollectionChanged;
+            new ChangeWatcher(dislpayScope).Changed += scopeChanged;
         }
+
+        private void scopeChanged(TECChangedEventArgs obj)
+        {
+            if(obj.PropertyName == "ScopeBranches")
+            {
+                raisePropertyChanged("Branches");
+            }
+        }
+
         public TECProposalItem(TECEquipment displayScope) : this(Guid.NewGuid(), displayScope) { }
         
         private void containingScopeCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             CollectionChangedHandlers.CollectionChangedHandler(sender, e, "ContainingScope", this, notifyCombinedChanged);
         }
+
+        #region IRelatable
+
+        public SaveableMap PropertyObjects
+        {
+            get
+            {
+                return new SaveableMap();
+            }
+        }
+
+        public SaveableMap LinkedObjects
+        {
+            get
+            {
+                var map = new SaveableMap();
+                map.Add(DisplayScope, "DisplayScope");
+                map.AddRange(ContainingScope, "ContainingScope");
+                return map;
+            }
+        }
+        #endregion
     }
 }

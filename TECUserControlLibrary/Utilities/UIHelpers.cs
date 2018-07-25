@@ -18,6 +18,7 @@ namespace TECUserControlLibrary.Utilities
     {       
         public static Type GetItemType(IEnumerable enumerable)
         {
+            if (enumerable == null) return null;
             var args = enumerable.GetType().GetInterface("IEnumerable`1");
             if(args == null)
             {
@@ -57,7 +58,8 @@ namespace TECUserControlLibrary.Utilities
             { sourceType = sourceList[0].GetType(); }
             else
             { sourceType = sourceItem.GetType(); }
-            Type targetType = GetItemType(dropInfo.TargetCollection);
+
+            Type targetType = GetItemType(dropInfo.TargetCollection) ?? dropInfo.TargetItem?.GetType();
             
             if (targetType != null)
             {
@@ -101,7 +103,8 @@ namespace TECUserControlLibrary.Utilities
             {
                 sourceItem = dropbable.DropData();
             }
-            Type targetType = GetItemType(dropInfo.TargetCollection);
+            Type targetType = GetItemType(dropInfo.TargetCollection) ?? dropInfo.TargetItem?.GetType();
+            
             if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
             {
                 if (sourceItem is IList)

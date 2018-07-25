@@ -293,6 +293,7 @@
     <Compile Include="ViewModels\ReplaceActuatorVM.cs" />
     <Compile Include="ViewModels\RiserVM.cs" />
     <Compile Include="ViewModels\ScheduleVM.cs" />
+    <Compile Include="ViewModels\SystemProposalVM.cs" />
     <Compile Include="ViewModels\ValveSelectionVM.cs" />
     <Compile Include="ViewModels\ValveSummaryVM.cs" />
     <Compile Include="ViewModels\WorkBoxVM.cs" />
@@ -567,6 +568,9 @@
     </Compile>
     <Compile Include="Views\SystemHierarchyView.xaml.cs">
       <DependentUpon>SystemHierarchyView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SystemProposalView.xaml.cs">
+      <DependentUpon>SystemProposalView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TypicalHierarchyView.xaml.cs">
       <DependentUpon>TypicalHierarchyView.xaml</DependentUpon>
@@ -1146,6 +1150,10 @@
       <DependentUpon>LabeledGridControl.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\MenuView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SystemProposalView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
