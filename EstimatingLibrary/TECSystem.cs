@@ -24,6 +24,7 @@ namespace EstimatingLibrary
             Panels.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Panels");
             MiscCosts.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "MiscCosts");
             ScopeBranches.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "ScopeBranches");
+            ProposalItems.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "ProposalItems");
         }
 
         public TECSystem() : this(Guid.NewGuid()) { }
@@ -94,6 +95,7 @@ namespace EstimatingLibrary
         public ObservableCollection<TECPanel> Panels { get; } = new ObservableCollection<TECPanel>();
         public ObservableCollection<TECMisc> MiscCosts { get; } = new ObservableCollection<TECMisc>();
         public ObservableCollection<TECScopeBranch> ScopeBranches { get; } = new ObservableCollection<TECScopeBranch>();
+        public ObservableCollection<TECProposalItem> ProposalItems { get; } = new ObservableCollection<TECProposalItem>();
 
         public bool ProposeEquipment
         {
@@ -197,17 +199,6 @@ namespace EstimatingLibrary
             }
             return costs;
         }
-        protected override SaveableMap propertyObjects()
-        {
-            SaveableMap saveList = new SaveableMap();
-            saveList.AddRange(base.propertyObjects());
-            saveList.AddRange(this.Equipment, "Equipment");
-            saveList.AddRange(this.Panels, "Panels");
-            saveList.AddRange(this.Controllers, "Controllers");
-            saveList.AddRange(this.MiscCosts, "MiscCosts");
-            saveList.AddRange(this.ScopeBranches, "ScopeBranches");
-            return saveList;
-        }
 
         protected void notifyPointChanged(int pointNum)
         {
@@ -279,8 +270,23 @@ namespace EstimatingLibrary
                 controller.Disconnect(removed);
             }
         }
-        
+
         #endregion
+        #endregion
+
+        #region IRelatable
+        protected override SaveableMap propertyObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(base.propertyObjects());
+            saveList.AddRange(this.Equipment, "Equipment");
+            saveList.AddRange(this.Panels, "Panels");
+            saveList.AddRange(this.Controllers, "Controllers");
+            saveList.AddRange(this.MiscCosts, "MiscCosts");
+            saveList.AddRange(this.ScopeBranches, "ScopeBranches");
+            saveList.AddRange(this.ProposalItems, "ProposalItems");
+            return saveList;
+        }
         #endregion
 
         #region ITypicalable

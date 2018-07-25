@@ -14,6 +14,7 @@ namespace EstimatingLibrary
         public ObservableCollection<IEndDevice> Devices { get; } = new ObservableCollection<IEndDevice>();
         public ObservableCollection<TECPoint> Points { get; } = new ObservableCollection<TECPoint>();
         public ObservableCollection<TECInterlockConnection> Interlocks { get; } = new ObservableCollection<TECInterlockConnection>();
+        public ObservableCollection<TECScopeBranch> ScopeBranches { get; } = new ObservableCollection<TECScopeBranch>();
         
         public IControllerConnection Connection { get; private set; }
         public int PointNumber
@@ -41,10 +42,12 @@ namespace EstimatingLibrary
         public TECSubScope(Guid guid) : base(guid)
         {
             IsTypical = false;
-            Devices.CollectionChanged += DevicesCollectionChanged;
-            Points.CollectionChanged += PointsCollectionChanged;
-            Interlocks.CollectionChanged += InterlocksCollectionChanged;
+            Devices.CollectionChanged += devicesCollectionChanged;
+            Points.CollectionChanged += pointsCollectionChanged;
+            Interlocks.CollectionChanged += interlocksCollectionChanged;
+            ScopeBranches.CollectionChanged += scopeBranchesCollectionChanged;
         }
+        
         public TECSubScope() : this(Guid.NewGuid()) { }
 
         //Copy Constructor
@@ -76,11 +79,11 @@ namespace EstimatingLibrary
         #endregion
         
         #region Event Handlers
-        private void PointsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void pointsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             CollectionChangedHandlers.CollectionChangedHandler(sender, e, "Points", this, notifyCombinedChanged, notifyCostChanged, notifyPointChanged);
         }
-        private void DevicesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void devicesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             CollectionChangedHandlers.CollectionChangedHandler(sender, e, "Devices", this, notifyCombinedChanged, notifyCostChanged, notifyPointChanged);
             if (e.Action == NotifyCollectionChangedAction.Remove)
@@ -91,11 +94,14 @@ namespace EstimatingLibrary
                 }
             }
         }
-        private void InterlocksCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void interlocksCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             CollectionChangedHandlers.CollectionChangedHandler(sender, e, "Interlocks", this, notifyCombinedChanged, notifyCostChanged, notifyPointChanged);
         }
-        
+        private void scopeBranchesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {            
+            CollectionChangedHandlers.CollectionChangedHandler(sender, e, "ScopeBranches", this, notifyCombinedChanged);
+        }
         #endregion
 
         #region Methods
@@ -148,32 +154,6 @@ namespace EstimatingLibrary
             }
             return costs;
         }
-        protected override SaveableMap propertyObjects()
-        {
-            SaveableMap saveList = new SaveableMap();
-            saveList.AddRange(base.propertyObjects());
-            List<TECObject> deviceList = new List<TECObject>();
-            foreach (IEndDevice item in this.Devices)
-            {
-                deviceList.Add(item as TECObject);
-            }
-            saveList.AddRange(deviceList, "Devices");
-            saveList.AddRange(this.Points, "Points");
-            saveList.AddRange(this.Interlocks, "Interlocks");
-            return saveList;
-        }
-        protected override SaveableMap linkedObjects()
-        {
-            SaveableMap saveList = new SaveableMap();
-            saveList.AddRange(base.linkedObjects());
-            List<TECObject> deviceList = new List<TECObject>();
-            foreach (IEndDevice item in this.Devices)
-            {
-                deviceList.Add(item as TECObject);
-            }
-            saveList.AddRange(deviceList.Distinct(), "Devices");
-            return saveList;
-        }
         protected override void notifyCostChanged(CostBatch costs)
         {
             if (!IsTypical)
@@ -193,6 +173,37 @@ namespace EstimatingLibrary
         {
             return new TECSubScope(this, guidDictionary);
         }
+        #endregion
+
+        #region IReltable
+        protected override SaveableMap propertyObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(base.propertyObjects());
+            List<TECObject> deviceList = new List<TECObject>();
+            foreach (IEndDevice item in this.Devices)
+            {
+                deviceList.Add(item as TECObject);
+            }
+            saveList.AddRange(deviceList, "Devices");
+            saveList.AddRange(this.Points, "Points");
+            saveList.AddRange(this.Interlocks, "Interlocks");
+            saveList.AddRange(this.ScopeBranches, "ScopeBranches");
+            return saveList;
+        }
+        protected override SaveableMap linkedObjects()
+        {
+            SaveableMap saveList = new SaveableMap();
+            saveList.AddRange(base.linkedObjects());
+            List<TECObject> deviceList = new List<TECObject>();
+            foreach (IEndDevice item in this.Devices)
+            {
+                deviceList.Add(item as TECObject);
+            }
+            saveList.AddRange(deviceList.Distinct(), "Devices");
+            return saveList;
+        }
+
         #endregion
 
         #region IConnectable
