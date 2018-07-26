@@ -72,7 +72,7 @@ namespace EstimatingLibrary.Utilities
                 }
                 else
                 {
-                    newCostBatch.typeDictionary.Add(type.Key, type.Value);
+                    newCostBatch.typeDictionary.Add(type.Key, -type.Value);
                 }
             }
             return newCostBatch;

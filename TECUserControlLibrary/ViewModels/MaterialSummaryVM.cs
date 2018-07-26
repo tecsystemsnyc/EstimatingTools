@@ -267,12 +267,6 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        //private void resubscribe(ChangeWatcher changeWatcher)
-        //{
-        //    changeWatcher.InstanceChanged -= instanceChanged;
-        //    changeWatcher.InstanceChanged += instanceChanged;
-        //}
-
         private void initializeVMs()
         {
             DeviceSummaryVM = new HardwareSummaryVM();
