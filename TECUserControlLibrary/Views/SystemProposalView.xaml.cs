@@ -39,6 +39,11 @@ namespace TECUserControlLibrary.Views
         {
             InitializeComponent();
         }
+
+        private void EquipmentListControl_Dropped(object sender, RoutedEventArgs e)
+        {
+            e.Handled = true;
+        }
     }
 
     public class SystemToProposalViewModelConverter : BaseConverter, IValueConverter

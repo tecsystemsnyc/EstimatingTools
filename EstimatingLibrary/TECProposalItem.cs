@@ -56,6 +56,7 @@ namespace EstimatingLibrary
         private void containingScopeCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             CollectionChangedHandlers.CollectionChangedHandler(sender, e, "ContainingScope", this, notifyCombinedChanged);
+            raisePropertyChanged("DisplayName");
         }
 
         #region IRelatable

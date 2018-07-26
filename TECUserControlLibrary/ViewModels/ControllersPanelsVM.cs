@@ -306,8 +306,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private bool canAddController()
         {
-            var controllerTypes = Templates == null ? Bid.Catalogs.ControllerTypes : Templates.Catalogs.ControllerTypes;
-            return controllerTypes.Count > 0;
+            return true;
         }
 
         private void addPanelExecute()

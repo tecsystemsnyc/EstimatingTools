@@ -139,39 +139,34 @@ namespace EstimateBuilder.MVVM
             updateRecentBidSettings(bidFilePath);
 
             buildTitleString(bidFilePath, "Estimate Builder");
-            DatabaseManager<TECTemplates> templatesDatabaseManager = null;
-            if (templatesFilePath != "")
+
+            if (bidFilePath != "")
             {
-                templatesDatabaseManager = new DatabaseManager<TECTemplates>(templatesFilePath);
-                templatesDatabaseManager.LoadComplete += assignData;
                 ViewEnabled = false;
-                templatesDatabaseManager.AsyncLoad();
+                databaseManager = new DatabaseManager<TECBid>(bidFilePath);
+                databaseManager.LoadComplete += handleLoaded;
+                databaseManager.LoadComplete += assignTemplates;
+                databaseManager.AsyncLoad();
             }
             else
             {
-                assignData(new TECTemplates());
+                handleLoaded(getNewWorkingScope());
+                assignTemplates(bid);
             }
-
-            void assignData(TECTemplates loadedTemplates)
+            
+            void assignTemplates(TECBid loadedBid)
             {
-                if (templatesDatabaseManager != null)
+                if(databaseManager != null) databaseManager.LoadComplete -= assignTemplates;
+                DatabaseManager<TECTemplates> templatesDatabaseManager = null;
+                if (templatesFilePath != "")
                 {
-                    templatesDatabaseManager.LoadComplete -= assignData;
-                }
-
-                var templates = loadedTemplates;
-                if (bidFilePath != "")
-                {
+                    templatesDatabaseManager = new DatabaseManager<TECTemplates>(templatesFilePath);
+                    templatesDatabaseManager.LoadComplete += handleLoadedTemplates;
                     ViewEnabled = false;
-                    databaseManager = new DatabaseManager<TECBid>(bidFilePath);
-                    databaseManager.LoadComplete += handleLoaded;
-                    databaseManager.AsyncLoad();
-                }
-                else
-                {
-                    handleLoaded(getNewWorkingScope());
+                    templatesDatabaseManager.AsyncLoad();
                 }
             }
+            
         }
 
         protected override void handleLoaded(TECBid loadedBid)
@@ -215,6 +210,7 @@ namespace EstimateBuilder.MVVM
             ModelLinkingHelper.LinkBidToCatalogs(bid);
             estimate = new TECEstimator(bid, watcher);
             EditorVM = new EstimateEditorVM(bid, watcher, estimate);
+            ViewEnabled = true;
         }
 
         #region Menu Commands Methods
