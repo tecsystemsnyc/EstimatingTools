@@ -47,7 +47,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ModelTestingUtilities\CostTestingUtilities.cs" />
     <Compile Include="GeneralTestingUtilities.cs" />
     <Compile Include="MockClasses\TECControllerMock.cs" />
     <Compile Include="MockClasses\IConnectableMock.cs" />

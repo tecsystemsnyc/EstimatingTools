@@ -27,11 +27,18 @@ namespace EstimatingLibrary.Utilities
                 AddCost(cost);
             }
         }
+        public CostBatch(CostBatch cb)
+        {
+            this.typeDictionary = new Dictionary<CostType, CostObject>();
+            foreach(KeyValuePair<CostType, CostObject> cost in cb.typeDictionary)
+            {
+                this.typeDictionary.Add(cost.Key, cost.Value);
+            }
+        }
 
         public static CostBatch operator +(CostBatch left, CostBatch right)
         {
-            CostBatch newCostBatch = new CostBatch();
-            newCostBatch.typeDictionary = left.typeDictionary;
+            CostBatch newCostBatch = new CostBatch(left);
             foreach(KeyValuePair<CostType, CostObject> type in right.typeDictionary)
             {
                 if (newCostBatch.typeDictionary.ContainsKey(type.Key))
@@ -56,8 +63,7 @@ namespace EstimatingLibrary.Utilities
         }
         public static CostBatch operator -(CostBatch left, CostBatch right)
         {
-            CostBatch newCostBatch = new CostBatch();
-            newCostBatch.typeDictionary = left.typeDictionary;
+            CostBatch newCostBatch = new CostBatch(left);
             foreach (KeyValuePair<CostType, CostObject> type in right.typeDictionary)
             {
                 if (newCostBatch.typeDictionary.ContainsKey(type.Key))

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using TestLibrary;
 using TestLibrary.ModelTestingUtilities;
 
 namespace Models
@@ -2124,7 +2125,7 @@ namespace Models
             system.AddInstance(bid);
 
             //For Both Conduit and Wire Cost: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 60
-            Assert.AreEqual(1.8, estimate.ElectricalShipping, CostTestingUtilities.DELTA);
+            Assert.AreEqual(1.8, estimate.ElectricalShipping, GeneralTestingUtilities.DELTA);
 
             checkRefresh(bid, estimate);
         }

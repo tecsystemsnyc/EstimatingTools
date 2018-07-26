@@ -604,7 +604,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     updateTotals(MiscSummaryVM.AddCost(misc));
                 }
-                else if (args.Value is TECCost cost)
+                else if (args.Value is ICost cost)
                 {
                     if (args.Sender is TECHardware hardware)
                     {
@@ -682,7 +682,7 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     updateTotals(MiscSummaryVM.RemoveCost(misc));
                 }
-                else if (args.Value is TECCost cost)
+                else if (args.Value is ICost cost)
                 {
                     if (args.Sender is TECHardware hardware)
                     {

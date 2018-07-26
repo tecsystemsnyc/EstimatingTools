@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using TECUserControlLibrary.ViewModels;
 using TestLibrary.ModelTestingUtilities;
-using static TestLibrary.ModelTestingUtilities.CostTestingUtilities;
+using TestLibrary;
 
 namespace Tests
 {
@@ -51,9 +51,6 @@ namespace Tests
                 x++;
             }
 
-            Total totalTEC = CalculateTotal(cost, CostType.TEC);
-            Total totalElec = CalculateTotal(cost, CostType.Electrical);
-
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             typical.AddInstance(bid);
@@ -64,11 +61,7 @@ namespace Tests
             typical.AssociatedCosts.Add(cost);
 
             //Assert
-            Assert.AreEqual(matVM.TotalTECCost, totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update proplery.");
-            Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
-
+            AssertMaterialVMMatchesItem(matVM, cost);
         }
 
         [TestMethod]
@@ -86,9 +79,6 @@ namespace Tests
             }
             if (cost == null) { Assert.Fail("No electrical cost in catalogs."); }
 
-            Total totalTEC = CalculateTotal(cost, CostType.TEC);
-            Total totalElec = CalculateTotal(cost, CostType.Electrical);
-
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             TECSystem instance = typical.AddInstance(bid);
@@ -99,11 +89,7 @@ namespace Tests
             typical.AssociatedCosts.Add(cost);
 
             //Assert
-            Assert.AreEqual(matVM.TotalTECCost, totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
-
+            AssertMaterialVMMatchesItem(matVM, cost);
         }
 
         [TestMethod]
@@ -112,20 +98,13 @@ namespace Tests
             //Arrange
             TECMisc misc = ModelCreation.TestMisc(bid.Catalogs, rand, CostType.TEC);
 
-            Total totalTEC = CalculateTotal(misc, CostType.TEC);
-            Total totalElec = CalculateTotal(misc, CostType.Electrical);
-
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
             //Act
             bid.MiscCosts.Add(misc);
 
             //Assert
-            Assert.AreEqual(matVM.TotalTECCost, totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update proplery.");
-            Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
-
+            AssertMaterialVMMatchesItem(matVM, misc);
         }
 
         [TestMethod]
@@ -134,20 +113,13 @@ namespace Tests
             //Arrange
             TECMisc misc = ModelCreation.TestMisc(bid.Catalogs, rand, CostType.Electrical);
 
-            Total totalTEC = CalculateTotal(misc, CostType.TEC);
-            Total totalElec = CalculateTotal(misc, CostType.Electrical);
-
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
             //Act
             bid.MiscCosts.Add(misc);
 
             //Assert
-            Assert.AreEqual(matVM.TotalTECCost, totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update proplery.");
-            Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
-
+            AssertMaterialVMMatchesItem(matVM, misc);
         }
 
         [TestMethod]
@@ -156,9 +128,6 @@ namespace Tests
             //Arrange
             TECMisc misc = ModelCreation.TestMisc(bid.Catalogs, rand, CostType.TEC);
 
-            Total totalTEC = CalculateTotal(misc, CostType.TEC);
-            Total totalElec = CalculateTotal(misc, CostType.Electrical);
-
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             typical.AddInstance(bid);
@@ -169,11 +138,7 @@ namespace Tests
             typical.MiscCosts.Add(misc);
 
             //Arrange
-            Assert.AreEqual(matVM.TotalTECCost, totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update proplery.");
-            Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
-
+            AssertMaterialVMMatchesItem(matVM, misc);
         }
 
         [TestMethod]
@@ -182,9 +147,6 @@ namespace Tests
             //Arrange
             TECMisc misc = ModelCreation.TestMisc(bid.Catalogs, rand, CostType.Electrical);
 
-            Total totalTEC = CalculateTotal(misc, CostType.TEC);
-            Total totalElec = CalculateTotal(misc, CostType.Electrical);
-
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             typical.AddInstance(bid);
@@ -193,13 +155,9 @@ namespace Tests
 
             //Act
             typical.MiscCosts.Add(misc);
-            
-            //Assert
-            Assert.AreEqual(matVM.TotalTECCost, totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
+            //Assert
+            AssertMaterialVMMatchesItem(matVM, misc);
         }
 
         [TestMethod]
@@ -209,20 +167,13 @@ namespace Tests
             TECPanel panel = ModelCreation.TestPanel(bid.Catalogs, rand);
             panel.AssignRandomScopeProperties(bid.Catalogs, rand);
 
-            Total totalTEC = CalculateTotal(panel, CostType.TEC);
-            Total totalElec = CalculateTotal(panel, CostType.Electrical);
-
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
             //Act
             bid.Panels.Add(panel);
 
             //Assert
-            Assert.AreEqual(matVM.TotalTECCost, totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update proplery.");
-            Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
-
+            AssertMaterialVMMatchesItem(matVM, panel);
         }
 
         [TestMethod]
@@ -232,20 +183,13 @@ namespace Tests
             TECController controller = ModelCreation.TestProvidedController(bid.Catalogs, rand);
             controller.AssignRandomScopeProperties(bid.Catalogs, rand);
 
-            Total totalTEC = CalculateTotal(controller, CostType.TEC);
-            Total totalElec = CalculateTotal(controller, CostType.Electrical);
-
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
             //Act
             bid.AddController(controller);
-            
-            //Assert
-            Assert.AreEqual(matVM.TotalTECCost, totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update proplery.");
-            Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
+            //Assert
+            AssertMaterialVMMatchesItem(matVM, controller);
         }
 
         [TestMethod]
@@ -254,9 +198,6 @@ namespace Tests
             //Arrange
             TECDevice device = ModelCreation.TestDevice(bid.Catalogs, rand);
             device.AssignRandomScopeProperties(bid.Catalogs, rand);
-
-            Total totalTEC = CalculateTotal(device, CostType.TEC);
-            Total totalElec = CalculateTotal(device, CostType.Electrical);
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
@@ -275,11 +216,7 @@ namespace Tests
             typSS.Devices.Add(device);
 
             //Assert
-            Assert.AreEqual(matVM.TotalTECCost, totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update proplery.");
-            Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
-
+            AssertMaterialVMMatchesItem(matVM, device);
         }
 
         [TestMethod]
@@ -288,9 +225,6 @@ namespace Tests
             //Arrange
             TECValve valve = ModelCreation.TestValve(bid.Catalogs, rand);
             valve.AssignRandomScopeProperties(bid.Catalogs, rand);
-
-            Total totalTEC = CalculateTotal(valve, CostType.TEC);
-            Total totalElec = CalculateTotal(valve, CostType.Electrical);
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
@@ -309,11 +243,7 @@ namespace Tests
             typSS.Devices.Add(valve);
 
             //Assert
-            Assert.AreEqual(matVM.TotalTECCost, totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update proplery.");
-            Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
-
+            AssertMaterialVMMatchesItem(matVM, valve);
         }
 
         [TestMethod]
@@ -322,9 +252,6 @@ namespace Tests
             //Arrange
             TECSubScope subscope = ModelCreation.TestSubScope(bid.Catalogs, rand);
             subscope.AssignRandomScopeProperties(bid.Catalogs, rand);
-
-            Total totalTEC = CalculateTotal(subscope, CostType.TEC);
-            Total totalElec = CalculateTotal(subscope, CostType.Electrical);
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
@@ -338,13 +265,9 @@ namespace Tests
 
             //Act
             typEquip.SubScope.Add(subscope);
-            
-            //Assert
-            Assert.AreEqual(matVM.TotalTECCost, totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update proplery.");
-            Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
 
+            //Assert
+            AssertMaterialVMMatchesItem(matVM, subscope);
         }
 
         [TestMethod]
@@ -353,9 +276,6 @@ namespace Tests
             //Arrange
             TECEquipment equipment = ModelCreation.TestEquipment(bid.Catalogs, rand);
             equipment.AssignRandomScopeProperties(bid.Catalogs, rand);
-
-            Total totalTEC = CalculateTotal(equipment, CostType.TEC);
-            Total totalElec = CalculateTotal(equipment, CostType.Electrical);
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
@@ -368,11 +288,7 @@ namespace Tests
             typical.Equipment.Add(equipment);
 
             //Assert
-            Assert.AreEqual(matVM.TotalTECCost, totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update proplery.");
-            Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
-
+            AssertMaterialVMMatchesItem(matVM, equipment);
         }
 
         [TestMethod]
@@ -388,15 +304,8 @@ namespace Tests
             //Act
             TECSystem instance = typical.AddInstance(bid);
 
-            Total totalTEC = CalculateTotal(instance, CostType.TEC);
-            Total totalElec = CalculateTotal(instance, CostType.Electrical);
-
             //Assert
-            Assert.AreEqual(matVM.TotalTECCost, totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update proplery.");
-            Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
-
+            AssertMaterialVMMatchesItem(matVM, instance);
         }
 
         [TestMethod]
@@ -434,16 +343,9 @@ namespace Tests
 
             TECSystem instance = typical.AddInstance(bid);
             TECSubScope instanceSubScope = instance.GetAllSubScope()[0];
-            
-            Total totalTEC = CalculateTotal(connection, CostType.TEC);
-            Total totalElec = CalculateTotal(connection, CostType.Electrical);
 
             //Assert
-            Assert.AreEqual(matVM.TotalTECCost, totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecLabor, totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
-
+            AssertMaterialVMMatchesItem(matVM, connection);
         }
         #endregion
 
@@ -476,18 +378,11 @@ namespace Tests
             double initialElecCost = matVM.TotalElecCost;
             double initialElecLabor = matVM.TotalElecLabor;
 
-            Total totalTEC = CalculateTotal(cost, CostType.TEC);
-            Total totalElec = CalculateTotal(cost, CostType.Electrical);
-
             //Act
             system.AssociatedCosts.Remove(cost);
 
             //Assert
-            Assert.AreEqual(matVM.TotalTECCost, initialTecCost - totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, initialTecLabor - totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
-
+            AssertMaterialVMMatchesItem(matVM, cost);
         }
 
         [TestMethod]
@@ -508,18 +403,11 @@ namespace Tests
             double initialElecCost = matVM.TotalElecCost;
             double initialElecLabor = matVM.TotalElecLabor;
 
-            Total totalTEC = CalculateTotal(cost, CostType.TEC);
-            Total totalElec = CalculateTotal(cost, CostType.Electrical);
-
             //Act
             system.AssociatedCosts.Remove(cost);
 
             //Assert
-            Assert.AreEqual(matVM.TotalTECCost, initialTecCost - totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, initialTecLabor - totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
-
+            AssertMaterialVMMatchesItem(matVM, cost);
         }
 
         [TestMethod]
@@ -537,18 +425,11 @@ namespace Tests
             double initialElecCost = matVM.TotalElecCost;
             double initialElecLabor = matVM.TotalElecLabor;
 
-            Total totalTEC = CalculateTotal(misc, CostType.TEC);
-            Total totalElec = CalculateTotal(misc, CostType.Electrical);
-
             //Act
             bid.MiscCosts.Remove(misc);
 
             //Assert
-            Assert.AreEqual(matVM.TotalTECCost, initialTecCost - totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, initialTecLabor - totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
-
+            AssertMaterialVMMatchesItem(matVM, misc);
         }
 
         [TestMethod]
@@ -566,18 +447,11 @@ namespace Tests
             double initialElecCost = matVM.TotalElecCost;
             double initialElecLabor = matVM.TotalElecLabor;
 
-            Total totalTEC = CalculateTotal(misc, CostType.TEC);
-            Total totalElec = CalculateTotal(misc, CostType.Electrical);
-
             //Act
             bid.MiscCosts.Remove(misc);
 
             //Assert
-            Assert.AreEqual(matVM.TotalTECCost, initialTecCost - totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, initialTecLabor - totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
-
+            AssertMaterialVMMatchesItem(matVM, misc);
         }
 
         [TestMethod]
@@ -596,18 +470,11 @@ namespace Tests
             double initialElecCost = matVM.TotalElecCost;
             double initialElecLabor = matVM.TotalElecLabor;
 
-            Total totalTEC = CalculateTotal(panel, CostType.TEC);
-            Total totalElec = CalculateTotal(panel, CostType.Electrical);
-
             //Act
             bid.Panels.Remove(panel);
 
             //Assert
-            Assert.AreEqual(matVM.TotalTECCost, initialTecCost - totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, initialTecLabor - totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
-
+            AssertMaterialVMMatchesItem(matVM, panel);
         }
 
         [TestMethod]
@@ -626,18 +493,11 @@ namespace Tests
             double initialElecCost = matVM.TotalElecCost;
             double initialElecLabor = matVM.TotalElecLabor;
 
-            Total totalTEC = CalculateTotal(controller, CostType.TEC);
-            Total totalElec = CalculateTotal(controller, CostType.Electrical);
-
             //Act
             bid.RemoveController(controller);
 
             //Assert
-            Assert.AreEqual(matVM.TotalTECCost, initialTecCost - totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, initialTecLabor - totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
-
+            AssertMaterialVMMatchesItem(matVM, controller);
         }
 
         [TestMethod]
@@ -667,18 +527,11 @@ namespace Tests
             double initialElecCost = matVM.TotalElecCost;
             double initialElecLabor = matVM.TotalElecLabor;
 
-            Total totalTEC = CalculateTotal(device, CostType.TEC);
-            Total totalElec = CalculateTotal(device, CostType.Electrical);
-
             //Act
             typSS.Devices.Remove(device);
 
             //Assert
-            Assert.AreEqual(matVM.TotalTECCost, initialTecCost - totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, initialTecLabor - totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
-
+            AssertMaterialVMMatchesItem(matVM, device);
         }
 
         [TestMethod]
@@ -711,18 +564,11 @@ namespace Tests
             double initialElecCost = matVM.TotalElecCost;
             double initialElecLabor = matVM.TotalElecLabor;
 
-            Total totalTEC = CalculateTotal(valve, CostType.TEC);
-            Total totalElec = CalculateTotal(valve, CostType.Electrical);
-
             //Act
             typSS.Devices.Remove(valve);
 
             //Assert
-            Assert.AreEqual(matVM.TotalTECCost, initialTecCost - totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, initialTecLabor - totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
-
+            AssertMaterialVMMatchesItem(matVM, valve);
         }
 
         [TestMethod]
@@ -750,18 +596,11 @@ namespace Tests
             double initialElecCost = matVM.TotalElecCost;
             double initialElecLabor = matVM.TotalElecLabor;
 
-            Total totalTEC = CalculateTotal(subScope, CostType.TEC);
-            Total totalElec = CalculateTotal(subScope, CostType.Electrical);
-
             //Act
             typEquip.SubScope.Remove(subScope);
 
             //Assert
-            Assert.AreEqual(matVM.TotalTECCost, initialTecCost - totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, initialTecLabor - totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
-
+            AssertMaterialVMMatchesItem(matVM, subScope);
         }
 
         [TestMethod]
@@ -785,18 +624,11 @@ namespace Tests
             double initialElecCost = matVM.TotalElecCost;
             double initialElecLabor = matVM.TotalElecLabor;
 
-            Total totalTEC = CalculateTotal(equip, CostType.TEC);
-            Total totalElec = CalculateTotal(equip, CostType.Electrical);
-
             //Act
             typical.Equipment.Remove(equip);
 
             //Assert
-            Assert.AreEqual(matVM.TotalTECCost, initialTecCost - totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, initialTecLabor - totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
-
+            AssertMaterialVMMatchesItem(matVM, equip);
         }
 
         [TestMethod]
@@ -817,25 +649,17 @@ namespace Tests
             double initialElecCost = matVM.TotalElecCost;
             double initialElecLabor = matVM.TotalElecLabor;
 
-            Total totalTEC = CalculateTotal(instance, CostType.TEC);
-            Total totalElec = CalculateTotal(instance, CostType.Electrical);
-
             //Act
             typical.Instances.Remove(instance);
 
             //Assert
-            Assert.AreEqual(matVM.TotalTECCost, initialTecCost - totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, initialTecLabor - totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
-
+            AssertMaterialVMMatchesItem(matVM, instance);
         }
 
         [TestMethod]
         public void RemoveConnection()
         {
             //Arrange
-
             TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0]);
             bid.AddController(controller);
 
@@ -864,19 +688,12 @@ namespace Tests
 
             double initialElecCost = matVM.TotalElecCost;
             double initialElecLabor = matVM.TotalElecLabor;
-
-            Total totalTEC = new Total(connection.CostBatch.GetCost(CostType.TEC), connection.CostBatch.GetLabor(CostType.TEC));
-            Total totalElec = new Total(connection.CostBatch.GetCost(CostType.Electrical), connection.CostBatch.GetLabor(CostType.Electrical));
-
+            
             //Act
             controller.Disconnect(instance.GetAllSubScope()[0]);
 
             //Assert
-            Assert.AreEqual(matVM.TotalTECCost, initialTecCost - totalTEC.Cost, DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalTECLabor, initialTecLabor - totalTEC.Labor, DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecCost, initialElecCost - totalElec.Cost, DELTA, "Total elec cost didn't update properly.");
-            Assert.AreEqual(matVM.TotalElecLabor, initialElecLabor - totalElec.Labor, DELTA, "Total elec labor didn't update properly.");
-
+            AssertMaterialVMMatchesItem(matVM, bid);
         }
         #endregion
 
@@ -912,15 +729,22 @@ namespace Tests
             connection.ConduitLength = 100;
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];
 
-            Assert.AreEqual(0, matVM.TotalTECCost, "Typical connection added to tec cost.");
-            Assert.AreEqual(0, matVM.TotalTECLabor, "Typical connection added to tec labor.");
-            Assert.AreEqual(0, matVM.TotalElecCost, "Typical connection added to elec cost.");
-            Assert.AreEqual(0, matVM.TotalElecLabor, "Typical connection added to elec labor.");
-
+            AssertMaterialVMMatchesItem(matVM, connection);
         }
         #endregion
 
         #endregion
         
+        private static void AssertMaterialVMMatchesItem(MaterialSummaryVM vm, INotifyCostChanged item)
+        {
+            Assert.AreEqual(vm.TotalTECCost, item.CostBatch.GetCost(CostType.TEC),
+                GeneralTestingUtilities.DELTA, "Total tec cost didn't update properly.");
+            Assert.AreEqual(vm.TotalTECLabor, item.CostBatch.GetLabor(CostType.TEC),
+                GeneralTestingUtilities.DELTA, "Total tec labor didn't update properly.");
+            Assert.AreEqual(vm.TotalElecCost, item.CostBatch.GetCost(CostType.Electrical),
+                GeneralTestingUtilities.DELTA, "Total elec cost didn't update proplery.");
+            Assert.AreEqual(vm.TotalElecLabor, item.CostBatch.GetLabor(CostType.Electrical),
+                GeneralTestingUtilities.DELTA, "Total elec labor didn't update properly.");
+        }
     }
 }
