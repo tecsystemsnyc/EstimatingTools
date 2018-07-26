@@ -12,7 +12,7 @@ namespace EstimatingLibrary
         #region Fields
         private ObservableCollection<TECController> _controllers = new ObservableCollection<TECController>();
 
-        private bool _proposeEquipment = false;
+        private bool _isSingleton = false;
         #endregion
 
         #region Constructors
@@ -102,14 +102,14 @@ namespace EstimatingLibrary
         public ObservableCollection<TECScopeBranch> ScopeBranches { get; } = new ObservableCollection<TECScopeBranch>();
         public ObservableCollection<TECProposalItem> ProposalItems { get; } = new ObservableCollection<TECProposalItem>();
 
-        public bool ProposeEquipment
+        public bool IsSingleton
         {
-            get { return _proposeEquipment; }
+            get { return _isSingleton; }
             set
             {
-                var old = ProposeEquipment;
-                _proposeEquipment = value;
-                notifyTECChanged(Change.Edit, "ProposeEquipment", this, value, old);
+                var old = IsSingleton;
+                _isSingleton = value;
+                notifyTECChanged(Change.Edit, "IsSingleton", this, value, old);
             }
         }
         public bool IsTypical

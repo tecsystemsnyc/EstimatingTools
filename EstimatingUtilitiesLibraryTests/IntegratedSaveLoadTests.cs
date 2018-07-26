@@ -540,7 +540,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Assert
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
-            Assert.AreEqual(expectedSystem.ProposeEquipment, actualSystem.ProposeEquipment);
+            Assert.AreEqual(expectedSystem.IsSingleton, actualSystem.IsSingleton);
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
         }
 
@@ -574,7 +574,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Assert
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
-            Assert.AreEqual(expectedSystem.ProposeEquipment, actualSystem.ProposeEquipment);
+            Assert.AreEqual(expectedSystem.IsSingleton, actualSystem.IsSingleton);
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
         }
 
@@ -609,7 +609,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Assert
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
-            Assert.AreEqual(expectedSystem.ProposeEquipment, actualSystem.ProposeEquipment);
+            Assert.AreEqual(expectedSystem.IsSingleton, actualSystem.IsSingleton);
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
         }
 

@@ -404,7 +404,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
         public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
-        public static TableField ProposeEquipment = new TableField("ProposeEquipment", "INTEGER", ObjectType.GetProperty("ProposeEquipment"));
+        public static TableField IsSingleton = new TableField("IsSingleton", "INTEGER", ObjectType.GetProperty("IsSingleton"));
 
         private List<TableField> primaryKeys = new List<TableField>() {
             ID
@@ -418,7 +418,7 @@ namespace EstimatingUtilitiesLibrary.Database
             ID,
             Name,
             Description,
-            ProposeEquipment
+            IsSingleton
 
         };
         private List<string> propertyNames = new List<string>()

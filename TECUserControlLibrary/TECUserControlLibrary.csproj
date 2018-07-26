@@ -452,9 +452,6 @@
     <Compile Include="Views\HardwareSummaryView.xaml.cs">
       <DependentUpon>HardwareSummaryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\SystemProposalGridControl.xaml.cs">
-      <DependentUpon>SystemProposalGridControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Utilities\AttachableForStyleBehavior.cs" />
     <Compile Include="Utilities\BindingProxy.cs" />
     <Compile Include="Utilities\BubbleScrollEvent .cs" />
@@ -981,10 +978,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\HardwareSummaryView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\SystemProposalGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
