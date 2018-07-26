@@ -395,7 +395,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = system.Guid.ToString();
             data[SystemTable.Name.Name] = system.Name.ToString();
             data[SystemTable.Description.Name] = system.Description.ToString();
-            data[SystemTable.ProposeEquipment.Name] = system.ProposeEquipment.ToInt().ToString();
+            data[SystemTable.IsSingleton.Name] = system.IsSingleton.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
 
             data = new Dictionary<string, string>();
@@ -431,7 +431,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToInt().ToString();
+            data[SystemTable.IsSingleton.Name] = instance.IsSingleton.ToInt().ToString();
 
             expectedItems.Add( new UpdateItem(Change.Add, SystemTable.TableName, data));
 
@@ -560,7 +560,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToInt().ToString();
+            data[SystemTable.IsSingleton.Name] = instance.IsSingleton.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
 
             data = new Dictionary<string, string>();
@@ -705,7 +705,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToInt().ToString();
+            data[SystemTable.IsSingleton.Name] = instance.IsSingleton.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
             data = new Dictionary<string, string>();
             data[EquipmentTable.ID.Name] = instance.Equipment[0].Guid.ToString();
@@ -879,7 +879,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToInt().ToString();
+            data[SystemTable.IsSingleton.Name] = instance.IsSingleton.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
 
             data = new Dictionary<string, string>();
@@ -1035,7 +1035,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToInt().ToString();
+            data[SystemTable.IsSingleton.Name] = instance.IsSingleton.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
             data = new Dictionary<string, string>();
             data[EquipmentTable.ID.Name] = instance.Equipment[0].Guid.ToString();
@@ -1188,7 +1188,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToInt().ToString();
+            data[SystemTable.IsSingleton.Name] = instance.IsSingleton.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
             data = new Dictionary<string, string>();
             data[EquipmentTable.ID.Name] = instance.Equipment[0].Guid.ToString();
@@ -1365,7 +1365,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToInt().ToString();
+            data[SystemTable.IsSingleton.Name] = instance.IsSingleton.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
             data = new Dictionary<string, string>();
             data[ProvidedControllerTable.ID.Name] = instance.Controllers[0].Guid.ToString();
@@ -1555,7 +1555,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToInt().ToString();
+            data[SystemTable.IsSingleton.Name] = instance.IsSingleton.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
             data = new Dictionary<string, string>();
             data[PanelTable.ID.Name] = instance.Panels[0].Guid.ToString();
@@ -1707,7 +1707,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToInt().ToString();
+            data[SystemTable.IsSingleton.Name] = instance.IsSingleton.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
             data = new Dictionary<string, string>();
             data[MiscTable.ID.Name] = instance.MiscCosts[0].Guid.ToString();
@@ -1916,7 +1916,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.ProposeEquipment.Name] = instance.ProposeEquipment.ToInt().ToString();
+            data[SystemTable.IsSingleton.Name] = instance.IsSingleton.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
 
             data = new Dictionary<string, string>();

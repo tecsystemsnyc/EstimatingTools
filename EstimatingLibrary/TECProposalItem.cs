@@ -44,6 +44,14 @@ namespace EstimatingLibrary
             ContainingScope.CollectionChanged += containingScopeCollectionChanged;
             new ChangeWatcher(dislpayScope).Changed += scopeChanged;
         }
+        public TECProposalItem(TECProposalItem source, Dictionary<Guid, Guid> guidDictionary = null) : this(source.Guid, new TECEquipment(source.DisplayScope, guidDictionary))
+        {
+            foreach(TECEquipment item in source.ContainingScope)
+            {
+                this.ContainingScope.Add(new TECEquipment(item, guidDictionary));
+            }
+
+        }
         
         private void scopeChanged(TECChangedEventArgs obj)
         {
