@@ -225,6 +225,7 @@ namespace TECUserControlLibrary.ViewModels
             else
             {
                 CostSummaryItem item = new CostSummaryItem(cost);
+                CostBatch delta = new CostBatch(item.TotalCost, item.TotalLabor, cost.Type);
                 costDictionary.Add(cost.Guid, item);
                 if (cost is TECMisc misc)
                 {
@@ -239,6 +240,10 @@ namespace TECUserControlLibrary.ViewModels
                         _miscElecItems.Add(item);
                         MiscElecCostTotal += item.TotalCost;
                         MiscElecLaborTotal += item.TotalLabor;
+                    }
+                    foreach(TECAssociatedCost assocCost in misc.AssociatedCosts)
+                    {
+                        delta += AddCost(assocCost);
                     }
                 }
                 else
@@ -256,7 +261,6 @@ namespace TECUserControlLibrary.ViewModels
                         AssocElecLaborTotal += item.TotalLabor;
                     }
                 }
-                CostBatch delta = new CostBatch(item.TotalCost, item.TotalLabor, cost.Type);
                 return delta;
             }
         }
@@ -279,6 +283,10 @@ namespace TECUserControlLibrary.ViewModels
                     {
                         MiscElecCostTotal += delta.GetCost(CostType.Electrical);
                         MiscElecLaborTotal += delta.GetLabor(CostType.Electrical);
+                    }
+                    foreach(TECAssociatedCost assocCost in misc.AssociatedCosts)
+                    {
+                        delta += RemoveCost(assocCost);
                     }
                 }
                 else
