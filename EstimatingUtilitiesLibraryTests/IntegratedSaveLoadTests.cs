@@ -553,7 +553,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             TECTypical typical = bid.Systems[0];
 
-            TECSystem expectedSystem = typical.AddInstance(bid);
+            TECSystem expectedSystem = typical.AddInstance();
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -588,7 +588,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECTypical typical = bid.Systems[0];
 
             typical.Equipment.Add(ModelCreation.TestEquipment(bid.Catalogs, rand));
-            TECSystem expectedSystem = typical.AddInstance(bid);
+            TECSystem expectedSystem = typical.AddInstance();
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 

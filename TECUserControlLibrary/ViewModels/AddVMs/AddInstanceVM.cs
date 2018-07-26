@@ -130,7 +130,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             foreach(NameConatiner item in Names)
             {
-                TECSystem newSystem = parent.AddInstance(bid);
+                TECSystem newSystem = parent.AddInstance();
                 newSystem.Name = item.Name;
                 if (item.Location != null)
                 {

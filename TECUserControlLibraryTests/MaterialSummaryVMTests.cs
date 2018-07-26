@@ -53,7 +53,7 @@ namespace Tests
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            typical.AddInstance(bid);
+            typical.AddInstance();
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
@@ -81,7 +81,7 @@ namespace Tests
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
@@ -130,7 +130,7 @@ namespace Tests
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            typical.AddInstance(bid);
+            typical.AddInstance();
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
@@ -149,7 +149,7 @@ namespace Tests
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            typical.AddInstance(bid);
+            typical.AddInstance();
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
@@ -208,7 +208,7 @@ namespace Tests
             TECSubScope typSS = new TECSubScope();
             typEquip.SubScope.Add(typSS);
 
-            typical.AddInstance(bid);
+            typical.AddInstance();
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
@@ -235,7 +235,7 @@ namespace Tests
             TECSubScope typSS = new TECSubScope();
             typEquip.SubScope.Add(typSS);
 
-            typical.AddInstance(bid);
+            typical.AddInstance();
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
@@ -259,7 +259,7 @@ namespace Tests
             TECEquipment typEquip = new TECEquipment();
             typical.Equipment.Add(typEquip);
 
-            typical.AddInstance(bid);
+            typical.AddInstance();
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
@@ -280,7 +280,7 @@ namespace Tests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
 
-            typical.AddInstance(bid);
+            typical.AddInstance();
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
             
@@ -302,7 +302,7 @@ namespace Tests
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
             //Act
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
 
             //Assert
             AssertMaterialVMMatchesCostBatch(matVM, instance.CostBatch);
@@ -341,7 +341,7 @@ namespace Tests
             connection.ConduitLength = 50;
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];
 
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             TECSubScope instanceSubScope = instance.GetAllSubScope()[0];
 
             //Assert
@@ -367,7 +367,7 @@ namespace Tests
             }
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            system.AddInstance(bid);
+            system.AddInstance();
             system.AssociatedCosts.Add(cost);
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
@@ -392,7 +392,7 @@ namespace Tests
             TECAssociatedCost cost = bid.Catalogs.AssociatedCosts.First(x => x.Type == CostType.Electrical);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            system.AddInstance(bid);
+            system.AddInstance();
             system.AssociatedCosts.Add(cost);
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
@@ -513,7 +513,7 @@ namespace Tests
             device.AssignRandomScopeProperties(bid.Catalogs, rand);
             typSS.Devices.Add(device);
 
-            typical.AddInstance(bid);
+            typical.AddInstance();
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
@@ -546,7 +546,7 @@ namespace Tests
             valve.AssignRandomScopeProperties(bid.Catalogs, rand);
             typSS.Devices.Add(valve);
 
-            typical.AddInstance(bid);
+            typical.AddInstance();
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
@@ -574,7 +574,7 @@ namespace Tests
             subScope.AssignRandomScopeProperties(bid.Catalogs, rand);
             typEquip.SubScope.Add(subScope);
 
-            typical.AddInstance(bid);
+            typical.AddInstance();
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
@@ -598,7 +598,7 @@ namespace Tests
             equip.AssignRandomScopeProperties(bid.Catalogs, rand);
             typical.Equipment.Add(equip);
 
-            typical.AddInstance(bid);
+            typical.AddInstance();
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
@@ -619,7 +619,7 @@ namespace Tests
             TECTypical typical = ModelCreation.TestTypical(bid.Catalogs, rand);
             bid.Systems.Add(typical);
 
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
@@ -649,7 +649,7 @@ namespace Tests
             ss.Devices.Add(bid.Catalogs.Devices[0]);
             typEquip.SubScope.Add(ss);
             
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
 
             TECSubScope instanceSubScope = instance.GetAllSubScope()[0];
             IControllerConnection connection = controller.Connect(instanceSubScope, (instanceSubScope as IConnectable).AvailableProtocols.First());

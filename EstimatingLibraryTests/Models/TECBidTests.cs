@@ -53,7 +53,7 @@ namespace Models
             typical.Equipment.Add(equipment);
 
             bid.Systems.Add(typical);
-            TECSystem system = typical.AddInstance(bid);
+            TECSystem system = typical.AddInstance();
             TECSubScope instanceSubScope = typical.GetInstancesFromTypical(subScope).First();
             IControllerConnection connection = controller.Connect(instanceSubScope, instanceSubScope.AvailableProtocols.First());
             Assert.IsTrue(connection is TECNetworkConnection);
@@ -82,7 +82,7 @@ namespace Models
             typical.AddController(typicalController);
 
             bid.Systems.Add(typical);
-            TECSystem system = typical.AddInstance(bid);
+            TECSystem system = typical.AddInstance();
             TECController instanceController = typical.GetInstancesFromTypical(typicalController).First();
 
             Assert.IsTrue(controller.CanConnect(instanceController));

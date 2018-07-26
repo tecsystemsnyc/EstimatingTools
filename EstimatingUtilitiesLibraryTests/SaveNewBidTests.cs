@@ -256,7 +256,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.Catalogs = ModelCreation.TestCatalogs(rand, 5);
             TECTypical expectedSystem = ModelCreation.TestTypical(bid.Catalogs, rand);
             bid.Systems.Add(expectedSystem);
-            expectedSystem.AddInstance(bid);
+            expectedSystem.AddInstance();
 
             path = Path.GetTempFileName();
 

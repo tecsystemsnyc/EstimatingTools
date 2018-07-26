@@ -109,7 +109,7 @@ namespace EstimatingLibrary
                 ProposalItems.Add(toAdd);
             }
             this.copyPropertiesFromLocated(system);
-            ModelLinkingHelper.LinkSystem(this, manager, guidDictionary);
+            ModelLinkingHelper.LinkSystem(this, guidDictionary);
         }
         #endregion
 
@@ -119,7 +119,7 @@ namespace EstimatingLibrary
         #endregion
 
         #region Methods
-        public TECSystem AddInstance(TECBid bid)
+        public TECSystem AddInstance()
         {
             Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
             var newSystem = new TECSystem();
@@ -154,7 +154,7 @@ namespace EstimatingLibrary
                 TypicalInstanceDictionary.AddItem(branch, toAdd);
                 newSystem.ScopeBranches.Add(toAdd);
             }
-            ModelLinkingHelper.LinkSystem(newSystem, bid, guidDictionary);
+            ModelLinkingHelper.LinkSystem(newSystem, guidDictionary);
             
             Instances.Add(newSystem);
 
@@ -276,7 +276,7 @@ namespace EstimatingLibrary
         {
             Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
             TECTypical outSystem = new TECTypical(this, guidDictionary);
-            ModelLinkingHelper.LinkSystem(outSystem, scopeManager, guidDictionary);
+            ModelLinkingHelper.LinkSystem(outSystem, guidDictionary);
             return outSystem;
         }
 
@@ -517,7 +517,6 @@ namespace EstimatingLibrary
 
             }
             
-            
         }
         private void handleRemove(TECChangedEventArgs args)
         {
@@ -558,5 +557,6 @@ namespace EstimatingLibrary
 
         #endregion
         #endregion
+        
     }
 }

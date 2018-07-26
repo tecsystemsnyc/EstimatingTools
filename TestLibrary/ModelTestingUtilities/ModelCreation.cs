@@ -106,7 +106,7 @@ namespace TestLibrary.ModelTestingUtilities
             rand.RepeatAction(() => bid.Systems.Add(TestTypical(bid.Catalogs, rand)), maxEachItem);
             foreach (TECTypical typ in bid.Systems)
             {
-                rand.RepeatAction(() => typ.AddInstance(bid), maxEachItem);
+                rand.RepeatAction(() => typ.AddInstance(), maxEachItem);
             }
 
             //Connections

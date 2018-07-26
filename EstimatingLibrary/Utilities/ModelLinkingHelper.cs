@@ -42,9 +42,8 @@ namespace EstimatingLibrary.Utilities
 
             return needsSave;
         }
-        public static void LinkSystem(TECSystem system, TECScopeManager scopeManager, Dictionary<Guid, Guid> guidDictionary)
+        public static void LinkSystem(TECSystem system, Dictionary<Guid, Guid> guidDictionary)
         {
-            linkSystemToCatalogs(system, scopeManager.Catalogs);
             linkSubScopeConnections(system.Controllers, system.GetAllSubScope(), guidDictionary);
             List<IConnectable> allChildren = new List<IConnectable>();
             allChildren.AddRange(system.Controllers);

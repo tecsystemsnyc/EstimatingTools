@@ -30,7 +30,7 @@ namespace Models
 
             for (int x = 0; x < qty; x++)
             {
-                system.AddInstance(bid);
+                system.AddInstance();
             }
 
             Assert.AreEqual(system.Instances.Count, qty);
@@ -53,7 +53,7 @@ namespace Models
             bid.Systems.Add(system);
             for (int x = 0; x < qty; x++)
             {
-                system.AddInstance(bid);
+                system.AddInstance();
             }
 
             system.Equipment.Add(ModelCreation.TestEquipment(bid.Catalogs,rand));
@@ -88,7 +88,7 @@ namespace Models
 
             system.Equipment.Add(equipment);
             equipment.SubScope.Add(subScope);
-            var instance = system.AddInstance(bid);
+            var instance = system.AddInstance();
             var instanceSubScope = instance.GetAllSubScope().First();
 
             bidController.Connect(instanceSubScope, hardProt);
@@ -113,7 +113,7 @@ namespace Models
             equipment.SubScope.Add(subScope);
             controller.Connect(subScope, subScope.AvailableProtocols.First());
             bid.Systems.Add(system);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
             
             TECController instanceController = system.TypicalInstanceDictionary.GetInstances(controller)[0] as TECController;
             TECSubScope instanceSubScope = system.TypicalInstanceDictionary.GetInstances(subScope)[0] as TECSubScope;
@@ -130,7 +130,7 @@ namespace Models
             TECBid bid = new TECBid();
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
 
             TECEquipment toAdd = new TECEquipment();
             typical.Equipment.Add(toAdd);
@@ -149,7 +149,7 @@ namespace Models
             TECEquipment equipment = new TECEquipment();
             typical.Equipment.Add(equipment);
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
 
             TECSubScope toAdd = new TECSubScope();
             equipment.SubScope.Add(toAdd);

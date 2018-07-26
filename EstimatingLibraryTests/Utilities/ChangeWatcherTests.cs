@@ -282,7 +282,7 @@ namespace Utilities
             resetRaised();
 
             //Act
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
 
             TECEquipment instanceEquip = instance.Equipment[0];
             TECSubScope instanceSS = instanceEquip.SubScope[0];
@@ -429,7 +429,7 @@ namespace Utilities
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             TECEquipment equip = new TECEquipment();
             TECSubScope ss = new TECSubScope();
             TECPoint point = new TECPoint();
@@ -461,7 +461,7 @@ namespace Utilities
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             TECControllerType type = bid.Catalogs.ControllerTypes[0];
             TECController controller = new TECProvidedController(type);
 
@@ -483,7 +483,7 @@ namespace Utilities
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             TECPanelType panelType = bid.Catalogs.PanelTypes[0];
             TECPanel panel = new TECPanel(panelType);
 
@@ -505,7 +505,7 @@ namespace Utilities
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             TECMisc misc = new TECMisc(CostType.TEC);
             misc.Cost = 97.43;
             misc.Labor = 46.15;
@@ -634,7 +634,7 @@ namespace Utilities
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             TECEquipment equip = new TECEquipment();
             instance.Equipment.Add(equip);
 
@@ -666,7 +666,7 @@ namespace Utilities
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             TECEquipment equip = new TECEquipment();
             instance.Equipment.Add(equip);
 
@@ -698,7 +698,7 @@ namespace Utilities
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             TECEquipment equip = new TECEquipment();
             TECSubScope ss = new TECSubScope();
             equip.SubScope.Add(ss);
@@ -723,7 +723,7 @@ namespace Utilities
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             TECEquipment equip = new TECEquipment();
             TECSubScope ss = new TECSubScope();
             equip.SubScope.Add(ss);
@@ -778,7 +778,7 @@ namespace Utilities
 
             TECController childController = new TECProvidedController(type);
             typical.AddController(childController);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             TECController instanceController = instance.Controllers[0];
 
             TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
@@ -829,7 +829,7 @@ namespace Utilities
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
-            system.AddInstance(bid);
+            system.AddInstance();
             TECSubScope instanceSubScope = system.Instances[0].Equipment[0].SubScope[0];
 
             TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0]);
@@ -887,7 +887,7 @@ namespace Utilities
             TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0]);
             system.AddController(controller);
             bid.Systems.Add(system);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
             TECSubScope instanceSubScope = instance.Equipment[0].SubScope[0];
             TECController instanceController = instance.Controllers[0];
 
@@ -1129,7 +1129,7 @@ namespace Utilities
             equip.SubScope.Add(ss);
             typical.Equipment.Add(equip);
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             TECEquipment instanceEquip = instance.Equipment[0];
             TECSubScope instanceSS = instanceEquip.SubScope[0];
             TECPoint instancePoint = instanceSS.Points[0];
@@ -1287,7 +1287,7 @@ namespace Utilities
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             TECEquipment equip = new TECEquipment();
             TECSubScope ss = new TECSubScope();
             TECPoint point = new TECPoint();
@@ -1320,7 +1320,7 @@ namespace Utilities
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             TECControllerType type = bid.Catalogs.ControllerTypes[0];
             TECController controller = new TECProvidedController(type);
             instance.AddController(controller);
@@ -1343,7 +1343,7 @@ namespace Utilities
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             TECPanelType panelType = bid.Catalogs.PanelTypes[0];
             TECPanel panel = new TECPanel(panelType);
             instance.Panels.Add(panel);
@@ -1366,7 +1366,7 @@ namespace Utilities
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             TECMisc misc = new TECMisc(CostType.TEC);
             misc.Cost = 31.11;
             misc.Labor = 49.73;
@@ -1498,7 +1498,7 @@ namespace Utilities
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             TECEquipment equip = new TECEquipment();
             instance.Equipment.Add(equip);
 
@@ -1531,7 +1531,7 @@ namespace Utilities
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             TECEquipment equip = new TECEquipment();
             instance.Equipment.Add(equip);
 
@@ -1565,7 +1565,7 @@ namespace Utilities
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             TECEquipment equip = new TECEquipment();
             TECSubScope ss = new TECSubScope();
             equip.SubScope.Add(ss);
@@ -1591,7 +1591,7 @@ namespace Utilities
             //Arrange
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             TECEquipment equip = new TECEquipment();
             TECSubScope ss = new TECSubScope();
             equip.SubScope.Add(ss);
@@ -1688,7 +1688,7 @@ namespace Utilities
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
-            system.AddInstance(bid);
+            system.AddInstance();
             TECSubScope instanceSubScope = system.Instances[0].Equipment[0].SubScope[0];
 
             TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0]);
@@ -1752,7 +1752,7 @@ namespace Utilities
             TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0]);
             system.AddController(controller);
             bid.Systems.Add(system);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
             TECSubScope instanceSubScope = instance.Equipment[0].SubScope[0];
             TECController instanceController = instance.Controllers[0];
             IControllerConnection connection = instanceController.Connect(instanceSubScope, hardProt);
@@ -2250,7 +2250,7 @@ namespace Utilities
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECSystem system = typical.AddInstance(bid);
+            TECSystem system = typical.AddInstance();
             system.Name = original;
 
             resetRaised();
@@ -2275,7 +2275,7 @@ namespace Utilities
 
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
-            TECSystem system = typical.AddInstance(bid);
+            TECSystem system = typical.AddInstance();
             system.Location = original;
 
             resetRaised();
@@ -2299,7 +2299,7 @@ namespace Utilities
             bid.Systems.Add(typical);
             TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0]);
             typical.AddController(controller);
-            TECSystem system = typical.AddInstance(bid);
+            TECSystem system = typical.AddInstance();
             TECController systemController = system.Controllers[0];
             systemController.Name = original;
 
@@ -2324,7 +2324,7 @@ namespace Utilities
             bid.Systems.Add(typical);
             TECPanel panel = new TECPanel(bid.Catalogs.PanelTypes[0]);
             typical.Panels.Add(panel);
-            TECSystem system = typical.AddInstance(bid);
+            TECSystem system = typical.AddInstance();
             TECPanel systemPanel = system.Panels[0];
             systemPanel.Name = original;
 
@@ -2349,7 +2349,7 @@ namespace Utilities
             bid.Systems.Add(typical);
             TECMisc misc = new TECMisc(CostType.TEC);
             typical.MiscCosts.Add(misc);
-            TECSystem system = typical.AddInstance(bid);
+            TECSystem system = typical.AddInstance();
             TECMisc systemMisc = system.MiscCosts[0];
             systemMisc.Name = original;
 
@@ -2374,7 +2374,7 @@ namespace Utilities
             bid.Systems.Add(typical);
             TECScopeBranch branch = new TECScopeBranch();
             typical.ScopeBranches.Add(branch);
-            TECSystem system = typical.AddInstance(bid);
+            TECSystem system = typical.AddInstance();
             TECScopeBranch systemScopeBranch = system.ScopeBranches[0];
             systemScopeBranch.Label = original;
 
@@ -2399,7 +2399,7 @@ namespace Utilities
             bid.Systems.Add(typical);
             TECEquipment equipment = new TECEquipment();
             typical.Equipment.Add(equipment);
-            TECSystem system = typical.AddInstance(bid);
+            TECSystem system = typical.AddInstance();
             TECEquipment systemEquipment = system.Equipment[0];
             systemEquipment.Name = original;
 
@@ -2426,7 +2426,7 @@ namespace Utilities
             typical.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
-            TECSystem system = typical.AddInstance(bid);
+            TECSystem system = typical.AddInstance();
             TECSubScope systemSubScope = system.Equipment[0].SubScope[0];
             systemSubScope.Name = original;
 
@@ -2455,7 +2455,7 @@ namespace Utilities
             equipment.SubScope.Add(subScope);
             TECPoint point = new TECPoint();
             subScope.Points.Add(point);
-            TECSystem system = typical.AddInstance(bid);
+            TECSystem system = typical.AddInstance();
             TECPoint systemPoint = system.Equipment[0].SubScope[0].Points[0];
             systemPoint.Label = original;
 
@@ -2484,7 +2484,7 @@ namespace Utilities
             equipment.SubScope.Add(subScope);
             TECPoint point = new TECPoint();
             subScope.Points.Add(point);
-            TECSystem system = typical.AddInstance(bid);
+            TECSystem system = typical.AddInstance();
             TECPoint systemPoint = system.Equipment[0].SubScope[0].Points[0];
             point.Quantity = original;
 
@@ -2516,7 +2516,7 @@ namespace Utilities
 
             typController.Connect(typSS, (typSS as IConnectable).AvailableProtocols.First());
 
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             IControllerConnection ssConnect = instance.Equipment[0].SubScope[0].Connection;
             ssConnect.Length = 134.12;
             ssConnect.ConduitLength = 91.15;

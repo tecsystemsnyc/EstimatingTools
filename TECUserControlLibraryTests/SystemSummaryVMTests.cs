@@ -163,7 +163,7 @@ namespace TECUserControlLibraryTests
             typical.MiscCosts.Add(misc);
 
             bid.Systems.Add(typical);
-            typical.AddInstance(bid);
+            typical.AddInstance();
             return typical;
         }
     }

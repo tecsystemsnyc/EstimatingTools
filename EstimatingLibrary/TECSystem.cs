@@ -83,7 +83,7 @@ namespace EstimatingLibrary
                 ProposalItems.Add(toAdd);
             }
             this.copyPropertiesFromLocated(source);
-            ModelLinkingHelper.LinkSystem(this, manager, guidDictionary);
+            ModelLinkingHelper.LinkSystem(this, guidDictionary);
         }
         #endregion
 
