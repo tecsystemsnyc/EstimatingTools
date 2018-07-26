@@ -31,18 +31,20 @@ namespace EstimatingLibrary
         }
         public String DisplayName
         {
-            get { return ContainingScope.Aggregate("", (name, equip) => 
-            name += equip.Name + (equip == ContainingScope.Last() ? "" : "; ")); }
+            get {
+                var allScope = new List<TECEquipment>() { DisplayScope };
+                allScope.AddRange(ContainingScope);
+                return allScope.ToList().Aggregate("", (name, equip) => 
+            name += equip.Name + (ContainingScope.Count == 0 || equip == ContainingScope.Last() ? "" : "; ")); }
         }
-        
+
         public TECProposalItem(Guid guid, TECEquipment dislpayScope) : base(guid)
         {
             this.DisplayScope = dislpayScope;
-            this.ContainingScope.Add(DisplayScope);
             ContainingScope.CollectionChanged += containingScopeCollectionChanged;
             new ChangeWatcher(dislpayScope).Changed += scopeChanged;
         }
-
+        
         private void scopeChanged(TECChangedEventArgs obj)
         {
             if(obj.PropertyName == "ScopeBranches")
@@ -57,6 +59,7 @@ namespace EstimatingLibrary
         {
             CollectionChangedHandlers.CollectionChangedHandler(sender, e, "ContainingScope", this, notifyCombinedChanged);
             raisePropertyChanged("DisplayName");
+            raisePropertyChanged("AllScope");
         }
 
         #region IRelatable
@@ -65,7 +68,10 @@ namespace EstimatingLibrary
         {
             get
             {
-                return new SaveableMap();
+                var map = new SaveableMap();
+                map.Add(DisplayScope, "DisplayScope");
+                map.AddRange(ContainingScope, "ContainingScope");
+                return map;
             }
         }
 

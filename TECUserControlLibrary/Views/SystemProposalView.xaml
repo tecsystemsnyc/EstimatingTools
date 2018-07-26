@@ -55,7 +55,8 @@
                               Grid.Row="1" Grid.Column="1"
                               HorizontalContentAlignment="Stretch"
                               dd:DragDrop.DropHandler="{Binding}"
-                              dd:DragDrop.IsDropTarget="True">
+                              dd:DragDrop.IsDropTarget="True"
+                              dd:DragDrop.IsDragSource="True">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -80,7 +81,7 @@
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
                                                 <Border Style="{StaticResource ListItemBorder}"
-                                                        Background="{StaticResource ItemBorderBrush}">
+                                                        Background="{StaticResource ItemBackgroundBrush}">
                                                     <TextBlock Text="{Binding Name}" Foreground="Black"/>
                                                 </Border>
                                             </DataTemplate>

@@ -7,6 +7,8 @@
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:eUtilities="clr-namespace:EstimatingUtilitiesLibrary;assembly=EstimatingUtilitiesLibrary"
+             xmlns:listcontrols="clr-namespace:TECUserControlLibrary.UserControls.ListControls"
+             xmlns:views="clr-namespace:TECUserControlLibrary.Views"
              mc:Ignorable="d" 
              x:Name="parent"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -43,8 +45,13 @@
             <!--Systems Tab-->
             <TabItem Visibility="Collapsed">
                 <Grid Background="{StaticResource SectionBackgroundBrush}">
-                    <controls:SystemProposalGridControl SystemsSource="{Binding Bid.Systems}"
-                                                        Grid.Row="1"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <listcontrols:TypicalListControl Source="{Binding Bid.Systems}" x:Name="typicalList"/>
+                    <views:SystemProposalView SystemSource="{Binding ElementName=typicalList, Path=SelectedItem}"
+                                              Grid.Column="1"/>
                 </Grid>
             </TabItem>
             <!--Notes Tab-->
