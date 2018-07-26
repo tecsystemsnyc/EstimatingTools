@@ -3,6 +3,7 @@ using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using EstimatingLibrary.Utilities.WatcherFilters;
 using GalaSoft.MvvmLight;
+using NLog;
 using System;
 using System.Linq;
 using TECUserControlLibrary.Utilities;
@@ -12,6 +13,8 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class MaterialSummaryVM : ViewModelBase
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         #region Fields and Properties
         private double _totalTECCost;
         private double _totalTECLabor;
@@ -199,7 +202,8 @@ namespace TECUserControlLibrary.ViewModels
                         CurrentType = "Misc";
                         break;
                     default:
-                        throw new InvalidOperationException("Material Summary Index not found.");
+                        logger.Error("Material Summary Index not found.");
+                        break;
                 }
                 _selectedIndex = value;
                 RaisePropertyChanged("SelectedIndex");
@@ -335,7 +339,8 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else
                 {
-                    throw new DataMisalignedException("End device isn't recognized. Not valve or device.");
+                    logger.Error("IEndDevice isn't recognized. Not valve or device. " +
+                        "MaterialSummaryVM cannot add IEndDevice. IEndDevice: {0}", endDev.Name);
                 }
             }
             foreach(ICost cost in ss.AssociatedCosts)
@@ -460,7 +465,8 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else
                 {
-                    throw new DataMisalignedException("End device isn't recognized. Not valve or device.");
+                    logger.Error("IEndDevice isn't recognized. Not valve or device. " +
+                        "MaterialSummaryVM cannot add IEndDevice. IEndDevice: {0}", endDev.Name);
                 }
             }
             foreach(ICost cost in ss.AssociatedCosts)
@@ -582,7 +588,8 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     else
                     {
-                        throw new DataMisalignedException("End device isn't recognized. Not valve or device.");
+                        logger.Error("IEndDevice isn't recognized. Not valve or device. " +
+                        "MaterialSummaryVM cannot add IEndDevice. IEndDevice: {0}", endDev.Name);
                     }
                     
                     if (sub.Connection != null)
@@ -599,9 +606,17 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else if (args.Value is TECCost cost)
                 {
-                    if (args.Sender is TECHardware || args.Sender is TECElectricalMaterial)
+                    if (args.Sender is TECHardware hardware)
                     {
-                        throw new NotImplementedException();
+                        logger.Error("TECHardware raised as value in instance changed args. Item: {0}, Parent:{1}", 
+                            hardware.Name,
+                            args.Sender.Guid.ToString());
+                    }
+                    else if (args.Sender is TECElectricalMaterial elecMat)
+                    {
+                        logger.Error("TECElectricalMaterial raise as value in instance changed args. Item: {0}, Parent:{1}",
+                            elecMat.Name,
+                            args.Sender.Guid.ToString());
                     }
                     else
                     {
@@ -651,7 +666,8 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     else
                     {
-                        throw new DataMisalignedException("End device isn't recognized. Not valve or device.");
+                        logger.Error("IEndDevice isn't recognized. Not valve or device. " +
+                        "MaterialSummaryVM cannot add IEndDevice. IEndDevice: {0}", endDev.Name);
                     }
                     
                     if (sub.Connection != null)
@@ -668,11 +684,17 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else if (args.Value is TECCost cost)
                 {
-                    if (args.Sender is TECHardware || args.Sender is TECElectricalMaterial)
+                    if (args.Sender is TECHardware hardware)
                     {
-                        throw new NotImplementedException
-                            ("Associated cost change in Hardware or ElectricalMaterial " +
-                            "during the course of the bid is unexpected.");
+                        logger.Error("TECHardware raised as value in instance changed args. Item: {0}, Parent:{1}",
+                            hardware.Name,
+                            args.Sender.Guid.ToString());
+                    }
+                    else if (args.Sender is TECElectricalMaterial elecMat)
+                    {
+                        logger.Error("TECElectricalMaterial raise as value in instance changed args. Item: {0}, Parent:{1}",
+                            elecMat.Name,
+                            args.Sender.Guid.ToString());
                     }
                     else
                     {
@@ -736,7 +758,8 @@ namespace TECUserControlLibrary.ViewModels
             }
             else
             {
-                throw new NotImplementedException("Change type not recognized.");
+                logger.Error("Change type in instance changed args not recognized. Change: {0}",
+                    args.Change.ToString());
             }
         }
 

@@ -3,6 +3,7 @@ using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary.SummaryItems;
 using GalaSoft.MvvmLight;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,6 +16,8 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class ValveSummaryVM : HardwareSummaryVM, IComponentSummaryVM
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         #region Fields and Properties
         private readonly Dictionary<Guid, ValveSummaryItem> valveDictionary;
 
@@ -168,7 +171,8 @@ namespace TECUserControlLibrary.ViewModels
             }
             else
             {
-                throw new NullReferenceException("Hardware item not present in dictionary.");
+                logger.Error("Valve not present. Cannot remove valve. Valve: {0}", valve.Name);
+                return new CostBatch();
             }
         }
 
