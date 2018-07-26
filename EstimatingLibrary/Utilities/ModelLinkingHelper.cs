@@ -51,13 +51,13 @@ namespace EstimatingLibrary.Utilities
             allChildren.AddRange(system.GetAllSubScope());
             linkNetworkConnections(system.Controllers, allChildren, guidDictionary);
             linkPanelsToControllers(system.Panels, system.Controllers, guidDictionary);
+            linkProposalItmes(system.ProposalItems, system.Equipment, guidDictionary);
             if(system is TECTypical typical)
             {
                 typical.RefreshRegistration();
             }
         }
         
-
         #region Linking Scope
         public static void LinkScopeItem(TECSystem scope, TECBid bid)
         {
@@ -338,6 +338,38 @@ namespace EstimatingLibrary.Utilities
             }
             subScope.Devices.ObservablyClear();
             subScope.Devices.AddRange(replacements);
+        }
+
+        private static void linkProposalItmes(IEnumerable<TECProposalItem> proposalItems, IEnumerable<TECEquipment> equipment, Dictionary<Guid, Guid> guidDictionary)
+        {
+            foreach(var item in proposalItems)
+            {
+                List<TECEquipment> newEquip = new List<TECEquipment>();
+                List<TECEquipment> oldEquip = new List<TECEquipment>();
+                foreach(var equip in equipment)
+                {
+                    bool isCopy = (guidDictionary != null && guidDictionary[item.DisplayScope.Guid] == guidDictionary[equip.Guid]);
+                    if(equip.Guid == item.DisplayScope.Guid || isCopy)
+                    {
+                        item.DisplayScope = equip;
+                    }
+                    else
+                    {
+                        foreach(var scope in item.ContainingScope)
+                        {
+                            isCopy = (guidDictionary != null && guidDictionary[scope.Guid] == guidDictionary[equip.Guid]);
+                            if (equip.Guid == scope.Guid || isCopy)
+                            {
+                                newEquip.Add(equip);
+                                oldEquip.Add(scope);
+                            }
+                        }
+                    }
+                }
+                oldEquip.ForEach(x => item.ContainingScope.Remove(x));
+                newEquip.ForEach(x => item.ContainingScope.Add(x));
+            }
+
         }
 
         private static void linkTemplateReferences(TECTemplates templatesManager, Dictionary<Guid, List<Guid>> templateReferences)

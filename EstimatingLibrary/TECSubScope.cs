@@ -70,6 +70,12 @@ namespace EstimatingLibrary
                 characteristicReference?.AddItem(interlock, toAdd);
                 Interlocks.Add(toAdd);
             }
+            foreach(TECScopeBranch branch in sourceSubScope.ScopeBranches)
+            {
+                var toAdd = new TECScopeBranch(branch);
+                characteristicReference?.AddItem(branch, toAdd);
+                ScopeBranches.Add(toAdd);
+            }
             this.copyPropertiesFromScope(sourceSubScope);
         }
         #endregion //Constructors

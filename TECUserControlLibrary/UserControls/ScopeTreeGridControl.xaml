@@ -19,13 +19,6 @@
     </UserControl.Resources>
 
     <Grid DataContext="{Binding ElementName=scopeTreeGridControl}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Label Content="Branches"/>
-        <Button Width="40" Content="Add" HorizontalAlignment="Right"
-                Command="{Binding AddCommand}"/>
         <DataGrid  ItemsSource="{Binding Path=ScopeTreeSource}"
                            AutoGenerateColumns="False"
                    Grid.Row="1">

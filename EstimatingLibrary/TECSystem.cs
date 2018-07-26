@@ -77,6 +77,11 @@ namespace EstimatingLibrary
                 var toAdd = new TECScopeBranch(branch);
                 ScopeBranches.Add(toAdd);
             }
+            foreach(TECProposalItem item in source.ProposalItems)
+            {
+                var toAdd = new TECProposalItem(item, guidDictionary);
+                ProposalItems.Add(toAdd);
+            }
             this.copyPropertiesFromLocated(source);
             ModelLinkingHelper.LinkSystem(this, manager, guidDictionary);
         }
