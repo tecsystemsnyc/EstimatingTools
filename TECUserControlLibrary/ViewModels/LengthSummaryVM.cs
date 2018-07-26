@@ -3,6 +3,7 @@ using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary.SummaryItems;
 using GalaSoft.MvvmLight;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,6 +14,8 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class LengthSummaryVM : ViewModelBase, IComponentSummaryVM
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         #region Fields and Properties
         private readonly Dictionary<Guid, LengthSummaryItem> lengthDictionary;
         private readonly Dictionary<Guid, CostSummaryItem> assocCostDictionary;
@@ -284,7 +287,9 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else
                 {
-                    throw new NullReferenceException("Length item not present in dictionary.");
+                    logger.Error("Electrical Material not found. Cannot remove length. Material: {0}",
+                        material.Name);
+                    return new CostBatch();
                 }
             }
             else
@@ -357,7 +362,9 @@ namespace TECUserControlLibrary.ViewModels
             }
             else
             {
-                throw new NullReferenceException("Cost item not present in dictionary.");
+                logger.Error("Associated cost not found. Cannot remove associated cost. Cost: {0}",
+                    cost.Name);
+                return new CostBatch();
             }
         }
         private CostBatch addRatedCost(ICost cost, double length)
@@ -433,7 +440,9 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else
                 {
-                    throw new NullReferenceException("Cost item not present in dictionary.");
+                    logger.Error("Rated cost not found. Cannot remove rated cost length. Cost: {0}",
+                        cost.Name);
+                    return new CostBatch();
                 }
             }
             else

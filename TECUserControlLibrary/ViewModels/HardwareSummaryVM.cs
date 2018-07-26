@@ -3,6 +3,7 @@ using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary.SummaryItems;
 using GalaSoft.MvvmLight;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,6 +14,8 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class HardwareSummaryVM : ViewModelBase, IComponentSummaryVM
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         #region Fields and Properties
         protected readonly Dictionary<Guid, HardwareSummaryItem> hardwareDictionary;
         protected readonly Dictionary<Guid, CostSummaryItem> assocCostDictionary;
@@ -202,7 +205,8 @@ namespace TECUserControlLibrary.ViewModels
             }
             else
             {
-                throw new NullReferenceException("Hardware item not present in dictionary.");
+                logger.Error("Hardware not present. Cannot remove hardware. Hardware: {0}", hardware.Name);
+                return new CostBatch();
             }
         }
 
@@ -277,7 +281,8 @@ namespace TECUserControlLibrary.ViewModels
             }
             else
             {
-                throw new NullReferenceException("Cost item not present in dictionary.");
+                logger.Error("Cost not found. Cannot remove cost. Cost: {0}", cost.Name);
+                return new CostBatch();
             }
         }
         #endregion

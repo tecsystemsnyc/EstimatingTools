@@ -3,6 +3,7 @@ using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using EstimatingUtilitiesLibrary.SummaryItems;
 using GalaSoft.MvvmLight;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,6 +14,8 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class MiscCostsSummaryVM : ViewModelBase, IComponentSummaryVM
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         #region Fields
         private readonly Dictionary<Guid, CostSummaryItem> costDictionary;
 
@@ -322,7 +325,8 @@ namespace TECUserControlLibrary.ViewModels
             }
             else
             {
-                throw new NullReferenceException("Cost item not present in dictionary.");
+                logger.Error("Cost not found. Cannot remove cost. Cost: {0}", cost.Name);
+                return new CostBatch();
             }
         }
         public CostBatch ChangeQuantity(TECCost cost, int deltaQuantity)
@@ -333,7 +337,9 @@ namespace TECUserControlLibrary.ViewModels
                 CostSummaryItem item = costDictionary[cost.Guid];
                 if (item.Quantity + deltaQuantity < 0)
                 {
-                    throw new InvalidOperationException("Removing a larger quantity than exists from CostSummaryItem.");
+                    logger.Error("Cannot remove more quantity than exists in CostSummaryItem. Removing all that exists." +
+                        "Cost: {0}", cost.Name);
+                    deltaQuantity = item.Quantity;
                 }
                 CostBatch delta = item.AddQuantity(deltaQuantity);
                 if (cost is TECMisc)
@@ -366,7 +372,8 @@ namespace TECUserControlLibrary.ViewModels
             }
             else
             {
-                throw new NullReferenceException("Cost item not present in dictionary.");
+                logger.Error("Cost not found. Cannot change quantity. Cost: {0}", cost.Name);
+                return new CostBatch();
             }
         }
         public CostBatch UpdateCost(TECCost cost)
@@ -406,7 +413,8 @@ namespace TECUserControlLibrary.ViewModels
             }
             else
             {
-                throw new NullReferenceException("Cost item not present in dictionary.");
+                logger.Error("Cost not found, cannot update. Cost: {0}", cost.Name);
+                return new CostBatch();
             }
         }
         #endregion
