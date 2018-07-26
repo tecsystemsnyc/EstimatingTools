@@ -61,7 +61,7 @@ namespace Tests
             typical.AssociatedCosts.Add(cost);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, cost);
+            AssertMaterialVMMatchesCostBatch(matVM, cost.CostBatch);
         }
 
         [TestMethod]
@@ -89,7 +89,7 @@ namespace Tests
             typical.AssociatedCosts.Add(cost);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, cost);
+            AssertMaterialVMMatchesCostBatch(matVM, cost.CostBatch);
         }
 
         [TestMethod]
@@ -104,7 +104,7 @@ namespace Tests
             bid.MiscCosts.Add(misc);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, misc);
+            AssertMaterialVMMatchesCostBatch(matVM, misc.CostBatch);
         }
 
         [TestMethod]
@@ -119,7 +119,7 @@ namespace Tests
             bid.MiscCosts.Add(misc);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, misc);
+            AssertMaterialVMMatchesCostBatch(matVM, misc.CostBatch);
         }
 
         [TestMethod]
@@ -138,7 +138,7 @@ namespace Tests
             typical.MiscCosts.Add(misc);
 
             //Arrange
-            AssertMaterialVMMatchesItem(matVM, misc);
+            AssertMaterialVMMatchesCostBatch(matVM, misc.CostBatch);
         }
 
         [TestMethod]
@@ -157,7 +157,7 @@ namespace Tests
             typical.MiscCosts.Add(misc);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, misc);
+            AssertMaterialVMMatchesCostBatch(matVM, misc.CostBatch);
         }
 
         [TestMethod]
@@ -173,7 +173,7 @@ namespace Tests
             bid.Panels.Add(panel);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, panel);
+            AssertMaterialVMMatchesCostBatch(matVM, panel.CostBatch);
         }
 
         [TestMethod]
@@ -189,7 +189,7 @@ namespace Tests
             bid.AddController(controller);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, controller);
+            AssertMaterialVMMatchesCostBatch(matVM, controller.CostBatch);
         }
 
         [TestMethod]
@@ -216,7 +216,7 @@ namespace Tests
             typSS.Devices.Add(device);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, device);
+            AssertMaterialVMMatchesCostBatch(matVM, device.CostBatch);
         }
 
         [TestMethod]
@@ -243,7 +243,7 @@ namespace Tests
             typSS.Devices.Add(valve);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, valve);
+            AssertMaterialVMMatchesCostBatch(matVM, valve.CostBatch);
         }
 
         [TestMethod]
@@ -267,7 +267,7 @@ namespace Tests
             typEquip.SubScope.Add(subscope);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, subscope);
+            AssertMaterialVMMatchesCostBatch(matVM, subscope.CostBatch);
         }
 
         [TestMethod]
@@ -288,7 +288,7 @@ namespace Tests
             typical.Equipment.Add(equipment);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, equipment);
+            AssertMaterialVMMatchesCostBatch(matVM, equipment.CostBatch);
         }
 
         [TestMethod]
@@ -305,7 +305,7 @@ namespace Tests
             TECSystem instance = typical.AddInstance(bid);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, instance);
+            AssertMaterialVMMatchesCostBatch(matVM, instance.CostBatch);
         }
 
         [TestMethod]
@@ -345,7 +345,7 @@ namespace Tests
             TECSubScope instanceSubScope = instance.GetAllSubScope()[0];
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, connection);
+            AssertMaterialVMMatchesCostBatch(matVM, connection.CostBatch);
         }
         #endregion
 
@@ -382,7 +382,7 @@ namespace Tests
             system.AssociatedCosts.Remove(cost);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, cost);
+            AssertMaterialVMMatchesCostBatch(matVM, cost.CostBatch);
         }
 
         [TestMethod]
@@ -407,7 +407,7 @@ namespace Tests
             system.AssociatedCosts.Remove(cost);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, cost);
+            AssertMaterialVMMatchesCostBatch(matVM, cost.CostBatch);
         }
 
         [TestMethod]
@@ -429,7 +429,7 @@ namespace Tests
             bid.MiscCosts.Remove(misc);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, misc);
+            AssertMaterialVMMatchesCostBatch(matVM, misc.CostBatch);
         }
 
         [TestMethod]
@@ -451,7 +451,7 @@ namespace Tests
             bid.MiscCosts.Remove(misc);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, misc);
+            AssertMaterialVMMatchesCostBatch(matVM, misc.CostBatch);
         }
 
         [TestMethod]
@@ -474,7 +474,7 @@ namespace Tests
             bid.Panels.Remove(panel);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, panel);
+            AssertMaterialVMMatchesCostBatch(matVM, panel.CostBatch);
         }
 
         [TestMethod]
@@ -487,17 +487,13 @@ namespace Tests
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
-            double initialTecCost = matVM.TotalTECCost;
-            double initialTecLabor = matVM.TotalTECLabor;
-
-            double initialElecCost = matVM.TotalElecCost;
-            double initialElecLabor = matVM.TotalElecLabor;
+            CostBatch initial = MatVMToCostBatch(matVM);
 
             //Act
             bid.RemoveController(controller);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, controller);
+            AssertMaterialVMMatchesCostBatch(matVM, initial - controller.CostBatch);
         }
 
         [TestMethod]
@@ -521,17 +517,13 @@ namespace Tests
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
-            double initialTecCost = matVM.TotalTECCost;
-            double initialTecLabor = matVM.TotalTECLabor;
-
-            double initialElecCost = matVM.TotalElecCost;
-            double initialElecLabor = matVM.TotalElecLabor;
+            CostBatch initial = MatVMToCostBatch(matVM);
 
             //Act
             typSS.Devices.Remove(device);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, device);
+            AssertMaterialVMMatchesCostBatch(matVM, initial - device.CostBatch);
         }
 
         [TestMethod]
@@ -558,17 +550,13 @@ namespace Tests
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
-            double initialTecCost = matVM.TotalTECCost;
-            double initialTecLabor = matVM.TotalTECLabor;
-
-            double initialElecCost = matVM.TotalElecCost;
-            double initialElecLabor = matVM.TotalElecLabor;
+            CostBatch initial = MatVMToCostBatch(matVM);
 
             //Act
             typSS.Devices.Remove(valve);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, valve);
+            AssertMaterialVMMatchesCostBatch(matVM, initial - valve.CostBatch);
         }
 
         [TestMethod]
@@ -590,17 +578,13 @@ namespace Tests
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
-            double initialTecCost = matVM.TotalTECCost;
-            double initialTecLabor = matVM.TotalTECLabor;
-
-            double initialElecCost = matVM.TotalElecCost;
-            double initialElecLabor = matVM.TotalElecLabor;
+            CostBatch initial = MatVMToCostBatch(matVM);
 
             //Act
             typEquip.SubScope.Remove(subScope);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, subScope);
+            AssertMaterialVMMatchesCostBatch(matVM, initial - subScope.CostBatch);
         }
 
         [TestMethod]
@@ -618,17 +602,13 @@ namespace Tests
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
-            double initialTecCost = matVM.TotalTECCost;
-            double initialTecLabor = matVM.TotalTECLabor;
-
-            double initialElecCost = matVM.TotalElecCost;
-            double initialElecLabor = matVM.TotalElecLabor;
+            CostBatch initial = MatVMToCostBatch(matVM);
 
             //Act
             typical.Equipment.Remove(equip);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, equip);
+            AssertMaterialVMMatchesCostBatch(matVM, initial - equip.CostBatch);
         }
 
         [TestMethod]
@@ -643,17 +623,13 @@ namespace Tests
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
-            double initialTecCost = matVM.TotalTECCost;
-            double initialTecLabor = matVM.TotalTECLabor;
-
-            double initialElecCost = matVM.TotalElecCost;
-            double initialElecLabor = matVM.TotalElecLabor;
+            CostBatch initial = MatVMToCostBatch(matVM);
 
             //Act
             typical.Instances.Remove(instance);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, instance);
+            AssertMaterialVMMatchesCostBatch(matVM, initial - instance.CostBatch);
         }
 
         [TestMethod]
@@ -683,17 +659,13 @@ namespace Tests
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
-            double initialTecCost = matVM.TotalTECCost;
-            double initialTecLabor = matVM.TotalTECLabor;
-
-            double initialElecCost = matVM.TotalElecCost;
-            double initialElecLabor = matVM.TotalElecLabor;
+            CostBatch initial = MatVMToCostBatch(matVM);
             
             //Act
             controller.Disconnect(instance.GetAllSubScope()[0]);
 
             //Assert
-            AssertMaterialVMMatchesItem(matVM, bid);
+            AssertMaterialVMMatchesCostBatch(matVM, initial - bid.CostBatch);
         }
         #endregion
 
@@ -729,22 +701,30 @@ namespace Tests
             connection.ConduitLength = 100;
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];
 
-            AssertMaterialVMMatchesItem(matVM, connection);
+            AssertMaterialVMMatchesCostBatch(matVM, connection.CostBatch);
         }
         #endregion
 
         #endregion
         
-        private static void AssertMaterialVMMatchesItem(MaterialSummaryVM vm, INotifyCostChanged item)
+        private static void AssertMaterialVMMatchesCostBatch(MaterialSummaryVM vm, CostBatch cb)
         {
-            Assert.AreEqual(vm.TotalTECCost, item.CostBatch.GetCost(CostType.TEC),
+            Assert.AreEqual(vm.TotalTECCost, cb.GetCost(CostType.TEC),
                 GeneralTestingUtilities.DELTA, "Total tec cost didn't update properly.");
-            Assert.AreEqual(vm.TotalTECLabor, item.CostBatch.GetLabor(CostType.TEC),
+            Assert.AreEqual(vm.TotalTECLabor, cb.GetLabor(CostType.TEC),
                 GeneralTestingUtilities.DELTA, "Total tec labor didn't update properly.");
-            Assert.AreEqual(vm.TotalElecCost, item.CostBatch.GetCost(CostType.Electrical),
+            Assert.AreEqual(vm.TotalElecCost, cb.GetCost(CostType.Electrical),
                 GeneralTestingUtilities.DELTA, "Total elec cost didn't update proplery.");
-            Assert.AreEqual(vm.TotalElecLabor, item.CostBatch.GetLabor(CostType.Electrical),
+            Assert.AreEqual(vm.TotalElecLabor, cb.GetLabor(CostType.Electrical),
                 GeneralTestingUtilities.DELTA, "Total elec labor didn't update properly.");
+        }
+
+        private static CostBatch MatVMToCostBatch(MaterialSummaryVM vm)
+        {
+            CostBatch cb = new CostBatch();
+            cb.Add(CostType.TEC, vm.TotalTECCost, vm.TotalTECLabor);
+            cb.Add(CostType.Electrical, vm.TotalElecCost, vm.TotalElecLabor);
+            return cb;
         }
     }
 }
