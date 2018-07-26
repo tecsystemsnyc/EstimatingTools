@@ -200,9 +200,13 @@ namespace TECUserControlLibrary.ViewModels
                         MiscElecCostTotal += delta.GetCost(CostType.Electrical);
                         MiscElecLaborTotal += delta.GetLabor(CostType.Electrical);
                     }
+                    
                     foreach (TECAssociatedCost extraCost in misc.AssociatedCosts)
                     {
-                        delta += AddCost(extraCost);
+                        for (int i = 0; i < misc.Quantity; i++)
+                        {
+                            delta += AddCost(extraCost);
+                        }
                     }
                     return delta;
                 }
@@ -243,7 +247,10 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     foreach(TECAssociatedCost assocCost in misc.AssociatedCosts)
                     {
-                        delta += AddCost(assocCost);
+                        for(int i = 0; i < misc.Quantity; i++)
+                        {
+                            delta += AddCost(assocCost);
+                        }
                     }
                 }
                 else
@@ -286,7 +293,10 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     foreach(TECAssociatedCost assocCost in misc.AssociatedCosts)
                     {
-                        delta += RemoveCost(assocCost);
+                        for(int i = 0; i < misc.Quantity; i++)
+                        {
+                            delta += RemoveCost(assocCost);
+                        }
                     }
                 }
                 else
