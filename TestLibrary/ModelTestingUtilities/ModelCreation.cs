@@ -585,6 +585,25 @@ namespace TestLibrary.ModelTestingUtilities
             networkConnection.AssignRandomConnectionProperties(catalogs, rand);
 
         }
+        public static void AddSyncronizerItems(TECTemplates templates)
+        {
+            TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
+            TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
+
+            TECSystem syncSys = new TECSystem();
+            syncSys.Name = "Sync System";
+            templates.Templates.SystemTemplates.Add(syncSys);
+
+            TECEquipment syncEquip = new TECEquipment();
+            syncEquip.Name = "Sync Equip";
+            templates.Templates.EquipmentTemplates.Add(syncEquip);
+            syncSys.Equipment.Add(equipSynchronizer.NewItem(syncEquip));
+
+            TECSubScope syncSubScope = new TECSubScope();
+            syncSubScope.Name = "Sync SS";
+            templates.Templates.SubScopeTemplates.Add(syncSubScope);
+            syncEquip.SubScope.Add(ssSynchronizer.NewItem(syncSubScope));
+        }
         #endregion
     }
 }

@@ -62,6 +62,7 @@ namespace EstimatingUtilitiesLibraryTests
             rand = new Random(0);
             //Arrange
             expectedTemplates = ModelCreation.TestTemplates(rand);
+            ModelCreation.AddSyncronizerItems(expectedTemplates);
             expectedSystem = expectedTemplates.Templates.SystemTemplates.First();
             expectedEquipment = expectedTemplates.Templates.EquipmentTemplates.First();
             expectedSubScope = expectedTemplates.Templates.SubScopeTemplates.First();
