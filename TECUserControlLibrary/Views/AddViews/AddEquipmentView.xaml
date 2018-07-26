@@ -8,7 +8,7 @@
                    xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              mc:Ignorable="d" 
                    x:Name="addEquipmentView"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="400">
     <Grid DataContext="{Binding ElementName=addEquipmentView, Path=DataContext}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -24,6 +24,7 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="30"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Label Content="Equipment: "/>
@@ -45,6 +46,31 @@
                                     Grid.Row="3" Grid.ColumnSpan="2"
                                     Visibility="{Binding ElementName=addEquipmentView, Path=ViewModel.ConnectVM,
                 Converter={utilities:NullToCollapsedConverter}}"/>
+            <Grid Grid.Row="4" Grid.ColumnSpan="2"
+                  Visibility="{Binding ElementName=addEquipmentView, Path=ViewModel.ExistingProposalItems, Converter={utilities:NullToCollapsedConverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="New Proposal:"
+                           VerticalAlignment="Center"
+                           Foreground="Black"/>
+                <CheckBox IsChecked="{Binding ElementName=addEquipmentView, Path=ViewModel.AddNewProposalItem}"
+                          Grid.Column="1"
+                          x:Name="proposeNewCheckbox"/>
+                <TextBlock Text="Add to:"
+                           Grid.Column="2"
+                           Foreground="Black"
+                           VerticalAlignment="Center"/>
+                <ComboBox ItemsSource="{Binding ElementName=addEquipmentView, Path=ViewModel.ExistingProposalItems}"
+                          DisplayMemberPath="DisplayName"
+                          SelectedItem="{Binding ElementName=addEquipmentView, Path=ViewModel.SelectedProposalItem}"
+                          IsEnabled="{Binding ElementName=proposeNewCheckbox, Path=IsChecked, Converter={utilities:InvertBoolConverter}}"
+                          Grid.Column="3"
+                          Margin="2"/>
+            </Grid>
 
         </Grid>
         <Grid Grid.Column="1">

@@ -19,6 +19,8 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private TECEquipment underlyingTemplate;
         private bool _displayReferenceProperty = false;
         private ConnectOnAddVM _connectVM;
+        private bool _addNewProposalItem = true;
+        private TECProposalItem _selectedProposalItem;
 
         public TECEquipment ToAdd
         {
@@ -37,6 +39,25 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 quantity = value;
                 RaisePropertyChanged("Quantity");
                 updateConnectVMFromQuantity(value);
+            }
+        }
+        public List<TECProposalItem> ExistingProposalItems { get; }
+        public bool AddNewProposalItem
+        {
+            get { return _addNewProposalItem; }
+            set
+            {
+                _addNewProposalItem = value;
+                RaisePropertyChanged("AddNewProposalItem");
+            }
+        }
+        public TECProposalItem SelectedProposalItem
+        {
+            get { return _selectedProposalItem; }
+            set
+            {
+                _selectedProposalItem = value;
+                RaisePropertyChanged("SelectedProposalItem");
             }
         }
 
@@ -75,10 +96,19 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         public AddEquipmentVM(TECSystem parentSystem, TECScopeManager scopeManager) : base(scopeManager)
         {
             parent = parentSystem;
+            ExistingProposalItems = new List<TECProposalItem>(parentSystem.ProposalItems);
             toAdd = new TECEquipment();
             add = equip =>
             {
                 parentSystem.Equipment.Add(equip);
+                if (AddNewProposalItem)
+                {
+                    parentSystem.ProposalItems.Add(new TECProposalItem(equip));
+                }
+                else if (SelectedProposalItem != null)
+                {
+                    SelectedProposalItem.ContainingScope.Add(equip);
+                }
             };
             AddCommand = new RelayCommand(addExecute, addCanExecute);
             Quantity = 1;

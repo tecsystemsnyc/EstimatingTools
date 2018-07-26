@@ -32,7 +32,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             get
             {
-                return System?.Equipment.Where(x => !System.ProposalItems.Any(y => y.ContainingScope.Contains(x))).ToList();
+                return System?.Equipment.Where(x => !System.ProposalItems.Any(y => y.ContainingScope.Contains(x) || y.DisplayScope == x)).ToList();
             }
         }
 
@@ -62,7 +62,7 @@ namespace TECUserControlLibrary.ViewModels
 
             bool dropCondition(object item, Type sourceType, Type targetType)
             {
-                bool correctSource = sourceType == typeof(TECEquipment);
+                bool correctSource = sourceType == typeof(TECEquipment) || sourceType == typeof(TECProposalItem);
                 bool correctTarget = dropInfo.TargetCollection is IList<TECEquipment> || 
                     targetType == typeof(TECProposalItem) ||
                     System.ProposalItems.Any(x => x.ContainingScope == dropInfo.TargetCollection);
@@ -77,42 +77,54 @@ namespace TECUserControlLibrary.ViewModels
 
             object dropObject(object arg)
             {
-                TECEquipment equip = arg as TECEquipment;
-                if (equip == null) return null;
-
-
-                var originalProposalItems = new List<TECProposalItem>(System.ProposalItems);
-                foreach(TECProposalItem item in originalProposalItems)
+                if(arg is TECEquipment equip)
                 {
-                    if(item.DisplayScope == equip)
+                    var originalProposalItems = new List<TECProposalItem>(System.ProposalItems);
+                    foreach (TECProposalItem item in originalProposalItems)
                     {
-                        var previousScope = item.ContainingScope;
-                        previousScope.Remove(equip);
-                        System.ProposalItems.Remove(item);
-                        if(previousScope.Count > 0)
+                        if (item.DisplayScope == equip)
                         {
-                            var newItem = new TECProposalItem(previousScope.First());
-                            previousScope.Remove(previousScope.First());
-                            foreach(var scope in previousScope) { newItem.ContainingScope.Add(scope); }
-                            System.ProposalItems.Add(newItem);
+                            var previousScope = item.ContainingScope;
+                            System.ProposalItems.Remove(item);
+                            if (previousScope.Count > 0)
+                            {
+                                var newItem = new TECProposalItem(previousScope.First());
+                                previousScope.Remove(previousScope.First());
+                                foreach (var scope in previousScope) { newItem.ContainingScope.Add(scope); }
+                                System.ProposalItems.Add(newItem);
+                            }
+                        }
+                        else if (item.ContainingScope.Contains(equip))
+                        {
+                            item.ContainingScope.Remove(equip);
                         }
                     }
-                    else if (item.ContainingScope.Contains(equip))
-                    {
-                        item.ContainingScope.Remove(equip);
-                    }
-                }
 
-                if (dropInfo.TargetCollection is IList<TECEquipment> collection)
-                {
-                    collection.Add(equip);
+                    if (dropInfo.TargetCollection is IList<TECEquipment> collection)
+                    {
+                        collection.Add(equip);
+                    }
+                    else
+                    {
+                        System.ProposalItems.Add(new TECProposalItem(equip));
+                    }
+                    
+
                 }
                 else
                 {
-                    System.ProposalItems.Add(new TECProposalItem(equip));
+                    if (dropInfo.TargetCollection is IList<TECEquipment> collection)
+                    {
+                        TECProposalItem item = arg as TECProposalItem;
+                        if(item.ContainingScope == collection) { return null; }
+                        System.ProposalItems.Remove(item);
+                        collection.Add(item.DisplayScope);
+                        foreach(var sub in item.ContainingScope) { collection.Add(sub); }
+                    }
                 }
                 RaisePropertyChanged("PotentialEquipment");
                 return null;
+
             }
         }        
     }

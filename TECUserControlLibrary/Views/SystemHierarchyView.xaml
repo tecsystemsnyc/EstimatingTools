@@ -277,10 +277,6 @@
                             </DataTemplate>
                             <DataTemplate x:Key="ProposalTemplate">
                                 <local:SystemProposalView SystemSource="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSystem}"/>
-                                <!--<Grid>
-                                     <controls:ScopeTreeGridControl ScopeTreeSource="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSystem.ScopeBranches}"
-                                     AddCommand="{Binding ElementName=systemHierarchyView, Path=ViewModel.AddScopeBranchCommand}"/>
-                                     </Grid>-->
                             </DataTemplate>
                             <DataTemplate x:Key="ValveTemplate">
                                 <Grid>
@@ -472,7 +468,6 @@
                                                         Width="*"/>
                                 </DataGrid.Columns>
                             </DataGrid>
-                            <!--<controls:ScopeTreeGridControl ScopeTreeSource="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSubScope.ScopeBranches}"/>-->
                         </Grid>
                     </TabItem>
                 </TabControl>

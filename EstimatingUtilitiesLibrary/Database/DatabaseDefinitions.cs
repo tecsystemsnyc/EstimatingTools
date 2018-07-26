@@ -982,7 +982,36 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+    internal class ProposalItemTable : TableBase
+    {
+        public static string TableName = "ProposalItem";
+        public static Type ProposalType = typeof(TECProposalItem);
 
+        public static TableField ID = new TableField("ID", "TEXT", ProposalType.GetProperty("Guid"));
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ProposalType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ID
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "ProposalItems"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
     #region ICost
     internal class MiscTable : TableBase
     {
@@ -1346,9 +1375,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
     #endregion
     #endregion
-
-
-
+    
     internal class InternalNoteTable : TableBase
     {
         public static string TableName = "InternalNote";
@@ -2683,6 +2710,45 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+    internal class SystemProposalItemTable : TableBase
+    {
+        public static string TableName = "SystemProposalItem";
+        public static Type SystemType = typeof(TECSystem);
+        public static Type ProposalType = typeof(TECProposalItem);
+
+        public static TableField SystemID = new TableField("SystemID", "TEXT", SystemType.GetProperty("Guid"));
+        public static TableField ProposalID = new TableField("ProposalID", "TEXT", ProposalType.GetProperty("Guid"));
+
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "ProposalItems", "0");
+
+        private List<TableField> primaryKeys = new List<TableField>() {
+            SystemID,
+            ProposalID
+            };
+        private List<Type> types = new List<Type>()
+        {
+            SystemType,
+            ProposalType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            SystemID,
+            ProposalID,
+            Index
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "ProposalItems"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
     internal class ValveActuatorTable : TableBase
     {
         public static string TableName = "ValveActuator";
@@ -2929,6 +2995,118 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<string> propertyNames = new List<string>()
         {
             "Location"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class SubScopeScopeBranchTable : TableBase
+    {
+        public static string TableName = "SubScopeScopeBranch";
+        public static Type SubScopeType = typeof(TECSubScope);
+        public static Type ScopeBranchType = typeof(TECScopeBranch);
+
+        public static TableField SubScopeID = new TableField("SubScopeID", "TEXT", SubScopeType.GetProperty("Guid"));
+        public static TableField BranchID = new TableField("BranchID", "TEXT", ScopeBranchType.GetProperty("Guid"));
+
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "ScopeBranches", "0");
+
+        private List<TableField> primaryKeys = new List<TableField>() {
+            SubScopeID,
+            BranchID
+            };
+        private List<Type> types = new List<Type>()
+        {
+            SubScopeType,
+            ScopeBranchType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            SubScopeID,
+            BranchID,
+            Index
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "ScopeBranches"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class ProposalItemContainingScopeTable : TableBase
+    {
+        public static string TableName = "ProposalItemContainingScope";
+        public static Type ProposalType = typeof(TECProposalItem);
+        public static Type ScopeType = typeof(TECEquipment);
+
+        public static TableField ProposalID = new TableField("ProposalID", "TEXT", ProposalType.GetProperty("Guid"));
+        public static TableField ScopeID = new TableField("ScopeID", "TEXT", ScopeType.GetProperty("Guid"));
+
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "ContainingScope", "0");
+
+        private List<TableField> primaryKeys = new List<TableField>() {
+            ProposalID,
+            ScopeID
+            };
+        private List<Type> types = new List<Type>()
+        {
+            ProposalType,
+            ScopeType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ProposalID,
+            ScopeID,
+            Index
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "ContainingScope"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+    internal class ProposalItemDisplayScopeTable : TableBase
+    {
+        public static string TableName = "ProposalItemDisplayScope";
+        public static Type ProposalType = typeof(TECProposalItem);
+        public static Type ScopeType = typeof(TECEquipment);
+
+        public static TableField ProposalID = new TableField("ProposalID", "TEXT", ProposalType.GetProperty("Guid"));
+        public static TableField ScopeID = new TableField("ScopeID", "TEXT", ScopeType.GetProperty("Guid"));
+        
+        private List<TableField> primaryKeys = new List<TableField>() {
+            ProposalID,
+            ScopeID
+            };
+        private List<Type> types = new List<Type>()
+        {
+            ProposalType,
+            ScopeType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ProposalID,
+            ScopeID
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "DisplayScope"
         };
 
         public override string NameString { get { return TableName; } }
@@ -3488,6 +3666,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new ProtocolTable(),
             new InterlockConnectionTable(),
             new ScopeTemplatesTable(),
+            new ProposalItemTable(),
           
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -3545,8 +3724,11 @@ namespace EstimatingUtilitiesLibrary.Database
             new TemplatesControllerTable(),
             new TemplatesMiscCostTable(),
             new TemplatesPanelTable(),
-            new TemplatesParametersTable()
-
+            new TemplatesParametersTable(),
+            new SystemProposalItemTable(),
+            new SubScopeScopeBranchTable(),
+            new ProposalItemContainingScopeTable(),
+            new ProposalItemDisplayScopeTable()
             };
     }
 
@@ -3577,6 +3759,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new ProtocolTable(),
             new InterlockConnectionTable(),
             new ScopeTemplatesTable(),
+            new ProposalItemTable(),
 
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -3626,7 +3809,11 @@ namespace EstimatingUtilitiesLibrary.Database
             new InterlockableInterlockTable(),
             new InterlockConnectionConnectionTypeTable(),
             new ManagerTemplatesTable(),
-            new TemplatesParametersTable()
+            new TemplatesParametersTable(),
+            new SystemProposalItemTable(),
+            new SubScopeScopeBranchTable(),
+            new ProposalItemContainingScopeTable(),
+            new ProposalItemDisplayScopeTable()
         };
     }
 

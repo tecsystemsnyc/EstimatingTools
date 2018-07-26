@@ -13287,11 +13287,12 @@ namespace EstimatingUtilitiesLibrary
                 }
 
                 addScopeBranchList(typical.ScopeBranches, poposalScopeParagraphs, fontSize, levelIndex + 1);
-                if (typical.ProposeEquipment)
+                foreach (TECProposalItem item in typical.ProposalItems)
                 {
-                    foreach(TECEquipment equipment in typical.Equipment)
+                    addItemToList(item.DisplayName, poposalScopeParagraphs, fontSize, levelIndex + 1);
+                    foreach(TECScopeBranch subItem in item.Branches)
                     {
-                        addItemToList(equipment.Name, poposalScopeParagraphs, fontSize, levelIndex + 1);
+                        addItemToList(subItem.Label, poposalScopeParagraphs, fontSize, levelIndex + 2);
                     }
                 }
             }
