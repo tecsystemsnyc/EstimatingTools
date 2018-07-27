@@ -7,7 +7,7 @@ using System.Collections.Specialized;
 
 namespace EstimatingLibrary
 {
-    public class TECSystem : TECLocated, INotifyPointChanged, IDDCopiable, ITypicalable, ICatalogContainer
+    public class TECSystem : TECLocated, INotifyPointChanged, IDDCopiable, ITypicalable
     {
         #region Fields
         private ObservableCollection<TECController> _controllers = new ObservableCollection<TECController>();

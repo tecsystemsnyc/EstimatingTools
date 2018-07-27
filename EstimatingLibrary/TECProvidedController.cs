@@ -292,5 +292,27 @@ namespace EstimatingLibrary
             TypicalableUtilities.MakeChildrenTypical(this);
         }
         #endregion
+
+        #region ICatalogContainer
+        public override bool RemoveCatalogItem<T>(T item, T replacement)
+        {
+            bool alreadyRemoved = base.RemoveCatalogItem(item, replacement);
+
+            bool replacedType = false;
+            if (item == this.Type)
+            {
+                if (replacement is TECControllerType newType && CanChangeType(newType))
+                {
+                    if (CanChangeType(newType))
+                    {
+                        ChangeType(newType);
+                    }
+                    else throw new ArgumentException("Replacement ControllerType must be compatible.");
+                }
+                else throw new ArgumentNullException("Replacement ControllerType cannot be null.");
+            }
+
+        }
+        #endregion
     }
 }

@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -83,6 +84,18 @@ namespace EstimatingLibrary
         List<TECConnectionType> IProtocol.ConnectionTypes
         {
             get { return new List<TECConnectionType>(this.ConnectionTypes); }
+        }
+        #endregion
+
+        #region ICatalogContainer
+        public bool RemoveCatalogItem<T>(T item, T replacement) where T : class, ICatalog<T>
+        {
+            bool removedConnectionType = false;
+            if (item is TECConnectionType type)
+            {
+                removedConnectionType = CommonUtilities.OptionallyReplaceAll(type, this.ConnectionTypes, replacement as TECConnectionType);
+            }
+            return removedConnectionType;
         }
         #endregion
     }

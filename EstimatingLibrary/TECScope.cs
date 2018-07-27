@@ -70,5 +70,19 @@ namespace EstimatingLibrary
             return relatedList;
         }
         #endregion Methods
+
+        #region ICatalogContainer
+        public override bool RemoveCatalogItem<T>(T item, T replacement)
+        {
+            bool alreadyRemoved = base.RemoveCatalogItem(item, replacement);
+
+            bool removedCost = false;
+            if (item is TECAssociatedCost cost)
+            {
+                removedCost = CommonUtilities.OptionallyReplaceAll(cost, this.AssociatedCosts, replacement as TECAssociatedCost);
+            }
+            return (removedCost || alreadyRemoved);
+        }
+        #endregion
     }
 }

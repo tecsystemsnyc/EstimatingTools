@@ -350,5 +350,20 @@ namespace EstimatingLibrary
             TypicalableUtilities.MakeChildrenTypical(this);
         }
         #endregion
+
+        #region ICatalogContainer
+        public override bool RemoveCatalogItem<T>(T item, T replacement)
+        {
+            bool alreadyRemoved = base.RemoveCatalogItem(item, replacement);
+
+            bool removedEndDevice = false;
+            if (item is IEndDevice dev)
+            {
+                removedEndDevice = CommonUtilities.OptionallyReplaceAll(dev, this.Devices, replacement as IEndDevice);
+            }
+
+            return (removedEndDevice || alreadyRemoved);
+        }
+        #endregion
     }
 }

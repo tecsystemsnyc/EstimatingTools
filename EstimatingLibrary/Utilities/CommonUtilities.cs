@@ -69,5 +69,19 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
+        public static bool OptionallyReplaceAll<T>(T item, IList<T> collection, T replacement = null) where T : class
+        {
+            if (!collection.Contains(item)) return false;
+            while(collection.Contains(item))
+            {
+                collection.Remove(item);
+                if (replacement != null)
+                {
+                    collection.Add(item);
+                }
+            }
+            return true;
+        }
+
     }
 }

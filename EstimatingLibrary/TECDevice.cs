@@ -92,5 +92,25 @@ namespace EstimatingLibrary
             }
         }
         #endregion
+
+        #region ICatalogContainer
+        public override bool RemoveCatalogItem<T>(T item, T replacement)
+        {
+            bool alreadyRemoved = base.RemoveCatalogItem(item, replacement);
+
+            bool removedConnectionType = false;
+            bool removedProtocol = false;
+            if (item is TECConnectionType type)
+            {
+                removedConnectionType = CommonUtilities.OptionallyReplaceAll(type, this.HardwiredConnectionTypes, replacement as TECConnectionType);
+            }
+            else if (item is TECProtocol prot)
+            {
+                removedProtocol = CommonUtilities.OptionallyReplaceAll(prot, this.PossibleProtocols, replacement as TECProtocol);
+            }
+
+            return (removedConnectionType || removedProtocol || alreadyRemoved);
+        }
+        #endregion
     }
 }
