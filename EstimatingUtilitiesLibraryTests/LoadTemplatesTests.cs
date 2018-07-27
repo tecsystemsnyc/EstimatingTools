@@ -154,7 +154,6 @@ namespace EstimatingUtilitiesLibraryTests
             //Assert
             Assert.AreEqual(expectedName, actualSystem.Name);
             Assert.AreEqual(expectedDescription, actualSystem.Description);
-            Assert.AreEqual(expectedProposeEquipment, actualSystem.IsSingleton);
 
             //foreach (TECSystem instance in actualSystem.Instances)
             //{

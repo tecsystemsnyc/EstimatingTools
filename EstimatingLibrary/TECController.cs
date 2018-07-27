@@ -114,13 +114,17 @@ namespace EstimatingLibrary
             }  
             return compatProtocols;
         }
+        public bool CanConnect(IConnectable connectable, IProtocol protocol)
+        {
+            return connectable != null && CompatibleProtocols(connectable).Contains(protocol);
+        }
         public bool CanConnect(IConnectable connectable)
         {
             return connectable != null && CompatibleProtocols(connectable).Count > 0;
         }
         public IControllerConnection Connect(IConnectable connectable, IProtocol protocol, bool attemptExisiting = false)
         {
-            if (!CanConnect(connectable)) return null;
+            if (!CanConnect(connectable, protocol)) return null;
             IControllerConnection connection;
             bool isNew = true;
             bool isTypical = (connectable as ITypicalable)?.IsTypical ?? false;

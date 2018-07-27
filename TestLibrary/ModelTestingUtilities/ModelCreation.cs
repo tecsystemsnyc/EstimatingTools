@@ -498,14 +498,14 @@ namespace TestLibrary.ModelTestingUtilities
             system.Equipment.RandomElement(rand).SubScope.Add(hardwiredSubScope);
             system.Equipment.RandomElement(rand).SubScope.Add(networkSubScope);
 
-            var hardwiredControllerType = catalogs.ControllerTypes.Where(x => new TECProvidedController(x).AvailableIO.Contains((hardwiredSubScope as IConnectable).HardwiredIO)).RandomElement(rand) ??
+            var hardwiredControllerType = catalogs.ControllerTypes.Where(x => new TECProvidedController(x).CanConnect(hardwiredSubScope, hardwiredProtocol)).RandomElement(rand) ??
                 new TECControllerType(catalogs.Manufacturers.RandomElement(rand));
             if (!catalogs.ControllerTypes.Contains(hardwiredControllerType))
             {
                 catalogs.ControllerTypes.Add(hardwiredControllerType);
                 hardwiredControllerType.IO.AddRange((hardwiredSubScope as IConnectable).HardwiredIO.ToList());
             }
-            var hardwiredController = system.Controllers.Where(x => x is TECProvidedController y && y.Type == hardwiredControllerType).RandomElement(rand) ??
+            var hardwiredController = system.Controllers.Where(x => x is TECProvidedController y && y.Type == hardwiredControllerType && y.CanConnect(hardwiredSubScope, hardwiredProtocol)).RandomElement(rand) ??
                 new TECProvidedController(hardwiredControllerType);
             if (!system.Controllers.Contains(hardwiredController)) system.AddController(hardwiredController);
 
@@ -516,7 +516,7 @@ namespace TestLibrary.ModelTestingUtilities
                 catalogs.ControllerTypes.Add(networkControllerType);
                 networkControllerType.IO.Add(new TECIO(networkProtocol));
             }
-            var networkController = system.Controllers.Where(x => x is TECProvidedController y && y.Type == networkControllerType && y.AvailableProtocols.Contains(networkProtocol)).RandomElement(rand) ??
+            var networkController = system.Controllers.Where(x => x is TECProvidedController y && y.Type == networkControllerType && y.CanConnect(networkSubScope, networkProtocol)).RandomElement(rand) ??
                 new TECProvidedController(networkControllerType);
             if (!system.Controllers.Contains(networkController)) system.AddController(networkController);
 

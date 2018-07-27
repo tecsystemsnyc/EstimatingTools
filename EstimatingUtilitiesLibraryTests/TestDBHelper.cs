@@ -412,14 +412,12 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("ebdbcc85-10f4-46b3-99e7-d896679f874a");
             values.Add("Typical System");
             values.Add("Typical System Description");
-            values.Add("1");
             addDataToTable(new SystemTable(), values);
 
             values = new List<string>();
             values.Add("ba2e71d4-a2b9-471a-9229-9fbad7432bf7");
             values.Add("Instance System");
             values.Add("Instance System Description");
-            values.Add("0");
             addDataToTable(new SystemTable(), values);
         }
         private static void addToEquipmentTable()
@@ -1925,7 +1923,6 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("e096ffb5-82f3-41c2-b767-c73b22c6875b");
             values.Add("System With Templated Equipment");
             values.Add("");
-            values.Add("0");
             addDataToTable(new SystemTable(), values);
 
             values = new List<string>();
@@ -1968,7 +1965,6 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("d562049c-ea9e-449c-8c1f-eaa7fbcb70d3");
             values.Add("System with templated equipment with templated subscope");
             values.Add("");
-            values.Add("0");
             addDataToTable(new SystemTable(), values);
 
             values = new List<string>();
