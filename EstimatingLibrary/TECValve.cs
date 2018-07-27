@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
 {
-    public class TECValve: TECHardware, IEndDevice, ICatalog<TECValve>
+    public class TECValve: TECHardware, IEndDevice, ICatalog<TECValve>, ICatalogContainer
     {
         #region Constants
         private const CostType COST_TYPE = CostType.TEC;

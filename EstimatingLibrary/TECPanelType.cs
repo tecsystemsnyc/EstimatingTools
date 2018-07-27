@@ -3,7 +3,7 @@ using System;
 
 namespace EstimatingLibrary
 {
-    public class TECPanelType : TECHardware, ICatalog<TECPanelType>
+    public class TECPanelType : TECHardware, ICatalog<TECPanelType>, ICatalogContainer
     {
         private const CostType COST_TYPE = CostType.TEC;
 

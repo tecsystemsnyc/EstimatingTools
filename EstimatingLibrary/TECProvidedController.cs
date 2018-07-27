@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECProvidedController : TECController, IDDCopiable
+    public class TECProvidedController : TECController, IDDCopiable, ICatalogContainer
     {
         #region Properties
         private TECControllerType _type;

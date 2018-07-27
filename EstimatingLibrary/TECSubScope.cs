@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace EstimatingLibrary
 {
-    public class TECSubScope : TECLocated, INotifyPointChanged, IDDCopiable, ITypicalable, IConnectable, IInterlockable
+    public class TECSubScope : TECLocated, INotifyPointChanged, IDDCopiable, ITypicalable, IConnectable, IInterlockable, ICatalogContainer
     {
         #region Properties
         public ObservableCollection<IEndDevice> Devices { get; } = new ObservableCollection<IEndDevice>();

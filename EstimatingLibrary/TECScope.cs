@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace EstimatingLibrary
 {
-    public abstract class TECScope : TECTagged, INotifyCostChanged, IRelatable, ITECScope
+    public abstract class TECScope : TECTagged, INotifyCostChanged, IRelatable, ITECScope, ICatalogContainer
     {
         #region Properties
         

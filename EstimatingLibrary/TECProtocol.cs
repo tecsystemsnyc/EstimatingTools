@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECProtocol : TECLabeled, IRelatable, IProtocol
+    public class TECProtocol : TECLabeled, IRelatable, IProtocol, ICatalogContainer
     {
         private ObservableCollection<TECConnectionType> _connectionTypes;
         

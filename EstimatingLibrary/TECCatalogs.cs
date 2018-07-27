@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
+using NLog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ namespace EstimatingLibrary
 {
     public class TECCatalogs : TECObject, IRelatable
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         private readonly ObservableCollection<TECIOModule> _ioModules = new ObservableCollection<TECIOModule>();
         private readonly ObservableCollection<TECDevice> _devices = new ObservableCollection<TECDevice>();
         private readonly ObservableCollection<TECValve> _valves = new ObservableCollection<TECValve>();
@@ -150,12 +153,21 @@ namespace EstimatingLibrary
 
         public void Add<T>(T item) where T : ICatalog<T>
         {
-            getCollectionForObject(item).Add(item);
+            IList<T> collection = getCollectionForObject(item);
+            if (collection != null)
+            {
+                collection.Add(item);
+            } 
+            else
+            {
+                logger.Error("Collection for catalog item not found. Item: {0}",
+                    item);
+            }
         }
 
         private IList<T> getCollectionForObject<T>(T obj) where T : ICatalog<T>
         {
-            return (IList<T>)getCatalogCollections().First(col => col is IList<T>);
+            return (IList<T>)getCatalogCollections().FirstOrDefault(col => col is IList<T>);
         }
 
         private List<IList> getCatalogCollections()
