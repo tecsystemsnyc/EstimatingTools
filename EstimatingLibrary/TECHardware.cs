@@ -4,7 +4,7 @@ using System;
 
 namespace EstimatingLibrary
 {
-    public abstract class TECHardware : TECCost, IDDCopiable
+    public abstract class TECHardware : TECCost, IDDCopiable, ICatalogContainer
     {
         #region Fields
         private TECManufacturer _manufacturer;

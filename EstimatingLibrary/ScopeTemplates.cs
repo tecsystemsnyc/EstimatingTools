@@ -44,13 +44,13 @@ namespace EstimatingLibrary
         }
         public void Unionize(ScopeTemplates templatesToAdd)
         {
-            UnionizeScopeColelction(this.SystemTemplates, templatesToAdd.SystemTemplates);
-            UnionizeScopeColelction(this.EquipmentTemplates, templatesToAdd.EquipmentTemplates);
-            UnionizeScopeColelction(this.SubScopeTemplates, templatesToAdd.SubScopeTemplates);
-            UnionizeScopeColelction(this.ControllerTemplates, templatesToAdd.ControllerTemplates);
-            UnionizeScopeColelction(this.MiscCostTemplates, templatesToAdd.MiscCostTemplates);
-            UnionizeScopeColelction(this.PanelTemplates, templatesToAdd.PanelTemplates);
-            UnionizeScopeColelction(this.Parameters, templatesToAdd.Parameters);
+            UnionizeScopeCollection(this.SystemTemplates, templatesToAdd.SystemTemplates);
+            UnionizeScopeCollection(this.EquipmentTemplates, templatesToAdd.EquipmentTemplates);
+            UnionizeScopeCollection(this.SubScopeTemplates, templatesToAdd.SubScopeTemplates);
+            UnionizeScopeCollection(this.ControllerTemplates, templatesToAdd.ControllerTemplates);
+            UnionizeScopeCollection(this.MiscCostTemplates, templatesToAdd.MiscCostTemplates);
+            UnionizeScopeCollection(this.PanelTemplates, templatesToAdd.PanelTemplates);
+            UnionizeScopeCollection(this.Parameters, templatesToAdd.Parameters);
         }
 
         #region Collection Changed

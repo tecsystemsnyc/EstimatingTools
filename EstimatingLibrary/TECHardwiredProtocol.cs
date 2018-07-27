@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECHardwiredProtocol : TECObject, IProtocol, IEquatable<TECHardwiredProtocol>
+    public class TECHardwiredProtocol : TECObject, IProtocol, IEquatable<TECHardwiredProtocol>, ICatalogContainer
     {
 
         public string Label => "Hardwired";

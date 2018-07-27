@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 namespace EstimatingLibrary
 {
 
-    abstract public class TECConnection : TECObject, INotifyCostChanged, IRelatable, IConnection
+    abstract public class TECConnection : TECObject, INotifyCostChanged, IRelatable, IConnection, ICatalogContainer
     {
         #region Properties
         protected double _length = 0;

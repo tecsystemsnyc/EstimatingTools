@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
 {
-    public class TECPanel : TECLocated, IDDCopiable, ITypicalable
+    public class TECPanel : TECLocated, IDDCopiable, ITypicalable, ICatalogContainer
     {
         #region Properties
         private TECPanelType _type;

@@ -104,6 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Defaults.cs" />
+    <Compile Include="Interfaces\ICatalogContainer.cs" />
     <Compile Include="Interfaces\IConnection.cs" />
     <Compile Include="Interfaces\ICatalog.cs" />
     <Compile Include="Interfaces\IControllerConnection.cs" />

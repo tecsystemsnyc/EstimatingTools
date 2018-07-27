@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace EstimatingLibrary
 {
-    public class TECElectricalMaterial : TECCost, ICatalog<TECElectricalMaterial>, IDDCopiable
+    public class TECElectricalMaterial : TECCost, ICatalog<TECElectricalMaterial>, IDDCopiable, ICatalogContainer
     {
         #region Properties
         public ObservableCollection<TECAssociatedCost> RatedCosts { get; } = new ObservableCollection<TECAssociatedCost>();

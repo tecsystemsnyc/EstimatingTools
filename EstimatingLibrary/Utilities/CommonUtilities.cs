@@ -34,24 +34,24 @@ namespace EstimatingLibrary.Utilities
                 && (second.Except(first).Count() == 0);
         }
 
-        public static void FillScopeCollection<T>(IList<T> collection, IList<T> otherCollection) where T : ITECObject
+        public static void FillScopeCollection<T>(IList<T> collectionToModify, IList<T> otherCollection) where T : ITECObject
         {
             foreach (T otherItem in otherCollection)
             {
-                if (!collection.Any(item => item.Guid == otherItem.Guid))
+                if (!collectionToModify.Any(item => item.Guid == otherItem.Guid))
                 {
-                    collection.Add(otherItem);
+                    collectionToModify.Add(otherItem);
                 }
             }
         }
 
-        public static void UnionizeScopeColelction<T>(IList<T> collection, IList<T> otherCollection) where T : ITECObject
+        public static void UnionizeScopeCollection<T>(IList<T> collectionToModify, IList<T> otherCollection) where T : ITECObject
         {
             List<T> itemsToRemove = new List<T>();
 
             foreach (T otherItem in otherCollection)
             {
-                foreach (T item in collection)
+                foreach (T item in collectionToModify)
                 {
                     if (item.Guid == otherItem.Guid)
                     {
@@ -61,11 +61,11 @@ namespace EstimatingLibrary.Utilities
             }
             foreach (T item in itemsToRemove)
             {
-                collection.Remove(item);
+                collectionToModify.Remove(item);
             }
             foreach (T item in otherCollection)
             {
-                collection.Add(item);
+                collectionToModify.Add(item);
             }
         }
 

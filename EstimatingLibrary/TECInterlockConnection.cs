@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECInterlockConnection : TECScope, IConnection, INotifyCostChanged, IRelatable, ITypicalable
+    public class TECInterlockConnection : TECScope, IConnection, INotifyCostChanged, IRelatable, ITypicalable, ICatalogContainer
     {
         private readonly ConnectionWrapper connection;
         public bool IsTypical { get; private set; } = false;
