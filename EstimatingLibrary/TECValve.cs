@@ -17,7 +17,7 @@ namespace EstimatingLibrary
         private double _cv;
         private double _size;
         private string _style;
-
+        private double _pressureRating;
         #endregion
 
         #region Properties
@@ -65,6 +65,17 @@ namespace EstimatingLibrary
                 notifyCombinedChanged(Change.Edit, "Style", this, _style, old);
             }
         }
+        public double PressureRating
+        {
+            get { return _pressureRating; }
+            set
+            {
+                var old = _pressureRating;
+                _pressureRating = value;
+                notifyCombinedChanged(Change.Edit, "PressureRating", this, _pressureRating, old);
+            }
+        }
+
         #endregion
 
         public TECValve(TECManufacturer manufacturer, TECDevice actuator) : this (Guid.NewGuid(), manufacturer, actuator) {}

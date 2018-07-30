@@ -1221,6 +1221,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField Cv = new TableField("Cv", "Real", ObjectType.GetProperty("Cv"));
         public static TableField Size = new TableField("Size", "Real", ObjectType.GetProperty("Size"));
         public static TableField Style = new TableField("Style", "TEXT", ObjectType.GetProperty("Style"));
+        public static TableField PressureRating = new TableField("PressureRating", "Real", ObjectType.GetProperty("PressureRating"));
 
         private List<TableField> primaryKeys = new List<TableField>() {
             ID
