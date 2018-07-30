@@ -1641,19 +1641,19 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
-    internal class FBOControllerIOTable : TableBase
+    internal class FBOControllerPointTable : TableBase
     {
-        public static string TableName = "FBOControllerIOTable";
+        public static string TableName = "FBOControllerPointTable";
         public static Type ObjectType = typeof(TECFBOController);
-        public static Type ReferenceType = typeof(TECIO);
+        public static Type ReferenceType = typeof(TECPoint);
 
         public static TableField ControllerID = new TableField("ControllerID", "TEXT", ObjectType.GetProperty("Guid"));
-        public static TableField IOID = new TableField("IOID", "TEXT", ReferenceType.GetProperty("Guid"));
+        public static TableField PointID = new TableField("PointID", "TEXT", ReferenceType.GetProperty("Guid"));
 
         private List<TableField> primaryKeys = new List<TableField>()
         {
             ControllerID,
-            IOID,
+            PointID
         };
         private List<Type> types = new List<Type>()
         {
@@ -1663,11 +1663,11 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             ControllerID,
-            IOID
+            PointID
         };
         private List<string> propertyNames = new List<string>()
         {
-            "IO"
+            "Points"
         };
 
         public override string NameString { get { return TableName; } }
@@ -3726,7 +3726,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new ControllerTypeIOTable(),
             new IOModuleIOTable(),
             new ProvidedControllerIOModuleTable(),
-            new FBOControllerIOTable(),
+            new FBOControllerPointTable(),
             new ControllerTypeIOModuleTable(),
             new BidScopeBranchTable(),
             new DeviceConnectionTypeTable(),
@@ -3816,7 +3816,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new FBOControllerTable(),
             new ControllerTypeIOTable(),
             new IOModuleIOTable(),
-            new FBOControllerIOTable(),
+            new FBOControllerPointTable(),
             new ProvidedControllerIOModuleTable(),
             new ControllerTypeIOModuleTable(),
             new HardwareManufacturerTable(),

@@ -219,6 +219,7 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<Guid, List<TECScopeBranch>> systemScopeBranches = getOneToManyRelationships(new SystemScopeBranchTable(), scopeBranches);
             Dictionary<Guid, List<TECScopeBranch>> scopeBranchHierarchy = getOneToManyRelationships(new ScopeBranchHierarchyTable(), scopeBranches);
             Dictionary<Guid, List<TECScopeBranch>> subScopeScopeBranch = getOneToManyRelationships(new SubScopeScopeBranchTable(), scopeBranches);
+            Dictionary<Guid, List<TECPoint>> fboPoints = getOneToManyRelationships(new FBOControllerPointTable(), points);
 
             Dictionary<Guid, TECEquipment> proposalItemDisplayScope = getOneToOneRelationships(new ProposalItemDisplayScopeTable(), equipment);
             List<TECProposalItem> proposalItems = getObjectsFromTable(new ProposalItemTable(), id => new TECProposalItem(id, proposalItemDisplayScope[id]));
@@ -249,7 +250,9 @@ namespace EstimatingUtilitiesLibrary.Database
 
             allControllers.ForEach(item => { if (item is TECProvidedController provided) provided.IOModules = controllerModuleRelationships.ValueOrNew(provided.Guid); });
             subScope.ForEach(item => item.Devices.AddRange(endDevices.ValueOrNew(item.Guid)));
-            
+
+            fboControllers.ForEach(item => item.Points.AddRange(fboPoints.ValueOrNew(item.Guid)));
+
             foreach(IControllerConnection item in allConnections)
             {
                 item.ConduitType = connectionConduitTypes.ValueOrDefault(item.Guid, null);
@@ -374,6 +377,7 @@ namespace EstimatingUtilitiesLibrary.Database
             List<TECParameters> parameters = getObjectsFromTable(new ParametersTable(), id => new TECParameters(id));
             List<TECInterlockConnection> interlockConnections = getObjectsFromTable(new InterlockConnectionTable(),
                 id => new TECInterlockConnection(id, interlockConnectionTypes.ValueOrNew(id)));
+            Dictionary<Guid, List<TECPoint>> fboPoints = getOneToManyRelationships(new FBOControllerPointTable(), points);
 
             Dictionary<Guid, TECController> connectionParents = getChildIDToParentRelationships(new ControllerConnectionTable(), controllers);
 
@@ -427,6 +431,8 @@ namespace EstimatingUtilitiesLibrary.Database
 
             Dictionary<Guid, List<TECController>> panelControllerDictionary = getOneToManyRelationships(new PanelControllerTable(), controllers);
             controllers.ForEach(item => { if (item is TECProvidedController provided) provided.IOModules = providedControllerModuleRelationships.ValueOrNew(provided.Guid); });
+
+            fboControllers.ForEach(item => item.Points.AddRange(fboPoints.ValueOrNew(item.Guid)));
 
             subScope.ForEach(item => { item.Devices.AddRange(endDevices.ValueOrNew(item.Guid));
                 item.Interlocks.AddRange(subScopeInterlocks.ValueOrNew(item.Guid));
