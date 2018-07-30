@@ -1179,6 +1179,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
         public static TableField Price = new TableField("Price", "REAL", ObjectType.GetProperty("Price"));
         public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
+        public static TableField RequireQuote = new TableField("RequireQuote", "INTEGER", ObjectType.GetProperty("RequireQuote"), defaultValue: "0");
 
         private List<TableField> primaryKeys = new List<TableField>() {
             ID
@@ -1193,7 +1194,8 @@ namespace EstimatingUtilitiesLibrary.Database
             Name,
             Description,
             Price,
-            Labor
+            Labor,
+            RequireQuote
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -1222,6 +1224,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField Size = new TableField("Size", "Real", ObjectType.GetProperty("Size"));
         public static TableField Style = new TableField("Style", "TEXT", ObjectType.GetProperty("Style"));
         public static TableField PressureRating = new TableField("PressureRating", "Real", ObjectType.GetProperty("PressureRating"));
+        public static TableField RequireQuote = new TableField("RequireQuote", "INTEGER", ObjectType.GetProperty("RequireQuote"), defaultValue: "0");
 
         private List<TableField> primaryKeys = new List<TableField>() {
             ID
@@ -1240,7 +1243,9 @@ namespace EstimatingUtilitiesLibrary.Database
             Type,
             Cv,
             Size,
-            Style
+            Style,
+            PressureRating,
+            RequireQuote
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -1263,6 +1268,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"), defaultValue: "");
         public static TableField Price = new TableField("Price", "REAL", ObjectType.GetProperty("Price"));
         public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
+        public static TableField RequireQuote = new TableField("RequireQuote", "INTEGER", ObjectType.GetProperty("RequireQuote"), defaultValue: "0");
 
         private List<TableField> primaryKeys = new List<TableField>()
         {
@@ -1279,7 +1285,8 @@ namespace EstimatingUtilitiesLibrary.Database
             Name,
             Description,
             Price,
-            Labor
+            Labor,
+            RequireQuote
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -1303,6 +1310,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField Price = new TableField("Price", "REAL", ObjectType.GetProperty("Price"));
         public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
         public static TableField Type = new TableField("Type", "TEXT", ObjectType.GetProperty("Type"));
+        public static TableField RequireQuote = new TableField("RequireQuote", "INTEGER", ObjectType.GetProperty("RequireQuote"), defaultValue: "0");
 
         private List<TableField> primaryKeys = new List<TableField>() {
             ID
@@ -1318,7 +1326,8 @@ namespace EstimatingUtilitiesLibrary.Database
             Description,
             Price,
             Labor,
-            Type
+            Type,
+            RequireQuote
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -1341,6 +1350,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField Description = new TableField("Description", "TEXT", IOModuleType.GetProperty("Description"));
         public static TableField Price = new TableField("Price", "REAL", IOModuleType.GetProperty("Price"));
         public static TableField Labor = new TableField("Labor", "REAL", IOModuleType.GetProperty("Labor"));
+        public static TableField RequireQuote = new TableField("RequireQuote", "INTEGER", IOModuleType.GetProperty("RequireQuote"), defaultValue: "0");
 
         private List<TableField> primaryKeys = new List<TableField>()
         {
@@ -1357,7 +1367,8 @@ namespace EstimatingUtilitiesLibrary.Database
             Name,
             Description,
             Price,
-            Labor
+            Labor,
+            RequireQuote
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -3114,6 +3125,37 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+    internal class HardwareQuoteTable : TableBase
+    {
+        public static string TableName = "HardwareQuote";
+        public static Type ObjectType = typeof(TECHardware);
+
+        public static TableField HardwareID = new TableField("HardwareID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField QuotedPrice = new TableField("QuotedPrice", "TEXT", ObjectType.GetProperty("QuotedPrice"));
+
+        private List<TableField> primaryKeys = new List<TableField>() {
+            HardwareID
+            };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            HardwareID,
+            QuotedPrice
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "QuotedPrice"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
 
     internal class TypicalInstanceTable : TableBase
     {
@@ -3727,7 +3769,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new SystemProposalItemTable(),
             new SubScopeScopeBranchTable(),
             new ProposalItemContainingScopeTable(),
-            new ProposalItemDisplayScopeTable()
+            new ProposalItemDisplayScopeTable(),
+            new HardwareQuoteTable()
             };
     }
 

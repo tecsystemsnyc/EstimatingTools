@@ -67,8 +67,14 @@ namespace EstimatingUtilitiesLibrary.Database
         private static (TECBid bid, bool needsUpdate) loadBid()
         {
             TECBid bid = getObjectFromTable(new BidInfoTable(), id => { return new TECBid(id); }, new TECBid());
-
+            
             getScopeManagerProperties(bid);
+
+            var quotes = getQuoteData();
+            foreach(TECHardware hard in bid.Catalogs.GetAll<TECHardware>())
+            {
+                hard.QuotedPrice = quotes.ValueOrDefault(hard.Guid, -1.0);
+            }
 
             List<TECLocation> locations = getObjectsFromTable(new LocationTable(), id => new TECLocation(id));
             Dictionary<Guid, List<TECLocation>> bidLocations = getOneToManyRelationships(new BidLocationTable(), locations);
@@ -586,7 +592,6 @@ namespace EstimatingUtilitiesLibrary.Database
             assignValuePropertiesFromTable(panel, new PanelTable(), row);
             return panel;
         }
-
         private static TECProvidedController getProvidedControllerFromRow(DataRow row, Dictionary<Guid, TECControllerType> controllerTypes)
         {
             Guid guid = new Guid(row[ProvidedControllerTable.ID.Name].ToString());
@@ -595,7 +600,6 @@ namespace EstimatingUtilitiesLibrary.Database
             assignValuePropertiesFromTable(controller, new ProvidedControllerTable(), row);
             return controller;
         }
-
         private static TECIO getIOFromRow(DataRow row, Dictionary<Guid, TECProtocol> protocols)
         {
             Guid guid = new Guid(row[IOTable.ID.Name].ToString());
@@ -612,7 +616,6 @@ namespace EstimatingUtilitiesLibrary.Database
             assignValuePropertiesFromTable(io, new IOTable(), row);
             return io;
         }
-        
         private static TECMisc getMiscFromRow(DataRow row)
         {
             Guid guid = new Guid(row[MiscTable.ID.Name].ToString());
@@ -637,7 +640,17 @@ namespace EstimatingUtilitiesLibrary.Database
             assignValuePropertiesFromTable(panelType, new PanelTypeTable(), row);
             return panelType;
         }
-        
+        private static Dictionary<Guid, double> getQuoteData()
+        {
+            Dictionary<Guid, double> quotes = new Dictionary<Guid, double>();
+            var data = SQLiteDB.GetDataFromTable(HardwareQuoteTable.TableName);
+            foreach(DataRow row in data.Rows)
+            {
+                quotes[new Guid(row[HardwareQuoteTable.HardwareID.Name].ToString())] = row[HardwareQuoteTable.QuotedPrice.Name].ToString().ToDouble(-1);
+            }
+            return quotes;
+        }
+
         private static void addRowToPlaceholderDict(DataRow row, Dictionary<Guid, List<Guid>> dict, string keyString, string valueString)
         {
             Guid key = new Guid(row[keyString].ToString());

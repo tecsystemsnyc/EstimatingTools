@@ -8,13 +8,14 @@ namespace EstimatingLibrary
     {
         #region Fields
         private TECManufacturer _manufacturer;
-        private double _price;
+        private double _price = 0;
+        private double _quotedPrice = -1;
+        private bool _requireQuote = false;
         #endregion
 
         #region Constructors
         public TECHardware(Guid guid, TECManufacturer manufacturer, CostType type) : base(guid, type)
         {
-            _price = 0;
             _manufacturer = manufacturer;
         }
         #endregion
@@ -39,7 +40,7 @@ namespace EstimatingLibrary
         {
             get
             {
-                return Price * Manufacturer.Multiplier;
+                return QuotedPrice == -1 ? Price * Manufacturer.Multiplier : QuotedPrice * Manufacturer.Multiplier;
             }
             set
             {
@@ -58,6 +59,29 @@ namespace EstimatingLibrary
                 raisePropertyChanged("Cost");
             }
         }
+        public double QuotedPrice
+        {
+            get { return _quotedPrice; }
+            set
+            {
+                var old = QuotedPrice;
+                _quotedPrice = value;
+                notifyCombinedChanged(Change.Edit, "QuotedPrice", this, value, old);
+                notifyCostChanged(new CostBatch(value - old, 0, Type));
+                raisePropertyChanged("Cost");
+            }
+        }
+        public bool RequireQuote
+        {
+            get { return _requireQuote; }
+            set
+            {
+                var old = RequireQuote;
+                _requireQuote = value;
+                notifyCombinedChanged(Change.Edit, "RequireQuote", this, value, old);
+            }
+        }
+
         #endregion
 
         #region Methods
