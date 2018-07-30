@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingUtilitiesLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -24,7 +25,7 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("Templates");
             }
         }
-        public ObservableCollection<TECObject> ResultCollection
+        public ObservableCollection<ITECObject> ResultCollection
         {
             get { return _resultCollection; }
             set
@@ -44,7 +45,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         
-        private ObservableCollection<TECObject> _resultCollection;
+        private ObservableCollection<ITECObject> _resultCollection;
         private ScopeTemplates _templates;
         private AllSearchableObjects _chosenType;
         private TECCatalogs catalogs;
@@ -160,9 +161,9 @@ namespace TECUserControlLibrary.ViewModels
             DropHandler(dropInfo);
         }
         
-        private ObservableCollection<TECObject> getResultCollection(IEnumerable<TECObject> source, string searchString)
+        private ObservableCollection<ITECObject> getResultCollection(IEnumerable<ITECObject> source, string searchString)
         {
-            return new ObservableCollection<TECObject>(source.GetSearchResult(searchString));
+            return new ObservableCollection<ITECObject>(source.GetSearchResult(searchString));
         }
         #endregion
         
