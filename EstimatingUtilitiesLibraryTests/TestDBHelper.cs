@@ -474,6 +474,7 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("Test Device Description");
             values.Add("123.45");
             values.Add("543.21");
+            values.Add("0");
             addDataToTable(new DeviceTable(), values);
         }
         private static void addToPointTable()
@@ -707,6 +708,7 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("Test Panel Type Description");
             values.Add("1324");
             values.Add("4231");
+            values.Add("0");
             addDataToTable(new PanelTypeTable(), values);
         }
         private static void addToPanelTable()
@@ -738,6 +740,7 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("Test IO Module Description");
             values.Add("2233");
             values.Add("3322");
+            values.Add("0");
             addDataToTable(new IOModuleTable(), values);
 
         }
@@ -778,6 +781,7 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("142");
             values.Add("12");
             values.Add("DDC");
+            values.Add("0");
             addDataToTable(new ControllerTypeTable(), values);
         }
         private static void addToInternalNoteTable()
