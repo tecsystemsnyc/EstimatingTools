@@ -221,7 +221,7 @@ namespace EstimatingLibrary
 
             return canExecute;
         }
-
+        
         public List<IControllerConnection> CreateTypicalAndInstanceConnections(TECController typicalController, TECSubScope typicalSubScope, IProtocol protocol)
         {
             if (!this.GetAllSubScope().Contains(typicalSubScope))
@@ -413,7 +413,7 @@ namespace EstimatingLibrary
         }
         protected override void scopeCollectionChanged(object sender,
             System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
-            //Is overridden so that TECTypical doesn't raise cost changed when an associated cost is added or removed.
+            //Overridden so that TECTypical doesn't raise cost changed when an associated cost is added or removed.
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {

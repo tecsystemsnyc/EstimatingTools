@@ -76,7 +76,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Labor Hours:"/>
-                <TextBlock Text="{Binding Estimate.TECLaborHours, StringFormat= {}}" 
+                <TextBlock Text="{Binding Estimate.TECLaborHours, StringFormat= {} {0:N2}}" 
                            Grid.Column="1"
                            TextAlignment="Right" />
             </Grid>
@@ -162,7 +162,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Labor Hours:"/>
-                <TextBlock Text="{Binding Estimate.SubcontractorLaborHours, StringFormat= {}}" 
+                <TextBlock Text="{Binding Estimate.SubcontractorLaborHours, StringFormat= {} {0:N2}}" 
                            Grid.Column="1"
                            TextAlignment="Right" />
             </Grid>
