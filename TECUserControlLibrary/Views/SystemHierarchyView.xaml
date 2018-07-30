@@ -168,8 +168,8 @@
                     <RowDefinition/>
                     <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
-                <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Column="1"
-                        Margin="5,0,5,0">
+                <Border Style="{StaticResource HeaderBorder}" 
+                        Grid.Column="1">
                     <TextBlock Text="Systems" Style="{StaticResource ListHeader}"/>
                 </Border>
                 <listControls:SystemListControl x:Name="systemList" Grid.Row="1" Grid.ColumnSpan="3" Source="{Binding SystemSource}"
@@ -204,9 +204,8 @@
                         &lt;-
                     </Button.Content>
                 </Button>
-                <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1"  Grid.Column="1" 
-                        Margin="5,0,5,0">
-                    <TextBlock Text="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSystem.Name, StringFormat='Components of {0}'}"
+                <Border Grid.Column="1" Style="{StaticResource HeaderBorder}" >
+                    <TextBlock Text="{Binding ElementName=systemHierarchyView, Path=ViewModel.SelectedSystem.Name, StringFormat='{}{0} Components'}"
                                Style="{StaticResource ListHeader}"/>
                 </Border>
                 <Grid Grid.Column="2" Visibility="{Binding SystemWidth, Converter={utilities:WidthDoubleToCollpasedConverter}}">

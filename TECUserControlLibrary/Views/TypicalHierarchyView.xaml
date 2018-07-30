@@ -34,10 +34,9 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Column="1"
+            <Border Style="{StaticResource HeaderBorder}" Grid.Column="1"
                     Margin="30,0,30,0">
-                <TextBlock Text="Typical"
-                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Text="Typical" Style="{StaticResource ListHeader}"/>
             </Border>
             <listControls:TypicalListControl
                 Source="{Binding TypicalSystems}"
