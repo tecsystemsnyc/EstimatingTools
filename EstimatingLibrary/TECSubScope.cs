@@ -254,7 +254,7 @@ namespace EstimatingLibrary
                 return this.Points.ToIOCollection();
             }
         }
-        
+
         bool IConnectable.CanSetParentConnection(IControllerConnection connection)
         {
             return ((IConnectable)this).AvailableProtocols.Contains(connection.Protocol);            

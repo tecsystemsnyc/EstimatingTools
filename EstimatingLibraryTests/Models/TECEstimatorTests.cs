@@ -556,6 +556,8 @@ namespace Models
             conduitType.RatedCosts.Add(ratedCost);
 
             var protocol = new TECProtocol(new List<TECConnectionType> { connectionType });
+            controllerType.IO.Add(new TECIO(protocol));
+
 
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol> { protocol },
@@ -621,6 +623,7 @@ namespace Models
             conduitType.RatedCosts.Add(ratedCost);
 
             var protocol = new TECProtocol(new List<TECConnectionType> { connectionType });
+            controllerType.IO.Add(new TECIO(protocol));
 
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol> { protocol },
@@ -778,6 +781,7 @@ namespace Models
             conduitType.AssociatedCosts.Add(assCost);
 
             var protocol = new TECProtocol(new List<TECConnectionType> { connectionType });
+            controllerType.IO.Add(new TECIO(protocol));
 
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol> { protocol },
@@ -2108,6 +2112,7 @@ namespace Models
             conduitType.RatedCosts.Add(ratedCost);
 
             var protocol = new TECProtocol(new List<TECConnectionType> { connectionType });
+            controllerType.IO.Add(new TECIO(protocol));
 
             var device = new TECDevice(new List<TECConnectionType> { connectionType }, 
                 new List<TECProtocol> { protocol },
@@ -2169,6 +2174,7 @@ namespace Models
             conduitType.RatedCosts.Add(ratedCost);
 
             var protocol = new TECProtocol(new List<TECConnectionType> { connectionType });
+            controllerType.IO.Add(new TECIO(protocol));
 
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol> { protocol },
@@ -2265,6 +2271,7 @@ namespace Models
             conduitType.RatedCosts.Add(ratedCost);
 
             var protocol = new TECProtocol(new List<TECConnectionType> { connectionType });
+            controllerType.IO.Add(new TECIO(protocol));
 
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol> { protocol },

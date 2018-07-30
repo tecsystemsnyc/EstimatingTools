@@ -37,14 +37,19 @@ namespace EstimatingLibrary
 
         public bool Equals(TECHardwiredProtocol other)
         {
-            return other != null &&
-                   EqualityComparer<ObservableCollection<TECConnectionType>>.Default.Equals(ConnectionTypes, other.ConnectionTypes);
+            
+            return other != null && ConnectionTypes.SequenceEqual(other.ConnectionTypes);
         }
 
         public override int GetHashCode()
         {
             var hashCode = -1871948804;
-            hashCode = hashCode * -1521134295 + EqualityComparer<ObservableCollection<TECConnectionType>>.Default.GetHashCode(ConnectionTypes);
+            var typeList = new List<TECConnectionType>(ConnectionTypes);
+            typeList.Sort();
+            foreach(TECConnectionType type in typeList)
+            {
+                hashCode = hashCode * -1521134295 + type.GetHashCode();
+            }
             return hashCode;
         }
 
@@ -59,4 +64,6 @@ namespace EstimatingLibrary
         }
         #endregion
     }
+    
+
 }

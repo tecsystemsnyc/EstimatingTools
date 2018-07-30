@@ -678,7 +678,7 @@ namespace Tests
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
             //Act
-            IControllerConnection connection = controller.Connect(ss, (ss as IConnectable).AvailableProtocols.First());
+            IControllerConnection connection = controller.Connect(ss, (ss as IConnectable).AvailableProtocols.First(y => y is TECHardwiredProtocol));
             connection.Length = 100;
             connection.ConduitLength = 100;
             connection.ConduitType = bid.Catalogs.ConduitTypes[0];

@@ -54,8 +54,8 @@ namespace Models
 
             bid.Systems.Add(typical);
             TECSystem system = typical.AddInstance();
-            TECSubScope instanceSubScope = typical.GetInstancesFromTypical(subScope).First();
-            IControllerConnection connection = controller.Connect(instanceSubScope, instanceSubScope.AvailableProtocols.First());
+            TECSubScope instanceSubScope = typical.GetInstancesFromTypical(subScope).First(x => x.AvailableProtocols.Any(y => y is TECProtocol && controller.AvailableProtocols.Contains(y)));
+            IControllerConnection connection = controller.Connect(instanceSubScope, instanceSubScope.AvailableProtocols.First(y => controller.AvailableProtocols.Contains(y)));
             Assert.IsTrue(connection is TECNetworkConnection);
 
             typical.Instances.Remove(system);

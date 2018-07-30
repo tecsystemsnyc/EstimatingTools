@@ -28,7 +28,7 @@ namespace Models
             TECDevice dev = catalogs.Devices.First();
             subScope.Devices.Add(dev);
 
-            controller.Connect(subScope, subScope.AvailableProtocols.First());
+            controller.Connect(subScope, subScope.AvailableProtocols.First(y => controller.AvailableProtocols.Contains(y)));
 
             Assert.AreEqual(1, controller.ChildrenConnections.Count, "Connection not added to controller");
             Assert.AreNotEqual(null, subScope.Connection, "Connection not added to subscope");
@@ -44,7 +44,7 @@ namespace Models
             TECDevice dev = catalogs.Devices.First();
             subScope.Devices.Add(dev);
 
-            controller.Connect(subScope, subScope.AvailableProtocols.First());
+            controller.Connect(subScope, subScope.AvailableProtocols.First(y => controller.AvailableProtocols.Contains(y)));
 
             //Act
             TECNetworkConnection netConnect = controller.Disconnect(subScope);

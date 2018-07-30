@@ -146,7 +146,7 @@ namespace TECUserControlLibraryTests
             TECController otherController = new TECProvidedController(controllerType);
             otherController.Name = "Other Controller";
             typical.AddController(otherController);
-            IControllerConnection connection = controller.Connect(connected, (connected as IConnectable).AvailableProtocols.First());
+            IControllerConnection connection = controller.Connect(connected, (connected as IConnectable).AvailableProtocols.First(y => y is TECHardwiredProtocol));
             connection.Length = 10;
             connection.ConduitLength = 20;
             connection.ConduitType = bid.Catalogs.ConduitTypes[1];
