@@ -30,7 +30,7 @@ namespace TECUserControlLibrary.Utilities.DropTargets
 
         private bool dragCondition(object data, Type sourceType, Type targetType)
         {
-            if(dropDelegate.SelectedConnection == null) { return false; }
+            if(dropDelegate.SelectedConnection == null || dropDelegate.SelectedConnection.ParentController == data) { return false; }
             IConnectable item = data as IConnectable;
             if(item == null || targetType != typeof(IConnectable)) { return false; }
             return item.AvailableProtocols.Contains(dropDelegate.SelectedConnection.Protocol);

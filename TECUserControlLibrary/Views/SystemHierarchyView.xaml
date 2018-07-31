@@ -265,6 +265,7 @@
                                             Height="30"
                                             Visibility="{Binding ElementName=systemHierarchyView, Path=ViewModel.UpdateInstanceConnectionsCommand, Converter={utilities:NullToCollapsedConverter}}"/>
                                     <local:ConnectionsView VM="{Binding ElementName=systemHierarchyView, Path=ViewModel.ConnectionsVM}"
+                                                           SelectionNeeded="{Binding ElementName=systemHierarchyView, Path=ViewModel.ConnectionsVM.SelectionNeeded}"
                                                            Grid.Row="1"/>
 
                                 </Grid>

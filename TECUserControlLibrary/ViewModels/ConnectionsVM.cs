@@ -177,6 +177,8 @@ namespace TECUserControlLibrary.ViewModels
         
         public InterlocksVM InterlocksVM { get; }
 
+        public RelayCommand<IControllerConnection> DeleteCommand { get; private set; }
+
         /// <summary>
         /// 
         /// </summary>
@@ -218,6 +220,25 @@ namespace TECUserControlLibrary.ViewModels
             { if (SelectedControllerGroup?.PassesFilter == false) SelectedControllerGroup = null; };
             this.ConnectableFilter.FilterChanged += () => 
             { if (SelectedConnectableGroup?.PassesFilter == false) SelectedConnectableGroup = null; };
+
+            DeleteCommand = new RelayCommand<IControllerConnection>(deleteConnectionExecute, canDeleteConnection);
+        }
+
+        private void deleteConnectionExecute(IControllerConnection obj)
+        {
+            if(obj is TECHardwiredConnection hardConn)
+            {
+                SelectedController.Disconnect(hardConn.Child);
+            }
+            else if (obj is TECNetworkConnection netConn)
+            {
+                SelectedController.RemoveNetworkConnection(netConn);
+            }
+        }
+
+        private bool canDeleteConnection(IControllerConnection arg)
+        {
+            return arg != null && SelectedController != null;
         }
 
         private void cancelProtocolSelectionExecute()
@@ -611,11 +632,6 @@ namespace TECUserControlLibrary.ViewModels
                             && availableIO.Contains(connectable.HardwiredIO))
                     {
                         connections.Add(controller.Connect(connectable, connectable.AvailableProtocols.First(x => x is TECHardwiredProtocol), true));
-                        
-                    }
-                    else
-                    {
-                        throw new Exception("Not able to connect connectable to controller");
                     }
                 }
             }

@@ -21,7 +21,8 @@
         WindowStartupLocation="CenterScreen"
         Title="{Binding TitleString}"
         DataContext="{Binding Main, Source={StaticResource Locator}}"
-        x:Name="mainWindow">
+        x:Name="mainWindow"
+        TextOptions.TextFormattingMode="Display">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
