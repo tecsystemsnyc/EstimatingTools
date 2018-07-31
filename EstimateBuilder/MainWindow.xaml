@@ -11,7 +11,6 @@
         xmlns:localMVVM="clr-namespace:EstimateBuilder.MVVM"
         xmlns:vm="clr-namespace:TECUserControlLibrary.ViewModels;assembly=TECUserControlLibrary"
         xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities;assembly=TECUserControlLibrary"
-        
         xmlns:views="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
         xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
         
@@ -98,6 +97,9 @@
                             <TabItem Header="Schedule">
                                 <views:ScheduleView
                                     ViewModel="{Binding ScheduleVM}"/>
+                            </TabItem>
+                            <TabItem Header="Quotes">
+                                <views:QuotesView VM="{Binding QuotesVM}"/>
                             </TabItem>
                             <TabItem Header="Review">
                                 <controls:ReviewTabControl ViewModel="{Binding}"/>

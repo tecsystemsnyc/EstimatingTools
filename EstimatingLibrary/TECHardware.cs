@@ -40,7 +40,7 @@ namespace EstimatingLibrary
         {
             get
             {
-                return QuotedPrice == -1 ? Price * Manufacturer.Multiplier : QuotedPrice * Manufacturer.Multiplier;
+                return QuotedPrice == -1 ? Price * Manufacturer.Multiplier : QuotedPrice;
             }
             set
             {

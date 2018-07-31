@@ -13,7 +13,7 @@ namespace EstimatingLibrary.Interfaces
     public static class RelatableExtensions
     {
         /// <summary>
-        /// Returns all objects of type T which exist as a direct child
+        /// Returns all objects of type T which exist as a direct descendant
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="relatable"></param>
