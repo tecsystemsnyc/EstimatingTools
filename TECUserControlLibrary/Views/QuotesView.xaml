@@ -16,22 +16,35 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="200"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Border Style="{StaticResource HeaderBorder}">
-            <TextBlock Text="Quotes Needed" Style="{StaticResource ListHeader}"/>
-        </Border>
-        <listcontrols:EndDeviceListControl Source="{Binding NeedQuoteHardware}"
-                                             IsDragSource="True" Grid.Row="1"/>
+        <local:ScopeCollectionsTabView ViewModel="{Binding CollectionsVM}"
+                                       Grid.RowSpan="2"/>
         <Border Style="{StaticResource HeaderBorder}"
                 Grid.Column="1">
+            <TextBlock Text="Quotes Needed" Style="{StaticResource ListHeader}"/>
+        </Border>
+        <ListView ItemsSource="{Binding NeedQuoteHardware}"
+                  Grid.Column="1" Grid.Row="1"
+                  dd:DragDrop.IsDragSource="True"
+                  dd:DragDrop.IsDropTarget="False">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <TextBlock Text="{Binding Name}"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Border Style="{StaticResource HeaderBorder}"
+                Grid.Column="2">
             <TextBlock Text="Quoted" Style="{StaticResource ListHeader}"/>
         </Border>
         <DataGrid ItemsSource="{Binding QuotedHardware}"
-                  Grid.Column="1" Grid.Row="1"
+                  Grid.Column="2" Grid.Row="1"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
-                  dd:DragDrop.IsDropTarget="True"
                   dd:DragDrop.DropHandler="{Binding QuoteDropHandler}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Name}" Header="Name" 

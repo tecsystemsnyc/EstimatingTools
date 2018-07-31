@@ -52,9 +52,9 @@
                     Content="Done"
                     Margin="2"
                     Command="{Binding Path=ViewModel.EndSearchCommand}"/>
-            <ComboBox Name="templateComboBox" ItemsSource="{Binding Source={x:Static utilities:UIHelpers.SearchSelectorList}}"
-                      DisplayMemberPath="Item1"    
-                  SelectedValuePath="Item2"
+            <ComboBox Name="templateComboBox" ItemsSource="{Binding Path=ViewModel.CollectionTypes}"
+                      DisplayMemberPath="Value"    
+                  SelectedValuePath="Key"
                   SelectedIndex="0"
                       SelectedValue="{Binding Path=ViewModel.ChosenType}"
                                               Margin="2" Grid.Row="1" FontSize="12"

@@ -4812,6 +4812,44 @@ namespace EstimatingUtilitiesLibraryTests
             CheckUpdateItems(expectedItems, stack);
 
         }
+
+        [TestMethod]
+        public void Device_EditQuotedPrice()
+        {
+            //Arrange
+            TECBid bid = new TECBid();
+            ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECTypical system = new TECTypical();
+            bid.Systems.Add(system);
+            TECEquipment equip = new TECEquipment();
+            system.Equipment.Add(equip);
+            TECSubScope subScope = new TECSubScope();
+            equip.SubScope.Add(subScope);
+            TECManufacturer manufacturer = new TECManufacturer();
+            bid.Catalogs.Manufacturers.Add(manufacturer);
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), manufacturer);
+            subScope.Devices.Add(device);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
+
+
+            device.QuotedPrice = 123.0;
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[HardwareQuoteTable.HardwareID.Name] = device.Guid.ToString();
+            data[HardwareQuoteTable.QuotedPrice.Name] = device.QuotedPrice.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, HardwareQuoteTable.TableName, data));
+            
+            int expectedCount = expectedItems.Count;
+            
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            CheckUpdateItems(expectedItems, stack);
+
+        }
         #endregion
         #endregion
 

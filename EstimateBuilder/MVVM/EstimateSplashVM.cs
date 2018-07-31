@@ -26,10 +26,10 @@ namespace EstimateBuilder.MVVM
 
         public string DefaultTemplatesPath
         {
-            get { return EBSettings.FirstRecentBid; }
+            get { return EBSettings.DefaultTemplatesPath; }
             set
             {
-                EBSettings.FirstRecentBid = value;
+                EBSettings.DefaultTemplatesPath = value;
                 RaisePropertyChanged("DefaultTemplatesPath");
                 EBSettings.Save();
             }

@@ -15,9 +15,10 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class QuotesVM: ViewModelBase
     {
-        ObservableCollection<TECHardware> NeedQuoteHardware { get; } = new ObservableCollection<TECHardware>();
-        ObservableCollection<TECHardware> QuotedHardware { get; } = new ObservableCollection<TECHardware>();
-        IDropTarget QuoteDropHandler { get; }
+        public ObservableCollection<TECHardware> NeedQuoteHardware { get; } = new ObservableCollection<TECHardware>();
+        public ObservableCollection<TECHardware> QuotedHardware { get; } = new ObservableCollection<TECHardware>();
+        public IDropTarget QuoteDropHandler { get; }
+        public ScopeCollectionsTabVM CollectionsVM { get; }
 
         public QuotesVM(TECBid bid)
         {
@@ -33,7 +34,7 @@ namespace TECUserControlLibrary.ViewModels
                 UIHelpers.DragOver(info, (item, sourceType, targetType) =>
                 {
                     var hardware = item as TECHardware;
-                    return sourceType == targetType && hardware != null && hardware.QuotedPrice != -1;
+                    return hardware != null && hardware.QuotedPrice == -1;
                 });
             };
             dropHandler.DropAction = info =>
@@ -45,8 +46,23 @@ namespace TECUserControlLibrary.ViewModels
                     return hardware;
                 });
             };
+            QuoteDropHandler = dropHandler;
+            CollectionsVM = new ScopeCollectionsTabVM(bid);
+            CollectionsVM.OmitCollections(new List<AllSearchableObjects>() {
+                AllSearchableObjects.System,
+                AllSearchableObjects.Equipment,
+                AllSearchableObjects.SubScope,
+                AllSearchableObjects.Controllers,
+                AllSearchableObjects.Panels,
+                AllSearchableObjects.MiscCosts,
+                AllSearchableObjects.MiscWiring,
+                AllSearchableObjects.Tags,
+                AllSearchableObjects.AssociatedCosts,
+                AllSearchableObjects.Wires,
+                AllSearchableObjects.Conduits,
+                AllSearchableObjects.Protocols
+            });
         }
-
-
+        
     }
 }

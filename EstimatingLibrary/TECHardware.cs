@@ -66,7 +66,7 @@ namespace EstimatingLibrary
             {
                 var old = QuotedPrice;
                 _quotedPrice = value;
-                notifyCombinedChanged(Change.Edit, "QuotedPrice", this, value, old);
+                notifyCombinedChanged(Change.Edit, "QuotedPrice", this, value);
                 notifyCostChanged(new CostBatch(value - old, 0, Type));
                 raisePropertyChanged("Cost");
             }

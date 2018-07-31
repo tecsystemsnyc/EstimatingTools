@@ -44,6 +44,7 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("ChosenType");
             }
         }
+        public Dictionary<AllSearchableObjects, String> CollectionTypes {get; private set;}
         
         private ObservableCollection<ITECObject> _resultCollection;
         private ScopeTemplates _templates;
@@ -81,10 +82,19 @@ namespace TECUserControlLibrary.ViewModels
             EndSearchCommand = new RelayCommand(EndSearchExecute);
             SearchString = "";
             SearchCollectionExecute();
+            CollectionTypes = new Dictionary<AllSearchableObjects, string>(UIHelpers.SearchSelectorList);
         }
 
         #region Methods
         
+        public void OmitCollections(List<AllSearchableObjects> ommisions)
+        {
+            foreach(var item in ommisions)
+            {
+                CollectionTypes.Remove(item);
+            }
+            RaisePropertyChanged("CollectionTypes");
+        }
 
         #region Commands
         private void SearchCollectionExecute()

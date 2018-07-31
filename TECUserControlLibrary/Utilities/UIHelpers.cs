@@ -394,24 +394,23 @@ namespace TECUserControlLibrary.Utilities
             new Tuple<string, Confidence>("95%", Confidence.NinetyFive)
         };
 
-        public static List<Tuple<string, AllSearchableObjects>> SearchSelectorList = new List<Tuple<string, AllSearchableObjects>>
+        public static Dictionary<AllSearchableObjects, string> SearchSelectorList = new Dictionary<AllSearchableObjects, string>
         {
-            new Tuple<string, AllSearchableObjects>("Systems", AllSearchableObjects.System),
-            new Tuple<string, AllSearchableObjects>("Equipment", AllSearchableObjects.Equipment),
-            new Tuple<string, AllSearchableObjects>("Points", AllSearchableObjects.SubScope),
-            new Tuple<string, AllSearchableObjects>("Devices", AllSearchableObjects.Devices),
-            new Tuple<string, AllSearchableObjects>("Valves", AllSearchableObjects.Valves),
-            new Tuple<string, AllSearchableObjects>("Wire Types", AllSearchableObjects.Wires),
-            new Tuple<string, AllSearchableObjects>("Conduit Types", AllSearchableObjects.Conduits),
-            new Tuple<string, AllSearchableObjects>("Associated Costs", AllSearchableObjects.AssociatedCosts),
-            new Tuple<string, AllSearchableObjects>("Misc. Costs", AllSearchableObjects.MiscCosts),
-            new Tuple<string, AllSearchableObjects>("Misc. Wiring", AllSearchableObjects.MiscWiring),
-            new Tuple<string, AllSearchableObjects>("Tags", AllSearchableObjects.Tags),
-            new Tuple<string, AllSearchableObjects>("Controller Types", AllSearchableObjects.ControllerTypes),
-            new Tuple<string, AllSearchableObjects>("Panel Types", AllSearchableObjects.PanelTypes),
-            new Tuple<string, AllSearchableObjects>("IO Modules", AllSearchableObjects.IOModules),
-            new Tuple<string, AllSearchableObjects>("Protocols", AllSearchableObjects.Protocols),
-
+            { AllSearchableObjects.System, "Systems" },
+            { AllSearchableObjects.Equipment, "Equipment" },
+            { AllSearchableObjects.SubScope, "Points" },
+            { AllSearchableObjects.Devices, "Devices" },
+            { AllSearchableObjects.Valves, "Valves" },
+            { AllSearchableObjects.Wires, "Wire Types" },
+            { AllSearchableObjects.Conduits, "Conduit Types" },
+            { AllSearchableObjects.AssociatedCosts, "Associated Costs" },
+            { AllSearchableObjects.MiscCosts, "Misc. Costs" },
+            { AllSearchableObjects.MiscWiring, "Misc. Wiring" },
+            { AllSearchableObjects.Tags, "Tags" },
+            { AllSearchableObjects.ControllerTypes, "Controller Types" },
+            { AllSearchableObjects.PanelTypes, "Panel Types" },
+            { AllSearchableObjects.IOModules, "IO Modules" },
+            { AllSearchableObjects.Protocols, "Protocols" }
         };
 
         public static List<Tuple<string, IOType>> IOSelectorList = new List<Tuple<string, IOType>>

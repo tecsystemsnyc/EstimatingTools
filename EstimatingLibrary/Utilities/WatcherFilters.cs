@@ -38,7 +38,7 @@ namespace EstimatingLibrary.Utilities.WatcherFilters
 
         protected override void watcherChanged(TECChangedEventArgs args)
         {
-            if (!propertyExceptions.Contains(args.PropertyName) && !(args.Sender is TECCatalogs))
+            if (!propertyExceptions.Contains(args.PropertyName) && !(args.Sender is TECCatalogs)&& !(args.Sender is ScopeTemplates))
             {
                 this.ScopeChanged?.Invoke(args);
             }

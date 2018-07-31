@@ -96,17 +96,17 @@ namespace EstimatingLibrary
 
         public void Unionize(TECCatalogs catalogToAdd)
         {
-            UnionizeScopeColelction(this.ConnectionTypes, catalogToAdd.ConnectionTypes);
-            UnionizeScopeColelction(this.ConduitTypes, catalogToAdd.ConduitTypes);
-            UnionizeScopeColelction(this.AssociatedCosts, catalogToAdd.AssociatedCosts);
-            UnionizeScopeColelction(this.PanelTypes, catalogToAdd.PanelTypes);
-            UnionizeScopeColelction(this.ControllerTypes, catalogToAdd.ControllerTypes);
-            UnionizeScopeColelction(this.IOModules, catalogToAdd.IOModules);
-            UnionizeScopeColelction(this.Devices, catalogToAdd.Devices);
-            UnionizeScopeColelction(this.Valves, catalogToAdd.Valves);
-            UnionizeScopeColelction(this.Manufacturers, catalogToAdd.Manufacturers);
-            UnionizeScopeColelction(this.Tags, catalogToAdd.Tags);
-            UnionizeScopeColelction(this.Protocols, catalogToAdd.Protocols);
+            UnionizeScopeCollection(this.ConnectionTypes, catalogToAdd.ConnectionTypes);
+            UnionizeScopeCollection(this.ConduitTypes, catalogToAdd.ConduitTypes);
+            UnionizeScopeCollection(this.AssociatedCosts, catalogToAdd.AssociatedCosts);
+            UnionizeScopeCollection(this.PanelTypes, catalogToAdd.PanelTypes);
+            UnionizeScopeCollection(this.ControllerTypes, catalogToAdd.ControllerTypes);
+            UnionizeScopeCollection(this.IOModules, catalogToAdd.IOModules);
+            UnionizeScopeCollection(this.Devices, catalogToAdd.Devices);
+            UnionizeScopeCollection(this.Valves, catalogToAdd.Valves);
+            UnionizeScopeCollection(this.Manufacturers, catalogToAdd.Manufacturers);
+            UnionizeScopeCollection(this.Tags, catalogToAdd.Tags);
+            UnionizeScopeCollection(this.Protocols, catalogToAdd.Protocols);
         }
 
         public void Fill(TECCatalogs catalogToAdd)

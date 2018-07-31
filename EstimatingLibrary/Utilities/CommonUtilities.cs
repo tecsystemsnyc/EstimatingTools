@@ -45,7 +45,7 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        public static void UnionizeScopeColelction<T>(IList<T> collection, IList<T> otherCollection) where T : ITECObject
+        public static void UnionizeScopeCollection<T>(IList<T> collection, IList<T> otherCollection) where T : ITECObject
         {
             List<T> itemsToRemove = new List<T>();
 
