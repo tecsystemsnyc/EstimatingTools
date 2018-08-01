@@ -3155,6 +3155,8 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
+
+        public override bool IsExtensionTable => true;
     }
 
     internal class TypicalInstanceTable : TableBase
@@ -3896,7 +3898,8 @@ namespace EstimatingUtilitiesLibrary.Database
                 return qtyField;
             }
         }
-
+        
+        public virtual bool IsExtensionTable { get { return false; } }
     }
     
     internal class TableField
