@@ -10,7 +10,7 @@ using System.Windows;
 using TECUserControlLibrary.Interfaces;
 using TECUserControlLibrary.ViewModels;
 
-namespace TECUserControlLibraryTests
+namespace ViewModels
 {
     [TestClass]
     public class DeleteDeviceVMTests

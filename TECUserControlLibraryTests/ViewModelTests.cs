@@ -2,15 +2,15 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TECUserControlLibrary.Models;
 
-namespace Tests
+namespace Models
 {
     /// <summary>
     /// Summary description for ViewModelTests
     /// </summary>
     [TestClass]
-    public class ViewModelTests
+    public class ControllerInPanelTests
     {
-        public ViewModelTests()
+        public ControllerInPanelTests()
         {
             //
             // TODO: Add constructor logic here

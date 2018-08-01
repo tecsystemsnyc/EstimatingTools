@@ -2,7 +2,6 @@
 using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tests;
 using TECUserControlLibrary.ViewModels.SummaryVMs;
 using EstimatingLibrary.Utilities;
 using EstimatingLibrary;
@@ -11,7 +10,7 @@ using EstimatingLibrary.Interfaces;
 using System.Linq;
 using TestLibrary.ModelTestingUtilities;
 
-namespace TECUserControlLibraryTests
+namespace ViewModels
 {
     /// <summary>
     /// Summary description for SystemSummaryVMTests

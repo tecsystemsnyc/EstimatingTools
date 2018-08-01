@@ -100,7 +100,6 @@
     <Compile Include="Models\TECTypicalTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\TECBidTests.cs" />
-    <Compile Include="Utilities\TemplateSynchronizerTests.cs" />
     <Compile Include="Utilities\TypeExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>

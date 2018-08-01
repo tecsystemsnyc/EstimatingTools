@@ -10,7 +10,7 @@ using TECUserControlLibrary.ViewModels;
 using TestLibrary.ModelTestingUtilities;
 using TestLibrary;
 
-namespace Tests
+namespace ViewModels
 {
     /// <summary>
     /// Summary description for SummaryVMTests
