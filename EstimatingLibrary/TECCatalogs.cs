@@ -99,14 +99,19 @@ namespace EstimatingLibrary
             UnionizeScopeCollection(this.ConnectionTypes, catalogToAdd.ConnectionTypes);
             UnionizeScopeCollection(this.ConduitTypes, catalogToAdd.ConduitTypes);
             UnionizeScopeCollection(this.AssociatedCosts, catalogToAdd.AssociatedCosts);
-            UnionizeScopeCollection(this.PanelTypes, catalogToAdd.PanelTypes);
-            UnionizeScopeCollection(this.ControllerTypes, catalogToAdd.ControllerTypes);
-            UnionizeScopeCollection(this.IOModules, catalogToAdd.IOModules);
-            UnionizeScopeCollection(this.Devices, catalogToAdd.Devices);
-            UnionizeScopeCollection(this.Valves, catalogToAdd.Valves);
+            UnionizeScopeCollection(this.PanelTypes, catalogToAdd.PanelTypes, setQuote);
+            UnionizeScopeCollection(this.ControllerTypes, catalogToAdd.ControllerTypes, setQuote);
+            UnionizeScopeCollection(this.IOModules, catalogToAdd.IOModules, setQuote);
+            UnionizeScopeCollection(this.Devices, catalogToAdd.Devices, setQuote);
+            UnionizeScopeCollection(this.Valves, catalogToAdd.Valves, setQuote);
             UnionizeScopeCollection(this.Manufacturers, catalogToAdd.Manufacturers);
             UnionizeScopeCollection(this.Tags, catalogToAdd.Tags);
             UnionizeScopeCollection(this.Protocols, catalogToAdd.Protocols);
+
+            void setQuote(TECHardware original, TECHardware newItem){
+                if (original.RequireQuote) newItem.RequireQuote = true;
+                if (original.QuotedPrice != -1) newItem.QuotedPrice = original.QuotedPrice;
+            }
         }
 
         public void Fill(TECCatalogs catalogToAdd)

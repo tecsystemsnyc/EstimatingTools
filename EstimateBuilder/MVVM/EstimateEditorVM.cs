@@ -32,7 +32,7 @@ namespace EstimateBuilder.MVVM
             ScheduleVM = new ScheduleVM(bid, watcher);
             BidPropertiesVM = new BidPropertiesVM(bid);
             InternalNotesVM = new InternalNotesVM(bid);
-            QuotesVM = new QuotesVM(bid);
+            QuotesVM = new QuotesVM(bid, watcher);
         }
     }
 }

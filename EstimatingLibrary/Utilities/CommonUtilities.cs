@@ -45,7 +45,14 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        public static void UnionizeScopeCollection<T>(IList<T> collection, IList<T> otherCollection) where T : ITECObject
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <param name="otherCollection"></param>
+        /// <param name="onReplace">Method to be called upon identify an item to replace. The arguments should be (existing item, new item)</param>
+        public static void UnionizeScopeCollection<T>(IList<T> collection, IList<T> otherCollection, Action<T,T> onReplace = null) where T : ITECObject
         {
             List<T> itemsToRemove = new List<T>();
 
@@ -55,6 +62,7 @@ namespace EstimatingLibrary.Utilities
                 {
                     if (item.Guid == otherItem.Guid)
                     {
+                        onReplace?.Invoke(item, otherItem);
                         itemsToRemove.Add(item);
                     }
                 }

@@ -30,7 +30,7 @@ namespace EstimatingLibrary.Utilities.WatcherFilters
     public class ScopeWatcherFilter : BaseWatcherFilter
     {
         /// <summary>
-        /// Adds, removes, edit raised from models, omitting property exceptions and catalogs
+        /// Adds, removes, edit raised from models, omitting property exceptions, catalogs, and templates
         /// </summary>
         public event Action<TECChangedEventArgs> ScopeChanged;
 
@@ -180,7 +180,7 @@ namespace EstimatingLibrary.Utilities.WatcherFilters
             }
         }
     }
-
+    
     internal static class TypicalExtension
     {
         public static bool IsTypical(this object obj)

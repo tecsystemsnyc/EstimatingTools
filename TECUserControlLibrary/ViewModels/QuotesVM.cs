@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GongSolutions.Wpf.DragDrop;
 using System;
@@ -20,8 +21,9 @@ namespace TECUserControlLibrary.ViewModels
         public IDropTarget QuoteDropHandler { get; }
         public ScopeCollectionsTabVM CollectionsVM { get; }
 
-        public QuotesVM(TECBid bid)
+        public QuotesVM(TECBid bid, ChangeWatcher watcher)
         {
+            watcher.Changed += bidChanged; 
             NeedQuoteHardware = new ObservableCollection<TECHardware>(bid
                 .GetAll<TECSubScope>()
                 .SelectMany(ss => ss.Devices
@@ -64,6 +66,41 @@ namespace TECUserControlLibrary.ViewModels
                 AllSearchableObjects.Conduits,
                 AllSearchableObjects.Protocols
             });
+        }
+
+        private void bidChanged(TECChangedEventArgs obj)
+        {
+            if(!(obj.Sender is TECCatalogs || obj.Sender is ScopeTemplates) && obj.Change == Change.Add)
+            {
+                if(obj.Value is TECHardware hardware)
+                {
+                    if(hardware.RequireQuote && hardware.QuotedPrice == -1)
+                    {
+                        NeedQuoteHardware.Add(hardware);
+                    }
+                }
+                else if(obj.Value is IRelatable child)
+                {
+                    if (child is TECSubScope subScope)
+                    {
+                        NeedQuoteHardware.AddRange(subScope.Devices
+                        .Where(x => x is TECHardware ware && ware.RequireQuote && ware.QuotedPrice == -1)
+                        .Distinct()
+                        .OfType<TECHardware>());
+                    }
+                    else
+                    {
+                        NeedQuoteHardware.AddRange(child
+                        .GetAll<TECSubScope>()
+                        .SelectMany(ss => ss.Devices
+                        .Where(x => x is TECHardware ware && ware.RequireQuote && ware.QuotedPrice == -1))
+                        .Distinct()
+                        .OfType<TECHardware>());
+                    }
+                    
+                }
+                
+            }
         }
 
         private void quotedHardware_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
