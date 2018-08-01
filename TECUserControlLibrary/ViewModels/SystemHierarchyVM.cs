@@ -311,7 +311,7 @@ namespace TECUserControlLibrary.ViewModels
                 ControllersPanelsVM = new ControllersPanelsVM(value, scopeManager);
                 ValveVM = new ValveSelectionVM(value, scopeManager.Catalogs.Valves);
                 ConnectionsVM = new ConnectionsVM(value, new ChangeWatcher(value), catalogs, locations: (scopeManager as TECBid)?.Locations, filterPredicate: connectionFilter);
-                if(value is TECTypical typical)
+                if(value is TECTypical typical && typical.Instances.Count > 1)
                 {
                     UpdateInstanceConnectionsCommand = new RelayCommand(typical.UpdateInstanceConnections, typical.CanUpdateInstanceConnections);
                 }

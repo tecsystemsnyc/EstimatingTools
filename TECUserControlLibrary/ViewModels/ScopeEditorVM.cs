@@ -29,7 +29,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 Selected = item;
             };
-            InstanceEditVM = new TypicalHierarchyVM(bid);
+            InstanceEditVM = new TypicalHierarchyVM(bid, watcher);
             InstanceEditVM.Selected += item => {
                 Selected = item;
             };
