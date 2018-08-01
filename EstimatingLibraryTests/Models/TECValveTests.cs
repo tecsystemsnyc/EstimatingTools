@@ -47,5 +47,11 @@ namespace Models
 
             Assert.AreEqual(newValue, valve.Labor);
         }
+        
+        [TestMethod()]
+        public void CatalogCopyTest()
+        {
+            Assert.Fail();
+        }
     }
 }

@@ -16,7 +16,7 @@ namespace TECUserControlLibrary.ViewModels
     public class ScopeCollectionsTabVM : ViewModelBase, IDropTarget
     {
         #region Properties
-        public ScopeTemplates Templates
+        public TECScopeTemplates Templates
         {
             get { return _templates; }
             set
@@ -47,7 +47,7 @@ namespace TECUserControlLibrary.ViewModels
         public Dictionary<AllSearchableObjects, String> CollectionTypes {get; private set;}
         
         private ObservableCollection<ITECObject> _resultCollection;
-        private ScopeTemplates _templates;
+        private TECScopeTemplates _templates;
         private AllSearchableObjects _chosenType;
         private TECCatalogs catalogs;
 

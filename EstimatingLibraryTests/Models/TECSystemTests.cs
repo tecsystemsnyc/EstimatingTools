@@ -24,7 +24,7 @@ namespace Models
             templates.Templates.SystemTemplates.Add(templateSys);
 
             TECEquipment templateEquip = new TECEquipment();
-            templateEquip.Name = "Template Equip"; 
+            templateEquip.Name = "Template Equip";
             templates.Templates.EquipmentTemplates.Add(templateEquip);
             templateSys.Equipment.Add(equipSync.NewItem(templateEquip));
 
@@ -44,7 +44,7 @@ namespace Models
             TECEquipment tempEquipCopy = sysCopy.Equipment[0];
 
             TECSubScope tempSSCopy = null, equipSSCopy = null;
-            foreach(TECSubScope ss in tempEquipCopy.SubScope)
+            foreach (TECSubScope ss in tempEquipCopy.SubScope)
             {
                 if (ss.Name == "Template SS")
                 {
@@ -69,6 +69,54 @@ namespace Models
             Assert.IsTrue(ssSync.Contains(equipSSCopy));
             Assert.IsTrue(ssSync.GetFullDictionary()[templateSS].Contains(ssSync.GetParent(tempSSCopy)));
             Assert.IsTrue(ssSync.GetFullDictionary()[equipSS].Contains(equipSSCopy));
+        }
+
+        [TestMethod()]
+        public void TECSystemTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void TECSystemTest1()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void TECSystemTest2()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void AddControllerTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void RemoveControllerTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void SetControllersTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void DragDropCopyTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void GetAllSubScopeTest()
+        {
+            Assert.Fail();
         }
     }
 }

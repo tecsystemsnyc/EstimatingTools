@@ -68,7 +68,7 @@ namespace Models
 
             TECNetworkConnection connection = controller.AddNetworkConnection(protocol);
             connection.AddChild(childController);
-            
+
             Assert.AreEqual(1, controller.ChildrenConnections.Count, "Connection not added to controller");
             Assert.AreEqual(connection, childController.ParentConnection, "Connection not added to child");
         }
@@ -140,6 +140,84 @@ namespace Models
             Assert.AreEqual(0, childController.ChildrenConnections.Count, "Connection not removed from controller");
             Assert.AreEqual(null, childController.ParentConnection, "Connection not removed from child");
             Assert.AreEqual(null, childestController.ParentConnection, "Connection not removed from childest");
+        }
+        
+        [TestMethod()]
+        public void CompatibleProtocolsTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CanConnectTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CanConnectTest1()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void ConnectTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void DisconnectTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CanAddNetworkConnectionTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void AddNetworkConnectionTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void RemoveNetworkConnectionTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void DisconnectAllTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void RemoveAllChildNetworkConnectionsTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void RemoveAllChildHardwiredConnectionsTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void RemoveAllChildConnectionsTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CopyControllerTest()
+        {
+            Assert.Fail();
         }
     }
 }

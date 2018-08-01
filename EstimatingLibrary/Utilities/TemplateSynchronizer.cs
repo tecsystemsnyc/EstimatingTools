@@ -185,7 +185,7 @@ namespace EstimatingLibrary.Utilities
         {
             if (obj.Value is T item && obj.Change == Change.Remove)
             {
-                if (obj.Sender is ScopeTemplates && dictionary.ContainsKey(item))
+                if (obj.Sender is TECScopeTemplates && dictionary.ContainsKey(item))
                 {
                     RemoveGroup(item);
                 }

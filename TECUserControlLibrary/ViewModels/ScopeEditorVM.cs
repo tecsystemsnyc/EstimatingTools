@@ -96,7 +96,7 @@ namespace TECUserControlLibrary.ViewModels
         #region Interface Properties
 
         #region Scope Properties
-        public ScopeTemplates Templates { get { return Bid.Templates; } }
+        public TECScopeTemplates Templates { get { return Bid.Templates; } }
 
         public TECBid Bid { get; }
         #endregion Scope Properties

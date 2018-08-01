@@ -122,7 +122,7 @@
     <Compile Include="Interfaces\ITECObject.cs" />
     <Compile Include="Interfaces\ITECScope.cs" />
     <Compile Include="TECProposalItem.cs" />
-    <Compile Include="ScopeTemplates.cs" />
+    <Compile Include="TECScopeTemplates.cs" />
     <Compile Include="TECAssociatedCost.cs" />
     <Compile Include="TECConnectionType.cs" />
     <Compile Include="TECExtraLabor.cs" />

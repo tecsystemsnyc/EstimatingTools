@@ -346,10 +346,10 @@ namespace EstimatingUtilitiesLibrary.Database
             
             return catalogs;
         }
-        private static ScopeTemplates getScopeTemplates(TECCatalogs catalogs)
+        private static TECScopeTemplates getScopeTemplates(TECCatalogs catalogs)
         {
-            ScopeTemplates templates = new ScopeTemplates();
-            templates = getObjectFromTable(new ScopeTemplatesTable(), id => { return new ScopeTemplates(id); }, new ScopeTemplates());
+            TECScopeTemplates templates = new TECScopeTemplates();
+            templates = getObjectFromTable(new ScopeTemplatesTable(), id => { return new TECScopeTemplates(id); }, new TECScopeTemplates());
             
             List<IEndDevice> allEndDevices = new List<IEndDevice>(catalogs.Devices);
             allEndDevices.AddRange(catalogs.Valves);

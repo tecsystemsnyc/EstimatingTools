@@ -58,6 +58,31 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\TECValveTests.cs" />
+    <Compile Include="Models\TECAssociatedCostTests.cs" />
+    <Compile Include="Models\TECCatalogsTests.cs" />
+    <Compile Include="Models\TECConnectionTypeTests.cs" />
+    <Compile Include="Models\TECControllerTypeTests.cs" />
+    <Compile Include="Models\TECDeviceTests.cs" />
+    <Compile Include="Models\TECElectricalMaterialTests.cs" />
+    <Compile Include="Models\TECFBOControllerTests.cs" />
+    <Compile Include="Models\TECHardwiredProtocolTests.cs" />
+    <Compile Include="Models\TECIOModuleTests.cs" />
+    <Compile Include="Models\TECIOTests.cs" />
+    <Compile Include="Models\TECLabeledTests.cs" />
+    <Compile Include="Models\TECManufacturerTests.cs" />
+    <Compile Include="Models\TECMiscTests.cs" />
+    <Compile Include="Models\TECNetworkConnectionTests.cs" />
+    <Compile Include="Models\TECPanelTests.cs" />
+    <Compile Include="Models\TECPanelTypeTests.cs" />
+    <Compile Include="Models\TECParametersTests.cs" />
+    <Compile Include="Models\TECPointTests.cs" />
+    <Compile Include="Models\TECProvidedControllerTests.cs" />
+    <Compile Include="Models\TECScheduleTests.cs" />
+    <Compile Include="Models\TECScopeBranchTests.cs" />
+    <Compile Include="Models\TECScopeTemplatesTests.cs" />
+    <Compile Include="Models\TECSubScopeTests.cs" />
+    <Compile Include="Models\TECTagTests.cs" />
+    <Compile Include="Models\TECTemplatesTests.cs" />
     <Compile Include="Utilities\ChangeWatcherTests.cs" />
     <Compile Include="Models\TECControllerTests.cs" />
     <Compile Include="Interfaces\INotifyCostChangedTests.cs" />

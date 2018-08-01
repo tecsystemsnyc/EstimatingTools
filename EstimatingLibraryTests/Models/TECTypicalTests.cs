@@ -56,7 +56,7 @@ namespace Models
                 system.AddInstance();
             }
 
-            system.Equipment.Add(ModelCreation.TestEquipment(bid.Catalogs,rand));
+            system.Equipment.Add(ModelCreation.TestEquipment(bid.Catalogs, rand));
             system.AddController(ModelCreation.TestProvidedController(bid.Catalogs, rand));
             system.Panels.Add(ModelCreation.TestPanel(bid.Catalogs, rand));
 
@@ -92,14 +92,14 @@ namespace Models
             var instanceSubScope = instance.GetAllSubScope().First();
 
             bidController.Connect(instanceSubScope, hardProt);
-            
+
             Assert.AreEqual(1, bidController.ChildrenConnections.Count, "Connection not added");
 
             system.Instances.Remove(instance);
 
             Assert.AreEqual(0, bidController.ChildrenConnections.Count, "Connection not removed");
         }
-        
+
         [TestMethod]
         public void RemoveControllerFromTypicalWithInstanceConnections()
         {
@@ -114,10 +114,10 @@ namespace Models
             controller.Connect(subScope, subScope.AvailableProtocols.First());
             bid.Systems.Add(system);
             TECSystem instance = system.AddInstance();
-            
+
             TECController instanceController = system.TypicalInstanceDictionary.GetInstances(controller)[0] as TECController;
             TECSubScope instanceSubScope = system.TypicalInstanceDictionary.GetInstances(subScope)[0] as TECSubScope;
-            
+
             system.RemoveController(controller);
 
             Assert.IsFalse(instance.Controllers.Contains(instanceController));
@@ -213,7 +213,7 @@ namespace Models
             TECTypical typical = null;
             TECSubScope typSS = null;
 
-            foreach(TECTypical typ in bid.Systems)
+            foreach (TECTypical typ in bid.Systems)
             {
                 if (typ.Instances.Count > 0)
                 {
@@ -231,7 +231,7 @@ namespace Models
             Assert.IsNotNull(typical);
             Assert.IsNotNull(typSS);
 
-            TECPoint newPoint  = ModelCreation.TestPoint(rand, IOType.AI);
+            TECPoint newPoint = ModelCreation.TestPoint(rand, IOType.AI);
             newPoint.Label = "New Point";
 
             typSS.Points.Add(newPoint);
@@ -239,7 +239,7 @@ namespace Models
             List<TECSubScope> instanceSubScope = typical.GetInstancesFromTypical(typSS);
             List<TECPoint> instancePoints = typical.GetInstancesFromTypical(newPoint);
 
-            foreach(TECSubScope instanceSS in instanceSubScope)
+            foreach (TECSubScope instanceSS in instanceSubScope)
             {
                 TECPoint newInstancePoint = null;
                 foreach (TECPoint point in instanceSS.Points)
@@ -253,6 +253,43 @@ namespace Models
                 Assert.IsNotNull(newInstancePoint);
                 Assert.IsTrue(instancePoints.Contains(newInstancePoint));
             }
+        }
+        
+
+        [TestMethod()]
+        public void AddInstanceTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void UpdateInstanceConnectionsTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CanUpdateInstanceConnectionsTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CreateTypicalAndInstanceConnectionsTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void GetInstancesFromTypicalTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void DragDropCopyTest()
+        {
+            Assert.Fail();
         }
     }
 }

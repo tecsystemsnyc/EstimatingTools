@@ -20,7 +20,7 @@ namespace TECUserControlLibraryTests
         {
             //Arrange
             TECTemplates templatesManager = new TECTemplates();
-            ScopeTemplates templates = templatesManager.Templates;
+            TECScopeTemplates templates = templatesManager.Templates;
 
             TECManufacturer man = new TECManufacturer();
             templatesManager.Catalogs.Manufacturers.Add(man);
@@ -68,7 +68,7 @@ namespace TECUserControlLibraryTests
         {
             //Arrange
             TECTemplates templatesManager = new TECTemplates();
-            ScopeTemplates templates = templatesManager.Templates;
+            TECScopeTemplates templates = templatesManager.Templates;
 
             TECManufacturer man = new TECManufacturer();
             templatesManager.Catalogs.Manufacturers.Add(man);

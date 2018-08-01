@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
@@ -32,9 +33,9 @@ namespace Models
             TECEquipment equipment = new TECEquipment();
             TECSubScope subScope = new TECSubScope();
             TECDevice device = null;
-            foreach(TECDevice item in bid.Catalogs.Devices)
+            foreach (TECDevice item in bid.Catalogs.Devices)
             {
-                foreach(TECProtocol prot in item.PossibleProtocols)
+                foreach (TECProtocol prot in item.PossibleProtocols)
                 {
                     if (controller.AvailableProtocols.Contains(prot))
                     {
@@ -61,7 +62,7 @@ namespace Models
             typical.Instances.Remove(system);
 
             Assert.IsTrue((connection as TECNetworkConnection).Children.Count == 0);
-            
+
         }
 
         [TestMethod]
@@ -95,6 +96,43 @@ namespace Models
 
             Assert.IsTrue((connection as TECNetworkConnection).Children.Count == 0);
 
+        }
+        
+        [TestMethod()]
+        public void AddControllerTest()
+        {
+            TECBid bid = new TECBid();
+            TECFBOController controller = new TECFBOController(bid.Catalogs);
+            
+            bid.AddController(controller);
+
+            Assert.IsTrue(bid.Controllers.Contains(controller));
+            Assert.AreEqual(1, bid.Controllers.Count);
+        }
+
+        [TestMethod()]
+        public void RemoveControllerTest()
+        {
+            TECBid bid = new TECBid();
+            TECFBOController controller = new TECFBOController(bid.Catalogs);
+            bid.AddController(controller);
+
+            bid.RemoveController(controller);
+
+            Assert.IsFalse(bid.Controllers.Contains(controller));
+            Assert.AreEqual(0, bid.Controllers.Count);
+        }
+
+        [TestMethod()]
+        public void SetControllersTest()
+        {
+            TECBid bid = new TECBid();
+            TECFBOController controller = new TECFBOController(bid.Catalogs);
+            
+            bid.SetControllers(new List<TECController>() { controller });
+
+            Assert.IsTrue(bid.Controllers.Contains(controller));
+            Assert.AreEqual(1, bid.Controllers.Count);
         }
     }
 }

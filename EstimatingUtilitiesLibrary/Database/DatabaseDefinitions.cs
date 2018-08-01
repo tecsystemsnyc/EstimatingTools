@@ -105,7 +105,7 @@ namespace EstimatingUtilitiesLibrary.Database
     {
         #region static
         public static string TableName = "ScopeTemplates";
-        public static Type ObjectType = typeof(ScopeTemplates);
+        public static Type ObjectType = typeof(TECScopeTemplates);
 
         public static TableField ID = new TableField("ID", "TEXT", ObjectType.GetProperty("Guid"));
         #endregion
@@ -3196,7 +3196,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class TemplatesSystemTable : TableBase
     {
         public static string TableName = "TemplatesSystem";
-        public static Type TemplatesType = typeof(ScopeTemplates);
+        public static Type TemplatesType = typeof(TECScopeTemplates);
         public static Type ScopeType = typeof(TECSystem);
 
         public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
@@ -3231,7 +3231,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class TemplatesEquipmentTable : TableBase
     {
         public static string TableName = "TemplatesEquipment";
-        public static Type TemplatesType = typeof(ScopeTemplates);
+        public static Type TemplatesType = typeof(TECScopeTemplates);
         public static Type ScopeType = typeof(TECEquipment);
 
         public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
@@ -3266,7 +3266,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class TemplatesSubScopeTable : TableBase
     {
         public static string TableName = "TemplatesSubScope";
-        public static Type TemplatesType = typeof(ScopeTemplates);
+        public static Type TemplatesType = typeof(TECScopeTemplates);
         public static Type ScopeType = typeof(TECSubScope);
 
         public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
@@ -3301,7 +3301,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class TemplatesControllerTable : TableBase
     {
         public static string TableName = "TemplatesController";
-        public static Type TemplatesType = typeof(ScopeTemplates);
+        public static Type TemplatesType = typeof(TECScopeTemplates);
         public static Type ScopeType = typeof(TECController);
 
         public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
@@ -3336,7 +3336,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class TemplatesMiscCostTable : TableBase
     {
         public static string TableName = "TemplatesMiscCost";
-        public static Type TemplatesType = typeof(ScopeTemplates);
+        public static Type TemplatesType = typeof(TECScopeTemplates);
         public static Type ScopeType = typeof(TECMisc);
 
         public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
@@ -3371,7 +3371,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class TemplatesPanelTable : TableBase
     {
         public static string TableName = "TemplatesPanel";
-        public static Type TemplatesType = typeof(ScopeTemplates);
+        public static Type TemplatesType = typeof(TECScopeTemplates);
         public static Type ScopeType = typeof(TECPanel);
 
         public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
@@ -3406,7 +3406,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class TemplatesParametersTable : TableBase
     {
         public static string TableName = "TemplatesParameters";
-        public static Type TemplatesType = typeof(ScopeTemplates);
+        public static Type TemplatesType = typeof(TECScopeTemplates);
         public static Type ParametersType = typeof(TECParameters);
 
         public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
@@ -3634,7 +3634,7 @@ namespace EstimatingUtilitiesLibrary.Database
     {
         public static string TableName = "ManagerTemplates";
         public static Type ObjectType = typeof(TECScopeManager);
-        public static Type ReferenceType = typeof(ScopeTemplates);
+        public static Type ReferenceType = typeof(TECScopeTemplates);
 
         public static TableField ManagerID = new TableField("ManagerID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", ReferenceType.GetProperty("Guid"));

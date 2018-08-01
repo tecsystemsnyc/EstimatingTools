@@ -6,8 +6,8 @@ namespace EstimatingLibrary
     public abstract class TECScopeManager : TECObject, IRelatable
     {
         #region Properties
-        private ScopeTemplates _templates = new ScopeTemplates();
-        public ScopeTemplates Templates
+        private TECScopeTemplates _templates = new TECScopeTemplates();
+        public TECScopeTemplates Templates
         {
             get { return _templates; }
             set

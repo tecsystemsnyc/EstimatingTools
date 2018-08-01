@@ -10,7 +10,7 @@ using static EstimatingLibrary.Utilities.CommonUtilities;
 
 namespace EstimatingLibrary
 {
-    public class ScopeTemplates : TECObject, IRelatable
+    public class TECScopeTemplates : TECObject, IRelatable
     {
         public ObservableCollection<TECSystem> SystemTemplates { get; } = new ObservableCollection<TECSystem>();
         public ObservableCollection<TECEquipment> EquipmentTemplates { get; } = new ObservableCollection<TECEquipment>();
@@ -20,8 +20,8 @@ namespace EstimatingLibrary
         public ObservableCollection<TECPanel> PanelTemplates { get; } = new ObservableCollection<TECPanel>();
         public ObservableCollection<TECParameters> Parameters { get; } = new ObservableCollection<TECParameters>();
         
-        public ScopeTemplates() : this(Guid.NewGuid()) { }
-        public ScopeTemplates(Guid guid) : base(guid)
+        public TECScopeTemplates() : this(Guid.NewGuid()) { }
+        public TECScopeTemplates(Guid guid) : base(guid)
         {
             SystemTemplates.CollectionChanged += (sender, args) => collectionChanged(sender, args, "SystemTemplates");
             EquipmentTemplates.CollectionChanged += (sender, args) => collectionChanged(sender, args, "EquipmentTemplates");
@@ -32,7 +32,7 @@ namespace EstimatingLibrary
             Parameters.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Parameters");
         }
 
-        public void Fill(ScopeTemplates templatesToAdd)
+        public void Fill(TECScopeTemplates templatesToAdd)
         {
             FillScopeCollection(this.SystemTemplates, templatesToAdd.SystemTemplates);
             FillScopeCollection(this.EquipmentTemplates, templatesToAdd.EquipmentTemplates);
@@ -42,7 +42,7 @@ namespace EstimatingLibrary
             FillScopeCollection(this.PanelTemplates, templatesToAdd.PanelTemplates);
             FillScopeCollection(this.Parameters, templatesToAdd.Parameters);
         }
-        public void Unionize(ScopeTemplates templatesToAdd)
+        public void Unionize(TECScopeTemplates templatesToAdd)
         {
             UnionizeScopeCollection(this.SystemTemplates, templatesToAdd.SystemTemplates);
             UnionizeScopeCollection(this.EquipmentTemplates, templatesToAdd.EquipmentTemplates);

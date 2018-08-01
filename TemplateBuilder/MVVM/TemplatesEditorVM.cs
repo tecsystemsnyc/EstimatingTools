@@ -12,7 +12,7 @@ namespace TemplateBuilder.MVVM
 {
     public class TemplatesEditorVM : ViewModelBase, EditorVM, IDropTarget
     {
-        private ScopeTemplates _templates;
+        private TECScopeTemplates _templates;
         private object _selected;
         private TECTemplates manager;
 
@@ -24,7 +24,7 @@ namespace TemplateBuilder.MVVM
         public PropertiesVM PropertiesVM { get; }
         public MiscCostsVM MiscVM { get; }
 
-        public ScopeTemplates Templates
+        public TECScopeTemplates Templates
         {
             get { return _templates; }
             set

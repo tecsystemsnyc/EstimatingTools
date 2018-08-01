@@ -35,7 +35,7 @@ namespace Models
 
             //Assert
             TECSubScope newTempSS = null, newEquipSS = null;
-            foreach(TECSubScope ss in equipCopy.SubScope)
+            foreach (TECSubScope ss in equipCopy.SubScope)
             {
                 if (ss.Name == "Template SS")
                 {
@@ -57,6 +57,13 @@ namespace Models
 
             Assert.IsTrue(ssSync.Contains(newTempSS));
             Assert.IsTrue(ssSync.GetFullDictionary()[tempSS].Contains(newTempSS));
+        }
+        
+
+        [TestMethod()]
+        public void DragDropCopyTest()
+        {
+            Assert.Fail();
         }
     }
 }

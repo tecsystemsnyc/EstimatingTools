@@ -70,7 +70,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void bidChanged(TECChangedEventArgs obj)
         {
-            if(!(obj.Sender is TECCatalogs || obj.Sender is ScopeTemplates) && obj.Change == Change.Add)
+            if(!(obj.Sender is TECCatalogs || obj.Sender is TECScopeTemplates) && obj.Change == Change.Add)
             {
                 if(obj.Value is TECHardware hardware)
                 {
