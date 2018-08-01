@@ -81,8 +81,8 @@ namespace TECUserControlLibrary.ViewModels
             SearchCollectionCommand = new RelayCommand(SearchCollectionExecute, SearchCanExecute);
             EndSearchCommand = new RelayCommand(EndSearchExecute);
             SearchString = "";
-            SearchCollectionExecute();
             CollectionTypes = new Dictionary<AllSearchableObjects, string>(UIHelpers.SearchSelectorList);
+            SearchCollectionExecute();
         }
 
         #region Methods
@@ -94,6 +94,8 @@ namespace TECUserControlLibrary.ViewModels
                 CollectionTypes.Remove(item);
             }
             RaisePropertyChanged("CollectionTypes");
+            ChosenType = CollectionTypes.First().Key;
+            SearchCollectionExecute();
         }
 
         #region Commands

@@ -26,8 +26,10 @@ namespace TECUserControlLibrary.ViewModels
                 .GetAll<TECSubScope>()
                 .SelectMany(ss => ss.Devices
                 .Where(x => x is TECHardware ware && ware.RequireQuote && ware.QuotedPrice == -1))
+                .Distinct()
                 .OfType<TECHardware>());
-            QuotedHardware = new ObservableCollection<TECHardware>(bid.Catalogs.GetAll<TECHardware>().Where(x => x.QuotedPrice != -1));
+            QuotedHardware = new ObservableCollection<TECHardware>(bid.Catalogs.GetAll<TECHardware>().Where(x => x.QuotedPrice != -1).Distinct());
+            QuotedHardware.CollectionChanged += quotedHardware_CollectionChanged;
             var dropHandler = new EmptyDropTarget();
             dropHandler.DragOverAction = info =>
             {
@@ -62,6 +64,24 @@ namespace TECUserControlLibrary.ViewModels
                 AllSearchableObjects.Conduits,
                 AllSearchableObjects.Protocols
             });
+        }
+
+        private void quotedHardware_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach(TECHardware item in e.NewItems)
+                {
+                    NeedQuoteHardware.Remove(item);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach(TECHardware item in e.OldItems)
+                {
+                    if(item.RequireQuote) NeedQuoteHardware.Add(item);
+                }
+            }
         }
         
     }
