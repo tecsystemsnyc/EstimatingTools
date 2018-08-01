@@ -163,6 +163,10 @@ namespace EstimatingUtilitiesLibrary.Database
                 {
                     tables.Add(table);
                 }
+                else if (matchesAllTypes(items, table.Types) && table.IsExtensionTable)
+                {
+                    tables.Add(table);
+                }
 
             }
             return tables;

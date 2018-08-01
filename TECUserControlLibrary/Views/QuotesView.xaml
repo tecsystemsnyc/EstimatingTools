@@ -32,11 +32,13 @@
         <ListView ItemsSource="{Binding NeedQuoteHardware}"
                   Grid.Column="1" Grid.Row="1"
                   dd:DragDrop.IsDragSource="True"
-                  dd:DragDrop.IsDropTarget="False">
+                  dd:DragDrop.IsDropTarget="False"
+                  HorizontalContentAlignment="Stretch">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Border Style="{StaticResource ListItemBorder}">
-                        <Grid Background="{StaticResource ItemBackgroundBrush}">
+                    <Border Style="{StaticResource ItemsAreaBorder}"
+                            Background="{StaticResource ItemBackgroundBrush}">
+                        <Grid>
                             <TextBlock Text="{Binding Name}"/>
                         </Grid>
                     </Border>
