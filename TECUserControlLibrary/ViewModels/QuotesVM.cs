@@ -84,7 +84,7 @@ namespace TECUserControlLibrary.ViewModels
                     if (child is TECSubScope subScope)
                     {
                         NeedQuoteHardware.AddRange(subScope.Devices
-                        .Where(x => x is TECHardware ware && ware.RequireQuote && ware.QuotedPrice == -1)
+                        .Where(x => x is TECHardware ware && ware.RequireQuote && ware.QuotedPrice == -1 && !NeedQuoteHardware.Contains(ware))
                         .Distinct()
                         .OfType<TECHardware>());
                     }
@@ -93,7 +93,7 @@ namespace TECUserControlLibrary.ViewModels
                         NeedQuoteHardware.AddRange(child
                         .GetAll<TECSubScope>()
                         .SelectMany(ss => ss.Devices
-                        .Where(x => x is TECHardware ware && ware.RequireQuote && ware.QuotedPrice == -1))
+                        .Where(x => x is TECHardware ware && ware.RequireQuote && ware.QuotedPrice == -1 && !NeedQuoteHardware.Contains(ware)))
                         .Distinct()
                         .OfType<TECHardware>());
                     }

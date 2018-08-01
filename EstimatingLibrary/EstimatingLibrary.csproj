@@ -110,6 +110,7 @@
     <Compile Include="Interfaces\ICost.cs" />
     <Compile Include="Interfaces\IDDCopiable.cs" />
     <Compile Include="Interfaces\IConnectable.cs" />
+    <Compile Include="Interfaces\IDoRedoable.cs" />
     <Compile Include="Interfaces\IDragDropable.cs" />
     <Compile Include="Interfaces\IInterlockable.cs" />
     <Compile Include="Interfaces\INotifyCostChanged.cs" />
