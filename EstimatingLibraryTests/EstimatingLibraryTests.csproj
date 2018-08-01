@@ -91,10 +91,17 @@
     <Compile Include="Interfaces\IRelatableTests.cs" />
     <Compile Include="Models\IOCollectionTests.cs" />
     <Compile Include="Models\TECSystemTests.cs" />
+    <Compile Include="Utilities\CollectionChangedHandlersTests.cs" />
+    <Compile Include="Utilities\CommonUtilitiesTests.cs" />
+    <Compile Include="Utilities\CostBatchTests.cs" />
+    <Compile Include="Utilities\ObservableListDictionaryTests.cs" />
+    <Compile Include="Utilities\ScopeExtensionsTests.cs" />
     <Compile Include="Utilities\TemplatesSynchronizerTests.cs" />
     <Compile Include="Models\TECTypicalTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\TECBidTests.cs" />
+    <Compile Include="Utilities\TemplateSynchronizerTests.cs" />
+    <Compile Include="Utilities\TypeExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EstimatingLibrary\EstimatingLibrary.csproj">
