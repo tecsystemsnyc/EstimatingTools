@@ -312,6 +312,10 @@ namespace EstimatingLibrary
             {
                 ScopeBranches.Add(branch);
             }
+            else if (property == "ProposalItems" && item is TECProposalItem propItem)
+            {
+                ProposalItems.Add(propItem);
+            }
             else
             {
                 this.AddChildForScopeProperty(property, item);

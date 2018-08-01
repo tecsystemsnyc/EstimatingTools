@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
@@ -65,14 +66,20 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             {
                 isFBO = value;
                 RaisePropertyChanged("IsFBO");
+                TECController newAdd;
                 if (value)
                 {
-                    ToAdd = new TECFBOController(PropertiesVM.Catalogs);
+                    newAdd = new TECFBOController(PropertiesVM.Catalogs);
                 }
                 else
                 {
-                    ToAdd = new TECProvidedController(SelectedType);
+                    newAdd = new TECProvidedController(SelectedType);
                 }
+                newAdd.Name = ToAdd.Name;
+                newAdd.Description = ToAdd.Description;
+                newAdd.Tags.AddRange(ToAdd.Tags);
+                newAdd.AssociatedCosts.AddRange(ToAdd.AssociatedCosts);
+                ToAdd = newAdd;
             }
         }
 

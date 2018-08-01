@@ -90,7 +90,8 @@
             <TextBox Text="{Binding SelectedIOQty, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Margin="2"/>
             <Button Content="Add IO" Command="{Binding AddIOToModuleCommand}" Grid.Column="4" Margin="2"/>
             <controls:IOGridControl IOSource="{Binding ModuleIO}"
-                                    Grid.Row="1" Grid.ColumnSpan="5"/>
+                                    Grid.Row="1" Grid.ColumnSpan="5"
+                                    DropHandler="{Binding ProtocolToIODropTarget}"/>
         </Grid>
         <controls:HardwareGridControl HardwareSource="{Binding Templates.Catalogs.IOModules}"
                                       Selected="{Binding SelectedIOModule}"

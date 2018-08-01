@@ -33,11 +33,8 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Border BorderBrush="DarkGray"
-                    BorderThickness="0,0,0,1"
-                    Margin="20,0,20,0">
-                <TextBlock Text="Not Located"
-                           HorizontalAlignment="Center"/>
+            <Border Style="{StaticResource HeaderBorder}">
+                <TextBlock Text="Not Located" Style="{StaticResource ListHeader}"/>
             </Border>
             <ListView ItemsSource="{Binding Unlocated}" Grid.Row="1"                      
                       dd:DragDrop.IsDragSource="True"

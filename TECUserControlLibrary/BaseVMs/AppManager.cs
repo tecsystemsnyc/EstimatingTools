@@ -388,10 +388,10 @@ namespace TECUserControlLibrary.BaseVMs
                 logger.Info("No changes.");
                 executeOnComplete();
             }
-
+            
             void saveComplete(bool success, string nonSuccessMessage = "databaseManager.SaveComplete returned false.")
             {
-                databaseManager.SaveComplete -= (dbSuccess) => saveComplete(dbSuccess);
+                if (databaseManager != null) databaseManager.SaveComplete -= (dbSuccess) => saveComplete(dbSuccess);
                 if (success)
                 {
                     logger.Info("Save successful.");

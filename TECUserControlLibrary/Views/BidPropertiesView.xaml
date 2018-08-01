@@ -21,16 +21,19 @@
     <Grid DataContext="{Binding ElementName=bidPropertiesView, Path=ViewModel}"
           Background="{StaticResource SectionBackgroundBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="40"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TextBlock Text="Bid Properties"
-                   Style="{StaticResource ListHeader}"
-                   Grid.ColumnSpan="2"/>
+        <Border Style="{StaticResource HeaderBorder}"
+                 Grid.ColumnSpan="2">
+            <TextBlock Text="Bid Properties"
+                   Style="{StaticResource ListHeader}"/>
+        </Border>
+        
         <StackPanel Grid.Row="1" Margin="20,0,20,0">
             <StackPanel.Resources>
                 <ResourceDictionary>
