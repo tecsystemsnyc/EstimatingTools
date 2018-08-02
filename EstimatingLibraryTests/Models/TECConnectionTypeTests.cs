@@ -26,14 +26,26 @@ namespace Models
             type.RatedCosts.Add(rCost);
 
             var costs = type.GetCosts(2);
-            Assert.AreEqual(costs.GetCost(CostType.TEC), 15);
-            Assert.AreEqual(costs.GetLabor(CostType.TEC), 2);
+            var tecExpected = 2 * (5) + 3;
+            var elecExpected = 2 * (2);
+            Assert.AreEqual(tecExpected, costs.GetCost(CostType.TEC));
+            Assert.AreEqual(elecExpected, costs.GetCost(CostType.Electrical));
+            var tecLaborExpected = 0;
+            var elecLabroExpected = 2 * (1);
+            Assert.AreEqual(tecLaborExpected, costs.GetLabor(CostType.TEC));
+            Assert.AreEqual(elecLabroExpected, costs.GetLabor(CostType.Electrical));
 
             type.PlenumCost = 1;
             type.PlenumLabor = 1;
             costs = type.GetCosts(2, true);
-            Assert.AreEqual(costs.GetCost(CostType.TEC), 17);
-            Assert.AreEqual(costs.GetLabor(CostType.TEC), 4);
+            tecExpected = 2 * (5) + 3;
+            elecExpected = 2 * (2 + 1);
+            Assert.AreEqual(tecExpected, costs.GetCost(CostType.TEC));
+            Assert.AreEqual(elecExpected, costs.GetCost(CostType.Electrical));
+            tecLaborExpected = 0;
+            elecLabroExpected = 2 * (1 + 1);
+            Assert.AreEqual(tecLaborExpected, costs.GetLabor(CostType.TEC));
+            Assert.AreEqual(elecLabroExpected, costs.GetLabor(CostType.Electrical));
 
         }
     }

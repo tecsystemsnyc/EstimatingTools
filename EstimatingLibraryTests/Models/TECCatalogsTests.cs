@@ -27,7 +27,7 @@ namespace Models
             firstDevice.QuotedPrice = 12;
 
             first.Unionize(second);
-            foreach (var item in second.GetAll<ITECObject>())
+            foreach (var item in second.GetAll<ITECObject>().Where(x => !(x is TECCatalogs)))
             {
                 Assert.IsTrue(first.GetAll<ITECObject>().Contains(item));
             }
@@ -45,7 +45,7 @@ namespace Models
             var second = ModelCreation.TestCatalogs(new Random(1));
 
             first.Fill(second);
-            foreach(var item in second.GetAll<ITECObject>())
+            foreach(var item in second.GetAll<ITECObject>().Where(x => !(x is TECCatalogs)))
             {
                 Assert.IsTrue(first.GetAll<ITECObject>().Contains(item));
             }
