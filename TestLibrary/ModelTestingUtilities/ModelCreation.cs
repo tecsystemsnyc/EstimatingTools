@@ -67,6 +67,7 @@ namespace TestLibrary.ModelTestingUtilities
             bid.ExtraLabor = TestLabor(rand, bid);
             bid.Parameters = TestParameters(rand, bid);
             bid.Catalogs = TestCatalogs(rand, maxEachItem);
+            bid.Templates = TestScopeTemplates(bid.Catalogs, rand);
 
             //Locations
             int numFloors = rand.Next(1, maxEachItem);
@@ -148,32 +149,39 @@ namespace TestLibrary.ModelTestingUtilities
             TECTemplates templates = new TECTemplates();
 
             templates.Catalogs = TestCatalogs(rand, 5);
-
-            //Parameters
-            rand.RepeatAction(() => templates.Templates.Parameters.Add(TestParameters(rand)), 5);
-
-            //Systems
-            rand.RepeatAction(() => templates.Templates.SystemTemplates.Add(TestSystem(templates.Catalogs, rand)), 10);
-
-            //Equipment
-            rand.RepeatAction(() => templates.Templates.EquipmentTemplates.Add(TestEquipment(templates.Catalogs, rand)), 10);
-
-            //SubScope
-            rand.RepeatAction(() => templates.Templates.SubScopeTemplates.Add(TestSubScope(templates.Catalogs, rand)), 10);
-
-            //Controllers
-            rand.RepeatAction(() => templates.Templates.ControllerTemplates.Add(TestProvidedController(templates.Catalogs, rand)), 10);
-
-            //Misc Costs
-            rand.RepeatAction(() => templates.Templates.MiscCostTemplates.Add(TestMisc(templates.Catalogs, rand, CostType.TEC)), 10);
-            rand.RepeatAction(() => templates.Templates.MiscCostTemplates.Add(TestMisc(templates.Catalogs, rand, CostType.Electrical)), 10);
-
-            //Panels
-            rand.RepeatAction(() => templates.Templates.PanelTemplates.Add(TestPanel(templates.Catalogs, rand)), 10);
+            templates.Templates = TestScopeTemplates(templates.Catalogs, rand);
 
             return templates;
         }
+        public static TECScopeTemplates TestScopeTemplates(TECCatalogs catalogs, Random rand)
+        {
+            TECScopeTemplates templates = new TECScopeTemplates();
+
+            //Parameters
+            rand.RepeatAction(() => templates.Parameters.Add(TestParameters(rand)), 5);
+
+            //Systems
+            rand.RepeatAction(() => templates.SystemTemplates.Add(TestSystem(catalogs, rand)), 10);
+
+            //Equipment
+            rand.RepeatAction(() => templates.EquipmentTemplates.Add(TestEquipment(catalogs, rand)), 10);
+
+            //SubScope
+            rand.RepeatAction(() => templates.SubScopeTemplates.Add(TestSubScope(catalogs, rand)), 10);
+
+            //Controllers
+            rand.RepeatAction(() => templates.ControllerTemplates.Add(TestProvidedController(catalogs, rand)), 10);
         
+            //Misc Costs
+            rand.RepeatAction(() => templates.MiscCostTemplates.Add(TestMisc(catalogs, rand, CostType.TEC)), 10);
+            rand.RepeatAction(() => templates.MiscCostTemplates.Add(TestMisc(catalogs, rand, CostType.Electrical)), 10);
+
+            //Panels
+            rand.RepeatAction(() => templates.PanelTemplates.Add(TestPanel(catalogs, rand)), 10);
+
+            return templates;
+        }
+
         #region Catalog Models
         public static TECTag TestTag(Random rand)
         {
