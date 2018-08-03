@@ -86,10 +86,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseVMs\AppManagerTests.cs" />
+    <Compile Include="ViewModels\ConnectionsVMTests.cs" />
+    <Compile Include="ViewModels\ConnectOnAddVMTests.cs" />
     <Compile Include="ViewModels\DeleteDeviceVMTests.cs" />
     <Compile Include="ViewModels\ItemSummaryVMTests.cs" />
     <Compile Include="ViewModels\MaterialSummaryVMTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\MenuVMTests.cs" />
     <Compile Include="ViewModels\SystemSummaryVMTests.cs" />
     <Compile Include="ViewModelTests.cs" />
   </ItemGroup>
