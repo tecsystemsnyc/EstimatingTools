@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace Utilities
 {
@@ -14,13 +15,38 @@ namespace Utilities
         [TestMethod()]
         public void ObservablyClearTest()
         {
-            Assert.Fail();
+            ObservableCollection<string> collection = new ObservableCollection<string>();
+            collection.Add("test1");
+            collection.Add("test2");
+
+            int eventNum = 0;
+            collection.CollectionChanged += (sender, args) =>
+            {
+                eventNum += 1;
+            };
+
+            collection.ObservablyClear();
+            Assert.AreEqual(2, eventNum);
         }
 
         [TestMethod()]
         public void AddRangeTest()
         {
-            Assert.Fail();
+            ObservableCollection<string> collection = new ObservableCollection<string>();
+            List<string> toAdd = new List<string>()
+            {
+                "test1",
+                "test2"
+            };
+
+            int eventNum = 0;
+            collection.CollectionChanged += (sender, args) =>
+            {
+                eventNum += 1;
+            };
+
+            collection.AddRange(toAdd);
+            Assert.AreEqual(2, eventNum);
         }
 
         [TestMethod()]

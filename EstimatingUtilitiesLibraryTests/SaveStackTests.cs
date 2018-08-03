@@ -2367,7 +2367,7 @@ namespace EstimatingUtilitiesLibraryTests
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             IControllerConnection connection = controller.Connect(subScope, (subScope as IConnectable).AvailableProtocols.First());
-            IControllerConnection instanceConnection = instanceController.Connect(instanceSubScope, (instanceSubScope as IConnectable).AvailableProtocols.First());
+            IControllerConnection instanceConnection = (instanceSubScope as IConnectable).GetParentConnection();
             Dictionary<string, string> data;
             
             data = new Dictionary<string, string>();

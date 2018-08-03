@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TestLibrary.MockClasses;
+using EstimatingLibrary;
 
 namespace Utilities
 {
@@ -14,55 +16,32 @@ namespace Utilities
         [TestMethod()]
         public void CopyPropertiesFromScopeTest()
         {
-            Assert.Fail();
+            TECScopeMock scope = new TECScopeMock();
+
+            TECScopeMock toCopy = new TECScopeMock();
+            toCopy.Name = "test";
+            toCopy.Description = "test d";
+
+            scope.CopyPropertiesFromScope(toCopy);
+
+            Assert.AreEqual(toCopy.Name, scope.Name);
+            Assert.AreEqual(toCopy.Description, scope.Description);
         }
 
         [TestMethod()]
         public void CopyChildrenFromScopeTest()
         {
-            Assert.Fail();
-        }
+            TECScopeMock scope = new TECScopeMock();
 
-        [TestMethod()]
-        public void FindParentEquipmentTest()
-        {
-            Assert.Fail();
-        }
+            TECScopeMock toCopy = new TECScopeMock();
+            toCopy.AssociatedCosts.Add(new TECAssociatedCost(CostType.TEC));
+            toCopy.Tags.Add(new TECTag());
 
-        [TestMethod()]
-        public void FindParentEquipmentTest1()
-        {
-            Assert.Fail();
-        }
+            scope.CopyChildrenFromScope(toCopy);
 
-        [TestMethod()]
-        public void GetAllSystemsTest()
-        {
-            Assert.Fail();
+            Assert.IsTrue(toCopy.AssociatedCosts.SequenceEqual(scope.AssociatedCosts));
+            Assert.IsTrue(toCopy.Tags.SequenceEqual(scope.Tags));
         }
-
-        [TestMethod()]
-        public void GetAllEquipmentTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void GetAllInstanceControllersTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void GetAllInstanceSubScopeTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void FindParentSystemTest()
-        {
-            Assert.Fail();
-        }
+        
     }
 }
