@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EstimatingLibrary.Interfaces
 {
@@ -27,6 +28,10 @@ namespace EstimatingLibrary.Interfaces
         public static bool IsConnected(this IConnectable connectable)
         {
             return connectable.GetParentConnection() != null;
+        }
+        public static TECHardwiredProtocol HardwiredProtocol(this IConnectable connectable)
+        {
+            return connectable.AvailableProtocols.OfType<TECHardwiredProtocol>().First();
         }
     }
 }
