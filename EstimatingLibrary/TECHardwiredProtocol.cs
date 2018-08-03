@@ -45,7 +45,7 @@ namespace EstimatingLibrary
         {
             var hashCode = -1871948804;
             var typeList = new List<TECConnectionType>(ConnectionTypes);
-            typeList.Sort();
+            typeList.OrderBy(x => x.Guid);
             foreach(TECConnectionType type in typeList)
             {
                 hashCode = hashCode * -1521134295 + type.GetHashCode();

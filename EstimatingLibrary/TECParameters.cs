@@ -614,6 +614,10 @@ namespace EstimatingLibrary
             _electricalIsUnion = parametersSource.ElectricalIsUnion;
         }
 
+        /// <summary>
+        /// Updates the labor coefficients, standard errors, rates, and subcontractor rates
+        /// </summary>
+        /// <param name="labor">The labor object with the new values</param>
         public void UpdateConstants(TECParameters labor)
         {
             PMCoef = labor.PMCoef;

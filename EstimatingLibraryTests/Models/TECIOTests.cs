@@ -14,38 +14,60 @@ namespace Models
         [TestMethod()]
         public void GetUniversalTypeTest()
         {
-            Assert.Fail();
+            Assert.AreEqual(TECIO.GetUniversalType(IOType.AI), IOType.UI);
+            Assert.AreEqual(TECIO.GetUniversalType(IOType.DI), IOType.UI);
+            Assert.AreEqual(TECIO.GetUniversalType(IOType.AO), IOType.UO);
+            Assert.AreEqual(TECIO.GetUniversalType(IOType.DO), IOType.UO);
         }
         
         //Constructor Tests
         [TestMethod()]
         public void TECIOTest()
         {
-            Assert.Fail();
+            TECIO io = new TECIO(IOType.AI);
+
+            Assert.AreEqual(IOType.AI,io.Type);
+            Assert.IsNull(io.Protocol);
+            Assert.AreEqual(1, io.Quantity);
         }
 
         [TestMethod()]
         public void TECIOTest1()
         {
-            Assert.Fail();
+            TECProtocol protocol = new TECProtocol(new List<TECConnectionType>());
+            TECIO io = new TECIO(protocol);
+
+            Assert.AreEqual(IOType.Protocol, io.Type);
+            Assert.AreEqual(protocol, io.Protocol);
+            Assert.AreEqual(1, io.Quantity);
         }
 
         [TestMethod()]
-        public void TECIOTest2()
+        public void TECIOSetType()
         {
-            Assert.Fail();
+            TECProtocol protocol = new TECProtocol(new List<TECConnectionType>());
+            TECIO io = new TECIO(protocol);
+
+            io.Type = IOType.AI;
+
+            Assert.AreEqual(IOType.AI, io.Type);
+            Assert.IsNull(io.Protocol);
+            Assert.AreEqual(1, io.Quantity);
         }
 
         [TestMethod()]
-        public void TECIOTest3()
+        public void TECIOSetProtocol()
         {
-            Assert.Fail();
-        }
+            TECIO io = new TECIO(IOType.AI);
 
-        [TestMethod()]
-        public void TECIOTest4()
-        {
-            Assert.Fail();
+            TECProtocol protocol = new TECProtocol(new List<TECConnectionType>());
+
+            io.Protocol = protocol;
+
+            Assert.AreEqual(IOType.Protocol, io.Type);
+            Assert.AreEqual(protocol, io.Protocol);
+            Assert.AreEqual(1, io.Quantity);
         }
+        
     }
 }

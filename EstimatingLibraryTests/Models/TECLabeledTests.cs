@@ -14,7 +14,15 @@ namespace Models
         [TestMethod()]
         public void DragDropCopyTest()
         {
-            Assert.Fail();
+            TECBid bid = new TECBid();
+
+            TECLabeled labeled = new TECLabeled();
+            labeled.Label = "test";
+
+            TECLabeled copy = labeled.DragDropCopy(bid) as TECLabeled;
+
+            Assert.AreNotEqual(labeled.Guid, copy.Guid);
+            Assert.AreEqual(labeled.Label, copy.Label);
         }
     }
 }

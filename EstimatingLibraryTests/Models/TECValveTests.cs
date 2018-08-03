@@ -51,7 +51,17 @@ namespace Models
         [TestMethod()]
         public void CatalogCopyTest()
         {
-            Assert.Fail();
+            Random rand = new Random(0);
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
+            TECValve valve = ModelCreation.TestValve(catalogs, rand);
+            var copy = valve.CatalogCopy();
+
+            Assert.AreNotEqual(valve.Guid, copy.Guid);
+            Assert.AreEqual(valve.Name, copy.Name);
+            Assert.AreEqual(valve.Description, copy.Description);
+            Assert.AreEqual(valve.Price, copy.Price);
+            Assert.AreEqual(valve.Manufacturer, copy.Manufacturer);
+            Assert.AreEqual(valve.Actuator, copy.Actuator);
         }
     }
 }

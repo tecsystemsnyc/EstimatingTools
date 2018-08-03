@@ -5,34 +5,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TestLibrary.ModelTestingUtilities;
 
 namespace Models
 {
     [TestClass()]
     public class TECTagTests
     {
-        [TestMethod()]
-        public void TECTagTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void TECTagTest1()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void TECTagTest2()
-        {
-            Assert.Fail();
-        }
 
         [TestMethod()]
         public void CatalogCopyTest()
         {
-            Assert.Fail();
+            Random rand = new Random(0);
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
+            TECTag tag = ModelCreation.TestTag(rand);
+            var copy = tag.CatalogCopy();
+
+            Assert.AreNotEqual(tag.Guid, copy.Guid);
+            Assert.AreEqual(tag.Label, copy.Label);
         }
     }
 }

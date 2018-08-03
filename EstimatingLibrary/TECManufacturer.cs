@@ -26,7 +26,7 @@ namespace EstimatingLibrary
         }
         public TECManufacturer() : this(Guid.NewGuid()) { }
 
-        public TECManufacturer(TECManufacturer manSource) : this(manSource.Guid)
+        public TECManufacturer(TECManufacturer manSource) : this()
         {
             _label = manSource.Label;
             _multiplier = manSource.Multiplier;

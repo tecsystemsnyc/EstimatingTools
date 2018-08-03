@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TestLibrary.ModelTestingUtilities;
 
 namespace Models
 {
@@ -14,7 +15,14 @@ namespace Models
         [TestMethod()]
         public void CatalogCopyTest()
         {
-            Assert.Fail();
+            Random rand = new Random(0);
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
+            TECManufacturer man = ModelCreation.TestManufacturer(rand);
+            var copy = man.CatalogCopy();
+
+            Assert.AreNotEqual(man.Guid, copy.Guid);
+            Assert.AreEqual(man.Label, copy.Label);
+            Assert.AreEqual(man.Multiplier, copy.Multiplier);
         }
 
         [TestMethod()]
