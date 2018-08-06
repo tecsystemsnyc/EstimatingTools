@@ -20,7 +20,7 @@ namespace EstimatingLibrary
         public TECIOModule(TECManufacturer manufacturer) : this(Guid.NewGuid(), manufacturer) { }
         public TECIOModule(TECIOModule ioModuleSource) : this(ioModuleSource.Manufacturer)
         {
-            copyPropertiesFromHardware(this);
+            copyPropertiesFromHardware(ioModuleSource);
             IO = ioModuleSource.IO;
             IO.CollectionChanged += ioCollectionChanged;
         }

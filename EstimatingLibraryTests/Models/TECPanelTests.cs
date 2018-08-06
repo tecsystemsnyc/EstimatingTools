@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TestLibrary.ModelTestingUtilities;
 
 namespace Models
 {
@@ -14,7 +15,15 @@ namespace Models
         [TestMethod()]
         public void DragDropCopyTest()
         {
-            Assert.Fail();
+            Random rand = new Random(0);
+            TECBid bid = ModelCreation.TestBid(rand);
+            TECPanel panel = ModelCreation.TestPanel(bid.Catalogs, rand);
+
+            TECPanel copy = panel.DragDropCopy(bid) as TECPanel;
+
+            Assert.AreEqual(panel.Name, copy.Name);
+            Assert.IsTrue(panel.CostBatch.CostsEqual(copy.CostBatch));
+
         }
     }
 }

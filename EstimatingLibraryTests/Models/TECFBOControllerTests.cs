@@ -27,7 +27,16 @@ namespace Models
         [TestMethod()]
         public void CopyControllerTest()
         {
-            Assert.Fail();
+            Random rand = new Random(0);
+            var catalogs = ModelCreation.TestCatalogs(rand);
+
+            var controller = new TECFBOController(catalogs);
+            controller.Name = "test";
+
+            var copy = controller.CopyController(new Dictionary<Guid, Guid>());
+
+            Assert.IsTrue(controller.IO.Protocols.SequenceEqual(copy.IO.Protocols));
+            Assert.AreEqual(controller.Name, copy.Name);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TestLibrary.ModelTestingUtilities;
 
 namespace Models
 {
@@ -14,19 +15,15 @@ namespace Models
         [TestMethod()]
         public void TECScopeBranchTest()
         {
-            Assert.Fail();
-        }
+            Random rand = new Random(0);
+            TECScopeBranch ogBranch = ModelCreation.TestScopeBranch(rand, 3);
 
-        [TestMethod()]
-        public void TECScopeBranchTest1()
-        {
-            Assert.Fail();
-        }
+            TECScopeBranch branch = new TECScopeBranch(ogBranch);
 
-        [TestMethod()]
-        public void TECScopeBranchTest2()
-        {
-            Assert.Fail();
+            Assert.AreEqual(ogBranch.Label, branch.Label);
+            Assert.AreEqual(ogBranch.Branches.Count, branch.Branches.Count);
+
         }
+        
     }
 }

@@ -39,7 +39,7 @@ namespace EstimatingLibrary
 
         public virtual object DragDropCopy(TECScopeManager scopeManager)
         {
-            return this;
+            return new TECLabeled(this);
         }
     }
 

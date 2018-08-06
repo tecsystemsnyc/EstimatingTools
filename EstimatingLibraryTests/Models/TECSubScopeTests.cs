@@ -5,17 +5,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TestLibrary.ModelTestingUtilities;
 
 namespace Models
 {
     [TestClass()]
     public class TECSubScopeTests
     {
-
         [TestMethod()]
         public void DragDropCopyTest()
         {
-            Assert.Fail();
+            Random rand = new Random(0);
+            TECBid bid = ModelCreation.TestBid(rand, 2);
+            TECSubScope subScope = ModelCreation.TestSubScope(bid.Catalogs, rand);
+
+            var copy = subScope.DragDropCopy(bid) as TECSubScope;
+
+            Assert.AreEqual(subScope.Name, copy.Name);
+            Assert.IsTrue(subScope.CostBatch.CostsEqual(copy.CostBatch));
         }
 
         [TestMethod()]
@@ -89,6 +96,37 @@ namespace Models
 
         [TestMethod()]
         public void CopyTest()
+        {
+            Random rand = new Random(0);
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand, 2);
+            TECSubScope subScope = ModelCreation.TestSubScope(catalogs, rand);
+
+            var copy = subScope.Copy(new Dictionary<Guid, Guid>());
+
+            Assert.AreEqual(subScope.Name, copy.Name);
+            Assert.IsTrue(subScope.CostBatch.CostsEqual(copy.CostBatch));
+        }
+
+        [TestMethod()]
+        public void AddPointToConnected()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void AddDeviceToConnected()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void RemovePointFromConnected()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void RemoveDeviceFromConnected()
         {
             Assert.Fail();
         }

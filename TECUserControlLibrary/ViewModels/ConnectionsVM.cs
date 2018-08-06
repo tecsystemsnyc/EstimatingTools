@@ -463,7 +463,7 @@ namespace TECUserControlLibrary.ViewModels
                     return;
                 }
 
-                var connections = ConnectionHelper.ConnectToController(connectables, SelectedController);
+                var connections = ConnectionHelper.ConnectToController(connectables.Where(y => y != SelectedController), SelectedController);
                 foreach (IControllerConnection connection in connections)
                 {
                     connection.Length += this.DefaultWireLength;
