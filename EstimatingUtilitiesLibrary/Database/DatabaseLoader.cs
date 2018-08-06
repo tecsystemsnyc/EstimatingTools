@@ -300,7 +300,7 @@ namespace EstimatingUtilitiesLibrary.Database
             void setSystemChildren(TECSystem item)
             {
                 item.Equipment.AddRange(systemEquipment.ValueOrNew(item.Guid));
-                item.SetControllers(systemControllers.ValueOrNew(item.Guid));
+                systemControllers.ValueOrNew(item.Guid).ForEach(c => item.AddController(c));
                 item.Panels.AddRange(systemPanels.ValueOrNew(item.Guid));
                 item.MiscCosts.AddRange(systemMisc.ValueOrNew(item.Guid));
                 item.ScopeBranches.AddRange(systemScopeBranches.ValueOrNew(item.Guid));
@@ -419,7 +419,7 @@ namespace EstimatingUtilitiesLibrary.Database
             foreach (TECSystem system in systems)
             {
                 system.Equipment.AddRange(systemEquipment.ValueOrNew(system.Guid));
-                system.SetControllers(systemController.ValueOrNew(system.Guid));
+                systemController.ValueOrNew(system.Guid).ForEach(c => system.AddController(c));
                 system.Panels.AddRange(systemPanels.ValueOrNew(system.Guid));
                 system.MiscCosts.AddRange(systemMisc.ValueOrNew(system.Guid));
                 system.ScopeBranches.AddRange(systemScopeBranch.ValueOrNew(system.Guid));
