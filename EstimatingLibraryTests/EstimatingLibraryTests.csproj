@@ -77,7 +77,6 @@
     <Compile Include="Models\TECParametersTests.cs" />
     <Compile Include="Models\TECPointTests.cs" />
     <Compile Include="Models\TECProvidedControllerTests.cs" />
-    <Compile Include="Models\TECScheduleTests.cs" />
     <Compile Include="Models\TECScopeBranchTests.cs" />
     <Compile Include="Models\TECScopeTemplatesTests.cs" />
     <Compile Include="Models\TECSubScopeTests.cs" />

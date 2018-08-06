@@ -113,7 +113,6 @@ namespace Models
             connection.RemoveChild(subScope);
 
             Assert.IsFalse(connection.Children.Contains(subScope));
-            Assert.IsFalse(controller.ChildrenConnections.Contains(connection));
             Assert.IsNull((subScope as IConnectable).GetParentConnection());
         }
     }

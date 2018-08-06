@@ -259,7 +259,19 @@ namespace Models
         [TestMethod()]
         public void AddInstanceTest()
         {
-            Assert.Fail();
+            Random rand = new Random(0);
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
+            TECTypical typical = ModelCreation.TestTypical(catalogs, rand);
+
+            TECSystem system = typical.AddInstance();
+
+            Assert.AreEqual(typical.Equipment.Count, system.Equipment.Count);
+            Assert.AreEqual(typical.ScopeBranches.Count, system.ScopeBranches.Count);
+            Assert.AreEqual(typical.ProposalItems.Count, system.ProposalItems.Count);
+            Assert.AreEqual(typical.Controllers.Count, system.Controllers.Count);
+            Assert.AreEqual(typical.Panels.Count, system.Panels.Count);
+            Assert.AreEqual(typical.MiscCosts.Count, system.MiscCosts.Count);
+            Assert.AreEqual(typical.Controllers.Aggregate(0, (total, next) => total += next.GetAll<TECConnection>().Count), system.GetAll<TECConnection>().Count);
         }
 
         [TestMethod()]
