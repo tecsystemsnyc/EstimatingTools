@@ -154,22 +154,22 @@ namespace TECUserControlLibrary.ViewModels
         {
             if(dropInfo.Data is TECSystem)
             {
-                UIHelpers.SystemToTypicalDragOver(dropInfo);
+                DragDropHelpers.SystemToTypicalDragOver(dropInfo);
             }
             else
             {
-                UIHelpers.StandardDragOver(dropInfo);
+                DragDropHelpers.StandardDragOver(dropInfo);
             }
         }
         public void Drop(IDropInfo dropInfo)
         {
             if (dropInfo.Data is TECSystem)
             {
-                UIHelpers.SystemToTypicalDrop(dropInfo, Bid);
+                DragDropHelpers.SystemToTypicalDrop(dropInfo, Bid);
             }
             else
             {
-                UIHelpers.StandardDrop(dropInfo, Bid);
+                DragDropHelpers.StandardDrop(dropInfo, Bid);
             }
         }
         #endregion

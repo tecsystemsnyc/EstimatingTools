@@ -8,13 +8,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
 {
     public class ConnectOnAddVM : ViewModelBase
     {
         private List<IConnectable> toConnect;
-        private TECSystem parent;
+        private List<TECController> controllers;
         private double _length = 0.0;
         private double _conduitLength = 0.0;
         private TECElectricalMaterial _conduitType;
@@ -79,18 +80,19 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         
-        public ConnectOnAddVM(IEnumerable<IConnectable> toConnect, TECSystem parent, IEnumerable<TECElectricalMaterial> conduitTypes, IEnumerable<TECConnectionType> connectionTypes)
+        public ConnectOnAddVM(IEnumerable<IConnectable> toConnect, IEnumerable<TECController> controllers, 
+            IEnumerable<TECElectricalMaterial> conduitTypes)
         {
             this.toConnect = new List<IConnectable>(toConnect);
-            this.parent = parent;
+            this.controllers = new List<TECController>(controllers);
             this.ConduitTypes =  new List<TECElectricalMaterial>(conduitTypes);
-            ParentControllers = getCompatibleControllers(parent);
+            ParentControllers = getCompatibleControllers(controllers);
         }
 
-        private List<TECController> getCompatibleControllers(TECSystem parent)
+        private List<TECController> getCompatibleControllers(IEnumerable<TECController> controllers)
         {
             List<TECController> result = new List<TECController>();
-            foreach(TECController controller in parent.Controllers)
+            foreach(TECController controller in controllers)
             {
                 if (ConnectionHelper.CanConnectToController(toConnect, controller))
                 {
@@ -103,7 +105,7 @@ namespace TECUserControlLibrary.ViewModels
         public void Update(IEnumerable<IConnectable> toConnect)
         {
             this.toConnect = new List<IConnectable>(toConnect);
-            ParentControllers = getCompatibleControllers(parent);
+            ParentControllers = getCompatibleControllers(controllers);
             if (!ParentControllers.Contains(SelectedController))
             {
                 SelectedController = null;
@@ -112,7 +114,6 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void ExecuteConnection(IEnumerable<IConnectable> finalToConnect)
         {
-
             var connections = ConnectionHelper.ConnectToController(finalToConnect, SelectedController);
 
             foreach (IControllerConnection conn in connections)

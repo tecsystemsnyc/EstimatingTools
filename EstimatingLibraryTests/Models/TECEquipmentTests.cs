@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TestLibrary.ModelTestingUtilities;
 
 namespace Models
 {
@@ -63,7 +64,17 @@ namespace Models
         [TestMethod()]
         public void DragDropCopyTest()
         {
-            Assert.Fail();
+            Random rand = new Random(0);
+            TECBid bid = ModelCreation.TestBid(rand);
+            TECEquipment equip = ModelCreation.TestEquipment(bid.Catalogs, rand);
+            bid.Systems.First().Equipment.Add(equip);
+
+            TECEquipment copy = equip.DragDropCopy(bid) as TECEquipment;
+
+            Assert.AreEqual(equip.Name, copy.Name);
+            Assert.AreEqual(equip.SubScope.Count, copy.SubScope.Count);
+            Assert.IsTrue(equip.CostBatch.CostsEqual(copy.CostBatch));
+
         }
     }
 }

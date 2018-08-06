@@ -410,7 +410,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             if (!PanelSelectionReadOnly)
             {
-                UIHelpers.DragOver(dropInfo, (item, sourceType, targetType) =>
+                DragDropHelpers.DragOver(dropInfo, (item, sourceType, targetType) =>
                 {
                     bool controllerDrag = (sourceType == typeof(TECController) && targetType == typeof(ControllerInPanel));
                     bool typesMatch = sourceType == targetType;
@@ -424,7 +424,7 @@ namespace TECUserControlLibrary.ViewModels
         public void Drop(IDropInfo dropInfo)
         {
             TECScopeManager scopeManager = Templates != null ? Templates as TECScopeManager : Bid as TECScopeManager;
-            UIHelpers.Drop(dropInfo, (item) =>
+            DragDropHelpers.Drop(dropInfo, (item) =>
             {
                 if (item is TECProvidedController controller)
                 {

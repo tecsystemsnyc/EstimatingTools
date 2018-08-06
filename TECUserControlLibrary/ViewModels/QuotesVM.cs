@@ -35,7 +35,7 @@ namespace TECUserControlLibrary.ViewModels
             var dropHandler = new EmptyDropTarget();
             dropHandler.DragOverAction = info =>
             {
-                UIHelpers.DragOver(info, (item, sourceType, targetType) =>
+                DragDropHelpers.DragOver(info, (item, sourceType, targetType) =>
                 {
                     var hardware = item as TECHardware;
                     return hardware != null && hardware.QuotedPrice == -1;
@@ -43,7 +43,7 @@ namespace TECUserControlLibrary.ViewModels
             };
             dropHandler.DropAction = info =>
             {
-                UIHelpers.Drop(info, item =>
+                DragDropHelpers.Drop(info, item =>
                 {
                     var hardware = item as TECHardware;
                     hardware.QuotedPrice = hardware.Cost;

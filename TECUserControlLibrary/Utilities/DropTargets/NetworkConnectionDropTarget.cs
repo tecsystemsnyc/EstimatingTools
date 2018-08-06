@@ -20,12 +20,12 @@ namespace TECUserControlLibrary.Utilities.DropTargets
 
         public void DragOver(IDropInfo dropInfo)
         {
-            UIHelpers.DragOver(dropInfo, dragCondition);
+            DragDropHelpers.DragOver(dropInfo, dragCondition);
         }
 
         public void Drop(IDropInfo dropInfo)
         {
-            UIHelpers.Drop(dropInfo, dropHandler, false);
+            DragDropHelpers.Drop(dropInfo, dropHandler, false);
         }
 
         private bool dragCondition(object data, Type sourceType, Type targetType)
@@ -54,7 +54,7 @@ namespace TECUserControlLibrary.Utilities.DropTargets
     {
         public void DragOver(IDropInfo dropInfo)
         {
-            UIHelpers.DragOver(dropInfo,
+            DragDropHelpers.DragOver(dropInfo,
                 (item, sourceType, targetType) =>
                 {
                     return sourceType == targetType;
@@ -67,7 +67,7 @@ namespace TECUserControlLibrary.Utilities.DropTargets
                 return item;
             }
 
-            UIHelpers.Drop(dropInfo, drop);
+            DragDropHelpers.Drop(dropInfo, drop);
         }
     }
 }

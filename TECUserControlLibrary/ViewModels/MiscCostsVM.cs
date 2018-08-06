@@ -297,7 +297,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
-            UIHelpers.StandardDragOver(dropInfo,
+            DragDropHelpers.StandardDragOver(dropInfo,
                 type =>
                 {
                     if (type == typeof(TECMisc) && dropInfo.Data is TECCost)

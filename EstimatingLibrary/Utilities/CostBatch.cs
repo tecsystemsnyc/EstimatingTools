@@ -158,6 +158,21 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
+        public bool CostsEqual(CostBatch other)
+        {
+            foreach(var pair in typeDictionary)
+            {
+                if (!other.typeDictionary.ContainsKey(pair.Key))
+                {
+                    return false;
+                }
+                else if (pair.Value != other.typeDictionary[pair.Key]){
+                    return false;
+                }
+            }
+            return true;
+        }
+
         private struct CostObject
         {
             public double Cost, Labor;
@@ -191,6 +206,19 @@ namespace EstimatingLibrary.Utilities
             public static CostObject operator *(CostObject left, double right)
             {
                 return new CostObject(left.Cost * right, left.Labor * right);
+            }
+
+            public static bool operator ==(CostObject left, CostObject right)
+            {
+                return left.Cost == right.Cost && left.Labor == right.Labor;
+            }
+            public static bool operator !=(CostObject left, CostObject right)
+            {
+                return !(left == right);
+            }
+            public override int GetHashCode()
+            {
+                return base.GetHashCode();
             }
         }
     }

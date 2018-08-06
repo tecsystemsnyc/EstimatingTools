@@ -271,7 +271,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
-            UIHelpers.DragOver(dropInfo, dropCondition, null);
+            DragDropHelpers.DragOver(dropInfo, dropCondition, null);
 
             bool dropCondition(object data, Type sourceType, Type targetType)
             {
@@ -285,7 +285,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void Drop(IDropInfo dropInfo)
         {
-            UIHelpers.Drop(dropInfo, dropMethod, false);
+            DragDropHelpers.Drop(dropInfo, dropMethod, false);
             object dropMethod(object dropped)
             {
                 if (dropInfo.TargetCollection == Unlocated)

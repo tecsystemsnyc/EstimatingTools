@@ -119,7 +119,8 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         public void SetParentSystem(TECSystem system, TECScopeManager scopeManager)
         {
             ConnectVM = new ConnectOnAddVM(new List<TECSubScope>(),
-                system, scopeManager.Catalogs.ConduitTypes, scopeManager.Catalogs.ConnectionTypes);
+                system.Controllers, scopeManager.Catalogs.ConduitTypes);
+            updateConnectVMWithQuantity(Quantity);
         }
 
         private void setup()

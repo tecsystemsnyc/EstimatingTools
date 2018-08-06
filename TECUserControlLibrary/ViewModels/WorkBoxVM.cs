@@ -41,7 +41,7 @@ namespace TECUserControlLibrary.ViewModels
 
         void IDropTarget.DragOver(IDropInfo dropInfo)
         {
-            UIHelpers.StandardDragOver(dropInfo);
+            DragDropHelpers.StandardDragOver(dropInfo);
         }
 
         void IDropTarget.Drop(IDropInfo dropInfo)
@@ -52,7 +52,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else
             {
-                UIHelpers.StandardDrop(dropInfo, manager);
+                DragDropHelpers.StandardDrop(dropInfo, manager);
             }
         }
     }

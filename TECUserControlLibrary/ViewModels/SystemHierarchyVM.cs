@@ -228,7 +228,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void DragOver(IDropInfo dropInfo)
         {
-            UIHelpers.DragOver(dropInfo, dropCondition);
+            DragDropHelpers.DragOver(dropInfo, dropCondition);
             
             bool dropCondition(object sourceItem, Type sourceType, Type targetType)
             {
@@ -242,7 +242,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else
                 {
-                    return UIHelpers.StandardDropCondition(sourceItem, sourceType, targetType);
+                    return DragDropHelpers.StandardDropCondition(sourceItem, sourceType, targetType);
                 }
             }
             
@@ -251,7 +251,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             if(dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
             {
-                UIHelpers.Drop(dropInfo, x => { return x; });
+                DragDropHelpers.Drop(dropInfo, x => { return x; });
             }
             else
             {
@@ -281,7 +281,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else if (dropped is IEndDevice)
                 {
-                    UIHelpers.StandardDrop(dropInfo, scopeManager);
+                    DragDropHelpers.StandardDrop(dropInfo, scopeManager);
                 }
                 else if (dropped is TECMisc || dropped is TECCost)
                 {
