@@ -27,7 +27,7 @@ namespace TECUserControlLibrary.ViewModels
             ViableReplacements = new List<TECDevice>();
             foreach(TECDevice dev in devices)
             {
-                if ((valve.Actuator as IEndDevice).ConnectionMethods.Matches((dev as IEndDevice).ConnectionMethods) && valve.Actuator != dev)
+                if ((valve.Actuator as IEndDevice).ConnectionMethods.SequenceEqual((dev as IEndDevice).ConnectionMethods) && valve.Actuator != dev)
                 {
                     ViableReplacements.Add(dev);
                 }

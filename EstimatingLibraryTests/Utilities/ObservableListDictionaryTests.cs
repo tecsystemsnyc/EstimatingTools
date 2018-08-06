@@ -5,70 +5,166 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EstimatingLibrary.Interfaces;
+using EstimatingLibrary;
 
 namespace Utilities
 {
     [TestClass()]
     public class ObservableListDictionaryTests
     {
-        [TestMethod()]
-        public void ObservableListDictionaryTest()
-        {
-            Assert.Fail();
-        }
 
         [TestMethod()]
         public void AddItemTest()
         {
-            Assert.Fail();
+            ObservableListDictionary<ITECScope> dict = new ObservableListDictionary<ITECScope>();
+
+            TECSubScope keySS = new TECSubScope();
+            TECSubScope valueSS = new TECSubScope();
+
+            dict.AddItem(keySS, valueSS);
+
+            Assert.IsTrue(dict.GetFullDictionary().ContainsKey(keySS));
+            Assert.IsTrue(dict.GetFullDictionary()[keySS].Contains(valueSS));
         }
 
         [TestMethod()]
         public void RemoveItemTest()
         {
-            Assert.Fail();
+            ObservableListDictionary<ITECScope> dict = new ObservableListDictionary<ITECScope>();
+
+            TECSubScope keySS = new TECSubScope();
+            TECSubScope valueSS1 = new TECSubScope();
+            TECSubScope valueSS2 = new TECSubScope();
+
+            dict.AddItem(keySS, valueSS1);
+            dict.AddItem(keySS, valueSS2);
+
+            dict.RemoveItem(keySS, valueSS1);
+
+            Assert.IsTrue(dict.GetFullDictionary().ContainsKey(keySS));
+            Assert.IsFalse(dict.GetFullDictionary()[keySS].Contains(valueSS1));
+            Assert.IsTrue(dict.GetFullDictionary()[keySS].Contains(valueSS2));
+
         }
 
         [TestMethod()]
         public void RemoveKeyTest()
         {
-            Assert.Fail();
+            ObservableListDictionary<ITECScope> dict = new ObservableListDictionary<ITECScope>();
+
+            TECSubScope keySS = new TECSubScope();
+            TECSubScope valueSS1 = new TECSubScope();
+            TECSubScope valueSS2 = new TECSubScope();
+
+            dict.AddItem(keySS, valueSS1);
+            dict.AddItem(keySS, valueSS2);
+
+            dict.RemoveKey(keySS);
+
+            Assert.IsFalse(dict.GetFullDictionary().ContainsKey(keySS));
         }
 
         [TestMethod()]
         public void GetTypicalTest()
         {
-            Assert.Fail();
+            ObservableListDictionary<ITECScope> dict = new ObservableListDictionary<ITECScope>();
+
+            TECSubScope keySS = new TECSubScope();
+            TECSubScope valueSS1 = new TECSubScope();
+            TECSubScope valueSS2 = new TECSubScope();
+
+            dict.AddItem(keySS, valueSS1);
+            dict.AddItem(keySS, valueSS2);
+
+            var typ = dict.GetTypical(valueSS1);
+
+            Assert.AreEqual(keySS, typ);
         }
 
         [TestMethod()]
         public void GetInstancesTest()
         {
-            Assert.Fail();
+            ObservableListDictionary<ITECScope> dict = new ObservableListDictionary<ITECScope>();
+
+            TECSubScope keySS = new TECSubScope();
+            TECSubScope valueSS1 = new TECSubScope();
+            TECSubScope valueSS2 = new TECSubScope();
+
+            dict.AddItem(keySS, valueSS1);
+            dict.AddItem(keySS, valueSS2);
+
+            var instances = dict.GetInstances(keySS);
+
+            Assert.IsTrue(instances.Contains(valueSS1));
+            Assert.IsTrue(instances.Contains(valueSS2));
+
         }
 
         [TestMethod()]
         public void ContainsKeyTest()
         {
-            Assert.Fail();
+            ObservableListDictionary<ITECScope> dict = new ObservableListDictionary<ITECScope>();
+
+            TECSubScope keySS = new TECSubScope();
+            TECSubScope valueSS1 = new TECSubScope();
+            TECSubScope valueSS2 = new TECSubScope();
+
+            dict.AddItem(keySS, valueSS1);
+            dict.AddItem(keySS, valueSS2);
+
+            Assert.IsTrue(dict.ContainsKey(keySS));
         }
 
         [TestMethod()]
         public void ContainsValueTest()
         {
-            Assert.Fail();
+            ObservableListDictionary<ITECScope> dict = new ObservableListDictionary<ITECScope>();
+
+            TECSubScope keySS = new TECSubScope();
+            TECSubScope valueSS1 = new TECSubScope();
+            TECSubScope valueSS2 = new TECSubScope();
+
+            dict.AddItem(keySS, valueSS1);
+            dict.AddItem(keySS, valueSS2);
+
+            Assert.IsTrue(dict.ContainsValue(valueSS1));
+            Assert.IsTrue(dict.ContainsValue(valueSS2));
         }
 
         [TestMethod()]
         public void GetFullDictionaryTest()
         {
-            Assert.Fail();
+            ObservableListDictionary<ITECScope> dict = new ObservableListDictionary<ITECScope>();
+
+            TECSubScope keySS = new TECSubScope();
+            TECSubScope valueSS1 = new TECSubScope();
+            TECSubScope valueSS2 = new TECSubScope();
+
+            dict.AddItem(keySS, valueSS1);
+            dict.AddItem(keySS, valueSS2);
+
+            var underlying = dict.GetFullDictionary();
+            Assert.AreEqual(1, underlying.Keys.Count);
+            Assert.AreEqual(2, underlying[keySS].Count);
         }
 
         [TestMethod()]
         public void RemoveValuesForKeysTest()
         {
-            Assert.Fail();
+            ObservableListDictionary<ITECScope> dict = new ObservableListDictionary<ITECScope>();
+
+            TECSubScope keySS = new TECSubScope();
+            TECSubScope valueSS1 = new TECSubScope();
+            TECSubScope valueSS2 = new TECSubScope();
+
+            dict.AddItem(keySS, valueSS1);
+            dict.AddItem(keySS, valueSS2);
+
+            dict.RemoveValuesForKeys(new List<ITECScope>() { valueSS1 }, new List<ITECScope>() { keySS });
+
+            Assert.IsFalse(dict.GetFullDictionary()[keySS].Contains(valueSS1));
+
         }
     }
 }

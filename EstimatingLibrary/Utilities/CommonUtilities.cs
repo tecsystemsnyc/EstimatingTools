@@ -27,13 +27,7 @@ namespace EstimatingLibrary.Utilities
                 collection.Add(item);
             }
         }
-
-        public static bool Matches<T>(this IEnumerable<T> first, IEnumerable<T> second)
-        {
-            return (first.Except(second).Count() == 0)
-                && (second.Except(first).Count() == 0);
-        }
-
+        
         public static void FillScopeCollection<T>(IList<T> collection, IList<T> otherCollection) where T : ITECObject
         {
             foreach (T otherItem in otherCollection)

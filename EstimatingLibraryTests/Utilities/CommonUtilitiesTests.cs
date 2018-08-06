@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 
 namespace Utilities
 {
@@ -48,23 +50,58 @@ namespace Utilities
             collection.AddRange(toAdd);
             Assert.AreEqual(2, eventNum);
         }
-
-        [TestMethod()]
-        public void MatchesTest()
-        {
-            Assert.Fail();
-        }
-
+        
         [TestMethod()]
         public void FillScopeCollectionTest()
         {
-            Assert.Fail();
+            TECSubScope scope1 = new TECSubScope();
+            TECSubScope scope2 = new TECSubScope();
+            TECSubScope scope3 = new TECSubScope();
+
+            List<ITECScope> first = new List<ITECScope>()
+            {
+                scope1,
+                scope2
+            };
+
+            List<ITECScope> second = new List<ITECScope>()
+            {
+                scope2,
+                scope3
+            };
+
+            CommonUtilities.FillScopeCollection(first, second);
+
+            Assert.IsTrue(first.Contains(scope3));
+            Assert.AreEqual(1, first.Where(x => x == scope2).Count());
+
         }
 
         [TestMethod()]
         public void UnionizeScopeCollectionTest()
         {
-            Assert.Fail();
+            TECSubScope scope1 = new TECSubScope();
+            TECSubScope scope2 = new TECSubScope();
+            TECSubScope scopeOverwrite = new TECSubScope(scope2.Guid);
+            TECSubScope scope3 = new TECSubScope();
+
+            List<ITECScope> first = new List<ITECScope>()
+            {
+                scope1,
+                scopeOverwrite
+            };
+
+            List<ITECScope> second = new List<ITECScope>()
+            {
+                scope2,
+                scope3
+            };
+
+            CommonUtilities.UnionizeScopeCollection(first, second);
+
+            Assert.IsTrue(first.Contains(scope3));
+            Assert.IsTrue(first.Contains(scope2));
+            Assert.IsFalse(first.Contains(scopeOverwrite));
         }
     }
 }
