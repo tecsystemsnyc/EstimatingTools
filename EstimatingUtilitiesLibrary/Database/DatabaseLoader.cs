@@ -100,6 +100,7 @@ namespace EstimatingUtilitiesLibrary.Database
             bid.MiscCosts.AddRange(getChildObjects(new BidMiscTable(), new MiscTable(), bid.Guid, data => getMiscFromRow(data)));
             bid.Schedule = getSchedule(bid);
             bid.InternalNotes.AddRange(getChildObjects(new BidInternalNoteTable(), new InternalNoteTable(), bid.Guid, id => { return new TECInternalNote(id); }));
+            bid.DistributionList.AddRange(getChildObjects(new BidDistributionContactTable(), new DistributionContactTable(), bid.Guid, id => { return new TECDistributionContact(id); }));
 
             List<TECLocated> allLocated = bid.GetAll<TECLocated>();
             instances.ForEach(x => allLocated.AddRange(x.GetAll<TECLocated>()));

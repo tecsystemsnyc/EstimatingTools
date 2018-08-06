@@ -1420,6 +1420,38 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+    internal class DistributionContactTable : TableBase
+    {
+        public static string TableName = "DistributionContact";
+        public static Type ContactType = typeof(TECDistributionContact);
+
+        public static TableField ID = new TableField("ID", "TEXT", ContactType.GetProperty("Guid"));
+        public static TableField Name = new TableField("Name", "TEXT", ContactType.GetProperty("Name"));
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ContactType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ID,
+            Name
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "DistributionList"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
 
     internal class ProtocolTable : TableBase
     {
@@ -3630,6 +3662,46 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+    internal class BidDistributionContactTable : TableBase
+    {
+        public static string TableName = "BidDistributionContact";
+        public static Type ObjectType = typeof(TECBid);
+        public static Type ReferenceType = typeof(TECDistributionContact);
+
+        public static TableField BidID = new TableField("BidID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField ContactID = new TableField("ContactID", "TEXT", ReferenceType.GetProperty("Guid"));
+
+        public static Type HelperType = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"), "DistributionList", "0");
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            BidID,
+            ContactID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            BidID,
+            ContactID,
+            Index
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "DistributionList"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
     internal class ManagerTemplatesTable : TableBase
     {
         public static string TableName = "ManagerTemplates";
@@ -3710,6 +3782,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new InterlockConnectionTable(),
             new ScopeTemplatesTable(),
             new ProposalItemTable(),
+            new DistributionContactTable(),
           
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -3772,7 +3845,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new SubScopeScopeBranchTable(),
             new ProposalItemContainingScopeTable(),
             new ProposalItemDisplayScopeTable(),
-            new HardwareQuoteTable()
+            new HardwareQuoteTable(),
+            new BidDistributionContactTable()
             };
     }
 

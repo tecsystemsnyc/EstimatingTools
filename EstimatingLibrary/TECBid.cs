@@ -141,6 +141,7 @@ namespace EstimatingLibrary
         public ObservableCollection<TECMisc> MiscCosts { get; } = new ObservableCollection<TECMisc>();
         public ObservableCollection<TECPanel> Panels { get; } = new ObservableCollection<TECPanel>();
         public ObservableCollection<TECInternalNote> InternalNotes { get; } = new ObservableCollection<TECInternalNote>();
+        public ObservableCollection<TECDistributionContact> DistributionList { get; } = new ObservableCollection<TECDistributionContact>();
 
         public CostBatch CostBatch
         {
@@ -169,6 +170,7 @@ namespace EstimatingLibrary
             MiscCosts.CollectionChanged += (sender, args) => collectionChanged(sender, args, "MiscCosts");
             Panels.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Panels");
             InternalNotes.CollectionChanged += (sender, args) => collectionChanged(sender, args, "InternalNotes");
+            DistributionList.CollectionChanged += (sender, args) => collectionChanged(sender, args, "DistributionList");
         }
 
         public TECBid() : this(Guid.NewGuid())
@@ -358,6 +360,7 @@ namespace EstimatingLibrary
             saveList.AddRange(this.MiscCosts, "MiscCosts");
             saveList.AddRange(this.Locations, "Locations");
             saveList.AddRange(this.InternalNotes, "InternalNotes");
+            saveList.AddRange(this.DistributionList, "DistributionList");
             return saveList;
         }
 
