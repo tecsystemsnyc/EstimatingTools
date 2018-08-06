@@ -136,13 +136,6 @@ namespace EstimatingLibrary
             notifyCostChanged(-controller.CostBatch);
             return success;
         }
-        public void SetControllers(IEnumerable<TECController> newControllers)
-        {
-            IEnumerable<TECController> oldControllers = Controllers;
-            if (this.IsTypical) { newControllers.ForEach((x => ((ITypicalable)x).MakeTypical())); }
-            _controllers = new ObservableCollection<TECController>(newControllers);
-            notifyTECChanged(Change.Edit, "Controllers", this, newControllers, oldControllers);
-        }
 
         public virtual object DragDropCopy(TECScopeManager scopeManager)
         {

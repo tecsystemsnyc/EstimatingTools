@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TestLibrary.ModelTestingUtilities;
 
 namespace Models
 {
@@ -74,39 +75,54 @@ namespace Models
         [TestMethod()]
         public void TECSystemTest()
         {
-            Assert.Fail();
-        }
+            Random rand = new Random(0);
+            TECBid bid = ModelCreation.TestBid(rand);
+            TECSystem originalSystem = ModelCreation.TestSystem(bid.Catalogs, rand);
 
-        [TestMethod()]
-        public void TECSystemTest1()
-        {
-            Assert.Fail();
+            var copy = new TECSystem(originalSystem, bid);
+            
+            //Not fully covered
+            Assert.AreEqual(originalSystem.Name, copy.Name);
+            Assert.IsTrue(originalSystem.CostBatch.CostsEqual(copy.CostBatch));
         }
-
-        [TestMethod()]
-        public void TECSystemTest2()
-        {
-            Assert.Fail();
-        }
-
+        
         [TestMethod()]
         public void AddControllerTest()
         {
-            Assert.Fail();
+            bool raised = false;
+            TECSystem system = new TECSystem();
+            system.TECChanged += args =>
+            {
+                raised = true;
+            };
+
+            TECProvidedController controller = new TECProvidedController(new TECControllerType(new TECManufacturer()));
+            system.AddController(controller);
+
+            Assert.IsTrue(raised);
+            Assert.IsTrue(system.Controllers.Contains(controller));
+
         }
 
         [TestMethod()]
         public void RemoveControllerTest()
         {
-            Assert.Fail();
-        }
+            bool raised = false;
+            TECSystem system = new TECSystem();
+            TECProvidedController controller = new TECProvidedController(new TECControllerType(new TECManufacturer()));
+            system.AddController(controller);
 
-        [TestMethod()]
-        public void SetControllersTest()
-        {
-            Assert.Fail();
-        }
+            system.TECChanged += args =>
+            {
+                raised = true;
+            };
 
+            system.RemoveController(controller);
+
+            Assert.IsTrue(raised);
+            Assert.IsFalse(system.Controllers.Contains(controller));
+        }
+        
         [TestMethod()]
         public void DragDropCopyTest()
         {
@@ -116,7 +132,15 @@ namespace Models
         [TestMethod()]
         public void GetAllSubScopeTest()
         {
-            Assert.Fail();
+            Random rand = new Random(0);
+            TECBid bid = ModelCreation.TestBid(rand);
+            TECSystem system = ModelCreation.TestSystem(bid.Catalogs, rand);
+
+            var allSubScope = system.GetAllSubScope();
+            foreach(var subScope in system.Equipment.SelectMany(e => e.SubScope))
+            {
+                Assert.IsTrue(allSubScope.Contains(subScope));
+            }
         }
     }
 }
