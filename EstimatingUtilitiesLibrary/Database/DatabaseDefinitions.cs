@@ -1178,7 +1178,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
         public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
         public static TableField Price = new TableField("Price", "REAL", ObjectType.GetProperty("Price"));
-        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
+        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"), defaultValue: "0");
         public static TableField RequireQuote = new TableField("RequireQuote", "INTEGER", ObjectType.GetProperty("RequireQuote"), defaultValue: "0");
 
         private List<TableField> primaryKeys = new List<TableField>() {
@@ -1223,7 +1223,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField Cv = new TableField("Cv", "Real", ObjectType.GetProperty("Cv"));
         public static TableField Size = new TableField("Size", "Real", ObjectType.GetProperty("Size"));
         public static TableField Style = new TableField("Style", "TEXT", ObjectType.GetProperty("Style"));
-        public static TableField PressureRating = new TableField("PressureRating", "Real", ObjectType.GetProperty("PressureRating"));
+        public static TableField PressureRating = new TableField("PressureRating", "Real", ObjectType.GetProperty("PressureRating"), defaultValue: "0");
         public static TableField RequireQuote = new TableField("RequireQuote", "INTEGER", ObjectType.GetProperty("RequireQuote"), defaultValue: "0");
 
         private List<TableField> primaryKeys = new List<TableField>() {
@@ -1267,7 +1267,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
         public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"), defaultValue: "");
         public static TableField Price = new TableField("Price", "REAL", ObjectType.GetProperty("Price"));
-        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
+        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"), defaultValue: "0");
         public static TableField RequireQuote = new TableField("RequireQuote", "INTEGER", ObjectType.GetProperty("RequireQuote"), defaultValue: "0");
 
         private List<TableField> primaryKeys = new List<TableField>()
@@ -1308,7 +1308,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField Name = new TableField("Name", "TEXT", ObjectType.GetProperty("Name"));
         public static TableField Description = new TableField("Description", "TEXT", ObjectType.GetProperty("Description"));
         public static TableField Price = new TableField("Price", "REAL", ObjectType.GetProperty("Price"));
-        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"));
+        public static TableField Labor = new TableField("Labor", "REAL", ObjectType.GetProperty("Labor"), defaultValue: "0");
         public static TableField Type = new TableField("Type", "TEXT", ObjectType.GetProperty("Type"));
         public static TableField RequireQuote = new TableField("RequireQuote", "INTEGER", ObjectType.GetProperty("RequireQuote"), defaultValue: "0");
 
@@ -1349,7 +1349,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField Name = new TableField("Name", "TEXT", IOModuleType.GetProperty("Name"));
         public static TableField Description = new TableField("Description", "TEXT", IOModuleType.GetProperty("Description"));
         public static TableField Price = new TableField("Price", "REAL", IOModuleType.GetProperty("Price"));
-        public static TableField Labor = new TableField("Labor", "REAL", IOModuleType.GetProperty("Labor"));
+        public static TableField Labor = new TableField("Labor", "REAL", IOModuleType.GetProperty("Labor"), defaultValue: "0");
         public static TableField RequireQuote = new TableField("RequireQuote", "INTEGER", IOModuleType.GetProperty("RequireQuote"), defaultValue: "0");
 
         private List<TableField> primaryKeys = new List<TableField>()
@@ -2869,7 +2869,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
         public static TableField ProtocolID = new TableField("ProtocolID", "TEXT", ObjectType.GetProperty("Guid"));
         public static TableField TypeID = new TableField("ConnectionTypeID", "TEXT", ReferenceType.GetProperty("Guid"));
-        public static TableField Quantity = new TableField("Quantity", "INTEGER", HelperType.GetProperty("Quantity"), "ConnectionTypes");
+        public static TableField Quantity = new TableField("Quantity", "INTEGER", HelperType.GetProperty("Quantity"), "ConnectionTypes", defaultValue: "1");
 
         private List<TableField> primaryKeys = new List<TableField>()
         {

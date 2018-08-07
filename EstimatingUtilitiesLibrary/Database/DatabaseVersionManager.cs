@@ -35,6 +35,12 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             int currentVersion = Properties.Settings.Default.Version;
             DataTable infoDT = db.GetDataFromTable(MetadataTable.TableName);
+            int version = dbVersion(db);
+            return (currentVersion - version);
+        }
+        static private int dbVersion(SQLiteDatabase db)
+        {
+            DataTable infoDT = db.GetDataFromTable(MetadataTable.TableName);
 
             if (infoDT.Rows.Count < 1)
             {
@@ -46,7 +52,7 @@ namespace EstimatingUtilitiesLibrary.Database
                 if (infoDT.Columns.Contains(MetadataTable.Version.Name))
                 {
                     int version = infoRow[MetadataTable.Version.Name].ToString().ToInt();
-                    return (currentVersion - version);
+                    return version;
                 }
                 else
                 { return 1; }
@@ -82,7 +88,57 @@ namespace EstimatingUtilitiesLibrary.Database
                 DatabaseGenerator.CreateTableFromDefinition(table, db);
             }
             migrateFromTempTables(tableMap, db);
+            cleanMigratedDatabase(db);
             UpdateVersionNumber(db);
+        }
+
+        private static void cleanMigratedDatabase(SQLiteDatabase db)
+        {
+            if(dbVersion(db) < 11)
+            {
+                string commandString = "";
+
+                #region Point Types
+                List<String> deprecatedTypes = new List<string>()
+                {
+                    "BACnetMSTP",
+                    "BACnetIP",
+                    "LonWorks",
+                    "ModbusTCP",
+                    "ModbusRTU"
+                };
+                foreach (var item in deprecatedTypes)
+                {
+                    commandString = String.Format("update {0} set {1} = '{2}' where {3} = '{4}'",
+                    PointTable.TableName, PointTable.Type.Name, "AI", PointTable.Type.Name, item);
+                    db.NonQueryCommand(commandString);
+
+                    commandString = String.Format("update {0} set {1} = '{2}' where {3} = '{4}'",
+                    IOTable.TableName, IOTable.IOType.Name, "AI", IOTable.IOType.Name, item);
+                    db.NonQueryCommand(commandString);
+                }
+                commandString = String.Format("delete from {0}", NetworkConnectionChildrenTable.TableName);
+                db.NonQueryCommand(commandString);
+                #endregion
+
+                #region HardwiredConnectionTypes
+
+                string deviceJoinTable = String.Format("select {0}, {1} from {2} inner join {3} where {2}.{4} = {3}.{5}", HardwiredConnectionChildrenTable.ConnectionID.Name, SubScopeDeviceTable.DeviceID.Name, HardwiredConnectionChildrenTable.TableName, 
+                    SubScopeDeviceTable.TableName, HardwiredConnectionChildrenTable.ChildID.Name, SubScopeDeviceTable.SubScopeID.Name);
+                string connectionConnectionTypeTableJoin = String.Format("select {0}, {1}, {2} from {3} inner join ({4}) where '{5}' = '{6}'", HardwiredConnectionChildrenTable.ConnectionID.Name,
+                    DeviceConnectionTypeTable.TypeID.Name, DeviceConnectionTypeTable.Quantity.Name, DeviceConnectionTypeTable.TableName, 
+                    deviceJoinTable, SubScopeDeviceTable.DeviceID.Name, DeviceConnectionTypeTable.DeviceID.Name);
+                commandString = String.Format("insert into {0} ({1}, {2}, {3}) {4}", HardwiredConnectionConnectionTypeTable.TableName, HardwiredConnectionConnectionTypeTable.ConnectionID.Name,
+                    HardwiredConnectionConnectionTypeTable.TypeID.Name, HardwiredConnectionConnectionTypeTable.Quantity.Name, connectionConnectionTypeTableJoin);
+                db.NonQueryCommand(commandString);
+
+                #endregion
+                #region Protocol
+                commandString = String.Format("insert into {0} select {1}, {1} from {2}", NetworkConnectionProtocolTable.TableName, NetworkConnectionTable.ID.Name, NetworkConnectionTable.TableName);
+                db.NonQueryCommand(commandString);
+                #endregion
+
+            }
         }
 
         private static void updateToVersion(DataTable dataTable, SQLiteDatabase db, int originalVersion,

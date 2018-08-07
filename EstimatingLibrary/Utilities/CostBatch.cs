@@ -220,6 +220,17 @@ namespace EstimatingLibrary.Utilities
             {
                 return base.GetHashCode();
             }
+            public override bool Equals(object obj)
+            {
+                if(obj is CostObject costObj)
+                {
+                    return this == costObj;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
     }
 

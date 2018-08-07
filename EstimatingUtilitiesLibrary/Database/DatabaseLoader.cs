@@ -87,7 +87,7 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<Guid, List<TECAssociatedCost>> costRelationships = getOneToManyRelationships(new ScopeAssociatedCostTable(), bid.Catalogs.AssociatedCosts);
 
             var parameters = getObjectsFromTable(new ParametersTable(), id => new TECParameters(id));
-            bid.Parameters = parameters.First(x => x.Guid == bid.Guid);
+            bid.Parameters = parameters.Any(x => x.Guid == bid.Guid) ? parameters.First(x => x.Guid == bid.Guid) : bid.Parameters = parameters.First();
             bid.ExtraLabor = getObjectFromTable(new ExtraLaborTable(), id => { return new TECExtraLabor(id); }, new TECExtraLabor(bid.Guid));
             bid.ScopeTree.AddRange(getChildObjects(new BidScopeBranchTable(), new ScopeBranchTable(), bid.Guid, id => new TECScopeBranch(id)));
             bid.ScopeTree.ForEach(item => linkBranchHierarchy(item, branches, branchHierarchy));
