@@ -117,11 +117,10 @@ namespace EstimatingUtilitiesLibrary.Database
                     IOTable.TableName, IOTable.IOType.Name, "AI", IOTable.IOType.Name, item);
                     db.NonQueryCommand(commandString);
                 }
-                commandString = String.Format("delete from {0}", NetworkConnectionChildrenTable.TableName);
-                db.NonQueryCommand(commandString);
+                
                 #endregion
 
-                #region HardwiredConnectionTypes
+                #region HardwiredConnections
 
                 string deviceJoinTable = String.Format("select {0}, {1} from {2} inner join {3} where {2}.{4} = {3}.{5}", HardwiredConnectionChildrenTable.ConnectionID.Name, SubScopeDeviceTable.DeviceID.Name, HardwiredConnectionChildrenTable.TableName, 
                     SubScopeDeviceTable.TableName, HardwiredConnectionChildrenTable.ChildID.Name, SubScopeDeviceTable.SubScopeID.Name);
@@ -133,9 +132,13 @@ namespace EstimatingUtilitiesLibrary.Database
                 db.NonQueryCommand(commandString);
 
                 #endregion
-                #region Protocol
+                #region Network Connections
                 commandString = String.Format("insert into {0} select {1}, {1} from {2}", NetworkConnectionProtocolTable.TableName, NetworkConnectionTable.ID.Name, NetworkConnectionTable.TableName);
                 db.NonQueryCommand(commandString);
+
+                //Considered to account for the lack of protocol-compliant devices
+                //commandString = String.Format("delete from {0}", NetworkConnectionChildrenTable.TableName);
+                //db.NonQueryCommand(commandString);
                 #endregion
 
             }

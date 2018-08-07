@@ -298,6 +298,10 @@ namespace EstimatingLibrary
             {
                 Interlocks.Add(interlock);
             }
+            else if (property == "ScopeBranches" && item is TECScopeBranch branch)
+            {
+                ScopeBranches.Add(branch);
+            }
             else
             {
                 this.AddChildForScopeProperty(property, item);
@@ -318,6 +322,10 @@ namespace EstimatingLibrary
             {
                 return Interlocks.Remove(interlock);
             }
+            else if (property == "ScopeBranches" && item is TECScopeBranch branch)
+            {
+               return ScopeBranches.Remove(branch);
+            }
             else
             {
                 return this.RemoveChildForScopeProperty(property, item);
@@ -337,6 +345,10 @@ namespace EstimatingLibrary
             else if (property == "Interlocks" && item is TECInterlockConnection interlock)
             {
                 return Interlocks.Contains(interlock);
+            }
+            else if (property == "ScopeBranches" && item is TECScopeBranch branch)
+            {
+                return ScopeBranches.Contains(branch);
             }
             else
             {
