@@ -22,7 +22,7 @@ namespace ViewModels
         {
             Assert.Fail();
         }
-
+        
         [TestMethod()]
         public void SetLoadCommandTest()
         {
@@ -76,5 +76,66 @@ namespace ViewModels
         {
             Assert.Fail();
         }
+        
+        #region CommandExecutes
+        [TestMethod()]
+        public void NewCommandTest()
+        {
+            Assert.Fail();
+        }
+        [TestMethod()]
+        public void LoadCommandTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void SaveDeltaCommandTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void SaveNewCommandTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void UndoCommandTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void RedoCommandTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void WikiCommandTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void ReportBugCommandTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void OpenFileLocationCommandTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void SettingsCommandTest()
+        {
+            Assert.Fail();
+        }
+        #endregion
     }
 }
