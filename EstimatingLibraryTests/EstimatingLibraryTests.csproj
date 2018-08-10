@@ -82,6 +82,7 @@
     <Compile Include="Models\TECSubScopeTests.cs" />
     <Compile Include="Models\TECTagTests.cs" />
     <Compile Include="Models\TECTemplatesTests.cs" />
+    <Compile Include="Utilities\DoStackTests.cs" />
     <Compile Include="Utilities\ChangeWatcherTests.cs" />
     <Compile Include="Models\TECControllerTests.cs" />
     <Compile Include="Interfaces\INotifyCostChangedTests.cs" />

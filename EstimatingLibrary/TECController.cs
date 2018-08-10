@@ -393,5 +393,6 @@ namespace EstimatingLibrary
         }
         protected abstract void makeTypical();
         #endregion
+
     }
 }

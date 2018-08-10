@@ -377,5 +377,30 @@ namespace EstimatingLibrary
             TypicalableUtilities.MakeChildrenTypical(this);
         }
         #endregion
+
+        #region IDoRedoable
+        public override void AddForProperty(string propertyName, object item)
+        {
+            if(propertyName == "Controllers")
+            {
+                this.AddController(item as TECController);
+            }
+            else
+            {
+                base.AddForProperty(propertyName, item);
+            }
+        }
+        public override void RemoveForProperty(string propertyName, object item)
+        {
+            if (propertyName == "Controllers")
+            {
+                this.RemoveController(item as TECController);
+            }
+            else
+            {
+                base.AddForProperty(propertyName, item);
+            }
+        }
+        #endregion
     }
 }

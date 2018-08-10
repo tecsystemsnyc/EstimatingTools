@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using NLog;
 using System.Collections;
@@ -31,7 +32,10 @@ namespace EstimatingLibrary.Utilities
         private void objectChanged(TECChangedEventArgs e)
         {
             if (!isDoing) { redoStack.Clear(); }
-            undoStack.Add(e);
+            if(e.Sender is IDoRedoable doable && doable.CanDo)
+            {
+                undoStack.Add(e);
+            }
         }
 
         public void Undo()
@@ -113,9 +117,7 @@ namespace EstimatingLibrary.Utilities
         {
             try
             {
-                var property = item.Sender.GetType().GetProperty(item.PropertyName);
-                var parentCollection = property.GetValue(item.Sender);
-                ((IList)parentCollection).Remove(item.Value);
+                (item.Sender as IDoRedoable).RemoveForProperty(item.PropertyName, item.Value);
             }
             catch
             {
@@ -127,9 +129,8 @@ namespace EstimatingLibrary.Utilities
         {
             try
             {
-                var property = item.Sender.GetType().GetProperty(item.PropertyName);
-                var parentCollection = property.GetValue(item.Sender);
-                ((IList)parentCollection).Add(item.Value);
+                (item.Sender as IDoRedoable).AddForProperty(item.PropertyName, item.Value);
+
             }
             catch
             {
@@ -139,17 +140,16 @@ namespace EstimatingLibrary.Utilities
         }
         private void handleEdit(TECChangedEventArgs item)
         {
-            var sender = item.Sender;
-            var oldValue = item.OldValue;
-            var property = sender.GetType().GetProperty(item.PropertyName);
-
-            if (property.GetSetMethod() != null)
-            { property.SetValue(sender, oldValue); }
-            else
+            try
             {
-                string message = "Property could not be set: " + property.Name;
+                (item.Sender as IDoRedoable).SetProperty(item.PropertyName, item.OldValue);
+            }
+            catch
+            {
+                string message = "Property could not be set: " + item.PropertyName;
                 logger.Error(message);
             }
+            
         }
 
         public int UndoCount()

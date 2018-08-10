@@ -34,13 +34,14 @@ namespace EstimatingLibrary
         {
             _label = source.Label;
         }
-        
-        #endregion //Constructors
 
+        #endregion //Constructors
+        
         public virtual object DragDropCopy(TECScopeManager scopeManager)
         {
             return new TECLabeled(this);
         }
+        
     }
 
     
