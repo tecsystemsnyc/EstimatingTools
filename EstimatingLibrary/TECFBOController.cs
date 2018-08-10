@@ -162,7 +162,7 @@ namespace EstimatingLibrary
         #endregion
 
         #region IRelatable
-        protected override SaveableMap propertyObjects()
+        protected override RelatableMap propertyObjects()
         {
             var map = base.propertyObjects();
             map.AddRange(this.Points, "Points");

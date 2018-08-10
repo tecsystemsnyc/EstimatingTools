@@ -61,12 +61,12 @@ namespace EstimatingLibrary
         #endregion
 
         #region IRelatable
-        public SaveableMap PropertyObjects { get { return propertyObjects(); } }
-        public SaveableMap LinkedObjects { get { return new SaveableMap(); } }
+        public RelatableMap PropertyObjects { get { return propertyObjects(); } }
+        public RelatableMap LinkedObjects { get { return new RelatableMap(); } }
 
-        private SaveableMap propertyObjects()
+        private RelatableMap propertyObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(this.SystemTemplates, "SystemTemplates");
             saveList.AddRange(this.EquipmentTemplates, "EquipmentTemplates");
             saveList.AddRange(this.SubScopeTemplates, "SubScopeTemplates");

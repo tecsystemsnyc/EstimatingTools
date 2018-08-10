@@ -21,7 +21,6 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class ConnectionsVM : ViewModelBase, IDropTarget, NetworkConnectionDropTargetDelegate
     {
-        
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         private readonly IRelatable root;
@@ -193,7 +192,7 @@ namespace TECUserControlLibrary.ViewModels
                 filterPredicate = item => true;
             }
             this.filterPredicate = filterPredicate;
-            this.InterlocksVM = new InterlocksVM(root, watcher, catalogs, filterPredicate);
+            //this.InterlocksVM = new InterlocksVM(root, watcher, catalogs, filterPredicate);
 
             this.root = root;
             this.Catalogs = catalogs;
@@ -209,7 +208,7 @@ namespace TECUserControlLibrary.ViewModels
             this.rootConnectableGroup = new FilteredConnectablesGroup("root", this.ConnectableFilter);
             this.rootControllerGroup = new FilteredConnectablesGroup("root", this.ControllerFilter);
 
-            repopulateGroups(root, addConnectable);
+            repopulateGroups(null, root, addConnectable);
 
             SelectProtocolCommand = new RelayCommand(selectProtocolExecute, selectProtocolCanExecute);
             CancelProtocolSelectionCommand = new RelayCommand(cancelProtocolSelectionExecute);
@@ -256,21 +255,23 @@ namespace TECUserControlLibrary.ViewModels
             return SelectedProtocol != null && SelectedConnectable != null && SelectedController != null;
         }
         
-        private void repopulateGroups(ITECObject item, Action<FilteredConnectablesGroup, IConnectable> action)
+        private void repopulateGroups(ITECObject parent, ITECObject item, Action<FilteredConnectablesGroup, IConnectable> action)
         {
             if(item is IConnectable connectable)
             {
-                action(this.rootConnectableGroup, connectable);
+                var closestRoot = this.rootConnectableGroup.GetGroup(parent as ITECScope) ?? this.rootConnectableGroup;
+                action(closestRoot, connectable);
                 if (connectable is TECController)
                 {
-                    action(this.rootControllerGroup, connectable);
+                    closestRoot = this.rootControllerGroup.GetGroup(parent as ITECScope) ?? this.rootControllerGroup;
+                    action(closestRoot, connectable);
                 }
             }
             else if (item is IRelatable relatable)
             {
                 foreach (ITECObject child in relatable.GetDirectChildren().Where(filterPredicate))
                 {
-                    repopulateGroups(child, action);
+                    repopulateGroups(item, child, action);
                 }
             }
         }
@@ -312,11 +313,11 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (obj.Change == Change.Add)
                 {
-                    repopulateGroups(tecObj, addConnectable);
+                    repopulateGroups(obj.Sender, tecObj, addConnectable);
                 }
                 else if (obj.Change == Change.Remove)
                 {
-                    repopulateGroups(tecObj, removeConnectable);
+                    repopulateGroups(obj.Sender, tecObj, removeConnectable);
                 }
             }
         }
@@ -324,15 +325,14 @@ namespace TECUserControlLibrary.ViewModels
         private void addConnectable(FilteredConnectablesGroup rootGroup, IConnectable connectable)
         {
             if (!filterPredicate(connectable)) return;
-            bool isDescendant = root.IsDirectDescendant(connectable);
-            if (!root.IsDirectDescendant(connectable))
+            IRelatable rootScope = rootGroup.Scope as IRelatable ?? this.root;
+            List<ITECObject> path = rootScope.GetObjectPath(connectable);
+            if (path.Count == 0)
             {
                 logger.Error("New connectable doesn't exist in root object.");
                 return;
             }
-
-            List<ITECObject> path = this.root.GetObjectPath(connectable);
-
+            
             FilteredConnectablesGroup lastGroup = rootGroup;
             int lastIndex = 0;
 

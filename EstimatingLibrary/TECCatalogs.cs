@@ -22,11 +22,11 @@ namespace EstimatingLibrary
         public ObservableCollection<TECTag> Tags { get; } = new ObservableCollection<TECTag>();
         public ObservableCollection<TECProtocol> Protocols { get; } = new ObservableCollection<TECProtocol>();
 
-        public SaveableMap PropertyObjects
+        public RelatableMap PropertyObjects
         {
             get { return propertyObjects(); }
         }
-        public SaveableMap LinkedObjects
+        public RelatableMap LinkedObjects
         {
             get { return linkedObjects(); }
         }
@@ -72,9 +72,9 @@ namespace EstimatingLibrary
                 }
             }
         }
-        private SaveableMap propertyObjects()
+        private RelatableMap propertyObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(this.IOModules, "IOModules");
             saveList.AddRange(this.Devices, "Devices");
             saveList.AddRange(this.Valves, "Valves");
@@ -88,9 +88,9 @@ namespace EstimatingLibrary
             saveList.AddRange(this.Protocols, "Protocols");
             return saveList;
         }
-        private SaveableMap linkedObjects()
+        private RelatableMap linkedObjects()
         {
-            SaveableMap relatedList = new SaveableMap();
+            RelatableMap relatedList = new RelatableMap();
             return relatedList;
         }
 

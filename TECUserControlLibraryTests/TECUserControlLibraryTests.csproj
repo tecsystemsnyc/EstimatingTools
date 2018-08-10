@@ -91,6 +91,7 @@
     <Compile Include="Utilities\DragDropHelpersTests.cs" />
     <Compile Include="Utilities\SearchUtilitiesTests.cs" />
     <Compile Include="Utilities\UIHelpersTests.cs" />
+    <Compile Include="ViewModels\ConnectableFilterTests.cs" />
     <Compile Include="ViewModels\ConnectionsVMTests.cs" />
     <Compile Include="ViewModels\ConnectOnAddVMTests.cs" />
     <Compile Include="ViewModels\DeleteDeviceVMTests.cs" />

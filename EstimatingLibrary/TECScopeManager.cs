@@ -37,12 +37,12 @@ namespace EstimatingLibrary
 
         #region IRelatable
 
-        public SaveableMap PropertyObjects { get { return propertyObjects(); } }
-        public SaveableMap LinkedObjects { get { return new SaveableMap(); } }
+        public RelatableMap PropertyObjects { get { return propertyObjects(); } }
+        public RelatableMap LinkedObjects { get { return new RelatableMap(); } }
 
-        protected virtual SaveableMap propertyObjects()
+        protected virtual RelatableMap propertyObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.Add(this.Catalogs, "Catalogs");
             saveList.Add(this.Templates, "Templates");
             return saveList;

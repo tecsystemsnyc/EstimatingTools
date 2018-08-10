@@ -588,9 +588,6 @@
     <Compile Include="Views\LaborView.xaml.cs">
       <DependentUpon>LaborView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ReviewTabControl.xaml.cs">
-      <DependentUpon>ReviewTabControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ReviewView.xaml.cs">
       <DependentUpon>ReviewView.xaml</DependentUpon>
     </Compile>
@@ -1174,10 +1171,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LaborView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UserControls\ReviewTabControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

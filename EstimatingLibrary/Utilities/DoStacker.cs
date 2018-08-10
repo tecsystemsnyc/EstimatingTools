@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace EstimatingUtilitiesLibrary
+namespace EstimatingLibrary.Utilities
 {
     public class DoStacker
     {

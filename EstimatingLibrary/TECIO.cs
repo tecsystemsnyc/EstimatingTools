@@ -142,21 +142,21 @@ namespace EstimatingLibrary
 
         #region Relatable
 
-        SaveableMap IRelatable.PropertyObjects
+        RelatableMap IRelatable.PropertyObjects
         {
             get
             {
-                SaveableMap map = new SaveableMap();
+                RelatableMap map = new RelatableMap();
                 if(Protocol != null) map.Add(Protocol, "Protocol");
                 return map;
             }
         }
 
-        SaveableMap IRelatable.LinkedObjects
+        RelatableMap IRelatable.LinkedObjects
         {
             get
             {
-                SaveableMap map = new SaveableMap();
+                RelatableMap map = new RelatableMap();
                 if (Protocol != null) map.Add(Protocol, "Protocol");
                 return map;
             }

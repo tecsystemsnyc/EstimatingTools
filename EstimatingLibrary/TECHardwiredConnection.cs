@@ -62,17 +62,17 @@ namespace EstimatingLibrary
 
         #region Methods
 
-        protected override SaveableMap propertyObjects()
+        protected override RelatableMap propertyObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(base.propertyObjects());
             saveList.Add(this.Child, "Child");
             saveList.AddRange(this.ConnectionTypes, "ConnectionTypes");
             return saveList;
         }
-        protected override SaveableMap linkedObjects()
+        protected override RelatableMap linkedObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(base.linkedObjects());
             saveList.Add(this.Child, "Child");
             saveList.AddRange(this.ConnectionTypes, "ConnectionTypes");

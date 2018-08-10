@@ -10,9 +10,9 @@ namespace EstimatingLibrary.Interfaces
         ObservableCollection<TECAssociatedCost> AssociatedCosts { get; }
         CostBatch CostBatch { get; }
         string Description { get; set; }
-        SaveableMap LinkedObjects { get; }
+        RelatableMap LinkedObjects { get; }
         string Name { get; set; }
-        SaveableMap PropertyObjects { get; }
+        RelatableMap PropertyObjects { get; }
         ObservableCollection<TECTag> Tags { get; }
 
         event Action<CostBatch> CostChanged;

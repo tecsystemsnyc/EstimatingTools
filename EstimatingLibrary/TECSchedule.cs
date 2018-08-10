@@ -17,11 +17,11 @@ namespace EstimatingLibrary
             get { return _tables; }
         }
 
-        public SaveableMap PropertyObjects
+        public RelatableMap PropertyObjects
         {
             get { return propertyObjects(); }
         }
-        public SaveableMap LinkedObjects
+        public RelatableMap LinkedObjects
         {
             get { return linkedObjects(); }
         }
@@ -38,15 +38,15 @@ namespace EstimatingLibrary
             CollectionChangedHandlers.CollectionChangedHandler(sender, e, "Tables", this,
                 notifyCombinedChanged, notifyReorder: false);
         }
-        private SaveableMap propertyObjects()
+        private RelatableMap propertyObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(this.Tables, "Tables");
             return saveList;
         }
-        private SaveableMap linkedObjects()
+        private RelatableMap linkedObjects()
         {
-            return new SaveableMap();
+            return new RelatableMap();
         }
         
     }

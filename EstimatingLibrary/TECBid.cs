@@ -345,9 +345,9 @@ namespace EstimatingLibrary
             }
             return costs;
         }
-        protected override SaveableMap propertyObjects()
+        protected override RelatableMap propertyObjects()
         {
-            SaveableMap saveList = base.propertyObjects();
+            RelatableMap saveList = base.propertyObjects();
             saveList.Add(this.Parameters, "Parameters");
             saveList.Add(this.ExtraLabor, "ExtraLabor");
             saveList.Add(this.Schedule, "Schedule");

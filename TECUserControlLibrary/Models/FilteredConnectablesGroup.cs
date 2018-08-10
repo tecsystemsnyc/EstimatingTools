@@ -53,12 +53,12 @@ namespace TECUserControlLibrary.Models
         }
         
         public ITECScope Scope { get; }
-        public ObservableCollection<FilteredConnectablesGroup> ChildrenGroups { get; }
-        
+        public ObservableCollection<FilteredConnectablesGroup> ChildrenGroups { get; } = new ObservableCollection<FilteredConnectablesGroup>();
+        private Dictionary<ITECScope, FilteredConnectablesGroup> scopeDictionary = new Dictionary<ITECScope, FilteredConnectablesGroup>();
+
         public FilteredConnectablesGroup(string name, ConnectableFilter filter)
         {
             this.Name = name;
-            ChildrenGroups = new ObservableCollection<FilteredConnectablesGroup>();
             
             this.filter = filter;
             this.filter.FilterChanged += filterChanged;
@@ -66,6 +66,7 @@ namespace TECUserControlLibrary.Models
         public FilteredConnectablesGroup(ITECScope scope, ConnectableFilter filter) : this(scope.Name, filter)
         {
             this.Scope = scope;
+            scopeDictionary.Add(scope, this);
             this.Scope.PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName == "Name")
@@ -92,6 +93,11 @@ namespace TECUserControlLibrary.Models
         }
         public void Add(FilteredConnectablesGroup child)
         {
+            foreach (var pair in child.scopeDictionary)
+            {
+                this.scopeDictionary.Add(pair.Key, pair.Value);
+            }
+            child.scopeDictionary = this.scopeDictionary;
             child.PropertyChanged += childPropertyChanged;
             this.ChildrenGroups.Add(child);
             this.PassesFilter = thisPassesFilter();
@@ -99,16 +105,7 @@ namespace TECUserControlLibrary.Models
 
         public bool Remove(ITECScope child)
         {
-            FilteredConnectablesGroup groupToRemove = null;
-
-            foreach (FilteredConnectablesGroup childGroup in this.ChildrenGroups)
-            {
-                if (childGroup.Scope == child)
-                {
-                    groupToRemove = childGroup;
-                    break;
-                }
-            }
+            FilteredConnectablesGroup groupToRemove = scopeDictionary.ContainsKey(child) ? scopeDictionary[child] : null;
 
             if (groupToRemove == null)
             {
@@ -116,11 +113,19 @@ namespace TECUserControlLibrary.Models
             }
             else
             {
-                return this.Remove(groupToRemove);
+                this.Remove(groupToRemove);
+                return true;
             }
         }
         public bool Remove(FilteredConnectablesGroup child)
         {
+            var moreChildren = new List<FilteredConnectablesGroup>(child.ChildrenGroups);
+            foreach (var childGroup in moreChildren)
+            {
+                child.Remove(childGroup);
+            }
+            child.scopeDictionary = null;
+            this.scopeDictionary.Remove(child.Scope);
             child.PropertyChanged -= childPropertyChanged;
             if (this.ChildrenGroups.Remove(child))
             {
@@ -135,21 +140,31 @@ namespace TECUserControlLibrary.Models
 
         public FilteredConnectablesGroup GetGroup(ITECScope scope)
         {
-            if (this.Scope == scope)
+            if (scope == null) return null;
+            if (this.scopeDictionary.ContainsKey(scope))
             {
-                return this;
+                return scopeDictionary[scope];
+            }
+            else
+            {
+                return null;
             }
 
-            foreach (FilteredConnectablesGroup group in this.ChildrenGroups)
-            {
-                FilteredConnectablesGroup childGroup = group.GetGroup(scope);
-                if (childGroup != null)
-                {
-                    return childGroup;
-                }
-            }
+            //if (this.Scope == scope)
+            //{
+            //    return this;
+            //}
 
-            return null;
+            //foreach (FilteredConnectablesGroup group in this.ChildrenGroups)
+            //{
+            //    FilteredConnectablesGroup childGroup = group.GetGroup(scope);
+            //    if (childGroup != null)
+            //    {
+            //        return childGroup;
+            //    }
+            //}
+
+            //return null;
         }
         public List<FilteredConnectablesGroup> GetPath(ITECScope scope)
         {

@@ -182,9 +182,9 @@ namespace EstimatingLibrary
         #endregion
 
         #region IReltable
-        protected override SaveableMap propertyObjects()
+        protected override RelatableMap propertyObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(base.propertyObjects());
             List<TECObject> deviceList = new List<TECObject>();
             foreach (IEndDevice item in this.Devices)
@@ -197,9 +197,9 @@ namespace EstimatingLibrary
             saveList.AddRange(this.ScopeBranches, "ScopeBranches");
             return saveList;
         }
-        protected override SaveableMap linkedObjects()
+        protected override RelatableMap linkedObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(base.linkedObjects());
             List<TECObject> deviceList = new List<TECObject>();
             foreach (IEndDevice item in this.Devices)

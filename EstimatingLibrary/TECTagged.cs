@@ -43,18 +43,18 @@ namespace EstimatingLibrary
 
         public ObservableCollection<TECTag> Tags { get; } = new ObservableCollection<TECTag>();
         
-        public SaveableMap PropertyObjects
+        public RelatableMap PropertyObjects
         {
             get
             {
                 return propertyObjects();
             }
         }
-        public SaveableMap LinkedObjects
+        public RelatableMap LinkedObjects
         {
             get
             {
-                SaveableMap map = linkedObjects();
+                RelatableMap map = linkedObjects();
                 return map;
             }
         }
@@ -87,15 +87,15 @@ namespace EstimatingLibrary
             CollectionChangedHandlers.CollectionChangedHandler(sender, e, propertyName, this, notifyCombinedChanged);
         }
         
-        protected virtual SaveableMap propertyObjects()
+        protected virtual RelatableMap propertyObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(this.Tags, "Tags");
             return saveList;
         }
-        protected virtual SaveableMap linkedObjects()
+        protected virtual RelatableMap linkedObjects()
         {
-            SaveableMap relatedList = new SaveableMap();
+            RelatableMap relatedList = new RelatableMap();
             relatedList.AddRange(this.Tags, "Tags");
             return relatedList;
         }

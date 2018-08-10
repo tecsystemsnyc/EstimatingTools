@@ -31,20 +31,20 @@ namespace EstimatingLibrary
             }
         }
 
-        public SaveableMap PropertyObjects {
+        public RelatableMap PropertyObjects {
             get
             {
-                SaveableMap map = new SaveableMap();
+                RelatableMap map = new RelatableMap();
                 map.AddRange(this.ConnectionTypes, "ConnectionTypes");
                 return map;
             }
         }
 
-        public SaveableMap LinkedObjects
+        public RelatableMap LinkedObjects
         {
             get
             {
-                SaveableMap map = new SaveableMap();
+                RelatableMap map = new RelatableMap();
                 map.AddRange(this.ConnectionTypes, "ConnectionTypes");
                 return map;
             }

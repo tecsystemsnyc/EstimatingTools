@@ -196,16 +196,16 @@ namespace EstimatingLibrary
                 return new CostBatch();
             }
         }
-        protected override SaveableMap propertyObjects()
+        protected override RelatableMap propertyObjects()
         {
-            SaveableMap saveList = base.propertyObjects();
+            RelatableMap saveList = base.propertyObjects();
             saveList.AddRange(this.IOModules, "IOModules");
             saveList.Add(this.Type, "Type");
             return saveList;
         }
-        protected override SaveableMap linkedObjects()
+        protected override RelatableMap linkedObjects()
         {
-            SaveableMap saveList = base.linkedObjects();
+            RelatableMap saveList = base.linkedObjects();
             saveList.AddRange(this.IOModules, "IOModules");
             saveList.Add(this.Type, "Type");
             return saveList;

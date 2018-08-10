@@ -263,9 +263,9 @@ namespace EstimatingLibrary
         #endregion
 
         #region IRelatable
-        protected override SaveableMap propertyObjects()
+        protected override RelatableMap propertyObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(base.propertyObjects());
             saveList.AddRange(this.Equipment, "Equipment");
             saveList.AddRange(this.Panels, "Panels");

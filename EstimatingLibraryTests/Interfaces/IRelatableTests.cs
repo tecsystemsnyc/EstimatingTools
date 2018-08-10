@@ -142,9 +142,9 @@ namespace Interfaces
 
     class RelatableTest : IRelatable
     {
-        public SaveableMap PropertyObjects { get; set; } = new SaveableMap();
+        public RelatableMap PropertyObjects { get; set; } = new RelatableMap();
 
-        public SaveableMap LinkedObjects { get; set; } = new SaveableMap();
+        public RelatableMap LinkedObjects { get; set; } = new RelatableMap();
 
         public Guid Guid { get; set; } = new Guid();
 

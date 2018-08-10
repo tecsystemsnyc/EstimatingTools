@@ -45,16 +45,16 @@ namespace EstimatingLibrary
             }
             return costBatch;
         }
-        protected override SaveableMap propertyObjects()
+        protected override RelatableMap propertyObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(base.propertyObjects());
             saveList.AddRange(this.RatedCosts.Distinct(), "RatedCosts");
             return saveList;
         }
-        protected override SaveableMap linkedObjects()
+        protected override RelatableMap linkedObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(base.linkedObjects());
             saveList.AddRange(this.RatedCosts.Distinct(), "RatedCosts");
             return saveList;

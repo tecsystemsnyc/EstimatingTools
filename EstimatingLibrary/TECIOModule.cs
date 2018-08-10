@@ -36,9 +36,9 @@ namespace EstimatingLibrary
                 notifyCombinedChanged, notifyReorder: false);
         }
 
-        protected override SaveableMap propertyObjects()
+        protected override RelatableMap propertyObjects()
         {
-            SaveableMap saveMap = new SaveableMap();
+            RelatableMap saveMap = new RelatableMap();
             saveMap.AddRange(base.propertyObjects());
             saveMap.AddRange(IO, "IO");
             return saveMap;

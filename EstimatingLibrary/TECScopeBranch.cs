@@ -10,13 +10,13 @@ namespace EstimatingLibrary
         #region Properties
         public ObservableCollection<TECScopeBranch> Branches { get; } = new ObservableCollection<TECScopeBranch>();
 
-        public SaveableMap PropertyObjects
+        public RelatableMap PropertyObjects
         {
             get { return propertyObjects(); }
         }
-        public SaveableMap LinkedObjects
+        public RelatableMap LinkedObjects
         {
-            get { return new SaveableMap(); }
+            get { return new RelatableMap(); }
         }
 
         public bool IsTypical { get; private set; }
@@ -49,9 +49,9 @@ namespace EstimatingLibrary
                 notifyCombinedChanged);
         }
 
-        private SaveableMap propertyObjects()
+        private RelatableMap propertyObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(this.Branches, "Branches");
             return saveList;
         }

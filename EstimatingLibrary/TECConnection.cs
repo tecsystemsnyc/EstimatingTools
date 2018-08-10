@@ -71,11 +71,11 @@ namespace EstimatingLibrary
             get { return getCosts(); }
         }
 
-        public SaveableMap PropertyObjects
+        public RelatableMap PropertyObjects
         {
             get { return propertyObjects(); }
         }
-        public SaveableMap LinkedObjects
+        public RelatableMap LinkedObjects
         {
             get { return linkedObjects(); }
         }
@@ -118,18 +118,18 @@ namespace EstimatingLibrary
             }
             return costs;
         }
-        protected virtual SaveableMap propertyObjects()
+        protected virtual RelatableMap propertyObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             if(this.ConduitType != null)
             {
                 saveList.Add(this.ConduitType, "ConduitType");
             }
             return saveList;
         }
-        protected virtual SaveableMap linkedObjects()
+        protected virtual RelatableMap linkedObjects()
         {
-            SaveableMap relatedList = new SaveableMap();
+            RelatableMap relatedList = new RelatableMap();
             if (this.ConduitType != null)
             {
                 relatedList.Add(this.ConduitType, "ConduitType");

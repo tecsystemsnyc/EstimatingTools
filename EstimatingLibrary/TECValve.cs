@@ -91,16 +91,16 @@ namespace EstimatingLibrary
             this.copyPropertiesFromHardware(valveSource);
 
         }
-        protected override SaveableMap propertyObjects()
+        protected override RelatableMap propertyObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(base.propertyObjects());
             saveList.Add(this.Actuator, "Actuator");
             return saveList;
         }
-        protected override SaveableMap linkedObjects()
+        protected override RelatableMap linkedObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(base.linkedObjects());
             saveList.Add(this.Actuator, "Actuator");
             return saveList;
