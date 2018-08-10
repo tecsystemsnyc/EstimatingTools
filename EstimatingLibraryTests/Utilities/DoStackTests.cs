@@ -799,19 +799,20 @@ namespace Utilities
         public void Undo_Bid_Connection_ConduitType()
         {
             //Arrange
-            var Bid = ModelCreation.TestBid(rand);
+            var bid = ModelCreation.TestBid(rand);
 
-            TECController controller1 = Bid.Controllers.First();
-            TECController controller2 = Bid.Controllers.First(x => controller1.CanConnect(x));
+            TECProtocol protocol = bid.Catalogs.Protocols.First();            
+            TECController controller1 = bid.Controllers.First(x => x.AvailableProtocols.Contains(protocol));
+            TECController controller2 = bid.Controllers.First(x => x.AvailableProtocols.Contains(protocol) && x != controller1);
 
-            IControllerConnection connection = controller1.Connect(controller2, controller1.AvailableProtocols.First());
-            connection.ConduitType = Bid.Catalogs.ConduitTypes.First();
+            IControllerConnection connection = controller1.Connect(controller2, protocol);
+            connection.ConduitType = bid.Catalogs.ConduitTypes.First();
 
             TECElectricalMaterial expected = connection.ConduitType;
-            TECElectricalMaterial edit = Bid.Catalogs.ConduitTypes.First(x => x != expected);
+            TECElectricalMaterial edit = bid.Catalogs.ConduitTypes.First(x => x != expected);
 
             //Act
-            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
+            ChangeWatcher watcher = new ChangeWatcher(bid); DoStacker testStack = new DoStacker(watcher);
             connection.ConduitType = edit;
             testStack.Undo();
 
