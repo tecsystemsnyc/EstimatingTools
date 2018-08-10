@@ -184,6 +184,5 @@ namespace EstimatingLibrary
             TypicalableUtilities.MakeChildrenTypical(this);
         }
         #endregion
-
     }
 }

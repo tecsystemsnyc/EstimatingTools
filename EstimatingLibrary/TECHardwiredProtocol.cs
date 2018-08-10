@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,7 +11,6 @@ namespace EstimatingLibrary
 {
     public class TECHardwiredProtocol : TECObject, IProtocol, IEquatable<TECHardwiredProtocol>, ICatalogContainer
     {
-
         public string Label => "Hardwired";
 
         public ObservableCollection<TECConnectionType> ConnectionTypes { get; }
@@ -56,6 +56,18 @@ namespace EstimatingLibrary
         public static bool operator !=(TECHardwiredProtocol protocol1, TECHardwiredProtocol protocol2)
         {
             return !(protocol1 == protocol2);
+        }
+        #endregion
+
+        #region ICatalogContainer
+        public bool RemoveCatalogItem<T>(T item, T replacement) where T : class, ICatalog<T>
+        {
+            bool replacedConnectionType = false;
+            if (item is TECConnectionType type)
+            {
+                replacedConnectionType = CommonUtilities.OptionallyReplaceAll(type, this.ConnectionTypes, replacement as TECConnectionType);
+            }
+            return replacedConnectionType;
         }
         #endregion
     }

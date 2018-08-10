@@ -121,7 +121,7 @@ namespace EstimatingLibrary
         protected virtual SaveableMap propertyObjects()
         {
             SaveableMap saveList = new SaveableMap();
-            if(this.ConduitType != null)
+            if (this.ConduitType != null)
             {
                 saveList.Add(this.ConduitType, "ConduitType");
             }
@@ -136,5 +136,25 @@ namespace EstimatingLibrary
             }
             return relatedList;
         }
+
+        #region ICatalogContainer
+        public virtual bool RemoveCatalogItem<T>(T item, T replacement) where T : class, ICatalog<T>
+        {
+            bool replacedConduit = false;
+            if (item == this.ConduitType)
+            {
+                if (replacement is TECElectricalMaterial newConduit)
+                {
+                    this.ConduitType = newConduit;
+                }
+                else
+                {
+                    this.ConduitType = null;
+                }
+                replacedConduit = true;
+            }
+            return replacedConduit;
+        }
+        #endregion
     }
 }

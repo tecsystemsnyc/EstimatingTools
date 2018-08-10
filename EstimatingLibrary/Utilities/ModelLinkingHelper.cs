@@ -309,7 +309,10 @@ namespace EstimatingLibrary.Utilities
             {
                 if (controller.Type.Guid == type.Guid)
                 {
-                    controller.Type = type;
+                    //controller.Type = type;
+                    //Or
+                    controller.ChangeType(type);
+                    throw new NotImplementedException();
                     return;
                 }
             }

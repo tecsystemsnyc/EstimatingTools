@@ -103,6 +103,15 @@ namespace EstimatingLibrary
         }
         #endregion
 
+        #region ICatalogContainer
+        public override bool RemoveCatalogItem<T>(T item, T replacement)
+        {
+            bool alreadyRemoved = base.RemoveCatalogItem(item, replacement);
+
+            throw new NotImplementedException();
+        }
+        #endregion
+
         private class ConnectionWrapper : TECConnection
         {
             public override IProtocol Protocol { get; }

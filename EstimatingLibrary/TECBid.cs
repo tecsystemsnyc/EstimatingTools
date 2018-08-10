@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace EstimatingLibrary
 {
-    public class TECBid : TECScopeManager, INotifyCostChanged, INotifyPointChanged, ICatalogContainer
+    public class TECBid : TECScopeManager, INotifyCostChanged, INotifyPointChanged
     {
         #region Fields
         private string _name = "";

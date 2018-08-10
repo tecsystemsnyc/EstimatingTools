@@ -18,7 +18,7 @@ namespace EstimatingLibrary
         public TECControllerType Type
         {
             get { return _type; }
-            set
+            private set
             {
                 var old = Type;
                 _type = value;
@@ -299,6 +299,7 @@ namespace EstimatingLibrary
             bool alreadyRemoved = base.RemoveCatalogItem(item, replacement);
 
             bool replacedType = false;
+            bool replacedMod = false;
             if (item == this.Type)
             {
                 if (replacement is TECControllerType newType && CanChangeType(newType))
@@ -311,7 +312,11 @@ namespace EstimatingLibrary
                 }
                 else throw new ArgumentNullException("Replacement ControllerType cannot be null.");
             }
-
+            else if (item is TECIOModule mod)
+            {
+                replacedMod = CommonUtilities.OptionallyReplaceAll(mod, this.IOModules, replacement as TECIOModule);
+            }
+            return (replacedType || replacedMod || alreadyRemoved);
         }
         #endregion
     }

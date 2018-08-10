@@ -67,5 +67,19 @@ namespace EstimatingLibrary
         }
         #endregion
 
+        #region ICatalogContainer
+        public override bool RemoveCatalogItem<T>(T item, T replacement)
+        {
+            bool alreadyReplaced = base.RemoveCatalogItem(item, replacement);
+
+            bool replacedMod = false;
+            if (item is TECIOModule mod)
+            {
+                replacedMod = CommonUtilities.OptionallyReplaceAll(mod, this.IOModules, replacement as TECIOModule);
+            }
+
+            return (replacedMod || alreadyReplaced);
+        }
+        #endregion
     }
 }

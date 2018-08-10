@@ -156,11 +156,11 @@ namespace EstimatingUtilitiesLibrary.Database
             scopeManager.Templates = getScopeTemplates(scopeManager.Catalogs);
             if (justUpdated)
             {
-                scopeManager.Catalogs.Manufacturers.Add(tempManufacturer);
-                scopeManager.Catalogs.PanelTypes.Add(tempPanelType);
-                scopeManager.Catalogs.ControllerTypes.Add(tempControllerType);
-                scopeManager.Catalogs.ConnectionTypes.Add(tempConnectionType);
-                scopeManager.Catalogs.Protocols.Add(tempProtocol);
+                scopeManager.Catalogs.Add(tempManufacturer);
+                scopeManager.Catalogs.Add(tempPanelType);
+                scopeManager.Catalogs.Add(tempControllerType);
+                scopeManager.Catalogs.Add(tempConnectionType);
+                scopeManager.Catalogs.Add(tempProtocol);
             }
         }
         private static (List<TECTypical> typicals, List<TECController> controllers, List<TECPanel> panels, Dictionary<Guid, List<Guid>> typicalSystems, List<TECSystem> instances) getScopeHierarchy(Guid bidID, TECCatalogs catalogs)

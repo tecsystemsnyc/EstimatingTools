@@ -17,7 +17,7 @@ namespace EstimatingLibrary
         Protocol
     }
 
-    public class TECIO : TECObject, IRelatable
+    public class TECIO : TECObject, IRelatable, ICatalogContainer
     {
         public static List<IOType> PointIO = new List<IOType>()
         {
@@ -160,6 +160,22 @@ namespace EstimatingLibrary
                 if (Protocol != null) map.Add(Protocol, "Protocol");
                 return map;
             }
+        }
+        #endregion
+
+        #region ICatalogContainer
+        public bool RemoveCatalogItem<T>(T item, T replacement) where T : class, ICatalog<T>
+        {
+            bool replacedProt = false;
+            if (item == this.Protocol)
+            {
+                if (replacement is TECProtocol prot)
+                {
+                    this.Protocol = prot;
+                }
+                else throw new ArgumentException("Replacement Protocol cannot be null.");
+            }
+            return (replacedProt);
         }
         #endregion
     }

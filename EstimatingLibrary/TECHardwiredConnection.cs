@@ -133,5 +133,14 @@ namespace EstimatingLibrary
             this.IsTypical = true;
         }
         #endregion
+
+        #region ICatalogContainer
+        public override bool RemoveCatalogItem<T>(T item, T replacement)
+        {
+            bool alreadyRemoved = base.RemoveCatalogItem(item, replacement);
+
+            throw new NotImplementedException();
+        }
+        #endregion
     }
 }
