@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECProtocol : TECLabeled, IRelatable, IProtocol, ICatalogContainer
+    public class TECProtocol : TECLabeled, IRelatable, IProtocol, ICatalogContainer, ICatalog<TECProtocol>
     {
         private ObservableCollection<TECConnectionType> _connectionTypes;
         
@@ -84,6 +84,13 @@ namespace EstimatingLibrary
         List<TECConnectionType> IProtocol.ConnectionTypes
         {
             get { return new List<TECConnectionType>(this.ConnectionTypes); }
+        }
+        #endregion
+
+        #region ICatalog
+        public TECProtocol CatalogCopy()
+        {
+            return new TECProtocol(this.Guid, this.ConnectionTypes);
         }
         #endregion
 
