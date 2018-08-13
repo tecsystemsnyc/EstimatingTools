@@ -205,7 +205,8 @@ namespace EstimatingLibrary.Utilities
                         }
                     }
                 }
-                panel.Controllers = new ObservableCollection<TECController>(controllersToLink);
+                panel.Controllers.ObservablyClear();
+                panel.Controllers.AddRange(controllersToLink);
             }
         }
         private static void linkNetworkConnections(IEnumerable<TECController> controllers, IEnumerable<IConnectable> children,

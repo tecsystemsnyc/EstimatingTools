@@ -22,19 +22,7 @@ namespace EstimatingLibrary
             }
         }
 
-        private ObservableCollection<TECController> _controllers;
-        public ObservableCollection<TECController> Controllers
-        {
-            get { return _controllers; }
-            set
-            {
-                var old = Controllers;
-                _controllers = value;
-                Controllers.CollectionChanged -= controllersCollectionChanged;
-                notifyCombinedChanged(Change.Edit, "Controllers", this, value, old);
-                Controllers.CollectionChanged += controllersCollectionChanged;
-            }
-        }
+        public ObservableCollection<TECController> Controllers { get; } = new ObservableCollection<TECController>();
         
         public bool IsTypical { get; private set; }
 
@@ -44,7 +32,6 @@ namespace EstimatingLibrary
         {
             IsTypical = false;
             _guid = guid;
-            _controllers = new ObservableCollection<TECController>();
             _type = type;
             Controllers.CollectionChanged += controllersCollectionChanged;
         }
@@ -56,7 +43,7 @@ namespace EstimatingLibrary
             copyPropertiesFromScope(panel);
             foreach (TECController controller in panel.Controllers)
             {
-                _controllers.Add(controller.CopyController(guidDictionary));
+                Controllers.Add(controller.CopyController(guidDictionary));
             }
         }
         public object DragDropCopy(TECScopeManager scopeManager)
