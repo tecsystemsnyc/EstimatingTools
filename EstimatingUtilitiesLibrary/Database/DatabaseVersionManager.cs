@@ -78,8 +78,7 @@ namespace EstimatingUtilitiesLibrary.Database
                 tableMap[table.NameString] = DatabaseGenerator.CreateTempTableFromDefinition(table, db);
             }
             int updateVerison = Properties.Settings.Default.Version;
-            DataTable infoDT = db.GetDataFromTable(MetadataTable.TableName);
-            int originalVerion = infoDT.Rows[0][MetadataTable.Version.Name].ToString().ToInt();
+            int originalVerion = dbVersion(db);
             updateToVersion(versionDefinition, db, originalVerion, updateVerison, tableMap, 
                 tableNames, databaseTableList);
             removeOldTables(tableNames, db);
@@ -88,13 +87,13 @@ namespace EstimatingUtilitiesLibrary.Database
                 DatabaseGenerator.CreateTableFromDefinition(table, db);
             }
             migrateFromTempTables(tableMap, db);
-            cleanMigratedDatabase(db);
+            cleanMigratedDatabase(db, originalVerion);
             UpdateVersionNumber(db);
         }
 
-        private static void cleanMigratedDatabase(SQLiteDatabase db)
+        private static void cleanMigratedDatabase(SQLiteDatabase db, int version)
         {
-            if(dbVersion(db) < 11)
+            if(version < 11)
             {
                 string commandString = "";
 
@@ -141,6 +140,18 @@ namespace EstimatingUtilitiesLibrary.Database
                 //db.NonQueryCommand(commandString);
                 #endregion
 
+                #region Bid Controllers and panels
+                var controllerQuery = String.Format("select {0} as ControllerID from {1} where {0} not in (select {2} from {3})", ProvidedControllerTable.ID.Name, ProvidedControllerTable.TableName, SystemControllerTable.ControllerID.Name, SystemControllerTable.TableName);
+                var bidControllerJoin = String.Format("select {1} as BidID, ControllerID from {0} join ({2}) ", BidInfoTable.TableName, BidInfoTable.ID.Name, controllerQuery);
+                commandString = String.Format("insert into {0} ({1}, {2}) {3}", BidControllerTable.TableName, BidControllerTable.BidID.Name, BidControllerTable.ControllerID.Name, bidControllerJoin);
+                db.NonQueryCommand(commandString);
+
+                var panelQuery = String.Format("select {0} as PanelID from {1} where {0} not in (select {2} from {3})", PanelTable.ID.Name, PanelTable.TableName, SystemPanelTable.PanelID.Name, SystemPanelTable.TableName);
+                var bidPanelJoin = String.Format("select {1} as BidID, PanelID from {0} join ({2}) ", BidInfoTable.TableName, BidInfoTable.ID.Name, panelQuery);
+                commandString = String.Format("insert into {0} ({1}, {2}) {3}", BidPanelTable.TableName, BidPanelTable.BidID.Name, BidPanelTable.PanelID.Name, bidPanelJoin);
+                db.NonQueryCommand(commandString);
+
+                #endregion
             }
         }
 

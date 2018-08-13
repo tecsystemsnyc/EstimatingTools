@@ -83,6 +83,8 @@ namespace EstimatingUtilitiesLibraryTests
             addToIOProtocolTable();
             addToConnectionProtocolTable();
             addToHardwiredConnectionConnectionTypeTable();
+            addToBidControllerTable();
+            addToBidPanelTable();
 
             addToTemplatesSystemTable();
             addToTemplatesEquipmentTable();
@@ -1807,6 +1809,40 @@ namespace EstimatingUtilitiesLibraryTests
                 values.Add("3");
                 addDataToTable(new HardwiredConnectionConnectionTypeTable(), values);
             }
+        }
+        private static void addToBidControllerTable()
+        {
+            List<string> values = new List<string>();
+            values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
+            values.Add("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
+            values.Add("0");
+            addDataToTable(new BidControllerTable(), values);
+
+            values = new List<string>();
+            values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
+            values.Add("973e6100-31f7-40b0-bfe7-9d64630c1c56");
+            values.Add("1");
+            addDataToTable(new BidControllerTable(), values);
+
+            values = new List<string>();
+            values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
+            values.Add("bf17527a-18ba-4765-a01e-8ab8de5664a3");
+            values.Add("2");
+            addDataToTable(new BidControllerTable(), values);
+
+            values = new List<string>();
+            values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
+            values.Add("7b6825df-57da-458a-a859-a9459c15907b");
+            values.Add("3");
+            addDataToTable(new BidControllerTable(), values);
+        }
+        private static void addToBidPanelTable()
+        {
+            List<string> values = new List<string>();
+            values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
+            values.Add("a8cdd31c-e690-4eaa-81ea-602c72904391");
+            values.Add("0");
+            addDataToTable(new BidPanelTable(), values);
         }
 
         private static void addToTemplatesSystemTable()

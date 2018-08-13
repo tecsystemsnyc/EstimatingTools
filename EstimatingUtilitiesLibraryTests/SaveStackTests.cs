@@ -43,6 +43,12 @@ namespace EstimatingUtilitiesLibraryTests
             data[ProvidedControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, ProvidedControllerControllerTypeTable.TableName, data));
 
+            data = new Dictionary<string, string>();
+            data[BidControllerTable.BidID.Name] = bid.Guid.ToString();
+            data[BidControllerTable.ControllerID.Name] = controller.Guid.ToString();
+            data[BidControllerTable.Index.Name] = "0";
+            expectedItems.Add(new UpdateItem(Change.Add, BidControllerTable.TableName, data));
+
             int expectedCount = expectedItems.Count;
 
             bid.AddController(controller);
@@ -110,6 +116,12 @@ namespace EstimatingUtilitiesLibraryTests
             data[PanelPanelTypeTable.PanelID.Name] = panel.Guid.ToString();
             data[PanelPanelTypeTable.PanelTypeID.Name] = type.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, PanelPanelTypeTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[BidPanelTable.BidID.Name] = bid.Guid.ToString();
+            data[BidPanelTable.PanelID.Name] = panel.Guid.ToString();
+            data[BidPanelTable.Index.Name] = "0";
+            expectedItems.Add(new UpdateItem(Change.Add, BidPanelTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
             
