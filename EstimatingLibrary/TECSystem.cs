@@ -398,7 +398,7 @@ namespace EstimatingLibrary
             }
             else
             {
-                base.AddForProperty(propertyName, item);
+                base.RemoveForProperty(propertyName, item);
             }
         }
         #endregion

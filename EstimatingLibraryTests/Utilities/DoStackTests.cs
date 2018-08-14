@@ -1440,13 +1440,11 @@ namespace Utilities
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            var system = Bid.Systems[0];
+            TECTypical system = Bid.Systems[0];
+            system.AddInstance();
+            system.AddInstance();
             system.Equipment.Add(edit);
-            var expected = new ObservableCollection<TECEquipment>();
-            foreach (TECEquipment item in system.Equipment)
-            {
-                expected.Add(item);
-            }
+            var expected = new List<TECEquipment>(system.Equipment);
             testStack.Undo();
             testStack.Redo();
 

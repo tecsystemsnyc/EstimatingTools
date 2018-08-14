@@ -6,12 +6,9 @@ namespace EstimatingLibrary.Utilities
 {
     public class CostBatch
     {
-        private Dictionary<CostType, CostObject> typeDictionary;
+        private Dictionary<CostType, CostObject> typeDictionary = new Dictionary<CostType, CostObject>();
 
-        public CostBatch()
-        {
-            typeDictionary = new Dictionary<CostType, CostObject>();
-        }
+        public CostBatch() { }
         public CostBatch(double cost, double labor, CostType type) : this()
         {
             typeDictionary.Add(type, new CostObject(cost, labor));

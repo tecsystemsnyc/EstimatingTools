@@ -332,7 +332,7 @@ namespace EstimatingLibrary
                 }
                 else if (args.Sender is TECController controller)
                 {
-                    handleControllerChaned(controller, args.PropertyName);
+                    handleControllerChanged(controller, args.PropertyName);
                 }
                 if (Instances.Count == 1 && (args.Value is IControllerConnection || args.Sender is IControllerConnection))
                 {
@@ -485,7 +485,7 @@ namespace EstimatingLibrary
                 
             }
         }
-        private void handleControllerChaned(TECController controller, string propertyName)
+        private void handleControllerChanged(TECController controller, string propertyName)
         {
             if (propertyName == "Type" && controller is TECProvidedController provided)
             {
