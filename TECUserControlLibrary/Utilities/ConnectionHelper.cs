@@ -12,11 +12,17 @@ namespace TECUserControlLibrary.Utilities
 
     public static class ConnectionHelper
     {
+        /// <summary>
+        /// Returns true if all the items can be connected, in some way, so the provided controller
+        /// </summary>
+        /// <param name="items"></param>
+        /// <param name="controller"></param>
+        /// <returns></returns>
         public static bool CanConnectToController(IEnumerable<IConnectable> items, TECController controller)
         {
 
             var connectables = items
-                .Where(x => x.GetParentConnection() == null);
+                .Where(x => x.GetParentConnection() == null || x.AvailableProtocols.Count == 0);
             if (connectables.Count() == 0)
             {
                 return false;
@@ -63,6 +69,12 @@ namespace TECUserControlLibrary.Utilities
             return true;
         }
 
+        /// <summary>
+        /// Connects all items to the controller. Existing network connections will be added to where possible
+        /// </summary>
+        /// <param name="items"></param>
+        /// <param name="controller"></param>
+        /// <returns></returns>
         public static List<IControllerConnection> ConnectToController(IEnumerable<IConnectable> items, TECController controller)
         {
             var connectables = items
@@ -99,6 +111,12 @@ namespace TECUserControlLibrary.Utilities
 
         }
 
+        /// <summary>
+        /// Returns all connectable objects which are direct descendants of the provided parent and match the provided predicate
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
         public static List<IConnectable> GetConnectables(ITECObject parent, Func<ITECObject, bool> predicate)
         {
             List<IConnectable> outList = new List<IConnectable>();
@@ -113,6 +131,11 @@ namespace TECUserControlLibrary.Utilities
             return outList;
         }
 
+        /// <summary>
+        /// Returns the io which make up existing network connections on a controller
+        /// </summary>
+        /// <param name="controller"></param>
+        /// <returns></returns>
         public static IOCollection ExistingNetworkIO(TECController controller)
         {
             IOCollection existingNetwork = new IOCollection();
