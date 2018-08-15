@@ -4,7 +4,7 @@ namespace EstimatingLibrary
 {
     public static class Defaults
     {
-        public static List<string> Scope = new List<string>(new string[]
+        public static List<string> Scope = new List<string>
         {
             "Provide a seamless extension to the existing Honeywell system provided by T.E.C.Systems.",
             "System components shall be manufactured by Honeywell Automation and will be designed and installed by T.E.C. Systems, Inc.",
@@ -13,14 +13,14 @@ namespace EstimatingLibrary
             "Provide field technical resources required for system commissioning, calibration, start-up and testing.",
             "Provide training in accordance with specification requirements.",
             "Provide one-year parts and labor warranty."
-        });
+        };
 
-        public static List<string> Notes = new List<string>(new string[]
+        public static List<string> Notes = new List<string>
         {
             "Use tax is included; this project is assumed to be a capital improvement project."
-        });
+        };
 
-        public static List<string> Exclusions = new List<string>(new string[]
+        public static List<string> Exclusions = new List<string>
         {
             "Overtime labor.",
             "Power wiring.",
@@ -34,6 +34,22 @@ namespace EstimatingLibrary
             "Provision of smoke detection and fire alarm system components.",
             "Payment and Performance Bonds.",
             "Smoke purge and UL-864 systems."
-        });
+        };
+
+        public static List<string> BidToDoList = new List<string>
+        {
+            "Fill out bid info",
+            "Populate riser",
+            "Create systems from sequences",
+            "Verify valve selections",
+            "Verify electrical runs",
+            "Verify proposal",
+            "Add systems' miscellaneous costs",
+            "Create system instances",
+            "Create and verify controllers",
+            "Create network electrical runs",
+            "Add any miscellaneous costs for the bid",
+            "Submit quotes"
+        };
     }
 }
