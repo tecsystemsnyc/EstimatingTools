@@ -255,23 +255,61 @@ namespace TECUserControlLibrary.ViewModels
             return SelectedProtocol != null && SelectedConnectable != null && SelectedController != null;
         }
         
-        private void repopulateGroups(ITECObject parent, ITECObject item, Action<FilteredConnectablesGroup, IConnectable> action)
+        private void repopulateGroups(ITECObject parent, ITECObject item, Action<FilteredConnectablesGroup, IConnectable, IEnumerable<ITECObject>> action, List<ITECObject> parentPath = null)
         {
+            parentPath = parentPath ?? new List<ITECObject>();
+            if(parent != null) { parentPath.Add(parent); }
             if(item is IConnectable connectable)
             {
-                var closestRoot = this.rootConnectableGroup.GetGroup(parent as ITECScope) ?? this.rootConnectableGroup;
-                action(closestRoot, connectable);
+                parentPath.Add(item);
+                var closestRoot = this.rootConnectableGroup;
+                var thisPath = new List<ITECObject>(parentPath);
+                var start = item;
+                var toRemove = new List<ITECObject>();
+                for (int x = parentPath.Count - 2; x >= 0; x--)
+                {
+                    if(!(parentPath[x] as IRelatable).GetDirectChildren().Contains(start))
+                    {
+                        thisPath.Remove(parentPath[x]);
+                    }
+                    else {
+                        start = parentPath[x];
+                        if (this.rootConnectableGroup.GetGroup(parentPath[x] as ITECScope) != null && closestRoot == this.rootConnectableGroup)
+                        {
+                            closestRoot = this.rootConnectableGroup.GetGroup(parentPath[x] as ITECScope);
+                        }
+                    }
+                }
+                action(closestRoot, connectable, thisPath.Distinct());
                 if (connectable is TECController)
                 {
-                    closestRoot = this.rootControllerGroup.GetGroup(parent as ITECScope) ?? this.rootControllerGroup;
-                    action(closestRoot, connectable);
+                    closestRoot = this.rootControllerGroup;
+                    thisPath = new List<ITECObject>(parentPath);
+                    start = item;
+                    toRemove = new List<ITECObject>();
+                    for (int x = parentPath.Count - 2; x >= 0; x--)
+                    {
+                        if (!(parentPath[x] as IRelatable).GetDirectChildren().Contains(start))
+                        {
+                            thisPath.Remove(parentPath[x]);
+                        }
+                        else
+                        {
+                            start = parentPath[x];
+                            if (this.rootControllerGroup.GetGroup(parentPath[x] as ITECScope) != null && closestRoot == this.rootControllerGroup)
+                            {
+                                closestRoot = this.rootControllerGroup.GetGroup(parentPath[x] as ITECScope);
+                            }
+                        }
+                    }
+                    action(closestRoot, connectable, thisPath.Distinct());
                 }
             }
             else if (item is IRelatable relatable)
             {
                 foreach (ITECObject child in relatable.GetDirectChildren().Where(filterPredicate))
                 {
-                    repopulateGroups(item, child, action);
+                    repopulateGroups(item, child, action, parentPath);
                 }
             }
         }
@@ -322,11 +360,17 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         
-        private void addConnectable(FilteredConnectablesGroup rootGroup, IConnectable connectable)
+        private void addConnectable(FilteredConnectablesGroup rootGroup, IConnectable connectable, IEnumerable<ITECObject> parentPath)
         {
             if (!filterPredicate(connectable)) return;
             IRelatable rootScope = rootGroup.Scope as IRelatable ?? this.root;
-            List<ITECObject> path = rootScope.GetObjectPath(connectable);
+            List<ITECObject> path = new List<ITECObject>(parentPath);
+            if (rootScope != parentPath.First())
+            {
+                path = rootScope.GetObjectPath(parentPath.First());
+                path.Remove(parentPath.First());
+                path.AddRange(parentPath);
+            }
 
             if (path.Count == 0)
             {
@@ -371,7 +415,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-        private void removeConnectable(FilteredConnectablesGroup rootGroup, IConnectable connectable)
+        private void removeConnectable(FilteredConnectablesGroup rootGroup, IConnectable connectable, IEnumerable<ITECObject> parentPath)
         {
             if (!filterPredicate(connectable)) return;
             List<FilteredConnectablesGroup> path = rootGroup.GetPath(connectable);
