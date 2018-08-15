@@ -1010,6 +1010,36 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+    internal class ToDoItemTable : TableBase
+    {
+        public static string TableName = "ToDoItem";
+        public static Type ToDoItemType = typeof(TECToDoItem);
+
+        public static TableField ID = new TableField("ID", "TEXT", ToDoItemType.GetProperty("Guid"));
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ToDoItemType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ID
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "ToDoList"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
     #region ICost
     internal class MiscTable : TableBase
     {
@@ -3743,6 +3773,46 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> Fields { get { return fields; } }
     }
     
+    internal class BidToDoItemTable : TableBase
+    {
+        public static string TableName = "BidToDoItem";
+        public static Type ObjectType = typeof(TECBid);
+        public static Type ReferenceType = typeof(TECToDoItem);
+
+        public static TableField BidID = new TableField("BidID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField ItemID = new TableField("ItemID", "TEXT", ReferenceType.GetProperty("Guid"));
+
+        public static Type HelperType = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"), "ToDoList", "0");
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            BidID,
+            ItemID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            BidID,
+            ItemID,
+            Index
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "ToDoList"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
     #endregion
 
     internal static class AllBidTables
@@ -3783,6 +3853,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new ScopeTemplatesTable(),
             new ProposalItemTable(),
             new DistributionContactTable(),
+            new ToDoItemTable(),
           
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -3846,7 +3917,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new ProposalItemContainingScopeTable(),
             new ProposalItemDisplayScopeTable(),
             new HardwareQuoteTable(),
-            new BidDistributionContactTable()
+            new BidDistributionContactTable(),
+            new BidToDoItemTable(),
             };
     }
 
