@@ -263,16 +263,15 @@ namespace TECUserControlLibrary.ViewModels
             {
                 parentPath.Add(item);
                 var closestRoot = this.rootConnectableGroup;
-                var thisPath = new List<ITECObject>(parentPath);
+                var thisPath = new List<ITECObject>();
+                thisPath.Add(connectable);
                 var start = item;
                 var toRemove = new List<ITECObject>();
                 for (int x = parentPath.Count - 2; x >= 0; x--)
                 {
-                    if(!(parentPath[x] as IRelatable).GetDirectChildren().Contains(start))
+                    if (!thisPath.Contains(parentPath[x]) && (parentPath[x] as IRelatable).GetDirectChildren().Contains(start))
                     {
-                        thisPath.Remove(parentPath[x]);
-                    }
-                    else {
+                        thisPath.Insert(0, parentPath[x]);
                         start = parentPath[x];
                         if (this.rootConnectableGroup.GetGroup(parentPath[x] as ITECScope) != null && closestRoot == this.rootConnectableGroup)
                         {
@@ -280,21 +279,19 @@ namespace TECUserControlLibrary.ViewModels
                         }
                     }
                 }
-                action(closestRoot, connectable, thisPath.Distinct());
+                action(closestRoot, connectable, thisPath);
                 if (connectable is TECController)
                 {
                     closestRoot = this.rootControllerGroup;
-                    thisPath = new List<ITECObject>(parentPath);
+                    thisPath = new List<ITECObject>();
+                    thisPath.Add(connectable);
                     start = item;
                     toRemove = new List<ITECObject>();
                     for (int x = parentPath.Count - 2; x >= 0; x--)
                     {
-                        if (!(parentPath[x] as IRelatable).GetDirectChildren().Contains(start))
+                        if (!thisPath.Contains(parentPath[x]) && (parentPath[x] as IRelatable).GetDirectChildren().Contains(start))
                         {
-                            thisPath.Remove(parentPath[x]);
-                        }
-                        else
-                        {
+                            thisPath.Insert(0, parentPath[x]);
                             start = parentPath[x];
                             if (this.rootControllerGroup.GetGroup(parentPath[x] as ITECScope) != null && closestRoot == this.rootControllerGroup)
                             {
@@ -302,7 +299,7 @@ namespace TECUserControlLibrary.ViewModels
                             }
                         }
                     }
-                    action(closestRoot, connectable, thisPath.Distinct());
+                    action(closestRoot, connectable, thisPath);
                 }
             }
             else if (item is IRelatable relatable)

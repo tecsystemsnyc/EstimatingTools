@@ -177,17 +177,15 @@ namespace TECUserControlLibrary.ViewModels
             {
                 parentPath.Add(item);
                 var closestRoot = this.rootInterlockablesGroup;
-                var thisPath = new List<ITECObject>(parentPath);
+                var thisPath = new List<ITECObject>();
+                thisPath.Add(connectable);
                 var start = item;
                 var toRemove = new List<ITECObject>();
                 for (int x = parentPath.Count - 2; x >= 0; x--)
                 {
-                    if (!(parentPath[x] as IRelatable).GetDirectChildren().Contains(start))
+                    if (!thisPath.Contains(parentPath[x]) && (parentPath[x] as IRelatable).GetDirectChildren().Contains(start))
                     {
-                        thisPath.Remove(parentPath[x]);
-                    }
-                    else
-                    {
+                        thisPath.Insert(0, parentPath[x]);
                         start = parentPath[x];
                         if (this.rootInterlockablesGroup.GetGroup(parentPath[x] as ITECScope) != null && closestRoot == this.rootInterlockablesGroup)
                         {
