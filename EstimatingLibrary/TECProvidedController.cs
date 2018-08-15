@@ -3,6 +3,7 @@ using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -90,6 +91,37 @@ namespace EstimatingLibrary
             else
             {
                 throw new InvalidOperationException("Controller can't accept IOModule.");
+            }
+        }
+        public bool CanRemoveModule(TECIOModule module)
+        {
+            if (module == null)
+            {
+                return false;
+            }
+            else
+            {
+                bool hasModule = this.IOModules.Contains(module);
+                bool canSpare = true;
+                foreach (TECIO io in module.IO)
+                {
+                    if (!this.AvailableIO.Contains(io))
+                    {
+                        canSpare = false;
+                        break;
+                    }
+                }
+                return hasModule && canSpare;
+            }
+        }
+        private void OptimizeModules()
+        {
+            foreach (TECIOModule item in this.IOModules.Distinct())
+            {
+                while (CanRemoveModule(item))
+                {
+                    IOModules.Remove(item);
+                }
             }
         }
 
@@ -232,8 +264,17 @@ namespace EstimatingLibrary
         {
             collectionChanged(sender, e, "IOModules");
         }
+
+        protected override void collectionChanged(object sender, NotifyCollectionChangedEventArgs e, string propertyName)
+        {
+            base.collectionChanged(sender, e, propertyName);
+            if(propertyName == "ChildrenConnections")
+            {
+                this.OptimizeModules();
+            }
+        }
         #endregion
-        
+
         #region IDDCopiable
         Object IDDCopiable.DragDropCopy(TECScopeManager scopeManager)
         {

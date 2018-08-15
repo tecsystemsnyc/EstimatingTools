@@ -82,8 +82,7 @@ namespace TECUserControlLibrary.Models
 
         private bool canAddModule(TECIOModule arg)
         {
-            return Controller.Type.IOModules.Where(item => item == arg).Count() >
-                Controller.IOModules.Where(item => item == arg).Count();
+            return Controller.CanAddModule(arg);
         }
 
         private void removeModuleExecute(TECIOModule obj)
@@ -95,24 +94,7 @@ namespace TECUserControlLibrary.Models
 
         private bool canRemoveModule(TECIOModule arg)
         {
-            if(arg == null)
-            {
-                return false;
-            }
-            else
-            {
-                bool hasModule = Controller.IOModules.Contains(arg);
-                bool canSpare = true;
-                foreach (TECIO io in arg.IO)
-                {
-                    if (!Controller.AvailableIO.Contains(io))
-                    {
-                        canSpare = false;
-                        break;
-                    }
-                }
-                return hasModule && canSpare;
-            }
+            return Controller.CanRemoveModule(arg);
             
         }
 

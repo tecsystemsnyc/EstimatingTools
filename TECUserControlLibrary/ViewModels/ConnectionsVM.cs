@@ -327,6 +327,7 @@ namespace TECUserControlLibrary.ViewModels
             if (!filterPredicate(connectable)) return;
             IRelatable rootScope = rootGroup.Scope as IRelatable ?? this.root;
             List<ITECObject> path = rootScope.GetObjectPath(connectable);
+
             if (path.Count == 0)
             {
                 logger.Error("New connectable doesn't exist in root object.");

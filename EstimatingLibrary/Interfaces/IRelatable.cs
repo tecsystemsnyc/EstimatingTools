@@ -112,6 +112,7 @@ namespace EstimatingLibrary.Interfaces
                     if (path.Count > before)
                     {
                         path.Add(parent);
+                        break;
                     }
                 }
             }

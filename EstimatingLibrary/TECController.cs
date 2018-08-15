@@ -263,7 +263,7 @@ namespace EstimatingLibrary
         public abstract TECController CopyController(Dictionary<Guid, Guid> guidDictionary = null);
 
         #region Event Handlers
-        protected void collectionChanged(object sender, NotifyCollectionChangedEventArgs e, string propertyName)
+        protected virtual void collectionChanged(object sender, NotifyCollectionChangedEventArgs e, string propertyName)
         {
             CollectionChangedHandlers.CollectionChangedHandler(sender, e, propertyName, this, notifyCombinedChanged, notifyCostChanged);
 
