@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -183,15 +184,15 @@ namespace TECUserControlLibrary.ViewModels
                     Locations.Remove(location);
                 }
             }
-            else if (obj.PropertyName == "Location" && obj.Sender is TECSystem system)
+            else if (obj.PropertyName == "Location" && obj.Sender is TECLocated located && passesPredicate(obj.Sender))
             {
-                Locations.Move(system, obj.OldValue as TECLabeled, obj.Value as TECLabeled);
+                Locations.Move(located, obj.OldValue as TECLabeled, obj.Value as TECLabeled);
                 if(obj.OldValue == null && obj.Value != null)
                 {
-                    Unlocated.Remove(system);
+                    Unlocated.Remove(located);
                 } else if(obj.OldValue != null && obj.Value == null)
                 {
-                    Unlocated.Add(system);
+                    Unlocated.Add(located);
                 }
             }
             else if (obj.Value is TECTypical typical)
@@ -200,11 +201,11 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     if (obj.Change == Change.Add)
                     {
-                        addSystem(instance);
+                        addLocated(instance);
                     }
                     else if (obj.Change == Change.Remove)
                     {
-                        removeSystem(instance);
+                        removeLocated(instance);
                     }
                 }
             }
@@ -212,16 +213,32 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (obj.Change == Change.Add)
                 {
-                    addSystem(item);
+                    addLocated(item);
                 }
                 else if (obj.Change == Change.Remove)
                 {
-                    removeSystem(item);
+                    removeLocated(item);
                 }
             }
-            
+            else if (obj.Value is TECController controller && obj.Sender is TECBid)
+            {
+                if (obj.Change == Change.Add)
+                {
+                    addLocated(controller);
+                }
+                else if (obj.Change == Change.Remove)
+                {
+                    removeLocated(controller);
+                }
+            }
         }
-        private void addSystem(TECSystem system)
+
+        private bool passesPredicate(ITECObject sender)
+        {
+            return sender is TECSystem || sender is TECController;
+        }
+
+        private void addLocated(TECLocated system)
         {
             if (system.Location != null)
             {
@@ -232,7 +249,7 @@ namespace TECUserControlLibrary.ViewModels
                 Unlocated.Add(system);
             }
         }
-        private void removeSystem(TECSystem system)
+        private void removeLocated(TECLocated system)
         {
             if (system.Location != null)
             {
@@ -255,8 +272,12 @@ namespace TECUserControlLibrary.ViewModels
             {
                 foreach(TECSystem system in typical.Instances)
                 {
-                    addSystem(system);
+                    addLocated(system);
                 }
+            }
+            foreach(TECController controller in bid.Controllers)
+            {
+                addLocated(controller);
             }
             Locations.CollectionChanged += Locations_CollectionChanged;
         }
