@@ -192,7 +192,7 @@ namespace TECUserControlLibrary.ViewModels
                 filterPredicate = item => true;
             }
             this.filterPredicate = filterPredicate;
-            //this.InterlocksVM = new InterlocksVM(root, watcher, catalogs, filterPredicate);
+            this.InterlocksVM = new InterlocksVM(root, watcher, catalogs, filterPredicate);
 
             this.root = root;
             this.Catalogs = catalogs;
