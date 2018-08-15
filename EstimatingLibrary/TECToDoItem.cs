@@ -38,5 +38,44 @@ namespace EstimatingLibrary
         }
 
         public TECToDoItem(Guid guid) : base(guid) { }
+        public TECToDoItem(Guid guid, string desc) : this(guid)
+        {
+            this.Description = desc;
+        }
+    }
+
+    public static class ToDoList
+    {
+        private static List<string> bidToDoList
+        {
+            get
+            {
+                return new List<string>
+                {
+                    "Fill out bid info",
+                    "Populate riser",
+                    "Create systems from sequences",
+                    "Verify valve selections",
+                    "Verify electrical runs",
+                    "Verify proposal",
+                    "Add systems' miscellaneous costs",
+                    "Create system instances",
+                    "Create and verify controllers",
+                    "Create network electrical runs",
+                    "Add any miscellaneous costs for the bid",
+                    "Submit quotes"
+                };
+            }
+        }
+
+        public static List<TECToDoItem> BidList
+        {
+            get
+            {
+                List<TECToDoItem> list = new List<TECToDoItem>();
+                bidToDoList.ForEach((item) => list.Add(new TECToDoItem(Guid.NewGuid(), item)));
+                return list;
+            }
+        }
     }
 }
