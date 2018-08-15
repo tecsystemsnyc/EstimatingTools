@@ -116,6 +116,11 @@ namespace EstimatingLibrary
         #region Properties
         public ObservableCollection<TECSystem> Instances { get; } = new ObservableCollection<TECSystem>();
         public ObservableListDictionary<ITECObject> TypicalInstanceDictionary { get; } = new ObservableListDictionary<ITECObject>();
+
+        public bool IsSingleton
+        {
+            get { return this.Instances.Count == 1; }
+        }
         #endregion
 
         #region Methods

@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
+using EstimatingLibrary.Utilities.WatcherFilters;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
@@ -21,7 +22,7 @@ namespace TECUserControlLibrary.ViewModels
     {
         private TECBid bid;
 
-        private ChangeWatcher watcher;
+        private ScopeWatcherFilter watcher;
         private LocationList _locations;
         private ObservableCollection<TECLocated> _unlocated;
         private TECLocated _selected;
@@ -123,8 +124,8 @@ namespace TECUserControlLibrary.ViewModels
         public RiserVM(TECBid bid, ChangeWatcher watcher)
         {
             this.bid = bid;
-            this.watcher = watcher;
-            this.watcher.Changed += changed;
+            this.watcher = new ScopeWatcherFilter(watcher);
+            this.watcher.ScopeChanged += changed;
             populateBidLocations(bid);
             AddLocationCommand = new RelayCommand(addLocationExecute, canAddLocation);
             AddPatternCommand = new RelayCommand(addPatternExecute, canAddPattern);
