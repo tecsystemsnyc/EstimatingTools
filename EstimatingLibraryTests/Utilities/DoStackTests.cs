@@ -954,7 +954,7 @@ namespace Utilities
                 }
             }
             TECControllerType expected = provided.Type;
-            TECControllerType edit = Bid.Catalogs.ControllerTypes[0];
+            TECControllerType edit = new TECControllerType(provided.Type);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
