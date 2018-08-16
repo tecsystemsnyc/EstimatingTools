@@ -38,18 +38,18 @@ namespace EstimatingLibrary
 
         public static List<(string description, string url)> BidToDoList = new List<(string description, string url)>
         {
-            ("Fill out bid info", "https://github.com/tecsystemsnyc/EstimatingTools/wiki/Getting-Started"),
-            ("Populate riser", ""),
-            ("Create systems from sequences", ""),
-            ("Verify valve selections", ""),
-            ("Verify electrical runs", ""),
-            ("Verify proposal", ""),
-            ("Add systems' miscellaneous costs", ""),
-            ("Create system instances", ""),
-            ("Create and verify controllers", ""),
-            ("Create network electrical runs", ""),
-            ("Add any miscellaneous costs for the bid", ""),
-            ("Submit quotes", ""),
+            ("Fill out bid info", "https://github.com/tecsystemsnyc/EstimatingTools/wiki/Fill-Out-Bid-Info"),
+            ("Populate riser", "https://github.com/tecsystemsnyc/EstimatingTools/wiki/Populate-Riser"),
+            ("Create systems from sequences", "https://github.com/tecsystemsnyc/EstimatingTools/wiki/Create-System-Instances"),
+            ("Verify valve selections", "https://github.com/tecsystemsnyc/EstimatingTools/wiki/Verify-Valve-Selections"),
+            ("Verify electrical runs", "https://github.com/tecsystemsnyc/EstimatingTools/wiki/Verify-Electrical-Runs"),
+            ("Verify proposal", "https://github.com/tecsystemsnyc/EstimatingTools/wiki/Verify-Proposal"),
+            ("Add systems' miscellaneous costs", "https://github.com/tecsystemsnyc/EstimatingTools/wiki/Add-System-Miscellaneous-Costs"),
+            ("Create system instances", "https://github.com/tecsystemsnyc/EstimatingTools/wiki/Create-System-Instances"),
+            ("Create and verify controllers", "https://github.com/tecsystemsnyc/EstimatingTools/wiki/Create-and-Verify-Controllers"),
+            ("Create network electrical runs", "https://github.com/tecsystemsnyc/EstimatingTools/wiki/Create-Network-Electrical-Runs"),
+            ("Add any miscellaneous costs for the bid", "https://github.com/tecsystemsnyc/EstimatingTools/wiki/Add-Bid-Miscellaneous-Costs"),
+            ("Submit quotes", "https://github.com/tecsystemsnyc/EstimatingTools/wiki/Submit-Quotes"),
         };
     }
 }
