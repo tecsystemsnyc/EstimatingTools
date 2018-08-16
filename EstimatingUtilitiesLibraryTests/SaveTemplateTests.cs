@@ -767,7 +767,7 @@ namespace EstimatingUtilitiesLibraryTests
             int oldNumDevices = templates.Catalogs.Devices.Count;
             TECDevice deviceToRemove = templates.Catalogs.Devices[0];
 
-            templates.Catalogs.Add(deviceToRemove);
+            templates.RemoveCatalogItem(deviceToRemove, null);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -1469,7 +1469,7 @@ namespace EstimatingUtilitiesLibraryTests
             int oldNumConduitTypes = templates.Catalogs.ConduitTypes.Count;
             TECElectricalMaterial conduitTypeToRemove = templates.Catalogs.ConduitTypes[0];
 
-            templates.Catalogs.Add(conduitTypeToRemove);
+            templates.RemoveCatalogItem(conduitTypeToRemove, null);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -1725,8 +1725,8 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Templates_Remove_PanelType()
         {
             //Act
-            TECPanelType costToRemove = templates.Catalogs.PanelTypes[0];
-            templates.Catalogs.Add(costToRemove);
+            TECPanelType typeToRemove = templates.Catalogs.PanelTypes[0];
+            templates.RemoveCatalogItem(typeToRemove, null);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
@@ -1734,7 +1734,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Assert
             foreach (TECPanelType cost in actualTemplates.Catalogs.PanelTypes)
             {
-                if (cost.Guid == costToRemove.Guid) Assert.Fail();
+                if (cost.Guid == typeToRemove.Guid) Assert.Fail();
             }
 
             Assert.AreEqual(templates.Catalogs.PanelTypes.Count, actualTemplates.Catalogs.PanelTypes.Count);
