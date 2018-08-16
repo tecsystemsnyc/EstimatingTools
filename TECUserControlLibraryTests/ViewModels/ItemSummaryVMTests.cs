@@ -8,7 +8,7 @@ using TECUserControlLibrary.ViewModels.Interfaces;
 using TestLibrary;
 using TestLibrary.ModelTestingUtilities;
 
-namespace Tests
+namespace ViewModels
 {
     [TestClass]
     public class ItemSummaryVMTests

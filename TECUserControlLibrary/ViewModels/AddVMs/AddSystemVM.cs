@@ -55,6 +55,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 {
                     TECTypical typical = new TECTypical(toAdd, bid);
                     bid.Systems.Add(typical);
+                    typical.AddInstance();
                     Added?.Invoke(typical);
                 }
                 else if (parent is TECTemplates)

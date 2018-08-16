@@ -6,14 +6,14 @@ namespace EstimatingLibrary.Interfaces
 {
     public interface IRelatable : ITECObject
     {
-        SaveableMap PropertyObjects { get; }
-        SaveableMap LinkedObjects { get; }
+        RelatableMap PropertyObjects { get; }
+        RelatableMap LinkedObjects { get; }
     }
 
     public static class RelatableExtensions
     {
         /// <summary>
-        /// Returns all objects of type T which exist as a direct child
+        /// Returns all objects of type T which exist as a direct descendant
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="relatable"></param>
@@ -45,12 +45,10 @@ namespace EstimatingLibrary.Interfaces
         /// <returns></returns>
         public static List<ITECObject> GetDirectChildren(this IRelatable relatable)
         {
-            List<ITECObject> list = new List<ITECObject>();
-            foreach (var item in relatable.PropertyObjects.ChildList().Where(x => !relatable.LinkedObjects.Contains(x.PropertyName)))
-            {
-                list.Add(item.Child);
-            }
-            return list;
+            return relatable.PropertyObjects.ChildList()
+                .Where(x => !relatable.LinkedObjects.Contains(x.PropertyName))
+                .Select(y => y.Child)
+                .ToList();
         }
 
         public static bool IsDirectChildProperty(this IRelatable relatable, string propertyName)
@@ -60,59 +58,75 @@ namespace EstimatingLibrary.Interfaces
 
         public static bool IsDirectDescendant(this IRelatable relatable, ITECObject item)
         {
-            List<ITECObject> directChildren = relatable.GetDirectChildren();
-            if (directChildren.Contains(item))
-            {
-                return true;
-            }
-
-            foreach(ITECObject child in directChildren)
-            {
-                if (child is IRelatable relatableChild && relatableChild.IsDirectDescendant(item))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return relatable.GetObjectPath(item).Count> 0;
         }
 
         public static List<ITECObject> GetObjectPath(this IRelatable parent, ITECObject descendant)
         {
             List<ITECObject> path = new List<ITECObject>();
+            getObjectPath(parent, descendant, path);
+            path.Reverse();
+            return path;
+            //var children = parent.GetDirectChildren();
 
-            if (!parent.IsDirectDescendant(descendant))
-            {
-                return path;
-            }
-
-            path.Add(parent);
-
-            foreach(ITECObject child in parent.GetDirectChildren())
-            {
-                if (child == descendant)
-                {
-                    path.Add(child);
-                    return path;
-                }
-                else if (child is IRelatable childRelatable && childRelatable.IsDirectDescendant(descendant))
-                {
-                    path.AddRange(childRelatable.GetObjectPath(descendant));
-                    return path;
-                }
-            }
-
-            throw new Exception("Parent shown as having the direct descendant, but path to direct descendant not found.");
+            //if (children.Contains(descendant))
+            //{
+            //    List<ITECObject> path = new List<ITECObject>();
+            //    path.Add(parent);
+            //    path.Add(descendant);
+            //    return path;
+            //}
+            //else
+            //{
+            //    foreach(var child in children.OfType<IRelatable>())
+            //    {
+            //        var childPath = GetObjectPath(child, descendant);
+            //        if (childPath != null)
+            //        {
+            //            List<ITECObject> path = new List<ITECObject>();
+            //            path.Add(parent);
+            //            path.AddRange(childPath);
+            //            return path;
+            //        }
+            //    }
+            //}
+            //return null;
+            
         }
+
+        private static void getObjectPath(IRelatable parent, ITECObject descendant, List<ITECObject> path)
+        {
+            var children = parent.GetDirectChildren();
+
+            if (children.Contains(descendant))
+            {
+                path.Add(descendant);
+                path.Add(parent);
+            }
+            else
+            {
+                foreach (var child in children.OfType<IRelatable>())
+                {
+                    int before = path.Count;
+                    getObjectPath(child, descendant, path);
+                    if (path.Count > before)
+                    {
+                        path.Add(parent);
+                        break;
+                    }
+                }
+            }
+        }
+        
     }
 
-    public class SaveableMap
+    public class RelatableMap
     {
         public List<ITECObject> Objects;
         public List<string> PropertyNames;
         Dictionary<string, List<ITECObject>> nameDictionary;
 
-        public SaveableMap()
+        public RelatableMap()
         {
             Objects = new List<ITECObject>();
             PropertyNames = new List<string>();
@@ -155,7 +169,7 @@ namespace EstimatingLibrary.Interfaces
         {
             PropertyNames.AddRange(names);
         }
-        public void AddRange(SaveableMap map)
+        public void AddRange(RelatableMap map)
         {
             foreach(KeyValuePair<string, List<ITECObject>> pair in map.nameDictionary)
             {
@@ -195,7 +209,6 @@ namespace EstimatingLibrary.Interfaces
             }
             return outList;
         }
-
         private void addToDictionary(string name, ITECObject item)
         {
             if (!nameDictionary.ContainsKey(name))

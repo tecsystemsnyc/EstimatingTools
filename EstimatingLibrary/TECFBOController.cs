@@ -160,5 +160,14 @@ namespace EstimatingLibrary
             TypicalableUtilities.MakeChildrenTypical(this);
         }
         #endregion
+
+        #region IRelatable
+        protected override RelatableMap propertyObjects()
+        {
+            var map = base.propertyObjects();
+            map.AddRange(this.Points, "Points");
+            return map;
+        }
+        #endregion
     }
 }

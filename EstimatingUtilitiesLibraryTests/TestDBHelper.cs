@@ -83,6 +83,8 @@ namespace EstimatingUtilitiesLibraryTests
             addToIOProtocolTable();
             addToConnectionProtocolTable();
             addToHardwiredConnectionConnectionTypeTable();
+            addToBidControllerTable();
+            addToBidPanelTable();
 
             addToTemplatesSystemTable();
             addToTemplatesEquipmentTable();
@@ -412,14 +414,12 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("ebdbcc85-10f4-46b3-99e7-d896679f874a");
             values.Add("Typical System");
             values.Add("Typical System Description");
-            values.Add("1");
             addDataToTable(new SystemTable(), values);
 
             values = new List<string>();
             values.Add("ba2e71d4-a2b9-471a-9229-9fbad7432bf7");
             values.Add("Instance System");
             values.Add("Instance System Description");
-            values.Add("0");
             addDataToTable(new SystemTable(), values);
         }
         private static void addToEquipmentTable()
@@ -476,6 +476,7 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("Test Device Description");
             values.Add("123.45");
             values.Add("543.21");
+            values.Add("0");
             addDataToTable(new DeviceTable(), values);
         }
         private static void addToPointTable()
@@ -709,6 +710,7 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("Test Panel Type Description");
             values.Add("1324");
             values.Add("4231");
+            values.Add("0");
             addDataToTable(new PanelTypeTable(), values);
         }
         private static void addToPanelTable()
@@ -740,6 +742,7 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("Test IO Module Description");
             values.Add("2233");
             values.Add("3322");
+            values.Add("0");
             addDataToTable(new IOModuleTable(), values);
 
         }
@@ -780,6 +783,7 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("142");
             values.Add("12");
             values.Add("DDC");
+            values.Add("0");
             addDataToTable(new ControllerTypeTable(), values);
         }
         private static void addToInternalNoteTable()
@@ -1806,6 +1810,40 @@ namespace EstimatingUtilitiesLibraryTests
                 addDataToTable(new HardwiredConnectionConnectionTypeTable(), values);
             }
         }
+        private static void addToBidControllerTable()
+        {
+            List<string> values = new List<string>();
+            values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
+            values.Add("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
+            values.Add("0");
+            addDataToTable(new BidControllerTable(), values);
+
+            values = new List<string>();
+            values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
+            values.Add("973e6100-31f7-40b0-bfe7-9d64630c1c56");
+            values.Add("1");
+            addDataToTable(new BidControllerTable(), values);
+
+            values = new List<string>();
+            values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
+            values.Add("bf17527a-18ba-4765-a01e-8ab8de5664a3");
+            values.Add("2");
+            addDataToTable(new BidControllerTable(), values);
+
+            values = new List<string>();
+            values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
+            values.Add("7b6825df-57da-458a-a859-a9459c15907b");
+            values.Add("3");
+            addDataToTable(new BidControllerTable(), values);
+        }
+        private static void addToBidPanelTable()
+        {
+            List<string> values = new List<string>();
+            values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
+            values.Add("a8cdd31c-e690-4eaa-81ea-602c72904391");
+            values.Add("0");
+            addDataToTable(new BidPanelTable(), values);
+        }
 
         private static void addToTemplatesSystemTable()
         {
@@ -1925,7 +1963,6 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("e096ffb5-82f3-41c2-b767-c73b22c6875b");
             values.Add("System With Templated Equipment");
             values.Add("");
-            values.Add("0");
             addDataToTable(new SystemTable(), values);
 
             values = new List<string>();
@@ -1968,7 +2005,6 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("d562049c-ea9e-449c-8c1f-eaa7fbcb70d3");
             values.Add("System with templated equipment with templated subscope");
             values.Add("");
-            values.Add("0");
             addDataToTable(new SystemTable(), values);
 
             values = new List<string>();

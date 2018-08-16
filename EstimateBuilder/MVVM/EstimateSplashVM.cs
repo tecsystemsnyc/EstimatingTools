@@ -26,10 +26,10 @@ namespace EstimateBuilder.MVVM
 
         public string DefaultTemplatesPath
         {
-            get { return EBSettings.FirstRecentBid; }
+            get { return EBSettings.DefaultTemplatesPath; }
             set
             {
-                EBSettings.FirstRecentBid = value;
+                EBSettings.DefaultTemplatesPath = value;
                 RaisePropertyChanged("DefaultTemplatesPath");
                 EBSettings.Save();
             }
@@ -139,12 +139,12 @@ namespace EstimateBuilder.MVVM
 
         public override void DragOver(IDropInfo dropInfo)
         {
-            UIHelpers.FileDragOver(dropInfo, fileExtensions);
+            DragDropHelpers.FileDragOver(dropInfo, fileExtensions);
         }
 
         public override void Drop(IDropInfo dropInfo)
         {
-            string path = UIHelpers.FileDrop(dropInfo, fileExtensions);
+            string path = DragDropHelpers.FileDrop(dropInfo, fileExtensions);
             if(path != null)
             {
                 string ext = Path.GetExtension(path);

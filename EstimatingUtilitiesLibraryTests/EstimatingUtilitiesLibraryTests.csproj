@@ -70,7 +70,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BidStackTests.cs" />
     <Compile Include="EULTestHelper.cs" />
     <Compile Include="IntegratedSaveLoadTests.cs" />
     <Compile Include="LegacyDBDefs.cs" />

@@ -13,6 +13,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
     [TestClass]
     public class LegacyDBTests
     {
+        
         static TECBid actualBid;
 
         static Guid TEST_TAG_GUID = new Guid("09fd531f-94f9-48ee-8d16-00e80c1d58b9");
@@ -310,7 +311,6 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             Assert.AreEqual(expectedName, actualSystem.Name);
             Assert.AreEqual(expectedDescription, actualSystem.Description);
             Assert.AreEqual(expectedChildren, actualSystem.Instances.Count);
-            Assert.AreEqual(expectedProposeEquipment, actualSystem.IsSingleton);
 
             foreach (TECSystem instance in actualSystem.Instances)
             {
@@ -1618,6 +1618,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
 
             Assert.IsTrue(foundCost, "Rated Cost not loaded properly into scope.");
         }
+        
     }
 }
 

@@ -67,11 +67,11 @@ namespace EstimatingLibrary
             }
         }
 
-        public SaveableMap PropertyObjects
+        public RelatableMap PropertyObjects
         {
             get { return propertyObjects(); }
         }
-        public SaveableMap LinkedObjects
+        public RelatableMap LinkedObjects
         {
             get { return linkedObjects(); }
         }
@@ -79,9 +79,9 @@ namespace EstimatingLibrary
         public TECScheduleItem(Guid guid) : base(guid) { }
         public TECScheduleItem() : this(Guid.NewGuid()) { }
 
-        private SaveableMap propertyObjects()
+        private RelatableMap propertyObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             if (this.Scope != null)
             {
                 saveList.Add(this.Scope, "Scope");
@@ -92,9 +92,9 @@ namespace EstimatingLibrary
             }
             return saveList;
         }
-        private SaveableMap linkedObjects()
+        private RelatableMap linkedObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             if (this.Scope != null)
             {
                 saveList.Add(this.Scope, "Scope");

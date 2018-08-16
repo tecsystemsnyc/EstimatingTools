@@ -21,7 +21,6 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class ConnectionsVM : ViewModelBase, IDropTarget, NetworkConnectionDropTargetDelegate
     {
-        
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         private readonly IRelatable root;
@@ -177,6 +176,8 @@ namespace TECUserControlLibrary.ViewModels
         
         public InterlocksVM InterlocksVM { get; }
 
+        public RelayCommand<IControllerConnection> DeleteCommand { get; private set; }
+
         /// <summary>
         /// 
         /// </summary>
@@ -207,7 +208,7 @@ namespace TECUserControlLibrary.ViewModels
             this.rootConnectableGroup = new FilteredConnectablesGroup("root", this.ConnectableFilter);
             this.rootControllerGroup = new FilteredConnectablesGroup("root", this.ControllerFilter);
 
-            repopulateGroups(root, addConnectable);
+            repopulateGroups(null, root, addConnectable);
 
             SelectProtocolCommand = new RelayCommand(selectProtocolExecute, selectProtocolCanExecute);
             CancelProtocolSelectionCommand = new RelayCommand(cancelProtocolSelectionExecute);
@@ -218,6 +219,25 @@ namespace TECUserControlLibrary.ViewModels
             { if (SelectedControllerGroup?.PassesFilter == false) SelectedControllerGroup = null; };
             this.ConnectableFilter.FilterChanged += () => 
             { if (SelectedConnectableGroup?.PassesFilter == false) SelectedConnectableGroup = null; };
+
+            DeleteCommand = new RelayCommand<IControllerConnection>(deleteConnectionExecute, canDeleteConnection);
+        }
+
+        private void deleteConnectionExecute(IControllerConnection obj)
+        {
+            if(obj is TECHardwiredConnection hardConn)
+            {
+                SelectedController.Disconnect(hardConn.Child);
+            }
+            else if (obj is TECNetworkConnection netConn)
+            {
+                SelectedController.RemoveNetworkConnection(netConn);
+            }
+        }
+
+        private bool canDeleteConnection(IControllerConnection arg)
+        {
+            return arg != null && SelectedController != null;
         }
 
         private void cancelProtocolSelectionExecute()
@@ -235,21 +255,58 @@ namespace TECUserControlLibrary.ViewModels
             return SelectedProtocol != null && SelectedConnectable != null && SelectedController != null;
         }
         
-        private void repopulateGroups(ITECObject item, Action<FilteredConnectablesGroup, IConnectable> action)
+        private void repopulateGroups(ITECObject parent, ITECObject item, Action<FilteredConnectablesGroup, IConnectable, IEnumerable<ITECObject>> action, List<ITECObject> parentPath = null)
         {
+            parentPath = parentPath ?? new List<ITECObject>();
+            if(parent != null) { parentPath.Add(parent); }
             if(item is IConnectable connectable)
             {
-                action(this.rootConnectableGroup, connectable);
+                parentPath.Add(item);
+                var closestRoot = this.rootConnectableGroup;
+                var thisPath = new List<ITECObject>();
+                thisPath.Add(connectable);
+                var start = item;
+                var toRemove = new List<ITECObject>();
+                for (int x = parentPath.Count - 2; x >= 0; x--)
+                {
+                    if (!thisPath.Contains(parentPath[x]) && (parentPath[x] as IRelatable).GetDirectChildren().Contains(start))
+                    {
+                        thisPath.Insert(0, parentPath[x]);
+                        start = parentPath[x];
+                        if (this.rootConnectableGroup.GetGroup(parentPath[x] as ITECScope) != null && closestRoot == this.rootConnectableGroup)
+                        {
+                            closestRoot = this.rootConnectableGroup.GetGroup(parentPath[x] as ITECScope);
+                        }
+                    }
+                }
+                action(closestRoot, connectable, thisPath);
                 if (connectable is TECController)
                 {
-                    action(this.rootControllerGroup, connectable);
+                    closestRoot = this.rootControllerGroup;
+                    thisPath = new List<ITECObject>();
+                    thisPath.Add(connectable);
+                    start = item;
+                    toRemove = new List<ITECObject>();
+                    for (int x = parentPath.Count - 2; x >= 0; x--)
+                    {
+                        if (!thisPath.Contains(parentPath[x]) && (parentPath[x] as IRelatable).GetDirectChildren().Contains(start))
+                        {
+                            thisPath.Insert(0, parentPath[x]);
+                            start = parentPath[x];
+                            if (this.rootControllerGroup.GetGroup(parentPath[x] as ITECScope) != null && closestRoot == this.rootControllerGroup)
+                            {
+                                closestRoot = this.rootControllerGroup.GetGroup(parentPath[x] as ITECScope);
+                            }
+                        }
+                    }
+                    action(closestRoot, connectable, thisPath);
                 }
             }
             else if (item is IRelatable relatable)
             {
                 foreach (ITECObject child in relatable.GetDirectChildren().Where(filterPredicate))
                 {
-                    repopulateGroups(child, action);
+                    repopulateGroups(item, child, action, parentPath);
                 }
             }
         }
@@ -291,27 +348,33 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (obj.Change == Change.Add)
                 {
-                    repopulateGroups(tecObj, addConnectable);
+                    repopulateGroups(obj.Sender, tecObj, addConnectable);
                 }
                 else if (obj.Change == Change.Remove)
                 {
-                    repopulateGroups(tecObj, removeConnectable);
+                    repopulateGroups(obj.Sender, tecObj, removeConnectable);
                 }
             }
         }
         
-        private void addConnectable(FilteredConnectablesGroup rootGroup, IConnectable connectable)
+        private void addConnectable(FilteredConnectablesGroup rootGroup, IConnectable connectable, IEnumerable<ITECObject> parentPath)
         {
             if (!filterPredicate(connectable)) return;
-            bool isDescendant = root.IsDirectDescendant(connectable);
-            if (!root.IsDirectDescendant(connectable))
+            IRelatable rootScope = rootGroup.Scope as IRelatable ?? this.root;
+            List<ITECObject> path = new List<ITECObject>(parentPath);
+            if (rootScope != parentPath.First())
+            {
+                path = rootScope.GetObjectPath(parentPath.First());
+                path.Remove(parentPath.First());
+                path.AddRange(parentPath);
+            }
+
+            if (path.Count == 0)
             {
                 logger.Error("New connectable doesn't exist in root object.");
                 return;
             }
-
-            List<ITECObject> path = this.root.GetObjectPath(connectable);
-
+            
             FilteredConnectablesGroup lastGroup = rootGroup;
             int lastIndex = 0;
 
@@ -349,7 +412,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-        private void removeConnectable(FilteredConnectablesGroup rootGroup, IConnectable connectable)
+        private void removeConnectable(FilteredConnectablesGroup rootGroup, IConnectable connectable, IEnumerable<ITECObject> parentPath)
         {
             if (!filterPredicate(connectable)) return;
             List<FilteredConnectablesGroup> path = rootGroup.GetPath(connectable);
@@ -387,7 +450,7 @@ namespace TECUserControlLibrary.ViewModels
                 connectables = ConnectionHelper.GetConnectables(group.Scope, filterPredicate);
                 
             }
-            else if (dropInfo.Data is IEnumerable dropList && UIHelpers.GetItemType(dropList) == typeof(FilteredConnectablesGroup))
+            else if (dropInfo.Data is IEnumerable dropList && DragDropHelpers.GetItemType(dropList) == typeof(FilteredConnectablesGroup))
             {
                 foreach(FilteredConnectablesGroup item in dropList)
                 {
@@ -396,7 +459,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             if (ConnectionHelper.CanConnectToController(connectables, SelectedController))
             {
-                UIHelpers.SetDragAdorners(dropInfo);
+                DragDropHelpers.SetDragAdorners(dropInfo);
             }
         }
         public void Drop(IDropInfo dropInfo)
@@ -424,7 +487,7 @@ namespace TECUserControlLibrary.ViewModels
                 List<IConnectable> connectables = new List<IConnectable>();
                 if (dropInfo.Data is IList dropList)
                 {
-                    if (UIHelpers.GetItemType(dropList) == typeof(FilteredConnectablesGroup))
+                    if (DragDropHelpers.GetItemType(dropList) == typeof(FilteredConnectablesGroup))
                     {
                         foreach (FilteredConnectablesGroup item in dropList)
                         {
@@ -442,7 +505,7 @@ namespace TECUserControlLibrary.ViewModels
                     return;
                 }
 
-                var connections = ConnectionHelper.ConnectToController(connectables, SelectedController);
+                var connections = ConnectionHelper.ConnectToController(connectables.Where(y => y != SelectedController), SelectedController);
                 foreach (IControllerConnection connection in connections)
                 {
                     connection.Length += this.DefaultWireLength;
@@ -529,122 +592,4 @@ namespace TECUserControlLibrary.ViewModels
         }
     }
 
-    internal static class ConnectionHelper
-    {
-        internal static bool CanConnectToController(IEnumerable<IConnectable> items, TECController controller)
-        {
-
-            var connectables = items
-                .Where(x => x.GetParentConnection() == null);
-            if(connectables.Count() == 0)
-            {
-                return false;
-            }
-
-            var availableIO = controller.AvailableIO + ExistingNetworkIO(controller);
-            foreach(var connectable in connectables.Where(x => x.AvailableProtocols.Count == 1))
-            {
-                var protocol = connectable.AvailableProtocols.First();
-
-                if (protocol is TECProtocol netProtocol)
-                {
-                    if (!availableIO.Contains(netProtocol))
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    if (!availableIO.Remove(connectable.HardwiredIO)) return false;
-                }
-            }
-
-            foreach(var connectable in connectables.Where(x => x.AvailableProtocols.Count > 1))
-            {
-                var canConnect = false;
-                foreach(var protocol in connectable.AvailableProtocols)
-                {
-                    if (protocol is TECProtocol networkProtocol)
-                    {
-                        if (availableIO.Contains(networkProtocol))
-                        {
-                            canConnect = true;
-                            break;
-                        }
-                    }
-                }
-                if(canConnect == false)
-                {
-                    if (!(connectable.AvailableProtocols.Any(x => x is TECHardwiredProtocol) && availableIO.Remove(connectable.HardwiredIO))) return false;
-                }
-            }
-            
-            return true;
-        }
-        
-        internal static List<IControllerConnection> ConnectToController(IEnumerable<IConnectable> items, TECController controller)
-        {
-            var connectables = items
-                .Where(x => x.GetParentConnection() == null);
-
-            var availableIO = controller.AvailableIO + ExistingNetworkIO(controller);
-            List<IControllerConnection> connections = new List<IControllerConnection>();
-
-            foreach (var connectable in connectables)
-            {
-                var protocols = connectable.AvailableProtocols;
-                if(protocols.Count == 1)
-                {
-                    connections.Add(controller.Connect(connectable, protocols.First(), true));
-                }
-                else
-                {
-                    var connected = false;
-                    foreach (var protocol in connectable.AvailableProtocols
-                        .Where(x => x is TECProtocol networkProtocol && availableIO.Contains(networkProtocol)))
-                    {
-                        connected = true;
-                        connections.Add(controller.Connect(connectable, protocol, true));
-                        break;
-                    }
-                    if (!connected && connectable.AvailableProtocols.Any(x => x is TECHardwiredProtocol)
-                            && availableIO.Contains(connectable.HardwiredIO))
-                    {
-                        connections.Add(controller.Connect(connectable, connectable.AvailableProtocols.First(x => x is TECHardwiredProtocol), true));
-                        
-                    }
-                    else
-                    {
-                        throw new Exception("Not able to connect connectable to controller");
-                    }
-                }
-            }
-            return connections;
-
-        }
-        
-        internal static List<IConnectable> GetConnectables(ITECObject parent, Func<ITECObject, bool> predicate)
-        {
-            List<IConnectable> outList = new List<IConnectable>();
-            if(parent is IConnectable connectable && predicate(parent))
-            {
-                outList.Add(connectable);
-            }
-            if(parent is IRelatable relatable)
-            {
-                relatable.GetDirectChildren().Where(predicate).ForEach(x => outList.AddRange(GetConnectables(x, predicate)));
-            }
-            return outList;
-        }
-
-        static IOCollection ExistingNetworkIO(TECController controller)
-        {
-            IOCollection existingNetwork = new IOCollection();
-            foreach(TECNetworkConnection connection in controller.ChildrenConnections.Where(x => x is TECNetworkConnection))
-            {
-                existingNetwork.Add(connection.NetworkProtocol);
-            }
-            return existingNetwork;
-        }
-    }
 }

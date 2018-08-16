@@ -33,9 +33,9 @@ namespace EstimatingLibrary
             { _location = scope.Location; }
         }
 
-        protected override SaveableMap propertyObjects()
+        protected override RelatableMap propertyObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(base.propertyObjects());
             if(this.Location != null)
             {
@@ -43,10 +43,10 @@ namespace EstimatingLibrary
             }
             return saveList;
         }
-        protected override SaveableMap linkedObjects()
+        protected override RelatableMap linkedObjects()
         {
-            SaveableMap saveList = new SaveableMap();
-            SaveableMap baseMap = base.linkedObjects();
+            RelatableMap saveList = new RelatableMap();
+            RelatableMap baseMap = base.linkedObjects();
             saveList.AddRange(baseMap);
             if (this.Location != null)
             {

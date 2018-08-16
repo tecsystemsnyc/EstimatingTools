@@ -15,7 +15,7 @@ namespace TECUserControlLibrary.ViewModels
     public class LaborVM : ViewModelBase
     {
         public TECBid Bid { get; }
-        public ScopeTemplates Templates { get { return Bid.Templates; } }
+        public TECScopeTemplates Templates { get { return Bid.Templates; } }
         public TECEstimator Estimate { get; }
         public ICommand ReloadCommand { get; private set; }
         public RelayCommand<TECParameters> SetParametersCommand { get; private set; }

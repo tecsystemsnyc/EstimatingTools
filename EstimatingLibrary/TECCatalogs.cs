@@ -42,7 +42,7 @@ namespace EstimatingLibrary
         {
             get { return propertyObjects(); }
         }
-        public SaveableMap LinkedObjects
+        public RelatableMap LinkedObjects
         {
             get { return linkedObjects(); }
         }
@@ -99,9 +99,9 @@ namespace EstimatingLibrary
                 }
             }
         }
-        private SaveableMap propertyObjects()
+        private RelatableMap propertyObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(this.IOModules, "IOModules");
             saveList.AddRange(this.Devices, "Devices");
             saveList.AddRange(this.Valves, "Valves");
@@ -115,9 +115,9 @@ namespace EstimatingLibrary
             saveList.AddRange(this.Protocols, "Protocols");
             return saveList;
         }
-        private SaveableMap linkedObjects()
+        private RelatableMap linkedObjects()
         {
-            SaveableMap relatedList = new SaveableMap();
+            RelatableMap relatedList = new RelatableMap();
             return relatedList;
         }
 
@@ -134,6 +134,12 @@ namespace EstimatingLibrary
             UnionizeScopeCollection(this._manufacturers, catalogToAdd.Manufacturers);
             UnionizeScopeCollection(this._tags, catalogToAdd.Tags);
             UnionizeScopeCollection(this._protocols, catalogToAdd.Protocols);
+           
+
+            void setQuote(TECHardware original, TECHardware newItem){
+                if (original.RequireQuote) newItem.RequireQuote = true;
+                if (original.QuotedPrice != -1) newItem.QuotedPrice = original.QuotedPrice;
+            }
         }
 
         public void Fill(TECCatalogs catalogToAdd)

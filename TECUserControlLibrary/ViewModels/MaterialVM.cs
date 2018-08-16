@@ -126,7 +126,7 @@ namespace TECUserControlLibrary.ViewModels
 
             public void DragOver(IDropInfo dropInfo)
             {
-                UIHelpers.StandardDragOver(dropInfo);
+                DragDropHelpers.StandardDragOver(dropInfo);
             }
 
             public void Drop(IDropInfo dropInfo)
@@ -138,7 +138,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else
                 {
-                    UIHelpers.StandardDrop(dropInfo, templates);
+                    DragDropHelpers.StandardDrop(dropInfo, templates);
                 }
             }
         }

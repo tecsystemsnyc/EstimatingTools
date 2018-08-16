@@ -182,9 +182,9 @@ namespace EstimatingLibrary
         #endregion
 
         #region IReltable
-        protected override SaveableMap propertyObjects()
+        protected override RelatableMap propertyObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(base.propertyObjects());
             List<TECObject> deviceList = new List<TECObject>();
             foreach (IEndDevice item in this.Devices)
@@ -197,9 +197,9 @@ namespace EstimatingLibrary
             saveList.AddRange(this.ScopeBranches, "ScopeBranches");
             return saveList;
         }
-        protected override SaveableMap linkedObjects()
+        protected override RelatableMap linkedObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(base.linkedObjects());
             List<TECObject> deviceList = new List<TECObject>();
             foreach (IEndDevice item in this.Devices)
@@ -254,7 +254,7 @@ namespace EstimatingLibrary
                 return this.Points.ToIOCollection();
             }
         }
-        
+
         bool IConnectable.CanSetParentConnection(IControllerConnection connection)
         {
             return ((IConnectable)this).AvailableProtocols.Contains(connection.Protocol);            
@@ -298,6 +298,10 @@ namespace EstimatingLibrary
             {
                 Interlocks.Add(interlock);
             }
+            else if (property == "ScopeBranches" && item is TECScopeBranch branch)
+            {
+                ScopeBranches.Add(branch);
+            }
             else
             {
                 this.AddChildForScopeProperty(property, item);
@@ -318,6 +322,10 @@ namespace EstimatingLibrary
             {
                 return Interlocks.Remove(interlock);
             }
+            else if (property == "ScopeBranches" && item is TECScopeBranch branch)
+            {
+               return ScopeBranches.Remove(branch);
+            }
             else
             {
                 return this.RemoveChildForScopeProperty(property, item);
@@ -337,6 +345,10 @@ namespace EstimatingLibrary
             else if (property == "Interlocks" && item is TECInterlockConnection interlock)
             {
                 return Interlocks.Contains(interlock);
+            }
+            else if (property == "ScopeBranches" && item is TECScopeBranch branch)
+            {
+                return ScopeBranches.Contains(branch);
             }
             else
             {

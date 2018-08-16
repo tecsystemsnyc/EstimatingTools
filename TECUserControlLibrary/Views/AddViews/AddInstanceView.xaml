@@ -26,7 +26,16 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" DataContext="{Binding ToAdd}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Border Style="{StaticResource HeaderBorder}" Grid.ColumnSpan="2">
+            <TextBlock Style="{StaticResource ListHeader}"
+                       Text="Add Instances"/>
+        </Border>
+        <Grid Grid.Column="0" DataContext="{Binding ToAdd}"
+              Grid.Row="1">
             <Grid.Resources>
                 <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=addInstanceView, Path=DataContext}"/>
             </Grid.Resources>
@@ -35,15 +44,12 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
-            <TextBlock Text="System: "/>
-            <TextBlock Text="{Binding Name}" Grid.Column="1"/>
-            <Grid Grid.Row="1" Grid.ColumnSpan="2">
+            <Grid Grid.Row="0" Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="25"/>
                     <RowDefinition Height="25"/>
@@ -104,9 +110,9 @@
                 
             </Grid>
             <TextBlock Text="Instances" Foreground="Black"
-                       Grid.Row="2" Grid.ColumnSpan="2"
+                       Grid.Row="1" Grid.ColumnSpan="2"
                        HorizontalAlignment="Center"/>
-            <DataGrid Grid.Row="3" Grid.ColumnSpan="2" Margin="2"
+            <DataGrid Grid.Row="2" Grid.ColumnSpan="2" Margin="2"
                       ItemsSource="{Binding ElementName=addInstanceView, Path=DataContext.Names}"
                       CanUserAddRows="True"
                       AutoGenerateColumns="False">
@@ -119,7 +125,7 @@
                                             DisplayMemberPath="Name"/>
                 </DataGrid.Columns>
             </DataGrid>
-            <Grid Grid.Row="4" Grid.ColumnSpan="2">
+            <Grid Grid.Row="3" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="30"/>
@@ -132,9 +138,9 @@
             </Grid>
            
         </Grid>
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1"
+              Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
@@ -142,11 +148,10 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Label Content="Review Properties" Grid.ColumnSpan="2"/>
-            <Border BorderThickness="0,0,0,1" BorderBrush="Black" Grid.ColumnSpan="2"/>
-            <views:PropertiesView Selected="{Binding ToAdd}" Grid.Row="1" Grid.ColumnSpan="2"
+            <views:PropertiesView Selected="{Binding ToAdd}" Grid.Row="0" Grid.ColumnSpan="2"
                                   DropHandler="{Binding PropertiesVM}"
-                                  ViewModel="{Binding PropertiesVM}"/>
+                                  ViewModel="{Binding PropertiesVM}"
+                                  />
             <Button Content="Cancel" x:Name="cancelButton" Click="cancelButton_Click" Grid.Row="2"/>
             <Button Content="Add" x:Name="doneButton" Click="doneButton_Click" Grid.Row="2"
                     Command="{Binding AddCommand}" Grid.Column="1"/>

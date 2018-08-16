@@ -228,7 +228,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void DragOver(IDropInfo dropInfo)
         {
-            UIHelpers.DragOver(dropInfo, dropCondition);
+            DragDropHelpers.DragOver(dropInfo, dropCondition);
             
             bool dropCondition(object sourceItem, Type sourceType, Type targetType)
             {
@@ -242,7 +242,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else
                 {
-                    return UIHelpers.StandardDropCondition(sourceItem, sourceType, targetType);
+                    return DragDropHelpers.StandardDropCondition(sourceItem, sourceType, targetType);
                 }
             }
             
@@ -251,7 +251,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             if(dropInfo.VisualTarget == dropInfo.DragInfo.VisualSource)
             {
-                UIHelpers.Drop(dropInfo, x => { return x; });
+                DragDropHelpers.Drop(dropInfo, x => { return x; });
             }
             else
             {
@@ -281,7 +281,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else if (dropped is IEndDevice)
                 {
-                    UIHelpers.StandardDrop(dropInfo, scopeManager);
+                    DragDropHelpers.StandardDrop(dropInfo, scopeManager);
                 }
                 else if (dropped is TECMisc || dropped is TECCost)
                 {
@@ -311,7 +311,7 @@ namespace TECUserControlLibrary.ViewModels
                 ControllersPanelsVM = new ControllersPanelsVM(value, scopeManager);
                 ValveVM = new ValveSelectionVM(value, scopeManager.Catalogs.Valves);
                 ConnectionsVM = new ConnectionsVM(value, new ChangeWatcher(value), catalogs, locations: (scopeManager as TECBid)?.Locations, filterPredicate: connectionFilter);
-                if(value is TECTypical typical)
+                if(value is TECTypical typical && typical.Instances.Count > 1)
                 {
                     UpdateInstanceConnectionsCommand = new RelayCommand(typical.UpdateInstanceConnections, typical.CanUpdateInstanceConnections);
                 }

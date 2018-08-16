@@ -66,11 +66,11 @@ namespace TestLibrary.MockClasses
 
         string ITECScope.Description { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        SaveableMap ITECScope.LinkedObjects => throw new NotImplementedException();
+        RelatableMap ITECScope.LinkedObjects => throw new NotImplementedException();
 
         string ITECScope.Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        SaveableMap ITECScope.PropertyObjects => throw new NotImplementedException();
+        RelatableMap ITECScope.PropertyObjects => throw new NotImplementedException();
 
         ObservableCollection<TECTag> ITECScope.Tags { get => throw new NotImplementedException(); }
 

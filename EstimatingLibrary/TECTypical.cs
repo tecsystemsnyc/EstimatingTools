@@ -24,7 +24,7 @@ namespace EstimatingLibrary
             TypicalInstanceDictionary.CollectionChanged += typicalInstanceDictionary_CollectionChanged;
 
             watcher = new TypicalWatcherFilter(new ChangeWatcher(this));
-            watcher.TypicalChanged += handleSystemChanged;
+            watcher.TypicalChanged += handleThisChanged;
         }
         
         public TECTypical() : this(Guid.NewGuid()) { }
@@ -109,17 +109,22 @@ namespace EstimatingLibrary
                 ProposalItems.Add(toAdd);
             }
             this.copyPropertiesFromLocated(system);
-            ModelLinkingHelper.LinkSystem(this, manager, guidDictionary);
+            ModelLinkingHelper.LinkSystem(this, guidDictionary);
         }
         #endregion
 
         #region Properties
         public ObservableCollection<TECSystem> Instances { get; } = new ObservableCollection<TECSystem>();
         public ObservableListDictionary<ITECObject> TypicalInstanceDictionary { get; } = new ObservableListDictionary<ITECObject>();
+
+        public bool IsSingleton
+        {
+            get { return this.Instances.Count == 1; }
+        }
         #endregion
 
         #region Methods
-        public TECSystem AddInstance(TECBid bid)
+        public TECSystem AddInstance()
         {
             Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
             var newSystem = new TECSystem();
@@ -154,7 +159,7 @@ namespace EstimatingLibrary
                 TypicalInstanceDictionary.AddItem(branch, toAdd);
                 newSystem.ScopeBranches.Add(toAdd);
             }
-            ModelLinkingHelper.LinkSystem(newSystem, bid, guidDictionary);
+            ModelLinkingHelper.LinkSystem(newSystem, guidDictionary);
             
             Instances.Add(newSystem);
 
@@ -221,7 +226,7 @@ namespace EstimatingLibrary
 
             return canExecute;
         }
-
+        
         public List<IControllerConnection> CreateTypicalAndInstanceConnections(TECController typicalController, TECSubScope typicalSubScope, IProtocol protocol)
         {
             if (!this.GetAllSubScope().Contains(typicalSubScope))
@@ -267,16 +272,16 @@ namespace EstimatingLibrary
         
         internal void RefreshRegistration()
         {
-            watcher.TypicalChanged -= handleSystemChanged;
+            watcher.TypicalChanged -= handleThisChanged;
             watcher = new TypicalWatcherFilter(new ChangeWatcher(this));
-            watcher.TypicalChanged += handleSystemChanged;
+            watcher.TypicalChanged += handleThisChanged;
         }
 
         public override object DragDropCopy(TECScopeManager scopeManager)
         {
             Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
             TECTypical outSystem = new TECTypical(this, guidDictionary);
-            ModelLinkingHelper.LinkSystem(outSystem, scopeManager, guidDictionary);
+            ModelLinkingHelper.LinkSystem(outSystem, guidDictionary);
             return outSystem;
         }
 
@@ -289,9 +294,9 @@ namespace EstimatingLibrary
             }
             return costs;
         }
-        protected override SaveableMap propertyObjects()
+        protected override RelatableMap propertyObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(base.propertyObjects());
             saveList.AddRange(this.Instances, "Instances");
             saveList.Add("TypicalInstances");
@@ -314,7 +319,7 @@ namespace EstimatingLibrary
         }
 
         #region Event Handlers
-        private void handleSystemChanged(TECChangedEventArgs args)
+        private void handleThisChanged(TECChangedEventArgs args)
         {
             if (Instances.Count > 0 && args.Value?.GetType() != typeof(TECSystem))
             {
@@ -326,18 +331,23 @@ namespace EstimatingLibrary
                 {
                     handleRemove(args);
                 }
-                else if (args.Sender is TECPoint point)
+                else if (args.Sender is TECPoint || args.Sender is TECMisc)
                 {
-                    handleValueChanged(point, args.PropertyName);
-                }
-                else if (args.Sender is TECMisc misc)
-                {
-                    handleValueChanged(misc, args.PropertyName);
+                    handleValueChanged(args.Sender, args.PropertyName);
                 }
                 else if (args.Sender is TECController controller)
                 {
-                    handleControllerChaned(controller, args.PropertyName);
+                    handleControllerChanged(controller, args.PropertyName);
                 }
+                if (Instances.Count == 1 && (args.Value is IControllerConnection || args.Sender is IControllerConnection))
+                {
+                    this.UpdateInstanceConnections();
+                }
+                else if (Instances.Count == 1)
+                {
+                    handleValueChanged(args.Sender, args.PropertyName);
+                }
+                
             }
         }
         
@@ -413,7 +423,7 @@ namespace EstimatingLibrary
         }
         protected override void scopeCollectionChanged(object sender,
             System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
-            //Is overridden so that TECTypical doesn't raise cost changed when an associated cost is added or removed.
+            //Overridden so that TECTypical doesn't raise cost changed when an associated cost is added or removed.
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
@@ -460,16 +470,27 @@ namespace EstimatingLibrary
         }
         private void handleValueChanged<T>(T item, string propertyName) where T: ITECObject
         {
-            PropertyInfo property = typeof(T).GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
-            if (property != null && property.CanWrite && TypicalInstanceDictionary.ContainsKey(item))
+            PropertyInfo property = item.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
+            if (property != null && property.CanWrite)
             {
-                foreach (T instance in TypicalInstanceDictionary.GetInstances(item))
+                if(TypicalInstanceDictionary.ContainsKey(item))
                 {
-                    property.SetValue(instance, property.GetValue(item), null);
+                    foreach (T instance in TypicalInstanceDictionary.GetInstances(item))
+                    {
+                        property.SetValue(instance, property.GetValue(item), null);
+                    }
                 }
+                else if (item as TECTypical == this)
+                {
+                    foreach (var instance in this.Instances)
+                    {
+                        property.SetValue(instance, property.GetValue(item), null);
+                    }
+                }
+                
             }
         }
-        private void handleControllerChaned(TECController controller, string propertyName)
+        private void handleControllerChanged(TECController controller, string propertyName)
         {
             if (propertyName == "Type" && controller is TECProvidedController provided)
             {
@@ -517,7 +538,6 @@ namespace EstimatingLibrary
 
             }
             
-            
         }
         private void handleRemove(TECChangedEventArgs args)
         {
@@ -558,5 +578,6 @@ namespace EstimatingLibrary
 
         #endregion
         #endregion
+        
     }
 }

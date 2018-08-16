@@ -540,7 +540,6 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Assert
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
-            Assert.AreEqual(expectedSystem.IsSingleton, actualSystem.IsSingleton);
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
         }
 
@@ -553,7 +552,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             TECTypical typical = bid.Systems[0];
 
-            TECSystem expectedSystem = typical.AddInstance(bid);
+            TECSystem expectedSystem = typical.AddInstance();
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -574,7 +573,6 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Assert
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
-            Assert.AreEqual(expectedSystem.IsSingleton, actualSystem.IsSingleton);
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
         }
 
@@ -588,7 +586,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECTypical typical = bid.Systems[0];
 
             typical.Equipment.Add(ModelCreation.TestEquipment(bid.Catalogs, rand));
-            TECSystem expectedSystem = typical.AddInstance(bid);
+            TECSystem expectedSystem = typical.AddInstance();
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -609,7 +607,6 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Assert
             Assert.AreEqual(expectedSystem.Name, actualSystem.Name);
-            Assert.AreEqual(expectedSystem.IsSingleton, actualSystem.IsSingleton);
             Assert.AreEqual(expectedSystem.Description, actualSystem.Description);
         }
 

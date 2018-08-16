@@ -25,7 +25,7 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
         
         public void DragOver(IDropInfo dropInfo)
         {
-            UIHelpers.StandardDragOver(dropInfo);
+            DragDropHelpers.StandardDragOver(dropInfo);
         }
         public void Drop(IDropInfo dropInfo)
         {
@@ -47,7 +47,7 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
                 }
             }
 
-            UIHelpers.StandardDrop(dropInfo, Templates, drop);
+            DragDropHelpers.StandardDrop(dropInfo, Templates, drop);
         }
     }
 }

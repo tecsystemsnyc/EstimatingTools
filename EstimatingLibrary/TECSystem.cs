@@ -12,7 +12,6 @@ namespace EstimatingLibrary
         #region Fields
         private ObservableCollection<TECController> _controllers = new ObservableCollection<TECController>();
 
-        private bool _isSingleton = false;
         #endregion
 
         #region Constructors
@@ -30,7 +29,8 @@ namespace EstimatingLibrary
         public TECSystem() : this(Guid.NewGuid()) { }
 
         public TECSystem(TECSystem source, TECScopeManager manager, Dictionary<Guid, Guid> guidDictionary = null,
-            ObservableListDictionary<ITECObject> characteristicReference = null, Tuple<TemplateSynchronizer<TECEquipment>, TemplateSynchronizer<TECSubScope>> synchronizers = null) : this()
+            ObservableListDictionary<ITECObject> characteristicReference = null,
+            Tuple<TemplateSynchronizer<TECEquipment>, TemplateSynchronizer<TECSubScope>> synchronizers = null) : this()
         {
             if (guidDictionary == null)
             { guidDictionary = new Dictionary<Guid, Guid>();  }
@@ -83,7 +83,7 @@ namespace EstimatingLibrary
                 ProposalItems.Add(toAdd);
             }
             this.copyPropertiesFromLocated(source);
-            ModelLinkingHelper.LinkSystem(this, manager, guidDictionary);
+            ModelLinkingHelper.LinkSystem(this, guidDictionary);
         }
         #endregion
 
@@ -101,17 +101,7 @@ namespace EstimatingLibrary
         public ObservableCollection<TECMisc> MiscCosts { get; } = new ObservableCollection<TECMisc>();
         public ObservableCollection<TECScopeBranch> ScopeBranches { get; } = new ObservableCollection<TECScopeBranch>();
         public ObservableCollection<TECProposalItem> ProposalItems { get; } = new ObservableCollection<TECProposalItem>();
-
-        public bool IsSingleton
-        {
-            get { return _isSingleton; }
-            set
-            {
-                var old = IsSingleton;
-                _isSingleton = value;
-                notifyTECChanged(Change.Edit, "IsSingleton", this, value, old);
-            }
-        }
+        
         public bool IsTypical
         {
             get; protected set;
@@ -145,13 +135,6 @@ namespace EstimatingLibrary
             notifyTECChanged(Change.Remove, "Controllers", this, controller);
             notifyCostChanged(-controller.CostBatch);
             return success;
-        }
-        public void SetControllers(IEnumerable<TECController> newControllers)
-        {
-            IEnumerable<TECController> oldControllers = Controllers;
-            if (this.IsTypical) { newControllers.ForEach((x => ((ITypicalable)x).MakeTypical())); }
-            _controllers = new ObservableCollection<TECController>(newControllers);
-            notifyTECChanged(Change.Edit, "Controllers", this, newControllers, oldControllers);
         }
 
         public virtual object DragDropCopy(TECScopeManager scopeManager)
@@ -280,9 +263,9 @@ namespace EstimatingLibrary
         #endregion
 
         #region IRelatable
-        protected override SaveableMap propertyObjects()
+        protected override RelatableMap propertyObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(base.propertyObjects());
             saveList.AddRange(this.Equipment, "Equipment");
             saveList.AddRange(this.Panels, "Panels");
@@ -321,6 +304,10 @@ namespace EstimatingLibrary
             else if (property == "ScopeBranch" && item is TECScopeBranch branch)
             {
                 ScopeBranches.Add(branch);
+            }
+            else if (property == "ProposalItems" && item is TECProposalItem propItem)
+            {
+                ProposalItems.Add(propItem);
             }
             else
             {
@@ -388,6 +375,31 @@ namespace EstimatingLibrary
         {
             this.IsTypical = true;
             TypicalableUtilities.MakeChildrenTypical(this);
+        }
+        #endregion
+
+        #region IDoRedoable
+        public override void AddForProperty(string propertyName, object item)
+        {
+            if(propertyName == "Controllers")
+            {
+                this.AddController(item as TECController);
+            }
+            else
+            {
+                base.AddForProperty(propertyName, item);
+            }
+        }
+        public override void RemoveForProperty(string propertyName, object item)
+        {
+            if (propertyName == "Controllers")
+            {
+                this.RemoveController(item as TECController);
+            }
+            else
+            {
+                base.RemoveForProperty(propertyName, item);
+            }
         }
         #endregion
     }

@@ -12,7 +12,8 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid x:Name="mainGrid"  DataContext="{Binding ElementName=connectionsView, Path=VM}">
+    <Grid x:Name="mainGrid" 
+          DataContext="{Binding ElementName=connectionsView, Path=VM}">
         <Grid.Resources>
             <ResourceDictionary>
                 <Style TargetType="TextBlock">
@@ -38,211 +39,231 @@
                 </Storyboard>
             </ResourceDictionary>
         </Grid.Resources>
-        <TabControl>
-            <TabItem Header="To Controllers">
-                <Grid Background="{StaticResource SectionBackgroundBrush}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition MinWidth="160" Width=".5*"/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition MinWidth="160" Width=".5*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <!--Parent Controllers Selection Grid-->
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <!--Header-->
-                        <Border Style="{StaticResource HeaderBorder}">
-                            <TextBlock Text="Controllers" Style="{StaticResource ListHeader}"/>
-                        </Border>
-                        <!--Controllers List-->
-                        <controls:FilteredConnectablesGroupControl ItemsSource="{Binding Controllers}"
-                                                               SelectedItem="{Binding SelectedControllerGroup}"
-                                                               IsDropTarget="False"
-                                                               IsDragSource="False"
-                                                               Grid.Row="1"/>
-                        <!--Filters Grid-->
-                        <Grid Grid.Row="2">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Text="Filters" Style="{StaticResource ListHeader}"/>
-                            <Border Style="{StaticResource HeaderBorder}"/>
-                            <controls:ConnectablesFilterControl Grid.Row="1"
-                                                            OmitConnected="{Binding ControllerFilter.OmitConnected, Mode=TwoWay}"
-                                                            Protocols="{Binding Catalogs.Protocols}"
-                                                            SelectedProtocol="{Binding ControllerFilter.FilterProtocol, Mode=TwoWay}"
-                                                            Locations="{Binding Locations}"
-                                                            SelectedLocation="{Binding ControllerFilter.FilterLocation, Mode=TwoWay}"/>
-                        </Grid>
-                    </Grid>
-
-                    <!--Controller Details-->
-                    <Grid Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition/>
-                            <RowDefinition Height="90"/>
-                        </Grid.RowDefinitions>
-                        <!--Controller Info-->
-                        <Grid>
-                            <TextBlock Text="{Binding SelectedController.Name, StringFormat=Selected Controller: {0}}"/>
-                        </Grid>
-                        <!--Connections List-->
-                        <Border Grid.Row="1" Style="{StaticResource ItemsAreaBorder}">
-                            <ListView ItemsSource="{Binding SelectedController.ChildrenConnections}" 
-                                  dd:DragDrop.IsDropTarget="True"
-                                  dd:DragDrop.DropHandler="{Binding ElementName=connectionsView, Path=VM}"
-                                  Background="Transparent" BorderBrush="Transparent"
-                                  SelectedItem="{Binding SelectedConnection}"
-                                  HorizontalContentAlignment="Stretch"
-                                  x:Name="connectionsList">
-                                <ListView.Resources>
-                                    <DataTemplate DataType="{x:Type models:TECHardwiredConnection}">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition/>
-                                                <ColumnDefinition Width="60"/>
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Text="{Binding Child.Name, StringFormat=To: {0}}"/>
-                                            <TextBlock Text="{Binding Length, StringFormat=Length: {0}}"
-                                                   HorizontalAlignment="Right"
-                                                   Grid.Column="1"/>
-                                        </Grid>
-                                    </DataTemplate>
-                                    <DataTemplate DataType="{x:Type models:TECNetworkConnection}">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition/>
-                                                <RowDefinition/>
-                                            </Grid.RowDefinitions>
-                                            <TextBlock Text="{Binding Protocol.Label, StringFormat=Protocol: {0}}"/>
-                                            <TextBlock Text="{Binding Length, StringFormat=Length: {0}}"
-                                                   HorizontalAlignment="Right"
-                                                   Grid.Column="1"/>
-                                            <Expander Grid.Row="1" Header="{Binding Children.Count, StringFormat=Children: {0}}">
-                                                <ListView ItemsSource="{Binding Children}"
-                                                      dd:DragDrop.DropHandler="{Binding ElementName=connectionsView, Path=VM.ConnectionDropHandler}">
-                                                    <ListView.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <Border Style="{StaticResource ListItemBorder}">
-                                                                <TextBlock Text="{Binding Name}"/>
-                                                            </Border>
-                                                        </DataTemplate>
-                                                    </ListView.ItemTemplate>
-                                                </ListView>
-                                            </Expander>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListView.Resources>
-                            </ListView>
-                        </Border>
-
-                        <!--Default Connection Properties-->
-                        <Grid Grid.Row="2">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="55"/>
-                                <ColumnDefinition Width="50"/>
-                                <ColumnDefinition Width="45"/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="0,0,1,1"
-                                Margin="5,15,5,15"
-                                Grid.RowSpan="4">
-                                <TextBlock Text="Defaults"/>
-                            </Border>
-                            <TextBlock Text="Wire" FontWeight="DemiBold"
-                                   Grid.Column="1"
-                                   Grid.RowSpan="2"/>
-                            <TextBlock Text="Length: " Grid.Column="2"/>
-                            <TextBox Text="{Binding DefaultWireLength}"
-                                 Grid.Column="3"/>
-                            <TextBlock Text="Plenum: " Grid.Column="2" Grid.Row="1"/>
-                            <CheckBox IsChecked="{Binding DefaultPlenum}"
-                                  Grid.Column="3"
-                                  Grid.Row="1"
-                                  Margin="2,0,0,0"/>
-
-                            <TextBlock Text="Conduit" FontWeight="DemiBold" Grid.Row="2"
-                                   Grid.Column="1"
-                                   Grid.RowSpan="2"/>
-                            <TextBlock Text="Length: " 
-                                   Grid.Column="2"
-                                   Grid.Row="2"/>
-                            <TextBox Text="{Binding DefaultConduitLength}"
-                                 Grid.Row="2"
-                                 Grid.Column="3"/>
-                            <TextBlock Text="Type: " Grid.Row="3" Grid.Column="2"/>
-                            <ComboBox ItemsSource="{Binding Catalogs.ConduitTypes}"
-                                  SelectedItem="{Binding DefaultConduitType}"
-                                  DisplayMemberPath="Name"
-                                  Grid.Column="3"
-                                  Grid.Row="3" Margin="2"/>
-
-                        </Grid>
-
-                        <!--Select label-->
-                        <TextBlock Text="Select a controller to make connections."
-                               Visibility="{Binding SelectedControllerGroup, Converter={utilities:NullToVisibilityConverter}}"
-                               Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    </Grid>
-
-                    <!--Connectable Grid-->
-                    <Grid Grid.Column="2">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <!--Header-->
-                        <Border Style="{StaticResource HeaderBorder}">
-                            <TextBlock Text="Connectables" Style="{StaticResource ListHeader}"/>
-                        </Border>
-                        <!--Connectables List-->
-                        <controls:FilteredConnectablesGroupControl ItemsSource="{Binding Connectables}"
-                                                               SelectedItem="{Binding SelectedConnectableGroup}"
-                                                               IsDropTarget="False"
-                                                               Grid.Row="1"/>
-                        <!--Filter-->
-                        <Grid Grid.Row="2">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Border Style="{StaticResource HeaderBorder}"/>
-                            <TextBlock Text="Filters" Style="{StaticResource ListHeader}"/>
-                            <controls:ConnectablesFilterControl Grid.Row="1"
-                                                            OmitConnected="{Binding ConnectableFilter.OmitConnected, Mode=TwoWay}"
-                                                            Protocols="{Binding Catalogs.Protocols}"
-                                                            SelectedProtocol="{Binding ConnectableFilter.FilterProtocol, Mode=TwoWay}"
-                                                            Locations="{Binding Locations}"
-                                                            SelectedLocation="{Binding ConnectableFilter.FilterLocation, Mode=TwoWay}"/>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Interlocks">
-                <local:InterlocksView VM="{Binding InterlocksVM}"/>
-            </TabItem>
-        </TabControl>
         
+        <Grid>
+            <TabControl>
+                <TabItem Header="To Controllers">
+                    <Grid Background="{StaticResource SectionBackgroundBrush}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition MinWidth="160" Width=".5*"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition MinWidth="160" Width=".5*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!--Parent Controllers Selection Grid-->
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <!--Header-->
+                            <Border Style="{StaticResource HeaderBorder}">
+                                <TextBlock Text="Controllers" Style="{StaticResource ListHeader}"/>
+                            </Border>
+                            <!--Controllers List-->
+                            <controls:FilteredConnectablesGroupControl ItemsSource="{Binding Controllers}"
+                                                                       SelectedItem="{Binding SelectedControllerGroup}"
+                                                                       IsDropTarget="False"
+                                                                       IsDragSource="False"
+                                                                       Grid.Row="1"/>
+                            <!--Filters Grid-->
+                            <Grid Grid.Row="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Filters" Style="{StaticResource ListHeader}"/>
+                                <Border Style="{StaticResource HeaderBorder}"/>
+                                <controls:ConnectablesFilterControl Grid.Row="1"
+                                                                    OmitConnected="{Binding ControllerFilter.OmitConnected, Mode=TwoWay}"
+                                                                    Protocols="{Binding Catalogs.Protocols}"
+                                                                    SelectedProtocol="{Binding ControllerFilter.FilterProtocol, Mode=TwoWay}"
+                                                                    Locations="{Binding Locations}"
+                                                                    SelectedLocation="{Binding ControllerFilter.FilterLocation, Mode=TwoWay}"/>
+                            </Grid>
+                        </Grid>
+
+                        <!--Controller Details-->
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="90"/>
+                            </Grid.RowDefinitions>
+                            <Grid.Resources>
+                                <utilities:BindingProxy x:Key="proxy" Data="{Binding ElementName=connectionsView, Path=VM}"/>
+                            </Grid.Resources>
+                            <!--Controller Info-->
+                            <Grid>
+                                <TextBlock Text="{Binding SelectedController.Name, StringFormat=Selected Controller: {0}}"/>
+                            </Grid>
+                            <!--Connections List-->
+                            <Border Grid.Row="1" Style="{StaticResource ItemsAreaBorder}">
+                                <ListView ItemsSource="{Binding SelectedController.ChildrenConnections}" 
+                                          dd:DragDrop.IsDropTarget="True"
+                                          dd:DragDrop.DropHandler="{Binding ElementName=connectionsView, Path=VM}"
+                                          Background="Transparent" BorderBrush="Transparent"
+                                          SelectedItem="{Binding SelectedConnection}"
+                                          HorizontalContentAlignment="Stretch"
+                                          x:Name="connectionsList">
+                                    <ListView.Resources>
+                                        <DataTemplate DataType="{x:Type models:TECHardwiredConnection}">
+                                            <Grid>
+                                                <Grid.ContextMenu>
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Delete" Command="{Binding Data.DeleteCommand, Source={StaticResource proxy}}"
+                                                                  CommandParameter="{Binding}"/>
+                                                    </ContextMenu>
+                                                </Grid.ContextMenu>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding Child.Name, StringFormat=To: {0}}"/>
+                                                <TextBlock Text="{Binding Length, StringFormat=Length: {0}}"
+                                                           HorizontalAlignment="Right"
+                                                           Grid.Column="1"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="{x:Type models:TECNetworkConnection}">
+                                            <Grid x:Name="networkConnectionGrid" DataContext="{Binding}">
+                                                <Grid.ContextMenu>
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Delete" Command="{Binding Data.DeleteCommand, Source={StaticResource proxy}}"
+                                                                  CommandParameter="{Binding}"/>
+                                                    </ContextMenu>
+                                                </Grid.ContextMenu>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Text="{Binding Protocol.Label, StringFormat=Protocol: {0}}"/>
+                                                <TextBlock Text="{Binding Length, StringFormat=Length: {0}}"
+                                                           HorizontalAlignment="Right"
+                                                           Grid.Column="1"/>
+                                                <Expander Grid.Row="1" Header="{Binding Children.Count, StringFormat=Children: {0}}"
+                                                          Expanded="Expander_Expanded">
+                                                    <ListView ItemsSource="{Binding Children}"
+                                                              dd:DragDrop.DropHandler="{Binding ElementName=connectionsView, Path=VM.ConnectionDropHandler}"
+                                                              dd:DragDrop.IsDropTarget="True">
+                                                        <ListView.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Border Style="{StaticResource ListItemBorder}">
+                                                                    <TextBlock Text="{Binding Name}"/>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </ListView.ItemTemplate>
+                                                    </ListView>
+                                                </Expander>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.Resources>
+                                </ListView>
+                            </Border>
+
+                            <!--Default Connection Properties-->
+                            <Grid Grid.Row="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="55"/>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="45"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="0,0,1,1"
+                                        Margin="5,15,5,15"
+                                        Grid.RowSpan="4">
+                                    <TextBlock Text="Defaults"/>
+                                </Border>
+                                <TextBlock Text="Wire" FontWeight="DemiBold"
+                                           Grid.Column="1"
+                                           Grid.RowSpan="2"/>
+                                <TextBlock Text="Length: " Grid.Column="2"/>
+                                <TextBox Text="{Binding DefaultWireLength}"
+                                         Grid.Column="3"/>
+                                <TextBlock Text="Plenum: " Grid.Column="2" Grid.Row="1"/>
+                                <CheckBox IsChecked="{Binding DefaultPlenum}"
+                                          Grid.Column="3"
+                                          Grid.Row="1"
+                                          Margin="2,0,0,0"/>
+
+                                <TextBlock Text="Conduit" FontWeight="DemiBold" Grid.Row="2"
+                                           Grid.Column="1"
+                                           Grid.RowSpan="2"/>
+                                <TextBlock Text="Length: " 
+                                           Grid.Column="2"
+                                           Grid.Row="2"/>
+                                <TextBox Text="{Binding DefaultConduitLength}"
+                                         Grid.Row="2"
+                                         Grid.Column="3"/>
+                                <TextBlock Text="Type: " Grid.Row="3" Grid.Column="2"/>
+                                <ComboBox ItemsSource="{Binding Catalogs.ConduitTypes}"
+                                          SelectedItem="{Binding DefaultConduitType}"
+                                          DisplayMemberPath="Name"
+                                          Grid.Column="3"
+                                          Grid.Row="3" Margin="2"/>
+
+                            </Grid>
+
+                            <!--Select label-->
+                            <TextBlock Text="Select a controller to make connections."
+                                       Visibility="{Binding SelectedControllerGroup, Converter={utilities:NullToVisibilityConverter}}"
+                                       Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Grid>
+
+                        <!--Connectable Grid-->
+                        <Grid Grid.Column="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <!--Header-->
+                            <Border Style="{StaticResource HeaderBorder}">
+                                <TextBlock Text="Connectables" Style="{StaticResource ListHeader}"/>
+                            </Border>
+                            <!--Connectables List-->
+                            <controls:FilteredConnectablesGroupControl ItemsSource="{Binding Connectables}"
+                                                                       SelectedItem="{Binding SelectedConnectableGroup}"
+                                                                       IsDropTarget="False"
+                                                                       Grid.Row="1"/>
+                            <!--Filter-->
+                            <Grid Grid.Row="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Border Style="{StaticResource HeaderBorder}"/>
+                                <TextBlock Text="Filters" Style="{StaticResource ListHeader}"/>
+                                <controls:ConnectablesFilterControl Grid.Row="1"
+                                                                    OmitConnected="{Binding ConnectableFilter.OmitConnected, Mode=TwoWay}"
+                                                                    Protocols="{Binding Catalogs.Protocols}"
+                                                                    SelectedProtocol="{Binding ConnectableFilter.FilterProtocol, Mode=TwoWay}"
+                                                                    Locations="{Binding Locations}"
+                                                                    SelectedLocation="{Binding ConnectableFilter.FilterLocation, Mode=TwoWay}"/>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Interlocks">
+                    <local:InterlocksView VM="{Binding InterlocksVM}"/>
+                </TabItem>
+            </TabControl>
+
+
+        </Grid>
         <!--Add Modal-->
-        <Grid Width="400"
-              Height="120">
+        <Grid Width="400" Height="120">
             <Grid.Resources>
                 <sys:Double x:Key="marginEdge">0.0</sys:Double>
             </Grid.Resources>
@@ -267,7 +288,7 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                        
+
                     <TextBlock Text="How would you like to connect?"/>
                     <ComboBox ItemsSource="{Binding ElementName=connectionsView,Path=VM.CompatibleProtocols}"
                               DisplayMemberPath="Label"
@@ -286,5 +307,7 @@
                 </Grid>
             </Border>
         </Grid>
+       
+        
     </Grid>
 </UserControl>

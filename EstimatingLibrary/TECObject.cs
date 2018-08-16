@@ -1,12 +1,13 @@
 ﻿using EstimatingLibrary.Interfaces;
 using System;
+using System.Collections;
 using System.ComponentModel;
 
 namespace EstimatingLibrary
 {
     public enum Change { Add, Remove, Edit }
 
-    public abstract class TECObject : INotifyPropertyChanged, INotifyTECChanged, ITECObject
+    public abstract class TECObject : INotifyPropertyChanged, INotifyTECChanged, ITECObject, IDoRedoable
     {
         #region Properties
         protected Guid _guid;
@@ -47,5 +48,31 @@ namespace EstimatingLibrary
         {
             _guid = guid;
         }
+
+        #region IDoRedoable
+
+        public virtual bool CanDo => true;
+
+        public virtual void AddForProperty(string propertyName, object item)
+        {
+            var property = this.GetType().GetProperty(propertyName);
+            var parentCollection = property.GetValue(this);
+            ((IList)parentCollection).Add(item);
+        }
+
+        public virtual void RemoveForProperty(string propertyName, object item)
+        {
+            var property = this.GetType().GetProperty(propertyName);
+            var parentCollection = property.GetValue(this);
+            ((IList)parentCollection).Remove(item);
+        }
+
+        public virtual void SetProperty(string propertyName, object value)
+        {
+            var property = this.GetType().GetProperty(propertyName);
+            property.SetValue(this, value);
+        }
+
+        #endregion
     }
 }

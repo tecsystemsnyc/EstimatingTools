@@ -139,13 +139,19 @@ namespace EstimatingUtilitiesLibrary.Database
                 List<TableBase> tables = DatabaseHelper.GetTables(sender, type);
                 foreach (TableBase table in tables)
                 {
-                    var fields = table.Fields;
-                    var data = DatabaseHelper.PrepareDataForEditObject(fields, sender, propertyName, value);
-                    var keyData = DatabaseHelper.PrimaryKeyData(table, sender);
-                    if (data != null)
+                    if (table.IsExtensionTable)
                     {
-                        outStack.Add(new UpdateItem(Change.Edit, table.NameString, data, keyData));
+                        var data = DatabaseHelper.PrepareDataForObjectTable(table.Fields, sender);
+                        if(data != null) outStack.Add(new UpdateItem(Change.Add, table.NameString, data));
                     }
+                    else
+                    {
+                        var fields = table.Fields;
+                        var data = DatabaseHelper.PrepareDataForEditObject(fields, sender, propertyName, value);
+                        var keyData = DatabaseHelper.PrimaryKeyData(table, sender);
+                        if (data != null) outStack.Add(new UpdateItem(Change.Edit, table.NameString, data, keyData)); 
+                    }
+                    
                 }
                 return outStack;
             }

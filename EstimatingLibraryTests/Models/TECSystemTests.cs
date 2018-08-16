@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TestLibrary.ModelTestingUtilities;
 
 namespace Models
 {
@@ -24,7 +25,7 @@ namespace Models
             templates.Templates.SystemTemplates.Add(templateSys);
 
             TECEquipment templateEquip = new TECEquipment();
-            templateEquip.Name = "Template Equip"; 
+            templateEquip.Name = "Template Equip";
             templates.Templates.EquipmentTemplates.Add(templateEquip);
             templateSys.Equipment.Add(equipSync.NewItem(templateEquip));
 
@@ -44,7 +45,7 @@ namespace Models
             TECEquipment tempEquipCopy = sysCopy.Equipment[0];
 
             TECSubScope tempSSCopy = null, equipSSCopy = null;
-            foreach(TECSubScope ss in tempEquipCopy.SubScope)
+            foreach (TECSubScope ss in tempEquipCopy.SubScope)
             {
                 if (ss.Name == "Template SS")
                 {
@@ -69,6 +70,77 @@ namespace Models
             Assert.IsTrue(ssSync.Contains(equipSSCopy));
             Assert.IsTrue(ssSync.GetFullDictionary()[templateSS].Contains(ssSync.GetParent(tempSSCopy)));
             Assert.IsTrue(ssSync.GetFullDictionary()[equipSS].Contains(equipSSCopy));
+        }
+
+        [TestMethod()]
+        public void TECSystemTest()
+        {
+            Random rand = new Random(0);
+            TECBid bid = ModelCreation.TestBid(rand);
+            TECSystem originalSystem = ModelCreation.TestSystem(bid.Catalogs, rand);
+
+            var copy = new TECSystem(originalSystem, bid);
+            
+            //Not fully covered
+            Assert.AreEqual(originalSystem.Name, copy.Name);
+            Assert.IsTrue(originalSystem.CostBatch.CostsEqual(copy.CostBatch));
+        }
+        
+        [TestMethod()]
+        public void AddControllerTest()
+        {
+            bool raised = false;
+            TECSystem system = new TECSystem();
+            system.TECChanged += args =>
+            {
+                raised = true;
+            };
+
+            TECProvidedController controller = new TECProvidedController(new TECControllerType(new TECManufacturer()));
+            system.AddController(controller);
+
+            Assert.IsTrue(raised);
+            Assert.IsTrue(system.Controllers.Contains(controller));
+
+        }
+
+        [TestMethod()]
+        public void RemoveControllerTest()
+        {
+            bool raised = false;
+            TECSystem system = new TECSystem();
+            TECProvidedController controller = new TECProvidedController(new TECControllerType(new TECManufacturer()));
+            system.AddController(controller);
+
+            system.TECChanged += args =>
+            {
+                raised = true;
+            };
+
+            system.RemoveController(controller);
+
+            Assert.IsTrue(raised);
+            Assert.IsFalse(system.Controllers.Contains(controller));
+        }
+        
+        [TestMethod()]
+        public void DragDropCopyTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void GetAllSubScopeTest()
+        {
+            Random rand = new Random(0);
+            TECBid bid = ModelCreation.TestBid(rand);
+            TECSystem system = ModelCreation.TestSystem(bid.Catalogs, rand);
+
+            var allSubScope = system.GetAllSubScope();
+            foreach(var subScope in system.Equipment.SelectMany(e => e.SubScope))
+            {
+                Assert.IsTrue(allSubScope.Contains(subScope));
+            }
         }
     }
 }

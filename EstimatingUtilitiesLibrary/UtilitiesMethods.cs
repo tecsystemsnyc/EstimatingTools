@@ -298,9 +298,9 @@ namespace EstimatingUtilitiesLibrary
 
     internal static class HelperExtensions
     {
-        public static ObservableCollection<T> ValueOrNew<T>(this Dictionary<Guid, List<T>> dictionary, Guid id)
+        public static List<T> ValueOrNew<T>(this Dictionary<Guid, List<T>> dictionary, Guid id)
         {
-            return dictionary.ContainsKey(id) ? new ObservableCollection<T>(dictionary[id]) : new ObservableCollection<T>();
+            return dictionary.ContainsKey(id) ? new List<T>(dictionary[id]) : new List<T>();
         }
         public static T ValueOrNew<T>(this Dictionary<Guid, T> dictionary, Guid id) where T : new()
         {

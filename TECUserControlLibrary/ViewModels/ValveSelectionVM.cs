@@ -76,6 +76,18 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        private double _searchPressure = 0;
+
+        public double SearchPressure
+        {
+            get { return _searchPressure; }
+            set
+            {
+                _searchPressure = value;
+                RaisePropertyChanged("SearchPressure");
+            }
+        }
+
         public ICommand ReplaceValveCommand { get; private set; } 
         public ICommand SearchCatalogCommand { get; private set; }
         public ICommand ResetCatalogCommand { get; private set; }
@@ -111,7 +123,8 @@ namespace TECUserControlLibrary.ViewModels
                 bool hasStyle = SearchStyle == "" || valve.Style.ToUpper() == SearchStyle.ToUpper();
                 bool hasCv = SearchCv == "" || valve.Cv >= SearchCv.ToDouble(0);
                 bool hasSize = SearchSize == "" || valve.Size == SearchSize.ToDouble(0);
-                if(hasStyle && hasCv && hasSize)
+                bool hasPressure = SearchPressure == 0.0 || valve.PressureRating > SearchPressure;
+                if(hasStyle && hasCv && hasSize && hasPressure)
                 {
                     results.Add(valve);
                 }
@@ -121,7 +134,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private bool canSearchCatalog()
         {
-            return (SearchStyle != "" || SearchSize != "" || SearchCv != "");
+            return (SearchStyle != "" || SearchSize != "" || SearchCv != "" || SearchPressure != 0.0);
         }
 
         private void replaceValveExecute(TECValve obj)

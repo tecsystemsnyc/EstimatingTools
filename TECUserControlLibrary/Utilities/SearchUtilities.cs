@@ -27,7 +27,7 @@ namespace TECUserControlLibrary.Utilities
             var outCollection = new List<T>();
             foreach (T item in source)
             {
-                if (item is TECScope scope)
+                if (item is TECTagged scope)
                 {
                     string[] references = { scope.Name.ToUpper(), scope.Description.ToUpper() };
                     foreach (TECTag tag in scope.Tags)

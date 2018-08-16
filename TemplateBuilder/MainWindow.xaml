@@ -22,7 +22,8 @@
         Width="1024"
         WindowStartupLocation="CenterScreen"
         MinHeight="300" MinWidth="535"
-        x:Name="mainWindow">
+        x:Name="mainWindow"
+        TextOptions.TextFormattingMode="Display">
 
     <Window.Resources>
         <ResourceDictionary>

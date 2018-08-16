@@ -45,9 +45,8 @@ namespace EstimatingLibrary.Utilities
 
             return needsSave;
         }
-        public static void LinkSystem(TECSystem system, TECScopeManager scopeManager, Dictionary<Guid, Guid> guidDictionary)
+        public static void LinkSystem(TECSystem system, Dictionary<Guid, Guid> guidDictionary)
         {
-            linkSystemToCatalogs(system, scopeManager.Catalogs);
             linkSubScopeConnections(system.Controllers, system.GetAllSubScope(), guidDictionary);
             List<IConnectable> allChildren = new List<IConnectable>();
             allChildren.AddRange(system.Controllers);
@@ -209,7 +208,8 @@ namespace EstimatingLibrary.Utilities
                         }
                     }
                 }
-                panel.Controllers = new ObservableCollection<TECController>(controllersToLink);
+                panel.Controllers.ObservablyClear();
+                panel.Controllers.AddRange(controllersToLink);
             }
         }
         private static void linkNetworkConnections(IEnumerable<TECController> controllers, IEnumerable<IConnectable> children,
