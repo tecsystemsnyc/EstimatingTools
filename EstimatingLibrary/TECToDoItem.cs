@@ -9,6 +9,7 @@ namespace EstimatingLibrary
     public class TECToDoItem : TECObject
     {
         private string _description = "";
+        private string _url = "";
         private bool _isDone = false;
 
         public string Description
@@ -24,6 +25,19 @@ namespace EstimatingLibrary
                 }
             }
         }
+        public string URL
+        {
+            get { return _url; }
+            set
+            {
+                if (_url != value)
+                {
+                    var old = _url;
+                    _url = value;
+                    notifyCombinedChanged(Change.Edit, "URL", this, value, old);
+                }
+            }
+        }
         public bool IsDone
         {
             get { return _isDone; }
@@ -36,11 +50,12 @@ namespace EstimatingLibrary
                 }
             }
         }
-        
-        public TECToDoItem(Guid guid, string desc) : base(guid)
+
+        public TECToDoItem(string desc, string url) : base(Guid.NewGuid())
         {
             this.Description = desc;
+            this.URL = url;
         }
-        public TECToDoItem(string desc) : this(Guid.NewGuid(), desc) { }
+        public TECToDoItem(Guid guid) : base(guid) { }
     }
 }
