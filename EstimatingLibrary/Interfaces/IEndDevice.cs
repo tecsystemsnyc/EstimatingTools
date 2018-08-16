@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary.Interfaces
 {
-    public interface IEndDevice : ITECObject
+    public interface IEndDevice : ITECObject, ICatalog
     {
         Guid Guid { get; }
 

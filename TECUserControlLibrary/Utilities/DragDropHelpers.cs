@@ -15,25 +15,6 @@ namespace TECUserControlLibrary.Utilities
 {
     public static class DragDropHelpers
     {
-        public static Type GetItemType(IEnumerable enumerable)
-        {
-            if (enumerable == null) return null;
-            var args = enumerable.GetType().GetInterface("IEnumerable`1");
-            if (args == null)
-            {
-                return null;
-            }
-
-            if (args.GenericTypeArguments.Length > 0)
-            {
-                return args.GenericTypeArguments[0];
-            }
-            else
-            {
-                return null;
-            }
-        }
-
         /// <summary>
         /// Standard method for applying drop adorners if the sourceitem and targetcollection are compatible.
         /// </summary>

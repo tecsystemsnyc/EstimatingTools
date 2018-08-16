@@ -103,7 +103,7 @@ namespace EstimatingLibrary
         #endregion Methods
 
         #region ICatalogContainer
-        public virtual bool RemoveCatalogItem<T>(T item, T replacement) where T : class, ICatalog<T>
+        public virtual bool RemoveCatalogItem<T>(T item, T replacement) where T : class, ICatalog
         {
             if (item is TECTag tag)
             {

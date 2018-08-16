@@ -35,7 +35,19 @@ namespace EstimatingLibrary
         protected TECScopeManager(Guid guid): base(guid) { }
         protected TECScopeManager() : this(Guid.NewGuid()) { }
 
-        public 
+        public bool RemoveCatalogItem<T>(T item, T replacement) where T : class, ICatalog
+        {
+            bool removedItem = false;
+            foreach(var child in this.GetDirectChildren())
+            {
+                if (child is ICatalogContainer container)
+                {
+                    bool removed = container.RemoveCatalogItem(item, replacement);
+                    if (removed) removedItem = true;
+                }
+            }
+            return removedItem;
+        }
 
         #region IRelatable
 

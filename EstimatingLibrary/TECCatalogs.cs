@@ -207,13 +207,20 @@ namespace EstimatingLibrary
             };
         }
 
-        bool ICatalogContainer.RemoveCatalogItem<T>(T item, T replacement)
+        public bool RemoveCatalogItem<T>(T item, T replacement) where T : class, ICatalog
         {
             bool replacedItem = false;
             foreach(IList collection in getCatalogCollections())
             {
-
+                Type collectionType = collection.GetItemType();
+                if (item.GetType() == collectionType)
+                {
+                    IList<T> tCollection = (IList<T>)collection;
+                    bool replaced = CommonUtilities.OptionallyReplaceAll(item, tCollection, replacement);
+                    if (replaced) replacedItem = true;
+                }
             }
+            return replacedItem;
         }
     }
 }

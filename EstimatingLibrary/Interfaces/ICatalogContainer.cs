@@ -8,6 +8,6 @@ namespace EstimatingLibrary.Interfaces
 {
     public interface ICatalogContainer : ITECObject
     {
-        bool RemoveCatalogItem<T>(T item, T replacement) where T : class, ICatalog<T>;
+        bool RemoveCatalogItem<T>(T item, T replacement) where T : class, ICatalog;
     }
 }
