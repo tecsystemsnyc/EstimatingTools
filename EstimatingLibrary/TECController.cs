@@ -240,7 +240,7 @@ namespace EstimatingLibrary
         public void RemoveAllChildHardwiredConnections()
         {
             List<IConnectable> connectables = new List<IConnectable>();
-            foreach (TECHardwiredConnection connection in this.ChildrenConnections)
+            foreach (TECHardwiredConnection connection in this.ChildrenConnections.Where(connect => { return connect is TECHardwiredConnection; }))
             {
                 connectables.Add(connection.Child);
             }
