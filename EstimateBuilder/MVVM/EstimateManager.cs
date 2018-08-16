@@ -136,7 +136,7 @@ namespace EstimateBuilder.MVVM
             this.currentBidPath = bidFilePath;
             this.currentTemplatesPath = templatesFilePath;
 
-            updateRecentBidSettings(bidFilePath);
+            updateRecentFilesSettings(bidFilePath);
 
             buildTitleString(bidFilePath, "Estimate Builder");
 
@@ -461,7 +461,7 @@ namespace EstimateBuilder.MVVM
             return new TECBid();
         }
 
-        private void updateRecentBidSettings(string bidPath)
+        protected override void updateRecentFilesSettings(string bidPath)
         {
             if (bidPath != null && bidPath != "")
             {

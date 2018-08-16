@@ -167,6 +167,7 @@ namespace TECUserControlLibrary.BaseVMs
                     databaseManager = new DatabaseManager<T>(loadFilePath);
                     databaseManager.LoadComplete += handleLoadComplete;
                     databaseManager.AsyncLoad();
+                    updateRecentFilesSettings(loadFilePath);
                 }
                 else
                 {
@@ -237,6 +238,7 @@ namespace TECUserControlLibrary.BaseVMs
                 databaseManager.SaveComplete += handleSaveNewComplete;
                 databaseManager.AsyncNew(getWorkingScope());
                 buildTitleString(saveFilePath, appName);
+                updateRecentFilesSettings(saveFilePath);
             }
             else
             {
@@ -421,6 +423,8 @@ namespace TECUserControlLibrary.BaseVMs
 
         protected abstract T getWorkingScope();
         protected abstract T getNewWorkingScope();
+
+        protected abstract void updateRecentFilesSettings(string path);
 
         private void closingExecute(CancelEventArgs e, Window window)
         {
