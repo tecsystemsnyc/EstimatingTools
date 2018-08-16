@@ -134,7 +134,7 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
                 connectionType.PlenumLabor = 0;
             }
             
-            this.Templates.Catalogs.ConnectionTypes.Add(connectionType);
+            this.Templates.Catalogs.Add(connectionType);
 
             this.ConnectionTypeName = "";
             this.ConnectionTypeCost = 0;

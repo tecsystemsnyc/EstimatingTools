@@ -83,7 +83,7 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
             conduitType.Cost = ConduitTypeCost;
             conduitType.Labor = ConduitTypeLabor;
 
-            this.Templates.Catalogs.ConduitTypes.Add(conduitType);
+            this.Templates.Catalogs.Add(conduitType);
 
             this.ConduitTypeName = "";
             this.ConduitTypeCost = 0;
