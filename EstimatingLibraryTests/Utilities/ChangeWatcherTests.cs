@@ -758,7 +758,7 @@ namespace Utilities
             resetRaised();
 
             //Act
-            TECNetworkConnection netConnect = parentController.AddNetworkConnection(bid.Catalogs.Protocols[0]);
+            TECNetworkConnection netConnect = parentController.AddNetworkConnection(type.IO.First(x => x.Type == IOType.Protocol).Protocol);
 
             //Assert
             checkRaised(true, true, false, true);
@@ -786,7 +786,7 @@ namespace Utilities
             resetRaised();
 
             //Act
-            TECNetworkConnection netConnect = instanceController.AddNetworkConnection(bid.Catalogs.Protocols[0]);
+            TECNetworkConnection netConnect = instanceController.AddNetworkConnection(type.IO.First(x => x.Type == IOType.Protocol).Protocol);
 
             //Assert
             checkRaised(true, true, false, true);
@@ -802,7 +802,8 @@ namespace Utilities
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
 
-            TECController typicalController = new TECProvidedController(bid.Catalogs.ControllerTypes[0]);
+            TECControllerType type = bid.Catalogs.ControllerTypes[0];
+            TECController typicalController = new TECProvidedController(type);
             typical.AddController(typicalController);
 
             TECConnectionType connectionType = bid.Catalogs.ConnectionTypes[0];
@@ -810,7 +811,7 @@ namespace Utilities
             resetRaised();
 
             //Act
-            TECNetworkConnection netConnect = typicalController.AddNetworkConnection(bid.Catalogs.Protocols[0]);
+            TECNetworkConnection netConnect = typicalController.AddNetworkConnection(type.IO.First(x => x.Type == IOType.Protocol).Protocol);
 
             //Assert
             checkRaised(false, false, false, false);
