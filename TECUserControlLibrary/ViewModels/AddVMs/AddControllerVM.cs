@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary;
 using GalaSoft.MvvmLight.CommandWpf;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
@@ -8,6 +9,8 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
 {
     public class AddControllerVM : AddVM
     {
+        private Logger logger = LogManager.GetCurrentClassLogger();
+
         private TECSystem parent;
         private TECController toAdd;
         private int quantity;
@@ -54,7 +57,10 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 RaisePropertyChanged("SelectedType");
                 if (value != null && ToAdd is TECProvidedController provided)
                 {
-                    provided.Type = SelectedType;
+                    if (!provided.ChangeType(SelectedType))
+                    {
+                        logger.Error("Limbo controller ToAdd could not have its type set to the SelectedType.");
+                    }
                 }
             }
         }
