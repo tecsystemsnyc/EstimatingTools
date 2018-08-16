@@ -1844,12 +1844,12 @@ namespace Utilities
 
             TECProvidedController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0]);
             bid.AddController(controller);
-            bid.Catalogs.ControllerTypes.Add(edited);
+            bid.Catalogs.Add(edited);
 
             resetRaised();
 
             //Act
-            controller.Type = edited;
+            controller.ChangeType(edited);
 
             //Assert
             checkRaised(instanceChanged: true, costChanged: true, pointChanged: false, instanceConstituentChanged: false);
@@ -1886,7 +1886,7 @@ namespace Utilities
             //Arrange
             var original = bid.Catalogs.ConduitTypes[0];
             var edited = new TECConnectionType();
-            bid.Catalogs.ConduitTypes.Add(edited);
+            bid.Catalogs.Add(edited);
 
             TECController controller = new TECProvidedController(bid.Catalogs.ControllerTypes[0]);
             TECController child = new TECProvidedController(bid.Catalogs.ControllerTypes[0]);
@@ -1934,7 +1934,7 @@ namespace Utilities
 
             TECPanel panel= new TECPanel(bid.Catalogs.PanelTypes[0]);
             bid.Panels.Add(panel);
-            bid.Catalogs.PanelTypes.Add(edited);
+            bid.Catalogs.Add(edited);
 
             resetRaised();
 
@@ -2543,7 +2543,7 @@ namespace Utilities
             var original = device.Manufacturer;
             var edited = new TECManufacturer();
             edited.Label = "edit";
-            templates.Catalogs.Manufacturers.Add(edited);
+            templates.Catalogs.Add(edited);
             
             resetRaised();
 
@@ -2564,7 +2564,7 @@ namespace Utilities
             var original = valve.Actuator;
             var edited = new TECDevice(templates.Catalogs.Devices[0]);
             edited.Name = "edit";
-            templates.Catalogs.Devices.Add(edited);
+            templates.Catalogs.Add(edited);
 
             resetRaised();
 

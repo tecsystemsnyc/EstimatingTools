@@ -89,7 +89,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECSystem> actual = Template.Templates.SystemTemplates;
+            var actual = Template.Templates.SystemTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -113,7 +113,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECEquipment> actual = Template.Templates.EquipmentTemplates;
+            var actual = Template.Templates.EquipmentTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -137,7 +137,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECSubScope> actual = Template.Templates.SubScopeTemplates;
+            var actual = Template.Templates.SubScopeTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -159,12 +159,12 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.Catalogs.Devices.Add(edit);
+            Template.Catalogs.Add(edit);
             Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECDevice> actual = Template.Catalogs.Devices;
+            var actual = Template.Catalogs.Devices;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -183,12 +183,12 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.Catalogs.Manufacturers.Add(edit);
+            Template.Catalogs.Add(edit);
             Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECManufacturer> actual = Template.Catalogs.Manufacturers;
+            var actual = Template.Catalogs.Manufacturers;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -207,12 +207,12 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.Catalogs.AssociatedCosts.Add(edit);
+            Template.Catalogs.Add(edit);
             Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECAssociatedCost> actual = Template.Catalogs.AssociatedCosts;
+            var actual = Template.Catalogs.AssociatedCosts;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -231,12 +231,12 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.Catalogs.ConnectionTypes.Add(edit);
+            Template.Catalogs.Add(edit);
             Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECConnectionType> actual = Template.Catalogs.ConnectionTypes;
+            var actual = Template.Catalogs.ConnectionTypes;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -255,12 +255,12 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.Catalogs.ConduitTypes.Add(edit);
+            Template.Catalogs.Add(edit);
             Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECElectricalMaterial> actual = Template.Catalogs.ConduitTypes;
+            var actual = Template.Catalogs.ConduitTypes;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -279,12 +279,12 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.Catalogs.Tags.Add(edit);
+            Template.Catalogs.Add(edit);
             Assert.AreEqual(1, testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECTag> actual = Template.Catalogs.Tags;
+            var actual = Template.Catalogs.Tags;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -351,7 +351,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECEquipment> actual = system.Equipment;
+            var actual = system.Equipment;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -419,7 +419,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECSubScope> actual = equipment.SubScope;
+            var actual = equipment.SubScope;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -487,7 +487,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECPoint> actual = subScope.Points;
+            var actual = subScope.Points;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -511,7 +511,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Undo();
 
             //assert
-            ObservableCollection<IEndDevice> actual = subScope.Devices;
+            var actual = subScope.Devices;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -721,7 +721,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECPanel> actual = Template.Templates.PanelTemplates;
+            var actual = Template.Templates.PanelTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -769,7 +769,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECMisc> actual = Template.Templates.MiscCostTemplates;
+            var actual = Template.Templates.MiscCostTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -789,12 +789,12 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             int beforeCount = testStack.UndoCount();
-            Template.Catalogs.PanelTypes.Add(edit);
+            Template.Catalogs.Add(edit);
             Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECPanelType> actual = Template.Catalogs.PanelTypes;
+            var actual = Template.Catalogs.PanelTypes;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -814,12 +814,12 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
             int beforeCount = testStack.UndoCount();
-            Template.Catalogs.IOModules.Add(edit);
+            Template.Catalogs.Add(edit);
             Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
-            ObservableCollection<TECIOModule> actual = Template.Catalogs.IOModules;
+            var actual = Template.Catalogs.IOModules;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -847,7 +847,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECSystem> actual = Template.Templates.SystemTemplates;
+            var actual = Template.Templates.SystemTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -871,7 +871,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECEquipment> actual = Template.Templates.EquipmentTemplates;
+            var actual = Template.Templates.EquipmentTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -895,7 +895,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECSubScope> actual = Template.Templates.SubScopeTemplates;
+            var actual = Template.Templates.SubScopeTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -912,7 +912,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.Catalogs.Devices.Add(edit);
+            Template.Catalogs.Add(edit);
             var expected = new ObservableCollection<TECDevice>();
             foreach (TECDevice item in Template.Catalogs.Devices)
             {
@@ -922,7 +922,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECDevice> actual = Template.Catalogs.Devices;
+            var actual = Template.Catalogs.Devices;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -936,7 +936,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.Catalogs.Manufacturers.Add(edit);
+            Template.Catalogs.Add(edit);
             var expected = new ObservableCollection<TECManufacturer>();
             foreach (TECManufacturer item in Template.Catalogs.Manufacturers)
             {
@@ -946,7 +946,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECManufacturer> actual = Template.Catalogs.Manufacturers;
+            var actual = Template.Catalogs.Manufacturers;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -960,7 +960,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.Catalogs.Tags.Add(edit);
+            Template.Catalogs.Add(edit);
             var expected = new ObservableCollection<TECTag>();
             foreach (TECTag item in Template.Catalogs.Tags)
             {
@@ -970,7 +970,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECTag> actual = Template.Catalogs.Tags;
+            var actual = Template.Catalogs.Tags;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -1032,7 +1032,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECEquipment> actual = Template.Templates.SystemTemplates[0].Equipment;
+            var actual = Template.Templates.SystemTemplates[0].Equipment;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
 
         }
@@ -1094,7 +1094,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECSubScope> actual = Template.Templates.SystemTemplates[0].Equipment[0].SubScope;
+            var actual = Template.Templates.SystemTemplates[0].Equipment[0].SubScope;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -1157,7 +1157,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECPoint> actual = Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Points;
+            var actual = Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Points;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -1184,7 +1184,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Redo();
 
             //assert
-            ObservableCollection<IEndDevice> actual = Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Devices;
+            var actual = Template.Templates.SystemTemplates[0].Equipment[0].SubScope[0].Devices;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -1344,7 +1344,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECPanel> actual = Template.Templates.PanelTemplates;
+            var actual = Template.Templates.PanelTemplates;
             Assert.AreEqual(expected.Count + 1, actual.Count, "Not Redone");
 
         }
@@ -1390,7 +1390,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECMisc> actual = Template.Templates.MiscCostTemplates;
+            var actual = Template.Templates.MiscCostTemplates;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -1404,7 +1404,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.Catalogs.PanelTypes.Add(edit);
+            Template.Catalogs.Add(edit);
             var expected = new ObservableCollection<TECPanelType>();
             foreach (TECPanelType item in Template.Catalogs.PanelTypes)
             {
@@ -1414,7 +1414,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECPanelType> actual = Template.Catalogs.PanelTypes;
+            var actual = Template.Catalogs.PanelTypes;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
@@ -1428,7 +1428,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Template); DoStacker testStack = new DoStacker(watcher);
-            Template.Catalogs.IOModules.Add(edit);
+            Template.Catalogs.Add(edit);
             var expected = new ObservableCollection<TECIOModule>();
             foreach (TECIOModule item in Template.Catalogs.IOModules)
             {
@@ -1438,7 +1438,7 @@ namespace EstimatingUtilitiesLibraryTests
             testStack.Redo();
 
             //assert
-            ObservableCollection<TECIOModule> actual = Template.Catalogs.IOModules;
+            var actual = Template.Catalogs.IOModules;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
 
         }
