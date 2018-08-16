@@ -1,4 +1,5 @@
-﻿using EstimatingLibrary.Utilities;
+﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECConnectionType : TECElectricalMaterial
+    public class TECConnectionType : TECElectricalMaterial, ICatalog<TECConnectionType>
     {
         private double _plenumCost;
         private double _plenumLabor;
@@ -74,6 +75,7 @@ namespace EstimatingLibrary
         public TECConnectionType(TECConnectionType typeSource) : base(typeSource)
         {
             PlenumCost = typeSource.PlenumCost;
+            PlenumLabor = typeSource.PlenumLabor;
         }
 
         public CostBatch GetCosts(double length, bool isPlenum)
@@ -84,7 +86,13 @@ namespace EstimatingLibrary
                 outCosts.Add(CostType.Electrical, (length * PlenumCost), (length * PlenumLabor));
             }
             return outCosts;
-        } 
+        }
 
+        #region ICatalog
+        TECConnectionType ICatalog<TECConnectionType>.CatalogCopy()
+        {
+            return new TECConnectionType(this);
+        }
+        #endregion
     }
 }
