@@ -607,73 +607,186 @@ namespace Utilities
         [TestMethod()]
         public void NewGroupTest()
         {
-            Assert.Fail();
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            var template = new TestObject();
+            synchronizer.NewGroup(template);
+
+            Assert.IsNotNull(synchronizer.GetFullDictionary()[template]);
+
         }
 
         [TestMethod()]
         public void RemoveGroupTest()
         {
-            Assert.Fail();
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            var template = new TestObject();
+            synchronizer.NewGroup(template);
+
+            synchronizer.RemoveGroup(template);
+
+            Assert.IsFalse(synchronizer.GetFullDictionary().ContainsKey(template));
         }
 
         [TestMethod()]
         public void NewItemTest1()
         {
-            Assert.Fail();
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            var template = new TestObject();
+            synchronizer.NewGroup(template);
+
+            var newItem = synchronizer.NewItem(template);
+
+            Assert.IsNotNull(newItem);
+            Assert.AreNotEqual(template, newItem);
         }
 
         [TestMethod()]
         public void RemoveItemTest()
         {
-            Assert.Fail();
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            var template = new TestObject();
+            synchronizer.NewGroup(template);
+
+            var newItem = synchronizer.NewItem(template);
+            synchronizer.RemoveItem(newItem);
+            
+            Assert.IsFalse(synchronizer.GetFullDictionary()[template].Contains(newItem));
         }
 
         [TestMethod()]
         public void RemoveItemTest1()
         {
-            Assert.Fail();
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            var template = new TestObject();
+            synchronizer.NewGroup(template);
+
+            var newItem = synchronizer.NewItem(template);
+            synchronizer.RemoveItem(template, newItem);
+
+            Assert.IsFalse(synchronizer.GetFullDictionary()[template].Contains(newItem));
         }
 
         [TestMethod()]
         public void LinkExistingTest1()
         {
-            Assert.Fail();
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            var template = new TestObject();
+            synchronizer.NewGroup(template);
+
+            var existing = new TestObject();
+            synchronizer.LinkExisting(template, existing);
+            
+            Assert.IsTrue(synchronizer.GetFullDictionary()[template].Contains(existing));
         }
 
         [TestMethod()]
         public void LinkExistingTest2()
         {
-            Assert.Fail();
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            var template = new TestObject();
+            synchronizer.NewGroup(template);
+
+            var existing1 = new TestObject();
+            var existing2 = new TestObject();
+            var existing = new List<TestObject> { existing1, existing2 };
+            synchronizer.LinkExisting(template, existing);
+
+            Assert.IsTrue(synchronizer.GetFullDictionary()[template].Contains(existing1));
+            Assert.IsTrue(synchronizer.GetFullDictionary()[template].Contains(existing2));
         }
 
         [TestMethod()]
         public void LinkNewTest()
         {
-            Assert.Fail();
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            var template = new TestObject();
+            synchronizer.NewGroup(template);
+
+            bool changed = false;
+
+            synchronizer.TECChanged += arg =>
+            {
+                changed = true;
+            };
+
+            var existing = new TestObject();
+            synchronizer.LinkNew(template, existing);
+
+            Assert.IsTrue(synchronizer.GetFullDictionary()[template].Contains(existing));
+            Assert.IsTrue(changed);
         }
 
         [TestMethod()]
         public void ContainsTest()
         {
-            Assert.Fail();
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            var template = new TestObject();
+            synchronizer.NewGroup(template);
+
+            var existing = new TestObject();
+            synchronizer.LinkExisting(template, existing);
+
+            Assert.IsTrue(synchronizer.Contains(existing));
+        }
+
+        [TestMethod()]
+        public void ContainsTest1()
+        {
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            var template = new TestObject();
+            synchronizer.NewGroup(template);
+
+            var newItem = synchronizer.NewItem(template);
+            synchronizer.RemoveItem(template, newItem);
+
+            Assert.IsFalse(synchronizer.Contains(newItem));
         }
 
         [TestMethod()]
         public void GetFullDictionaryTest()
         {
-            Assert.Fail();
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            var template = new TestObject();
+            synchronizer.NewGroup(template);
+
+            synchronizer.NewItem(template);
+            synchronizer.NewGroup(new TestObject());
+
+            Assert.IsTrue(synchronizer.GetFullDictionary()[template].Count == 1);
+            Assert.IsTrue(synchronizer.GetFullDictionary().Keys.Count == 2);
         }
 
         [TestMethod()]
         public void GetTemplateTest()
         {
-            Assert.Fail();
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            var template = new TestObject();
+            synchronizer.NewGroup(template);
+
+            var newItem = synchronizer.NewItem(template);
+
+            Assert.AreEqual(template, synchronizer.GetTemplate(newItem));
+            Assert.AreEqual(template, synchronizer.GetTemplate(template));
+
         }
 
         [TestMethod()]
         public void GetParentTest()
         {
-            Assert.Fail();
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            var template = new TestObject();
+            synchronizer.NewGroup(template);
+
+            var newItem = synchronizer.NewItem(template);
+
+            Assert.AreEqual(template, synchronizer.GetParent(newItem));
+            Assert.IsNull(synchronizer.GetParent(template));
+        }
+
+        private class TestObject : TECObject
+        {
+            public TestObject() : base(Guid.NewGuid()) { }
+
         }
     }
 }
