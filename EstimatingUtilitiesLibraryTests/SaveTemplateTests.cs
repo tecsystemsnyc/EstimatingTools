@@ -1296,7 +1296,7 @@ namespace EstimatingUtilitiesLibraryTests
             int oldNumTags = templates.Catalogs.Tags.Count;
             TECTag tagToRemove = templates.Catalogs.Tags[0];
 
-            templates.Catalogs.Add(tagToRemove);
+            templates.RemoveCatalogItem(tagToRemove, null);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -1721,11 +1721,12 @@ namespace EstimatingUtilitiesLibraryTests
         }
 
         [TestMethod]
-        public void Save_Templates_Remove_PanelType()
+        public void Save_Templates_Replace_PanelType()
         {
             //Act
-            TECPanelType typeToRemove = templates.Catalogs.PanelTypes[0];
-            templates.RemoveCatalogItem(typeToRemove, null);
+            TECPanelType typeToRemove = templates.Catalogs.PanelTypes.First();
+            TECPanelType newType = new TECPanelType(templates.Catalogs.Manufacturers.First());
+            templates.RemoveCatalogItem(typeToRemove, newType);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
@@ -1824,16 +1825,16 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Templates_Remove_IOModule()
         {
             //Act
-            TECIOModule costToRemove = templates.Catalogs.IOModules[0];
-            templates.Catalogs.Add(costToRemove);
+            TECIOModule modToRemove = templates.Catalogs.IOModules[0];
+            templates.RemoveCatalogItem(modToRemove, null);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             //Assert
-            foreach (TECIOModule cost in actualTemplates.Catalogs.IOModules)
+            foreach (TECIOModule mod in actualTemplates.Catalogs.IOModules)
             {
-                if (cost.Guid == costToRemove.Guid) Assert.Fail();
+                if (mod.Guid == modToRemove.Guid) Assert.Fail();
             }
 
             Assert.AreEqual(templates.Catalogs.IOModules.Count, actualTemplates.Catalogs.IOModules.Count);

@@ -199,6 +199,7 @@ namespace EstimatingLibrary
         }
         public TECNetworkConnection AddNetworkConnection(TECProtocol protocol)
         {
+            if (!CanAddNetworkConnection(protocol)) return null;
             TECNetworkConnection netConnect = new TECNetworkConnection(this, protocol);
             this.ChildrenConnections.Add(netConnect);
             return netConnect;

@@ -87,7 +87,7 @@ namespace EstimatingLibrary
             get
             {
                 List<IProtocol> connectionMethods = new List<IProtocol>(PossibleProtocols);
-                connectionMethods.Add(new TECHardwiredProtocol(HardwiredConnectionTypes));
+                if (HardwiredConnectionTypes.Count > 0) connectionMethods.Add(new TECHardwiredProtocol(HardwiredConnectionTypes));
                 return connectionMethods;
             }
         }
