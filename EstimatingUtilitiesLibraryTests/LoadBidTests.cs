@@ -4,6 +4,7 @@ using EstimatingUtilitiesLibraryTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace EstimatingUtilitiesLibraryTests
 {
@@ -1716,6 +1717,20 @@ namespace EstimatingUtilitiesLibraryTests
             Assert.AreEqual(expectedType, actualIO.Type, "Type not loaded");
             Assert.AreEqual(expectedLabor, actualIO.Quantity, "Quantity not loaded");
             //Assert.AreEqual(expectedModuleGuid, actualIO.IOModule.Guid, "IOModule not loaded");
+        }
+
+        [TestMethod]
+        public void Load_Bid_ToDoItem()
+        {
+            //Arrange
+            Guid expectedGuid = new Guid("133c14e1-f9de-4ad3-a970-8f0fc6b69879");
+
+            TECToDoItem actualItem = actualBid.ToDoList.First(x => x.Guid == expectedGuid);
+
+            //Assert
+            Assert.AreEqual("Test To Do", actualItem.Description, "Description not loaded");
+            Assert.AreEqual("https://test.com", actualItem.URL, "URL not loaded");
+            Assert.AreEqual(true, actualItem.IsDone, "IsDone not loaded");
         }
 
         //----------------------------------------Tests above have new values, below do not-------------------------------------------

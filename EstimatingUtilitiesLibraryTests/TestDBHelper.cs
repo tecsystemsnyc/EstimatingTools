@@ -45,6 +45,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToInternalNoteTable();
             addToProtocolTable();
             addToScopeTemplatesTable();
+            addToToDoItemTable();
 
             addToBidScopeBranchTable();
             addToBidMiscTable();
@@ -85,6 +86,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToHardwiredConnectionConnectionTypeTable();
             addToBidControllerTable();
             addToBidPanelTable();
+            addToBidToDoItemTable();
 
             addToTemplatesSystemTable();
             addToTemplatesEquipmentTable();
@@ -799,6 +801,16 @@ namespace EstimatingUtilitiesLibraryTests
             List<string> values = new List<string>();
             values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             addDataToTable(new ScopeTemplatesTable(), values);
+        }
+        private static void addToToDoItemTable()
+        {
+            List<string> values = new List<string>();
+            values.Add("133c14e1-f9de-4ad3-a970-8f0fc6b69879");
+            values.Add("Test To Do");
+            values.Add("https://test.com");
+            values.Add("1");
+            addDataToTable(new ToDoItemTable(), values);
+            
         }
         
         #endregion
@@ -1911,6 +1923,14 @@ namespace EstimatingUtilitiesLibraryTests
                 values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
                 addDataToTable(new ManagerTemplatesTable(), values);
             }
+        }
+        private static void addToBidToDoItemTable()
+        {
+            List<string> values = new List<string>();
+            values.Add("d8788062-92d2-4889-b9f2-02a7a28aff05");
+            values.Add("133c14e1-f9de-4ad3-a970-8f0fc6b69879");
+            values.Add("0");
+            addDataToTable(new BidToDoItemTable(), values);
         }
         #endregion
 

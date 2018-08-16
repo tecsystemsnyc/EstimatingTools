@@ -72,11 +72,27 @@ namespace EstimateBuilder.MVVM
                 logger.Debug("No debug window to set command to.");
             }
         }
+        public void SetToDoWindowCommand(Action execute, Func<bool> canExecute = null)
+        {
+            RelayCommand command = new RelayCommand(execute, forceNullToTrue(canExecute));
+            try
+            {
+                setCommand("To Do", command);
+            }
+            catch (Exception)
+            {
+                logger.Debug("No To Do to set command to.");
+            }
+        }
+
 
         private void setupMenu()
         {
             //File menu items
             addMenuItem("Refresh Bid", "Can't refresh", parentItemName: "File");
+
+            //Help
+            addMenuItem("To Do", parentItemName: "Help");
 
             //Export menu items
             addMenuItem("Proposal", parentItemName: "Export");

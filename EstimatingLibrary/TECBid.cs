@@ -142,6 +142,7 @@ namespace EstimatingLibrary
         public ObservableCollection<TECPanel> Panels { get; } = new ObservableCollection<TECPanel>();
         public ObservableCollection<TECInternalNote> InternalNotes { get; } = new ObservableCollection<TECInternalNote>();
         public ObservableCollection<TECDistributionContact> DistributionList { get; } = new ObservableCollection<TECDistributionContact>();
+        public ObservableCollection<TECToDoItem> ToDoList { get; } = new ObservableCollection<TECToDoItem>();
 
         public CostBatch CostBatch
         {
@@ -171,6 +172,7 @@ namespace EstimatingLibrary
             Panels.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Panels");
             InternalNotes.CollectionChanged += (sender, args) => collectionChanged(sender, args, "InternalNotes");
             DistributionList.CollectionChanged += (sender, args) => collectionChanged(sender, args, "DistributionList");
+            ToDoList.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ToDoList");
         }
 
         public TECBid() : this(Guid.NewGuid())
@@ -192,6 +194,10 @@ namespace EstimatingLibrary
                 var noteToAdd = new TECLabeled();
                 noteToAdd.Label = item;
                 Notes.Add(new TECLabeled(noteToAdd));
+            }
+            foreach(var item in Defaults.BidToDoList)
+            {
+                ToDoList.Add(new TECToDoItem(item.description, item.url));
             }
             _parameters.Markup = 20;
         }
@@ -361,6 +367,7 @@ namespace EstimatingLibrary
             saveList.AddRange(this.Locations, "Locations");
             saveList.AddRange(this.InternalNotes, "InternalNotes");
             saveList.AddRange(this.DistributionList, "DistributionList");
+            saveList.AddRange(this.ToDoList, "ToDoList");
             return saveList;
         }
 
