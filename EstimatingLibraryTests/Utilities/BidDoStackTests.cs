@@ -11,7 +11,7 @@ using System.Linq;
 namespace Utilities
 {
     [TestClass]
-    public class DoStackTests
+    public class BidDoStackTests
     {
         private Random rand;
 
