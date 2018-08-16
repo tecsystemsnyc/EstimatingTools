@@ -14,12 +14,13 @@ namespace EstimatingLibrary
         private readonly ConnectionWrapper connection;
         public bool IsTypical { get; private set; } = false;
         
-        public List<TECConnectionType> ConnectionTypes { get; }
+        public ObservableCollection<TECConnectionType> ConnectionTypes { get; }
         
         public TECInterlockConnection(Guid guid, IEnumerable<TECConnectionType> connectionTypes) : base(guid)
         {
             this.connection = new ConnectionWrapper(guid, new TECHardwiredProtocol(connectionTypes));
-            this.ConnectionTypes = new List<TECConnectionType>(connectionTypes);
+            this.ConnectionTypes = new ObservableCollection<TECConnectionType>(connectionTypes);
+            ConnectionTypes.CollectionChanged += connectionTypesCollectionChanged;
             subscribeToConnection();
         }
 
@@ -35,6 +36,10 @@ namespace EstimatingLibrary
             this.connection.CostChanged += notifyCostChanged;
             this.connection.TECChanged += (args) => notifyTECChanged(args.Change, args.PropertyName, args.Sender, args.Value, args.OldValue);
             this.connection.PropertyChanged += (sender, args) => raisePropertyChanged(args.PropertyName);
+        }
+        private void connectionTypesCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            CollectionChangedHandlers.CollectionChangedHandler(sender, e, "ConnectionTypes", this, notifyCombinedChanged, notifyCostChanged);
         }
 
         #region IConnection
