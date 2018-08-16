@@ -22,10 +22,25 @@ namespace TECUserControlLibrary.Utilities
         }
     }
 
+    public class LocatedSelector : InterfaceDataTemplateSelector<TECLocated>
+    {
+        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        {
+            if (item is TECTypical typ && !typ.IsSingleton)
+            {
+                return DefaultTemplate;
+            }
+            else
+            {
+                return base.SelectTemplate(item, container);
+            }
+        }
+    }
+
+
     public class ScopeSelector : InterfaceDataTemplateSelector<TECScope> { }
     public class CostSelector : InterfaceDataTemplateSelector<TECCost> { }
     public class HardwareSelector : InterfaceDataTemplateSelector<TECHardware> { }
-    public class LocatedSelector : InterfaceDataTemplateSelector<TECLocated> { }
     public class LabeledSelector : InterfaceDataTemplateSelector<TECLabeled> { }
     public class ControllerSelector : InterfaceDataTemplateSelector<TECProvidedController> { }
     public class PanelSelector : InterfaceDataTemplateSelector<TECPanel> { }

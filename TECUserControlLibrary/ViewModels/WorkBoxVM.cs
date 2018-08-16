@@ -1,5 +1,7 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Utilities;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
@@ -7,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using TECUserControlLibrary.Utilities;
 
 namespace TECUserControlLibrary.ViewModels
@@ -17,20 +20,28 @@ namespace TECUserControlLibrary.ViewModels
 
         public ObservableCollection<TECObject> BoxItems { get; }
 
+        public ICommand ClearCommand { get; private set; }
+
         public WorkBoxVM(TECScopeManager manager)
         {
             this.manager = manager;
             BoxItems = new ObservableCollection<TECObject>();
+            ClearCommand = new RelayCommand(clearExecute, canClear);
         }
 
-        public void Refresh(TECScopeManager manager)
+        private void clearExecute()
         {
-            this.manager = manager;
+            BoxItems.ObservablyClear();
+        }
+
+        private bool canClear()
+        {
+            return BoxItems.Count > 0;
         }
 
         void IDropTarget.DragOver(IDropInfo dropInfo)
         {
-            UIHelpers.StandardDragOver(dropInfo);
+            DragDropHelpers.StandardDragOver(dropInfo);
         }
 
         void IDropTarget.Drop(IDropInfo dropInfo)
@@ -41,7 +52,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else
             {
-                UIHelpers.StandardDrop(dropInfo, manager);
+                DragDropHelpers.StandardDrop(dropInfo, manager);
             }
         }
     }

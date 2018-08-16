@@ -72,22 +72,22 @@ namespace EstimatingLibrary
 
         #region IRelatable
 
-        public SaveableMap PropertyObjects
+        public RelatableMap PropertyObjects
         {
             get
             {
-                var map = new SaveableMap();
+                var map = new RelatableMap();
                 map.Add(DisplayScope, "DisplayScope");
                 map.AddRange(ContainingScope, "ContainingScope");
                 return map;
             }
         }
 
-        public SaveableMap LinkedObjects
+        public RelatableMap LinkedObjects
         {
             get
             {
-                var map = new SaveableMap();
+                var map = new RelatableMap();
                 map.Add(DisplayScope, "DisplayScope");
                 map.AddRange(ContainingScope, "ContainingScope");
                 return map;

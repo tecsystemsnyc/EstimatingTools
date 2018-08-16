@@ -32,20 +32,35 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Column="1"
+            <Border Style="{StaticResource HeaderBorder}" Grid.Column="1"
                     Margin="30,0,30,0">
-                <TextBlock Text="Typical"
-                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Text="Typical with Instances" Style="{StaticResource ListHeader}"/>
             </Border>
+            <Grid  Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="70"/>
+                </Grid.ColumnDefinitions>
+                <ComboBox ItemsSource="{Binding Singletons}"
+                      DisplayMemberPath="Name"
+                      x:Name="singletonCombobox"
+                      Grid.Column="0"
+                          Margin="2"/>
+                <Button Content="Instance..."
+                        Command="{Binding InstanceTypicalCommand}"
+                        CommandParameter="{Binding ElementName=singletonCombobox, Path=SelectedItem}"
+                        Grid.Column="2"
+                        Margin="2"/>
+            </Grid>
+            
             <listControls:TypicalListControl
                 Source="{Binding TypicalSystems}"
                 SelectedItem="{Binding SelectedTypical}"
-                 Grid.Row="1"/>
-            <Border BorderThickness="0,0,1,0" BorderBrush="DarkGray" Margin="0,30,0,30" Grid.Row="1">
-                
-            </Border>
+                 Grid.Row="2"/>
+            <Border BorderThickness="0,0,1,0" BorderBrush="DarkGray" Margin="0,30,0,30" Grid.Row="2"/>
         </Grid>
         <local:SystemHierarchyView
             ViewModel="{Binding SystemHierarchyVM}"

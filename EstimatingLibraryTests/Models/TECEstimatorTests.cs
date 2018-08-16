@@ -44,7 +44,7 @@ namespace Models
 
             parameters.DesiredConfidence = Confidence.Fifty;
         }
-            
+
         [TestMethod]
         public void Estimate_Refresh()
         {
@@ -98,7 +98,7 @@ namespace Models
 
             checkRefresh(bid, estimate);
         }
-        
+
         [TestMethod]
         public void Estimate_AddControllerToTypicalWithInstances()
         {
@@ -115,7 +115,7 @@ namespace Models
             var typical = new TECTypical();
             bid.Systems.Add(typical);
 
-            typical.AddInstance(bid);
+            typical.AddInstance();
 
             typical.AddController(controller);
 
@@ -141,7 +141,7 @@ namespace Models
             var typical = new TECTypical();
             bid.Systems.Add(typical);
 
-            typical.AddInstance(bid);
+            typical.AddInstance();
 
             typical.AddController(controller);
             typical.RemoveController(controller);
@@ -169,7 +169,7 @@ namespace Models
 
             typical.AddController(controller);
 
-            typical.AddInstance(bid);
+            typical.AddInstance();
 
             Assert.AreEqual(100, estimate.TECMaterialCost, "Material cost not added.");
             Assert.AreEqual(0, estimate.ElectricalMaterialCost);
@@ -195,7 +195,7 @@ namespace Models
 
             typical.AddController(controller);
 
-            typical.AddInstance(bid);
+            typical.AddInstance();
 
             typical.RemoveController(controller);
 
@@ -267,7 +267,7 @@ namespace Models
             var typical = new TECTypical();
             bid.Systems.Add(typical);
 
-            typical.AddInstance(bid);
+            typical.AddInstance();
 
             typical.Panels.Add(panel);
 
@@ -296,7 +296,7 @@ namespace Models
             var typical = new TECTypical();
             bid.Systems.Add(typical);
 
-            typical.AddInstance(bid);
+            typical.AddInstance();
 
             typical.Panels.Add(panel);
 
@@ -326,7 +326,7 @@ namespace Models
 
             typical.Panels.Add(panel);
 
-            typical.AddInstance(bid);
+            typical.AddInstance();
 
             Assert.AreEqual(50, estimate.TECMaterialCost, "Material cost not added.");
             Assert.AreEqual(7, estimate.TECLaborHours, "Labor hours not added.");
@@ -355,7 +355,7 @@ namespace Models
 
             typical.Panels.Add(panel);
 
-            typical.AddInstance(bid);
+            typical.AddInstance();
 
             typical.Panels.Remove(panel);
 
@@ -393,8 +393,8 @@ namespace Models
             var system = ModelCreation.TestTypical(bid.Catalogs, rand);
             bid.Systems.Add(system);
 
-            system.AddInstance(bid);
-            system.AddInstance(bid);
+            system.AddInstance();
+            system.AddInstance();
 
             bid.Systems.Remove(system);
 
@@ -419,16 +419,16 @@ namespace Models
             bid.Catalogs.Devices.Add(device);
             connectionType.Cost = 1;
             connectionType.Labor = 1;
-            
+
             var system = new TECTypical();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
             subScope.Devices.Add(device);
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
-            
+
             bid.Systems.Add(system);
-            system.AddInstance(bid);
+            system.AddInstance();
 
             Assert.AreEqual(10, estimate.TECMaterialCost, "TECMaterialCost Not Updating");
 
@@ -459,7 +459,7 @@ namespace Models
             system.Equipment.Add(equipment);
 
             bid.Systems.Add(system);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
 
             system.Instances.Remove(instance);
 
@@ -475,7 +475,7 @@ namespace Models
             var bid = new TECBid();
             bid.Parameters = parameters;
             var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
-            
+
             var system = new TECTypical();
             var tecMisc = new TECMisc(CostType.TEC);
             tecMisc.Cost = 11;
@@ -490,7 +490,7 @@ namespace Models
             system.MiscCosts.Add(electricalMisc);
 
             bid.Systems.Add(system);
-            system.AddInstance(bid);
+            system.AddInstance();
 
             Assert.AreEqual(11, estimate.TECMaterialCost, "Material cost not added");
             Assert.AreEqual(13, estimate.ElectricalMaterialCost, "Electrical Material cost not added");
@@ -521,7 +521,7 @@ namespace Models
             system.MiscCosts.Add(electricalMisc);
 
             bid.Systems.Add(system);
-            var instance = system.AddInstance(bid);
+            var instance = system.AddInstance();
 
             system.Instances.Remove(instance);
 
@@ -556,6 +556,8 @@ namespace Models
             conduitType.RatedCosts.Add(ratedCost);
 
             var protocol = new TECProtocol(new List<TECConnectionType> { connectionType });
+            controllerType.IO.Add(new TECIO(protocol));
+
 
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol> { protocol },
@@ -571,13 +573,13 @@ namespace Models
             var system = new TECTypical();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
-            
+
             var controller = new TECProvidedController(controllerType);
 
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             system.AddController(controller);
-            
+
             subScope.Devices.Add(device);
 
             var connection = controller.Connect(subScope, protocol);
@@ -587,8 +589,8 @@ namespace Models
 
             bid.Systems.Add(system);
 
-            system.AddInstance(bid);
-            system.AddInstance(bid);
+            system.AddInstance();
+            system.AddInstance();
 
             //For Both Conduit and Wire: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 20 = 60
             Assert.AreEqual(60, estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
@@ -621,6 +623,7 @@ namespace Models
             conduitType.RatedCosts.Add(ratedCost);
 
             var protocol = new TECProtocol(new List<TECConnectionType> { connectionType });
+            controllerType.IO.Add(new TECIO(protocol));
 
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol> { protocol },
@@ -652,7 +655,7 @@ namespace Models
 
             bid.Systems.Add(system);
 
-            var instance = system.AddInstance(bid);
+            var instance = system.AddInstance();
 
             system.Instances.Remove(instance);
 
@@ -691,7 +694,7 @@ namespace Models
             conduitType.Labor = 1;
             conduitType.RatedCosts.Add(ratedCost);
             conduitType.AssociatedCosts.Add(assCost);
-            
+
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol>(),
                 manufacturer);
@@ -706,7 +709,7 @@ namespace Models
             var system = new TECTypical();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
-            
+
             var controller = new TECProvidedController(controllerType);
 
             system.AddController(controller);
@@ -714,15 +717,15 @@ namespace Models
             equipment.SubScope.Add(subScope);
             subScope.Devices.Add(device);
             bid.Systems.Add(system);
-            
-            system.AddInstance(bid);
-            system.AddInstance(bid);
+
+            system.AddInstance();
+            system.AddInstance();
 
             var connection = controller.Connect(subScope, subScope.AvailableProtocols.First());
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
-            
+
             Assert.AreEqual(0, estimate.ElectricalLaborHours, "Electrical Labor Not Updating");
             Assert.AreEqual(0, estimate.ElectricalMaterialCost, "Electrical Material Not Updating");
 
@@ -778,6 +781,7 @@ namespace Models
             conduitType.AssociatedCosts.Add(assCost);
 
             var protocol = new TECProtocol(new List<TECConnectionType> { connectionType });
+            controllerType.IO.Add(new TECIO(protocol));
 
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol> { protocol },
@@ -802,8 +806,8 @@ namespace Models
             subScope.Devices.Add(device);
             bid.Systems.Add(system);
 
-            system.AddInstance(bid);
-            system.AddInstance(bid);
+            system.AddInstance();
+            system.AddInstance();
 
             var connection = controller.Connect(subScope, protocol);
             connection.Length = 10;
@@ -836,7 +840,7 @@ namespace Models
         {
             var bid = new TECBid();
             bid.Parameters = parameters;
-            
+
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
             var controllerType = new TECControllerType(manufacturer);
@@ -881,8 +885,8 @@ namespace Models
             subScope.Devices.Add(device);
             bid.Systems.Add(system);
 
-            system.AddInstance(bid);
-            system.AddInstance(bid);
+            system.AddInstance();
+            system.AddInstance();
 
             var connection = controller.Connect(subScope, subScope.AvailableProtocols.First());
             connection.Length = 10;
@@ -1011,7 +1015,7 @@ namespace Models
             conduitType.Cost = 1;
             conduitType.Labor = 1;
             conduitType.RatedCosts.Add(ratedCost);
-            
+
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol>(),
                 manufacturer);
@@ -1037,7 +1041,7 @@ namespace Models
             connection.Length = 10;
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
-            
+
             controller.Disconnect(subScope);
 
             //Assert
@@ -1115,7 +1119,7 @@ namespace Models
             var bid = new TECBid();
             bid.Parameters = parameters;
             var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
-            
+
             var tecMisc = new TECMisc(CostType.TEC);
             tecMisc.Cost = 1234;
             tecMisc.Labor = 4321;
@@ -1187,7 +1191,7 @@ namespace Models
 
             eMisc.Cost += 1;
             eMisc.Labor += 1;
-            
+
             Assert.AreEqual(1235, estimate.TECMaterialCost, "Material cost incorrect");
             Assert.AreEqual(5679, estimate.ElectricalMaterialCost, "Electrical Material cost not added");
             Assert.AreEqual(4322, estimate.TECLaborHours, "Labor hours not added");
@@ -1204,8 +1208,8 @@ namespace Models
             var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
             var system = new TECTypical();
             bid.Systems.Add(system);
-            system.AddInstance(bid);
-            system.AddInstance(bid);
+            system.AddInstance();
+            system.AddInstance();
 
             var tecMisc = new TECMisc(CostType.TEC);
             tecMisc.Cost = 1234;
@@ -1234,8 +1238,8 @@ namespace Models
             var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
             var system = new TECTypical();
             bid.Systems.Add(system);
-            system.AddInstance(bid);
-            system.AddInstance(bid);
+            system.AddInstance();
+            system.AddInstance();
 
             var tecMisc = new TECMisc(CostType.TEC);
             tecMisc.Cost = 1234;
@@ -1266,8 +1270,8 @@ namespace Models
             bid.Parameters = parameters;
             var system = new TECTypical();
             bid.Systems.Add(system);
-            system.AddInstance(bid);
-            system.AddInstance(bid);
+            system.AddInstance();
+            system.AddInstance();
 
             var tecMisc = new TECMisc(CostType.TEC);
             tecMisc.Cost = 1234;
@@ -1305,8 +1309,8 @@ namespace Models
             var estimate = new TECEstimator(bid, watcher);
             var system = new TECTypical();
             bid.Systems.Add(system);
-            system.AddInstance(bid);
-            system.AddInstance(bid);
+            system.AddInstance();
+            system.AddInstance();
 
             var tecCost = new TECAssociatedCost(CostType.TEC);
             tecCost.Cost = 1234;
@@ -1335,8 +1339,8 @@ namespace Models
             var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
             var system = new TECTypical();
             bid.Systems.Add(system);
-            system.AddInstance(bid);
-            system.AddInstance(bid);
+            system.AddInstance();
+            system.AddInstance();
 
             var tecCost = new TECAssociatedCost(CostType.TEC);
             tecCost.Cost = 1234;
@@ -1372,8 +1376,8 @@ namespace Models
             var equipment = new TECEquipment();
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
-            system.AddInstance(bid);
-            system.AddInstance(bid);
+            system.AddInstance();
+            system.AddInstance();
 
             var tecCost = new TECAssociatedCost(CostType.TEC);
             tecCost.Cost = 1234;
@@ -1406,8 +1410,8 @@ namespace Models
             var equipment = new TECEquipment();
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
-            system.AddInstance(bid);
-            system.AddInstance(bid);
+            system.AddInstance();
+            system.AddInstance();
 
             var tecCost = new TECAssociatedCost(CostType.TEC);
             tecCost.Cost = 1234;
@@ -1432,7 +1436,7 @@ namespace Models
 
             checkRefresh(bid, estimate);
         }
-        
+
         [TestMethod]
         public void Estimate_AddDeviceToSubScope()
         {
@@ -1446,20 +1450,20 @@ namespace Models
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
-            system.AddInstance(bid);
-            system.AddInstance(bid);
+            system.AddInstance();
+            system.AddInstance();
 
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
 
-            var device = new TECDevice(new List<TECConnectionType> { new TECConnectionType() }, 
+            var device = new TECDevice(new List<TECConnectionType> { new TECConnectionType() },
                 new List<TECProtocol>(),
                 manufacturer);
             device.Price = 100;
             bid.Catalogs.Devices.Add(device);
 
             subScope.Devices.Add(device);
-            
+
             Assert.AreEqual(200, estimate.TECMaterialCost, "Material cost not added");
 
             checkRefresh(bid, estimate);
@@ -1478,13 +1482,13 @@ namespace Models
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
-            system.AddInstance(bid);
-            system.AddInstance(bid);
+            system.AddInstance();
+            system.AddInstance();
 
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 1;
 
-            var device = new TECDevice(new List<TECConnectionType> { new TECConnectionType() }, 
+            var device = new TECDevice(new List<TECConnectionType> { new TECConnectionType() },
                 new List<TECProtocol>(),
                 manufacturer);
             device.Price = 100;
@@ -1512,13 +1516,13 @@ namespace Models
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
-            system.AddInstance(bid);
-            system.AddInstance(bid);
+            system.AddInstance();
+            system.AddInstance();
 
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 0.5;
 
-            var device = new TECDevice(new List<TECConnectionType> { new TECConnectionType() }, 
+            var device = new TECDevice(new List<TECConnectionType> { new TECConnectionType() },
                 new List<TECProtocol>(),
                 manufacturer);
             device.Price = 100;
@@ -1544,13 +1548,13 @@ namespace Models
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
-            system.AddInstance(bid);
-            system.AddInstance(bid);
+            system.AddInstance();
+            system.AddInstance();
 
             var manufacturer = new TECManufacturer();
             manufacturer.Multiplier = 0.5;
 
-            var device = new TECDevice(new List<TECConnectionType> { new TECConnectionType() }, 
+            var device = new TECDevice(new List<TECConnectionType> { new TECConnectionType() },
                 new List<TECProtocol>(),
                 manufacturer);
             device.Price = 100;
@@ -1607,7 +1611,7 @@ namespace Models
 
             checkRefresh(bid, estimate);
         }
-        
+
         [TestMethod]
         public void Estimate_RemoveNetworkConnection()
         {
@@ -1653,7 +1657,7 @@ namespace Models
         {
             var bid = new TECBid();
             bid.Parameters = parameters;
-            
+
             var manufacturer = new TECManufacturer();
 
             TECIO io = new TECIO(IOType.AI);
@@ -1715,13 +1719,13 @@ namespace Models
 
             var controller1 = new TECProvidedController(controllerType);
             var controller2 = new TECProvidedController(controllerType);
-            
+
             var protocol = new TECProtocol(new List<TECConnectionType>() { connectionType });
             controllerType.IO.Add(new TECIO(protocol));
 
             bid.AddController(controller1);
             system.AddController(controller2);
-            system.AddInstance(bid);
+            system.AddInstance();
             var instanceController = system.Instances[0].Controllers[0];
 
             var connection = controller1.AddNetworkConnection(protocol);
@@ -1761,7 +1765,7 @@ namespace Models
 
             bid.AddController(controller1);
             system.AddController(controller2);
-            system.AddInstance(bid);
+            system.AddInstance();
             var instanceController = system.Instances[0].Controllers[0];
 
             var connection = controller1.AddNetworkConnection(protocol);
@@ -1791,7 +1795,7 @@ namespace Models
 
             TECIO io = new TECIO(IOType.AI);
             controllerType.IO.Add(io);
-            
+
             var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 1;
@@ -1804,14 +1808,14 @@ namespace Models
 
             bid.AddController(controller1);
             system.AddController(controller2);
-            system.AddInstance(bid);
+            system.AddInstance();
             var instanceController = system.Instances[0].Controllers[0];
 
             var connection = controller1.AddNetworkConnection(protocol);
 
             connection.AddChild(instanceController);
             connection.Length = 50;
-            
+
             var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
 
             connection.Length += 1;
@@ -1837,7 +1841,7 @@ namespace Models
 
             var equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            system.AddInstance(bid);
+            system.AddInstance();
 
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol>(),
@@ -1868,9 +1872,9 @@ namespace Models
 
             var equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            system.AddInstance(bid);
+            system.AddInstance();
 
-            var device = new TECDevice(new List<TECConnectionType> { connectionType }, 
+            var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol>(),
                 manufacturer);
             device.Price = 10;
@@ -1898,10 +1902,10 @@ namespace Models
             connectionType.Labor = 1;
             var system = new TECTypical();
             bid.Systems.Add(system);
-            system.AddInstance(bid);
+            system.AddInstance();
 
             var equipment = new TECEquipment();
-            var device = new TECDevice(new List<TECConnectionType> { connectionType }, 
+            var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol>(),
                 manufacturer);
             device.Price = 10;
@@ -1928,10 +1932,10 @@ namespace Models
             connectionType.Labor = 1;
             var system = new TECTypical();
             bid.Systems.Add(system);
-            system.AddInstance(bid);
+            system.AddInstance();
 
             var equipment = new TECEquipment();
-            var device = new TECDevice(new List<TECConnectionType> { connectionType }, 
+            var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol>(),
                 manufacturer);
             device.Price = 10;
@@ -1960,10 +1964,10 @@ namespace Models
             connectionType.Labor = 1;
             var system = new TECTypical();
             bid.Systems.Add(system);
-            system.AddInstance(bid);
+            system.AddInstance();
 
             var equipment = new TECEquipment();
-            var device = new TECDevice(new List<TECConnectionType> { connectionType }, 
+            var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol>(),
                 manufacturer);
             device.Price = 10;
@@ -1990,10 +1994,10 @@ namespace Models
             connectionType.Labor = 1;
             var system = new TECTypical();
             bid.Systems.Add(system);
-            system.AddInstance(bid);
+            system.AddInstance();
 
             var equipment = new TECEquipment();
-            var device = new TECDevice(new List<TECConnectionType> { connectionType }, 
+            var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol>(),
                 manufacturer);
             device.Price = 10;
@@ -2022,10 +2026,10 @@ namespace Models
             connectionType.Labor = 1;
             var system = new TECTypical();
             bid.Systems.Add(system);
-            system.AddInstance(bid);
+            system.AddInstance();
 
             var equipment = new TECEquipment();
-            var device = new TECDevice(new List<TECConnectionType> { connectionType }, 
+            var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol>(),
                 manufacturer);
             device.Price = 10;
@@ -2034,7 +2038,7 @@ namespace Models
             equipment.SubScope.Add(subScope);
 
             system.Equipment.Add(equipment);
-            
+
             Assert.AreEqual(0.3, estimate.TECShipping);
 
             checkRefresh(bid, estimate);
@@ -2052,7 +2056,7 @@ namespace Models
             connectionType.Labor = 1;
             var system = new TECTypical();
             bid.Systems.Add(system);
-            system.AddInstance(bid);
+            system.AddInstance();
 
             var equipment = new TECEquipment();
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
@@ -2108,8 +2112,9 @@ namespace Models
             conduitType.RatedCosts.Add(ratedCost);
 
             var protocol = new TECProtocol(new List<TECConnectionType> { connectionType });
+            controllerType.IO.Add(new TECIO(protocol));
 
-            var device = new TECDevice(new List<TECConnectionType> { connectionType }, 
+            var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol> { protocol },
                 manufacturer);
             bid.Catalogs.Devices.Add(device);
@@ -2121,8 +2126,8 @@ namespace Models
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
 
-            system.AddInstance(bid);
-            system.AddInstance(bid);
+            system.AddInstance();
+            system.AddInstance();
 
             //For Both Conduit and Wire Cost: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 10 = 60
             Assert.AreEqual(1.8, estimate.ElectricalShipping, GeneralTestingUtilities.DELTA);
@@ -2169,6 +2174,7 @@ namespace Models
             conduitType.RatedCosts.Add(ratedCost);
 
             var protocol = new TECProtocol(new List<TECConnectionType> { connectionType });
+            controllerType.IO.Add(new TECIO(protocol));
 
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol> { protocol },
@@ -2182,8 +2188,8 @@ namespace Models
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
 
-            system.AddInstance(bid);
-            system.AddInstance(bid);
+            system.AddInstance();
+            system.AddInstance();
 
             //For Both Conduit and Wire Cost: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 20 = 60
             Assert.AreEqual(3, estimate.ElectricalWarranty);
@@ -2211,7 +2217,7 @@ namespace Models
             TECDevice dev = bid.Catalogs.Devices.First();
             subScope.Devices.Add(dev);
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
 
             TECSubScope instanceSubScope = typical.GetInstancesFromTypical(subScope).First();
 
@@ -2233,7 +2239,7 @@ namespace Models
             bid.Parameters = parameters;
             var watcher = new ChangeWatcher(bid);
             var estimate = new TECEstimator(bid, watcher);
-            
+
             var system = new TECTypical();
             var equipment = new TECEquipment();
             var subScope = new TECSubScope();
@@ -2265,6 +2271,7 @@ namespace Models
             conduitType.RatedCosts.Add(ratedCost);
 
             var protocol = new TECProtocol(new List<TECConnectionType> { connectionType });
+            controllerType.IO.Add(new TECIO(protocol));
 
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol> { protocol },
@@ -2278,8 +2285,8 @@ namespace Models
             connection.ConduitLength = 5;
             connection.ConduitType = conduitType;
 
-            system.AddInstance(bid);
-            system.AddInstance(bid);
+            system.AddInstance();
+            system.AddInstance();
 
             //For Both Conduit and Wire Cost: 2*(length * type.Price/Labor + length * RatedCost.Cost/Labor) = 2*(10 * 1 +10 * 1) + 2 * (5 * 1 + 5 * 1) = 40 + 20 = 60
             Assert.AreEqual(estimate.TotalPrice, systemEstimate.TotalPrice);
@@ -2294,13 +2301,13 @@ namespace Models
             bid.Parameters = parameters;
             bid.Duration = 52;
             var watcher = new ChangeWatcher(bid); var estimate = new TECEstimator(bid, watcher);
-            var manufacturer = new TECManufacturer(); 
+            var manufacturer = new TECManufacturer();
             var connectionType = new TECConnectionType();
             connectionType.Cost = 1;
             connectionType.Labor = 0;
             var system = new TECTypical();
             bid.Systems.Add(system);
-            system.AddInstance(bid);
+            system.AddInstance();
 
             var equipment = new TECEquipment();
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
@@ -2332,8 +2339,8 @@ namespace Models
             misc.Cost = 100.00;
             bid.MiscCosts.Add(misc);
 
-            var expected = 100 * (parameters.SubcontractorShipping/100 + 
-                parameters.SubcontractorWarranty/100 + 1);
+            var expected = 100 * (parameters.SubcontractorShipping / 100 +
+                parameters.SubcontractorWarranty / 100 + 1);
             expected *= 0.03;
 
             Assert.AreEqual(expected, estimate.ElectricalEscalation, 0.0001);
@@ -2360,9 +2367,9 @@ namespace Models
             equipment.SubScope.Add(subScope);
             system.Equipment.Add(equipment);
             bid.Systems.Add(system);
-            
-            system.AddInstance(bid);
-            system.AddInstance(bid);
+
+            system.AddInstance();
+            system.AddInstance();
 
             Assert.AreEqual(2, estimate.TotalPointNumber, "Total points not updating");
             Assert.AreEqual(3.08, estimate.PMLaborHours, "PM labor calcualtion");
@@ -2394,7 +2401,7 @@ namespace Models
 
             checkRefresh(bid, estimate);
         }
-        
+
         #endregion
 
         private void assertNoCostOrLabor(TECEstimator estimate)

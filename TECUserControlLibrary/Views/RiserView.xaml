@@ -5,9 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
              xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls"
-                          xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:estimatinglibrary="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              mc:Ignorable="d" 
              x:Name="riserView"
              d:DesignHeight="640" d:DesignWidth="960">
@@ -33,19 +34,16 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Border BorderBrush="DarkGray"
-                    BorderThickness="0,0,0,1"
-                    Margin="20,0,20,0">
-                <TextBlock Text="Not Located"
-                           HorizontalAlignment="Center"/>
+            <Border Style="{StaticResource HeaderBorder}">
+                <TextBlock Text="Not Located" Style="{StaticResource ListHeader}"/>
             </Border>
             <ListView ItemsSource="{Binding Unlocated}" Grid.Row="1"                      
                       dd:DragDrop.IsDragSource="True"
                       dd:DragDrop.DropHandler="{Binding ElementName=riserView, Path=ViewModel}"
                       HorizontalContentAlignment="Stretch"
                       SelectedItem="{Binding ElementName=riserView, Path=ViewModel.Selected}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
+                <ListView.Resources>
+                    <DataTemplate DataType="{x:Type estimatinglibrary:TECSystem}">
                         <Border BorderBrush="{StaticResource ItemBorderBrush}"
                                 BorderThickness="1" CornerRadius="2"
                                 Background="{StaticResource ItemBackgroundBrush}">
@@ -58,7 +56,20 @@
                         </Border>
                         
                     </DataTemplate>
-                </ListView.ItemTemplate>
+                    <DataTemplate DataType="{x:Type estimatinglibrary:TECController}">
+                        <Border BorderBrush="{StaticResource ItemBorderBrush}"
+                                BorderThickness="1" CornerRadius="2"
+                                Background="LightYellow">
+                            <Grid MouseUp="ItemControl_MouseUp">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="{Binding Name}"/>
+                            </Grid>
+                        </Border>
+
+                    </DataTemplate>
+                </ListView.Resources>
             </ListView>
         </Grid>
         <Grid Grid.Column="1">
@@ -86,7 +97,7 @@
                              Grid.Column="1">
                         <TextBox.InputBindings>
                             <KeyBinding Key="Return" 
-                    Command="{Binding AddLocationCommand}"/>
+                                        Command="{Binding AddLocationCommand}"/>
                         </TextBox.InputBindings>
                     </TextBox>
                     <TextBlock Text="Tag:"
@@ -97,11 +108,11 @@
                              Grid.Column="3">
                         <TextBox.InputBindings>
                             <KeyBinding Key="Return" 
-                    Command="{Binding AddLocationCommand}"/>
+                                        Command="{Binding AddLocationCommand}"/>
                         </TextBox.InputBindings>
                     </TextBox>
                     <Button Content="Add Location" Command="{Binding AddLocationCommand}"
-                        Grid.Column="4" Margin="2"/>
+                            Grid.Column="4" Margin="2"/>
                 </Grid>
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
@@ -141,10 +152,10 @@
                           dd:DragDrop.IsDragSource="True"
                           dd:DragDrop.DropHandler="{Binding ElementName=riserView, Path=ViewModel}">
                     <!--<ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="Focusable" Value="false"/>
-                        </Style>
-                    </ListView.ItemContainerStyle>-->
+                         <Style TargetType="ListViewItem">
+                         <Setter Property="Focusable" Value="false"/>
+                         </Style>
+                         </ListView.ItemContainerStyle>-->
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1">
@@ -152,7 +163,7 @@
                                     <Grid.ContextMenu>
                                         <ContextMenu>
                                             <MenuItem Header="Delete" Command="{Binding Data.DeleteCommand, Source={StaticResource proxy}}"
-                                                CommandParameter="{Binding}"/>
+                                                      CommandParameter="{Binding}"/>
                                         </ContextMenu>
                                     </Grid.ContextMenu>
                                     <Grid.RowDefinitions>
@@ -194,16 +205,34 @@
                                                 <StackPanel Orientation="Horizontal"/>
                                             </ItemsPanelTemplate>
                                         </ListView.ItemsPanel>
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate>
-                                                <Border BorderBrush="{StaticResource ItemBorderBrush}" BorderThickness="1" CornerRadius="2"
+                                        <ListView.Resources>
+                                            <DataTemplate DataType="{x:Type estimatinglibrary:TECSystem}">
+                                                <Border BorderBrush="{StaticResource ItemBorderBrush}"
+                                                        BorderThickness="1" CornerRadius="2"
                                                         Background="{StaticResource ItemBackgroundBrush}">
                                                     <Grid MouseUp="ItemControl_MouseUp">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="30"/>
+                                                        </Grid.RowDefinitions>
                                                         <TextBlock Text="{Binding Name}"/>
                                                     </Grid>
                                                 </Border>
+
                                             </DataTemplate>
-                                        </ListView.ItemTemplate>
+                                            <DataTemplate DataType="{x:Type estimatinglibrary:TECController}">
+                                                <Border BorderBrush="{StaticResource ItemBorderBrush}"
+                                                        BorderThickness="1" CornerRadius="2"
+                                                        Background="LightYellow">
+                                                    <Grid MouseUp="ItemControl_MouseUp">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="30"/>
+                                                        </Grid.RowDefinitions>
+                                                        <TextBlock Text="{Binding Name}"/>
+                                                    </Grid>
+                                                </Border>
+
+                                            </DataTemplate>
+                                        </ListView.Resources>
                                     </ListView>
                                 </Grid>
                             </Border>

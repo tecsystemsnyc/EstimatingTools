@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.UserControls"
-              x:Name="hardwarePropertiesControl"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             x:Name="hardwarePropertiesControl"
              mc:Ignorable="d" 
-             d:DesignHeight="60" d:DesignWidth="300">
+             d:DesignHeight="75" d:DesignWidth="300">
     <UserControl.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="Foreground" Value="Black"/>
@@ -18,27 +19,23 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
-        <Grid Grid.ColumnSpan="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="25"/>
-                <RowDefinition Height="25"/>
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Column="0" Grid.Row="0"
+        <TextBlock Grid.Column="0" Grid.Row="0"
                    Text="List Price:"/>
-            <TextBox Grid.Column="1" Grid.Row="0"
-                   Text="{Binding Price, StringFormat={}{0:C}}"
-                     IsReadOnly="{Binding ElementName=hardwarePropertiesControl, Path=ReadOnly}"/>
-            <TextBlock Grid.Column="0" Grid.Row="1"
+        <TextBox Grid.Column="1" Grid.Row="0"
+                 Text="{Binding Price, StringFormat={}{0:C}}"
+                 IsReadOnly="{Binding ElementName=hardwarePropertiesControl, Path=ReadOnly}"/>
+        <TextBlock Grid.Column="0" Grid.Row="1"
                    Text="Manufacturer:"/>
-            <TextBlock Grid.Column="1" Grid.Row="1"
+        <TextBlock Grid.Column="1" Grid.Row="1"
                    Text="{Binding Manufacturer.Label}"/>
-
-        </Grid>
+        <TextBlock Grid.Column="0" Grid.Row="2"
+                   Text="Require Quote:"/>
+        <CheckBox IsChecked="{Binding RequireQuote}"
+                  Grid.Row="2" Grid.Column="1"
+                  IsEnabled="{Binding ElementName=hardwarePropertiesControl, Path=ReadOnly, Converter={utilities:InvertBoolConverter}}"/>
     </Grid>
 </UserControl>

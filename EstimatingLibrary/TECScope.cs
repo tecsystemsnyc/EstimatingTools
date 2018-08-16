@@ -57,15 +57,15 @@ namespace EstimatingLibrary
             this.AssociatedCosts.ForEach(item => costs += item.CostBatch);
             return costs;
         }
-        protected override SaveableMap propertyObjects()
+        protected override RelatableMap propertyObjects()
         {
-            SaveableMap saveList = base.propertyObjects();
+            RelatableMap saveList = base.propertyObjects();
             saveList.AddRange(this.AssociatedCosts.Distinct(), "AssociatedCosts");
             return saveList;
         }
-        protected override SaveableMap linkedObjects()
+        protected override RelatableMap linkedObjects()
         {
-            SaveableMap relatedList = base.linkedObjects();
+            RelatableMap relatedList = base.linkedObjects();
             relatedList.AddRange(this.AssociatedCosts.Distinct(), "AssociatedCosts");
             return relatedList;
         }

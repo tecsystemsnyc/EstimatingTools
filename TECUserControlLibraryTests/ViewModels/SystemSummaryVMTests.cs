@@ -2,7 +2,6 @@
 using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tests;
 using TECUserControlLibrary.ViewModels.SummaryVMs;
 using EstimatingLibrary.Utilities;
 using EstimatingLibrary;
@@ -11,7 +10,7 @@ using EstimatingLibrary.Interfaces;
 using System.Linq;
 using TestLibrary.ModelTestingUtilities;
 
-namespace TECUserControlLibraryTests
+namespace ViewModels
 {
     /// <summary>
     /// Summary description for SystemSummaryVMTests
@@ -146,7 +145,7 @@ namespace TECUserControlLibraryTests
             TECController otherController = new TECProvidedController(controllerType);
             otherController.Name = "Other Controller";
             typical.AddController(otherController);
-            IControllerConnection connection = controller.Connect(connected, (connected as IConnectable).AvailableProtocols.First());
+            IControllerConnection connection = controller.Connect(connected, (connected as IConnectable).AvailableProtocols.First(y => y is TECHardwiredProtocol));
             connection.Length = 10;
             connection.ConduitLength = 20;
             connection.ConduitType = bid.Catalogs.ConduitTypes[1];
@@ -163,7 +162,7 @@ namespace TECUserControlLibraryTests
             typical.MiscCosts.Add(misc);
 
             bid.Systems.Add(typical);
-            typical.AddInstance(bid);
+            typical.AddInstance();
             return typical;
         }
     }

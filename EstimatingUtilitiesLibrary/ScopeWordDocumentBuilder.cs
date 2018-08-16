@@ -5,6 +5,7 @@ using EstimatingLibrary;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using A = DocumentFormat.OpenXml.Drawing;
 using A14 = DocumentFormat.OpenXml.Office2010.Drawing;
 using Ap = DocumentFormat.OpenXml.ExtendedProperties;
@@ -31,11 +32,23 @@ namespace EstimatingUtilitiesLibrary
         {
             _bid = bid;
             _estimate = estimate;
-            CreatePackage(path);
-            if (openOnComplete)
+            if(bid.DistributionList.Count == 0)
             {
-                System.Diagnostics.Process.Start(path);
+                CreatePackage(path);
+                if (openOnComplete)
+                {
+                    System.Diagnostics.Process.Start(path);
+                }
             }
+            else
+            {
+                foreach(var contact in bid.DistributionList)
+                {
+                    string personPath = Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + "-" + contact.Name + Path.GetExtension(path);
+                    CreatePackage(personPath, contact.Name);
+                }
+            }
+            
         }
 
         static private void addHeader(MainDocumentPart mainPart, TECBid bid)
@@ -55,22 +68,22 @@ namespace EstimatingUtilitiesLibrary
         const string intro = "As an authorized representative of Honeywell, Inc., / American Auto-Matrix Inc, T.E.C. Systems, Inc. is pleased to provide this quotation to provide the Automatic Temperature Controls and Building Automation Systems as Specified. This proposal is based upon our evaluation and review of the following contract documentation:";
 
         // Creates a WordprocessingDocument.
-        static private void CreatePackage(string filePath)
+        static private void CreatePackage(string filePath, string to = "All Bidders")
         {
             using (WordprocessingDocument package = WordprocessingDocument.Create(filePath, WordprocessingDocumentType.Document))
             {
-                CreateParts(package);
+                CreateParts(package, to);
             }
         }
 
         // Adds child parts and generates content of the specified part.
-        static private void CreateParts(WordprocessingDocument document)
+        static private void CreateParts(WordprocessingDocument document, string to)
         {
             ExtendedFilePropertiesPart extendedFilePropertiesPart1 = document.AddNewPart<ExtendedFilePropertiesPart>("rId3");
             GenerateExtendedFilePropertiesPart1Content(extendedFilePropertiesPart1);
 
             MainDocumentPart mainDocumentPart1 = document.AddMainDocumentPart();
-            GenerateMainDocumentPart1Content(mainDocumentPart1);
+            GenerateMainDocumentPart1Content(mainDocumentPart1, to);
 
             FooterPart footerPart1 = mainDocumentPart1.AddNewPart<FooterPart>("rId8");
             GenerateFooterPart1Content(footerPart1);
@@ -209,7 +222,7 @@ namespace EstimatingUtilitiesLibrary
         }
 
         // Generates content of mainDocumentPart1.
-        static private void GenerateMainDocumentPart1Content(MainDocumentPart mainDocumentPart1)
+        static private void GenerateMainDocumentPart1Content(MainDocumentPart mainDocumentPart1, string to)
         {
             Document document1 = new Document() { MCAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 wp14" } };
             document1.AddNamespaceDeclaration("wpc", "http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas");
@@ -503,7 +516,7 @@ namespace EstimatingUtilitiesLibrary
 
             runProperties26.Append((FontSize)fontSize1.CloneNode(true));
             Text text9 = new Text();
-            text9.Text = "To All Bidders:";
+            text9.Text = String.Format("To {0}:", to);
 
             run26.Append(runProperties26);
             run26.Append(text9);

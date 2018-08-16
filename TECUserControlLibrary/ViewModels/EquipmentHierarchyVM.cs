@@ -189,7 +189,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
-            UIHelpers.StandardDragOver(dropInfo);
+            DragDropHelpers.StandardDragOver(dropInfo);
 
         }
         public void Drop(IDropInfo dropInfo)
@@ -213,7 +213,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (dropInfo.Data is IEndDevice)
             {
-                UIHelpers.StandardDrop(dropInfo, scopeManager);
+                DragDropHelpers.StandardDrop(dropInfo, scopeManager);
             }
         }
 

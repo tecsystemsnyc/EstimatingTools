@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using EstimatingLibrary.Interfaces;
 using EstimatingUtilitiesLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -15,7 +16,7 @@ namespace TECUserControlLibrary.ViewModels
     public class ScopeCollectionsTabVM : ViewModelBase, IDropTarget
     {
         #region Properties
-        public ScopeTemplates Templates
+        public TECScopeTemplates Templates
         {
             get { return _templates; }
             set
@@ -24,7 +25,7 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("Templates");
             }
         }
-        public ObservableCollection<TECObject> ResultCollection
+        public ObservableCollection<ITECObject> ResultCollection
         {
             get { return _resultCollection; }
             set
@@ -43,9 +44,10 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("ChosenType");
             }
         }
+        public Dictionary<AllSearchableObjects, String> CollectionTypes {get; private set;}
         
-        private ObservableCollection<TECObject> _resultCollection;
-        private ScopeTemplates _templates;
+        private ObservableCollection<ITECObject> _resultCollection;
+        private TECScopeTemplates _templates;
         private AllSearchableObjects _chosenType;
         private TECCatalogs catalogs;
 
@@ -79,11 +81,22 @@ namespace TECUserControlLibrary.ViewModels
             SearchCollectionCommand = new RelayCommand(SearchCollectionExecute, SearchCanExecute);
             EndSearchCommand = new RelayCommand(EndSearchExecute);
             SearchString = "";
+            CollectionTypes = new Dictionary<AllSearchableObjects, string>(UIHelpers.SearchSelectorList);
             SearchCollectionExecute();
         }
 
         #region Methods
         
+        public void OmitCollections(List<AllSearchableObjects> ommisions)
+        {
+            foreach(var item in ommisions)
+            {
+                CollectionTypes.Remove(item);
+            }
+            RaisePropertyChanged("CollectionTypes");
+            ChosenType = CollectionTypes.First().Key;
+            SearchCollectionExecute();
+        }
 
         #region Commands
         private void SearchCollectionExecute()
@@ -160,9 +173,9 @@ namespace TECUserControlLibrary.ViewModels
             DropHandler(dropInfo);
         }
         
-        private ObservableCollection<TECObject> getResultCollection(IEnumerable<TECObject> source, string searchString)
+        private ObservableCollection<ITECObject> getResultCollection(IEnumerable<ITECObject> source, string searchString)
         {
-            return new ObservableCollection<TECObject>(source.GetSearchResult(searchString));
+            return new ObservableCollection<ITECObject>(source.GetSearchResult(searchString));
         }
         #endregion
         

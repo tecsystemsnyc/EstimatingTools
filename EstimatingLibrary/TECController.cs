@@ -114,13 +114,17 @@ namespace EstimatingLibrary
             }  
             return compatProtocols;
         }
+        public bool CanConnect(IConnectable connectable, IProtocol protocol)
+        {
+            return connectable != null && CompatibleProtocols(connectable).Contains(protocol);
+        }
         public bool CanConnect(IConnectable connectable)
         {
             return connectable != null && CompatibleProtocols(connectable).Count > 0;
         }
         public IControllerConnection Connect(IConnectable connectable, IProtocol protocol, bool attemptExisiting = false)
         {
-            if (!CanConnect(connectable)) return null;
+            if (!CanConnect(connectable, protocol)) return null;
             IControllerConnection connection;
             bool isNew = true;
             bool isTypical = (connectable as ITypicalable)?.IsTypical ?? false;
@@ -259,7 +263,7 @@ namespace EstimatingLibrary
         public abstract TECController CopyController(Dictionary<Guid, Guid> guidDictionary = null);
 
         #region Event Handlers
-        protected void collectionChanged(object sender, NotifyCollectionChangedEventArgs e, string propertyName)
+        protected virtual void collectionChanged(object sender, NotifyCollectionChangedEventArgs e, string propertyName)
         {
             CollectionChangedHandlers.CollectionChangedHandler(sender, e, propertyName, this, notifyCombinedChanged, notifyCostChanged);
 
@@ -287,16 +291,16 @@ namespace EstimatingLibrary
                 return new CostBatch();
             }
         }
-        protected override SaveableMap propertyObjects()
+        protected override RelatableMap propertyObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(base.propertyObjects());
             saveList.AddRange(this.ChildrenConnections, "ChildrenConnections");
             return saveList;
         }
-        protected override SaveableMap linkedObjects()
+        protected override RelatableMap linkedObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(base.linkedObjects());
             return saveList;
         }
@@ -389,5 +393,6 @@ namespace EstimatingLibrary
         }
         protected abstract void makeTypical();
         #endregion
+
     }
 }

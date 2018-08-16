@@ -92,7 +92,7 @@ namespace TECUserControlLibrary.Debug
             typical.Equipment.Add(equip);
 
             bid.Systems.Add(typical);
-            typical.AddInstance(bid);
+            typical.AddInstance();
         }
         private void addTypicalExecute()
         {
@@ -160,7 +160,7 @@ namespace TECUserControlLibrary.Debug
             typical.MiscCosts.Add(misc);
 
             bid.Systems.Add(typical);
-            typical.AddInstance(bid);
+            typical.AddInstance();
         }
         private void throwExceptionExecute()
         {

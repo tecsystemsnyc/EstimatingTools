@@ -43,6 +43,12 @@ namespace EstimatingUtilitiesLibraryTests
             data[ProvidedControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, ProvidedControllerControllerTypeTable.TableName, data));
 
+            data = new Dictionary<string, string>();
+            data[BidControllerTable.BidID.Name] = bid.Guid.ToString();
+            data[BidControllerTable.ControllerID.Name] = controller.Guid.ToString();
+            data[BidControllerTable.Index.Name] = "0";
+            expectedItems.Add(new UpdateItem(Change.Add, BidControllerTable.TableName, data));
+
             int expectedCount = expectedItems.Count;
 
             bid.AddController(controller);
@@ -110,6 +116,12 @@ namespace EstimatingUtilitiesLibraryTests
             data[PanelPanelTypeTable.PanelID.Name] = panel.Guid.ToString();
             data[PanelPanelTypeTable.PanelTypeID.Name] = type.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, PanelPanelTypeTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[BidPanelTable.BidID.Name] = bid.Guid.ToString();
+            data[BidPanelTable.PanelID.Name] = panel.Guid.ToString();
+            data[BidPanelTable.Index.Name] = "0";
+            expectedItems.Add(new UpdateItem(Change.Add, BidPanelTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
             
@@ -395,7 +407,6 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = system.Guid.ToString();
             data[SystemTable.Name.Name] = system.Name.ToString();
             data[SystemTable.Description.Name] = system.Description.ToString();
-            data[SystemTable.IsSingleton.Name] = system.IsSingleton.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
 
             data = new Dictionary<string, string>();
@@ -424,14 +435,13 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
 
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             Dictionary<string, string> data = new Dictionary<string, string>();
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.IsSingleton.Name] = instance.IsSingleton.ToInt().ToString();
 
             expectedItems.Add( new UpdateItem(Change.Add, SystemTable.TableName, data));
 
@@ -493,7 +503,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECTypical typical = new TECTypical();
             TECEquipment equip = new TECEquipment();
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(bid);
@@ -548,7 +558,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
 
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -560,7 +570,6 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.IsSingleton.Name] = instance.IsSingleton.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
 
             data = new Dictionary<string, string>();
@@ -634,7 +643,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.Systems.Add(system);
             TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -690,7 +699,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
             
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -705,7 +714,6 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.IsSingleton.Name] = instance.IsSingleton.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
             data = new Dictionary<string, string>();
             data[EquipmentTable.ID.Name] = instance.Equipment[0].Guid.ToString();
@@ -794,7 +802,7 @@ namespace EstimatingUtilitiesLibraryTests
             system.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -857,7 +865,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             ChangeWatcher watcher = new ChangeWatcher(bid);
             DeltaStacker stack = new DeltaStacker(watcher, bid);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -879,7 +887,6 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.IsSingleton.Name] = instance.IsSingleton.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
 
             data = new Dictionary<string, string>();
@@ -974,7 +981,7 @@ namespace EstimatingUtilitiesLibraryTests
             system.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(bid);
@@ -1020,7 +1027,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data;
             data = new Dictionary<string, string>();
@@ -1035,7 +1042,6 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.IsSingleton.Name] = instance.IsSingleton.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
             data = new Dictionary<string, string>();
             data[EquipmentTable.ID.Name] = instance.Equipment[0].Guid.ToString();
@@ -1124,7 +1130,7 @@ namespace EstimatingUtilitiesLibraryTests
             system.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(bid);
@@ -1173,7 +1179,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data;
             data = new Dictionary<string, string>();
@@ -1188,7 +1194,6 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.IsSingleton.Name] = instance.IsSingleton.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
             data = new Dictionary<string, string>();
             data[EquipmentTable.ID.Name] = instance.Equipment[0].Guid.ToString();
@@ -1285,7 +1290,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(manufacturer);
             TECController controller = new TECProvidedController(type);
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(bid);
@@ -1354,7 +1359,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
 
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -1365,7 +1370,6 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.IsSingleton.Name] = instance.IsSingleton.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
             data = new Dictionary<string, string>();
             data[ProvidedControllerTable.ID.Name] = instance.Controllers[0].Guid.ToString();
@@ -1481,7 +1485,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECPanelType type = new TECPanelType(new TECManufacturer());
             TECPanel panel = new TECPanel(type);
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -1544,7 +1548,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
 
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -1555,7 +1559,6 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.IsSingleton.Name] = instance.IsSingleton.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
             data = new Dictionary<string, string>();
             data[PanelTable.ID.Name] = instance.Panels[0].Guid.ToString();
@@ -1632,7 +1635,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECTypical typical = new TECTypical();
             TECMisc misc = new TECMisc(CostType.TEC);
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -1695,7 +1698,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
 
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
 
             List<UpdateItem> expectedItems = new List<UpdateItem>();
             Dictionary<string, string> data;
@@ -1707,7 +1710,6 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.IsSingleton.Name] = instance.IsSingleton.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
             data = new Dictionary<string, string>();
             data[MiscTable.ID.Name] = instance.MiscCosts[0].Guid.ToString();
@@ -1822,7 +1824,7 @@ namespace EstimatingUtilitiesLibraryTests
             system.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -1891,7 +1893,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Act
             ChangeWatcher watcher = new ChangeWatcher(bid);
             DeltaStacker stack = new DeltaStacker(watcher, bid);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
 
             var instanceSubScope = instance.Equipment[0].SubScope[0];
             var instanceInterlock = instanceSubScope.Interlocks[0];
@@ -1916,7 +1918,6 @@ namespace EstimatingUtilitiesLibraryTests
             data[SystemTable.ID.Name] = instance.Guid.ToString();
             data[SystemTable.Name.Name] = instance.Name.ToString();
             data[SystemTable.Description.Name] = instance.Description.ToString();
-            data[SystemTable.IsSingleton.Name] = instance.IsSingleton.ToInt().ToString();
             expectedItems.Add(new UpdateItem(Change.Add, SystemTable.TableName, data));
 
             data = new Dictionary<string, string>();
@@ -2045,7 +2046,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             typical.AddController(child);
-            TECSystem system = typical.AddInstance(bid);
+            TECSystem system = typical.AddInstance();
             TECController instanceController = system.Controllers[0];
             
             TECProtocol protocol= new TECProtocol(new List<TECConnectionType>());
@@ -2104,14 +2105,14 @@ namespace EstimatingUtilitiesLibraryTests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             typical.AddController(controller);
-            TECSystem system = typical.AddInstance(bid);
+            TECSystem system = typical.AddInstance();
             TECController instanceController = system.Controllers[0];
 
             TECController otherController = new TECProvidedController(type);
             TECTypical otherTypical = new TECTypical();
             bid.Systems.Add(otherTypical);
             otherTypical.AddController(otherController);
-            TECSystem otherSystem = otherTypical.AddInstance(bid);
+            TECSystem otherSystem = otherTypical.AddInstance();
             TECController otherInstanceController = otherSystem.Controllers[0];
 
             TECProtocol protocol = new TECProtocol(new List<TECConnectionType>());
@@ -2243,7 +2244,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             subScope.Devices.Add(device);
             bid.Systems.Add(typical);
-            TECSystem system = typical.AddInstance(bid);
+            TECSystem system = typical.AddInstance();
             TECSubScope instanceSubScope = system.Equipment[0].SubScope[0];
 
             //Act
@@ -2367,10 +2368,10 @@ namespace EstimatingUtilitiesLibraryTests
             bid.Catalogs.Devices.Add(device);
             subScope.Devices.Add(device);
             bid.Systems.Add(typical);
-            TECSystem system = typical.AddInstance(bid);
+            TECSystem system = typical.AddInstance();
 
-            TECSubScope instanceSubScope = system.Equipment[0].SubScope[0];
-            TECController instanceController = system.Controllers[0];
+            TECSubScope instanceSubScope = typical.GetInstancesFromTypical(subScope).First();
+            TECController instanceController = typical.GetInstancesFromTypical(controller).First();
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -2378,9 +2379,34 @@ namespace EstimatingUtilitiesLibraryTests
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             IControllerConnection connection = controller.Connect(subScope, (subScope as IConnectable).AvailableProtocols.First());
-            IControllerConnection instanceConnection = instanceController.Connect(instanceSubScope, (instanceSubScope as IConnectable).AvailableProtocols.First());
+            IControllerConnection instanceConnection = (instanceSubScope as IConnectable).GetParentConnection();
             Dictionary<string, string> data;
-            
+
+
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionTable.ID.Name] = instanceConnection.Guid.ToString();
+            data[SubScopeConnectionTable.Length.Name] = instanceConnection.Length.ToString();
+            data[SubScopeConnectionTable.ConduitLength.Name] = instanceConnection.ConduitLength.ToString();
+            data[SubScopeConnectionTable.IsPlenum.Name] = instanceConnection.IsPlenum.ToInt().ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[HardwiredConnectionChildrenTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
+            data[HardwiredConnectionChildrenTable.ChildID.Name] = instanceSubScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, HardwiredConnectionChildrenTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
+            data[HardwiredConnectionConnectionTypeTable.TypeID.Name] = connType.Guid.ToString();
+            data[HardwiredConnectionConnectionTypeTable.Quantity.Name] = "1";
+            expectedItems.Add(new UpdateItem(Change.Add, HardwiredConnectionConnectionTypeTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[ControllerConnectionTable.ControllerID.Name] = instanceController.Guid.ToString();
+            data[ControllerConnectionTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
+
+
             data = new Dictionary<string, string>();
             data[SubScopeConnectionTable.ID.Name] = connection.Guid.ToString();
             data[SubScopeConnectionTable.Length.Name] = connection.Length.ToString();
@@ -2404,34 +2430,21 @@ namespace EstimatingUtilitiesLibraryTests
             data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
 
+
+            //Edit from updating singleton
+            Tuple<string, string> keyData = new Tuple<string, string>(SubScopeConnectionTable.ID.Name, instanceConnection.Guid.ToString());
+
             data = new Dictionary<string, string>();
-            data[SubScopeConnectionTable.ID.Name] = instanceConnection.Guid.ToString();
             data[SubScopeConnectionTable.Length.Name] = instanceConnection.Length.ToString();
             data[SubScopeConnectionTable.ConduitLength.Name] = instanceConnection.ConduitLength.ToString();
-            data[SubScopeConnectionTable.IsPlenum.Name] = connection.IsPlenum.ToInt().ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, SubScopeConnectionTable.TableName, data));
+            data[SubScopeConnectionTable.IsPlenum.Name] = instanceConnection.IsPlenum.ToInt().ToString();
+            expectedItems.Add(new UpdateItem(Change.Edit, SubScopeConnectionTable.TableName, data, keyData));
             
-            data = new Dictionary<string, string>();
-            data[HardwiredConnectionChildrenTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
-            data[HardwiredConnectionChildrenTable.ChildID.Name] = instanceSubScope.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, HardwiredConnectionChildrenTable.TableName, data));
-
-            data = new Dictionary<string, string>();
-            data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
-            data[HardwiredConnectionConnectionTypeTable.TypeID.Name] = connType.Guid.ToString();
-            data[HardwiredConnectionConnectionTypeTable.Quantity.Name] = "1";
-            expectedItems.Add(new UpdateItem(Change.Add, HardwiredConnectionConnectionTypeTable.TableName, data));
-            
-            data = new Dictionary<string, string>();
-            data[ControllerConnectionTable.ControllerID.Name] = instanceController.Guid.ToString();
-            data[ControllerConnectionTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
-            
-
             int expectedCount = expectedItems.Count;
 
             //Assert
-            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            var cleansedStack = stack.CleansedStack();
+            Assert.AreEqual(expectedCount, cleansedStack.Count);
             CheckUpdateItems(expectedItems, stack);
         }
         #endregion
@@ -2464,7 +2477,12 @@ namespace EstimatingUtilitiesLibraryTests
             data[ProvidedControllerControllerTypeTable.ControllerID.Name] = controller.Guid.ToString();
             data[ProvidedControllerControllerTypeTable.TypeID.Name] = type.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, ProvidedControllerControllerTypeTable.TableName, data));
-            
+
+            data = new Dictionary<string, string>();
+            data[BidControllerTable.BidID.Name] = bid.Guid.ToString();
+            data[BidControllerTable.ControllerID.Name] = controller.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, BidControllerTable.TableName, data));
+
             int expectedCount = expectedItems.Count;
 
             bid.RemoveController(controller);
@@ -2498,6 +2516,11 @@ namespace EstimatingUtilitiesLibraryTests
             data[PanelPanelTypeTable.PanelID.Name] = panel.Guid.ToString();
             data[PanelPanelTypeTable.PanelTypeID.Name] = type.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, PanelPanelTypeTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[BidPanelTable.BidID.Name] = bid.Guid.ToString();
+            data[BidPanelTable.PanelID.Name] = panel.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, BidPanelTable.TableName, data));
 
             int expectedCount = expectedItems.Count;
 
@@ -2755,7 +2778,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -2821,7 +2844,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECTypical typical = new TECTypical();
             TECEquipment equip = new TECEquipment();
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             typical.Equipment.Add(equip);
 
             //Act
@@ -2867,7 +2890,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECEquipment equip = new TECEquipment();
             bid.Systems.Add(typical);
             typical.Equipment.Add(equip);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -2952,7 +2975,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.Systems.Add(system);
             TECEquipment equipment = new TECEquipment();
             system.Equipment.Add(equipment);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
             TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
 
@@ -2999,7 +3022,7 @@ namespace EstimatingUtilitiesLibraryTests
             system.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -3099,7 +3122,7 @@ namespace EstimatingUtilitiesLibraryTests
             system.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
             TECPoint point = new TECPoint();
             subScope.Points.Add(point);
 
@@ -3148,7 +3171,7 @@ namespace EstimatingUtilitiesLibraryTests
             equipment.SubScope.Add(subScope);
             TECPoint point = new TECPoint();
             subScope.Points.Add(point);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
             
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -3251,7 +3274,7 @@ namespace EstimatingUtilitiesLibraryTests
             system.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
             TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             bid.Catalogs.Devices.Add(device);
             subScope.Devices.Add(device);
@@ -3291,7 +3314,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             bid.Catalogs.Devices.Add(device);
             subScope.Devices.Add(device);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -3386,7 +3409,7 @@ namespace EstimatingUtilitiesLibraryTests
             system.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
             TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             TECValve valve = new TECValve(new TECManufacturer(), device);
             bid.Catalogs.Devices.Add(device);
@@ -3430,7 +3453,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.Catalogs.Devices.Add(device);
             bid.Catalogs.Valves.Add(valve);
             subScope.Devices.Add(valve);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -3533,7 +3556,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECControllerType type = new TECControllerType(manufacturer);
             TECController controller = new TECProvidedController(type);
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             typical.AddController(controller);
 
             //Act
@@ -3590,7 +3613,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECController controller = new TECProvidedController(type);
             bid.Systems.Add(typical);
             typical.AddController(controller);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -3714,7 +3737,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECPanelType type = new TECPanelType(new TECManufacturer());
             TECPanel panel = new TECPanel(type);
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             typical.Panels.Add(panel);
 
             //Act
@@ -3769,7 +3792,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECPanel panel = new TECPanel(type);
             bid.Systems.Add(typical);
             typical.Panels.Add(panel);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -3849,7 +3872,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECTypical typical = new TECTypical();
             TECMisc misc = new TECMisc(CostType.TEC);
             bid.Systems.Add(typical);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
             typical.MiscCosts.Add(misc);
             var removed = instance.MiscCosts[0];
 
@@ -3897,7 +3920,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECMisc misc = new TECMisc(CostType.TEC);
             bid.Systems.Add(typical);
             typical.MiscCosts.Add(misc);
-            TECSystem instance = typical.AddInstance(bid);
+            TECSystem instance = typical.AddInstance();
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -4013,7 +4036,7 @@ namespace EstimatingUtilitiesLibraryTests
             system.Equipment.Add(equipment);
             TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
             TECInterlockConnection interlock = new TECInterlockConnection(new List<TECConnectionType>());
             subScope.Interlocks.Add(interlock);
 
@@ -4062,7 +4085,7 @@ namespace EstimatingUtilitiesLibraryTests
             equipment.SubScope.Add(subScope);
             TECInterlockConnection interlock = new TECInterlockConnection(new List<TECConnectionType>());
             subScope.Interlocks.Add(interlock);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
 
             var instanceInterlock = instance.Equipment[0].SubScope[0].Interlocks[0];
 
@@ -4195,7 +4218,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             typical.AddController(child);
-            TECSystem system = typical.AddInstance(bid);
+            TECSystem system = typical.AddInstance();
             TECController instanceController = system.Controllers[0];
 
             TECProtocol protocol = new TECProtocol(new List<TECConnectionType>());
@@ -4249,14 +4272,14 @@ namespace EstimatingUtilitiesLibraryTests
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
             typical.AddController(controller);
-            TECSystem system = typical.AddInstance(bid);
+            TECSystem system = typical.AddInstance();
             TECController instanceController = system.Controllers[0];
 
             TECController otherController = new TECProvidedController(type);
             TECTypical otherTypical = new TECTypical();
             bid.Systems.Add(otherTypical);
             otherTypical.AddController(otherController);
-            TECSystem otherSystem = otherTypical.AddInstance(bid);
+            TECSystem otherSystem = otherTypical.AddInstance();
             TECController otherInstanceController = otherSystem.Controllers[0];
 
             TECProtocol protocol = new TECProtocol(new List<TECConnectionType>());
@@ -4375,7 +4398,7 @@ namespace EstimatingUtilitiesLibraryTests
             subScope.Devices.Add(device);
             equipment.SubScope.Add(subScope);
             bid.Systems.Add(typical);
-            TECSystem system = typical.AddInstance(bid);
+            TECSystem system = typical.AddInstance();
             TECSubScope instanceSubScope = system.Equipment[0].SubScope[0];
             IControllerConnection connection = controller.Connect(instanceSubScope, (instanceSubScope as IConnectable).AvailableProtocols.First());
 
@@ -4498,13 +4521,13 @@ namespace EstimatingUtilitiesLibraryTests
             subScope.Devices.Add(device);
             equipment.SubScope.Add(subScope);
             bid.Systems.Add(typical);
-            TECSystem system = typical.AddInstance(bid);
+            TECSystem system = typical.AddInstance();
 
             TECSubScope instanceSubScope = system.Equipment[0].SubScope[0];
             TECController instanceController = system.Controllers[0];
 
             IControllerConnection connection = controller.Connect(subScope, (subScope as IConnectable).AvailableProtocols.First());
-            IControllerConnection instanceConnection = instanceController.Connect(instanceSubScope, (instanceSubScope as IConnectable).AvailableProtocols.First());
+            IControllerConnection instanceConnection = (instanceSubScope as IConnectable).GetParentConnection();
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -4516,25 +4539,6 @@ namespace EstimatingUtilitiesLibraryTests
 
             Dictionary<string, string> data;
 
-            data = new Dictionary<string, string>();
-            data[SubScopeConnectionTable.ID.Name] = connection.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionTable.TableName, data));
-
-            data = new Dictionary<string, string>();
-            data[HardwiredConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[HardwiredConnectionChildrenTable.ChildID.Name] = subScope.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, HardwiredConnectionChildrenTable.TableName, data));
-
-            data = new Dictionary<string, string>();
-            data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
-            data[HardwiredConnectionConnectionTypeTable.TypeID.Name] = connType.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, HardwiredConnectionConnectionTypeTable.TableName, data));
-
-            data = new Dictionary<string, string>();
-            data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
-            data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
-            expectedItems.Add(new UpdateItem(Change.Remove, ControllerConnectionTable.TableName, data));
-            
             data = new Dictionary<string, string>();
             data[SubScopeConnectionTable.ID.Name] = instanceConnection.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionTable.TableName, data));
@@ -4554,6 +4558,25 @@ namespace EstimatingUtilitiesLibraryTests
             data[ControllerConnectionTable.ConnectionID.Name] = instanceConnection.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, ControllerConnectionTable.TableName, data));
 
+
+            data = new Dictionary<string, string>();
+            data[SubScopeConnectionTable.ID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, SubScopeConnectionTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[HardwiredConnectionChildrenTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[HardwiredConnectionChildrenTable.ChildID.Name] = subScope.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, HardwiredConnectionChildrenTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[HardwiredConnectionConnectionTypeTable.ConnectionID.Name] = connection.Guid.ToString();
+            data[HardwiredConnectionConnectionTypeTable.TypeID.Name] = connType.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, HardwiredConnectionConnectionTypeTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
+            data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, ControllerConnectionTable.TableName, data));
             
 
             int expectedCount = expectedItems.Count;
@@ -4746,7 +4769,7 @@ namespace EstimatingUtilitiesLibraryTests
             ChangeWatcher watcher = new ChangeWatcher(bid);
             TECTypical system = new TECTypical();
             bid.Systems.Add(system);
-            TECSystem instance = system.AddInstance(bid);
+            TECSystem instance = system.AddInstance();
             TECLocation originalLocation = new TECLocation();
             TECLocation newLocation = new TECLocation();
             bid.Locations.Add(originalLocation);
@@ -4818,6 +4841,44 @@ namespace EstimatingUtilitiesLibraryTests
 
             device.Manufacturer = newManufacturer;
 
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            CheckUpdateItems(expectedItems, stack);
+
+        }
+
+        [TestMethod]
+        public void Device_EditQuotedPrice()
+        {
+            //Arrange
+            TECBid bid = new TECBid();
+            ChangeWatcher watcher = new ChangeWatcher(bid);
+            TECTypical system = new TECTypical();
+            bid.Systems.Add(system);
+            TECEquipment equip = new TECEquipment();
+            system.Equipment.Add(equip);
+            TECSubScope subScope = new TECSubScope();
+            equip.SubScope.Add(subScope);
+            TECManufacturer manufacturer = new TECManufacturer();
+            bid.Catalogs.Manufacturers.Add(manufacturer);
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), manufacturer);
+            subScope.Devices.Add(device);
+
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
+
+
+            device.QuotedPrice = 123.0;
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[HardwareQuoteTable.HardwareID.Name] = device.Guid.ToString();
+            data[HardwareQuoteTable.QuotedPrice.Name] = device.QuotedPrice.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, HardwareQuoteTable.TableName, data));
+            
+            int expectedCount = expectedItems.Count;
+            
             //Assert
             Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
             CheckUpdateItems(expectedItems, stack);

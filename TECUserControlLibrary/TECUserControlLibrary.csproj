@@ -263,6 +263,9 @@
     <Compile Include="UserControls\ValveGridControl.xaml.cs">
       <DependentUpon>ValveGridControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\ConnectionHelper.cs" />
+    <Compile Include="Utilities\DragDropHelpers.cs" />
+    <Compile Include="Utilities\DropTargets\EmptyDropTarget.cs" />
     <Compile Include="Utilities\DropTargets\NetworkConnectionDropTarget.cs" />
     <Compile Include="Utilities\DropTargets\ProtocolToIODropTarget.cs" />
     <Compile Include="Utilities\QuantityCollection.cs" />
@@ -290,6 +293,7 @@
     <Compile Include="ViewModels\EquipmentHierarchyVM.cs" />
     <Compile Include="ViewModels\InternalNotesVM.cs" />
     <Compile Include="ViewModels\InterlocksVM.cs" />
+    <Compile Include="ViewModels\QuotesVM.cs" />
     <Compile Include="ViewModels\ReplaceActuatorVM.cs" />
     <Compile Include="ViewModels\RiserVM.cs" />
     <Compile Include="ViewModels\ScheduleVM.cs" />
@@ -511,6 +515,9 @@
     <Compile Include="UserControls\ScopeBranchAsNoteGridControl.xaml.cs">
       <DependentUpon>ScopeBranchAsNoteGridControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\QuotesView.xaml.cs">
+      <DependentUpon>QuotesView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ReplaceActuatorView.xaml.cs">
       <DependentUpon>ReplaceActuatorView.xaml</DependentUpon>
     </Compile>
@@ -580,9 +587,6 @@
     </Compile>
     <Compile Include="Views\LaborView.xaml.cs">
       <DependentUpon>LaborView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\ReviewTabControl.xaml.cs">
-      <DependentUpon>ReviewTabControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ReviewView.xaml.cs">
       <DependentUpon>ReviewView.xaml</DependentUpon>
@@ -1057,6 +1061,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\QuotesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ReplaceActuatorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1163,10 +1171,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LaborView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UserControls\ReviewTabControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -17,11 +17,11 @@ namespace Utilities
         {
             return new TECSubScope(template);
         }
-        private void syncSubScope(TemplateSynchronizer<TECSubScope> synchronizer, 
+        private void syncSubScope(TemplateSynchronizer<TECSubScope> synchronizer,
             TECSubScope templateSS, TECSubScope toSync, TECChangedEventArgs args)
         {
             toSync.CopyPropertiesFromScope(templateSS);
-            foreach(TECSubScope reference in synchronizer.GetFullDictionary()[templateSS].Where(item => item != toSync))
+            foreach (TECSubScope reference in synchronizer.GetFullDictionary()[templateSS].Where(item => item != toSync))
             {
                 reference.CopyPropertiesFromScope(toSync);
             }
@@ -33,12 +33,12 @@ namespace Utilities
             //Arrange
             TECTemplates templates = new TECTemplates();
 
-            TemplateSynchronizer<TECSubScope> synchronizer = 
+            TemplateSynchronizer<TECSubScope> synchronizer =
                 new TemplateSynchronizer<TECSubScope>(copySubScope, item => { }, syncSubScope, templates);
 
             TECSubScope templateSS = new TECSubScope();
             templateSS.Name = "Template SubScope";
-            
+
             synchronizer.NewGroup(templateSS);
 
             //Act
@@ -55,7 +55,7 @@ namespace Utilities
             //Arrange
             TECTemplates templates = new TECTemplates();
 
-            TemplateSynchronizer<TECSubScope> synchronizer = 
+            TemplateSynchronizer<TECSubScope> synchronizer =
                 new TemplateSynchronizer<TECSubScope>(copySubScope, item => { }, syncSubScope, templates);
 
             TECSubScope templateSS = new TECSubScope();
@@ -69,7 +69,7 @@ namespace Utilities
             Assert.AreNotEqual(templateSS.Guid, copySS.Guid);
         }
 
-        [TestMethod] 
+        [TestMethod]
         public void ChangeTemplateTest()
         {
             //Arrange
@@ -132,12 +132,12 @@ namespace Utilities
             templateSS.Description = "Test Description";
 
             //Assert
-            foreach(TECSubScope refSS in newReferenceSS)
+            foreach (TECSubScope refSS in newReferenceSS)
             {
                 Assert.AreEqual(templateSS.Description, refSS.Description);
             }
         }
-        
+
         #endregion
 
         #region TECTemplates Integration Tests
@@ -406,7 +406,7 @@ namespace Utilities
             Assert.AreEqual("First Name", ss1.Name);
             Assert.AreEqual("Second Name", ss2.Name);
         }
-        
+
         [TestMethod]
         public void ReferenceSubScopeRemoved()
         {
@@ -603,5 +603,77 @@ namespace Utilities
             Assert.IsFalse(ssSynchronizer.Contains(refSS), "Reference SubScope was not removed properly from synchronizer.");
         }
         #endregion
+
+        [TestMethod()]
+        public void NewGroupTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void RemoveGroupTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void NewItemTest1()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void RemoveItemTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void RemoveItemTest1()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void LinkExistingTest1()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void LinkExistingTest2()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void LinkNewTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void ContainsTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void GetFullDictionaryTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void GetTemplateTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void GetParentTest()
+        {
+            Assert.Fail();
+        }
     }
 }

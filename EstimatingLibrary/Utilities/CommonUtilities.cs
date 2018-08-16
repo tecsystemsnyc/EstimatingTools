@@ -27,12 +27,7 @@ namespace EstimatingLibrary.Utilities
                 collection.Add(item);
             }
         }
-
-        public static bool Matches<T>(this IEnumerable<T> first, IEnumerable<T> second)
-        {
-            return (first.Except(second).Count() == 0)
-                && (second.Except(first).Count() == 0);
-        }
+        
 
         public static void FillScopeCollection<T>(IList<T> collectionToModify, IList<T> otherCollection) where T : ITECObject
         {
@@ -45,7 +40,14 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        public static void UnionizeScopeCollection<T>(IList<T> collectionToModify, IList<T> otherCollection) where T : ITECObject
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <param name="otherCollection"></param>
+        /// <param name="onReplace">Method to be called upon identify an item to replace. The arguments should be (existing item, new item)</param>
+        public static void UnionizeScopeCollection<T>(IList<T> collectionToModify, IList<T> otherCollection, Action<T,T> onReplace = null) where T : ITECObject
         {
             List<T> itemsToRemove = new List<T>();
 
@@ -55,6 +57,7 @@ namespace EstimatingLibrary.Utilities
                 {
                     if (item.Guid == otherItem.Guid)
                     {
+                        onReplace?.Invoke(item, otherItem);
                         itemsToRemove.Add(item);
                     }
                 }

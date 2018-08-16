@@ -23,11 +23,11 @@ namespace EstimatingLibrary.Utilities
 
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                foreach (TECObject item in e.NewItems)
+                foreach (ITECObject item in e.NewItems)
                 {
                     if(parent is ITypicalable parentTypical && parentTypical.IsTypical && item is ITypicalable typ) { typ.MakeTypical(); }
                     onAdd?.Invoke(item);
-                    if (item is ITypicalable typItem && typItem.IsTypical) { notifyCost = null; }
+                    if (item is ITypicalable typItem && typItem.IsTypical) { notifyCost = null; notifyPoint = null; }
                     if (item is INotifyCostChanged cost)
                     {
                         costs += cost.CostBatch;
@@ -42,7 +42,7 @@ namespace EstimatingLibrary.Utilities
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
-                foreach (TECObject item in e.OldItems)
+                foreach (ITECObject item in e.OldItems)
                 {
                     onRemove?.Invoke(item);
                     if (item is ITypicalable typItem && typItem.IsTypical) { notifyCost = null; }

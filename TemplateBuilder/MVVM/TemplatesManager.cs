@@ -69,7 +69,7 @@ namespace TemplateBuilder.MVVM
 
         private void userStartedEditorHandler(string path)
         {
-            updateRecentTemplatesSettings(path);
+            updateRecentFilesSettings(path);
             buildTitleString(path, "TemplateBuilder");
             if (path != "")
             {
@@ -155,7 +155,7 @@ namespace TemplateBuilder.MVVM
             return new TECTemplates();
         }
 
-        private void updateRecentTemplatesSettings(string templatesPath)
+        protected override void updateRecentFilesSettings(string templatesPath)
         {
             if (templatesPath != null && templatesPath != "")
             {

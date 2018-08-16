@@ -16,38 +16,38 @@ namespace TestLibrary.ModelTestingUtilities
             TECCatalogs catalogs = new TECCatalogs();
 
             //Tags
-            rand.RepeatAction(() => catalogs.Tags.Add(TestTag(rand)), maxEachItem);
+            rand.RepeatAction(() => catalogs.Add(TestTag(rand)), maxEachItem);
 
             //Associated Costs
-            rand.RepeatAction(() => catalogs.AssociatedCosts.Add(TestCost(catalogs, rand, CostType.TEC)), maxEachItem);
-            rand.RepeatAction(() => catalogs.AssociatedCosts.Add(TestCost(catalogs, rand, CostType.Electrical)), maxEachItem);
+            rand.RepeatAction(() => catalogs.Add(TestCost(catalogs, rand, CostType.TEC)), maxEachItem);
+            rand.RepeatAction(() => catalogs.Add(TestCost(catalogs, rand, CostType.Electrical)), maxEachItem);
 
             //Conduit Types
-            rand.RepeatAction(() => catalogs.ConduitTypes.Add(TestElectricalMaterial(catalogs, rand, "Conduit Type")), maxEachItem);
+            rand.RepeatAction(() => catalogs.Add(TestElectricalMaterial(catalogs, rand, "Conduit Type")), maxEachItem);
 
             //ConnectionTypes
-            rand.RepeatAction(() => catalogs.ConnectionTypes.Add(TestConnectionType(catalogs, rand)), maxEachItem);
+            rand.RepeatAction(() => catalogs.Add(TestConnectionType(catalogs, rand)), maxEachItem);
 
             //Manufacturers
-            rand.RepeatAction(() => catalogs.Manufacturers.Add(TestManufacturer(rand)), maxEachItem);
+            rand.RepeatAction(() => catalogs.Add(TestManufacturer(rand)), maxEachItem);
 
             //Protocols
-            rand.RepeatAction(() => catalogs.Protocols.Add(TestProtocol(catalogs, rand)), maxEachItem);
+            rand.RepeatAction(() => catalogs.Add(TestProtocol(catalogs, rand)), maxEachItem);
 
             //Devices
-            rand.RepeatAction(() => catalogs.Devices.Add(TestDevice(catalogs, rand)), maxEachItem);
+            rand.RepeatAction(() => catalogs.Add(TestDevice(catalogs, rand)), maxEachItem);
 
             //IO Modules
-            rand.RepeatAction(() => catalogs.IOModules.Add(TestIOModule(catalogs, rand)), maxEachItem);
+            rand.RepeatAction(() => catalogs.Add(TestIOModule(catalogs, rand)), maxEachItem);
 
             //Controller Types
-            rand.RepeatAction(() => catalogs.ControllerTypes.Add(TestControllerType(catalogs, rand)), maxEachItem);
+            rand.RepeatAction(() => catalogs.Add(TestControllerType(catalogs, rand)), maxEachItem);
 
             //Panel Types
-            rand.RepeatAction(() => catalogs.PanelTypes.Add(TestPanelType(catalogs, rand)), maxEachItem);
+            rand.RepeatAction(() => catalogs.Add(TestPanelType(catalogs, rand)), maxEachItem);
 
             //Valves
-            rand.RepeatAction(() => catalogs.Valves.Add(TestValve(catalogs, rand)), maxEachItem);
+            rand.RepeatAction(() => catalogs.Add(TestValve(catalogs, rand)), maxEachItem);
             
             return catalogs;
         }
@@ -67,6 +67,7 @@ namespace TestLibrary.ModelTestingUtilities
             bid.ExtraLabor = TestLabor(rand, bid);
             bid.Parameters = TestParameters(rand, bid);
             bid.Catalogs = TestCatalogs(rand, maxEachItem);
+            bid.Templates = TestScopeTemplates(bid.Catalogs, rand);
 
             //Locations
             int numFloors = rand.Next(1, maxEachItem);
@@ -106,7 +107,7 @@ namespace TestLibrary.ModelTestingUtilities
             rand.RepeatAction(() => bid.Systems.Add(TestTypical(bid.Catalogs, rand)), maxEachItem);
             foreach (TECTypical typ in bid.Systems)
             {
-                rand.RepeatAction(() => typ.AddInstance(bid), maxEachItem);
+                rand.RepeatAction(() => typ.AddInstance(), maxEachItem);
             }
 
             //Connections
@@ -148,32 +149,39 @@ namespace TestLibrary.ModelTestingUtilities
             TECTemplates templates = new TECTemplates();
 
             templates.Catalogs = TestCatalogs(rand, 5);
-
-            //Parameters
-            rand.RepeatAction(() => templates.Templates.Parameters.Add(TestParameters(rand)), 5);
-
-            //Systems
-            rand.RepeatAction(() => templates.Templates.SystemTemplates.Add(TestSystem(templates.Catalogs, rand)), 10);
-
-            //Equipment
-            rand.RepeatAction(() => templates.Templates.EquipmentTemplates.Add(TestEquipment(templates.Catalogs, rand)), 10);
-
-            //SubScope
-            rand.RepeatAction(() => templates.Templates.SubScopeTemplates.Add(TestSubScope(templates.Catalogs, rand)), 10);
-
-            //Controllers
-            rand.RepeatAction(() => templates.Templates.ControllerTemplates.Add(TestProvidedController(templates.Catalogs, rand)), 10);
-
-            //Misc Costs
-            rand.RepeatAction(() => templates.Templates.MiscCostTemplates.Add(TestMisc(templates.Catalogs, rand, CostType.TEC)), 10);
-            rand.RepeatAction(() => templates.Templates.MiscCostTemplates.Add(TestMisc(templates.Catalogs, rand, CostType.Electrical)), 10);
-
-            //Panels
-            rand.RepeatAction(() => templates.Templates.PanelTemplates.Add(TestPanel(templates.Catalogs, rand)), 10);
+            templates.Templates = TestScopeTemplates(templates.Catalogs, rand);
 
             return templates;
         }
+        public static TECScopeTemplates TestScopeTemplates(TECCatalogs catalogs, Random rand)
+        {
+            TECScopeTemplates templates = new TECScopeTemplates();
+
+            //Parameters
+            rand.RepeatAction(() => templates.Parameters.Add(TestParameters(rand)), 5);
+
+            //Systems
+            rand.RepeatAction(() => templates.SystemTemplates.Add(TestSystem(catalogs, rand)), 10);
+
+            //Equipment
+            rand.RepeatAction(() => templates.EquipmentTemplates.Add(TestEquipment(catalogs, rand)), 10);
+
+            //SubScope
+            rand.RepeatAction(() => templates.SubScopeTemplates.Add(TestSubScope(catalogs, rand)), 10);
+
+            //Controllers
+            rand.RepeatAction(() => templates.ControllerTemplates.Add(TestProvidedController(catalogs, rand)), 10);
         
+            //Misc Costs
+            rand.RepeatAction(() => templates.MiscCostTemplates.Add(TestMisc(catalogs, rand, CostType.TEC)), 10);
+            rand.RepeatAction(() => templates.MiscCostTemplates.Add(TestMisc(catalogs, rand, CostType.Electrical)), 10);
+
+            //Panels
+            rand.RepeatAction(() => templates.PanelTemplates.Add(TestPanel(catalogs, rand)), 10);
+
+            return templates;
+        }
+
         #region Catalog Models
         public static TECTag TestTag(Random rand)
         {
@@ -479,7 +487,7 @@ namespace TestLibrary.ModelTestingUtilities
         {
             var hardwiredDevice = catalogs.Devices.Where(x => x.HardwiredConnectionTypes.Count > 0).RandomElement(rand) ??
                 new TECDevice(catalogs.ConnectionTypes.RandomElements(rand, false), new List<TECProtocol>(), catalogs.Manufacturers.RandomElement(rand));
-            if (!catalogs.Devices.Contains(hardwiredDevice)) catalogs.Devices.Add(hardwiredDevice);
+            if (!catalogs.Devices.Contains(hardwiredDevice)) catalogs.Add(hardwiredDevice);
             var networkDevice = catalogs.Devices.Where(x => x.PossibleProtocols.Count > 0 && x != hardwiredDevice).RandomElement(rand) ??
                 new TECDevice(new List<TECConnectionType>(), new List<TECProtocol> { catalogs.Protocols.RandomElement(rand) }, catalogs.Manufacturers.RandomElement(rand));
 
@@ -498,14 +506,14 @@ namespace TestLibrary.ModelTestingUtilities
             system.Equipment.RandomElement(rand).SubScope.Add(hardwiredSubScope);
             system.Equipment.RandomElement(rand).SubScope.Add(networkSubScope);
 
-            var hardwiredControllerType = catalogs.ControllerTypes.Where(x => new TECProvidedController(x).AvailableIO.Contains((hardwiredSubScope as IConnectable).HardwiredIO)).RandomElement(rand) ??
+            var hardwiredControllerType = catalogs.ControllerTypes.Where(x => new TECProvidedController(x).CanConnect(hardwiredSubScope, hardwiredProtocol)).RandomElement(rand) ??
                 new TECControllerType(catalogs.Manufacturers.RandomElement(rand));
             if (!catalogs.ControllerTypes.Contains(hardwiredControllerType))
             {
-                catalogs.ControllerTypes.Add(hardwiredControllerType);
+                catalogs.Add(hardwiredControllerType);
                 hardwiredControllerType.IO.AddRange((hardwiredSubScope as IConnectable).HardwiredIO.ToList());
             }
-            var hardwiredController = system.Controllers.Where(x => x is TECProvidedController y && y.Type == hardwiredControllerType).RandomElement(rand) ??
+            var hardwiredController = system.Controllers.Where(x => x is TECProvidedController y && y.Type == hardwiredControllerType && y.CanConnect(hardwiredSubScope, hardwiredProtocol)).RandomElement(rand) ??
                 new TECProvidedController(hardwiredControllerType);
             if (!system.Controllers.Contains(hardwiredController)) system.AddController(hardwiredController);
 
@@ -513,10 +521,10 @@ namespace TestLibrary.ModelTestingUtilities
                 new TECControllerType(catalogs.Manufacturers.RandomElement(rand));
             if (!catalogs.ControllerTypes.Contains(networkControllerType))
             {
-                catalogs.ControllerTypes.Add(networkControllerType);
+                catalogs.Add(networkControllerType);
                 networkControllerType.IO.Add(new TECIO(networkProtocol));
             }
-            var networkController = system.Controllers.Where(x => x is TECProvidedController y && y.Type == networkControllerType && y.AvailableProtocols.Contains(networkProtocol)).RandomElement(rand) ??
+            var networkController = system.Controllers.Where(x => x is TECProvidedController y && y.Type == networkControllerType && y.CanConnect(networkSubScope, networkProtocol)).RandomElement(rand) ??
                 new TECProvidedController(networkControllerType);
             if (!system.Controllers.Contains(networkController)) system.AddController(networkController);
 
@@ -534,7 +542,7 @@ namespace TestLibrary.ModelTestingUtilities
 
             var hardwiredDevice = catalogs.Devices.Where(x => x.HardwiredConnectionTypes.Count > 0).RandomElement(rand) ??
                 new TECDevice(catalogs.ConnectionTypes.RandomElements(rand, false), new List<TECProtocol>(), catalogs.Manufacturers.RandomElement(rand));
-            if (!catalogs.Devices.Contains(hardwiredDevice)) catalogs.Devices.Add(hardwiredDevice);
+            if (!catalogs.Devices.Contains(hardwiredDevice)) catalogs.Add(hardwiredDevice);
             var networkDevice = catalogs.Devices.Where(x => x.PossibleProtocols.Count > 0 && x != hardwiredDevice).RandomElement(rand) ??
                 new TECDevice(new List<TECConnectionType>(), new List<TECProtocol> { catalogs.Protocols.RandomElement(rand) }, catalogs.Manufacturers.RandomElement(rand));
 
@@ -560,7 +568,7 @@ namespace TestLibrary.ModelTestingUtilities
                 new TECControllerType(catalogs.Manufacturers.RandomElement(rand));
             if (!catalogs.ControllerTypes.Contains(hardwiredControllerType))
             {
-                catalogs.ControllerTypes.Add(hardwiredControllerType);
+                catalogs.Add(hardwiredControllerType);
                 hardwiredControllerType.IO.AddRange((hardwiredSubScope as IConnectable).HardwiredIO.ToList());
             }
             var hardwiredController = bid.Controllers.Where(x => x is TECProvidedController y && y.Type == hardwiredControllerType).RandomElement(rand) ??
@@ -571,7 +579,7 @@ namespace TestLibrary.ModelTestingUtilities
                 new TECControllerType(catalogs.Manufacturers.RandomElement(rand));
             if (!catalogs.ControllerTypes.Contains(networkControllerType))
             {
-                catalogs.ControllerTypes.Add(networkControllerType);
+                catalogs.Add(networkControllerType);
                 networkControllerType.IO.Add(new TECIO(networkProtocol));
             }
             var networkController = bid.Controllers.Where(x => x is TECProvidedController y && y.Type == networkControllerType && y.AvailableProtocols.Contains(networkProtocol)).RandomElement(rand) ??

@@ -58,17 +58,17 @@ namespace EstimatingLibrary
                 notifyCombinedChanged, notifyReorder: true);
         }
 
-        protected override SaveableMap propertyObjects()
+        protected override RelatableMap propertyObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(base.propertyObjects());
             saveList.AddRange(this.HardwiredConnectionTypes, "HardwiredConnectionTypes");
             saveList.AddRange(this.PossibleProtocols, "PossibleProtocols");
             return saveList;
         }
-        protected override SaveableMap linkedObjects()
+        protected override RelatableMap linkedObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.AddRange(base.linkedObjects());
             saveList.AddRange(this.HardwiredConnectionTypes, "HardwiredConnectionTypes");
             saveList.AddRange(this.PossibleProtocols, "PossibleProtocols");

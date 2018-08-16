@@ -16,47 +16,6 @@ namespace TECUserControlLibrary.ViewModels
     /// </summary>
     public class ScopeEditorVM : ViewModelBase, IDropTarget
     {
-        //Initializer
-        public ScopeEditorVM(TECBid bid, ChangeWatcher watcher)
-        {
-            Bid = bid;
-
-            setupScopeCollection();
-            setupControllersPanelsTab();
-            setupMiscVM();
-            TypicalEditVM = new SystemHierarchyVM(bid, true);
-            TypicalEditVM.Selected += item =>
-            {
-                Selected = item;
-            };
-            InstanceEditVM = new TypicalHierarchyVM(bid);
-            InstanceEditVM.Selected += item => {
-                Selected = item;
-            };
-            PropertiesVM = new PropertiesVM(bid.Catalogs, bid);
-            WorkBoxVM = new WorkBoxVM(bid);
-            ConnectionsVM = new ConnectionsVM(bid, watcher, bid.Catalogs, locations: bid.Locations, filterPredicate: filterPredicate);
-
-            bool filterPredicate(ITECObject obj)
-            {
-                if (obj is ITypicalable typable)
-                {
-                    return (typable is TECTypical || !typable.IsTypical);
-                }
-                else
-                {
-                    return true;
-                }
-            }
-
-            ConnectionsVM.Selected += item =>
-            {
-                Selected = item;
-            };
-            DGTabIndex = GridIndex.Systems;
-            TemplatesVisibility = Visibility.Visible;
-        }
-
         #region Properties
         private TECObject selected;
         private GridIndex _dGTabIndex;
@@ -96,7 +55,7 @@ namespace TECUserControlLibrary.ViewModels
         #region Interface Properties
 
         #region Scope Properties
-        public ScopeTemplates Templates { get { return Bid.Templates; } }
+        public TECScopeTemplates Templates { get { return Bid.Templates; } }
 
         public TECBid Bid { get; }
         #endregion Scope Properties
@@ -120,6 +79,47 @@ namespace TECUserControlLibrary.ViewModels
         #endregion Visibility Properties
         #endregion //Properties
 
+        //Initializer
+        public ScopeEditorVM(TECBid bid, ChangeWatcher watcher)
+        {
+            Bid = bid;
+
+            setupScopeCollection();
+            setupControllersPanelsTab();
+            setupMiscVM();
+            TypicalEditVM = new SystemHierarchyVM(bid, true);
+            TypicalEditVM.Selected += item =>
+            {
+                Selected = item;
+            };
+            InstanceEditVM = new TypicalHierarchyVM(bid, watcher);
+            InstanceEditVM.Selected += item => {
+                Selected = item;
+            };
+            PropertiesVM = new PropertiesVM(bid.Catalogs, bid);
+            WorkBoxVM = new WorkBoxVM(bid);
+            ConnectionsVM = new ConnectionsVM(bid, watcher, bid.Catalogs, locations: bid.Locations, filterPredicate: filterPredicate);
+
+            bool filterPredicate(ITECObject obj)
+            {
+                if (obj is ITypicalable typable)
+                {
+                    return (typable is TECTypical || !typable.IsTypical);
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            ConnectionsVM.Selected += item =>
+            {
+                Selected = item;
+            };
+            DGTabIndex = GridIndex.Systems;
+            TemplatesVisibility = Visibility.Visible;
+        }
+        
         #region Methods
 
         #region Setup Extensions
@@ -154,22 +154,22 @@ namespace TECUserControlLibrary.ViewModels
         {
             if(dropInfo.Data is TECSystem)
             {
-                UIHelpers.SystemToTypicalDragOver(dropInfo);
+                DragDropHelpers.SystemToTypicalDragOver(dropInfo);
             }
             else
             {
-                UIHelpers.StandardDragOver(dropInfo);
+                DragDropHelpers.StandardDragOver(dropInfo);
             }
         }
         public void Drop(IDropInfo dropInfo)
         {
             if (dropInfo.Data is TECSystem)
             {
-                UIHelpers.SystemToTypicalDrop(dropInfo, Bid);
+                DragDropHelpers.SystemToTypicalDrop(dropInfo, Bid);
             }
             else
             {
-                UIHelpers.StandardDrop(dropInfo, Bid);
+                DragDropHelpers.StandardDrop(dropInfo, Bid);
             }
         }
         #endregion

@@ -58,7 +58,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
-            UIHelpers.DragOver(dropInfo, dropCondition);
+            DragDropHelpers.DragOver(dropInfo, dropCondition);
 
             bool dropCondition(object item, Type sourceType, Type targetType)
             {
@@ -73,7 +73,7 @@ namespace TECUserControlLibrary.ViewModels
         
         public void Drop(IDropInfo dropInfo)
         {
-            UIHelpers.Drop(dropInfo, dropObject, false);
+            DragDropHelpers.Drop(dropInfo, dropObject, false);
 
             object dropObject(object arg)
             {

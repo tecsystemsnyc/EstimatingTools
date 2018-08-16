@@ -6,8 +6,8 @@ namespace EstimatingLibrary
     public abstract class TECScopeManager : TECObject, IRelatable
     {
         #region Properties
-        private ScopeTemplates _templates = new ScopeTemplates();
-        public ScopeTemplates Templates
+        private TECScopeTemplates _templates = new TECScopeTemplates();
+        public TECScopeTemplates Templates
         {
             get { return _templates; }
             set
@@ -39,12 +39,12 @@ namespace EstimatingLibrary
 
         #region IRelatable
 
-        public SaveableMap PropertyObjects { get { return propertyObjects(); } }
-        public SaveableMap LinkedObjects { get { return new SaveableMap(); } }
+        public RelatableMap PropertyObjects { get { return propertyObjects(); } }
+        public RelatableMap LinkedObjects { get { return new RelatableMap(); } }
 
-        protected virtual SaveableMap propertyObjects()
+        protected virtual RelatableMap propertyObjects()
         {
-            SaveableMap saveList = new SaveableMap();
+            RelatableMap saveList = new RelatableMap();
             saveList.Add(this.Catalogs, "Catalogs");
             saveList.Add(this.Templates, "Templates");
             return saveList;

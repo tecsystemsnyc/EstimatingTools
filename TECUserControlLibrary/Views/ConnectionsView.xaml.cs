@@ -14,6 +14,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TECUserControlLibrary.Utilities;
 using TECUserControlLibrary.ViewModels;
 
 namespace TECUserControlLibrary.Views
@@ -97,6 +98,15 @@ namespace TECUserControlLibrary.Views
             }
         }
 
-
+        private void Expander_Expanded(object sender, RoutedEventArgs e)
+        {
+            Grid parentGrid = UIHelpers.FindVisualParent<Grid>(sender as FrameworkElement);
+            if (parentGrid != null && parentGrid.Name == "networkConnectionGrid")
+            {
+                var thisView = this as ConnectionsView;
+                ListView list = (ListView)thisView.FindName("connectionsList");
+                list.SelectedItem = parentGrid.DataContext;
+            }
+        }
     }
 }

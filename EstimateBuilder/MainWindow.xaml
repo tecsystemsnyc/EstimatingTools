@@ -11,17 +11,17 @@
         xmlns:localMVVM="clr-namespace:EstimateBuilder.MVVM"
         xmlns:vm="clr-namespace:TECUserControlLibrary.ViewModels;assembly=TECUserControlLibrary"
         xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities;assembly=TECUserControlLibrary"
-        
         xmlns:views="clr-namespace:TECUserControlLibrary.Views;assembly=TECUserControlLibrary"
         xmlns:controls="clr-namespace:TECUserControlLibrary.UserControls;assembly=TECUserControlLibrary"
-        
+        xmlns:summaryViews="clr-namespace:TECUserControlLibrary.Views.SummaryViews;assembly=TECUserControlLibrary"
         mc:Ignorable="d ignore"
         Height="640"
         Width="1024"
         WindowStartupLocation="CenterScreen"
         Title="{Binding TitleString}"
         DataContext="{Binding Main, Source={StaticResource Locator}}"
-        x:Name="mainWindow">
+        x:Name="mainWindow"
+        TextOptions.TextFormattingMode="Display">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -98,8 +98,28 @@
                                 <views:ScheduleView
                                     ViewModel="{Binding ScheduleVM}"/>
                             </TabItem>
+                            <TabItem Header="Quotes">
+                                <views:QuotesView VM="{Binding QuotesVM}"/>
+                            </TabItem>
                             <TabItem Header="Review">
-                                <controls:ReviewTabControl ViewModel="{Binding}"/>
+                                <Grid Background="{DynamicResource SectionBackgroundBrush}">
+                                    <TabControl>
+                                        <TabItem Header="Labor">
+                                            <views:LaborView
+                                                ViewModel="{Binding LaborVM}"/>
+                                        </TabItem>
+                                        <TabItem Header="Material">
+                                            <views:MaterialSummaryView ViewModel="{Binding MaterialSummaryVM}"/>
+                                        </TabItem>
+                                        <TabItem Header="Itemized">
+                                            <summaryViews:ItemizedSummaryView ViewModel="{Binding ItemizedSummaryVM}"/>
+                                        </TabItem>
+                                        <TabItem Header="Summary">
+                                            <views:ReviewView ViewModel="{Binding ReviewVM}"/>
+                                        </TabItem>
+                                    </TabControl>
+
+                                </Grid>
                             </TabItem>
                             <TabItem Header="Proposal">
                                 <views:ProposalView
@@ -152,12 +172,12 @@
                                             <ColumnDefinition/>
                                         </Grid.ColumnDefinitions>
                                         <Button Content="Load File..."
-                                            Command="{Binding LoadTemplatesCommand}"
-                                            Margin="2"/>
+                                                Command="{Binding LoadTemplatesCommand}"
+                                                Margin="2"/>
                                         <Button Content="Cancel"
-                                            Command="{Binding CancelLoadTemplatesCommand}"
-                                            Grid.Column="1"
-                                            Margin="2"/>
+                                                Command="{Binding CancelLoadTemplatesCommand}"
+                                                Grid.Column="1"
+                                                Margin="2"/>
                                     </Grid>
                                     
                                 </Grid>

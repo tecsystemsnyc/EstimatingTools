@@ -1,7 +1,6 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
-using EstimatingUtilitiesLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -9,10 +8,10 @@ using System.Collections.ObjectModel;
 using TestLibrary.ModelTestingUtilities;
 using System.Linq;
 
-namespace EstimatingUtilitiesLibraryTests
+namespace Utilities
 {
     [TestClass]
-    public class BidStackTests
+    public class DoStackTests
     {
         private Random rand;
 
@@ -231,7 +230,6 @@ namespace EstimatingUtilitiesLibraryTests
 
         }
         
-        
         [TestMethod]
         public void Undo_Bid_Locations()
         {
@@ -306,6 +304,27 @@ namespace EstimatingUtilitiesLibraryTests
             //assert
             ObservableCollection<TECPanel> actual = Bid.Panels;
             Assert.AreEqual(expected.Count, actual.Count, "Not Undone");
+
+        }
+
+        [TestMethod]
+        public void Undo_Bid_Controller()
+        {
+            //Arrange
+            var Bid = ModelCreation.TestBid(rand);
+            int expected = Bid.Controllers.Count;
+            TECProvidedController edit = new TECProvidedController(Bid.Catalogs.ControllerTypes[0]);
+
+            //Act
+            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
+            int beforeCount = testStack.UndoCount();
+            Bid.AddController(edit);
+            Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            var actual = Bid.Controllers;
+            Assert.AreEqual(expected, actual.Count, "Not Undone");
 
         }
 
@@ -576,6 +595,29 @@ namespace EstimatingUtilitiesLibraryTests
 
         }
 
+        [TestMethod]
+        public void Undo_System_Controller()
+        {
+            //Arrange
+            var Bid = ModelCreation.TestBid(rand);
+            var system = new TECTypical();
+            Bid.Systems.Add(system);
+            int expected = system.Controllers.Count;
+            TECProvidedController edit = new TECProvidedController(Bid.Catalogs.ControllerTypes[0]);
+
+            //Act
+            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
+            int beforeCount = testStack.UndoCount();
+            system.AddController(edit);
+            Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
+            testStack.Undo();
+
+            //assert
+            var actual = system.Controllers;
+            Assert.AreEqual(expected, actual.Count, "Not Undone");
+
+        }
+
         #endregion
 
         #region Equipment Properties
@@ -757,19 +799,20 @@ namespace EstimatingUtilitiesLibraryTests
         public void Undo_Bid_Connection_ConduitType()
         {
             //Arrange
-            var Bid = ModelCreation.TestBid(rand);
+            var bid = ModelCreation.TestBid(rand);
 
-            TECController controller1 = Bid.Controllers.First();
-            TECController controller2 = Bid.Controllers.First(x => controller1.CanConnect(x));
+            TECProtocol protocol = bid.Catalogs.Protocols.First();            
+            TECController controller1 = bid.Controllers.First(x => x.AvailableProtocols.Contains(protocol));
+            TECController controller2 = bid.Controllers.First(x => x.AvailableProtocols.Contains(protocol) && x != controller1);
 
-            IControllerConnection connection = controller1.Connect(controller2, controller1.AvailableProtocols.First());
-            connection.ConduitType = Bid.Catalogs.ConduitTypes.First();
+            IControllerConnection connection = controller1.Connect(controller2, protocol);
+            connection.ConduitType = bid.Catalogs.ConduitTypes.First();
 
             TECElectricalMaterial expected = connection.ConduitType;
-            TECElectricalMaterial edit = Bid.Catalogs.ConduitTypes.First(x => x != expected);
+            TECElectricalMaterial edit = bid.Catalogs.ConduitTypes.First(x => x != expected);
 
             //Act
-            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
+            ChangeWatcher watcher = new ChangeWatcher(bid); DoStacker testStack = new DoStacker(watcher);
             connection.ConduitType = edit;
             testStack.Undo();
 
@@ -1048,6 +1091,28 @@ namespace EstimatingUtilitiesLibraryTests
             //assert
             ObservableCollection<TECScopeBranch> actual = Bid.ScopeTree;
             Assert.AreEqual(expected.Count, actual.Count, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_Bid_Controller()
+        {
+            //Arrange
+            var Bid = ModelCreation.TestBid(rand);
+            TECProvidedController edit = new TECProvidedController(Bid.Catalogs.ControllerTypes[0]);
+
+            //Act
+            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
+            int beforeCount = testStack.UndoCount();
+            Bid.AddController(edit);
+            int expected = Bid.Controllers.Count;
+            Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            var actual = Bid.Controllers;
+            Assert.AreEqual(expected, actual.Count, "Not Undone");
 
         }
 
@@ -1375,13 +1440,11 @@ namespace EstimatingUtilitiesLibraryTests
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
-            var system = Bid.Systems[0];
+            TECTypical system = Bid.Systems[0];
+            system.AddInstance();
+            system.AddInstance();
             system.Equipment.Add(edit);
-            var expected = new ObservableCollection<TECEquipment>();
-            foreach (TECEquipment item in system.Equipment)
-            {
-                expected.Add(item);
-            }
+            var expected = new List<TECEquipment>(system.Equipment);
             testStack.Undo();
             testStack.Redo();
 
@@ -1413,6 +1476,30 @@ namespace EstimatingUtilitiesLibraryTests
             //assert
             TECLabeled actual = system.Location;
             Assert.AreEqual(edit, actual, "Not Redone");
+
+        }
+
+        [TestMethod]
+        public void Redo_System_Controller()
+        {
+            //Arrange
+            var Bid = ModelCreation.TestBid(rand);
+            var system = new TECTypical();
+            Bid.Systems.Add(system);
+            TECProvidedController edit = new TECProvidedController(Bid.Catalogs.ControllerTypes[0]);
+
+            //Act
+            ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
+            int beforeCount = testStack.UndoCount();
+            system.AddController(edit);
+            int expected = system.Controllers.Count;
+            Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
+            testStack.Undo();
+            testStack.Redo();
+
+            //assert
+            var actual = system.Controllers;
+            Assert.AreEqual(expected, actual.Count, "Not Undone");
 
         }
 

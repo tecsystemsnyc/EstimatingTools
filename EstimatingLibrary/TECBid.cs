@@ -141,6 +141,7 @@ namespace EstimatingLibrary
         public ObservableCollection<TECMisc> MiscCosts { get; } = new ObservableCollection<TECMisc>();
         public ObservableCollection<TECPanel> Panels { get; } = new ObservableCollection<TECPanel>();
         public ObservableCollection<TECInternalNote> InternalNotes { get; } = new ObservableCollection<TECInternalNote>();
+        public ObservableCollection<TECDistributionContact> DistributionList { get; } = new ObservableCollection<TECDistributionContact>();
 
         public CostBatch CostBatch
         {
@@ -169,6 +170,7 @@ namespace EstimatingLibrary
             MiscCosts.CollectionChanged += (sender, args) => collectionChanged(sender, args, "MiscCosts");
             Panels.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Panels");
             InternalNotes.CollectionChanged += (sender, args) => collectionChanged(sender, args, "InternalNotes");
+            DistributionList.CollectionChanged += (sender, args) => collectionChanged(sender, args, "DistributionList");
         }
 
         public TECBid() : this(Guid.NewGuid())
@@ -343,9 +345,9 @@ namespace EstimatingLibrary
             }
             return costs;
         }
-        protected override SaveableMap propertyObjects()
+        protected override RelatableMap propertyObjects()
         {
-            SaveableMap saveList = base.propertyObjects();
+            RelatableMap saveList = base.propertyObjects();
             saveList.Add(this.Parameters, "Parameters");
             saveList.Add(this.ExtraLabor, "ExtraLabor");
             saveList.Add(this.Schedule, "Schedule");
@@ -358,6 +360,7 @@ namespace EstimatingLibrary
             saveList.AddRange(this.MiscCosts, "MiscCosts");
             saveList.AddRange(this.Locations, "Locations");
             saveList.AddRange(this.InternalNotes, "InternalNotes");
+            saveList.AddRange(this.DistributionList, "DistributionList");
             return saveList;
         }
 
@@ -378,6 +381,32 @@ namespace EstimatingLibrary
                 if (located.Location == location) located.Location = null;
 
             }
+        }
+        #endregion
+
+        #region IDoRedoable
+        public override void AddForProperty(string propertyName, object item)
+        {
+            if(propertyName == "Controllers")
+            {
+                this.AddController(item as TECController);
+            }
+            else
+            {
+                base.AddForProperty(propertyName, item);
+            }
+        }
+        public override void RemoveForProperty(string propertyName, object item)
+        {
+            if (propertyName == "Controllers")
+            {
+                this.RemoveController(item as TECController);
+            }
+            else{
+                base.RemoveForProperty(propertyName, item);
+
+            }
+
         }
         #endregion
     }

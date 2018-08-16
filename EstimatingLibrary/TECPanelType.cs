@@ -13,7 +13,7 @@ namespace EstimatingLibrary
         public TECPanelType(TECManufacturer manufacturer) : this(Guid.NewGuid(), manufacturer) { }
         public TECPanelType(TECPanelType typeSource) : this(typeSource.Manufacturer)
         {
-            copyPropertiesFromCost(typeSource);
+            copyPropertiesFromHardware(typeSource);
         }
 
         public TECPanelType CatalogCopy()

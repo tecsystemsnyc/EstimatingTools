@@ -122,7 +122,6 @@ namespace TestLibrary.ModelTestingUtilities
             rand.RepeatAction(() => sys.MiscCosts.Add(ModelCreation.TestMisc(catalogs, rand, CostType.Electrical)), 5);
             rand.RepeatAction(() => sys.ScopeBranches.Add(ModelCreation.TestScopeBranch(rand, 3)), 5);
             rand.RepeatAction(() => ModelCreation.AddSystemConnections(sys, catalogs, rand), 5);
-            sys.IsSingleton = rand.NextBool();
         }
         public static void AssignRandomConnectionProperties(this IConnection connection, TECCatalogs catalogs, Random rand)
         {

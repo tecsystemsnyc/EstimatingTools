@@ -130,7 +130,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         {
             foreach(NameConatiner item in Names)
             {
-                TECSystem newSystem = parent.AddInstance(bid);
+                TECSystem newSystem = parent.AddInstance();
                 newSystem.Name = item.Name;
                 if (item.Location != null)
                 {
@@ -181,7 +181,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                 NameConatiner newItem = new NameConatiner();
                 if (IncludeLocationTag && PatternLocation != null && PatternLocation.Label != "")
                 {
-                    newItem.Name = string.Format("{0}-{1}-{2}", PatternName, PatternLocation.Label, x);
+                    newItem.Name = String.Format("{0}-{1}-{2}", PatternName, PatternLocation.Label, x);
                 }
                 else
                 {
@@ -200,7 +200,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private bool canAddPattern()
         {
             bool start = PatternStart >= 0;
-            bool end = PatternEnd > PatternStart;
+            bool end = PatternEnd >= PatternStart;
             bool name = (PatternName != null && PatternName != "");
             return (start && end && name);
         }

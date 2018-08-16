@@ -86,11 +86,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DeleteDeviceVMTests.cs" />
-    <Compile Include="ItemSummaryVMTests.cs" />
-    <Compile Include="MaterialSummaryVMTests.cs" />
+    <Compile Include="BaseVMs\AppManagerTests.cs" />
+    <Compile Include="Utilities\ConnectionHelperTests.cs" />
+    <Compile Include="Utilities\DragDropHelpersTests.cs" />
+    <Compile Include="Utilities\SearchUtilitiesTests.cs" />
+    <Compile Include="Utilities\UIHelpersTests.cs" />
+    <Compile Include="ViewModels\ConnectableFilterTests.cs" />
+    <Compile Include="ViewModels\ConnectionsVMTests.cs" />
+    <Compile Include="ViewModels\ConnectOnAddVMTests.cs" />
+    <Compile Include="ViewModels\DeleteDeviceVMTests.cs" />
+    <Compile Include="ViewModels\ItemSummaryVMTests.cs" />
+    <Compile Include="ViewModels\MaterialSummaryVMTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SystemSummaryVMTests.cs" />
+    <Compile Include="ViewModels\MenuVMTests.cs" />
+    <Compile Include="ViewModels\SystemSummaryVMTests.cs" />
     <Compile Include="ViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -36,21 +36,27 @@
                 </TextBox>
                 <Button Content="Add" Command="{Binding AddNewCommand}" Grid.Column="1" Margin="2"/>
             </Grid>
-            <ListView ItemsSource="{Binding Bid.InternalNotes}" Grid.Row="2"
+            <Border BorderBrush="DarkGray"
+                    BorderThickness="0,0,1,0"
+                     Grid.Row="2">
+                <ListView ItemsSource="{Binding Bid.InternalNotes}"
                       x:Name="notesList"
-                      SelectedItem="{Binding SelectedNote}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
+                      SelectedItem="{Binding SelectedNote}"
+                      HorizontalContentAlignment="Stretch">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
                             <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1">
-                            <Grid>
+                                <Grid>
 
-                                <TextBlock Text="{Binding Label}"/>
-                            </Grid>
+                                    <TextBlock Text="{Binding Label}"/>
+                                </Grid>
 
-                        </Border>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Border>
+            
         </Grid>
         
         <StackPanel Grid.Column="1" DataContext="{Binding ElementName=notesList, Path=SelectedItem}">

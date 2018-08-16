@@ -13,15 +13,15 @@ namespace TECUserControlLibrary.Utilities.DropTargets
     {
         public void DragOver(IDropInfo dropInfo)
         {
-            if (dropInfo.Data is TECProtocol && UIHelpers.TargetCollectionIsType(dropInfo, typeof(TECIO)))
+            if (dropInfo.Data is TECProtocol && DragDropHelpers.TargetCollectionIsType(dropInfo, typeof(TECIO)))
             {
-                UIHelpers.SetDragAdorners(dropInfo);
+                DragDropHelpers.SetDragAdorners(dropInfo);
             }
         }
 
         public void Drop(IDropInfo dropInfo)
         {
-            UIHelpers.Drop(dropInfo, x => convertToIO(x, (IList)dropInfo.TargetCollection), false);
+            DragDropHelpers.Drop(dropInfo, x => convertToIO(x, (IList)dropInfo.TargetCollection), false);
         }
 
         static private object convertToIO(object protocol, IList collection)

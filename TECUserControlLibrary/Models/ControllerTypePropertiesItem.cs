@@ -84,7 +84,10 @@ namespace TECUserControlLibrary.Models
 
         void IDropTarget.DragOver(IDropInfo dropInfo)
         {
-            UIHelpers.StandardDragOver(dropInfo);
+            DragDropHelpers.DragOver(dropInfo, (item, sourceType, targetType) =>
+            {
+                return sourceType == typeof(TECIOModule);
+            });
         }
 
         void IDropTarget.Drop(IDropInfo dropInfo)

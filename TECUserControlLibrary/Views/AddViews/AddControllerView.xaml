@@ -21,7 +21,16 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" DataContext="{Binding ToAdd}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Border Style="{StaticResource HeaderBorder}" Grid.ColumnSpan="2">
+            <TextBlock Style="{StaticResource ListHeader}"
+                       Text="Add Controllers"/>
+        </Border>
+        <Grid Grid.Column="0" DataContext="{Binding ToAdd}"
+              Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -31,28 +40,25 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
-
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <TextBlock Text="Controller: "/>
-            <TextBlock Text="{Binding Name}" Grid.Column="1"/>
-            <TextBlock Text="Quantity: " Grid.Row="1"/>
-            <TextBox Text="{Binding ElementName=addControllerView, Path=ViewModel.Quantity}" Grid.Row="1" Grid.Column="1"
+            <TextBlock Text="Quantity: " Grid.Row="0"/>
+            <TextBox Text="{Binding ElementName=addControllerView, Path=ViewModel.Quantity}" Grid.Row="0" Grid.Column="1"
                      Margin="2"/>
-            <TextBlock Text="Type: " Grid.Row="2"/>
+            <TextBlock Text="Type: " Grid.Row="1"/>
             <ComboBox ItemsSource="{Binding ElementName=addControllerView, Path=ViewModel.ControllerTypes}"
                       SelectedItem="{Binding ElementName=addControllerView, Path=ViewModel.SelectedType}"
                       DisplayMemberPath="Name" 
-                      Grid.Row="2" Grid.Column="1"
+                      Grid.Row="1" Grid.Column="1"
                       IsEnabled="{Binding ElementName=FBOCheckBox, Path=IsChecked, Converter={utilities:InvertBoolConverter}}"/>
-            <TextBlock Text="FBO: " Grid.Row="3"/>
+            <TextBlock Text="FBO: " Grid.Row="2"/>
             <CheckBox IsChecked="{Binding ElementName=addControllerView, Path=ViewModel.IsFBO}"
-                      Grid.Row="3" Grid.Column="1"
+                      Grid.Row="2" Grid.Column="1"
                       x:Name="FBOCheckBox"/>
         </Grid>
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1"
+              Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
@@ -60,9 +66,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Label Content="Review Properties" Grid.ColumnSpan="2"/>
-            <Border BorderThickness="0,0,0,1" BorderBrush="Black" Grid.ColumnSpan="2"/>
-            <views:PropertiesView Selected="{Binding ToAdd}" Grid.Row="1" Grid.ColumnSpan="2"
+            <views:PropertiesView Selected="{Binding ToAdd}" Grid.ColumnSpan="2"
                                   DropHandler="{Binding PropertiesVM}"
                                   ViewModel="{Binding PropertiesVM}"/>
             <Button Content="Cancel" x:Name="cancelButton" Click="cancelButton_Click" Grid.Row="2"

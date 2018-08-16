@@ -37,10 +37,12 @@ namespace EstimatingLibrary.Utilities
         }
         public void RemoveKey(T key)
         {
-            foreach(T value in dictionary[key])
+            List<T> toRemove = new List<T>(dictionary[key]);
+            foreach (T value in toRemove)
             {
                 RemoveItem(key, value);
             }
+            dictionary.Remove(key);
         }
 
         public Y GetTypical<Y>(Y instance) where Y : class

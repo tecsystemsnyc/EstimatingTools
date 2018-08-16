@@ -35,17 +35,17 @@
                 <ColumnDefinition Width="70"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Name:" Margin="5,0,0,0"
-                           VerticalAlignment="Center"/>
+                       VerticalAlignment="Center"/>
             <TextBox  Grid.Column="1" Margin="2"
-                          Text="{Binding ControllerTypeName}"/>
+                      Text="{Binding ControllerTypeName}"/>
             <TextBlock Text="Description:" Margin="5,0,0,0"
-                           VerticalAlignment="Center" Grid.Column="2"/>
+                       VerticalAlignment="Center" Grid.Column="2"/>
             <TextBox  Grid.Column="3" Margin="2"
-                          Text="{Binding ControllerTypeDescription}"/>
+                      Text="{Binding ControllerTypeDescription}"/>
             <TextBlock Text="List Price: " Grid.Column="4" Margin="5,0,0,0"
-                           VerticalAlignment="Center"/>
+                       VerticalAlignment="Center"/>
             <TextBox  Grid.Column="5" Margin="2"
-                          Text="{Binding ControllerTypeCost, StringFormat={}{0:C}}"/>
+                      Text="{Binding ControllerTypeCost, StringFormat={}{0:C}}"/>
 
         </Grid>
         <Grid Grid.Row="1">
@@ -56,15 +56,15 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Labor:" Margin="5,0,0,0"
-                           VerticalAlignment="Center"/>
+                       VerticalAlignment="Center"/>
             <TextBox  Grid.Column="1" Margin="2"
-                          Text="{Binding ControllerTypeLabor}"/>
+                      Text="{Binding ControllerTypeLabor}"/>
             <TextBlock Text="Manufacturer:" Margin="5,0,0,0"
-                                           VerticalAlignment="Center" Grid.Column="2"/>
+                       VerticalAlignment="Center" Grid.Column="2"/>
             <ComboBox ItemsSource="{Binding Templates.Catalogs.Manufacturers}"
-                                          SelectedItem="{Binding ControllerTypeManufacturer}"
-                                          DisplayMemberPath="Label" Grid.Column="3"
-                                          Margin="2"/>
+                      SelectedItem="{Binding ControllerTypeManufacturer}"
+                      DisplayMemberPath="Label" Grid.Column="3"
+                      Margin="2"/>
         </Grid>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
@@ -85,16 +85,16 @@
                 </Grid.ColumnDefinitions>
                 <Label Content="IO: "/>
                 <ComboBox ItemsSource="{Binding Source={x:Static utilities:UIHelpers.IOSelectorList}}"
-                                          SelectedValue="{Binding SelectedIO}"
-                                          DisplayMemberPath="Item1"
-                                          SelectedValuePath="Item2"
-                                          Grid.Column="1"
-                                              Margin="2"/>
+                          SelectedValue="{Binding SelectedIO}"
+                          DisplayMemberPath="Item1"
+                          SelectedValuePath="Item2"
+                          Grid.Column="1"
+                          Margin="2"/>
                 <Label Content="Qty: " Grid.Column="2"/>
                 <TextBox Text="{Binding SelectedIOQty, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3"/>
                 <Button Content="Add" Command="{Binding AddIOCommand}" Grid.Column="4"/>
                 <controls:IOGridControl IOSource="{Binding ControllerTypeIO}"
-                                                        Grid.Row="1" Grid.ColumnSpan="5"
+                                        Grid.Row="1" Grid.ColumnSpan="5"
                                         DropHandler="{Binding ProtocolToIODropTarget}"/>
             </Grid>
             <Grid Grid.Column="1">
@@ -104,10 +104,10 @@
                 </Grid.RowDefinitions>
                 <Label Content="Max IO Modules: "/>
                 <DataGrid Grid.Row="1" 
-                            ItemsSource="{Binding ControllerTypeModules}"
-                            AutoGenerateColumns="False"
-                            CanUserAddRows="False"
-                            dd:DragDrop.DropHandler="{Binding ReferenceDropHandler}">
+                          ItemsSource="{Binding ControllerTypeModules}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          dd:DragDrop.DropHandler="{Binding ReferenceDropHandler}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding Item.Name}" Header="Name" 
                                             Width="Auto" MinWidth="40" IsReadOnly="True"/>
@@ -129,8 +129,8 @@
 
         </Grid>
         <Button Grid.Row="3" Grid.ColumnSpan="4"
-                                        Content="Add" Margin="2"
-                                        Command="{Binding AddControllerTypeCommand}"/>
+                Content="Add" Margin="2"
+                Command="{Binding AddControllerTypeCommand}"/>
         <controls:HardwareGridControl HardwareSource="{Binding Templates.Catalogs.ControllerTypes}"
                                       Grid.Row="4" Margin="5"
                                       DropHandler="{Binding}"

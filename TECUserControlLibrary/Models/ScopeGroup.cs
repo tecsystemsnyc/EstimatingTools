@@ -36,17 +36,17 @@ namespace TECUserControlLibrary.Models
         }
 
         public ITECScope Scope { get; }
-        public ObservableCollection<ScopeGroup> ChildrenGroups { get; }
+        public ObservableCollection<ScopeGroup> ChildrenGroups { get; } = new ObservableCollection<ScopeGroup>();
+        private Dictionary<ITECScope, ScopeGroup> scopeDictionary = new Dictionary<ITECScope, ScopeGroup>();
 
         public ScopeGroup(string name)
         {
             this.Name = name;
-
-            ChildrenGroups = new ObservableCollection<ScopeGroup>();
         }
         public ScopeGroup(ITECScope scope) : this(scope.Name)
         {
             this.Scope = scope;
+            scopeDictionary.Add(scope, this);
             this.Scope.PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName == "Name")
@@ -64,54 +64,64 @@ namespace TECUserControlLibrary.Models
         }
         public void Add(ScopeGroup child)
         {
+            foreach(var pair in child.scopeDictionary)
+            {
+                this.scopeDictionary.Add(pair.Key, pair.Value);
+            }
+            child.scopeDictionary = this.scopeDictionary;
             this.ChildrenGroups.Add(child);
         }
 
         public bool Remove(ITECScope child)
         {
-            ScopeGroup groupToRemove = null;
-
-            foreach (ScopeGroup childGroup in this.ChildrenGroups)
-            {
-                if (childGroup.Scope == child)
-                {
-                    groupToRemove = childGroup;
-                    break;
-                }
-            }
-
+            ScopeGroup groupToRemove = scopeDictionary.ContainsKey(child) ? scopeDictionary[child] : null;
+            
             if (groupToRemove == null)
             {
                 return false;
             }
             else
             {
-                this.ChildrenGroups.Remove(groupToRemove);
+                this.Remove(groupToRemove);
                 return true;
             }
         }
         public bool Remove(ScopeGroup child)
         {
+            var moreChildren = new List<ScopeGroup>(child.ChildrenGroups);
+            foreach (var childGroup in moreChildren)
+            {
+                child.Remove(childGroup);
+            }
+            child.scopeDictionary = null;
+            this.scopeDictionary.Remove(child.Scope);
             return this.ChildrenGroups.Remove(child);
         }
 
         public ScopeGroup GetGroup(ITECScope scope)
         {
-            if (this.Scope == scope)
-            {
-                return this;
-            }
+            //if (this.Scope == scope)
+            //{
+            //    return this;
+            //}
 
-            foreach (ScopeGroup group in this.ChildrenGroups)
+            //foreach (ScopeGroup group in this.ChildrenGroups)
+            //{
+            //    ScopeGroup childGroup = group.GetGroup(scope);
+            //    if (childGroup != null)
+            //    {
+            //        return childGroup;
+            //    }
+            //}
+            if (scope == null) return null;
+            if (this.scopeDictionary.ContainsKey(scope))
             {
-                ScopeGroup childGroup = group.GetGroup(scope);
-                if (childGroup != null)
-                {
-                    return childGroup;
-                }
+                return scopeDictionary[scope];
             }
-
-            return null;
+            else
+            {
+                return null;
+            }            
         }
         public List<ScopeGroup> GetPath(ITECScope scope)
         {

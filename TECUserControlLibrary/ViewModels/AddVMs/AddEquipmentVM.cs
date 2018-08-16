@@ -112,7 +112,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             };
             AddCommand = new RelayCommand(addExecute, addCanExecute);
             Quantity = 1;
-            ConnectVM = new ConnectOnAddVM(ToAdd.SubScope, parent, scopeManager.Catalogs.ConduitTypes, scopeManager.Catalogs.ConnectionTypes);
+            ConnectVM = new ConnectOnAddVM(ToAdd.SubScope, parent.Controllers, scopeManager.Catalogs.ConduitTypes);
         }
         public AddEquipmentVM(Action<TECEquipment> addMethod, TECScopeManager scopeManager) : base(scopeManager)
         {

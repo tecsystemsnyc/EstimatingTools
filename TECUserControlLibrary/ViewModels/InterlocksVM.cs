@@ -136,7 +136,7 @@ namespace TECUserControlLibrary.ViewModels
             this.ConduitTypes.Add(noneConduit);
             this.ConduitType = noneConduit;
 
-            repopulateGroups(root, addInterlockable);
+            repopulateGroups(null, root, addInterlockable);
 
         }
 
@@ -169,17 +169,37 @@ namespace TECUserControlLibrary.ViewModels
             return ConnectionTypes.Count != 0;
         }
         
-        private void repopulateGroups(ITECObject item, Action<ScopeGroup, IInterlockable> action)
+        private void repopulateGroups(ITECObject parent, ITECObject item, Action<ScopeGroup, IInterlockable, IEnumerable<ITECObject>> action, List<ITECObject> parentPath = null)
         {
+            parentPath = parentPath ?? new List<ITECObject>();
+            if (parent != null) { parentPath.Add(parent); }
             if (item is IInterlockable connectable)
             {
-                action(this.rootInterlockablesGroup, connectable);
+                parentPath.Add(item);
+                var closestRoot = this.rootInterlockablesGroup;
+                var thisPath = new List<ITECObject>();
+                thisPath.Add(connectable);
+                var start = item;
+                var toRemove = new List<ITECObject>();
+                for (int x = parentPath.Count - 2; x >= 0; x--)
+                {
+                    if (!thisPath.Contains(parentPath[x]) && (parentPath[x] as IRelatable).GetDirectChildren().Contains(start))
+                    {
+                        thisPath.Insert(0, parentPath[x]);
+                        start = parentPath[x];
+                        if (this.rootInterlockablesGroup.GetGroup(parentPath[x] as ITECScope) != null && closestRoot == this.rootInterlockablesGroup)
+                        {
+                            closestRoot = this.rootInterlockablesGroup.GetGroup(parentPath[x] as ITECScope);
+                        }
+                    }
+                }
+                action(closestRoot, connectable, thisPath);
             }
             else if (item is IRelatable relatable)
             {
                 foreach (ITECObject child in relatable.GetDirectChildren().Where(filterPredicate))
                 {
-                    repopulateGroups(child, action);
+                    repopulateGroups(item, child, action, parentPath);
                 }
             }
         }
@@ -190,25 +210,31 @@ namespace TECUserControlLibrary.ViewModels
             {
                 if (obj.Change == Change.Add)
                 {
-                    repopulateGroups(tecObj, addInterlockable);
+                    repopulateGroups(obj.Sender, tecObj, addInterlockable);
                 }
                 else if (obj.Change == Change.Remove)
                 {
-                    repopulateGroups(tecObj, removeInterloackable);
+                    repopulateGroups(obj.Sender, tecObj, removeInterloackable);
                 }
             }
         }
-        private void addInterlockable(ScopeGroup rootGroup, IInterlockable interlockable)
+        private void addInterlockable(ScopeGroup rootGroup, IInterlockable interlockable, IEnumerable<ITECObject> parentPath)
         {
             if (!filterPredicate(interlockable)) return;
-            bool isDescendant = root.IsDirectDescendant(interlockable);
-            if (!root.IsDirectDescendant(interlockable))
+            IRelatable rootScope = rootGroup.Scope as IRelatable ?? this.root;
+            List<ITECObject> path = new List<ITECObject>(parentPath);
+            if (rootScope != parentPath.First())
+            {
+                path = rootScope.GetObjectPath(parentPath.First());
+                path.Remove(parentPath.First());
+                path.AddRange(parentPath);
+            }
+
+            if (path.Count == 0)
             {
                 logger.Error("New connectable doesn't exist in root object.");
                 return;
             }
-
-            List<ITECObject> path = this.root.GetObjectPath(interlockable);
 
             ScopeGroup lastGroup = rootGroup;
             int lastIndex = 0;
@@ -247,7 +273,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
             }
         }
-        private void removeInterloackable(ScopeGroup rootGroup, IInterlockable interlockable)
+        private void removeInterloackable(ScopeGroup rootGroup, IInterlockable interlockable, IEnumerable<ITECObject> parentPath)
         {
             if (!filterPredicate(interlockable)) return;
             List<ScopeGroup> path = rootGroup.GetPath(interlockable as ITECScope);
