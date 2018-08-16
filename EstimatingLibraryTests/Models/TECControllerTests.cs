@@ -531,7 +531,7 @@ namespace Models
             controller.Disconnect(subScope);
 
             Assert.IsFalse(connection.Children.Contains(subScope));
-            Assert.IsFalse(controller.ChildrenConnections.Contains(connection));
+            Assert.IsTrue(controller.ChildrenConnections.Contains(connection));
             Assert.IsNull((subScope as IConnectable).GetParentConnection());
         }
 
@@ -555,7 +555,6 @@ namespace Models
 
             controller.Disconnect(subScope);
 
-            Assert.IsFalse(connection.Child == subScope);
             Assert.IsFalse(controller.ChildrenConnections.Contains(connection));
             Assert.IsNull((subScope as IConnectable).GetParentConnection());
         }
@@ -657,7 +656,8 @@ namespace Models
             TECProtocol thirdProtocol = new TECProtocol(new List<TECConnectionType>());
             TECProtocol fourthProtocol = new TECProtocol(new List<TECConnectionType>());
 
-            TECDevice compatibleDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>() { secondProtocol, firstProtocol, fourthProtocol }, new TECManufacturer());
+            TECConnectionType connectionType = new TECConnectionType();
+            TECDevice compatibleDevice = new TECDevice(new List<TECConnectionType> { connectionType }, new List<TECProtocol>() { secondProtocol, firstProtocol, fourthProtocol }, new TECManufacturer());
             TECSubScope subScope = new TECSubScope();
             subScope.Devices.Add(compatibleDevice);
 
@@ -670,16 +670,16 @@ namespace Models
 
             TECNetworkConnection connection = controller.Connect(subScope, firstProtocol) as TECNetworkConnection;
             
-            TECDevice compatibleHardDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
+            TECDevice compatibleHardDevice = new TECDevice(new List<TECConnectionType> { connectionType }, new List<TECProtocol>(), new TECManufacturer());
             TECSubScope hardSubScope = new TECSubScope();
-            subScope.Devices.Add(compatibleDevice);
+            hardSubScope.Devices.Add(compatibleDevice);
             TECPoint point = new TECPoint();
             point.Type = IOType.AI;
-            subScope.Points.Add(point);
+            hardSubScope.Points.Add(point);
 
             type.IO.Add(new TECIO(IOType.AI));
             
-            TECHardwiredConnection hardConnection = controller.Connect(subScope, subScope.HardwiredProtocol()) as TECHardwiredConnection;
+            TECHardwiredConnection hardConnection = controller.Connect(hardSubScope, hardSubScope.HardwiredProtocol()) as TECHardwiredConnection;
 
 
             TECController parentController = new TECProvidedController(type);
@@ -693,8 +693,7 @@ namespace Models
             Assert.IsFalse(connection.Children.Contains(subScope));
             Assert.IsFalse(controller.ChildrenConnections.Contains(connection));
             Assert.IsNull((subScope as IConnectable).GetParentConnection());
-
-            Assert.IsNull(hardConnection.Child);
+            
             Assert.IsFalse(controller.ChildrenConnections.Contains(hardConnection));
             Assert.IsNull((hardSubScope as IConnectable).GetParentConnection());
 
@@ -709,7 +708,9 @@ namespace Models
             TECProtocol thirdProtocol = new TECProtocol(new List<TECConnectionType>());
             TECProtocol fourthProtocol = new TECProtocol(new List<TECConnectionType>());
 
-            TECDevice compatibleDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>() { secondProtocol, firstProtocol, fourthProtocol }, new TECManufacturer());
+            TECConnectionType connectionType = new TECConnectionType();
+
+            TECDevice compatibleDevice = new TECDevice(new List<TECConnectionType> { connectionType }, new List<TECProtocol>() { secondProtocol, firstProtocol, fourthProtocol }, new TECManufacturer());
             TECSubScope subScope = new TECSubScope();
             subScope.Devices.Add(compatibleDevice);
 
@@ -722,16 +723,16 @@ namespace Models
 
             TECNetworkConnection connection = controller.Connect(subScope, firstProtocol) as TECNetworkConnection;
 
-            TECDevice compatibleHardDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
+            TECDevice compatibleHardDevice = new TECDevice(new List<TECConnectionType> { connectionType }, new List<TECProtocol>(), new TECManufacturer());
             TECSubScope hardSubScope = new TECSubScope();
-            subScope.Devices.Add(compatibleDevice);
+            hardSubScope.Devices.Add(compatibleDevice);
             TECPoint point = new TECPoint();
             point.Type = IOType.AI;
-            subScope.Points.Add(point);
+            hardSubScope.Points.Add(point);
 
             type.IO.Add(new TECIO(IOType.AI));
 
-            TECHardwiredConnection hardConnection = controller.Connect(subScope, subScope.HardwiredProtocol()) as TECHardwiredConnection;
+            TECHardwiredConnection hardConnection = controller.Connect(hardSubScope, hardSubScope.HardwiredProtocol()) as TECHardwiredConnection;
 
 
             TECController parentController = new TECProvidedController(type);
@@ -740,7 +741,7 @@ namespace Models
 
             Assert.IsNotNull(controller.ParentConnection);
 
-            controller.DisconnectAll();
+            controller.RemoveAllChildNetworkConnections();
 
             Assert.IsFalse(connection.Children.Contains(subScope));
             Assert.IsFalse(controller.ChildrenConnections.Contains(connection));
@@ -776,14 +777,14 @@ namespace Models
 
             TECDevice compatibleHardDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             TECSubScope hardSubScope = new TECSubScope();
-            subScope.Devices.Add(compatibleDevice);
+            hardSubScope.Devices.Add(compatibleDevice);
             TECPoint point = new TECPoint();
             point.Type = IOType.AI;
-            subScope.Points.Add(point);
+            hardSubScope.Points.Add(point);
 
             type.IO.Add(new TECIO(IOType.AI));
 
-            TECHardwiredConnection hardConnection = controller.Connect(subScope, subScope.HardwiredProtocol()) as TECHardwiredConnection;
+            TECHardwiredConnection hardConnection = controller.Connect(hardSubScope, hardSubScope.HardwiredProtocol()) as TECHardwiredConnection;
 
 
             TECController parentController = new TECProvidedController(type);
@@ -797,8 +798,7 @@ namespace Models
             Assert.IsTrue(connection.Children.Contains(subScope));
             Assert.IsTrue(controller.ChildrenConnections.Contains(connection));
             Assert.AreEqual((subScope as IConnectable).GetParentConnection(), connection);
-
-            Assert.IsNull(hardConnection.Child);
+            
             Assert.IsFalse(controller.ChildrenConnections.Contains(hardConnection));
             Assert.IsNull((hardSubScope as IConnectable).GetParentConnection());
 
@@ -808,12 +808,14 @@ namespace Models
         [TestMethod()]
         public void RemoveAllChildConnectionsTest()
         {
+            TECConnectionType connectionType = new TECConnectionType();
+
             TECProtocol firstProtocol = new TECProtocol(new List<TECConnectionType>());
             TECProtocol secondProtocol = new TECProtocol(new List<TECConnectionType>());
             TECProtocol thirdProtocol = new TECProtocol(new List<TECConnectionType>());
             TECProtocol fourthProtocol = new TECProtocol(new List<TECConnectionType>());
 
-            TECDevice compatibleDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>() { secondProtocol, firstProtocol, fourthProtocol }, new TECManufacturer());
+            TECDevice compatibleDevice = new TECDevice(new List<TECConnectionType> { connectionType }, new List<TECProtocol>() { secondProtocol, firstProtocol, fourthProtocol }, new TECManufacturer());
             TECSubScope subScope = new TECSubScope();
             subScope.Devices.Add(compatibleDevice);
 
@@ -826,16 +828,16 @@ namespace Models
 
             TECNetworkConnection connection = controller.Connect(subScope, firstProtocol) as TECNetworkConnection;
 
-            TECDevice compatibleHardDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
+            TECDevice compatibleHardDevice = new TECDevice(new List<TECConnectionType> { connectionType }, new List<TECProtocol>(), new TECManufacturer());
             TECSubScope hardSubScope = new TECSubScope();
-            subScope.Devices.Add(compatibleDevice);
+            hardSubScope.Devices.Add(compatibleDevice);
             TECPoint point = new TECPoint();
             point.Type = IOType.AI;
-            subScope.Points.Add(point);
+            hardSubScope.Points.Add(point);
 
             type.IO.Add(new TECIO(IOType.AI));
 
-            TECHardwiredConnection hardConnection = controller.Connect(subScope, subScope.AvailableProtocols.First(x => x is TECHardwiredProtocol)) as TECHardwiredConnection;
+            TECHardwiredConnection hardConnection = controller.Connect(hardSubScope, hardSubScope.AvailableProtocols.First(x => x is TECHardwiredProtocol)) as TECHardwiredConnection;
 
 
             TECController parentController = new TECProvidedController(type);
@@ -849,8 +851,7 @@ namespace Models
             Assert.IsFalse(connection.Children.Contains(subScope));
             Assert.IsFalse(controller.ChildrenConnections.Contains(connection));
             Assert.IsNull((subScope as IConnectable).GetParentConnection());
-
-            Assert.IsNull(hardConnection.Child);
+            
             Assert.IsFalse(controller.ChildrenConnections.Contains(hardConnection));
             Assert.IsNull((hardSubScope as IConnectable).GetParentConnection());
 
