@@ -35,6 +35,8 @@ namespace EstimatingLibrary
         protected TECScopeManager(Guid guid): base(guid) { }
         protected TECScopeManager() : this(Guid.NewGuid()) { }
 
+        public 
+
         #region IRelatable
 
         public SaveableMap PropertyObjects { get { return propertyObjects(); } }

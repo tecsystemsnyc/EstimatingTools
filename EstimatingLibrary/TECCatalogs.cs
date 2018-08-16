@@ -10,7 +10,7 @@ using static EstimatingLibrary.Utilities.CommonUtilities;
 
 namespace EstimatingLibrary
 {
-    public class TECCatalogs : TECObject, IRelatable
+    public class TECCatalogs : TECObject, IRelatable, ICatalogContainer
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -199,6 +199,15 @@ namespace EstimatingLibrary
                 this._tags,
                 this._protocols
             };
+        }
+
+        bool ICatalogContainer.RemoveCatalogItem<T>(T item, T replacement)
+        {
+            bool replacedItem = false;
+            foreach(IList collection in getCatalogCollections())
+            {
+
+            }
         }
     }
 }
