@@ -80,7 +80,7 @@ namespace EstimatingLibrary.Utilities
                 collection.Remove(item);
                 if (replacement != null)
                 {
-                    collection.Add(item);
+                    collection.Add(replacement);
                 }
             }
             return true;

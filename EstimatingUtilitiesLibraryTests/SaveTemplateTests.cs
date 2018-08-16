@@ -761,25 +761,24 @@ namespace EstimatingUtilitiesLibraryTests
         }
 
         [TestMethod]
-        public void Save_Templates_Remove_Device()
+        public void Save_Templates_Replace_Device()
         {
-            //Act
-            int oldNumDevices = templates.Catalogs.Devices.Count;
-            TECDevice deviceToRemove = templates.Catalogs.Devices[0];
+            //Arrange
+            TECDevice deviceToRemove = templates.Catalogs.Devices.First();
+            TECDevice newDevice = new TECDevice(deviceToRemove.HardwiredConnectionTypes, deviceToRemove.PossibleProtocols, deviceToRemove.Manufacturer);
 
-            templates.RemoveCatalogItem(deviceToRemove, null);
+            //Act
+            templates.RemoveCatalogItem(deviceToRemove, newDevice);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             //Assert
-            foreach (TECDevice dev in actualTemplates.Catalogs.Devices)
-            {
-                if (dev.Guid == deviceToRemove.Guid) Assert.Fail();
-            }
+            Assert.IsTrue(actualTemplates.Catalogs.Devices.Any(dev => (dev.Guid == newDevice.Guid)));
+            Assert.IsFalse(actualTemplates.Catalogs.Devices.Any(dev => (dev.Guid == deviceToRemove.Guid)));
 
-            Assert.AreEqual((oldNumDevices - 1), actualTemplates.Catalogs.Devices.Count);
+            Assert.AreEqual(templates.Catalogs.Devices.Count, actualTemplates.Catalogs.Devices.Count);
         }
 
         [TestMethod]
@@ -1573,7 +1572,7 @@ namespace EstimatingUtilitiesLibraryTests
             int oldNumAssociatedCosts = templates.Catalogs.AssociatedCosts.Count;
             TECAssociatedCost costToRemove = templates.Catalogs.AssociatedCosts[0];
 
-            templates.Catalogs.Add(costToRemove);
+            templates.RemoveCatalogItem(costToRemove, null);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
