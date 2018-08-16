@@ -22,7 +22,7 @@ namespace Models
             var firstDevice = first.Devices.RandomElement(rand);
             firstDevice.RequireQuote = false;
             firstDevice.QuotedPrice = -1;
-            second.Devices.Add(firstDevice.CatalogCopy());
+            second.Add(firstDevice.CatalogCopy());
             firstDevice.RequireQuote = true;
             firstDevice.QuotedPrice = 12;
 

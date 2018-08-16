@@ -1022,7 +1022,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
-            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.Add(device);
             subScope.Devices.Add(device);
 
             //Act
@@ -1173,8 +1173,8 @@ namespace EstimatingUtilitiesLibraryTests
             equipment.SubScope.Add(subScope);
             TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             TECValve valve = new TECValve(new TECManufacturer(), device);
-            bid.Catalogs.Devices.Add(device);
-            bid.Catalogs.Valves.Add(valve);
+            bid.Catalogs.Add(device);
+            bid.Catalogs.Add(valve);
             subScope.Devices.Add(valve);
 
             //Act
@@ -2178,7 +2178,7 @@ namespace EstimatingUtilitiesLibraryTests
             equipment.SubScope.Add(subScope);
             TECConnectionType connType = new TECConnectionType();
             TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
-            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.Add(device);
 
             subScope.Devices.Add(device);
             bid.Systems.Add(typical);
@@ -2240,7 +2240,7 @@ namespace EstimatingUtilitiesLibraryTests
             equipment.SubScope.Add(subScope);
             TECConnectionType connType = new TECConnectionType();
             TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
-            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.Add(device);
 
             subScope.Devices.Add(device);
             bid.Systems.Add(typical);
@@ -2304,7 +2304,7 @@ namespace EstimatingUtilitiesLibraryTests
             equipment.SubScope.Add(subScope);
             TECConnectionType connType = new TECConnectionType();
             TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
-            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.Add(device);
             subScope.Devices.Add(device);
             bid.Systems.Add(typical);
 
@@ -2365,7 +2365,7 @@ namespace EstimatingUtilitiesLibraryTests
             equipment.SubScope.Add(subScope);
             TECConnectionType connType = new TECConnectionType();
             TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
-            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.Add(device);
             subScope.Devices.Add(device);
             bid.Systems.Add(typical);
             TECSystem system = typical.AddInstance();
@@ -3276,7 +3276,7 @@ namespace EstimatingUtilitiesLibraryTests
             equipment.SubScope.Add(subScope);
             TECSystem instance = system.AddInstance();
             TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
-            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.Add(device);
             subScope.Devices.Add(device);
 
             //Act
@@ -3312,7 +3312,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSubScope subScope = new TECSubScope();
             equipment.SubScope.Add(subScope);
             TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
-            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.Add(device);
             subScope.Devices.Add(device);
             TECSystem instance = system.AddInstance();
 
@@ -3412,8 +3412,8 @@ namespace EstimatingUtilitiesLibraryTests
             TECSystem instance = system.AddInstance();
             TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             TECValve valve = new TECValve(new TECManufacturer(), device);
-            bid.Catalogs.Devices.Add(device);
-            bid.Catalogs.Valves.Add(valve);
+            bid.Catalogs.Add(device);
+            bid.Catalogs.Add(valve);
             subScope.Devices.Add(valve);
 
             //Act
@@ -3450,8 +3450,8 @@ namespace EstimatingUtilitiesLibraryTests
             equipment.SubScope.Add(subScope);
             TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
             TECValve valve = new TECValve(new TECManufacturer(), device);
-            bid.Catalogs.Devices.Add(device);
-            bid.Catalogs.Valves.Add(valve);
+            bid.Catalogs.Add(device);
+            bid.Catalogs.Add(valve);
             subScope.Devices.Add(valve);
             TECSystem instance = system.AddInstance();
 
@@ -4389,7 +4389,7 @@ namespace EstimatingUtilitiesLibraryTests
             bid.AddController(controller);
             TECConnectionType connType = new TECConnectionType();
             TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
-            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.Add(device);
 
             TECTypical typical = new TECTypical();
             TECEquipment equipment = new TECEquipment();
@@ -4451,7 +4451,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECController controller = new TECProvidedController(type);
             TECConnectionType connType = new TECConnectionType();
             TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
-            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.Add(device);
 
             TECTypical typical = new TECTypical();
             typical.AddController(controller);
@@ -4511,7 +4511,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECController controller = new TECProvidedController(type);
             TECConnectionType connType = new TECConnectionType();
             TECDevice device = new TECDevice(new List<TECConnectionType> { connType }, new List<TECProtocol>(), new TECManufacturer());
-            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.Add(device);
 
             TECTypical typical = new TECTypical();
             typical.AddController(controller);
@@ -4817,8 +4817,8 @@ namespace EstimatingUtilitiesLibraryTests
             equip.SubScope.Add(subScope);
             TECManufacturer originalManufacturer = new TECManufacturer();
             TECManufacturer newManufacturer = new TECManufacturer();
-            bid.Catalogs.Manufacturers.Add(originalManufacturer);
-            bid.Catalogs.Manufacturers.Add(newManufacturer);
+            bid.Catalogs.Add(originalManufacturer);
+            bid.Catalogs.Add(newManufacturer);
             TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), originalManufacturer);
             subScope.Devices.Add(device);
 
@@ -4860,7 +4860,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECSubScope subScope = new TECSubScope();
             equip.SubScope.Add(subScope);
             TECManufacturer manufacturer = new TECManufacturer();
-            bid.Catalogs.Manufacturers.Add(manufacturer);
+            bid.Catalogs.Add(manufacturer);
             TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), manufacturer);
             subScope.Devices.Add(device);
 
