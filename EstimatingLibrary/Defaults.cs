@@ -38,7 +38,7 @@ namespace EstimatingLibrary
 
         public static List<(string description, string url)> BidToDoList = new List<(string description, string url)>
         {
-            ("Fill out bid info", ""),
+            ("Fill out bid info", "https://github.com/tecsystemsnyc/EstimatingTools/wiki/Getting-Started"),
             ("Populate riser", ""),
             ("Create systems from sequences", ""),
             ("Verify valve selections", ""),

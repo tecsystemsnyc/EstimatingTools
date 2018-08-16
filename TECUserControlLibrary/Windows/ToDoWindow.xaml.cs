@@ -39,8 +39,12 @@ namespace TECUserControlLibrary.Windows
 
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
-            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
-            e.Handled = true;
+            if (e.Uri.IsWellFormedOriginalString() && e.Uri.OriginalString != "")
+            {
+                Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+                e.Handled = true;
+            }
+
         }
     }
 }

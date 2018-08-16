@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TECUserControlLibrary.Windows"
         mc:Ignorable="d"
         x:Name="toDoWindow"
-        Title="ToDoWindow" Height="450" Width="400">
+        Title="To Do" Height="450" Width="400">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
