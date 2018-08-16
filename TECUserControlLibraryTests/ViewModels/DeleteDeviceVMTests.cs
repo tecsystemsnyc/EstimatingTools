@@ -23,10 +23,10 @@ namespace ViewModels
             TECScopeTemplates templates = templatesManager.Templates;
 
             TECManufacturer man = new TECManufacturer();
-            templatesManager.Catalogs.Manufacturers.Add(man);
+            templatesManager.Catalogs.Add(man);
 
             TECDevice dev = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), man);
-            templatesManager.Catalogs.Devices.Add(dev);
+            templatesManager.Catalogs.Add(dev);
 
             TECSystem sys = new TECSystem();
             templates.SystemTemplates.Add(sys);
@@ -71,10 +71,10 @@ namespace ViewModels
             TECScopeTemplates templates = templatesManager.Templates;
 
             TECManufacturer man = new TECManufacturer();
-            templatesManager.Catalogs.Manufacturers.Add(man);
+            templatesManager.Catalogs.Add(man);
 
             TECDevice dev = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), man);
-            templatesManager.Catalogs.Devices.Add(dev);
+            templatesManager.Catalogs.Add(dev);
 
             TECSystem sys = new TECSystem();
             templates.SystemTemplates.Add(sys);
