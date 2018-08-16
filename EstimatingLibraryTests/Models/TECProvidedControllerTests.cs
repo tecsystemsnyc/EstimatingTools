@@ -143,8 +143,9 @@ namespace Models
             TECSubScope ss1 = new TECSubScope();
             TECSubScope ss2 = new TECSubScope();
 
-            TECDevice proDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>() { protocol }, new TECManufacturer());
-            TECDevice hardDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
+            TECConnectionType connectionType = new TECConnectionType();
+            TECDevice proDevice = new TECDevice(new List<TECConnectionType> { connectionType }, new List<TECProtocol>() { protocol }, new TECManufacturer());
+            TECDevice hardDevice = new TECDevice(new List<TECConnectionType> { connectionType }, new List<TECProtocol>(), new TECManufacturer());
 
             ss1.Devices.Add(proDevice);
             ss2.Devices.Add(hardDevice);
