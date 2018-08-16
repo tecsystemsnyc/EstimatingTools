@@ -313,7 +313,7 @@ namespace ViewModels
         {
             //Arrange
             TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
-            bid.Catalogs.ControllerTypes.Add(controllerType);
+            bid.Catalogs.Add(controllerType);
             
             TECTypical typical = new TECTypical();
             bid.Systems.Add(typical);
@@ -330,7 +330,7 @@ namespace ViewModels
             ObservableCollection<TECConnectionType> connectionTypes = new ObservableCollection<TECConnectionType>();
             connectionTypes.Add(bid.Catalogs.ConnectionTypes[0]);
             TECDevice dev = new TECDevice(connectionTypes, new List<TECProtocol>(), bid.Catalogs.Manufacturers[0]);
-            bid.Catalogs.Devices.Add(dev);
+            bid.Catalogs.Add(dev);
             typSS.Devices.Add(dev);
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
@@ -510,7 +510,7 @@ namespace ViewModels
         public void RemoveValve()
         {
             //Arrange
-            bid.Catalogs.Valves.Add(ModelCreation.TestValve(bid.Catalogs, rand));
+            bid.Catalogs.Add(ModelCreation.TestValve(bid.Catalogs, rand));
             ChangeWatcher cw = new ChangeWatcher(bid);
 
             TECTypical typical = new TECTypical();
@@ -658,7 +658,7 @@ namespace ViewModels
             //Arrange
 
             TECControllerType controllerType = new TECControllerType(bid.Catalogs.Manufacturers[0]);
-            bid.Catalogs.ControllerTypes.Add(controllerType);
+            bid.Catalogs.Add(controllerType);
             TECController controller = new TECProvidedController(controllerType);
             bid.AddController(controller);
 
