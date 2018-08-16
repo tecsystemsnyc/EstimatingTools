@@ -165,17 +165,18 @@ namespace EstimatingLibrary
             IOCollection possibleIO = possibleController.getPotentialIO() + possibleController.AvailableIO;
             return possibleIO.Contains(necessaryIO);
         }
-        public void ChangeType(TECControllerType newType)
+        public bool ChangeType(TECControllerType newType)
         {
             if (CanChangeType(newType))
             {
                 this.IOModules.ObservablyClear();
                 this.Type = newType;
                 ModelCleanser.addRequiredIOModules(this);
+                return true;
             }
             else
             {
-                return;
+                return false;
             }
         }
 

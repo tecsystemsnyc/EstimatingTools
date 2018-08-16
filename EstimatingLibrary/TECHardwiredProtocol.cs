@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECHardwiredProtocol : TECObject, IProtocol, IEquatable<TECHardwiredProtocol>, ICatalogContainer
+    public class TECHardwiredProtocol : TECObject, IProtocol, IEquatable<TECHardwiredProtocol>
     {
         public string Label => "Hardwired";
 
@@ -56,18 +56,6 @@ namespace EstimatingLibrary
         public static bool operator !=(TECHardwiredProtocol protocol1, TECHardwiredProtocol protocol2)
         {
             return !(protocol1 == protocol2);
-        }
-        #endregion
-
-        #region ICatalogContainer
-        public bool RemoveCatalogItem<T>(T item, T replacement) where T : class, ICatalog<T>
-        {
-            bool replacedConnectionType = false;
-            if (item is TECConnectionType type)
-            {
-                replacedConnectionType = CommonUtilities.OptionallyReplaceAll(type, this.ConnectionTypes, replacement as TECConnectionType);
-            }
-            return replacedConnectionType;
         }
         #endregion
     }
