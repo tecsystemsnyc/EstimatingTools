@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections;
@@ -40,7 +41,7 @@ namespace TECUserControlLibrary.Utilities
             else
             { sourceType = sourceItem.GetType(); }
 
-            Type targetType = GetItemType(dropInfo.TargetCollection) ?? dropInfo.TargetItem?.GetType();
+            Type targetType = dropInfo.TargetCollection.GetItemType() ?? dropInfo.TargetItem?.GetType();
 
             if (targetType != null)
             {
@@ -84,7 +85,7 @@ namespace TECUserControlLibrary.Utilities
             {
                 sourceItem = dropbable.DropData();
             }
-            Type targetType = GetItemType(dropInfo.TargetCollection) ?? dropInfo.TargetItem?.GetType();
+            Type targetType = dropInfo.TargetCollection.GetItemType() ?? dropInfo.TargetItem?.GetType();
 
             if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
             {

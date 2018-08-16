@@ -1976,7 +1976,7 @@ namespace EstimatingUtilitiesLibraryTests
             templates.Templates.SystemTemplates.Add(expectedScope);
             
             var subScope = new TECSubScope();
-            subScope.Devices.Add(templates.Catalogs.Add());
+            subScope.Devices.Add(templates.Catalogs.Devices.First());
 
             var scopeEquipment = new TECEquipment();
             scopeEquipment.Name = "Test Scope System";
