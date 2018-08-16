@@ -38,7 +38,7 @@ namespace EstimatingLibrary
         public ReadOnlyObservableCollection<TECTag> Tags { get; }
         public ReadOnlyObservableCollection<TECProtocol> Protocols { get; }
 
-        public SaveableMap PropertyObjects
+        public RelatableMap PropertyObjects
         {
             get { return propertyObjects(); }
         }
@@ -126,11 +126,11 @@ namespace EstimatingLibrary
             UnionizeScopeCollection(this._connectionTypes, catalogToAdd.ConnectionTypes);
             UnionizeScopeCollection(this._conduitTypes, catalogToAdd.ConduitTypes);
             UnionizeScopeCollection(this._associatedCosts, catalogToAdd.AssociatedCosts);
-            UnionizeScopeCollection(this._panelTypes, catalogToAdd.PanelTypes);
-            UnionizeScopeCollection(this._controllerTypes, catalogToAdd.ControllerTypes);
-            UnionizeScopeCollection(this._ioModules, catalogToAdd.IOModules);
-            UnionizeScopeCollection(this._devices, catalogToAdd.Devices);
-            UnionizeScopeCollection(this._valves, catalogToAdd.Valves);
+            UnionizeScopeCollection(this._panelTypes, catalogToAdd.PanelTypes, setQuote);
+            UnionizeScopeCollection(this._controllerTypes, catalogToAdd.ControllerTypes, setQuote);
+            UnionizeScopeCollection(this._ioModules, catalogToAdd.IOModules, setQuote);
+            UnionizeScopeCollection(this._devices, catalogToAdd.Devices, setQuote);
+            UnionizeScopeCollection(this._valves, catalogToAdd.Valves, setQuote);
             UnionizeScopeCollection(this._manufacturers, catalogToAdd.Manufacturers);
             UnionizeScopeCollection(this._tags, catalogToAdd.Tags);
             UnionizeScopeCollection(this._protocols, catalogToAdd.Protocols);
