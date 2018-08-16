@@ -164,6 +164,19 @@ namespace EstimatingLibrary
                     item);
             }
         }
+        public void AddRange<T>(IEnumerable<T> range) where T : ICatalog<T>
+        {
+            if (range.Count() < 1) return;
+            IList<T> collection = getCollectionForObject(range.First());
+            if (collection != null)
+            {
+                range.ForEach(item => collection.Add(item));
+            }
+            else
+            {
+                logger.Error("Collection for catalog range not found.");
+            }
+        }
 
         private IList<T> getCollectionForObject<T>(T obj) where T : ICatalog<T>
         {
