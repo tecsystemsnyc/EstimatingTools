@@ -96,7 +96,7 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
             associatedCost.Cost = this.AssociatedCostCost;
             associatedCost.Labor = this.AssociatedCostLabor;
 
-            this.Templates.Catalogs.AssociatedCosts.Add(associatedCost);
+            this.Templates.Catalogs.Add(associatedCost);
 
             this.AssociatedCostName = "";
             this.AssociatedCostCost = 0;
