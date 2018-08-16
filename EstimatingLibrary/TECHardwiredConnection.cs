@@ -13,7 +13,7 @@ namespace EstimatingLibrary
 
         public IConnectable Child { get; }
 
-        public List<TECConnectionType> ConnectionTypes { get; }
+        public ObservableCollection<TECConnectionType> ConnectionTypes { get; }
 
         public TECController ParentController
         {
@@ -36,17 +36,25 @@ namespace EstimatingLibrary
         {
             this.IsTypical = false;
             Child = child;
-            ConnectionTypes = new List<TECConnectionType>(protocol.ConnectionTypes);
+            ConnectionTypes = new ObservableCollection<TECConnectionType>(protocol.ConnectionTypes);
+            ConnectionTypes.CollectionChanged += connectionTypesCollectionChanged;
             ParentController = controller;
             child.SetParentConnection(this);
         }
+
+        private void connectionTypesCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            CollectionChangedHandlers.CollectionChangedHandler(sender, e, "ConnectionTypes", this, notifyCombinedChanged, notifyCostChanged);
+        }
+
         public TECHardwiredConnection(IConnectable child, TECController parent, TECHardwiredProtocol protocol) : this(Guid.NewGuid(), child, parent, protocol) { }
         public TECHardwiredConnection(TECHardwiredConnection connectionSource, TECController parent, Dictionary<Guid, Guid> guidDictionary = null) 
             : base(connectionSource, guidDictionary)
         {
             Child = connectionSource.Child.Copy(guidDictionary);
             ParentController = parent;
-            ConnectionTypes = new List<TECConnectionType>(connectionSource.ConnectionTypes);
+            ConnectionTypes = new ObservableCollection<TECConnectionType>(connectionSource.ConnectionTypes);
+            ConnectionTypes.CollectionChanged += connectionTypesCollectionChanged;
             Child.SetParentConnection(this);
         }
         public TECHardwiredConnection(TECHardwiredConnection linkingSource, IConnectable child, bool isTypical) : base(linkingSource)
