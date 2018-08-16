@@ -199,7 +199,8 @@ namespace Models
         [TestMethod()]
         public void CompatibleProtocolsTest2()
         {
-            TECDevice compatibleDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
+            TECConnectionType connectionType = new TECConnectionType();
+            TECDevice compatibleDevice = new TECDevice(new List<TECConnectionType> { connectionType }, new List<TECProtocol>(), new TECManufacturer());
             TECSubScope subScope = new TECSubScope();
             subScope.Devices.Add(compatibleDevice);
             TECPoint point = new TECPoint();
@@ -288,7 +289,8 @@ namespace Models
         [TestMethod()]
         public void CanConnectTest2()
         {
-            TECDevice compatibleDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
+            TECConnectionType connectionType = new TECConnectionType();
+            TECDevice compatibleDevice = new TECDevice(new List<TECConnectionType>{ connectionType }, new List<TECProtocol>(), new TECManufacturer());
             TECSubScope subScope = new TECSubScope();
             subScope.Devices.Add(compatibleDevice);
             TECPoint point = new TECPoint();
@@ -374,7 +376,8 @@ namespace Models
         [TestMethod()]
         public void CanConnectTest6()
         {
-            TECDevice compatibleDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
+            TECConnectionType connectionType = new TECConnectionType();
+            TECDevice compatibleDevice = new TECDevice(new List<TECConnectionType> { connectionType }, new List<TECProtocol>(), new TECManufacturer());
             TECSubScope subScope = new TECSubScope();
             subScope.Devices.Add(compatibleDevice);
             TECPoint point = new TECPoint();
@@ -393,7 +396,8 @@ namespace Models
         [TestMethod()]
         public void CanConnectTest7()
         {
-            TECDevice compatibleDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
+            TECConnectionType connectionType = new TECConnectionType();
+            TECDevice compatibleDevice = new TECDevice(new List<TECConnectionType> { connectionType }, new List<TECProtocol>(), new TECManufacturer());
             TECSubScope subScope = new TECSubScope();
             subScope.Devices.Add(compatibleDevice);
             TECPoint point = new TECPoint();
@@ -462,7 +466,8 @@ namespace Models
         [TestMethod()]
         public void ConnectTest2()
         {
-            TECDevice compatibleDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
+            TECConnectionType connectionType = new TECConnectionType();
+            TECDevice compatibleDevice = new TECDevice(new List<TECConnectionType> { connectionType }, new List<TECProtocol>(), new TECManufacturer());
             TECSubScope subScope = new TECSubScope();
             subScope.Devices.Add(compatibleDevice);
             TECPoint point = new TECPoint();
@@ -485,7 +490,8 @@ namespace Models
         [TestMethod()]
         public void ConnectTest3()
         {
-            TECDevice compatibleDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
+            TECConnectionType connectionType = new TECConnectionType();
+            TECDevice compatibleDevice = new TECDevice(new List<TECConnectionType> { connectionType }, new List<TECProtocol>(), new TECManufacturer());
             TECSubScope subScope = new TECSubScope();
             subScope.Devices.Add(compatibleDevice);
             TECPoint point = new TECPoint();
@@ -532,7 +538,8 @@ namespace Models
         [TestMethod()]
         public void DiconnectTest1()
         {
-            TECDevice compatibleDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
+            TECConnectionType connectionType = new TECConnectionType();
+            TECDevice compatibleDevice = new TECDevice(new List<TECConnectionType> { connectionType }, new List<TECProtocol>(), new TECManufacturer());
             TECSubScope subScope = new TECSubScope();
             subScope.Devices.Add(compatibleDevice);
             TECPoint point = new TECPoint();
@@ -851,9 +858,64 @@ namespace Models
         }
 
         [TestMethod()]
-        public void CopyControllerTest()
+        public void CopyFBOControllerTest()
         {
-            Assert.Fail();
+            //Arrange
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
+            TECFBOController controller = ModelCreation.TestFBOController(catalogs, rand);
+            TECFBOController copy = controller.CopyController(new Dictionary<Guid, Guid>()) as TECFBOController;
+
+            //TECTagged
+            Assert.AreEqual(controller.Name, copy.Name);
+            Assert.AreEqual(controller.Description, copy.Description);
+            Assert.IsTrue(controller.Tags.SequenceEqual(copy.Tags));
+
+            //TECScope
+            Assert.IsTrue(controller.AssociatedCosts.SequenceEqual(copy.AssociatedCosts));
+
+            //TECLocated
+            Assert.AreEqual(controller.Location, copy.Location);
+
+            //TECController
+            Assert.AreEqual(controller.IsServer, copy.IsServer);
+
+            //TECFBOController
+            foreach(TECPoint point in controller.Points)
+            {
+                Assert.IsTrue(copy.Points.Any(pointCopy =>
+                {
+                    return pointCopy.Label == point.Label 
+                    && pointCopy.Type == point.Type 
+                    && pointCopy.Quantity == point.Quantity;
+                }));
+            }
+        }
+
+        [TestMethod()]
+        public void CopyProvidedControllerTest()
+        {
+            //Arrange
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
+            TECProvidedController controller = ModelCreation.TestProvidedController(catalogs, rand);
+            TECProvidedController copy = controller.CopyController(new Dictionary<Guid, Guid>()) as TECProvidedController;
+
+            //TECTagged
+            Assert.AreEqual(controller.Name, copy.Name);
+            Assert.AreEqual(controller.Description, copy.Description);
+            Assert.IsTrue(controller.Tags.SequenceEqual(copy.Tags));
+
+            //TECScope
+            Assert.IsTrue(controller.AssociatedCosts.SequenceEqual(copy.AssociatedCosts));
+
+            //TECLocated
+            Assert.AreEqual(controller.Location, copy.Location);
+
+            //TECController
+            Assert.AreEqual(controller.IsServer, copy.IsServer);
+
+            //TECFBOController
+            Assert.AreEqual(controller.Type, copy.Type);
+            Assert.IsTrue(controller.IOModules.SequenceEqual(copy.IOModules));
         }
     }
 }

@@ -31,7 +31,7 @@ namespace EstimatingLibrary.Interfaces
         }
         public static TECHardwiredProtocol HardwiredProtocol(this IConnectable connectable)
         {
-            return connectable.AvailableProtocols.OfType<TECHardwiredProtocol>().First();
+            return connectable.AvailableProtocols.OfType<TECHardwiredProtocol>().FirstOrDefault();
         }
     }
 }
