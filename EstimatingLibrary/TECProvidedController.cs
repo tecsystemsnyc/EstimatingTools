@@ -116,7 +116,8 @@ namespace EstimatingLibrary
         }
         private void OptimizeModules()
         {
-            foreach (TECIOModule item in this.IOModules.Distinct())
+            List<TECIOModule> previousModules = this.IOModules.Distinct().ToList();
+            foreach (TECIOModule item in previousModules)
             {
                 while (CanRemoveModule(item))
                 {
