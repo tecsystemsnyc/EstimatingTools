@@ -47,7 +47,7 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
             TECProtocol toAdd = new TECProtocol(this.ConnectionTypes);
             toAdd.Label = this.Name;
 
-            this.Templates.Catalogs.Protocols.Add(toAdd);
+            this.Templates.Catalogs.Add(toAdd);
 
             this.Name = "";
             this.ConnectionTypes.ObservablyClear();

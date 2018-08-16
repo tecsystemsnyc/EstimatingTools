@@ -163,11 +163,11 @@ namespace EstimatingUtilitiesLibrary.Database
             scopeManager.Templates = getScopeTemplates(scopeManager.Catalogs);
             if (justUpdated)
             {
-                scopeManager.Catalogs.Manufacturers.Add(tempManufacturer);
-                scopeManager.Catalogs.PanelTypes.Add(tempPanelType);
-                scopeManager.Catalogs.ControllerTypes.Add(tempControllerType);
-                scopeManager.Catalogs.ConnectionTypes.Add(tempConnectionType);
-                scopeManager.Catalogs.Protocols.Add(tempProtocol);
+                scopeManager.Catalogs.Add(tempManufacturer);
+                scopeManager.Catalogs.Add(tempPanelType);
+                scopeManager.Catalogs.Add(tempControllerType);
+                scopeManager.Catalogs.Add(tempConnectionType);
+                scopeManager.Catalogs.Add(tempProtocol);
             }
         }
         private static (List<TECTypical> typicals, List<TECController> controllers, List<TECPanel> panels, List<TECMisc> misc, Dictionary<Guid, List<Guid>> typicalSystems, List<TECSystem> instances) getScopeHierarchy(Guid bidID, TECCatalogs catalogs)
@@ -320,22 +320,22 @@ namespace EstimatingUtilitiesLibrary.Database
         private static TECCatalogs getCatalogs()
         {
             TECCatalogs catalogs = new TECCatalogs();
-            catalogs.Manufacturers.AddRange(getObjectsFromTable(new ManufacturerTable(), id => new TECManufacturer(id)));
-            catalogs.ConnectionTypes.AddRange(getObjectsFromTable(new ConnectionTypeTable(), id => new TECConnectionType(id)));
-            catalogs.ConduitTypes.AddRange(getObjectsFromTable(new ConduitTypeTable(), id => new TECElectricalMaterial(id)));
+            catalogs.AddRange(getObjectsFromTable(new ManufacturerTable(), id => new TECManufacturer(id)));
+            catalogs.AddRange(getObjectsFromTable(new ConnectionTypeTable(), id => new TECConnectionType(id)));
+            catalogs.AddRange(getObjectsFromTable(new ConduitTypeTable(), id => new TECElectricalMaterial(id)));
             Dictionary<Guid, List<TECConnectionType>> protocolConnectionType = getOneToManyRelationships(new ProtocolConnectionTypeTable(), catalogs.ConnectionTypes);
-            catalogs.Protocols.AddRange(getObjectsFromTable(new ProtocolTable(), id => new TECProtocol(id, protocolConnectionType[id])));
+            catalogs.AddRange(getObjectsFromTable(new ProtocolTable(), id => new TECProtocol(id, protocolConnectionType[id])));
             Dictionary<Guid, TECManufacturer> hardwareManufacturer = getOneToOneRelationships(new HardwareManufacturerTable(), catalogs.Manufacturers);
             Dictionary<Guid, List<TECConnectionType>> deviceConnectionType = getOneToManyRelationships(new DeviceConnectionTypeTable(), catalogs.ConnectionTypes);
             Dictionary<Guid, List<TECProtocol>> deviceProtocols = getOneToManyRelationships(new DeviceProtocolTable(), catalogs.Protocols);
-            catalogs.Devices.AddRange(getObjectsFromTable(new DeviceTable(), id => new TECDevice(id, deviceConnectionType.ValueOrNew(id), deviceProtocols.ValueOrNew(id), hardwareManufacturer[id])));
+            catalogs.AddRange(getObjectsFromTable(new DeviceTable(), id => new TECDevice(id, deviceConnectionType.ValueOrNew(id), deviceProtocols.ValueOrNew(id), hardwareManufacturer[id])));
             Dictionary<Guid, TECDevice> actuators = getOneToOneRelationships(new ValveActuatorTable(), catalogs.Devices);
-            catalogs.Valves.AddRange(getObjectsFromTable(new ValveTable(), id => new TECValve(id, hardwareManufacturer[id], actuators[id])));
-            catalogs.AssociatedCosts.AddRange(getObjectsFromTable(new AssociatedCostTable(), getAssociatedCostFromRow));
-            catalogs.PanelTypes.AddRange(getObjectsFromTable(new PanelTypeTable(), data => getPanelTypeFromRow(data, hardwareManufacturer)));
-            catalogs.IOModules.AddRange(getObjectsFromTable(new IOModuleTable(), id => new TECIOModule(id, hardwareManufacturer[id])));
-            catalogs.ControllerTypes.AddRange(getObjectsFromTable(new ControllerTypeTable(), id => new TECControllerType(id, hardwareManufacturer[id])));
-            catalogs.Tags.AddRange(getObjectsFromTable(new TagTable(), id => new TECTag(id)));
+            catalogs.AddRange(getObjectsFromTable(new ValveTable(), id => new TECValve(id, hardwareManufacturer[id], actuators[id])));
+            catalogs.AddRange(getObjectsFromTable(new AssociatedCostTable(), getAssociatedCostFromRow));
+            catalogs.AddRange(getObjectsFromTable(new PanelTypeTable(), data => getPanelTypeFromRow(data, hardwareManufacturer)));
+            catalogs.AddRange(getObjectsFromTable(new IOModuleTable(), id => new TECIOModule(id, hardwareManufacturer[id])));
+            catalogs.AddRange(getObjectsFromTable(new ControllerTypeTable(), id => new TECControllerType(id, hardwareManufacturer[id])));
+            catalogs.AddRange(getObjectsFromTable(new TagTable(), id => new TECTag(id)));
             Dictionary<Guid, TECProtocol> ioProtocols = getOneToOneRelationships(new IOProtocolTable(), catalogs.Protocols);
 
             List<TECIO> io = getObjectsFromTable(new IOTable(), row => getIOFromRow(row, ioProtocols)).ToList();

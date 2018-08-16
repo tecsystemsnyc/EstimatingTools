@@ -416,7 +416,7 @@ namespace Models
                 new List<TECProtocol>(),
                 manufacturer);
             device.Price = 10;
-            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.Add(device);
             connectionType.Cost = 1;
             connectionType.Labor = 1;
 
@@ -447,7 +447,7 @@ namespace Models
                 new List<TECProtocol>(),
                 manufacturer);
             device.Price = 10;
-            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.Add(device);
             connectionType.Cost = 1;
             connectionType.Labor = 1;
 
@@ -562,13 +562,13 @@ namespace Models
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol> { protocol },
                 manufacturer);
-            bid.Catalogs.Devices.Add(device);
-            bid.Catalogs.ConnectionTypes.Add(connectionType);
-            bid.Catalogs.ConduitTypes.Add(conduitType);
-            bid.Catalogs.AssociatedCosts.Add(ratedCost);
-            bid.Catalogs.Manufacturers.Add(manufacturer);
-            bid.Catalogs.ControllerTypes.Add(controllerType);
-            bid.Catalogs.Protocols.Add(protocol);
+            bid.Catalogs.Add(device);
+            bid.Catalogs.Add(connectionType);
+            bid.Catalogs.Add(conduitType);
+            bid.Catalogs.Add(ratedCost);
+            bid.Catalogs.Add(manufacturer);
+            bid.Catalogs.Add(controllerType);
+            bid.Catalogs.Add(protocol);
 
             var system = new TECTypical();
             var equipment = new TECEquipment();
@@ -628,13 +628,13 @@ namespace Models
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol> { protocol },
                 manufacturer);
-            bid.Catalogs.Devices.Add(device);
-            bid.Catalogs.ConnectionTypes.Add(connectionType);
-            bid.Catalogs.ConduitTypes.Add(conduitType);
-            bid.Catalogs.AssociatedCosts.Add(ratedCost);
-            bid.Catalogs.Manufacturers.Add(manufacturer);
-            bid.Catalogs.ControllerTypes.Add(controllerType);
-            bid.Catalogs.Protocols.Add(protocol);
+            bid.Catalogs.Add(device);
+            bid.Catalogs.Add(connectionType);
+            bid.Catalogs.Add(conduitType);
+            bid.Catalogs.Add(ratedCost);
+            bid.Catalogs.Add(manufacturer);
+            bid.Catalogs.Add(controllerType);
+            bid.Catalogs.Add(protocol);
 
             var system = new TECTypical();
             var equipment = new TECEquipment();
@@ -698,13 +698,13 @@ namespace Models
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol>(),
                 manufacturer);
-            bid.Catalogs.Devices.Add(device);
-            bid.Catalogs.ConnectionTypes.Add(connectionType);
-            bid.Catalogs.ConduitTypes.Add(conduitType);
-            bid.Catalogs.AssociatedCosts.Add(assCost);
-            bid.Catalogs.AssociatedCosts.Add(ratedCost);
-            bid.Catalogs.Manufacturers.Add(manufacturer);
-            bid.Catalogs.ControllerTypes.Add(controllerType);
+            bid.Catalogs.Add(device);
+            bid.Catalogs.Add(connectionType);
+            bid.Catalogs.Add(conduitType);
+            bid.Catalogs.Add(assCost);
+            bid.Catalogs.Add(ratedCost);
+            bid.Catalogs.Add(manufacturer);
+            bid.Catalogs.Add(controllerType);
 
             var system = new TECTypical();
             var equipment = new TECEquipment();
@@ -786,13 +786,13 @@ namespace Models
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol> { protocol },
                 manufacturer);
-            bid.Catalogs.Devices.Add(device);
-            bid.Catalogs.ConnectionTypes.Add(connectionType);
-            bid.Catalogs.ConduitTypes.Add(conduitType);
-            bid.Catalogs.AssociatedCosts.Add(ratedCost);
-            bid.Catalogs.AssociatedCosts.Add(assCost);
-            bid.Catalogs.Manufacturers.Add(manufacturer);
-            bid.Catalogs.ControllerTypes.Add(controllerType);
+            bid.Catalogs.Add(device);
+            bid.Catalogs.Add(connectionType);
+            bid.Catalogs.Add(conduitType);
+            bid.Catalogs.Add(ratedCost);
+            bid.Catalogs.Add(assCost);
+            bid.Catalogs.Add(manufacturer);
+            bid.Catalogs.Add(controllerType);
 
             var system = new TECTypical();
             var equipment = new TECEquipment();
@@ -866,12 +866,12 @@ namespace Models
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol>(),
                 manufacturer);
-            bid.Catalogs.Devices.Add(device);
-            bid.Catalogs.ConnectionTypes.Add(connectionType);
-            bid.Catalogs.ConduitTypes.Add(conduitType);
-            bid.Catalogs.AssociatedCosts.Add(ratedCost);
-            bid.Catalogs.Manufacturers.Add(manufacturer);
-            bid.Catalogs.ControllerTypes.Add(controllerType);
+            bid.Catalogs.Add(device);
+            bid.Catalogs.Add(connectionType);
+            bid.Catalogs.Add(conduitType);
+            bid.Catalogs.Add(ratedCost);
+            bid.Catalogs.Add(manufacturer);
+            bid.Catalogs.Add(controllerType);
 
             var system = new TECTypical();
             var equipment = new TECEquipment();
@@ -960,12 +960,12 @@ namespace Models
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol>(),
                 manufacturer);
-            bid.Catalogs.Devices.Add(device);
-            bid.Catalogs.ConnectionTypes.Add(connectionType);
-            bid.Catalogs.ConduitTypes.Add(conduitType);
-            bid.Catalogs.AssociatedCosts.Add(ratedCost);
-            bid.Catalogs.Manufacturers.Add(manufacturer);
-            bid.Catalogs.ControllerTypes.Add(controllerType);
+            bid.Catalogs.Add(device);
+            bid.Catalogs.Add(connectionType);
+            bid.Catalogs.Add(conduitType);
+            bid.Catalogs.Add(ratedCost);
+            bid.Catalogs.Add(manufacturer);
+            bid.Catalogs.Add(controllerType);
 
             var system = new TECTypical();
             var equipment = new TECEquipment();
@@ -1019,12 +1019,12 @@ namespace Models
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol>(),
                 manufacturer);
-            bid.Catalogs.Devices.Add(device);
-            bid.Catalogs.ConnectionTypes.Add(connectionType);
-            bid.Catalogs.ConduitTypes.Add(conduitType);
-            bid.Catalogs.AssociatedCosts.Add(ratedCost);
-            bid.Catalogs.Manufacturers.Add(manufacturer);
-            bid.Catalogs.ControllerTypes.Add(controllerType);
+            bid.Catalogs.Add(device);
+            bid.Catalogs.Add(connectionType);
+            bid.Catalogs.Add(conduitType);
+            bid.Catalogs.Add(ratedCost);
+            bid.Catalogs.Add(manufacturer);
+            bid.Catalogs.Add(controllerType);
 
             var system = new TECTypical();
             var equipment = new TECEquipment();
@@ -1076,12 +1076,12 @@ namespace Models
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol>(),
                 manufacturer);
-            bid.Catalogs.Devices.Add(device);
-            bid.Catalogs.ConnectionTypes.Add(connectionType);
-            bid.Catalogs.ConduitTypes.Add(conduitType);
-            bid.Catalogs.AssociatedCosts.Add(ratedCost);
-            bid.Catalogs.Manufacturers.Add(manufacturer);
-            bid.Catalogs.ControllerTypes.Add(controllerType);
+            bid.Catalogs.Add(device);
+            bid.Catalogs.Add(connectionType);
+            bid.Catalogs.Add(conduitType);
+            bid.Catalogs.Add(ratedCost);
+            bid.Catalogs.Add(manufacturer);
+            bid.Catalogs.Add(controllerType);
 
             var system = new TECTypical();
             var equipment = new TECEquipment();
@@ -1460,7 +1460,7 @@ namespace Models
                 new List<TECProtocol>(),
                 manufacturer);
             device.Price = 100;
-            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.Add(device);
 
             subScope.Devices.Add(device);
 
@@ -1492,7 +1492,7 @@ namespace Models
                 new List<TECProtocol>(),
                 manufacturer);
             device.Price = 100;
-            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.Add(device);
 
             subScope.Devices.Add(device);
 
@@ -1526,7 +1526,7 @@ namespace Models
                 new List<TECProtocol>(),
                 manufacturer);
             device.Price = 100;
-            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.Add(device);
 
             subScope.Devices.Add(device);
 
@@ -1558,7 +1558,7 @@ namespace Models
                 new List<TECProtocol>(),
                 manufacturer);
             device.Price = 100;
-            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.Add(device);
 
             subScope.Devices.Add(device);
 
@@ -2117,7 +2117,7 @@ namespace Models
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol> { protocol },
                 manufacturer);
-            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.Add(device);
 
             subScope.Devices.Add(device);
 
@@ -2179,7 +2179,7 @@ namespace Models
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol> { protocol },
                 manufacturer);
-            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.Add(device);
 
             subScope.Devices.Add(device);
 
@@ -2276,7 +2276,7 @@ namespace Models
             var device = new TECDevice(new List<TECConnectionType> { connectionType },
                 new List<TECProtocol> { protocol },
                 manufacturer);
-            bid.Catalogs.Devices.Add(device);
+            bid.Catalogs.Add(device);
 
             subScope.Devices.Add(device);
 

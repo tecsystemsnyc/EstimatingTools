@@ -450,7 +450,7 @@ namespace TECUserControlLibrary.ViewModels
                 connectables = ConnectionHelper.GetConnectables(group.Scope, filterPredicate);
                 
             }
-            else if (dropInfo.Data is IEnumerable dropList && DragDropHelpers.GetItemType(dropList) == typeof(FilteredConnectablesGroup))
+            else if (dropInfo.Data is IEnumerable dropList && dropList.GetItemType() == typeof(FilteredConnectablesGroup))
             {
                 foreach(FilteredConnectablesGroup item in dropList)
                 {
@@ -487,7 +487,7 @@ namespace TECUserControlLibrary.ViewModels
                 List<IConnectable> connectables = new List<IConnectable>();
                 if (dropInfo.Data is IList dropList)
                 {
-                    if (DragDropHelpers.GetItemType(dropList) == typeof(FilteredConnectablesGroup))
+                    if (dropList.GetItemType() == typeof(FilteredConnectablesGroup))
                     {
                         foreach (FilteredConnectablesGroup item in dropList)
                         {

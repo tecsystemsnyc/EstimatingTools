@@ -58,97 +58,12 @@ namespace TECUserControlLibrary.ViewModels
 
             if (result == MessageBoxResult.Yes)
             {
-                foreach (TECSubScope ss in templates.Templates.SubScopeTemplates)
-                {
-                    while (ss.Devices.Contains(EndDevice))
-                    {
-                        ss.Devices.Remove(EndDevice);
-                    }
-                }
-
-                foreach (TECEquipment equip in templates.Templates.EquipmentTemplates)
-                {
-                    foreach (TECSubScope ss in equip.SubScope)
-                    {
-                        while (ss.Devices.Contains(EndDevice))
-                        {
-                            ss.Devices.Remove(EndDevice);
-                        }
-                    }
-                }
-
-                foreach (TECSystem sys in templates.Templates.SystemTemplates)
-                {
-                    foreach (TECEquipment equip in sys.Equipment)
-                    {
-                        foreach (TECSubScope ss in equip.SubScope)
-                        {
-                            while (ss.Devices.Contains(EndDevice))
-                            {
-                                ss.Devices.Remove(EndDevice);
-                            }
-                        }
-                    }
-                }
-
-                if (EndDevice is TECDevice dev)
-                {
-                    templates.Catalogs.Devices.Remove(dev);
-                }
-                else if (EndDevice is TECValve valve)
-                {
-                    templates.Catalogs.Valves.Remove(valve);
-                }
-                else throw new InvalidCastException("End device is not TECDevice or TECValve");
+                templates.RemoveCatalogItem(EndDevice, null);
             }
         }
         private void deleteAndReplaceExecute()
         {
-            foreach (TECSubScope ss in templates.Templates.SubScopeTemplates)
-            {
-                while (ss.Devices.Contains(EndDevice))
-                {
-                    ss.Devices.Remove(EndDevice);
-                    ss.Devices.Add(SelectedReplacement);
-                }
-            }
-
-            foreach (TECEquipment equip in templates.Templates.EquipmentTemplates)
-            {
-                foreach (TECSubScope ss in equip.SubScope)
-                {
-                    while (ss.Devices.Contains(EndDevice))
-                    {
-                        ss.Devices.Remove(EndDevice);
-                        ss.Devices.Add(SelectedReplacement);
-                    }
-                }
-            }
-
-            foreach (TECSystem sys in templates.Templates.SystemTemplates)
-            {
-                foreach (TECEquipment equip in sys.Equipment)
-                {
-                    foreach (TECSubScope ss in equip.SubScope)
-                    {
-                        while (ss.Devices.Contains(EndDevice))
-                        {
-                            ss.Devices.Remove(EndDevice);
-                            ss.Devices.Add(SelectedReplacement);
-                        }
-                    }
-                }
-            }
-
-            if (EndDevice is TECDevice dev)
-            {
-                templates.Catalogs.Devices.Remove(dev);
-            }
-            else if (EndDevice is TECValve valve)
-            {
-                templates.Catalogs.Valves.Remove(valve);
-            }
-            else throw new InvalidCastException("End device is not TECDevice or TECValve");
+            templates.RemoveCatalogItem(EndDevice, SelectedReplacement);
         }
         private bool deleteAndReplaceCanExecute()
         {

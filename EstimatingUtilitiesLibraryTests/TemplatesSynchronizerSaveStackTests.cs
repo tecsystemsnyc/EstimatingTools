@@ -25,16 +25,16 @@ namespace EstimatingUtilitiesLibraryTests
             TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
 
             TECAssociatedCost testCost = new TECAssociatedCost(CostType.TEC);
-            templates.Catalogs.AssociatedCosts.Add(testCost);
+            templates.Catalogs.Add(testCost);
 
             TECTag testTag = new TECTag();
-            templates.Catalogs.Tags.Add(testTag);
+            templates.Catalogs.Add(testTag);
 
             TECManufacturer testMan = new TECManufacturer();
-            templates.Catalogs.Manufacturers.Add(testMan);
+            templates.Catalogs.Add(testMan);
 
             TECDevice testDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), testMan);
-            templates.Catalogs.Devices.Add(testDevice);
+            templates.Catalogs.Add(testDevice);
 
             TECPoint testPoint = new TECPoint();
             testPoint.Label = "Test Point";
@@ -137,16 +137,16 @@ namespace EstimatingUtilitiesLibraryTests
             TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
 
             TECAssociatedCost testCost = new TECAssociatedCost(CostType.TEC);
-            templates.Catalogs.AssociatedCosts.Add(testCost);
+            templates.Catalogs.Add(testCost);
 
             TECTag testTag = new TECTag();
-            templates.Catalogs.Tags.Add(testTag);
+            templates.Catalogs.Add(testTag);
 
             TECManufacturer testMan = new TECManufacturer();
-            templates.Catalogs.Manufacturers.Add(testMan);
+            templates.Catalogs.Add(testMan);
 
             TECDevice testDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), testMan);
-            templates.Catalogs.Devices.Add(testDevice);
+            templates.Catalogs.Add(testDevice);
 
             TECPoint testPoint = new TECPoint();
             testPoint.Label = "Test Point";
@@ -239,7 +239,7 @@ namespace EstimatingUtilitiesLibraryTests
             TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
 
             TECAssociatedCost testCost = new TECAssociatedCost(CostType.TEC);
-            templates.Catalogs.AssociatedCosts.Add(testCost);
+            templates.Catalogs.Add(testCost);
 
             TECSubScope templateSS = new TECSubScope();
             templates.Templates.SubScopeTemplates.Add(templateSS);
@@ -289,7 +289,7 @@ namespace EstimatingUtilitiesLibraryTests
             TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
 
             TECAssociatedCost testCost = new TECAssociatedCost(CostType.TEC);
-            templates.Catalogs.AssociatedCosts.Add(testCost);
+            templates.Catalogs.Add(testCost);
 
             TECSubScope templateSS = new TECSubScope();
             templates.Templates.SubScopeTemplates.Add(templateSS);
@@ -338,7 +338,7 @@ namespace EstimatingUtilitiesLibraryTests
             TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
 
             TECTag testTag = new TECTag();
-            templates.Catalogs.Tags.Add(testTag);
+            templates.Catalogs.Add(testTag);
 
             TECSubScope templateSS = new TECSubScope();
             templates.Templates.SubScopeTemplates.Add(templateSS);
@@ -386,7 +386,7 @@ namespace EstimatingUtilitiesLibraryTests
             TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
 
             TECTag testTag = new TECTag();
-            templates.Catalogs.Tags.Add(testTag);
+            templates.Catalogs.Add(testTag);
 
             TECSubScope templateSS = new TECSubScope();
             templates.Templates.SubScopeTemplates.Add(templateSS);
@@ -435,10 +435,10 @@ namespace EstimatingUtilitiesLibraryTests
             TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
 
             TECManufacturer testMan = new TECManufacturer();
-            templates.Catalogs.Manufacturers.Add(testMan);
+            templates.Catalogs.Add(testMan);
 
             TECDevice testDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), testMan);
-            templates.Catalogs.Devices.Add(testDevice);
+            templates.Catalogs.Add(testDevice);
 
             TECSubScope templateSS = new TECSubScope();
             templates.Templates.SubScopeTemplates.Add(templateSS);
@@ -490,10 +490,10 @@ namespace EstimatingUtilitiesLibraryTests
             TemplateSynchronizer<TECSubScope> ssSynchronizer = templates.SubScopeSynchronizer;
 
             TECManufacturer testMan = new TECManufacturer();
-            templates.Catalogs.Manufacturers.Add(testMan);
+            templates.Catalogs.Add(testMan);
 
             TECDevice testDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), testMan);
-            templates.Catalogs.Devices.Add(testDevice);
+            templates.Catalogs.Add(testDevice);
 
             TECSubScope templateSS = new TECSubScope();
             templates.Templates.SubScopeTemplates.Add(templateSS);
@@ -826,10 +826,10 @@ namespace EstimatingUtilitiesLibraryTests
             TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
 
             TECAssociatedCost testCost = new TECAssociatedCost(CostType.TEC);
-            templates.Catalogs.AssociatedCosts.Add(testCost);
+            templates.Catalogs.Add(testCost);
 
             TECTag testTag = new TECTag();
-            templates.Catalogs.Tags.Add(testTag);
+            templates.Catalogs.Add(testTag);
 
             TECSubScope testSS = new TECSubScope();
             testSS.Name = "Test SS";
@@ -927,10 +927,10 @@ namespace EstimatingUtilitiesLibraryTests
             TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
 
             TECAssociatedCost testCost = new TECAssociatedCost(CostType.TEC);
-            templates.Catalogs.AssociatedCosts.Add(testCost);
+            templates.Catalogs.Add(testCost);
 
             TECTag testTag = new TECTag();
-            templates.Catalogs.Tags.Add(testTag);
+            templates.Catalogs.Add(testTag);
 
             TECSubScope testSS = new TECSubScope();
             testSS.Name = "Test SS";
@@ -1023,7 +1023,7 @@ namespace EstimatingUtilitiesLibraryTests
             TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
 
             TECAssociatedCost testCost = new TECAssociatedCost(CostType.TEC);
-            templates.Catalogs.AssociatedCosts.Add(testCost);
+            templates.Catalogs.Add(testCost);
 
             TECEquipment templateEquip = new TECEquipment();
             templates.Templates.EquipmentTemplates.Add(templateEquip);
@@ -1073,7 +1073,7 @@ namespace EstimatingUtilitiesLibraryTests
             TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
 
             TECAssociatedCost testCost = new TECAssociatedCost(CostType.TEC);
-            templates.Catalogs.AssociatedCosts.Add(testCost);
+            templates.Catalogs.Add(testCost);
 
             TECEquipment templateEquip = new TECEquipment();
             templates.Templates.EquipmentTemplates.Add(templateEquip);
@@ -1122,7 +1122,7 @@ namespace EstimatingUtilitiesLibraryTests
             TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
 
             TECTag testTag = new TECTag();
-            templates.Catalogs.Tags.Add(testTag);
+            templates.Catalogs.Add(testTag);
 
             TECEquipment templateEquip = new TECEquipment();
             templates.Templates.EquipmentTemplates.Add(templateEquip);
@@ -1170,7 +1170,7 @@ namespace EstimatingUtilitiesLibraryTests
             TemplateSynchronizer<TECEquipment> equipSynchronizer = templates.EquipmentSynchronizer;
 
             TECTag testTag = new TECTag();
-            templates.Catalogs.Tags.Add(testTag);
+            templates.Catalogs.Add(testTag);
 
             TECEquipment templateEquip = new TECEquipment();
             templates.Templates.EquipmentTemplates.Add(templateEquip);

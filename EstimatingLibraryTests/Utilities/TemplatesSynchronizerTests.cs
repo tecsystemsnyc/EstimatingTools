@@ -161,7 +161,7 @@ namespace Utilities
             TECDevice dev = new TECDevice(new List<TECConnectionType>(),
                 new List<TECProtocol>(),
                 new TECManufacturer());
-            templates.Catalogs.Devices.Add(dev);
+            templates.Catalogs.Add(dev);
 
             TECPoint point = new TECPoint();
             point.Label = "Test Point";
@@ -169,10 +169,10 @@ namespace Utilities
             point.Quantity = 5;
 
             TECAssociatedCost cost = new TECAssociatedCost(CostType.TEC);
-            templates.Catalogs.AssociatedCosts.Add(cost);
+            templates.Catalogs.Add(cost);
 
             TECTag tag = new TECTag();
-            templates.Catalogs.Tags.Add(tag);
+            templates.Catalogs.Add(tag);
 
             //Act
             templateSS.Description = "Test Description";
@@ -211,7 +211,7 @@ namespace Utilities
             TECDevice dev = new TECDevice(new List<TECConnectionType>(),
                 new List<TECProtocol>(),
                 new TECManufacturer());
-            templates.Catalogs.Devices.Add(dev);
+            templates.Catalogs.Add(dev);
 
             TECPoint point = new TECPoint();
             point.Label = "Test Point";
@@ -219,10 +219,10 @@ namespace Utilities
             point.Quantity = 5;
 
             TECAssociatedCost cost = new TECAssociatedCost(CostType.TEC);
-            templates.Catalogs.AssociatedCosts.Add(cost);
+            templates.Catalogs.Add(cost);
 
             TECTag tag = new TECTag();
-            templates.Catalogs.Tags.Add(tag);
+            templates.Catalogs.Add(tag);
 
             //Act
             refSS.Description = "Test Description";
@@ -260,7 +260,7 @@ namespace Utilities
             TECDevice dev = new TECDevice(new List<TECConnectionType>(),
                 new List<TECProtocol>(),
                 new TECManufacturer());
-            templates.Catalogs.Devices.Add(dev);
+            templates.Catalogs.Add(dev);
 
             TECPoint point = new TECPoint();
             point.Label = "Test Point";
@@ -268,10 +268,10 @@ namespace Utilities
             point.Quantity = 5;
 
             TECAssociatedCost cost = new TECAssociatedCost(CostType.TEC);
-            templates.Catalogs.AssociatedCosts.Add(cost);
+            templates.Catalogs.Add(cost);
 
             TECTag tag = new TECTag();
-            templates.Catalogs.Tags.Add(tag);
+            templates.Catalogs.Add(tag);
 
             TECSubScope ss = new TECSubScope();
             ss.Description = "Test Description";
@@ -328,7 +328,7 @@ namespace Utilities
             TECDevice dev = new TECDevice(new List<TECConnectionType>(),
                 new List<TECProtocol>(),
                 new TECManufacturer());
-            templates.Catalogs.Devices.Add(dev);
+            templates.Catalogs.Add(dev);
 
             TECPoint point = new TECPoint();
             point.Label = "Test Point";
@@ -336,10 +336,10 @@ namespace Utilities
             point.Quantity = 5;
 
             TECAssociatedCost cost = new TECAssociatedCost(CostType.TEC);
-            templates.Catalogs.AssociatedCosts.Add(cost);
+            templates.Catalogs.Add(cost);
 
             TECTag tag = new TECTag();
-            templates.Catalogs.Tags.Add(tag);
+            templates.Catalogs.Add(tag);
 
             TECSubScope ss = new TECSubScope();
             ss.Description = "Test Description";

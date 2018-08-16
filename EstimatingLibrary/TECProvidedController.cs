@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECProvidedController : TECController, IDDCopiable
+    public class TECProvidedController : TECController, IDDCopiable, ICatalogContainer
     {
         #region Properties
         private TECControllerType _type;
@@ -19,7 +19,7 @@ namespace EstimatingLibrary
         public TECControllerType Type
         {
             get { return _type; }
-            set
+            private set
             {
                 var old = Type;
                 _type = value;
@@ -116,7 +116,8 @@ namespace EstimatingLibrary
         }
         private void OptimizeModules()
         {
-            foreach (TECIOModule item in this.IOModules.Distinct())
+            List<TECIOModule> previousModules = this.IOModules.Distinct().ToList();
+            foreach (TECIOModule item in previousModules)
             {
                 while (CanRemoveModule(item))
                 {
@@ -197,17 +198,18 @@ namespace EstimatingLibrary
             IOCollection possibleIO = possibleController.getPotentialIO() + possibleController.AvailableIO;
             return possibleIO.Contains(necessaryIO);
         }
-        public void ChangeType(TECControllerType newType)
+        public bool ChangeType(TECControllerType newType)
         {
             if (CanChangeType(newType))
             {
                 this.IOModules.ObservablyClear();
                 this.Type = newType;
                 ModelCleanser.addRequiredIOModules(this);
+                return true;
             }
             else
             {
-                return;
+                return false;
             }
         }
 
@@ -331,6 +333,33 @@ namespace EstimatingLibrary
         {
             this.IsTypical = true;
             TypicalableUtilities.MakeChildrenTypical(this);
+        }
+        #endregion
+
+        #region ICatalogContainer
+        public override bool RemoveCatalogItem<T>(T item, T replacement)
+        {
+            bool alreadyRemoved = base.RemoveCatalogItem(item, replacement);
+
+            bool replacedType = false;
+            bool replacedMod = false;
+            if (item == this.Type)
+            {
+                if (replacement is TECControllerType newType && CanChangeType(newType))
+                {
+                    if (CanChangeType(newType))
+                    {
+                        ChangeType(newType);
+                    }
+                    else throw new ArgumentException("Replacement ControllerType must be compatible.");
+                }
+                else throw new ArgumentNullException("Replacement ControllerType cannot be null.");
+            }
+            else if (item is TECIOModule mod)
+            {
+                replacedMod = CommonUtilities.OptionallyReplaceAll(mod, this.IOModules, replacement as TECIOModule);
+            }
+            return (replacedType || replacedMod || alreadyRemoved);
         }
         #endregion
     }

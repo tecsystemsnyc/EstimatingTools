@@ -1,6 +1,8 @@
 ﻿using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
+using NLog;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -8,19 +10,33 @@ using static EstimatingLibrary.Utilities.CommonUtilities;
 
 namespace EstimatingLibrary
 {
-    public class TECCatalogs : TECObject, IRelatable
+    public class TECCatalogs : TECObject, IRelatable, ICatalogContainer
     {
-        public ObservableCollection<TECIOModule> IOModules { get; } = new ObservableCollection<TECIOModule>();
-        public ObservableCollection<TECDevice> Devices { get; } = new ObservableCollection<TECDevice>();
-        public ObservableCollection<TECValve> Valves { get; } = new ObservableCollection<TECValve>();
-        public ObservableCollection<TECManufacturer> Manufacturers { get; } = new ObservableCollection<TECManufacturer>();
-        public ObservableCollection<TECPanelType> PanelTypes { get; } = new ObservableCollection<TECPanelType>();
-        public ObservableCollection<TECControllerType> ControllerTypes { get; } = new ObservableCollection<TECControllerType>();
-        public ObservableCollection<TECConnectionType> ConnectionTypes { get; } = new ObservableCollection<TECConnectionType>();
-        public ObservableCollection<TECElectricalMaterial> ConduitTypes { get; } = new ObservableCollection<TECElectricalMaterial>();
-        public ObservableCollection<TECAssociatedCost> AssociatedCosts { get; } = new ObservableCollection<TECAssociatedCost>();
-        public ObservableCollection<TECTag> Tags { get; } = new ObservableCollection<TECTag>();
-        public ObservableCollection<TECProtocol> Protocols { get; } = new ObservableCollection<TECProtocol>();
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
+        private readonly ObservableCollection<TECIOModule> _ioModules = new ObservableCollection<TECIOModule>();
+        private readonly ObservableCollection<TECDevice> _devices = new ObservableCollection<TECDevice>();
+        private readonly ObservableCollection<TECValve> _valves = new ObservableCollection<TECValve>();
+        private readonly ObservableCollection<TECManufacturer> _manufacturers = new ObservableCollection<TECManufacturer>();
+        private readonly ObservableCollection<TECPanelType> _panelTypes = new ObservableCollection<TECPanelType>();
+        private readonly ObservableCollection<TECControllerType> _controllerTypes = new ObservableCollection<TECControllerType>();
+        private readonly ObservableCollection<TECConnectionType> _connectionTypes = new ObservableCollection<TECConnectionType>();
+        private readonly ObservableCollection<TECElectricalMaterial> _conduitTypes = new ObservableCollection<TECElectricalMaterial>();
+        private readonly ObservableCollection<TECAssociatedCost> _associatedCosts = new ObservableCollection<TECAssociatedCost>();
+        private readonly ObservableCollection<TECTag> _tags = new ObservableCollection<TECTag>();
+        private readonly ObservableCollection<TECProtocol> _protocols = new ObservableCollection<TECProtocol>();
+
+        public ReadOnlyObservableCollection<TECIOModule> IOModules { get; }
+        public ReadOnlyObservableCollection<TECDevice> Devices { get; }
+        public ReadOnlyObservableCollection<TECValve> Valves { get; }
+        public ReadOnlyObservableCollection<TECManufacturer> Manufacturers { get; }
+        public ReadOnlyObservableCollection<TECPanelType> PanelTypes { get; }
+        public ReadOnlyObservableCollection<TECControllerType> ControllerTypes { get; }
+        public ReadOnlyObservableCollection<TECConnectionType> ConnectionTypes { get; }
+        public ReadOnlyObservableCollection<TECElectricalMaterial> ConduitTypes { get; }
+        public ReadOnlyObservableCollection<TECAssociatedCost> AssociatedCosts { get; }
+        public ReadOnlyObservableCollection<TECTag> Tags { get; }
+        public ReadOnlyObservableCollection<TECProtocol> Protocols { get; }
 
         public RelatableMap PropertyObjects
         {
@@ -35,30 +51,41 @@ namespace EstimatingLibrary
 
         public TECCatalogs() : base(Guid.NewGuid())
         {
+            this.IOModules = new ReadOnlyObservableCollection<TECIOModule>(this._ioModules);
+            this.Devices = new ReadOnlyObservableCollection<TECDevice>(this._devices);
+            this.Valves = new ReadOnlyObservableCollection<TECValve>(this._valves);
+            this.Manufacturers = new ReadOnlyObservableCollection<TECManufacturer>(this._manufacturers);
+            this.PanelTypes = new ReadOnlyObservableCollection<TECPanelType>(this._panelTypes);
+            this.ControllerTypes = new ReadOnlyObservableCollection<TECControllerType>(this._controllerTypes);
+            this.ConnectionTypes = new ReadOnlyObservableCollection<TECConnectionType>(this._connectionTypes);
+            this.ConduitTypes = new ReadOnlyObservableCollection<TECElectricalMaterial>(this._conduitTypes);
+            this.AssociatedCosts = new ReadOnlyObservableCollection<TECAssociatedCost>(this._associatedCosts);
+            this.Tags = new ReadOnlyObservableCollection<TECTag>(this._tags);
+            this.Protocols = new ReadOnlyObservableCollection<TECProtocol>(this._protocols);
+
             registerInitialCollectionChanges();
         }
         
         private void registerInitialCollectionChanges()
         {
-            ConduitTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ConduitTypes");
-            ConnectionTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ConnectionTypes");
-            AssociatedCosts.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "AssociatedCosts");
-            PanelTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "PanelTypes");
-            ControllerTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ControllerTypes");
-            IOModules.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "IOModules");
-            Devices.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Devices");
-            Valves.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Valves");
-            Manufacturers.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Manufacturers");
-            Tags.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Tags");
-            Protocols.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Protocols");
+            _conduitTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ConduitTypes");
+            _connectionTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ConnectionTypes");
+            _associatedCosts.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "AssociatedCosts");
+            _panelTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "PanelTypes");
+            _controllerTypes.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "ControllerTypes");
+            _ioModules.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "IOModules");
+            _devices.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Devices");
+            _valves.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Valves");
+            _manufacturers.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Manufacturers");
+            _tags.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Tags");
+            _protocols.CollectionChanged += (sender, e) => CollectionChanged(sender, e, "Protocols");
 
-            AssociatedCosts.CollectionChanged += ScopeChildren_CollectionChanged;
-            Tags.CollectionChanged += ScopeChildren_CollectionChanged;
+            _associatedCosts.CollectionChanged += ScopeChildren_CollectionChanged;
+            _tags.CollectionChanged += ScopeChildren_CollectionChanged;
         }
 
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
         {
-
             CollectionChangedHandlers.CollectionChangedHandler(sender, e, propertyName, this, notifyCombinedChanged);
         }
 
@@ -96,17 +123,18 @@ namespace EstimatingLibrary
 
         public void Unionize(TECCatalogs catalogToAdd)
         {
-            UnionizeScopeCollection(this.ConnectionTypes, catalogToAdd.ConnectionTypes);
-            UnionizeScopeCollection(this.ConduitTypes, catalogToAdd.ConduitTypes);
-            UnionizeScopeCollection(this.AssociatedCosts, catalogToAdd.AssociatedCosts);
-            UnionizeScopeCollection(this.PanelTypes, catalogToAdd.PanelTypes, setQuote);
-            UnionizeScopeCollection(this.ControllerTypes, catalogToAdd.ControllerTypes, setQuote);
-            UnionizeScopeCollection(this.IOModules, catalogToAdd.IOModules, setQuote);
-            UnionizeScopeCollection(this.Devices, catalogToAdd.Devices, setQuote);
-            UnionizeScopeCollection(this.Valves, catalogToAdd.Valves, setQuote);
-            UnionizeScopeCollection(this.Manufacturers, catalogToAdd.Manufacturers);
-            UnionizeScopeCollection(this.Tags, catalogToAdd.Tags);
-            UnionizeScopeCollection(this.Protocols, catalogToAdd.Protocols);
+            UnionizeScopeCollection(this._connectionTypes, catalogToAdd.ConnectionTypes);
+            UnionizeScopeCollection(this._conduitTypes, catalogToAdd.ConduitTypes);
+            UnionizeScopeCollection(this._associatedCosts, catalogToAdd.AssociatedCosts);
+            UnionizeScopeCollection(this._panelTypes, catalogToAdd.PanelTypes, setQuote);
+            UnionizeScopeCollection(this._controllerTypes, catalogToAdd.ControllerTypes, setQuote);
+            UnionizeScopeCollection(this._ioModules, catalogToAdd.IOModules, setQuote);
+            UnionizeScopeCollection(this._devices, catalogToAdd.Devices, setQuote);
+            UnionizeScopeCollection(this._valves, catalogToAdd.Valves, setQuote);
+            UnionizeScopeCollection(this._manufacturers, catalogToAdd.Manufacturers);
+            UnionizeScopeCollection(this._tags, catalogToAdd.Tags);
+            UnionizeScopeCollection(this._protocols, catalogToAdd.Protocols);
+           
 
             void setQuote(TECHardware original, TECHardware newItem){
                 if (original.RequireQuote) newItem.RequireQuote = true;
@@ -116,17 +144,83 @@ namespace EstimatingLibrary
 
         public void Fill(TECCatalogs catalogToAdd)
         {
-            FillScopeCollection(this.ConnectionTypes, catalogToAdd.ConnectionTypes);
-            FillScopeCollection(this.ConduitTypes, catalogToAdd.ConduitTypes);
-            FillScopeCollection(this.AssociatedCosts, catalogToAdd.AssociatedCosts);
-            FillScopeCollection(this.PanelTypes, catalogToAdd.PanelTypes);
-            FillScopeCollection(this.ControllerTypes, catalogToAdd.ControllerTypes);
-            FillScopeCollection(this.IOModules, catalogToAdd.IOModules);
-            FillScopeCollection(this.Devices, catalogToAdd.Devices);
-            FillScopeCollection(this.Valves, catalogToAdd.Valves);
-            FillScopeCollection(this.Manufacturers, catalogToAdd.Manufacturers);
-            FillScopeCollection(this.Tags, catalogToAdd.Tags);
-            FillScopeCollection(this.Protocols, catalogToAdd.Protocols);
+            FillScopeCollection(this._connectionTypes, catalogToAdd.ConnectionTypes);
+            FillScopeCollection(this._conduitTypes, catalogToAdd.ConduitTypes);
+            FillScopeCollection(this._associatedCosts, catalogToAdd.AssociatedCosts);
+            FillScopeCollection(this._panelTypes, catalogToAdd.PanelTypes);
+            FillScopeCollection(this._controllerTypes, catalogToAdd.ControllerTypes);
+            FillScopeCollection(this._ioModules, catalogToAdd.IOModules);
+            FillScopeCollection(this._devices, catalogToAdd.Devices);
+            FillScopeCollection(this._valves, catalogToAdd.Valves);
+            FillScopeCollection(this._manufacturers, catalogToAdd.Manufacturers);
+            FillScopeCollection(this._tags, catalogToAdd.Tags);
+            FillScopeCollection(this._protocols, catalogToAdd.Protocols);
+        }
+
+        public void Add<T>(T item) where T : ICatalog<T>
+        {
+            IList<T> collection = getCollectionForObject(item);
+            if (collection != null)
+            {
+                collection.Add(item);
+            } 
+            else
+            {
+                logger.Error("Collection for catalog item not found. Item: {0}",
+                    item);
+            }
+        }
+        public void AddRange<T>(IEnumerable<T> range) where T : ICatalog<T>
+        {
+            if (range.Count() < 1) return;
+            IList<T> collection = getCollectionForObject(range.First());
+            if (collection != null)
+            {
+                range.ForEach(item => collection.Add(item));
+            }
+            else
+            {
+                logger.Error("Collection for catalog range not found.");
+            }
+        }
+
+        private IList<T> getCollectionForObject<T>(T obj) where T : ICatalog<T>
+        {
+            return (IList<T>)getCatalogCollections().FirstOrDefault(col => col is IList<T>);
+        }
+
+        private List<IList> getCatalogCollections()
+        {
+            return new List<IList>()
+            {
+                this._ioModules,
+                this._devices,
+                this._valves,
+                this._manufacturers,
+                this._panelTypes,
+                this._controllerTypes,
+                this._connectionTypes,
+                this._conduitTypes,
+                this._associatedCosts,
+                this._tags,
+                this._protocols
+            };
+        }
+
+        public bool RemoveCatalogItem<T>(T item, T replacement) where T : class, ICatalog
+        {
+            bool replacedItem = false;
+            foreach(IList collection in getCatalogCollections())
+            {
+                Type collectionType = collection.GetItemType();
+                if (item.GetType() == collectionType)
+                {
+                    IList<T> tCollection = (IList<T>)collection;
+                    bool replaced = CommonUtilities.OptionallyReplaceAll(item, tCollection, replacement);
+                    if (replaced) replacedItem = true;
+                }
+            }
+            return replacedItem;
         }
     }
 }

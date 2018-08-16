@@ -69,7 +69,7 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
             newMan.Label = this.NewManName;
             newMan.Multiplier = this.NewManMultiplier;
 
-            this.Templates.Catalogs.Manufacturers.Add(newMan);
+            this.Templates.Catalogs.Add(newMan);
 
             this.NewManName = "";
             this.NewManMultiplier = 0;

@@ -4,7 +4,7 @@ using System;
 
 namespace EstimatingLibrary
 {
-    public abstract class TECHardware : TECCost, IDDCopiable
+    public abstract class TECHardware : TECCost, IDDCopiable, ICatalogContainer
     {
         #region Fields
         private TECManufacturer _manufacturer;
@@ -110,6 +110,25 @@ namespace EstimatingLibrary
             saveList.AddRange(base.linkedObjects());
             saveList.Add(this.Manufacturer, "Manufacturer");
             return saveList;
+        }
+        #endregion
+
+        #region ICatalogContainer
+        public override bool RemoveCatalogItem<T>(T item, T replacement)
+        {
+            bool alreadyRemoved = base.RemoveCatalogItem(item, replacement);
+
+            bool replacedMan = false;
+            if (this.Manufacturer == item)
+            {
+                if (replacement is TECManufacturer newMan)
+                {
+                    this.Manufacturer = newMan;
+                    replacedMan = true;
+                }
+                else throw new ArgumentNullException("Replacement Manufacturer cannot be null.");
+            }
+            return (replacedMan || alreadyRemoved);
         }
         #endregion
     }

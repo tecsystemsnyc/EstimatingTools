@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using NLog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +11,8 @@ namespace EstimatingLibrary.Utilities
 {
     public static class ModelLinkingHelper
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         #region Public Methods
         public static bool LinkLoadedBid(TECBid bid, Dictionary<Guid, List<Guid>> guidDictionary)
         {
@@ -309,8 +312,10 @@ namespace EstimatingLibrary.Utilities
             {
                 if (controller.Type.Guid == type.Guid)
                 {
-                    controller.Type = type;
-                    return;
+                    if (!controller.ChangeType(type))
+                    {
+                        logger.Error("Controller type isn't compatible with controller, can't change type.");
+                    }
                 }
             }
         }

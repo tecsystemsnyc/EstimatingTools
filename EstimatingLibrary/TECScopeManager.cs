@@ -35,6 +35,33 @@ namespace EstimatingLibrary
         protected TECScopeManager(Guid guid): base(guid) { }
         protected TECScopeManager() : this(Guid.NewGuid()) { }
 
+        public bool RemoveCatalogItem<T>(T item, T replacement) where T : class, ICatalog
+        {
+            return removeFromObject(this);
+
+            bool removeFromObject(ITECObject obj)
+            {
+                bool removedItem = false;
+
+                if (obj is ICatalogContainer container)
+                {
+                    bool removed = container.RemoveCatalogItem(item, replacement);
+                    if (removed) removedItem = true;
+                }
+
+                if (obj is IRelatable relatable)
+                {
+                    foreach (var child in relatable.GetDirectChildren())
+                    {
+                        bool removed = removeFromObject(child);
+                        if (removed) removedItem = true;
+                    }
+                }
+                
+                return removedItem;
+            }
+        }
+
         #region IRelatable
 
         public RelatableMap PropertyObjects { get { return propertyObjects(); } }

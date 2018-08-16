@@ -737,7 +737,7 @@ namespace EstimatingUtilitiesLibraryTests
             expectedDevice.Description = "New Device desc";
             expectedDevice.Price = 11.54;
 
-            templates.Catalogs.Devices.Add(expectedDevice);
+            templates.Catalogs.Add(expectedDevice);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -761,25 +761,24 @@ namespace EstimatingUtilitiesLibraryTests
         }
 
         [TestMethod]
-        public void Save_Templates_Remove_Device()
+        public void Save_Templates_Replace_Device()
         {
-            //Act
-            int oldNumDevices = templates.Catalogs.Devices.Count;
-            TECDevice deviceToRemove = templates.Catalogs.Devices[0];
+            //Arrange
+            TECDevice deviceToRemove = templates.Catalogs.Devices.First();
+            TECDevice newDevice = new TECDevice(deviceToRemove.HardwiredConnectionTypes, deviceToRemove.PossibleProtocols, deviceToRemove.Manufacturer);
 
-            templates.Catalogs.Devices.Remove(deviceToRemove);
+            //Act
+            templates.RemoveCatalogItem(deviceToRemove, newDevice);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
 
             //Assert
-            foreach (TECDevice dev in actualTemplates.Catalogs.Devices)
-            {
-                if (dev.Guid == deviceToRemove.Guid) Assert.Fail();
-            }
+            Assert.IsTrue(actualTemplates.Catalogs.Devices.Any(dev => (dev.Guid == newDevice.Guid)));
+            Assert.IsFalse(actualTemplates.Catalogs.Devices.Any(dev => (dev.Guid == deviceToRemove.Guid)));
 
-            Assert.AreEqual((oldNumDevices - 1), actualTemplates.Catalogs.Devices.Count);
+            Assert.AreEqual(templates.Catalogs.Devices.Count, actualTemplates.Catalogs.Devices.Count);
         }
 
         [TestMethod]
@@ -859,7 +858,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECDevice expectedDevice = templates.Catalogs.Devices[0];
             var testConnectionType = new TECConnectionType();
             testConnectionType.Name = "Test Add Connection Type Device";
-            templates.Catalogs.ConnectionTypes.Add(testConnectionType);
+            templates.Catalogs.Add(testConnectionType);
             expectedDevice.HardwiredConnectionTypes.Add(testConnectionType);
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -901,7 +900,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECManufacturer manToAdd = new TECManufacturer();
             manToAdd.Label = "Test";
             manToAdd.Multiplier = 1;
-            templates.Catalogs.Manufacturers.Add(manToAdd);
+            templates.Catalogs.Add(manToAdd);
             expectedDevice.Manufacturer = manToAdd;
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -1051,7 +1050,7 @@ namespace EstimatingUtilitiesLibraryTests
         //    //Act
         //    TECController expectedController = templates.Templates.ControllerTemplates[0];
         //    var testManufacturer = new TECManufacturer();
-        //    templates.Catalogs.Manufacturers.Add(testManufacturer);
+        //    templates.Catalogs.Add(testManufacturer);
         //    expectedController.Manufacturer = testManufacturer;
         //    DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -1186,7 +1185,7 @@ namespace EstimatingUtilitiesLibraryTests
             expectedManufacturer.Label = "Test Add Manufacturer";
             expectedManufacturer.Multiplier = 21.34;
 
-            templates.Catalogs.Manufacturers.Add(expectedManufacturer);
+            templates.Catalogs.Add(expectedManufacturer);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -1269,7 +1268,7 @@ namespace EstimatingUtilitiesLibraryTests
             TECTag expectedTag = new TECTag();
             expectedTag.Label = "Test add tag";
 
-            templates.Catalogs.Tags.Add(expectedTag);
+            templates.Catalogs.Add(expectedTag);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -1297,7 +1296,7 @@ namespace EstimatingUtilitiesLibraryTests
             int oldNumTags = templates.Catalogs.Tags.Count;
             TECTag tagToRemove = templates.Catalogs.Tags[0];
 
-            templates.Catalogs.Tags.Remove(tagToRemove);
+            templates.Catalogs.Add(tagToRemove);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -1323,7 +1322,7 @@ namespace EstimatingUtilitiesLibraryTests
             expectedConnectionType.Name = "Test Add Connection Type";
             expectedConnectionType.Cost = 21.34;
 
-            templates.Catalogs.ConnectionTypes.Add(expectedConnectionType);
+            templates.Catalogs.Add(expectedConnectionType);
 
             TECAssociatedCost expectedCost = templates.Catalogs.AssociatedCosts[0];
             expectedConnectionType.AssociatedCosts.Add(expectedCost);
@@ -1426,7 +1425,7 @@ namespace EstimatingUtilitiesLibraryTests
             expectedConduitType.Name = "Test Add Conduit Type";
             expectedConduitType.Cost = 21.34;
 
-            templates.Catalogs.ConduitTypes.Add(expectedConduitType);
+            templates.Catalogs.Add(expectedConduitType);
 
             TECAssociatedCost expectedRated = null;
             foreach (TECAssociatedCost cost in templates.Catalogs.AssociatedCosts)
@@ -1469,7 +1468,7 @@ namespace EstimatingUtilitiesLibraryTests
             int oldNumConduitTypes = templates.Catalogs.ConduitTypes.Count;
             TECElectricalMaterial conduitTypeToRemove = templates.Catalogs.ConduitTypes[0];
 
-            templates.Catalogs.ConduitTypes.Remove(conduitTypeToRemove);
+            templates.RemoveCatalogItem(conduitTypeToRemove, null);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -1543,7 +1542,7 @@ namespace EstimatingUtilitiesLibraryTests
             expectedAssociatedCost.Name = "Test Associated Cost";
             expectedAssociatedCost.Cost = 21.34;
 
-            templates.Catalogs.AssociatedCosts.Add(expectedAssociatedCost);
+            templates.Catalogs.Add(expectedAssociatedCost);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -1573,7 +1572,7 @@ namespace EstimatingUtilitiesLibraryTests
             int oldNumAssociatedCosts = templates.Catalogs.AssociatedCosts.Count;
             TECAssociatedCost costToRemove = templates.Catalogs.AssociatedCosts[0];
 
-            templates.Catalogs.AssociatedCosts.Remove(costToRemove);
+            templates.RemoveCatalogItem(costToRemove, null);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -1700,7 +1699,7 @@ namespace EstimatingUtilitiesLibraryTests
             expectedCost.Name = "Add cost addition";
             expectedCost.Price = 978.3;
 
-            templates.Catalogs.PanelTypes.Add(expectedCost);
+            templates.Catalogs.Add(expectedCost);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -1725,8 +1724,8 @@ namespace EstimatingUtilitiesLibraryTests
         public void Save_Templates_Remove_PanelType()
         {
             //Act
-            TECPanelType costToRemove = templates.Catalogs.PanelTypes[0];
-            templates.Catalogs.PanelTypes.Remove(costToRemove);
+            TECPanelType typeToRemove = templates.Catalogs.PanelTypes[0];
+            templates.RemoveCatalogItem(typeToRemove, null);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;
@@ -1734,7 +1733,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Assert
             foreach (TECPanelType cost in actualTemplates.Catalogs.PanelTypes)
             {
-                if (cost.Guid == costToRemove.Guid) Assert.Fail();
+                if (cost.Guid == typeToRemove.Guid) Assert.Fail();
             }
 
             Assert.AreEqual(templates.Catalogs.PanelTypes.Count, actualTemplates.Catalogs.PanelTypes.Count);
@@ -1800,7 +1799,7 @@ namespace EstimatingUtilitiesLibraryTests
             expectedModule.Price = 978.3;
             expectedModule.Manufacturer = templates.Catalogs.Manufacturers[0];
 
-            templates.Catalogs.IOModules.Add(expectedModule);
+            templates.Catalogs.Add(expectedModule);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 
@@ -1826,7 +1825,7 @@ namespace EstimatingUtilitiesLibraryTests
         {
             //Act
             TECIOModule costToRemove = templates.Catalogs.IOModules[0];
-            templates.Catalogs.IOModules.Remove(costToRemove);
+            templates.Catalogs.Add(costToRemove);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
             (TECScopeManager loaded, bool needsSave) = DatabaseLoader.Load(path); TECTemplates actualTemplates = loaded as TECTemplates;

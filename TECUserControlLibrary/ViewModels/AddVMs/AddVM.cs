@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight;
 using System;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
+using NLog;
 
 namespace TECUserControlLibrary.ViewModels.AddVMs
 {

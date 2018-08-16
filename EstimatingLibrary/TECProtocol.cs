@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECProtocol : TECLabeled, IRelatable, IProtocol
+    public class TECProtocol : TECLabeled, IRelatable, IProtocol, ICatalogContainer, ICatalog<TECProtocol>
     {
         private ObservableCollection<TECConnectionType> _connectionTypes;
         
@@ -83,6 +84,25 @@ namespace EstimatingLibrary
         List<TECConnectionType> IProtocol.ConnectionTypes
         {
             get { return new List<TECConnectionType>(this.ConnectionTypes); }
+        }
+        #endregion
+
+        #region ICatalog
+        public TECProtocol CatalogCopy()
+        {
+            return new TECProtocol(this.Guid, this.ConnectionTypes);
+        }
+        #endregion
+
+        #region ICatalogContainer
+        public bool RemoveCatalogItem<T>(T item, T replacement) where T : class, ICatalog
+        {
+            bool removedConnectionType = false;
+            if (item is TECConnectionType type)
+            {
+                removedConnectionType = CommonUtilities.OptionallyReplaceAll(type, this.ConnectionTypes, replacement as TECConnectionType);
+            }
+            return removedConnectionType;
         }
         #endregion
     }

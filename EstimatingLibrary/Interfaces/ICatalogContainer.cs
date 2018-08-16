@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary.Interfaces
 {
-    public interface ICatalog<T> : ICatalog
+    public interface ICatalogContainer : ITECObject
     {
-        T CatalogCopy();
+        bool RemoveCatalogItem<T>(T item, T replacement) where T : class, ICatalog;
     }
-
-    public interface ICatalog { }
 }

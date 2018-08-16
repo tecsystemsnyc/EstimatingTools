@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
 {
-    public class TECValve: TECHardware, IEndDevice, ICatalog<TECValve>
+    public class TECValve: TECHardware, IEndDevice, ICatalog<TECValve>, ICatalogContainer
     {
         #region Constants
         private const CostType COST_TYPE = CostType.TEC;
@@ -124,5 +124,23 @@ namespace EstimatingLibrary
         public ObservableCollection<TECProtocol> PossibleProtocols => ((IEndDevice)Actuator).PossibleProtocols;
         #endregion
 
+        #region ICatalogContainer
+        public override bool RemoveCatalogItem<T>(T item, T replacement)
+        {
+            bool alreadyRemoved = base.RemoveCatalogItem(item, replacement);
+
+            bool replacedActuator = false;
+            if (item == this.Actuator)
+            {
+                if (replacement is TECDevice newActuator)
+                {
+                    this.Actuator = newActuator;
+                    replacedActuator = true;
+                }
+                else throw new ArgumentNullException("Replacement Actuator cannot be null.");
+            }
+            return (replacedActuator || alreadyRemoved);
+        }
+        #endregion
     }
 }

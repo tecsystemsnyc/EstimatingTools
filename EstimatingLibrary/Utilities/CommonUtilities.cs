@@ -28,13 +28,14 @@ namespace EstimatingLibrary.Utilities
             }
         }
         
-        public static void FillScopeCollection<T>(IList<T> collection, IList<T> otherCollection) where T : ITECObject
+
+        public static void FillScopeCollection<T>(IList<T> collectionToModify, IList<T> otherCollection) where T : ITECObject
         {
             foreach (T otherItem in otherCollection)
             {
-                if (!collection.Any(item => item.Guid == otherItem.Guid))
+                if (!collectionToModify.Any(item => item.Guid == otherItem.Guid))
                 {
-                    collection.Add(otherItem);
+                    collectionToModify.Add(otherItem);
                 }
             }
         }
@@ -46,13 +47,13 @@ namespace EstimatingLibrary.Utilities
         /// <param name="collection"></param>
         /// <param name="otherCollection"></param>
         /// <param name="onReplace">Method to be called upon identify an item to replace. The arguments should be (existing item, new item)</param>
-        public static void UnionizeScopeCollection<T>(IList<T> collection, IList<T> otherCollection, Action<T,T> onReplace = null) where T : ITECObject
+        public static void UnionizeScopeCollection<T>(IList<T> collectionToModify, IList<T> otherCollection, Action<T,T> onReplace = null) where T : ITECObject
         {
             List<T> itemsToRemove = new List<T>();
 
             foreach (T otherItem in otherCollection)
             {
-                foreach (T item in collection)
+                foreach (T item in collectionToModify)
                 {
                     if (item.Guid == otherItem.Guid)
                     {
@@ -63,12 +64,26 @@ namespace EstimatingLibrary.Utilities
             }
             foreach (T item in itemsToRemove)
             {
-                collection.Remove(item);
+                collectionToModify.Remove(item);
             }
             foreach (T item in otherCollection)
             {
-                collection.Add(item);
+                collectionToModify.Add(item);
             }
+        }
+
+        public static bool OptionallyReplaceAll<T>(T item, IList<T> collection, T replacement = null) where T : class
+        {
+            if (!collection.Contains(item)) return false;
+            while(collection.Contains(item))
+            {
+                collection.Remove(item);
+                if (replacement != null)
+                {
+                    collection.Add(replacement);
+                }
+            }
+            return true;
         }
 
     }

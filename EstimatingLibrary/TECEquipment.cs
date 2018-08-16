@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
 {
-    public class TECEquipment : TECLocated, INotifyPointChanged, IDDCopiable, ITypicalable
+    public class TECEquipment : TECLocated, INotifyPointChanged, IDDCopiable, ITypicalable, ICatalogContainer
     {
         #region Properties
 
@@ -184,6 +184,5 @@ namespace EstimatingLibrary
             TypicalableUtilities.MakeChildrenTypical(this);
         }
         #endregion
-
     }
 }

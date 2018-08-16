@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
 {
-    public class TECPanel : TECLocated, IDDCopiable, ITypicalable
+    public class TECPanel : TECLocated, IDDCopiable, ITypicalable, ICatalogContainer
     {
         #region Properties
         private TECPanelType _type;
@@ -141,5 +141,24 @@ namespace EstimatingLibrary
             this.IsTypical = true;
             TypicalableUtilities.MakeChildrenTypical(this);
         }
+
+        #region ICatalogContainer
+        public override bool RemoveCatalogItem<T>(T item, T replacement)
+        {
+            bool alreadyRemoved = base.RemoveCatalogItem(item, replacement);
+
+            bool replacedType = false;
+            if (item == this.Type)
+            {
+                if (replacement is TECPanelType type)
+                {
+                    this.Type = type;
+                    replacedType = true;
+                }
+                else throw new ArgumentException("Replacement PanelType cannot be null.");
+            }
+            return (replacedType || alreadyRemoved);
+        }
+        #endregion
     }
 }

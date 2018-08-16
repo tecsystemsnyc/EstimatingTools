@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,7 +11,6 @@ namespace EstimatingLibrary
 {
     public class TECHardwiredProtocol : TECObject, IProtocol, IEquatable<TECHardwiredProtocol>
     {
-
         public string Label => "Hardwired";
 
         public ObservableCollection<TECConnectionType> ConnectionTypes { get; }

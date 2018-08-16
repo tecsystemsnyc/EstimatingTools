@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
+using EstimatingLibrary.Utilities;
 using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections;
@@ -15,25 +16,6 @@ namespace TECUserControlLibrary.Utilities
 {
     public static class DragDropHelpers
     {
-        public static Type GetItemType(IEnumerable enumerable)
-        {
-            if (enumerable == null) return null;
-            var args = enumerable.GetType().GetInterface("IEnumerable`1");
-            if (args == null)
-            {
-                return null;
-            }
-
-            if (args.GenericTypeArguments.Length > 0)
-            {
-                return args.GenericTypeArguments[0];
-            }
-            else
-            {
-                return null;
-            }
-        }
-
         /// <summary>
         /// Standard method for applying drop adorners if the sourceitem and targetcollection are compatible.
         /// </summary>
@@ -59,7 +41,7 @@ namespace TECUserControlLibrary.Utilities
             else
             { sourceType = sourceItem.GetType(); }
 
-            Type targetType = GetItemType(dropInfo.TargetCollection) ?? dropInfo.TargetItem?.GetType();
+            Type targetType = dropInfo.TargetCollection.GetItemType() ?? dropInfo.TargetItem?.GetType();
 
             if (targetType != null)
             {
@@ -103,7 +85,7 @@ namespace TECUserControlLibrary.Utilities
             {
                 sourceItem = dropbable.DropData();
             }
-            Type targetType = GetItemType(dropInfo.TargetCollection) ?? dropInfo.TargetItem?.GetType();
+            Type targetType = dropInfo.TargetCollection.GetItemType() ?? dropInfo.TargetItem?.GetType();
 
             if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)
             {

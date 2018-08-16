@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 namespace EstimatingLibrary
 {
 
-    abstract public class TECConnection : TECObject, INotifyCostChanged, IRelatable, IConnection
+    abstract public class TECConnection : TECObject, INotifyCostChanged, IRelatable, IConnection, ICatalogContainer
     {
         #region Properties
         protected double _length = 0;
@@ -136,5 +136,25 @@ namespace EstimatingLibrary
             }
             return relatedList;
         }
+
+        #region ICatalogContainer
+        public virtual bool RemoveCatalogItem<T>(T item, T replacement) where T : class, ICatalog
+        {
+            bool replacedConduit = false;
+            if (item == this.ConduitType)
+            {
+                if (replacement is TECElectricalMaterial newConduit)
+                {
+                    this.ConduitType = newConduit;
+                }
+                else
+                {
+                    this.ConduitType = null;
+                }
+                replacedConduit = true;
+            }
+            return replacedConduit;
+        }
+        #endregion
     }
 }

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace EstimatingLibrary
 {
-    public abstract class TECTagged : TECObject, IRelatable
+    public abstract class TECTagged : TECObject, IRelatable, ICatalogContainer
     {
         #region Properties
 
@@ -99,7 +99,18 @@ namespace EstimatingLibrary
             relatedList.AddRange(this.Tags, "Tags");
             return relatedList;
         }
+
         #endregion Methods
-        
+
+        #region ICatalogContainer
+        public virtual bool RemoveCatalogItem<T>(T item, T replacement) where T : class, ICatalog
+        {
+            if (item is TECTag tag)
+            {
+                return (CommonUtilities.OptionallyReplaceAll(tag, this.Tags, replacement as TECTag));
+            }
+            return false;
+        }
+        #endregion
     }
 }

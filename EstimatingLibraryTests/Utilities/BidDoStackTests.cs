@@ -11,7 +11,7 @@ using System.Linq;
 namespace Utilities
 {
     [TestClass]
-    public class DoStackTests
+    public class BidDoStackTests
     {
         private Random rand;
 
@@ -954,12 +954,12 @@ namespace Utilities
                 }
             }
             TECControllerType expected = provided.Type;
-            TECControllerType edit = Bid.Catalogs.ControllerTypes[0];
+            TECControllerType edit = new TECControllerType(provided.Type);
 
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
             int beforeCount = testStack.UndoCount();
-            provided.Type = edit;
+            provided.ChangeType(edit);
             Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,25 @@ namespace EstimatingLibrary.Utilities
         {
             foreach (var item in source)
                 action(item);
+        }
+
+        public static Type GetItemType(this IEnumerable enumerable)
+        {
+            if (enumerable == null) return null;
+            var args = enumerable.GetType().GetInterface("IEnumerable`1");
+            if (args == null)
+            {
+                return null;
+            }
+
+            if (args.GenericTypeArguments.Length > 0)
+            {
+                return args.GenericTypeArguments[0];
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace EstimatingLibrary
 {
-    public class TECElectricalMaterial : TECCost, ICatalog<TECElectricalMaterial>, IDDCopiable
+    public class TECElectricalMaterial : TECCost, ICatalog<TECElectricalMaterial>, IDDCopiable, ICatalogContainer
     {
         #region Properties
         public ObservableCollection<TECAssociatedCost> RatedCosts { get; } = new ObservableCollection<TECAssociatedCost>();
@@ -71,5 +71,20 @@ namespace EstimatingLibrary
         {
             return new TECElectricalMaterial(this);
         }
+
+        #region ICatalogContainer
+        public override bool RemoveCatalogItem<T>(T item, T replacement)
+        {
+            bool alreadyRemoved = base.RemoveCatalogItem(item, replacement);
+
+            bool replacedRated = false;
+            if (item is TECAssociatedCost cost)
+            {
+                replacedRated = CommonUtilities.OptionallyReplaceAll(cost, this.RatedCosts, replacement as TECAssociatedCost);
+            }
+
+            return (replacedRated || alreadyRemoved);
+        }
+        #endregion
     }
 }

@@ -56,7 +56,7 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
             TECTag newTag = new TECTag();
             newTag.Label = this.NewTagName;
 
-            this.Templates.Catalogs.Tags.Add(newTag);
+            this.Templates.Catalogs.Add(newTag);
 
             this.NewTagName = "";
         }

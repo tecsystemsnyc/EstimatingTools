@@ -2685,7 +2685,7 @@ namespace EstimatingUtilitiesLibraryTests
             expectedCost.Name = "Add cost addition";
             expectedCost.Price = 978.3;
 
-            bid.Catalogs.PanelTypes.Add(expectedCost);
+            bid.Catalogs.Add(expectedCost);
 
             DatabaseUpdater.Update(path, testStack.CleansedStack());
 

@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
 {
-    public class TECNetworkConnection : TECConnection, IControllerConnection
+    public class TECNetworkConnection : TECConnection, IControllerConnection, ICatalogContainer
     {
         #region Properties
         //---Stored---
@@ -114,6 +114,18 @@ namespace EstimatingLibrary
             }
         }
 
+        public void SetProtocol(TECProtocol prot)
+        {
+            if (this.protocol != prot)
+            {
+                var old = this.protocol;
+                var originalCost = CostBatch;
+                this.protocol = prot;
+                notifyCombinedChanged(Change.Edit, "Protocol", this, prot, old);
+                notifyCostChanged(CostBatch - originalCost);
+            }
+        }
+        
         protected override RelatableMap propertyObjects()
         {
             RelatableMap saveList = new RelatableMap();
@@ -183,6 +195,24 @@ namespace EstimatingLibrary
         void ITypicalable.MakeTypical()
         {
             this.IsTypical = true;
+        }
+        #endregion
+
+        #region ICatalogContainer
+        public override bool RemoveCatalogItem<T>(T item, T replacement)
+        {
+            bool alreadyRemoved = base.RemoveCatalogItem(item, replacement);
+
+            bool replacedProt = false;
+            if (item == this.protocol)
+            {
+                if (replacement is TECProtocol prot)
+                {
+                    SetProtocol(prot);
+                }
+                else throw new ArgumentException("Replacement Protocol cannot be null.");
+            }
+            return (replacedProt || alreadyRemoved);
         }
         #endregion
     }
