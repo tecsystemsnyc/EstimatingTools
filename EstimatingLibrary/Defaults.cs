@@ -36,20 +36,20 @@ namespace EstimatingLibrary
             "Smoke purge and UL-864 systems."
         };
 
-        public static List<string> BidToDoList = new List<string>
+        public static List<(string description, string url)> BidToDoList = new List<(string description, string url)>
         {
-            "Fill out bid info",
-            "Populate riser",
-            "Create systems from sequences",
-            "Verify valve selections",
-            "Verify electrical runs",
-            "Verify proposal",
-            "Add systems' miscellaneous costs",
-            "Create system instances",
-            "Create and verify controllers",
-            "Create network electrical runs",
-            "Add any miscellaneous costs for the bid",
-            "Submit quotes"
+            ("Fill out bid info", ""),
+            ("Populate riser", ""),
+            ("Create systems from sequences", ""),
+            ("Verify valve selections", ""),
+            ("Verify electrical runs", ""),
+            ("Verify proposal", ""),
+            ("Add systems' miscellaneous costs", ""),
+            ("Create system instances", ""),
+            ("Create and verify controllers", ""),
+            ("Create network electrical runs", ""),
+            ("Add any miscellaneous costs for the bid", ""),
+            ("Submit quotes", ""),
         };
     }
 }

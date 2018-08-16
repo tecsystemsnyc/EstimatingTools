@@ -195,9 +195,9 @@ namespace EstimatingLibrary
                 noteToAdd.Label = item;
                 Notes.Add(new TECLabeled(noteToAdd));
             }
-            foreach(string item in Defaults.BidToDoList)
+            foreach(var item in Defaults.BidToDoList)
             {
-                ToDoList.Add(new TECToDoItem(item));
+                ToDoList.Add(new TECToDoItem(item.description, item.url));
             }
             _parameters.Markup = 20;
         }

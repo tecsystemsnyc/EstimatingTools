@@ -1017,6 +1017,7 @@ namespace EstimatingUtilitiesLibrary.Database
 
         public static TableField ID = new TableField("ID", "TEXT", ToDoItemType.GetProperty("Guid"));
         public static TableField Description = new TableField("Description", "TEXT", ToDoItemType.GetProperty("Description"));
+        public static TableField URL = new TableField("URL", "TEXT", ToDoItemType.GetProperty("URL"));
         public static TableField IsDone = new TableField("IsDone", "INTEGER", ToDoItemType.GetProperty("IsDone"));
 
         private List<TableField> primaryKeys = new List<TableField>()
@@ -1031,6 +1032,7 @@ namespace EstimatingUtilitiesLibrary.Database
         {
             ID,
             Description,
+            URL,
             IsDone
         };
         private List<string> propertyNames = new List<string>()
