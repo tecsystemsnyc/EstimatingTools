@@ -229,8 +229,9 @@ namespace EstimateBuilder.MVVM
             menuVM.SetExportBudgetCommand(exportBudgetExecute, canExportBudget);
             menuVM.SetExportBOMCommand(exportBOMExecute, canExportBOM);
             menuVM.SetDebugWindowCommand(debugWindowExecute, canDebugWindow);
+            menuVM.SetToDoWindowCommand(toDoWindowExecute, canToDoWindow);
         }
-
+        
         //Load Templates
         private void openLoadTemplatesPopup()
         {
@@ -449,6 +450,16 @@ namespace EstimateBuilder.MVVM
 
             BugReportWindow reportWindow = new BugReportWindow("Estimate Builder Bug", reportPrompt, logPath);
             reportWindow.ShowDialog();
+        }
+        //To Do Window
+        private void toDoWindowExecute()
+        {
+            var toDoWindow = new ToDoWindow(bid.ToDoList);
+            toDoWindow.Show();
+        }
+        private bool canToDoWindow()
+        {
+            return true;
         }
         #endregion
 

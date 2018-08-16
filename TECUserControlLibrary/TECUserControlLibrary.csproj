@@ -616,6 +616,9 @@
     <Compile Include="Windows\BugReportWindow.xaml.cs">
       <DependentUpon>BugReportWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ToDoWindow.xaml.cs">
+      <DependentUpon>ToDoWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Debug\EBDebugWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1210,6 +1213,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\BugReportWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ToDoWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
