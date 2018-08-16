@@ -147,7 +147,13 @@ namespace EstimatingLibrary
         {
             bool alreadyRemoved = base.RemoveCatalogItem(item, replacement);
 
-            throw new NotImplementedException();
+            bool removedConnectionType = false;
+            if (item is TECConnectionType type)
+            {
+                removedConnectionType = CommonUtilities.OptionallyReplaceAll(type, this.ConnectionTypes, replacement as TECConnectionType);
+            }
+
+            return (removedConnectionType || alreadyRemoved);
         }
         #endregion
     }
