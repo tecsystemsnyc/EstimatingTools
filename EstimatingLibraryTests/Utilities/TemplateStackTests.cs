@@ -1,24 +1,23 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
-using EstimatingUtilitiesLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using TestLibrary.ModelTestingUtilities;
 
-namespace EstimatingUtilitiesLibraryTests
+namespace Utilities
 {
     /// <summary>
     /// Summary description for TemplateStackTests
     /// </summary>
     [TestClass]
-    public class TemplateStackTests
+    public class TemplateDoStackTests
     {
         Random rand;
         
-        public TemplateStackTests()
+        public TemplateDoStackTests()
         {
             //
             // TODO: Add constructor logic here
@@ -398,7 +397,6 @@ namespace EstimatingUtilitiesLibraryTests
 
         }
         
-
         [TestMethod]
         public void Undo_Template_Equipment_SubScope()
         {
