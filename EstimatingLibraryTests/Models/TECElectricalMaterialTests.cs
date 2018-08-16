@@ -18,7 +18,7 @@ namespace Models
         {
             TECBid bid = new TECBid();
             TECElectricalMaterial dev = new TECElectricalMaterial();
-            bid.Catalogs.ConduitTypes.Add(dev);
+            bid.Catalogs.Add(dev);
             var copy = dev.DragDropCopy(bid);
 
             Assert.AreEqual(dev, copy);

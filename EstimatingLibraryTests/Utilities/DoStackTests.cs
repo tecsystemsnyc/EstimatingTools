@@ -959,7 +959,7 @@ namespace Utilities
             //Act
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
             int beforeCount = testStack.UndoCount();
-            provided.Type = edit;
+            provided.ChangeType(edit);
             Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 

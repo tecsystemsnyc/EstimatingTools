@@ -18,7 +18,7 @@ namespace Models
         {
             TECBid bid = new TECBid();
             TECDevice dev = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
-            bid.Catalogs.Devices.Add(dev);
+            bid.Catalogs.Add(dev);
             var copy = dev.DragDropCopy(bid);
 
             Assert.AreEqual(dev, copy);
