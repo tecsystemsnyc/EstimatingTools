@@ -123,6 +123,7 @@
     <Compile Include="Interfaces\ITypicalable.cs" />
     <Compile Include="Interfaces\ITECObject.cs" />
     <Compile Include="Interfaces\ITECScope.cs" />
+    <Compile Include="TECToDoItem.cs" />
     <Compile Include="TECDistributionContact.cs" />
     <Compile Include="TECProposalItem.cs" />
     <Compile Include="TECScopeTemplates.cs" />

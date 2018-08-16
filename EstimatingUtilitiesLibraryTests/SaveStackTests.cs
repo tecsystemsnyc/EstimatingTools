@@ -4728,6 +4728,37 @@ namespace EstimatingUtilitiesLibraryTests
             CheckUpdateItems(expectedItems, stack);
             
         }
+
+        [TestMethod]
+        public void Bid_EditToDo()
+        {
+            //Arrange
+            TECBid bid = new TECBid(); ChangeWatcher watcher = new ChangeWatcher(bid);
+
+            var item = bid.ToDoList.First();
+
+           
+            //Act
+            DeltaStacker stack = new DeltaStacker(watcher, bid);
+            item.IsDone = true;
+
+
+            Tuple<string, string> keyData = new Tuple<string, string>(ToDoItemTable.ID.Name, item.Guid.ToString());
+
+            List<UpdateItem> expectedItems = new List<UpdateItem>();
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data[ToDoItemTable.IsDone.Name] = item.IsDone.ToInt().ToString();
+            expectedItems.Add(new UpdateItem(Change.Edit, ToDoItemTable.TableName, data, keyData));
+
+            int expectedCount = expectedItems.Count;
+            
+
+            //Assert
+            Assert.AreEqual(expectedCount, stack.CleansedStack().Count);
+            CheckUpdateItems(expectedItems, stack);
+
+        }
         #endregion
         #region System
         [TestMethod]
