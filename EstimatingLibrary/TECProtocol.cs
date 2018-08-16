@@ -95,7 +95,7 @@ namespace EstimatingLibrary
         #endregion
 
         #region ICatalogContainer
-        public bool RemoveCatalogItem<T>(T item, T replacement) where T : class, ICatalog<T>
+        public bool RemoveCatalogItem<T>(T item, T replacement) where T : class, ICatalog
         {
             bool removedConnectionType = false;
             if (item is TECConnectionType type)
