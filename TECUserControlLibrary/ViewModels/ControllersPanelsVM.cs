@@ -198,7 +198,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void changeTypeExecute(TECProvidedController obj)
         {
-            ObservableCollection<TECControllerType> types = Bid != null ? Bid.Catalogs.ControllerTypes : Templates.Catalogs.ControllerTypes;
+            IEnumerable<TECControllerType> types = Bid != null ? Bid.Catalogs.ControllerTypes : Templates.Catalogs.ControllerTypes;
 
             SelectedVM = new ChangeControllerTypeVM(obj, types);
         }
@@ -207,7 +207,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             if (arg is TECProvidedController provided)
             {
-                ObservableCollection<TECControllerType> types = Bid != null ? Bid.Catalogs.ControllerTypes : Templates.Catalogs.ControllerTypes;
+                IEnumerable<TECControllerType> types = Bid != null ? Bid.Catalogs.ControllerTypes : Templates.Catalogs.ControllerTypes;
 
                 return provided != null && types.Any(x => provided.CanChangeType(x));
             }

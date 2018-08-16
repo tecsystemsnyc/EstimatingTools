@@ -169,7 +169,7 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
             toAdd.Style = ValveStyle;
             toAdd.Cv = ValveCv;
             toAdd.Size = ValveSize;
-            Templates.Catalogs.Valves.Add(toAdd);
+            Templates.Catalogs.Add(toAdd);
 
             ValveName = "";
             ValveDescription = "";

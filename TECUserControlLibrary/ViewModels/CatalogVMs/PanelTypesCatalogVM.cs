@@ -110,7 +110,7 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
             panelType.Price = this.PanelTypeCost;
             panelType.Labor = this.PanelTypeLabor;
 
-            Templates.Catalogs.PanelTypes.Add(panelType);
+            Templates.Catalogs.Add(panelType);
 
             this.PanelTypeName = "";
             this.PanelTypeDescription = "";

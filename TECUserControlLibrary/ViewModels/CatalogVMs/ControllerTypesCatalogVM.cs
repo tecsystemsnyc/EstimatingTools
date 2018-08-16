@@ -191,7 +191,7 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
                 }
             }
 
-            Templates.Catalogs.ControllerTypes.Add(toAdd);
+            Templates.Catalogs.Add(toAdd);
             
             this.ControllerTypeName = "";
             this.ControllerTypeDescription = "";

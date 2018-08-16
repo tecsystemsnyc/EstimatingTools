@@ -157,7 +157,7 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
             ioModule.Description = this.IOModuleDescription;
             ioModule.IO.AddRange(this.ModuleIO);
 
-            this.Templates.Catalogs.IOModules.Add(ioModule);
+            this.Templates.Catalogs.Add(ioModule);
             
             this.IOModuleName = "";
             this.IOModuleDescription = "";

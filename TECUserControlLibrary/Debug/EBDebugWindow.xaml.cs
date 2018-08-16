@@ -56,7 +56,7 @@ namespace TECUserControlLibrary.Debug
             type.Name = "Controller Type";
             type.IO.Add(new TECIO(IOType.AI) );
 
-            bid.Catalogs.ControllerTypes.Add(type);
+            bid.Catalogs.Add(type);
 
             TECProvidedController controller = new TECProvidedController(type);
             controller.Name = "Test Server";

@@ -122,7 +122,7 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
             toAdd.Price = this.DeviceListPrice;
             toAdd.Labor = this.DeviceLabor;
 
-            this.Templates.Catalogs.Devices.Add(toAdd);
+            this.Templates.Catalogs.Add(toAdd);
 
             this.DeviceName = "";
             this.DeviceDescription = "";
