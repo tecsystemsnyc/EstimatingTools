@@ -195,8 +195,9 @@ namespace Models
 
             TECConnectionType otherConnectionType = new TECConnectionType();
             TECDevice nextDevice = new TECDevice(new List<TECConnectionType> { otherConnectionType }, new List<TECProtocol>(), new TECManufacturer());
-            subScope.AddDevice(nextDevice);
+            bool deviceAdded = subScope.AddDevice(nextDevice);
 
+            Assert.IsFalse(deviceAdded);
             Assert.IsFalse(subScope.Devices.Contains(nextDevice));
 
         }
