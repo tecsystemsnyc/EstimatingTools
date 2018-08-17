@@ -139,7 +139,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void replaceValveExecute(TECValve obj)
         {
-            SelectedValve.SubScope.Devices.Remove(SelectedValve.Valve);
+            SelectedValve.SubScope.RemoveDevice(SelectedValve.Valve);
             SelectedValve.SubScope.AddDevice(obj);
             SelectedValve.Valve = obj;
         }

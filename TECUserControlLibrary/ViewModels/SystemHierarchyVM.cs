@@ -467,7 +467,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void deleteDeviceExecute(IEndDevice obj)
         {
-            SelectedSubScope.Devices.Remove(obj);
+            SelectedSubScope.RemoveDevice(obj);
         }
         private bool canDeleteDevice(IEndDevice arg)
         {
@@ -476,7 +476,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private void deletePointExecute(TECPoint obj)
         {
-            SelectedSubScope.Points.Remove(obj);
+            SelectedSubScope.RemovePoint(obj);
         }
         private bool canDeletePoint(TECPoint arg)
         {

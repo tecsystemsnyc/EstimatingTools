@@ -87,7 +87,7 @@ namespace TECUserControlLibrary.Debug
             TECPoint point = new TECPoint();
             point.Type = IOType.AI;
             point.Quantity = 1;
-            ss.Points.Add(point);
+            ss.AddPoint(point);
             equip.SubScope.Add(ss);
             typical.Equipment.Add(equip);
 
@@ -106,7 +106,7 @@ namespace TECUserControlLibrary.Debug
             TECPoint point = new TECPoint();
             point.Type = IOType.AI;
             point.Quantity = 1;
-            ss.Points.Add(point);
+            ss.AddPoint(point);
             equipment.SubScope.Add(ss);
             typical.Equipment.Add(equipment);
 
@@ -116,7 +116,7 @@ namespace TECUserControlLibrary.Debug
             TECPoint point2 = new TECPoint();
             point2.Type = IOType.AI;
             point2.Quantity = 1;
-            connected.Points.Add(point2);
+            connected.AddPoint(point2);
             equipment.SubScope.Add(connected);
 
             TECSubScope toConnect = new TECSubScope();
@@ -125,7 +125,7 @@ namespace TECUserControlLibrary.Debug
             TECPoint point3 = new TECPoint();
             point3.Type = IOType.AI;
             point3.Quantity = 1;
-            toConnect.Points.Add(point3);
+            toConnect.AddPoint(point3);
             equipment.SubScope.Add(toConnect);
 
             TECControllerType controllerType = new TECControllerType(new TECManufacturer());

@@ -154,7 +154,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void deleteDeviceExecute(IEndDevice obj)
         {
-            SelectedSubScope.Devices.Remove(obj);
+            SelectedSubScope.RemoveDevice(obj);
         }
 
         private bool canDeletePoint(TECPoint arg)
@@ -163,7 +163,7 @@ namespace TECUserControlLibrary.ViewModels
         }
         private void deletePointExecute(TECPoint obj)
         {
-            SelectedSubScope.Points.Remove(obj);
+            SelectedSubScope.RemovePoint(obj);
         }
 
         private bool canDeleteInterlock(TECInterlockConnection arg)

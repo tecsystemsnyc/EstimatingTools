@@ -53,7 +53,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         private void addExecute()
         {
             var newPoint = new TECPoint(ToAdd);
-            parent.Points.Add(newPoint);
+            parent.AddPoint(newPoint);
             if (parent.Connection != null && parent.Connection is TECHardwiredConnection hardwiredConnection)
             {
                 var parentController = parent.Connection.ParentController;
