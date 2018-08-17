@@ -13,7 +13,7 @@ using TECUserControlLibrary.ViewModels.Interfaces;
 
 namespace TECUserControlLibrary.ViewModels
 {
-    class WireSummaryVM : LengthSummaryVM, IComponentSummaryVM
+    public class WireSummaryVM : LengthSummaryVM, IComponentSummaryVM
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 

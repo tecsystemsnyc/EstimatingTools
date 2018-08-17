@@ -16,18 +16,10 @@ namespace TECUserControlLibrary.ViewModels
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         #region Fields and Properties
-        private double _totalTECCost;
-        private double _totalTECLabor;
-        private double _totalElecCost;
-        private double _totalElecLabor;
-
-        private HardwareSummaryVM _deviceSummaryVM;
-        private ValveSummaryVM _valveSummaryVM;
-        private HardwareSummaryVM _controllerSummaryVM;
-        private HardwareSummaryVM _panelSummaryVM;
-        private LengthSummaryVM _wireSummaryVM;
-        private LengthSummaryVM _conduitSummaryVM;
-        private MiscCostsSummaryVM _miscSummaryVM;
+        private double _totalTECCost = 0;
+        private double _totalTECLabor = 0;
+        private double _totalElecCost = 0;
+        private double _totalElecLabor = 0;
 
         private IComponentSummaryVM _currentVM;
         private MaterialSummaryIndex _selectedIndex;
@@ -70,90 +62,13 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        public HardwareSummaryVM DeviceSummaryVM
-        {
-            get { return _deviceSummaryVM; }
-            set
-            {
-                if (DeviceSummaryVM != value)
-                {
-                    _deviceSummaryVM = value;
-                    RaisePropertyChanged("DeviceSummaryVM");
-                }
-            }
-        }
-        public ValveSummaryVM ValveSummaryVM
-        {
-            get { return _valveSummaryVM; }
-            set
-            {
-                if (ValveSummaryVM != value)
-                {
-                    _valveSummaryVM = value;
-                    RaisePropertyChanged("ValveSummaryVM");
-                }
-            }
-        }
-        public HardwareSummaryVM ControllerSummaryVM
-        {
-            get { return _controllerSummaryVM; }
-            set
-            {
-                if (ControllerSummaryVM != value)
-                {
-                    _controllerSummaryVM = value;
-                    RaisePropertyChanged("ControllerSummaryVM");
-                }
-            }
-        }
-        public HardwareSummaryVM PanelSummaryVM
-        {
-            get { return _panelSummaryVM; }
-            set
-            {
-                if (PanelSummaryVM != value)
-                {
-                    _panelSummaryVM = value;
-                    RaisePropertyChanged("PanelSummaryVM");
-                }
-            }
-        }
-        public LengthSummaryVM WireSummaryVM
-        {
-            get { return _wireSummaryVM; }
-            set
-            {
-                if (WireSummaryVM != value)
-                {
-                    _wireSummaryVM = value;
-                    RaisePropertyChanged("WireSummaryVM");
-                }
-            }
-        }
-        public LengthSummaryVM ConduitSummaryVM
-        {
-            get { return _conduitSummaryVM; }
-            set
-            {
-                if (ConduitSummaryVM != value)
-                {
-                    _conduitSummaryVM = value;
-                    RaisePropertyChanged("ConduitSummaryVM");
-                }
-            }
-        }
-        public MiscCostsSummaryVM MiscSummaryVM
-        {
-            get { return _miscSummaryVM; }
-            set
-            {
-                if (MiscSummaryVM != value)
-                {
-                    _miscSummaryVM = value;
-                    RaisePropertyChanged("MiscSummaryVM");
-                }
-            }
-        }
+        public HardwareSummaryVM DeviceSummaryVM { get; } = new HardwareSummaryVM();
+        public ValveSummaryVM ValveSummaryVM { get; } = new ValveSummaryVM();
+        public HardwareSummaryVM ControllerSummaryVM { get; } = new HardwareSummaryVM();
+        public HardwareSummaryVM PanelSummaryVM { get; } = new HardwareSummaryVM();
+        public WireSummaryVM WireSummaryVM { get; } = new WireSummaryVM();
+        public LengthSummaryVM ConduitSummaryVM { get; } = new LengthSummaryVM();
+        public MiscCostsSummaryVM MiscSummaryVM { get; } = new MiscCostsSummaryVM();
 
         public IComponentSummaryVM CurrentVM
         {
@@ -227,8 +142,6 @@ namespace TECUserControlLibrary.ViewModels
         //Constructor
         public MaterialSummaryVM(TECBid bid, ChangeWatcher changeWatcher)
         {
-            reinitializeTotals();
-            initializeVMs();
             loadBid(bid);
             new InstanceWatcherFilter(changeWatcher).InstanceChanged += instanceChanged;
             SelectedIndex = MaterialSummaryIndex.Devices;
@@ -236,14 +149,6 @@ namespace TECUserControlLibrary.ViewModels
 
         #region Methods
         #region Initialization Methods
-        private void reinitializeTotals()
-        {
-            TotalTECCost = 0;
-            TotalTECLabor = 0;
-            TotalElecCost = 0;
-            TotalElecLabor = 0;
-        }
-
         private void loadBid(TECBid bid)
         {
             foreach (TECTypical typical in bid.Systems)
@@ -265,17 +170,6 @@ namespace TECUserControlLibrary.ViewModels
             {
                 updateTotals(MiscSummaryVM.AddCost(misc));
             }
-        }
-
-        private void initializeVMs()
-        {
-            DeviceSummaryVM = new HardwareSummaryVM();
-            ValveSummaryVM = new ValveSummaryVM();
-            ControllerSummaryVM = new HardwareSummaryVM();
-            PanelSummaryVM = new HardwareSummaryVM();
-            WireSummaryVM = new LengthSummaryVM();
-            ConduitSummaryVM = new LengthSummaryVM();
-            MiscSummaryVM = new MiscCostsSummaryVM();
         }
         #endregion
 
@@ -391,9 +285,9 @@ namespace TECUserControlLibrary.ViewModels
             if (!connection.IsTypical)
             {
                 CostBatch deltas = new CostBatch();
-                foreach (TECElectricalMaterial connectionType in connection.Protocol.ConnectionTypes)
+                foreach (TECConnectionType connectionType in connection.Protocol.ConnectionTypes)
                 {
-                    deltas += (WireSummaryVM.AddRun(connectionType, connection.Length));
+                    deltas += (WireSummaryVM.AddRun(connectionType, connection.Length, connection.IsPlenum));
                 }
                 if (connection.ConduitType != null)
                 {
@@ -514,9 +408,9 @@ namespace TECUserControlLibrary.ViewModels
         private CostBatch removeConnection(IControllerConnection connection)
         {
             CostBatch deltas = new CostBatch();
-            foreach (TECElectricalMaterial connectionType in connection.Protocol.ConnectionTypes)
+            foreach (TECConnectionType connectionType in connection.Protocol.ConnectionTypes)
             {
-                deltas += (WireSummaryVM.RemoveRun(connectionType, connection.Length));
+                deltas += (WireSummaryVM.RemoveRun(connectionType, connection.Length, connection.IsPlenum));
             }
             if (connection.ConduitType != null)
             {
@@ -588,9 +482,9 @@ namespace TECUserControlLibrary.ViewModels
                     
                     if (sub.Connection != null)
                     {
-                        foreach(TECElectricalMaterial connectionType in sub.Connection.Protocol.ConnectionTypes)
+                        foreach(TECConnectionType connectionType in sub.Connection.Protocol.ConnectionTypes)
                         {
-                            updateTotals(WireSummaryVM.AddRun(connectionType, sub.Connection.Length));
+                            updateTotals(WireSummaryVM.AddRun(connectionType, sub.Connection.Length, sub.Connection.IsPlenum));
                         }
                     }
                 }
@@ -666,9 +560,9 @@ namespace TECUserControlLibrary.ViewModels
                     
                     if (sub.Connection != null)
                     {
-                        foreach(TECElectricalMaterial connectionType in sub.Connection.Protocol.ConnectionTypes)
+                        foreach(TECConnectionType connectionType in sub.Connection.Protocol.ConnectionTypes)
                         {
-                            updateTotals(WireSummaryVM.AddRun(connectionType, sub.Connection.Length));
+                            updateTotals(WireSummaryVM.AddRun(connectionType, sub.Connection.Length, sub.Connection.IsPlenum));
                         }
                     }
                 }
@@ -703,9 +597,9 @@ namespace TECUserControlLibrary.ViewModels
                     if (args.PropertyName == "Length")
                     {
                         double deltaLength = (double)args.Value - (double)args.OldValue;
-                        foreach (TECElectricalMaterial connectionType in connection.Protocol.ConnectionTypes)
+                        foreach (TECConnectionType connectionType in connection.Protocol.ConnectionTypes)
                         {
-                            updateTotals(WireSummaryVM.AddLength(connectionType, deltaLength));
+                            updateTotals(WireSummaryVM.AddLength(connectionType, deltaLength, connection.IsPlenum));
                         }
                     }
                     else if (args.PropertyName == "ConduitLength")
@@ -718,8 +612,8 @@ namespace TECUserControlLibrary.ViewModels
                     }
                     else if (args.PropertyName == "ConnectionType")
                     {
-                        updateTotals(WireSummaryVM.RemoveRun(args.OldValue as TECElectricalMaterial, connection.Length));
-                        updateTotals(WireSummaryVM.AddRun(args.Value as TECElectricalMaterial, connection.Length));
+                        updateTotals(WireSummaryVM.RemoveRun(args.OldValue as TECConnectionType, connection.Length, connection.IsPlenum));
+                        updateTotals(WireSummaryVM.AddRun(args.Value as TECConnectionType, connection.Length, connection.IsPlenum));
                     }
                     else if (args.PropertyName == "ConduitType")
                     {
