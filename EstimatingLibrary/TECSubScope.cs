@@ -152,7 +152,7 @@ namespace EstimatingLibrary
             }
             else
             {
-                if (device.ConnectionMethods.Contains(Connection.Protocol))
+                if (Connection.Protocol is TECProtocol && device.ConnectionMethods.Contains(Connection.Protocol))
                 {
                     this.Devices.Add(device);
                     return true;
@@ -163,6 +163,21 @@ namespace EstimatingLibrary
         public bool RemoveDevice(IEndDevice device)
         {
             return Devices.Remove(device);
+        }
+
+        public bool CanChangeDevice(IEndDevice oldDevice, IEndDevice newDevice)
+        {
+            if (this.Connection == null) return true;
+            if (Connection.Protocol is TECProtocol && newDevice.ConnectionMethods.Contains(Connection.Protocol))
+            {
+                return true;
+            }
+            else if (Connection.Protocol is TECHardwiredProtocol &&
+                oldDevice.HardwiredConnectionTypes.SequenceEqual(newDevice.HardwiredConnectionTypes))
+            {
+                return true;
+            }
+            return false;
         }
 
         public bool CanConnectToNetwork(TECNetworkConnection netConnect)
@@ -405,9 +420,16 @@ namespace EstimatingLibrary
             bool alreadyRemoved = base.RemoveCatalogItem(item, replacement);
 
             bool removedEndDevice = false;
-            if (item is IEndDevice dev)
+            if (item is IEndDevice oldDev && replacement is IEndDevice newDev)
             {
-                removedEndDevice = CommonUtilities.OptionallyReplaceAll(dev, this.Devices, replacement as IEndDevice);
+                if (this.Devices.Contains(oldDev))
+                {
+                    if (CanChangeDevice(oldDev, newDev))
+                    {
+                        removedEndDevice = CommonUtilities.OptionallyReplaceAll(oldDev, this.Devices, newDev);
+                    }
+                    else throw new ArgumentException("Replacement Device must be compatible.");
+                }
             }
 
             return (removedEndDevice || alreadyRemoved);
