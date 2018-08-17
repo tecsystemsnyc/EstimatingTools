@@ -120,20 +120,47 @@ namespace EstimatingLibrary
             return outScope;
         }
         
-        public void AddPoint(TECPoint point)
+        public bool AddPoint(TECPoint point)
         {
-            Points.Add(point);
+            if (this.Connection == null || !(this.Connection is TECHardwiredConnection))
+            {
+                this.Points.Add(point);
+                return true;
+            }
+            else
+            {
+                TECIO io = new TECIO(point.Type) { Quantity = point.Quantity };
+                if (this.Connection.ParentController.AvailableIO.Contains(io))
+                {
+                    this.Points.Add(point);
+                    return true;
+                }
+            }
+            return false;
         }
         public bool RemovePoint(TECPoint point)
         {
             return Points.Remove(point);
         }
 
-        public void AddDevice(TECDevice device)
+        public bool AddDevice(IEndDevice device)
         {
-            Devices.Add(device);
+            if (this.Connection == null)
+            {
+                this.Devices.Add(device);
+                return true;
+            }
+            else
+            {
+                if (device.ConnectionMethods.Contains(Connection.Protocol))
+                {
+                    this.Devices.Add(device);
+                    return true;
+                }
+            }
+            return false;
         }
-        public bool RemoveDevice(TECDevice device)
+        public bool RemoveDevice(IEndDevice device)
         {
             return Devices.Remove(device);
         }
