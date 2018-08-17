@@ -368,5 +368,34 @@ namespace Models
             Assert.IsFalse(ss.AvailableProtocols.Contains(prot3));
             Assert.AreEqual(2, ss.AvailableProtocols.Count);
         }
+
+        [TestMethod()]
+        public void AvailableProtocols1()
+        {
+            TECConnectionType type1 = new TECConnectionType();
+            TECConnectionType type2 = new TECConnectionType();
+
+            TECProtocol prot1 = new TECProtocol(new List<TECConnectionType>());
+            TECProtocol prot2 = new TECProtocol(new List<TECConnectionType>());
+            TECProtocol prot3 = new TECProtocol(new List<TECConnectionType>());
+
+            TECDevice dev1 = new TECDevice(new List<TECConnectionType>(),
+                new List<TECProtocol> { prot1, prot2 }, new TECManufacturer());
+            TECDevice dev2 = new TECDevice(new List<TECConnectionType> { type2 },
+                new List<TECProtocol> { prot1, prot3 }, new TECManufacturer());
+
+            TECSubScope ss = new TECSubScope();
+            bool dev1Added = ss.AddDevice(dev1);
+            bool dev2Added = ss.AddDevice(dev2);
+
+            Assert.IsTrue(dev1Added);
+            Assert.IsTrue(dev2Added);
+
+            Assert.IsFalse(ss.AvailableProtocols.Any(prot => { return prot is TECHardwiredProtocol; } ));
+            Assert.IsTrue(ss.AvailableProtocols.Contains(prot1));
+            Assert.IsFalse(ss.AvailableProtocols.Contains(prot2));
+            Assert.IsFalse(ss.AvailableProtocols.Contains(prot3));
+            Assert.AreEqual(1, ss.AvailableProtocols.Count);
+        }
     }
 }

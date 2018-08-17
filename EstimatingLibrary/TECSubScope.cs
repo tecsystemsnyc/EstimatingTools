@@ -273,28 +273,35 @@ namespace EstimatingLibrary
             {
                 List<IProtocol> protocols = new List<IProtocol>();
                 if (Connection != null) return protocols;
+                List<TECConnectionType> hardConnectionTypes = new List<TECConnectionType>();
+                List<TECProtocol> catalogProtocols = new List<TECProtocol>();
+                bool allDevsHaveHard = true;
                 foreach(IEndDevice endDev in this.Devices)
                 {
-                    if (protocols.Count <= 0)
+                    if (endDev.HardwiredConnectionTypes.Count < 1) allDevsHaveHard = false;
+                    hardConnectionTypes.AddRange(endDev.HardwiredConnectionTypes);
+                    if (catalogProtocols.Count <= 0)
                     {
-                        protocols.AddRange(endDev.ConnectionMethods);
+                        catalogProtocols.AddRange(endDev.PossibleProtocols);
                     }
                     else
                     {
-                        List<IProtocol> toRemove = new List<IProtocol>();
-                        foreach(IProtocol protocol in protocols)
+                        List<TECProtocol> toRemove = new List<TECProtocol>();
+                        foreach(TECProtocol protocol in catalogProtocols)
                         {
-                            if (!endDev.ConnectionMethods.Contains(protocol))
+                            if (!endDev.PossibleProtocols.Contains(protocol))
                             {
                                 toRemove.Add(protocol);
                             }
                         }
-                        foreach(IProtocol protocol in toRemove)
+                        foreach(TECProtocol protocol in toRemove)
                         {
-                            protocols.Remove(protocol);
+                            catalogProtocols.Remove(protocol);
                         }
                     }
                 }
+                if (allDevsHaveHard) protocols.Add(new TECHardwiredProtocol(hardConnectionTypes));
+                protocols.AddRange(catalogProtocols);
                 return protocols;
             }
         }
