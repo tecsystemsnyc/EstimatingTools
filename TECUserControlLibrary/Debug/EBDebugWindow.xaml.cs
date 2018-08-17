@@ -83,7 +83,7 @@ namespace TECUserControlLibrary.Debug
             TECEquipment equip = new TECEquipment();
             TECSubScope ss = new TECSubScope();
             ss.Name = "Test Subscope";
-            ss.Devices.Add(bid.Catalogs.Devices[0]);
+            ss.AddDevice(bid.Catalogs.Devices[0]);
             TECPoint point = new TECPoint();
             point.Type = IOType.AI;
             point.Quantity = 1;
@@ -102,7 +102,7 @@ namespace TECUserControlLibrary.Debug
             equipment.Name = "test equipment";
             TECSubScope ss = new TECSubScope();
             ss.Name = "Test Subscope";
-            ss.Devices.Add(bid.Catalogs.Devices[0]);
+            ss.AddDevice(bid.Catalogs.Devices[0]);
             TECPoint point = new TECPoint();
             point.Type = IOType.AI;
             point.Quantity = 1;
@@ -112,7 +112,7 @@ namespace TECUserControlLibrary.Debug
 
             TECSubScope connected = new TECSubScope();
             connected.Name = "Connected";
-            connected.Devices.Add(bid.Catalogs.Devices[0]);
+            connected.AddDevice(bid.Catalogs.Devices[0]);
             TECPoint point2 = new TECPoint();
             point2.Type = IOType.AI;
             point2.Quantity = 1;
@@ -121,7 +121,7 @@ namespace TECUserControlLibrary.Debug
 
             TECSubScope toConnect = new TECSubScope();
             toConnect.Name = "To Connect";
-            toConnect.Devices.Add(bid.Catalogs.Devices[0]);
+            toConnect.AddDevice(bid.Catalogs.Devices[0]);
             TECPoint point3 = new TECPoint();
             point3.Type = IOType.AI;
             point3.Quantity = 1;

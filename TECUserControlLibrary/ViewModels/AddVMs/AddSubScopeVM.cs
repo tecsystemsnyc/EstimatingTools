@@ -179,7 +179,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                     subScope.CopyPropertiesFromScope(ToAdd);
                     foreach (IEndDevice device in ToAdd.Devices.Where(item => !originalDevices.Contains(item)))
                     {
-                        subScope.Devices.Add(device);
+                        subScope.AddDevice(device);
                     }
                     foreach (TECPoint point in ToAdd.Points.Where(item => !originalPoints.Contains(item)))
                     {
