@@ -32,10 +32,10 @@
             </Storyboard>
             <Storyboard x:Key="modalOut">
                 <DoubleAnimation Storyboard.TargetName="subScopeHierarchyView"
-                                     Storyboard.TargetProperty="(local:SubScopeHierarchyView.ModalHeight)" 
+                                 Storyboard.TargetProperty="(local:SubScopeHierarchyView.ModalHeight)" 
                                  Completed="modalOut_Completed"
                                  FillBehavior="Stop"
-                                     From="0" To="{Binding ElementName=subScopeHierarchyView, Path=ActualHeight}" BeginTime="0:0:0" Duration="0:0:0.2"/>
+                                 From="0" To="{Binding ElementName=subScopeHierarchyView, Path=ActualHeight}" BeginTime="0:0:0" Duration="0:0:0.2"/>
             </Storyboard>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -65,94 +65,146 @@
         <Grid DataContext="{Binding ElementName=subScopeHierarchyView}">
         
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <!--Column 0-->
-        <Grid Grid.Column="0" >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="50"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition/>
-                <RowDefinition Height="30"/>
-            </Grid.RowDefinitions>
-            <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Column="1"
-                    Margin="5,0,5,0">
-                    <TextBlock Text="Point Templates" Style="{StaticResource ListHeader}"/>
-            </Border>
-            <listControls:SubScopeListControl x:Name="subScopeList" Source="{Binding ElementName=subScopeHierarchyView, Path=SubScopeSource}"
-                                    SelectedItem ="{Binding ViewModel.SelectedSubScope}" 
-                                    Grid.ColumnSpan="3" Grid.Row="1"
-                                    DropHandler="{Binding ViewModel}"
-                                    DeleteCommand="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.DeleteSubScopeCommand}"
-                                            IsDragSource="True"/>
-            <Grid Grid.Row="2" Grid.Column="2">
-                <Button Content="Add" x:Name="addSubScope" 
-                        Style="{StaticResource AddButtonStyle}" 
-                        
-                        Command="{Binding ViewModel.AddSubScopeCommand}"/>
-            </Grid>
-
-        </Grid>
-        <!--Column 1-->
-        <Grid Grid.Column="1" Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-                <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
-                    Margin="35,0,35,0">
-                    <TextBlock Text="{Binding ElementName=subScopeList, Path=SelectedItem.Name, StringFormat=Devices/Contacts in {0}}"
-                               Style="{StaticResource ListHeader}"/>
-                </Border>
-                <listControls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
-                                                SelectedItem="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.SelectedDevice}" Grid.Row="1"
-                                                DropHandler="{Binding ViewModel}"
-                                                    DeleteCommand="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.DeleteDeviceCommand}"
-                                                    IsDragSource="True"/>
-            <Grid Grid.Row="2" Grid.RowSpan="2">
+            <!--Column 0-->
+            <Grid Grid.Column="0" >
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="5"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="30"/>
-                    </Grid.RowDefinitions>
-                    <Border BorderBrush="DarkGray" BorderThickness="0,1,0,0" Margin="5,0,5,0" Grid.ColumnSpan="2"/>
-                    <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="1"
-                    Margin="35,0,35,0" Grid.ColumnSpan="2">
-                        <TextBlock Text="{Binding ElementName=subScopeList, Path=SelectedItem.Name, StringFormat=IO in {0}}"
-                                   Style="{StaticResource ListHeader}"/>
-                    </Border>
-                    <listControls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
-                                           x:Name="pointList"
-                                               Grid.Row="2" Grid.ColumnSpan="2"
-                                               SelectedItem="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.SelectedPoint}"
-                                               DeleteCommand="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.DeletePointCommand}"
-                                               IsDragSource="True"/>
-                    <Grid  Grid.Column="1" Grid.Row="3"
-                        Visibility="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.SelectedSubScope, Converter={utilities:NullToCollapsedConverter}}">
-                        <Button Content="Add" x:Name="addPoint" Width="50" HorizontalAlignment="Right"
-                        Command="{Binding ViewModel.AddPointCommand}"
-                        CommandParameter="{Binding ViewModel.SelectedSubScope}"
-                        Style="{StaticResource AddButtonStyle}" />
-                    </Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Column="1"
+                        Margin="5,0,5,0">
+                    <TextBlock Text="Point Templates" Style="{StaticResource ListHeader}"/>
+                </Border>
+                <listControls:SubScopeListControl x:Name="subScopeList" Source="{Binding ElementName=subScopeHierarchyView, Path=SubScopeSource}"
+                                                  SelectedItem ="{Binding ViewModel.SelectedSubScope}" 
+                                                  Grid.ColumnSpan="3" Grid.Row="1"
+                                                  DropHandler="{Binding ViewModel}"
+                                                  DeleteCommand="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.DeleteSubScopeCommand}"
+                                                  IsDragSource="True"/>
+                <Grid Grid.Row="2" Grid.Column="2">
+                    <Button Content="Add" x:Name="addSubScope" 
+                            Style="{StaticResource AddButtonStyle}" 
+                        
+                            Command="{Binding ViewModel.AddSubScopeCommand}"/>
+                </Grid>
 
             </Grid>
-            
+            <!--Column 1-->
+            <Grid Grid.Column="1">
+                <TabControl>
+                    <TabItem Header="Scope">
+                        <Grid Background="{StaticResource SectionBackgroundBrush}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="0"
+                                    Margin="35,0,35,0">
+                                <TextBlock Text="{Binding ElementName=subScopeList, Path=SelectedItem.Name, StringFormat=Devices/Contacts in {0}}"
+                                           Style="{StaticResource ListHeader}"/>
+                            </Border>
+                            <listControls:EndDeviceListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Devices}"
+                                                               SelectedItem="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.SelectedDevice}" Grid.Row="1"
+                                                               DropHandler="{Binding ViewModel}"
+                                                               DeleteCommand="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.DeleteDeviceCommand}"
+                                                               IsDragSource="True"/>
+                            <TextBlock Text="Select a Point to view its Devices/IO" Visibility="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.SelectedSubScope,
+                                       Converter={utilities:NullToVisibilityConverter}}"
+                                       Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="5"/>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="30"/>
+                                </Grid.RowDefinitions>
+                                <Border BorderBrush="DarkGray" BorderThickness="0,1,0,0" Margin="5,0,5,0" Grid.ColumnSpan="2"/>
+                                <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="1"
+                                        Margin="35,0,35,0" Grid.ColumnSpan="2">
+                                    <TextBlock Text="{Binding ElementName=subScopeList, Path=SelectedItem.Name, StringFormat=IO in {0}}"
+                                               Style="{StaticResource ListHeader}"/>
+                                </Border>
+
+                                <listControls:PointListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Points}"
+                                                               x:Name="pointList"
+                                                               Grid.Row="2" Grid.ColumnSpan="2"
+                                                               SelectedItem="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.SelectedPoint}"
+                                                               DeleteCommand="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.DeletePointCommand}"
+                                                               IsDragSource="True"/>
+                                <Grid  Grid.Column="1" Grid.Row="3"
+                                       Visibility="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.SelectedSubScope, Converter={utilities:NullToCollapsedConverter}}">
+                                    <Button Content="Add" x:Name="addPoint" Width="50" HorizontalAlignment="Right"
+                                            Command="{Binding ViewModel.AddPointCommand}"
+                                            CommandParameter="{Binding ViewModel.SelectedSubScope}"
+                                            Style="{StaticResource AddButtonStyle}" />
+                                </Grid>
+                            </Grid>
+                            <Grid Grid.Row="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="5"/>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="30"/>
+                                </Grid.RowDefinitions>
+                                <Border BorderBrush="DarkGray" BorderThickness="0,1,0,0" Margin="5,0,5,0" Grid.ColumnSpan="2"/>
+                                <Border BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Row="1"
+                                        Margin="35,0,35,0" Grid.ColumnSpan="2">
+                                    <TextBlock Text="{Binding ElementName=subScopeList, Path=SelectedItem.Name, StringFormat=Interlocks in {0}}"
+                                               Style="{StaticResource ListHeader}"/>
+                                </Border>
+
+                                <listControls:InterlocksListControl Source="{Binding ElementName=subScopeList, Path=SelectedItem.Interlocks}"
+                                                                    x:Name="interlockList"
+                                                                    Grid.Row="2" Grid.ColumnSpan="2"
+                                                                    SelectedItem="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.SelectedInterlock}"
+                                                                    DeleteCommand="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.DeleteInterlockCommand}"
+                                                                    IsDragSource="True"/>
+                                <Grid  Grid.Column="1" Grid.Row="3"
+                                       Visibility="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.SelectedSubScope, Converter={utilities:NullToCollapsedConverter}}">
+                                    <Button Content="Add" x:Name="addInterlock" Width="50" HorizontalAlignment="Right"
+                                            Command="{Binding ViewModel.AddInterlockCommand}"
+                                            CommandParameter="{Binding ViewModel.SelectedSubScope}"
+                                            Style="{StaticResource AddButtonStyle}" />
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Proposal">
+                        <Grid>
+                            <DataGrid ItemsSource="{Binding ElementName=subScopeHierarchyView, Path=ViewModel.SelectedSubScope.ScopeBranches}"
+                                      AutoGenerateColumns="False" MinRowHeight="25">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Label}" Header="Text"
+                                                        Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+
+            </Grid>
+
         </Grid>
-        
-    </Grid>
         <!--Add Modal-->
         <Grid Width="{Binding ElementName=subScopeHierarchyView, Path=ActualWidth}"
               Height="{Binding ElementName=subScopeHierarchyView, Path=ActualHeight}">
@@ -178,6 +230,9 @@
                         </DataTemplate>
                         <DataTemplate DataType="{x:Type addVMs:AddPointVM}">
                             <addViews:AddPointView ViewModel="{Binding}"/>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type addVMs:AddInterlockVM}">
+                            <addViews:AddInterlockView ViewModel="{Binding}"/>
                         </DataTemplate>
                     </ContentPresenter.Resources>
                 </ContentPresenter>

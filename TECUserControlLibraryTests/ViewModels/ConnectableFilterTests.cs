@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EstimatingLibrary;
 
 namespace Utilities
 {
@@ -14,7 +15,12 @@ namespace Utilities
         [TestMethod()]
         public void PassesFilterTest()
         {
-            Assert.Fail();
+            ConnectableFilter filter = new ConnectableFilter();
+            filter.FilterLocation = new TECLocation();
+
+
+            TECSubScope subScope = new TECSubScope();
+            Assert.IsFalse(filter.PassesFilter(subScope));
         }
     }
 }

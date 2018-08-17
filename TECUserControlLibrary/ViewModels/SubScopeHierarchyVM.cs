@@ -22,6 +22,7 @@ namespace TECUserControlLibrary.ViewModels
         private IEndDevice selectedDevice;
         private TECPoint selectedPoint;
         private object parent;
+        private TECInterlockConnection selectedInterlock;
 
         public ViewModelBase SelectedVM
         {
@@ -62,13 +63,25 @@ namespace TECUserControlLibrary.ViewModels
                 Selected?.Invoke(value);
             }
         }
+        public TECInterlockConnection SelectedInterlock
+        {
+            get { return selectedInterlock; }
+            set
+            {
+                selectedInterlock = value;
+                RaisePropertyChanged("SelectedInterlock");
+                Selected?.Invoke(value);
+            }
+        }
 
         public RelayCommand AddSubScopeCommand { get; private set; }
         public RelayCommand<TECSubScope> AddPointCommand { get; private set; }
-        
+        public RelayCommand<IInterlockable> AddInterlockCommand { get; private set; }
+
         public RelayCommand<TECSubScope> DeleteSubScopeCommand { get; private set; }
         public RelayCommand<IEndDevice> DeleteDeviceCommand { get; private set; }
         public RelayCommand<TECPoint> DeletePointCommand { get; private set; }
+        public RelayCommand<TECInterlockConnection> DeleteInterlockCommand { get; private set; }
 
         public SubScopeHierarchyVM(TECScopeManager scopeManager)
         {
@@ -78,10 +91,12 @@ namespace TECUserControlLibrary.ViewModels
             }
             AddSubScopeCommand = new RelayCommand(addSubScopeExecute, canAddSubScope);
             AddPointCommand = new RelayCommand<TECSubScope>(addPointExecute, canAddPoint);
+            AddInterlockCommand = new RelayCommand<IInterlockable>(addInterlockExecute, canAddInterlock);
 
             DeleteSubScopeCommand = new RelayCommand<TECSubScope>(deleteSubScopeExecute, canDeleteSubScope);
             DeleteDeviceCommand = new RelayCommand<IEndDevice>(deleteDeviceExecute, canDeleteDevice);
             DeletePointCommand = new RelayCommand<TECPoint>(deletePointExecute, canDeletePoint);
+            DeleteInterlockCommand = new RelayCommand<TECInterlockConnection>(deleteInterlockExecute, canDeleteInterlock);
 
             catalogs = scopeManager.Catalogs;
             this.scopeManager = scopeManager;
@@ -115,34 +130,49 @@ namespace TECUserControlLibrary.ViewModels
             return subScope != null;
         }
 
-        private void deleteSubScopeExecute(TECSubScope obj)
+        private void addInterlockExecute(IInterlockable interlockable)
         {
-            scopeManager.Templates.SubScopeTemplates.Remove(obj);
+            SelectedVM = new AddInterlockVM(interlockable, scopeManager);
+        }
+        private bool canAddInterlock(IInterlockable arg)
+        {
+            return true;
         }
 
         private bool canDeleteSubScope(TECSubScope arg)
         {
             return true;
         }
-
-        private void deleteDeviceExecute(IEndDevice obj)
+        private void deleteSubScopeExecute(TECSubScope obj)
         {
-            SelectedSubScope.RemoveDevice(obj);
+            scopeManager.Templates.SubScopeTemplates.Remove(obj);
         }
 
         private bool canDeleteDevice(IEndDevice arg)
         {
             return true;
         }
-
-        private void deletePointExecute(TECPoint obj)
+        private void deleteDeviceExecute(IEndDevice obj)
         {
-            SelectedSubScope.RemovePoint(obj);
+            SelectedSubScope.RemoveDevice(obj);
         }
 
         private bool canDeletePoint(TECPoint arg)
         {
             return true;
+        }
+        private void deletePointExecute(TECPoint obj)
+        {
+            SelectedSubScope.RemovePoint(obj);
+        }
+
+        private bool canDeleteInterlock(TECInterlockConnection arg)
+        {
+            return true;
+        }
+        private void deleteInterlockExecute(TECInterlockConnection obj)
+        {
+            SelectedSubScope.Interlocks.Remove(obj);
         }
 
         public void DragOver(IDropInfo dropInfo)
@@ -167,7 +197,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (dropInfo.Data is IEndDevice)
             {
-                DragDropHelpers.StandardDrop(dropInfo, scopeManager);
+                DragDropHelpers.Drop(dropInfo, obj => SelectedSubScope.AddDevice((obj as IDDCopiable).DragDropCopy(scopeManager) as IEndDevice), false);
             }
         }
 
