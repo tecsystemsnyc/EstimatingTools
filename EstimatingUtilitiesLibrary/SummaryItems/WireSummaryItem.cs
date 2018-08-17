@@ -30,6 +30,10 @@ namespace EstimatingUtilitiesLibrary.SummaryItems
                 return this.IsPlenum ? this.ConnectionType.TotalPlenumLabor : this.ConnectionType.Labor;
             }
         }
+        public string TypeName
+        {
+            get { return string.Format("{0}{1}", (IsPlenum ? "Plenum " : ""), this.ConnectionType.Name); }
+        }
         
         public WireSummaryItem(TECConnectionType type, double length, bool isPlenum) : base(type, length)
         {

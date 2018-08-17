@@ -300,6 +300,7 @@
     <Compile Include="ViewModels\SystemProposalVM.cs" />
     <Compile Include="ViewModels\ValveSelectionVM.cs" />
     <Compile Include="ViewModels\ValveSummaryVM.cs" />
+    <Compile Include="ViewModels\WireSummaryVM.cs" />
     <Compile Include="ViewModels\WorkBoxVM.cs" />
     <Compile Include="Views\AddViews\AddInterlockView.xaml.cs">
       <DependentUpon>AddInterlockView.xaml</DependentUpon>

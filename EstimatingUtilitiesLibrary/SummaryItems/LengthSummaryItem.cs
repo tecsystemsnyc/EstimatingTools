@@ -81,7 +81,7 @@ namespace EstimatingUtilitiesLibrary.SummaryItems
             return updateTotals();
         }
 
-        protected CostBatch updateTotals()
+        private CostBatch updateTotals()
         {
             double newCost = (this.UnitCost * Length);
             double newLabor = (this.UnitLabor * Length);

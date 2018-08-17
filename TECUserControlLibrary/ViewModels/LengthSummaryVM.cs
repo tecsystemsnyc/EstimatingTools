@@ -17,52 +17,37 @@ namespace TECUserControlLibrary.ViewModels
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         #region Fields and Properties
-        private readonly Dictionary<Guid, LengthSummaryItem> lengthDictionary;
-        private readonly Dictionary<Guid, CostSummaryItem> assocCostDictionary;
-        private readonly Dictionary<Guid, RatedCostSummaryItem> ratedCostDictionary;
+        private readonly Dictionary<Guid, LengthSummaryItem> lengthDictionary = new Dictionary<Guid, LengthSummaryItem>();
+        private readonly Dictionary<Guid, CostSummaryItem> assocCostDictionary = new Dictionary<Guid, CostSummaryItem>();
+        private readonly Dictionary<Guid, RatedCostSummaryItem> ratedCostDictionary = new Dictionary<Guid, RatedCostSummaryItem>();
 
-        private readonly ObservableCollection<LengthSummaryItem> _lengthSummaryItems;
-        private readonly ObservableCollection<CostSummaryItem> _assocTECItems;
-        private readonly ObservableCollection<CostSummaryItem> _assocElecItems;
-        private readonly ObservableCollection<RatedCostSummaryItem> _ratedTECItems;
-        private readonly ObservableCollection<RatedCostSummaryItem> _ratedElecItems;
+        private readonly ObservableCollection<LengthSummaryItem> _lengthSummaryItems = new ObservableCollection<LengthSummaryItem>();
+        private readonly ObservableCollection<CostSummaryItem> _assocTECItems = new ObservableCollection<CostSummaryItem>();
+        private readonly ObservableCollection<CostSummaryItem> _assocElecItems = new ObservableCollection<CostSummaryItem>();
+        private readonly ObservableCollection<RatedCostSummaryItem> _ratedTECItems = new ObservableCollection<RatedCostSummaryItem>();
+        private readonly ObservableCollection<RatedCostSummaryItem> _ratedElecItems = new ObservableCollection<RatedCostSummaryItem>();
 
-        private double _lengthCostTotal;
-        private double _lengthLaborTotal;
-        private double _assocTECCostTotal;
-        private double _assocTECLaborTotal;
-        private double _assocElecCostTotal;
-        private double _assocElecLaborTotal;
-        private double _ratedTECCostTotal;
-        private double _ratedTECLaborTotal;
-        private double _ratedElecCostTotal;
-        private double _ratedElecLaborTotal;
+        private double _lengthCostTotal = 0;
+        private double _lengthLaborTotal = 0;
+        private double _assocTECCostTotal = 0;
+        private double _assocTECLaborTotal = 0;
+        private double _assocElecCostTotal = 0;
+        private double _assocElecLaborTotal = 0;
+        private double _ratedTECCostTotal = 0;
+        private double _ratedTECLaborTotal = 0;
+        private double _ratedElecCostTotal = 0;
+        private double _ratedElecLaborTotal = 0;
 
-        public ReadOnlyObservableCollection<LengthSummaryItem> LengthSummaryItems
-        {
-            get { return new ReadOnlyObservableCollection<LengthSummaryItem>(_lengthSummaryItems); }
-        }
-        public ReadOnlyObservableCollection<CostSummaryItem> AssocTECItems
-        {
-            get { return new ReadOnlyObservableCollection<CostSummaryItem>(_assocTECItems); }
-        }
-        public ReadOnlyObservableCollection<CostSummaryItem> AssocElecItems
-        {
-            get { return new ReadOnlyObservableCollection<CostSummaryItem>(_assocElecItems); }
-        }
-        public ReadOnlyObservableCollection<RatedCostSummaryItem> RatedTECItems
-        {
-            get { return new ReadOnlyObservableCollection<RatedCostSummaryItem>(_ratedTECItems); }
-        }
-        public ReadOnlyObservableCollection<RatedCostSummaryItem> RatedElecItems
-        {
-            get { return new ReadOnlyObservableCollection<RatedCostSummaryItem>(_ratedElecItems); }
-        }
+        public ReadOnlyObservableCollection<LengthSummaryItem> LengthSummaryItems { get; }
+        public ReadOnlyObservableCollection<CostSummaryItem> AssocTECItems { get; }
+        public ReadOnlyObservableCollection<CostSummaryItem> AssocElecItems { get; }
+        public ReadOnlyObservableCollection<RatedCostSummaryItem> RatedTECItems { get; }
+        public ReadOnlyObservableCollection<RatedCostSummaryItem> RatedElecItems { get; }
 
         public double LengthCostTotal
         {
             get { return _lengthCostTotal; }
-            private set
+            protected set
             {
                 _lengthCostTotal = value;
                 RaisePropertyChanged("LengthCostTotal");
@@ -72,7 +57,7 @@ namespace TECUserControlLibrary.ViewModels
         public double LengthLaborTotal
         {
             get { return _lengthLaborTotal; }
-            private set
+            protected set
             {
                 _lengthLaborTotal = value;
                 RaisePropertyChanged("LengthLaborTotal");
@@ -192,26 +177,11 @@ namespace TECUserControlLibrary.ViewModels
         
         public LengthSummaryVM()
         {
-            lengthDictionary = new Dictionary<Guid, LengthSummaryItem>();
-            assocCostDictionary = new Dictionary<Guid, CostSummaryItem>();
-            ratedCostDictionary = new Dictionary<Guid, RatedCostSummaryItem>();
-
-            _lengthSummaryItems = new ObservableCollection<LengthSummaryItem>();
-            _assocTECItems = new ObservableCollection<CostSummaryItem>();
-            _assocElecItems = new ObservableCollection<CostSummaryItem>();
-            _ratedTECItems = new ObservableCollection<RatedCostSummaryItem>();
-            _ratedElecItems = new ObservableCollection<RatedCostSummaryItem>();
-
-            LengthCostTotal = 0;
-            LengthLaborTotal = 0;
-            AssocTECCostTotal = 0;
-            AssocTECLaborTotal = 0;
-            AssocElecCostTotal = 0;
-            AssocElecLaborTotal = 0;
-            RatedTECCostTotal = 0;
-            RatedTECLaborTotal = 0;
-            RatedElecCostTotal = 0;
-            RatedElecLaborTotal = 0;
+            LengthSummaryItems = new ReadOnlyObservableCollection<LengthSummaryItem>(_lengthSummaryItems);
+            AssocTECItems = new ReadOnlyObservableCollection<CostSummaryItem>(_assocTECItems);
+            AssocElecItems = new ReadOnlyObservableCollection<CostSummaryItem>(_assocElecItems);
+            RatedTECItems = new ReadOnlyObservableCollection<RatedCostSummaryItem>(_ratedTECItems);
+            RatedElecItems = new ReadOnlyObservableCollection<RatedCostSummaryItem>(_ratedElecItems);
         }
 
         #region Methods
@@ -235,6 +205,13 @@ namespace TECUserControlLibrary.ViewModels
         }
         public CostBatch AddLength(TECElectricalMaterial material, double length)
         {
+            if (length < 0)
+            {
+                logger.Error("Length needs to be greater than 0 when adding to length summary. " +
+                    "Failed to add length. Obj: {0}", material.Name);
+                return new CostBatch();
+            }
+
             CostBatch deltas = new CostBatch();
             bool containsItem = lengthDictionary.ContainsKey(material.Guid);
             if (containsItem)
@@ -262,43 +239,43 @@ namespace TECUserControlLibrary.ViewModels
         }
         public CostBatch RemoveLength(TECElectricalMaterial material, double length)
         {
-            if (length > 0)
+            if (length < 0)
             {
-                bool containsItem = lengthDictionary.ContainsKey(material.Guid);
-                if (containsItem)
-                {
-                    CostBatch deltas = new CostBatch();
-                    LengthSummaryItem item = lengthDictionary[material.Guid];
-                    CostBatch delta = item.RemoveLength(length);
-                    LengthCostTotal += delta.GetCost(CostType.Electrical);
-                    LengthLaborTotal += delta.GetLabor(CostType.Electrical);
-                    deltas += delta;
+                logger.Error("Length needs to be greater than 0 when removing from length summary. " +
+                    "Failed to remove length. Obj: {0}", material.Name);
+                return new CostBatch();
+            }
 
-                    if (item.Length <= 0)
-                    {
-                        _lengthSummaryItems.Remove(item);
-                        lengthDictionary.Remove(material.Guid);
-                    }
-                    foreach (ICost cost in material.RatedCosts)
-                    {
-                        deltas += removeRatedCost(cost, length);
-                    }
-                    return deltas;
-                }
-                else
+            bool containsItem = lengthDictionary.ContainsKey(material.Guid);
+            if (containsItem)
+            {
+                CostBatch deltas = new CostBatch();
+                LengthSummaryItem item = lengthDictionary[material.Guid];
+                CostBatch delta = item.RemoveLength(length);
+                LengthCostTotal += delta.GetCost(CostType.Electrical);
+                LengthLaborTotal += delta.GetLabor(CostType.Electrical);
+                deltas += delta;
+
+                if (item.Length <= 0)
                 {
-                    logger.Error("Electrical Material not found. Cannot remove length. Material: {0}",
-                        material.Name);
-                    return new CostBatch();
+                    _lengthSummaryItems.Remove(item);
+                    lengthDictionary.Remove(material.Guid);
                 }
+                foreach (ICost cost in material.RatedCosts)
+                {
+                    deltas += removeRatedCost(cost, length);
+                }
+                return deltas;
             }
             else
             {
+                logger.Error("Electrical Material not found. Cannot remove length. Material: {0}",
+                    material.Name);
                 return new CostBatch();
             }
         }
 
-        private CostBatch addAssocCost(ICost cost)
+        protected CostBatch addAssocCost(ICost cost)
         {
             CostBatch deltas = new CostBatch();
             bool containsItem = assocCostDictionary.ContainsKey(cost.Guid);
@@ -332,7 +309,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             return deltas;
         }
-        private CostBatch removeAssocCost(ICost cost)
+        protected CostBatch removeAssocCost(ICost cost)
         {
             bool containsItem = assocCostDictionary.ContainsKey(cost.Guid);
             if (containsItem)
@@ -367,7 +344,7 @@ namespace TECUserControlLibrary.ViewModels
                 return new CostBatch();
             }
         }
-        private CostBatch addRatedCost(ICost cost, double length)
+        protected CostBatch addRatedCost(ICost cost, double length)
         {
             bool containsItem = ratedCostDictionary.ContainsKey(cost.Guid);
             if (containsItem)
@@ -405,7 +382,7 @@ namespace TECUserControlLibrary.ViewModels
                 return new CostBatch(item.TotalCost, item.TotalLabor, cost.Type);
             }
         }
-        private CostBatch removeRatedCost(ICost cost, double length)
+        protected CostBatch removeRatedCost(ICost cost, double length)
         {
             if (length > 0)
             {
