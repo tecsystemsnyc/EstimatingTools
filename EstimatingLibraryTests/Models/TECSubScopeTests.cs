@@ -191,7 +191,7 @@ namespace Models
             TECDevice otherDevice = new TECDevice(new List<TECConnectionType> { connectionType }, new List<TECProtocol>(), new TECManufacturer());
             subScope.AddDevice(otherDevice);
 
-            Assert.IsTrue(subScope.Devices.Contains(otherDevice));
+            Assert.IsFalse(subScope.Devices.Contains(otherDevice));
 
             TECConnectionType otherConnectionType = new TECConnectionType();
             TECDevice nextDevice = new TECDevice(new List<TECConnectionType> { otherConnectionType }, new List<TECProtocol>(), new TECManufacturer());
@@ -336,6 +336,37 @@ namespace Models
             Assert.IsNull((subScope as IConnectable).GetParentConnection());
             Assert.IsTrue(controller.ChildrenConnections.Contains(connection));
 
+        }
+
+        [TestMethod()]
+        public void AvailableProtocols()
+        {
+            TECConnectionType type1 = new TECConnectionType();
+            TECConnectionType type2 = new TECConnectionType();
+
+            TECProtocol prot1 = new TECProtocol(new List<TECConnectionType>());
+            TECProtocol prot2 = new TECProtocol(new List<TECConnectionType>());
+            TECProtocol prot3 = new TECProtocol(new List<TECConnectionType>());
+
+            TECDevice dev1 = new TECDevice(new List<TECConnectionType> { type1 },
+                new List<TECProtocol> { prot1, prot2 }, new TECManufacturer());
+            TECDevice dev2 = new TECDevice(new List<TECConnectionType> { type2 },
+                new List<TECProtocol> { prot1, prot3 }, new TECManufacturer());
+
+            TECSubScope ss = new TECSubScope();
+            bool dev1Added = ss.AddDevice(dev1);
+            bool dev2Added = ss.AddDevice(dev2);
+
+            Assert.IsTrue(dev1Added);
+            Assert.IsTrue(dev2Added);
+
+            TECHardwiredProtocol expectedHardProt = new TECHardwiredProtocol(new List<TECConnectionType> { type1, type2 });
+
+            Assert.IsTrue(ss.AvailableProtocols.Contains(expectedHardProt));
+            Assert.IsTrue(ss.AvailableProtocols.Contains(prot1));
+            Assert.IsFalse(ss.AvailableProtocols.Contains(prot2));
+            Assert.IsFalse(ss.AvailableProtocols.Contains(prot3));
+            Assert.AreEqual(2, ss.AvailableProtocols.Count);
         }
     }
 }
