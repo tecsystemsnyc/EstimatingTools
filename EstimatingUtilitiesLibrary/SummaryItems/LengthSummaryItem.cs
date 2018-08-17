@@ -39,6 +39,15 @@ namespace EstimatingUtilitiesLibrary.SummaryItems
             }
         }
 
+        public virtual double UnitCost
+        {
+            get { return this.Material.Cost; }
+        }
+        public virtual double UnitLabor
+        {
+            get { return this.Material.Labor; }
+        }
+
         public double TotalCost
         {
             get { return _totalCost; }
@@ -72,10 +81,10 @@ namespace EstimatingUtilitiesLibrary.SummaryItems
             return updateTotals();
         }
 
-        private CostBatch updateTotals()
+        protected CostBatch updateTotals()
         {
-            double newCost = (Material.Cost * Length);
-            double newLabor = (Material.Labor * Length);
+            double newCost = (this.UnitCost * Length);
+            double newLabor = (this.UnitLabor * Length);
 
             double deltaCost = newCost - TotalCost;
             double deltaLabor = newLabor - TotalLabor;
