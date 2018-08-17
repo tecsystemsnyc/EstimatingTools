@@ -18,16 +18,7 @@ namespace TECUserControlLibrary.ViewModels
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         private readonly Dictionary<(Guid guid, bool isPlenum), WireSummaryItem> wireDictionary = new Dictionary<(Guid guid, bool isPlenum), WireSummaryItem>();
-
-        private readonly ObservableCollection<WireSummaryItem> _wireSummaryItems = new ObservableCollection<WireSummaryItem>();
-
-        public ReadOnlyObservableCollection<WireSummaryItem> WireSummaryItems { get; }
-
-        public WireSummaryVM()
-        {
-            this.WireSummaryItems = new ReadOnlyObservableCollection<WireSummaryItem>(_wireSummaryItems);
-        }
-
+        
         public CostBatch AddRun(TECConnectionType type, double length, bool isPlenum)
         {
             CostBatch deltas = AddLength(type, length, isPlenum);
@@ -70,7 +61,7 @@ namespace TECUserControlLibrary.ViewModels
             {
                 WireSummaryItem item = new WireSummaryItem(type, length, isPlenum);
                 wireDictionary.Add(wireTypeKey, item);
-                _wireSummaryItems.Add(item);
+                _lengthSummaryItems.Add(item);
                 LengthCostTotal += item.TotalCost;
                 LengthLaborTotal += item.TotalLabor;
                 deltas += new CostBatch(item.TotalCost, item.TotalLabor, CostType.Electrical);
@@ -103,7 +94,7 @@ namespace TECUserControlLibrary.ViewModels
 
                 if (item.Length <= 0)
                 {
-                    _wireSummaryItems.Remove(item);
+                    _lengthSummaryItems.Remove(item);
                     wireDictionary.Remove(wireTypeKey);
                 }
                 foreach(ICost cost in type.RatedCosts)

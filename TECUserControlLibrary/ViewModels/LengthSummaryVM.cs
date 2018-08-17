@@ -21,7 +21,7 @@ namespace TECUserControlLibrary.ViewModels
         private readonly Dictionary<Guid, CostSummaryItem> assocCostDictionary = new Dictionary<Guid, CostSummaryItem>();
         private readonly Dictionary<Guid, RatedCostSummaryItem> ratedCostDictionary = new Dictionary<Guid, RatedCostSummaryItem>();
 
-        private readonly ObservableCollection<LengthSummaryItem> _lengthSummaryItems = new ObservableCollection<LengthSummaryItem>();
+        protected readonly ObservableCollection<LengthSummaryItem> _lengthSummaryItems = new ObservableCollection<LengthSummaryItem>();
         private readonly ObservableCollection<CostSummaryItem> _assocTECItems = new ObservableCollection<CostSummaryItem>();
         private readonly ObservableCollection<CostSummaryItem> _assocElecItems = new ObservableCollection<CostSummaryItem>();
         private readonly ObservableCollection<RatedCostSummaryItem> _ratedTECItems = new ObservableCollection<RatedCostSummaryItem>();

@@ -38,6 +38,7 @@ namespace EstimatingUtilitiesLibrary.SummaryItems
         public WireSummaryItem(TECConnectionType type, double length, bool isPlenum) : base(type, length)
         {
             this.IsPlenum = isPlenum;
+            updateTotals();
         }
     }
 }

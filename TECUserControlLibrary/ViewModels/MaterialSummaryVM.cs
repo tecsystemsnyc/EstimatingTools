@@ -626,6 +626,24 @@ namespace TECUserControlLibrary.ViewModels
                             updateTotals(ConduitSummaryVM.AddRun(args.Value as TECElectricalMaterial, connection.ConduitLength));
                         }
                     }
+                    else if (args.PropertyName == "IsPlenum")
+                    {
+                        bool oldIsPlenum = (bool)args.OldValue;
+                        bool newIsPlenum = (bool)args.Value;
+
+                        if (oldIsPlenum == newIsPlenum)
+                        {
+                            logger.Error("IsPlenum was raised, but the old and new values are the same," +
+                                "cannot actuate change in MaterialSummaryVM.");
+                            return;
+                        }
+
+                        foreach (TECConnectionType connectionType in connection.Protocol.ConnectionTypes)
+                        {
+                            updateTotals(WireSummaryVM.RemoveRun(connectionType, connection.Length, oldIsPlenum));
+                            updateTotals(WireSummaryVM.AddRun(connectionType, connection.Length, newIsPlenum));
+                        }
+                    }
                 }
                 else if (args.Sender is TECMisc misc)
                 {
