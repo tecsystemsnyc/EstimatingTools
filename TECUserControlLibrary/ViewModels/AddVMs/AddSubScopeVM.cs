@@ -137,7 +137,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             newPoint.Type = PointType;
             newPoint.Quantity = PointQuantity;
             newPoint.Label = PointName;
-            ToAdd.Points.Add(newPoint);
+            ToAdd.AddPoint(newPoint);
             PointName = "";
             updateConnectVMWithQuantity(Quantity);
         }
@@ -148,14 +148,14 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
 
         private void deletePointExecute(TECPoint point)
         {
-            toAdd.Points.Remove(point);
+            toAdd.RemovePoint(point);
             updateConnectVMWithQuantity(Quantity);
 
         }
 
         private void deleteDeviceExecute(IEndDevice device)
         {
-            toAdd.Devices.Remove(device);
+            toAdd.RemoveDevice(device);
         }
         
         private bool addCanExecute()
@@ -183,7 +183,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                     }
                     foreach (TECPoint point in ToAdd.Points.Where(item => !originalPoints.Contains(item)))
                     {
-                        subScope.Points.Add(point);
+                        subScope.AddPoint(point);
                     }
                 }
                 else
