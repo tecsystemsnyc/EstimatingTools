@@ -281,7 +281,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else if (dropped is IEndDevice)
                 {
-                    DragDropHelpers.StandardDrop(dropInfo, scopeManager);
+                    DragDropHelpers.Drop(dropInfo, obj => SelectedSubScope.AddDevice((obj as IDDCopiable).DragDropCopy(scopeManager) as IEndDevice), false);
                 }
                 else if (dropped is TECMisc || dropped is TECCost)
                 {
@@ -502,14 +502,14 @@ namespace TECUserControlLibrary.ViewModels
             return true;
         }
 
+        private bool canDeleteInterlock(TECInterlockConnection arg)
+        {
+            return true;
+        }
         private void deleteInterlockExecute(TECInterlockConnection obj)
         {
             SelectedSubScope.Interlocks.Remove(obj);
         }
 
-        private bool canDeleteInterlock(TECInterlockConnection arg)
-        {
-            return true;
-        }
     }
 }

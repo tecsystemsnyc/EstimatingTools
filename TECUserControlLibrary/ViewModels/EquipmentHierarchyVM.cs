@@ -22,6 +22,7 @@ namespace TECUserControlLibrary.ViewModels
         private TECSubScope selectedSubScope;
         private IEndDevice selectedDevice;
         private TECPoint selectedPoint;
+        private TECInterlockConnection selectedInterlock;
 
         public ViewModelBase SelectedVM
         {
@@ -73,17 +74,29 @@ namespace TECUserControlLibrary.ViewModels
                 Selected?.Invoke(value);
             }
         }
+        public TECInterlockConnection SelectedInterlock
+        {
+            get { return selectedInterlock; }
+            set
+            {
+                selectedInterlock = value;
+                RaisePropertyChanged("SelectedInterlock");
+                Selected?.Invoke(value);
+            }
+        }
 
         public RelayCommand AddEquipmentCommand { get; private set; }
         public RelayCommand<TECEquipment> AddSubScopeCommand { get; private set; }
         public RelayCommand<TECSubScope> AddPointCommand { get; private set; }
+        public RelayCommand<IInterlockable> AddInterlockCommand { get; private set; }
         public RelayCommand<object> BackCommand { get; private set; }
 
         public RelayCommand<TECEquipment> DeleteEquipmentCommand { get; private set; }
         public RelayCommand<TECSubScope> DeleteSubScopeCommand { get; private set; }
         public RelayCommand<IEndDevice> DeleteDeviceCommand { get; private set; }
         public RelayCommand<TECPoint> DeletePointCommand { get; private set; }
-        
+        public RelayCommand<TECInterlockConnection> DeleteInterlockCommand { get; private set; }
+
 
         public EquipmentHierarchyVM(TECScopeManager scopeManager)
         {
@@ -91,11 +104,13 @@ namespace TECUserControlLibrary.ViewModels
             AddSubScopeCommand = new RelayCommand<TECEquipment>(addSubScopeExecute, canAddSubScope);
             AddPointCommand = new RelayCommand<TECSubScope>(addPointExecute, canAddPoint);
             BackCommand = new RelayCommand<object>(backExecute);
+            AddInterlockCommand = new RelayCommand<IInterlockable>(addInterlockExecute, canAddInterlock);
 
             DeleteEquipmentCommand = new RelayCommand<TECEquipment>(deleteEquipmentExecute, canDeleteEquipment);
             DeleteSubScopeCommand = new RelayCommand<TECSubScope>(deleteSubScopeExecute, canDeleteSubScope);
             DeleteDeviceCommand = new RelayCommand<IEndDevice>(deleteDeviceExecute, canDeleteDevice);
             DeletePointCommand = new RelayCommand<TECPoint>(deletePointExecute, canDeletePoint);
+            DeleteInterlockCommand = new RelayCommand<TECInterlockConnection>(deleteInterlockExecute, canDeleteInterlock);
             catalogs = scopeManager.Catalogs;
             this.scopeManager = scopeManager;
         }
@@ -144,48 +159,60 @@ namespace TECUserControlLibrary.ViewModels
         {
             return subScope != null;
         }
-        
 
-        private void deleteEquipmentExecute(TECEquipment obj)
+        private void addInterlockExecute(IInterlockable interlockable)
         {
-            scopeManager.Templates.EquipmentTemplates.Remove(obj);
+            SelectedVM = new AddInterlockVM(interlockable, scopeManager);
+        }
+        private bool canAddInterlock(IInterlockable arg)
+        {
+            return true;
         }
 
         private bool canDeleteEquipment(TECEquipment arg)
         {
             return true;
         }
-
-        private void deleteSubScopeExecute(TECSubScope obj)
+        private void deleteEquipmentExecute(TECEquipment obj)
         {
-            SelectedEquipment.SubScope.Remove(obj);
+            scopeManager.Templates.EquipmentTemplates.Remove(obj);
         }
 
         private bool canDeleteSubScope(TECSubScope arg)
         {
             return true;
         }
-
-        private void deleteDeviceExecute(IEndDevice obj)
+        private void deleteSubScopeExecute(TECSubScope obj)
         {
-            SelectedSubScope.Devices.Remove(obj);
+            SelectedEquipment.SubScope.Remove(obj);
         }
 
         private bool canDeleteDevice(IEndDevice arg)
         {
             return true;
         }
-
-        private void deletePointExecute(TECPoint obj)
+        private void deleteDeviceExecute(IEndDevice obj)
         {
-            SelectedSubScope.Points.Remove(obj);
+            SelectedSubScope.Devices.Remove(obj);
         }
 
         private bool canDeletePoint(TECPoint arg)
         {
             return true;
         }
+        private void deletePointExecute(TECPoint obj)
+        {
+            SelectedSubScope.Points.Remove(obj);
+        }
         
+        private bool canDeleteInterlock(TECInterlockConnection arg)
+        {
+            return true;
+        }
+        private void deleteInterlockExecute(TECInterlockConnection obj)
+        {
+            SelectedSubScope.Interlocks.Remove(obj);
+        }
 
         public void DragOver(IDropInfo dropInfo)
         {
@@ -213,7 +240,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (dropInfo.Data is IEndDevice)
             {
-                DragDropHelpers.StandardDrop(dropInfo, scopeManager);
+                DragDropHelpers.Drop(dropInfo, obj => SelectedSubScope.AddDevice((obj as IDDCopiable).DragDropCopy(scopeManager) as IEndDevice), false);
             }
         }
 
