@@ -47,6 +47,10 @@ namespace EstimatingUtilitiesLibrary.SummaryItems
         {
             get { return this.Material.Labor; }
         }
+        public virtual string TypeName
+        {
+            get { return Material.Name; }
+        }
 
         public double TotalCost
         {

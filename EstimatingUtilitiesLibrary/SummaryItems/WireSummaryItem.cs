@@ -30,7 +30,7 @@ namespace EstimatingUtilitiesLibrary.SummaryItems
                 return this.IsPlenum ? this.ConnectionType.TotalPlenumLabor : this.ConnectionType.Labor;
             }
         }
-        public string TypeName
+        public override string TypeName
         {
             get { return string.Format("{0}{1}", (IsPlenum ? "Plenum " : ""), this.ConnectionType.Name); }
         }
