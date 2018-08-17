@@ -129,6 +129,15 @@ namespace EstimatingLibrary
             return Points.Remove(point);
         }
 
+        public void AddDevice(TECDevice device)
+        {
+            Devices.Add(device);
+        }
+        public bool RemoveDevice(TECDevice device)
+        {
+            return Devices.Remove(device);
+        }
+
         public bool CanConnectToNetwork(TECNetworkConnection netConnect)
         {
             return this.AvailableProtocols.Contains(netConnect.Protocol);

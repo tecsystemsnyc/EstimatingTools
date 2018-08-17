@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TestLibrary.ModelTestingUtilities;
+using EstimatingLibrary.Interfaces;
 
 namespace Models
 {
@@ -108,27 +109,232 @@ namespace Models
         }
 
         [TestMethod()]
-        public void AddPointToConnected()
+        public void AddPointToConnectedHardwired()
         {
-            Assert.Fail();
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+
+            type.IO.Add(new TECIO(IOType.AI));
+            TECProvidedController controller = new TECProvidedController(type);
+
+            TECConnectionType connectionType = new TECConnectionType();
+            TECDevice device = new TECDevice(new List<TECConnectionType> { connectionType }, new List<TECProtocol>(), new TECManufacturer());
+
+            TECSubScope subScope = new TECSubScope();
+            subScope.Devices.Add(device);
+
+            controller.Connect(subScope, subScope.HardwiredProtocol());
+            
+            TECPoint point = new TECPoint();
+            point.Type = IOType.AI;
+            subScope.AddPoint(point);
+
+            Assert.IsTrue(subScope.Points.Contains(point));
+            Assert.IsTrue(controller.AvailableIO.IONumber(IOType.AI) == 0);
+
+
+            TECPoint otherPoint = new TECPoint();
+            otherPoint.Type = IOType.AI;
+
+            subScope.AddPoint(otherPoint);
+            Assert.IsFalse(subScope.Points.Contains(otherPoint));
         }
 
         [TestMethod()]
-        public void AddDeviceToConnected()
+        public void AddPointToConnectedNetwork()
         {
-            Assert.Fail();
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+            TECProtocol protocol = new TECProtocol(new List<TECConnectionType>());
+
+            type.IO.Add(new TECIO(IOType.AI));
+            type.IO.Add(new TECIO(protocol));
+            TECProvidedController controller = new TECProvidedController(type);
+
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol> { protocol }, new TECManufacturer());
+
+            TECSubScope subScope = new TECSubScope();
+            subScope.Devices.Add(device);
+
+            controller.Connect(subScope, protocol);
+
+            TECPoint point = new TECPoint();
+            point.Type = IOType.AI;
+            subScope.AddPoint(point);
+
+            Assert.IsTrue(subScope.Points.Contains(point));
+            Assert.IsTrue(controller.AvailableIO.IONumber(IOType.AI) == 1);
+            
+            TECPoint otherPoint = new TECPoint();
+            otherPoint.Type = IOType.AI;
+
+            subScope.AddPoint(otherPoint);
+            Assert.IsTrue(subScope.Points.Contains(otherPoint));
+            Assert.IsTrue(controller.AvailableIO.IONumber(IOType.AI) == 1);
+
+        }
+        
+        [TestMethod()]
+        public void AddDeviceToConnectedHardwired()
+        {
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+
+            type.IO.Add(new TECIO(IOType.AI));
+            TECProvidedController controller = new TECProvidedController(type);
+
+            TECConnectionType connectionType = new TECConnectionType();
+            TECDevice device = new TECDevice(new List<TECConnectionType> { connectionType }, new List<TECProtocol>(), new TECManufacturer());
+
+            TECSubScope subScope = new TECSubScope();
+            subScope.AddDevice(device);
+            
+            controller.Connect(subScope, subScope.HardwiredProtocol());
+
+            TECDevice otherDevice = new TECDevice(new List<TECConnectionType> { connectionType }, new List<TECProtocol>(), new TECManufacturer());
+            subScope.AddDevice(otherDevice);
+
+            Assert.IsTrue(subScope.Devices.Contains(otherDevice));
+
+            TECConnectionType otherConnectionType = new TECConnectionType();
+            TECDevice nextDevice = new TECDevice(new List<TECConnectionType> { otherConnectionType }, new List<TECProtocol>(), new TECManufacturer());
+            subScope.AddDevice(nextDevice);
+
+            Assert.IsFalse(subScope.Devices.Contains(nextDevice));
+
         }
 
         [TestMethod()]
-        public void RemovePointFromConnected()
+        public void AddDeviceToConnectedNetwork()
         {
-            Assert.Fail();
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+            TECProtocol protocol = new TECProtocol(new List<TECConnectionType>());
+
+            type.IO.Add(new TECIO(protocol));
+            TECProvidedController controller = new TECProvidedController(type);
+
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol> { protocol }, new TECManufacturer());
+
+            TECSubScope subScope = new TECSubScope();
+            subScope.Devices.Add(device);
+
+            controller.Connect(subScope, protocol);
+
+            TECDevice otherDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol> { protocol }, new TECManufacturer());
+            
+            subScope.AddDevice(otherDevice);
+            Assert.IsTrue(subScope.Devices.Contains(otherDevice));
+
+            TECProtocol otherProtocol = new TECProtocol(new List<TECConnectionType>());
+            TECDevice nextDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol> { otherProtocol }, new TECManufacturer());
+
+            subScope.AddDevice(nextDevice);
+            Assert.IsFalse(subScope.Devices.Contains(nextDevice));
+
         }
 
         [TestMethod()]
-        public void RemoveDeviceFromConnected()
+        public void RemovePointFromConnectedHardwired()
         {
-            Assert.Fail();
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+
+            type.IO.Add(new TECIO(IOType.AI));
+            TECProvidedController controller = new TECProvidedController(type);
+
+            TECConnectionType connectionType = new TECConnectionType();
+            TECDevice device = new TECDevice(new List<TECConnectionType> { connectionType }, new List<TECProtocol>(), new TECManufacturer());
+
+            TECSubScope subScope = new TECSubScope();
+            subScope.Devices.Add(device);
+            
+            TECPoint point = new TECPoint();
+            point.Type = IOType.AI;
+            subScope.AddPoint(point);
+
+            controller.Connect(subScope, subScope.HardwiredProtocol());
+            
+            subScope.RemovePoint(point);
+
+            Assert.IsFalse(subScope.Points.Contains(point));
+            Assert.IsTrue(controller.AvailableIO.IONumber(IOType.AI) == 1);
+            
+        }
+
+        [TestMethod()]
+        public void RemovePointFromConnectedNetwork()
+        {
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+            TECProtocol protocol = new TECProtocol(new List<TECConnectionType>());
+
+            type.IO.Add(new TECIO(IOType.AI));
+            type.IO.Add(new TECIO(protocol));
+            TECProvidedController controller = new TECProvidedController(type);
+
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol> { protocol }, new TECManufacturer());
+
+            TECSubScope subScope = new TECSubScope();
+            subScope.Devices.Add(device);
+            
+            TECPoint point = new TECPoint();
+            point.Type = IOType.AI;
+            subScope.AddPoint(point);
+
+            TECPoint otherPoint = new TECPoint();
+            otherPoint.Type = IOType.AI;
+
+            controller.Connect(subScope, protocol);
+
+            subScope.RemovePoint(point);
+            
+            Assert.IsFalse(subScope.Points.Contains(point));
+            Assert.IsTrue(controller.AvailableIO.IONumber(IOType.AI) == 1);
+            
+            subScope.RemovePoint(otherPoint);
+            Assert.IsFalse(subScope.Points.Contains(otherPoint));
+            Assert.IsTrue(controller.AvailableIO.IONumber(IOType.AI) == 1);
+
+        }
+
+        [TestMethod()]
+        public void RemoveDeviceFromConnectedHardwired()
+        {
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+
+            TECProvidedController controller = new TECProvidedController(type);
+
+            TECConnectionType connectionType = new TECConnectionType();
+            TECDevice device = new TECDevice(new List<TECConnectionType> { connectionType }, new List<TECProtocol>(), new TECManufacturer());
+
+            TECSubScope subScope = new TECSubScope();
+            subScope.Devices.Add(device);
+
+            TECHardwiredConnection connection = controller.Connect(subScope, subScope.HardwiredProtocol()) as TECHardwiredConnection;
+            
+            subScope.RemoveDevice(device);
+
+            Assert.IsNull((subScope as IConnectable).GetParentConnection());
+            Assert.IsFalse(controller.ChildrenConnections.Contains(connection));
+            
+        }
+
+        [TestMethod()]
+        public void RemoveDeviceFromConnectedNetwork()
+        {
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+            TECProtocol protocol = new TECProtocol(new List<TECConnectionType>());
+
+            type.IO.Add(new TECIO(protocol));
+            TECProvidedController controller = new TECProvidedController(type);
+
+            TECDevice device = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol> { protocol }, new TECManufacturer());
+
+            TECSubScope subScope = new TECSubScope();
+            subScope.Devices.Add(device);
+            
+            IControllerConnection connection = controller.Connect(subScope, protocol);
+            
+            subScope.RemoveDevice(device);
+
+            Assert.IsNull((subScope as IConnectable).GetParentConnection());
+            Assert.IsTrue(controller.ChildrenConnections.Contains(connection));
+
         }
     }
 }
