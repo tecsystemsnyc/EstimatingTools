@@ -42,7 +42,7 @@ namespace TECUserControlLibrary.ViewModels
         }
 
         #region Extensions
-        public ScopeCollectionsTabVM ScopeCollection { get; set; }
+        public ScopeCollectionsTabVM ScopeCollection { get; }
         public ControllersPanelsVM ControllersPanelsTab { get; set; }
         public MiscCostsVM MiscVM { get; set; }
         public SystemHierarchyVM TypicalEditVM { get; set; }
@@ -84,7 +84,10 @@ namespace TECUserControlLibrary.ViewModels
         {
             Bid = bid;
 
-            setupScopeCollection();
+            ScopeCollection = new ScopeCollectionsTabVM(Bid);
+            ScopeCollection.DragHandler += DragOver;
+            ScopeCollection.DropHandler += Drop;
+
             setupControllersPanelsTab();
             setupMiscVM();
             TypicalEditVM = new SystemHierarchyVM(bid, true);
@@ -123,13 +126,6 @@ namespace TECUserControlLibrary.ViewModels
         #region Methods
 
         #region Setup Extensions
-
-        private void setupScopeCollection()
-        {
-            ScopeCollection = new ScopeCollectionsTabVM(Bid);
-            ScopeCollection.DragHandler += DragOver;
-            ScopeCollection.DropHandler += Drop;
-        }
         private void setupControllersPanelsTab()
         {
             ControllersPanelsTab = new ControllersPanelsVM(Bid);

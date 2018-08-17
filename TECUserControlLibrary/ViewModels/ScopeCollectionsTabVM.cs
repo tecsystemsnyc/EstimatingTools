@@ -28,7 +28,7 @@ namespace TECUserControlLibrary.ViewModels
         public ObservableCollection<ITECObject> ResultCollection
         {
             get { return _resultCollection; }
-            set
+            private set
             {
                 _resultCollection = value;
                 RaisePropertyChanged("ResultCollection");
