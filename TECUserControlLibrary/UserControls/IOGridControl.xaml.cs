@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using GongSolutions.Wpf.DragDrop;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,9 +16,9 @@ namespace TECUserControlLibrary.UserControls
         /// <summary>
         /// Gets or sets the SystemSource which is displayed
         /// </summary>
-        public ObservableCollection<TECIO> IOSource
+        public IEnumerable<TECIO> IOSource
         {
-            get { return (ObservableCollection<TECIO>)GetValue(IOSourceProperty); }
+            get { return (IEnumerable<TECIO>)GetValue(IOSourceProperty); }
             set { SetValue(IOSourceProperty, value); }
         }
 
@@ -25,8 +26,8 @@ namespace TECUserControlLibrary.UserControls
         /// Identified the SystemSource dependency property
         /// </summary>
         public static readonly DependencyProperty IOSourceProperty =
-            DependencyProperty.Register("IOSource", typeof(ObservableCollection<TECIO>),
-              typeof(IOGridControl), new PropertyMetadata(default(ObservableCollection<TECIO>)));
+            DependencyProperty.Register("IOSource", typeof(IEnumerable<TECIO>),
+              typeof(IOGridControl), new PropertyMetadata(default(IEnumerable<TECIO>)));
 
 
 

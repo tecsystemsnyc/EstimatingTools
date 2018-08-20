@@ -1,20 +1,23 @@
-﻿using EstimatingLibrary;
-using EstimatingLibrary.Interfaces;
-using EstimatingUtilitiesLibrary.Database;
+﻿using System;
+using System.Text;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+using EstimatingLibrary;
 using System.IO;
+using EstimatingUtilitiesLibrary.Database;
+using System.Linq;
+using EstimatingLibrary.Interfaces;
 
-namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
+namespace Legacy
 {
     /// <summary>
     /// Summary description for LegacyDBTests
     /// </summary>
     [TestClass]
-    public class LegacyDBTests
+    public class LegacyTemplateDBTests
     {
-        
-        static TECBid actualBid;
+
+        static TECTemplates actualTemplates;
 
         static Guid TEST_TAG_GUID = new Guid("09fd531f-94f9-48ee-8d16-00e80c1d58b9");
         static Guid TEST_TEC_COST_GUID = new Guid("1c2a7631-9e3b-4006-ada7-12d6cee52f08");
@@ -39,33 +42,13 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         public static void ClassInitialize(TestContext TestContext)
         {
             var path = Path.GetTempFileName();
-            LegacyDBGenerator.CreateTestBid_1_6(path);
-            DatabaseManager<TECBid> manager = new DatabaseManager<TECBid>(path);
-            actualBid = manager.Load() as TECBid;
+            LegacyDBGenerator.CreateTestTemplates(path);
+            DatabaseManager<TECTemplates> manager = new DatabaseManager<TECTemplates>(path);
+            actualTemplates = manager.Load() as TECTemplates;
         }
-
+        
         [TestMethod]
-        public void Load_Bid_Info()
-        {
-            //Assert
-            string expectedName = "Testimate";
-            Assert.AreEqual(expectedName, actualBid.Name, "Bid name didn't load properly.");
-
-            string expectedNumber = "7357";
-            Assert.AreEqual(expectedNumber, actualBid.BidNumber, "Bid number didn't load properly.");
-
-            DateTime expectedDueDate = new DateTime(1969, 7, 20);
-            Assert.AreEqual(expectedDueDate, actualBid.DueDate, "Bid due date didn't load properly.");
-
-            string expectedSales = "Mrs. Salesperson";
-            Assert.AreEqual(expectedSales, actualBid.Salesperson, "Salesperson didn't load properly.");
-
-            string expectedEstimator = "Mr. Estimator";
-            Assert.AreEqual(expectedEstimator, actualBid.Estimator, "Estimator didn't load properly.");
-        }
-
-        [TestMethod]
-        public void Load_Bid_Parameters()
+        public void Load_Templates_Parameters()
         {
             double expectedEscalation = 10;
             double expectedSubcontractorEscalation = 10;
@@ -74,46 +57,46 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             bool expectedRequiresWrapUp = false;
             double expectedMarkup = 20;
 
-            Assert.AreEqual(expectedEscalation, actualBid.Parameters.Escalation, "Escalation didn't load properly.");
-            Assert.AreEqual(expectedMarkup, actualBid.Parameters.Markup, "Markup didn't load properly.");
-            Assert.AreEqual(expectedSubcontractorEscalation, actualBid.Parameters.SubcontractorEscalation, "Subcontractor escalation didn't load properly.");
-            Assert.AreEqual(expectedIsTaxExempt, actualBid.Parameters.IsTaxExempt, "Is tax exempt didn't load properly.");
-            Assert.AreEqual(expectedRequiresBond, actualBid.Parameters.RequiresBond, "Requires bond didn't load properly.");
-            Assert.AreEqual(expectedRequiresWrapUp, actualBid.Parameters.RequiresWrapUp, "Requires wrap up didn't load properly.");
+            Assert.AreEqual(expectedEscalation, actualTemplates.Templates.Parameters.First().Escalation, "Escalation didn't load properly.");
+            Assert.AreEqual(expectedMarkup, actualTemplates.Templates.Parameters.First().Markup, "Markup didn't load properly.");
+            Assert.AreEqual(expectedSubcontractorEscalation, actualTemplates.Templates.Parameters.First().SubcontractorEscalation, "Subcontractor escalation didn't load properly.");
+            Assert.AreEqual(expectedIsTaxExempt, actualTemplates.Templates.Parameters.First().IsTaxExempt, "Is tax exempt didn't load properly.");
+            Assert.AreEqual(expectedRequiresBond, actualTemplates.Templates.Parameters.First().RequiresBond, "Requires bond didn't load properly.");
+            Assert.AreEqual(expectedRequiresWrapUp, actualTemplates.Templates.Parameters.First().RequiresWrapUp, "Requires wrap up didn't load properly.");
         }
 
         [TestMethod]
-        public void Load_Bid_LaborConsts()
+        public void Load_Templates_LaborConsts()
         {
             //Assert
             double expectedPMCoef = 2;
             double expectedPMRate = 30;
-            Assert.AreEqual(expectedPMCoef, actualBid.Parameters.PMCoef, "PM Coefficient didn't load properly.");
-            Assert.AreEqual(expectedPMRate, actualBid.Parameters.PMRate, "PM Rate didn't load properly.");
+            Assert.AreEqual(expectedPMCoef, actualTemplates.Templates.Parameters.First().PMCoef, "PM Coefficient didn't load properly.");
+            Assert.AreEqual(expectedPMRate, actualTemplates.Templates.Parameters.First().PMRate, "PM Rate didn't load properly.");
 
             double expectedENGCoef = 2;
             double expectedENGRate = 40;
-            Assert.AreEqual(expectedENGCoef, actualBid.Parameters.ENGCoef, "ENG Coefficient didn't load properly.");
-            Assert.AreEqual(expectedENGRate, actualBid.Parameters.ENGRate, "ENG Rate didn't load properly.");
+            Assert.AreEqual(expectedENGCoef, actualTemplates.Templates.Parameters.First().ENGCoef, "ENG Coefficient didn't load properly.");
+            Assert.AreEqual(expectedENGRate, actualTemplates.Templates.Parameters.First().ENGRate, "ENG Rate didn't load properly.");
 
             double expectedCommCoef = 2;
             double expectedCommRate = 50;
-            Assert.AreEqual(expectedCommCoef, actualBid.Parameters.CommCoef, "Comm Coefficient didn't load properly.");
-            Assert.AreEqual(expectedCommRate, actualBid.Parameters.CommRate, "Comm Rate didn't load properly.");
+            Assert.AreEqual(expectedCommCoef, actualTemplates.Templates.Parameters.First().CommCoef, "Comm Coefficient didn't load properly.");
+            Assert.AreEqual(expectedCommRate, actualTemplates.Templates.Parameters.First().CommRate, "Comm Rate didn't load properly.");
 
             double expectedSoftCoef = 2;
             double expectedSoftRate = 60;
-            Assert.AreEqual(expectedSoftCoef, actualBid.Parameters.SoftCoef, "Software Coefficient didn't load properly.");
-            Assert.AreEqual(expectedSoftRate, actualBid.Parameters.SoftRate, "Software Rate didn't load properly.");
+            Assert.AreEqual(expectedSoftCoef, actualTemplates.Templates.Parameters.First().SoftCoef, "Software Coefficient didn't load properly.");
+            Assert.AreEqual(expectedSoftRate, actualTemplates.Templates.Parameters.First().SoftRate, "Software Rate didn't load properly.");
 
             double expectedGraphCoef = 2;
             double expectedGraphRate = 70;
-            Assert.AreEqual(expectedGraphCoef, actualBid.Parameters.GraphCoef, "Graphics Coefficient didn't load properly.");
-            Assert.AreEqual(expectedGraphRate, actualBid.Parameters.GraphRate, "Graphics Rate didn't load properly.");
+            Assert.AreEqual(expectedGraphCoef, actualTemplates.Templates.Parameters.First().GraphCoef, "Graphics Coefficient didn't load properly.");
+            Assert.AreEqual(expectedGraphRate, actualTemplates.Templates.Parameters.First().GraphRate, "Graphics Rate didn't load properly.");
         }
 
         [TestMethod]
-        public void Load_Bid_SubcontractorConsts()
+        public void Load_Templates_SubcontractorConsts()
         {
             //Assert
             double expectedElectricalRate = 50;
@@ -123,105 +106,17 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             double expectedElectricalSuperRatio = 0.25;
             bool expectedOT = false;
             bool expectedUnion = true;
-            Assert.AreEqual(expectedElectricalRate, actualBid.Parameters.ElectricalRate, "Electrical rate didn't load properly.");
-            Assert.AreEqual(expectedElectricalSuperRate, actualBid.Parameters.ElectricalSuperRate, "Electrical Supervision rate didn't load properly.");
-            Assert.AreEqual(expectedElectricalNonUnionRate, actualBid.Parameters.ElectricalNonUnionRate, "Electrical Non-Union rate didn't load properly.");
-            Assert.AreEqual(expectedElectricalSuperNonUnionRate, actualBid.Parameters.ElectricalSuperNonUnionRate, "Electrical Supervision Non-Union rate didn't load properly.");
-            Assert.AreEqual(expectedElectricalSuperRatio, actualBid.Parameters.ElectricalSuperRatio, "Electrical Supervision time ratio didn't load properly.");
-            Assert.AreEqual(expectedOT, actualBid.Parameters.ElectricalIsOnOvertime, "Electrical overtime bool didn't load properly.");
-            Assert.AreEqual(expectedUnion, actualBid.Parameters.ElectricalIsUnion, "Electrical union bool didn't load properly.");
+            Assert.AreEqual(expectedElectricalRate, actualTemplates.Templates.Parameters.First().ElectricalRate, "Electrical rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalSuperRate, actualTemplates.Templates.Parameters.First().ElectricalSuperRate, "Electrical Supervision rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalNonUnionRate, actualTemplates.Templates.Parameters.First().ElectricalNonUnionRate, "Electrical Non-Union rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalSuperNonUnionRate, actualTemplates.Templates.Parameters.First().ElectricalSuperNonUnionRate, "Electrical Supervision Non-Union rate didn't load properly.");
+            Assert.AreEqual(expectedElectricalSuperRatio, actualTemplates.Templates.Parameters.First().ElectricalSuperRatio, "Electrical Supervision time ratio didn't load properly.");
+            Assert.AreEqual(expectedOT, actualTemplates.Templates.Parameters.First().ElectricalIsOnOvertime, "Electrical overtime bool didn't load properly.");
+            Assert.AreEqual(expectedUnion, actualTemplates.Templates.Parameters.First().ElectricalIsUnion, "Electrical union bool didn't load properly.");
         }
-
+        
         [TestMethod]
-        public void Load_Bid_UserAdjustments()
-        {
-            //Assert
-            double expectedPMExtra = 120;
-            double expectedENGExtra = 110;
-            double expectedCommExtra = 100;
-            double expectedSoftExtra = 90;
-            double expectedGraphExtra = 80;
-
-            Assert.AreEqual(expectedPMExtra, actualBid.ExtraLabor.PMExtraHours, "PM Extra Hours didn't load properly.");
-            Assert.AreEqual(expectedENGExtra, actualBid.ExtraLabor.ENGExtraHours, "ENG Extra Hours didn't load properly.");
-            Assert.AreEqual(expectedCommExtra, actualBid.ExtraLabor.CommExtraHours, "Comm Extra Hours didn't load properly.");
-            Assert.AreEqual(expectedSoftExtra, actualBid.ExtraLabor.SoftExtraHours, "Soft Extra Hours didn't load properly.");
-            Assert.AreEqual(expectedGraphExtra, actualBid.ExtraLabor.GraphExtraHours, "Graph Extra Hours didn't load properly.");
-        }
-
-        [TestMethod]
-        public void Load_Bid_Note()
-        {
-            //Assert
-            Guid expectedGuid = new Guid("50f3a707-fc1b-4eb3-9413-1dbde57b1d90");
-            string expectedText = "Test Note";
-
-            TECLabeled actualNote = null;
-            foreach (TECLabeled note in actualBid.Notes)
-            {
-                if (note.Guid == expectedGuid)
-                {
-                    actualNote = note;
-                    break;
-                }
-            }
-
-            Assert.AreEqual(expectedText, actualNote.Label, "Note text didn't load properly.");
-        }
-
-        [TestMethod]
-        public void Load_Bid_Exclusion()
-        {
-            //Assert
-            Guid expectedGuid = new Guid("15692e12-e728-4f1b-b65c-de365e016e7a");
-            string expectedText = "Test Exclusion";
-
-            TECLabeled actualExclusion = null;
-            foreach (TECLabeled note in actualBid.Exclusions)
-            {
-                if (note.Guid == expectedGuid)
-                {
-                    actualExclusion = note;
-                    break;
-                }
-            }
-
-            Assert.AreEqual(expectedText, actualExclusion.Label, "Exclusion text didn't load properly.");
-        }
-
-        [TestMethod]
-        public void Load_Bid_BidScopeTree()
-        {
-            Guid expectedParentGuid = new Guid("25e815fa-4ac7-4b69-9640-5ae220f0cd40");
-            string expectedParentName = "Bid Scope Branch";
-            Guid expectedChildGuid = new Guid("81adfc62-20ec-466f-a2a0-430e1223f64f");
-            string expectedChildName = "Bid Child Branch";
-
-            TECScopeBranch actualParent = null;
-            TECScopeBranch actualChild = null;
-            foreach (TECScopeBranch branch in actualBid.ScopeTree)
-            {
-                if (branch.Guid == expectedParentGuid)
-                {
-                    actualParent = branch;
-                    foreach (TECScopeBranch child in branch.Branches)
-                    {
-                        if (child.Guid == expectedChildGuid)
-                        {
-                            actualChild = child;
-                            break;
-                        }
-                    }
-                    break;
-                }
-            }
-
-            Assert.AreEqual(expectedParentName, actualParent.Label, "Parent scope branch name didn't load properly.");
-            Assert.AreEqual(expectedChildName, actualChild.Label, "Child scope branch name didn't load properly.");
-        }
-
-        [TestMethod]
-        public void Load_Bid_SystemScopeTree()
+        public void Load_Templates_SystemTemplates_ScopeTree()
         {
             Guid expectedParentGuid = new Guid("814710f1-f2dd-4ae6-9bc4-9279288e4994");
             string expectedParentName = "System Scope Branch";
@@ -230,7 +125,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
 
             TECScopeBranch actualParent = null;
             TECScopeBranch actualChild = null;
-            foreach (TECSystem typical in actualBid.Systems)
+            foreach (TECSystem typical in actualTemplates.Templates.SystemTemplates)
             {
                 foreach (TECScopeBranch branch in typical.ScopeBranches)
                 {
@@ -256,7 +151,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         }
 
         [TestMethod]
-        public void Load_Bid_TypicalSystem()
+        public void Load_Templates_TypicalSystem()
         {
             //Arrange
             Guid expectedGuid = new Guid("ebdbcc85-10f4-46b3-99e7-d896679f874a");
@@ -270,7 +165,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             Guid childPanel = new Guid("e7695d68-d79f-44a2-92f5-b303436186af");
 
             TECTypical actualSystem = null;
-            foreach (TECTypical system in actualBid.Systems)
+            foreach (TECTypical system in actualTemplates.Templates.SystemTemplates)
             {
                 if (system.Guid == expectedGuid)
                 {
@@ -328,14 +223,14 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         }
 
         [TestMethod]
-        public void Load_Bid_InstanceSystem()
+        public void Load_Templates_InstanceSystem()
         {
             Guid expectedGuid = new Guid("ba2e71d4-a2b9-471a-9229-9fbad7432bf7");
             string expectedName = "Instance System";
             string expectedDescription = "Instance System Description";
 
             TECSystem actualSystem = null;
-            foreach (TECTypical typical in actualBid.Systems)
+            foreach (TECTypical typical in actualTemplates.Templates.SystemTemplates)
             {
                 foreach (TECSystem instance in typical.Instances)
                 {
@@ -356,7 +251,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         }
 
         [TestMethod]
-        public void Load_Bid_TypicalEquipment()
+        public void Load_Templates_TypicalEquipment()
         {
             Guid expectedGuid = new Guid("8a9bcc02-6ae2-4ac9-bbe1-e33d9a590b0e");
             string expectedName = "Typical Equip";
@@ -365,7 +260,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             Guid childSubScope = new Guid("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
 
             TECEquipment actualEquipment = null;
-            foreach (TECSystem typical in actualBid.Systems)
+            foreach (TECSystem typical in actualTemplates.Templates.SystemTemplates)
             {
                 foreach (TECEquipment equip in typical.Equipment)
                 {
@@ -399,7 +294,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         }
 
         [TestMethod]
-        public void Load_Bid_InstanceEquipment()
+        public void Load_Templates_InstanceEquipment()
         {
             Guid expectedInstanceGuid = new Guid("cdd9d7f7-ff3e-44ff-990f-c1b721e0ff8d");
             string expectedInstanceName = "Instance Equip";
@@ -408,7 +303,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             Guid childSubScope = new Guid("94726d87-b468-46a8-9421-3ff9725d5239");
 
             TECEquipment actualEquipment = null;
-            foreach (TECTypical typical in actualBid.Systems)
+            foreach (TECTypical typical in actualTemplates.Templates.SystemTemplates)
             {
                 foreach (TECSystem instance in typical.Instances)
                 {
@@ -445,7 +340,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         }
 
         [TestMethod]
-        public void Load_Bid_TypicalSubScope()
+        public void Load_Templates_TypicalSubScope()
         {
             //Arrange
             Guid expectedGuid = new Guid("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
@@ -457,7 +352,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             Guid expectedConnectionGuid = new Guid("5723e279-ac5c-4ee0-ae01-494a0c524b5c");
 
             TECSubScope actualSubScope = null;
-            foreach (TECSystem system in actualBid.Systems)
+            foreach (TECSystem system in actualTemplates.Templates.SystemTemplates)
             {
                 foreach (TECEquipment equipment in system.Equipment)
                 {
@@ -512,7 +407,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         }
 
         [TestMethod]
-        public void Load_Bid_InstanceSubScope()
+        public void Load_Templates_InstanceSubScope()
         {
             //Arrange
             Guid expectedGuid = new Guid("94726d87-b468-46a8-9421-3ff9725d5239");
@@ -524,7 +419,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             Guid expectedConnectionGuid = new Guid("560ffd84-444d-4611-a346-266074f62f6f");
 
             TECSubScope actualSubScope = null;
-            foreach (TECTypical typical in actualBid.Systems)
+            foreach (TECTypical typical in actualTemplates.Templates.SystemTemplates)
             {
                 foreach (TECSystem system in typical.Instances)
                 {
@@ -585,7 +480,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         }
 
         [TestMethod]
-        public void Load_Bid_Device()
+        public void Load_Templates_Device()
         {
             Guid expectedGuid = new Guid("95135fdf-7565-4d22-b9e4-1f177febae15");
             string expectedName = "Test Device";
@@ -596,7 +491,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             Guid connectionTypeGuid = new Guid("f38867c8-3846-461f-a6fa-c941aeb723c7");
 
             TECDevice actualDevice = null;
-            foreach (TECDevice dev in actualBid.Catalogs.Devices)
+            foreach (TECDevice dev in actualTemplates.Catalogs.Devices)
             {
                 if (dev.Guid == expectedGuid)
                 {
@@ -627,7 +522,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         }
 
         [TestMethod]
-        public void Load_Bid_TypicalPoint()
+        public void Load_Templates_TypicalPoint()
         {
             Guid expectedGuid = new Guid("03a16819-9205-4e65-a16b-96616309f171");
             string expectedName = "Typical Point";
@@ -635,7 +530,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             IOType expectedType = IOType.AI;
 
             TECPoint actualPoint = null;
-            foreach (TECSystem typical in actualBid.Systems)
+            foreach (TECSystem typical in actualTemplates.Templates.SystemTemplates)
             {
                 foreach (TECEquipment equip in typical.Equipment)
                 {
@@ -662,7 +557,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         }
 
         [TestMethod]
-        public void Load_Bid_InstancePoint()
+        public void Load_Templates_InstancePoint()
         {
             Guid expectedGuid = new Guid("e60437bc-09a1-47eb-9fd5-78711d942a12");
             string expectedName = "Instance Point";
@@ -670,7 +565,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             IOType expectedType = IOType.AI;
 
             TECPoint actualPoint = null;
-            foreach (TECTypical typical in actualBid.Systems)
+            foreach (TECTypical typical in actualTemplates.Templates.SystemTemplates)
             {
                 foreach (TECSystem instance in typical.Instances)
                 {
@@ -698,18 +593,18 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             Assert.AreEqual(expectedName, actualPoint.Label, "Instance point name didn't load properly.");
             Assert.AreEqual(expectedQuantity, actualPoint.Quantity, "Instance point quantity didn't load properly.");
             Assert.AreEqual(expectedType, actualPoint.Type, "Instance point type didn't load properly.");
-            
+
 
         }
 
         [TestMethod]
-        public void Load_Bid_Tag()
+        public void Load_Templates_Tag()
         {
             Guid expectedGuid = new Guid("09fd531f-94f9-48ee-8d16-00e80c1d58b9");
             string expectedString = "Test Tag";
 
             TECLabeled actualTag = null;
-            foreach (TECTag tag in actualBid.Catalogs.Tags)
+            foreach (TECTag tag in actualTemplates.Catalogs.Tags)
             {
                 if (tag.Guid == expectedGuid)
                 {
@@ -722,7 +617,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         }
 
         [TestMethod]
-        public void Load_Bid_Manufacturer()
+        public void Load_Templates_Manufacturer()
         {
             //Arrange
             Guid expectedGuid = new Guid("90cd6eae-f7a3-4296-a9eb-b810a417766d");
@@ -731,7 +626,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
 
 
             TECManufacturer actualManufacturer = null;
-            foreach (TECManufacturer man in actualBid.Catalogs.Manufacturers)
+            foreach (TECManufacturer man in actualTemplates.Catalogs.Manufacturers)
             {
                 if (man.Guid == expectedGuid)
                 {
@@ -744,30 +639,9 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             Assert.AreEqual(expectedName, actualManufacturer.Label);
             Assert.AreEqual(expectedMultiplier, actualManufacturer.Multiplier);
         }
-
+        
         [TestMethod]
-        public void Load_Bid_Location()
-        {
-            //Arrange
-            Guid expectedGuid = new Guid("4175d04b-82b1-486b-b742-b2cc875405cb");
-            string expectedLocationName = "Test Location";
-
-            TECLocation actualLocation = null;
-            foreach (TECLocation location in actualBid.Locations)
-            {
-                if (location.Guid == expectedGuid)
-                {
-                    actualLocation = location;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedLocationName, actualLocation.Name);
-        }
-
-        [TestMethod]
-        public void Load_Bid_ConnectionType()
+        public void Load_Templates_ConnectionType()
         {
             //Arrange
             Guid expectedGuid = new Guid("f38867c8-3846-461f-a6fa-c941aeb723c7");
@@ -776,7 +650,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             double expectedLabor = 84.21;
 
             TECElectricalMaterial actualConnectionType = null;
-            foreach (TECElectricalMaterial connectionType in actualBid.Catalogs.ConnectionTypes)
+            foreach (TECElectricalMaterial connectionType in actualTemplates.Catalogs.ConnectionTypes)
             {
                 if (connectionType.Guid == expectedGuid)
                 {
@@ -795,7 +669,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         }
 
         [TestMethod]
-        public void Load_Bid_ConduitType()
+        public void Load_Templates_ConduitType()
         {
             //Arrange
             Guid expectedGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
@@ -804,7 +678,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             double expectedLabor = 76.54;
 
             TECElectricalMaterial actualConduitType = null;
-            foreach (TECElectricalMaterial conduitType in actualBid.Catalogs.ConduitTypes)
+            foreach (TECElectricalMaterial conduitType in actualTemplates.Catalogs.ConduitTypes)
             {
                 if (conduitType.Guid == expectedGuid)
                 {
@@ -823,7 +697,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         }
 
         [TestMethod]
-        public void Load_Bid_AssociatedCosts()
+        public void Load_Templates_AssociatedCosts()
         {
             Guid expectedTECGuid = new Guid("1c2a7631-9e3b-4006-ada7-12d6cee52f08");
             string expectedTECName = "Test TEC Associated Cost";
@@ -839,7 +713,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
 
             ICost actualICost = null;
             ICost actualElectricalCost = null;
-            foreach (ICost cost in actualBid.Catalogs.AssociatedCosts)
+            foreach (ICost cost in actualTemplates.Catalogs.AssociatedCosts)
             {
                 if (cost.Guid == expectedTECGuid)
                 {
@@ -868,7 +742,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         }
 
         [TestMethod]
-        public void Load_Bid_TypicalSubScopeConnection()
+        public void Load_Templates_TypicalSubScopeConnection()
         {
             Guid expectedGuid = new Guid("5723e279-ac5c-4ee0-ae01-494a0c524b5c");
             double expectedWireLength = 40;
@@ -879,7 +753,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             Guid expectedSubScopeGuid = new Guid("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
 
             TECHardwiredConnection actualSSConnect = null;
-            foreach (TECSystem typical in actualBid.Systems)
+            foreach (TECSystem typical in actualTemplates.Templates.SystemTemplates)
             {
                 foreach (TECController controller in typical.Controllers)
                 {
@@ -906,7 +780,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         }
 
         [TestMethod]
-        public void Load_Bid_InstanceSubScopeConnection()
+        public void Load_Templates_InstanceSubScopeConnection()
         {
             //Arrange
             Guid expectedGuid = new Guid("560ffd84-444d-4611-a346-266074f62f6f");
@@ -917,7 +791,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             Guid expectedConduitTypeGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
 
             TECHardwiredConnection actualConnection = null;
-            foreach (TECTypical typical in actualBid.Systems)
+            foreach (TECTypical typical in actualTemplates.Templates.SystemTemplates)
             {
                 foreach (TECSystem system in typical.Instances)
                 {
@@ -951,119 +825,10 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             Assert.AreEqual(expectedControllerGuid, actualConnection.ParentController.Guid, "Parent controller didn't load properly in subscope connection.");
             Assert.AreEqual(expectedConduitTypeGuid, actualConnection.ConduitType.Guid, "Conduit type didn't load properly in subscope connection.");
         }
-
+        
+        
         [TestMethod]
-        public void Load_Bid_BidInstance_NetworkConnection()
-        {
-            Guid expectedGuid = new Guid("4f93907a-9aab-4ed5-8e55-43aab2af5ef8");
-            double expectedLength = 100;
-            double expectedConduitLength = 80;
-
-            Guid expectedParentControllerGuid = new Guid("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
-            Guid expectedConnectionTypeGuid = new Guid("f38867c8-3846-461f-a6fa-c941aeb723c7");
-            Guid expectedConduitTypeGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
-            Guid expectedChildControllerGuid = new Guid("f22913a6-e348-4a77-821f-80447621c6e0");
-
-            TECNetworkConnection actualNetConnect = null;
-            foreach (TECController controller in actualBid.Controllers)
-            {
-                foreach (IControllerConnection connection in controller.ChildrenConnections)
-                {
-                    if (connection.Guid == expectedGuid)
-                    {
-                        actualNetConnect = (connection as TECNetworkConnection);
-                        break;
-                    }
-                }
-                if (actualNetConnect != null) break;
-            }
-
-            bool childControllerFound = false;
-            foreach (TECController controller in actualNetConnect.Children)
-            {
-                if (controller.Guid == expectedChildControllerGuid)
-                {
-                    childControllerFound = true;
-                    break;
-                }
-            }
-            bool foundConnectionType = false;
-            foreach (TECElectricalMaterial type in actualNetConnect.Protocol.ConnectionTypes)
-            {
-                if (type.Guid == expectedConnectionTypeGuid)
-                {
-                    foundConnectionType = true;
-                    break;
-                }
-            }
-
-
-            //Assert
-            Assert.AreEqual(expectedLength, actualNetConnect.Length, "Length didn't load properly in network connection.");
-            Assert.AreEqual(expectedConduitLength, actualNetConnect.ConduitLength, "ConduitLength didn't load properly in network connection.");
-
-            Assert.AreEqual(expectedParentControllerGuid, actualNetConnect.ParentController.Guid, "Parent controller didn't load properly in network connection.");
-            Assert.IsTrue(foundConnectionType, "ConnectionType didn't load properly in network connection.");
-            Assert.AreEqual(expectedConduitTypeGuid, actualNetConnect.ConduitType.Guid, "ConduitType didn't load properly in network connection.");
-            Assert.IsTrue(childControllerFound, "Child controller didn't load properly in network connection.");
-        }
-
-        [TestMethod]
-        public void Load_Bid_BidBidChild_NetworkConnection()
-        {
-            Guid expectedGuid = new Guid("6aca8c22-5115-4534-a5b1-698b7e42d6c2");
-            double expectedLength = 80;
-            double expectedConduitLength = 60;
-
-            Guid expectedParentControllerGuid = new Guid("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
-            Guid expectedConnectionTypeGuid = new Guid("f38867c8-3846-461f-a6fa-c941aeb723c7");
-            Guid expectedChildControllerGuid = new Guid("973e6100-31f7-40b0-bfe7-9d64630c1c56");
-
-            TECNetworkConnection actualNetConnect = null;
-            foreach (TECController controller in actualBid.Controllers)
-            {
-                foreach (IControllerConnection connection in controller.ChildrenConnections)
-                {
-                    if (connection.Guid == expectedGuid)
-                    {
-                        actualNetConnect = (connection as TECNetworkConnection);
-                        break;
-                    }
-                }
-                if (actualNetConnect != null) break;
-            }
-
-            bool childControllerFound = false;
-            foreach (TECController controller in actualNetConnect.Children)
-            {
-                if (controller.Guid == expectedChildControllerGuid)
-                {
-                    childControllerFound = true;
-                    break;
-                }
-            }
-            bool foundConnectionType = false;
-            foreach (TECElectricalMaterial type in actualNetConnect.Protocol.ConnectionTypes)
-            {
-                if (type.Guid == expectedConnectionTypeGuid)
-                {
-                    foundConnectionType = true;
-                    break;
-                }
-            }
-
-
-            //Assert
-            Assert.AreEqual(expectedLength, actualNetConnect.Length, "Length didn't load properly in network connection.");
-            Assert.AreEqual(expectedConduitLength, actualNetConnect.ConduitLength, "ConduitLength didn't load properly in network connection.");
-
-            Assert.AreEqual(expectedParentControllerGuid, actualNetConnect.ParentController.Guid, "Parent controller didn't load properly in network connection.");
-            Assert.IsTrue(foundConnectionType, "ConnectionType didn't load properly in network connection.");
-            Assert.IsTrue(childControllerFound, "Child controller didn't load properly in network connection.");
-        }
-
-        [TestMethod]
-        public void Load_Bid_InstanceInstanceChild_NetworkConnection()
+        public void Load_Templates_InstanceInstanceChild_NetworkConnection()
         {
             Guid expectedGuid = new Guid("e503fdd4-f299-4618-8d54-6751c3b2bc25");
             double expectedLength = 70;
@@ -1074,7 +839,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             Guid expectedChildControllerGuid = new Guid("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
 
             TECNetworkConnection actualNetConnect = null;
-            foreach (TECTypical typical in actualBid.Systems)
+            foreach (TECTypical typical in actualTemplates.Templates.SystemTemplates)
             {
                 foreach (TECSystem instance in typical.Instances)
                 {
@@ -1125,7 +890,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         }
 
         [TestMethod]
-        public void Load_Bid_DaisyChain_NetworkConnection()
+        public void Load_Templates_DaisyChain_NetworkConnection()
         {
             Guid expectedGuid = new Guid("99aea45e-ebeb-4c1a-8407-1d1a3540ceeb");
             double expectedLength = 90;
@@ -1138,7 +903,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             Guid expectedDaisy2Guid = new Guid("7b6825df-57da-458a-a859-a9459c15907b");
 
             TECNetworkConnection actualNetConnect = null;
-            foreach (TECController controller in actualBid.Controllers)
+            foreach (TECController controller in actualTemplates.Templates.ControllerTemplates)
             {
                 foreach (IControllerConnection connection in controller.ChildrenConnections)
                 {
@@ -1186,58 +951,9 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             Assert.IsTrue(daisy1Found, "First daisy chain controller didn't load properly in network connection.");
             Assert.IsTrue(daisy2Found, "Second daisy chain controller didn't load properly in network connection.");
         }
-
+        
         [TestMethod]
-        public void Load_Bid_BidController()
-        {
-            //Arrange
-            Guid expectedGuid = new Guid("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
-            string expectedName = "Bid Controller";
-            string expectedDescription = "Bid Controller Description";
-
-            TECController actualController = null;
-            foreach (TECController controller in actualBid.Controllers)
-            {
-                if (controller.Guid == expectedGuid)
-                {
-                    actualController = controller;
-                    break;
-                }
-            }
-
-            Guid expectedConnectionGuid = new Guid("4f93907a-9aab-4ed5-8e55-43aab2af5ef8");
-            Guid expectedIOGuid = new Guid("1f6049cc-4dd6-4b50-a9d5-045b629ae6fb");
-
-            //bool hasIO = false;
-            //foreach (TECIO io in actualController.IO)
-            //{
-            //    if (io.Guid == expectedIOGuid)
-            //    {
-            //        hasIO = true;
-            //        break;
-            //    }
-            //}
-
-            bool hasConnection = false;
-            foreach (IControllerConnection conn in actualController.ChildrenConnections)
-            {
-                if (conn.Guid == expectedConnectionGuid)
-                {
-                    hasConnection = true;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedName, actualController.Name);
-            Assert.AreEqual(expectedDescription, actualController.Description);
-            //Assert.IsTrue(hasIO);
-            Assert.IsTrue(hasConnection);
-            testForTag(actualController);
-            testForCosts(actualController);
-        }
-
-        [TestMethod]
-        public void Load_Bid_SystemTypicalController()
+        public void Load_Templates_SystemTypicalController()
         {
             //Arrange
             Guid expectedGuid = new Guid("1bb86714-2512-4fdd-a80f-46969753d8a0");
@@ -1245,7 +961,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             string expectedDescription = "Typical Controller Description";
 
             TECController actualController = null;
-            foreach (TECSystem system in actualBid.Systems)
+            foreach (TECSystem system in actualTemplates.Templates.SystemTemplates)
             {
                 foreach (TECController controller in system.Controllers)
                 {
@@ -1289,7 +1005,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         }
 
         [TestMethod]
-        public void Load_Bid_SystemInstanceController()
+        public void Load_Templates_SystemInstanceController()
         {
             //Arrange
             Guid expectedGuid = new Guid("f22913a6-e348-4a77-821f-80447621c6e0");
@@ -1298,7 +1014,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             bool expectedType = false;
 
             TECController actualController = null;
-            foreach (TECTypical typical in actualBid.Systems)
+            foreach (TECTypical typical in actualTemplates.Templates.SystemTemplates)
             {
                 foreach (TECSystem system in typical.Instances)
                 {
@@ -1346,7 +1062,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         }
 
         [TestMethod]
-        public void Load_Bid_MiscCost()
+        public void Load_Templates_MiscCost()
         {
             //Arrange
             Guid expectedGuid = new Guid("5df99701-1d7b-4fbe-843d-40793f4145a8");
@@ -1356,7 +1072,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             double expectedQuantity = 2;
             CostType expectedType = CostType.Electrical;
             TECMisc actualMisc = null;
-            foreach (TECMisc misc in actualBid.MiscCosts)
+            foreach (TECMisc misc in actualTemplates.Templates.MiscCostTemplates)
             {
                 if (misc.Guid == expectedGuid)
                 {
@@ -1374,7 +1090,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         }
 
         [TestMethod]
-        public void Load_Bid_SystemMiscCost()
+        public void Load_Templates_SystemMiscCost()
         {
             //Arrange
             Guid expectedGuid = new Guid("e3ecee54-1f90-415a-b493-90a78f618476");
@@ -1384,7 +1100,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             double expectedQuantity = 3;
             CostType expectedType = CostType.TEC;
             TECMisc actualMisc = null;
-            foreach (TECSystem system in actualBid.Systems)
+            foreach (TECSystem system in actualTemplates.Templates.SystemTemplates)
             {
                 foreach (TECMisc misc in system.MiscCosts)
                 {
@@ -1405,7 +1121,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         }
 
         [TestMethod]
-        public void Load_Bid_PanelType()
+        public void Load_Templates_PanelType()
         {
             //Arrange
             Guid expectedGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
@@ -1414,7 +1130,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             double expectedLabor = 4231;
 
             TECPanelType actualType = null;
-            foreach (TECPanelType type in actualBid.Catalogs.PanelTypes)
+            foreach (TECPanelType type in actualTemplates.Catalogs.PanelTypes)
             {
                 if (type.Guid == expectedGuid)
                 {
@@ -1427,36 +1143,10 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             Assert.AreEqual(expectedCost, actualType.Cost);
             Assert.AreEqual(expectedLabor, actualType.Labor);
         }
+        
 
         [TestMethod]
-        public void Load_Bid_BidPanel()
-        {
-            //Arrange
-            Guid expectedGuid = new Guid("a8cdd31c-e690-4eaa-81ea-602c72904391");
-            string expectedName = "Bid Panel";
-            string expectedDescription = "Bid Panel Description";
-
-            Guid expectedTypeGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
-
-            TECPanel actualPanel = null;
-            foreach (TECPanel panel in actualBid.Panels)
-            {
-                if (panel.Guid == expectedGuid)
-                {
-                    actualPanel = panel;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedName, actualPanel.Name);
-            Assert.AreEqual(expectedDescription, actualPanel.Description);
-            Assert.AreEqual(expectedTypeGuid, actualPanel.Type.Guid);
-            testForCosts(actualPanel);
-        }
-
-        [TestMethod]
-        public void Load_Bid_TypicalPanel()
+        public void Load_Templates_TypicalPanel()
         {
             //Arrange
             Guid expectedGuid = new Guid("e7695d68-d79f-44a2-92f5-b303436186af");
@@ -1467,7 +1157,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             Guid expectedTypeGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
 
             TECPanel actualPanel = null;
-            foreach (TECSystem system in actualBid.Systems)
+            foreach (TECSystem system in actualTemplates.Templates.SystemTemplates)
             {
                 foreach (TECPanel panel in system.Panels)
                 {
@@ -1488,7 +1178,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         }
 
         [TestMethod]
-        public void Load_Bid_InstancePanel()
+        public void Load_Templates_InstancePanel()
         {
             //Arrange
             Guid expectedGuid = new Guid("10b07f6c-4374-49fc-ba6f-84db65b61ffa");
@@ -1499,7 +1189,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             Guid expectedTypeGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
 
             TECPanel actualPanel = null;
-            foreach (TECTypical typical in actualBid.Systems)
+            foreach (TECTypical typical in actualTemplates.Templates.SystemTemplates)
             {
                 foreach (TECSystem system in typical.Instances)
                 {
@@ -1524,7 +1214,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         }
 
         [TestMethod]
-        public void Load_Bid_IOModule()
+        public void Load_Templates_IOModule()
         {
             //Arrange
             Guid expectedGuid = new Guid("b346378d-dc72-4dda-b275-bbe03022dd12");
@@ -1533,7 +1223,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             double expectedCost = 2233;
 
             TECIOModule actualModule = null;
-            foreach (TECIOModule module in actualBid.Catalogs.IOModules)
+            foreach (TECIOModule module in actualTemplates.Catalogs.IOModules)
             {
                 if (module.Guid == expectedGuid)
                 {
@@ -1546,12 +1236,12 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             Assert.AreEqual(expectedDescription, actualModule.Description);
             Assert.AreEqual(expectedCost, actualModule.Price);
         }
-        
+
         private void testForScopeChildren(TECScope scope)
         {
             testForTag(scope);
             testForCosts(scope);
-            if(scope is TECLocated located)
+            if (scope is TECLocated located)
             {
                 testForLocation(located);
             }
@@ -1618,7 +1308,6 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
 
             Assert.IsTrue(foundCost, "Rated Cost not loaded properly into scope.");
         }
-        
+
     }
 }
-

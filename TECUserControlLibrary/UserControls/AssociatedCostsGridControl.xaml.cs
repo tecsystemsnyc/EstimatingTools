@@ -1,6 +1,7 @@
 ﻿using EstimatingLibrary;
 using GongSolutions.Wpf.DragDrop;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,15 +16,15 @@ namespace TECUserControlLibrary.UserControls
     {
         #region DPs
 
-        public ObservableCollection<TECAssociatedCost> CostsSource
+        public IEnumerable<TECAssociatedCost> CostsSource
         {
-            get { return (ObservableCollection<TECAssociatedCost>)GetValue(CostsSourceProperty); }
+            get { return (IEnumerable<TECAssociatedCost>)GetValue(CostsSourceProperty); }
             set { SetValue(CostsSourceProperty, value); }
         }
 
         public static readonly DependencyProperty CostsSourceProperty =
-            DependencyProperty.Register("CostsSource", typeof(ObservableCollection<TECAssociatedCost>),
-              typeof(AssociatedCostsGridControl), new PropertyMetadata(default(ObservableCollection<TECAssociatedCost>)));
+            DependencyProperty.Register("CostsSource", typeof(IEnumerable<TECAssociatedCost>),
+              typeof(AssociatedCostsGridControl), new PropertyMetadata(default(IEnumerable<TECAssociatedCost>)));
 
 
         /// <summary>

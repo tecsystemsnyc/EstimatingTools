@@ -8,6 +8,8 @@ namespace EstimatingUtilitiesLibrary.Database
 {
     internal class DatabaseVersionManager
     {
+        private static DBType dbType = DBType.Bid;
+
         public enum UpdateStatus { Updated = 1, NotUpdated, Incompatible }
         public static UpdateStatus CheckAndUpdate(string path, DataTable versionDefintion)
         {
@@ -68,9 +70,15 @@ namespace EstimatingUtilitiesLibrary.Database
             List<string> tableNames = DatabaseHelper.TableNames(db);
             List<TableBase> databaseTableList = new List<TableBase>();
             if (tableNames.Contains(BidInfoTable.TableName) || tableNames.Contains("TECBidInfo"))
-            { databaseTableList = AllBidTables.Tables; }
+            {
+                databaseTableList = AllBidTables.Tables;
+                dbType = DBType.Bid;
+            }
             else if (tableNames.Contains(TemplatesInfoTable.TableName) || tableNames.Contains("TECTemplatesInfo"))
-            { databaseTableList = AllTemplateTables.Tables; }
+            {
+                databaseTableList = AllTemplateTables.Tables;
+                dbType = DBType.Templates;
+            }
             else
             { throw new ArgumentException("updateDatabase() can't determine db type"); }
             foreach (TableBase table in databaseTableList)
@@ -93,10 +101,10 @@ namespace EstimatingUtilitiesLibrary.Database
 
         private static void cleanMigratedDatabase(SQLiteDatabase db, int version)
         {
-            if(version < 11)
+            if(version < 10)
             {
                 string commandString = "";
-
+                
                 #region Point Types
                 List<String> deprecatedTypes = new List<string>()
                 {
@@ -118,14 +126,13 @@ namespace EstimatingUtilitiesLibrary.Database
                 }
                 
                 #endregion
-
                 #region HardwiredConnections
-
-                string deviceJoinTable = String.Format("select {0}, {1} from {2} inner join {3} where {2}.{4} = {3}.{5}", HardwiredConnectionChildrenTable.ConnectionID.Name, SubScopeDeviceTable.DeviceID.Name, HardwiredConnectionChildrenTable.TableName, 
+                
+                string deviceJoinTable = String.Format("select {0}, {1} as ConDevID from {2} inner join {3} where {2}.{4} = {3}.{5}", HardwiredConnectionChildrenTable.ConnectionID.Name, SubScopeDeviceTable.DeviceID.Name, HardwiredConnectionChildrenTable.TableName, 
                     SubScopeDeviceTable.TableName, HardwiredConnectionChildrenTable.ChildID.Name, SubScopeDeviceTable.SubScopeID.Name);
-                string connectionConnectionTypeTableJoin = String.Format("select {0}, {1}, {2} from {3} inner join ({4}) where '{5}' = '{6}'", HardwiredConnectionChildrenTable.ConnectionID.Name,
+                string connectionConnectionTypeTableJoin = String.Format("select {0}, {1}, {2} from {3} inner join ({4}) where {5} = ConDevID", HardwiredConnectionChildrenTable.ConnectionID.Name,
                     DeviceConnectionTypeTable.TypeID.Name, DeviceConnectionTypeTable.Quantity.Name, DeviceConnectionTypeTable.TableName, 
-                    deviceJoinTable, SubScopeDeviceTable.DeviceID.Name, DeviceConnectionTypeTable.DeviceID.Name);
+                    deviceJoinTable, DeviceConnectionTypeTable.DeviceID.Name);
                 commandString = String.Format("insert into {0} ({1}, {2}, {3}) {4}", HardwiredConnectionConnectionTypeTable.TableName, HardwiredConnectionConnectionTypeTable.ConnectionID.Name,
                     HardwiredConnectionConnectionTypeTable.TypeID.Name, HardwiredConnectionConnectionTypeTable.Quantity.Name, connectionConnectionTypeTableJoin);
                 db.NonQueryCommand(commandString);
@@ -139,18 +146,57 @@ namespace EstimatingUtilitiesLibrary.Database
                 //commandString = String.Format("delete from {0}", NetworkConnectionChildrenTable.TableName);
                 //db.NonQueryCommand(commandString);
                 #endregion
-
                 #region Bid Controllers and panels
-                var controllerQuery = String.Format("select {0} as ControllerID from {1} where {0} not in (select {2} from {3})", ProvidedControllerTable.ID.Name, ProvidedControllerTable.TableName, SystemControllerTable.ControllerID.Name, SystemControllerTable.TableName);
-                var bidControllerJoin = String.Format("select {1} as BidID, ControllerID from {0} join ({2}) ", BidInfoTable.TableName, BidInfoTable.ID.Name, controllerQuery);
-                commandString = String.Format("insert into {0} ({1}, {2}) {3}", BidControllerTable.TableName, BidControllerTable.BidID.Name, BidControllerTable.ControllerID.Name, bidControllerJoin);
+                if(dbType == DBType.Bid)
+                {
+                    var controllerQuery = String.Format("select {0} as ControllerID from {1} where {0} not in (select {2} from {3})", ProvidedControllerTable.ID.Name, ProvidedControllerTable.TableName, SystemControllerTable.ControllerID.Name, SystemControllerTable.TableName);
+                    var bidControllerJoin = String.Format("select {1} as BidID, ControllerID from {0} join ({2}) ", BidInfoTable.TableName, BidInfoTable.ID.Name, controllerQuery);
+                    commandString = String.Format("insert into {0} ({1}, {2}) {3}", BidControllerTable.TableName, BidControllerTable.BidID.Name, BidControllerTable.ControllerID.Name, bidControllerJoin);
+                    db.NonQueryCommand(commandString);
+
+                    var panelQuery = String.Format("select {0} as PanelID from {1} where {0} not in (select {2} from {3})", PanelTable.ID.Name, PanelTable.TableName, SystemPanelTable.PanelID.Name, SystemPanelTable.TableName);
+                    var bidPanelJoin = String.Format("select {1} as BidID, PanelID from {0} join ({2}) ", BidInfoTable.TableName, BidInfoTable.ID.Name, panelQuery);
+                    commandString = String.Format("insert into {0} ({1}, {2}) {3}", BidPanelTable.TableName, BidPanelTable.BidID.Name, BidPanelTable.PanelID.Name, bidPanelJoin);
+                    db.NonQueryCommand(commandString);
+                }
+                #endregion
+
+                #region Manager Templates
+                Guid templatesGuid = Guid.NewGuid();
+                var idField = dbType == DBType.Bid ? BidInfoTable.ID.Name : TemplatesInfoTable.ID.Name;
+                var managerTable = dbType == DBType.Bid ? BidInfoTable.TableName : TemplatesInfoTable.TableName;
+
+                var managerID = String.Format("select {0} from {1} limit 1", idField, managerTable);
+                commandString = String.Format("insert into {0} ({1}, {2}) values (({3}), '{4}')",
+                    ManagerTemplatesTable.TableName, ManagerTemplatesTable.ManagerID.Name, ManagerTemplatesTable.TemplatesID.Name, managerID, templatesGuid.ToString());
                 db.NonQueryCommand(commandString);
 
-                var panelQuery = String.Format("select {0} as PanelID from {1} where {0} not in (select {2} from {3})", PanelTable.ID.Name, PanelTable.TableName, SystemPanelTable.PanelID.Name, SystemPanelTable.TableName);
-                var bidPanelJoin = String.Format("select {1} as BidID, PanelID from {0} join ({2}) ", BidInfoTable.TableName, BidInfoTable.ID.Name, panelQuery);
-                commandString = String.Format("insert into {0} ({1}, {2}) {3}", BidPanelTable.TableName, BidPanelTable.BidID.Name, BidPanelTable.PanelID.Name, bidPanelJoin);
+                commandString = String.Format("update {0} set {1} = '{2}'", TemplatesControllerTable.TableName, TemplatesControllerTable.TemplatesID.Name, templatesGuid.ToString());
                 db.NonQueryCommand(commandString);
 
+                commandString = String.Format("update {0} set {1} = '{2}'", TemplatesEquipmentTable.TableName, TemplatesEquipmentTable.TemplatesID.Name, templatesGuid.ToString());
+                db.NonQueryCommand(commandString);
+
+                commandString = String.Format("update {0} set {1} = '{2}'", TemplatesSystemTable.TableName, TemplatesSystemTable.TemplatesID.Name, templatesGuid.ToString());
+                db.NonQueryCommand(commandString);
+
+                commandString = String.Format("update {0} set {1} = '{2}'", TemplatesSubScopeTable.TableName, TemplatesSubScopeTable.TemplatesID.Name, templatesGuid.ToString());
+                db.NonQueryCommand(commandString);
+
+                commandString = String.Format("update {0} set {1} = '{2}'", TemplatesMiscCostTable.TableName, TemplatesMiscCostTable.TemplatesID.Name, templatesGuid.ToString());
+                db.NonQueryCommand(commandString);
+
+                commandString = String.Format("update {0} set {1} = '{2}'", TemplatesPanelTable.TableName, TemplatesPanelTable.TemplatesID.Name, templatesGuid.ToString());
+                db.NonQueryCommand(commandString);
+                
+                commandString = String.Format("insert into {0} ({1}) select {2} from {3}", TemplatesParametersTable.TableName, TemplatesParametersTable.ParametersID.Name, ParametersTable.ID.Name, ParametersTable.TableName);
+                db.NonQueryCommand(commandString);
+
+                commandString = String.Format("update {0} set {1} = '{2}'", TemplatesParametersTable.TableName, TemplatesParametersTable.TemplatesID.Name, templatesGuid.ToString());
+                db.NonQueryCommand(commandString);
+
+                commandString = String.Format("insert into {0} values ('{1}')", ScopeTemplatesTable.TableName, templatesGuid.ToString());
+                db.NonQueryCommand(commandString);
                 #endregion
             }
         }

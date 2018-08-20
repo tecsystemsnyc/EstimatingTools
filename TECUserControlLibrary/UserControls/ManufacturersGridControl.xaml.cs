@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,9 +16,9 @@ namespace TECUserControlLibrary.UserControls
         /// <summary>
         /// Gets or sets the DevicesSource which is displayed
         /// </summary>
-        public ObservableCollection<TECManufacturer> ManufacturersSource
+        public IEnumerable<TECManufacturer> ManufacturersSource
         {
-            get { return (ObservableCollection<TECManufacturer>)GetValue(ManufacturersSourceProperty); }
+            get { return (IEnumerable<TECManufacturer>)GetValue(ManufacturersSourceProperty); }
             set { SetValue(ManufacturersSourceProperty, value); }
         }
 
@@ -25,8 +26,8 @@ namespace TECUserControlLibrary.UserControls
         /// Identified the DevicesSource dependency property
         /// </summary>
         public static readonly DependencyProperty ManufacturersSourceProperty =
-            DependencyProperty.Register("ManufacturersSource", typeof(ObservableCollection<TECManufacturer>),
-              typeof(ManufacturersGridControl), new PropertyMetadata(default(ObservableCollection<TECManufacturer>)));
+            DependencyProperty.Register("ManufacturersSource", typeof(IEnumerable<TECManufacturer>),
+              typeof(ManufacturersGridControl), new PropertyMetadata(default(IEnumerable<TECManufacturer>)));
 
 
         public TECManufacturer SelectedItem

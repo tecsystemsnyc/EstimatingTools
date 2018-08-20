@@ -396,7 +396,7 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<Guid, TECSubScope> subScopeConnectionChildrenRelationships = getOneToOneRelationships(new HardwiredConnectionChildrenTable(), subScope);
 
             List<TECHardwiredConnection> subScopeConnections = getObjectsFromTable(new SubScopeConnectionTable(), id => new TECHardwiredConnection(id, subScopeConnectionChildrenRelationships[id],
-                connectionParents[id], new TECHardwiredProtocol(hardwiredConnectionTypes[id])));
+                connectionParents[id], new TECHardwiredProtocol(hardwiredConnectionTypes.ValueOrNew(id))));
             List<TECNetworkConnection> networkConnections = getObjectsFromTable(new NetworkConnectionTable(), id => new TECNetworkConnection(id, connectionParents[id], connectionProtocol[id]));
             List<IControllerConnection> connections = new List<IControllerConnection>(subScopeConnections);
             connections.AddRange(networkConnections);

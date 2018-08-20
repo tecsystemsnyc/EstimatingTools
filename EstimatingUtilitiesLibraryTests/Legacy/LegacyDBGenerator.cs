@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
+namespace Legacy
 {
     internal class LegacyDBGenerator
     {
@@ -146,7 +146,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
             SQLiteDB.Connection.Close();
         }
 
-        private static void AddDataToTable(LegacyDB_1_6.TableBase table, List<string> values)
+        private static void AddDataToTable(TableBase table, List<string> values)
         {
             TableInfo info = new TableInfo(table);
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -190,7 +190,7 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         {
             List<string> values = new List<string>();
             values.Add("28561e73-2843-4f56-9c47-2b32031472f2");
-            values.Add("1.6.0.13");
+            //values.Add("1.6.0.13");
             AddDataToTable(new TemplatesInfoTable(), values);
         }
         private static void AddToBidParametersTable()
@@ -1613,14 +1613,14 @@ namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
         
         private static void CreateBidDB()
         {
-            foreach(Object table in LegacyDB_1_6.AllBidTables_1_6.Tables)
+            foreach(Object table in AllBidTables_1_6.Tables)
             {
                 createTableFromDefinition(table as TableBase);
             }
         } 
         private static void CreateTemplateDB()
         {
-            foreach (Object table in LegacyDB_1_6.AllTemplateTables_1_6.Tables)
+            foreach (Object table in AllTemplateTables_1_6.Tables)
             {
                 createTableFromDefinition(table as TableBase);
             }

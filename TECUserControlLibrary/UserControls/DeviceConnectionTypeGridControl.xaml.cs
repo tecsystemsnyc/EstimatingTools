@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,9 +16,9 @@ namespace TECUserControlLibrary.UserControls
         /// <summary>
         /// Gets or sets the DevicesSource which is displayed
         /// </summary>
-        public ObservableCollection<TECElectricalMaterial> ConnectionTypesSource
+        public IEnumerable<TECElectricalMaterial> ConnectionTypesSource
         {
-            get { return (ObservableCollection<TECElectricalMaterial>)GetValue(ConnectionTypesSourceProperty); }
+            get { return (IEnumerable<TECElectricalMaterial>)GetValue(ConnectionTypesSourceProperty); }
             set { SetValue(ConnectionTypesSourceProperty, value); }
         }
 
@@ -25,8 +26,8 @@ namespace TECUserControlLibrary.UserControls
         /// Identified the DevicesSource dependency property
         /// </summary>
         public static readonly DependencyProperty ConnectionTypesSourceProperty =
-            DependencyProperty.Register("ConnectionTypesSource", typeof(ObservableCollection<TECElectricalMaterial>),
-              typeof(DeviceConnectionTypeGridControl), new PropertyMetadata(default(ObservableCollection<TECElectricalMaterial>)));
+            DependencyProperty.Register("ConnectionTypesSource", typeof(IEnumerable<TECElectricalMaterial>),
+              typeof(DeviceConnectionTypeGridControl), new PropertyMetadata(default(IEnumerable<TECElectricalMaterial>)));
         
         #endregion
         public DeviceConnectionTypeGridControl()

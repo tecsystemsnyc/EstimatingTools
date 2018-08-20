@@ -188,10 +188,16 @@ namespace EstimatingUtilitiesLibrary.Database
             };
             worker.RunWorkerCompleted += (s, e) =>
             {
-                if (e.Result is T scopeManager)
+                if (e.Error != null)
+                {
+                    logger.Error("Error occured whille loadinng :" + path + " , Error: " + e.Error);
+                    notifyLoadComplete(null);
+                }
+                else if (e.Result is T scopeManager)
                 {
                     notifyLoadComplete(scopeManager);
-                } else
+                }
+                else
                 {
                     notifyLoadComplete(null);
                 }

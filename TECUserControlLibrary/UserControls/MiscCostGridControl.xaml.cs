@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,9 +16,9 @@ namespace TECUserControlLibrary.UserControls
         /// <summary>
         /// Gets or sets the DevicesSource which is displayed
         /// </summary>
-        public ObservableCollection<TECMisc> CostSource
+        public IEnumerable<TECMisc> CostSource
         {
-            get { return (ObservableCollection<TECMisc>)GetValue(CostSourceProperty); }
+            get { return (IEnumerable<TECMisc>)GetValue(CostSourceProperty); }
             set { SetValue(CostSourceProperty, value); }
         }
 
@@ -25,8 +26,8 @@ namespace TECUserControlLibrary.UserControls
         /// Identified the DevicesSource dependency property
         /// </summary>
         public static readonly DependencyProperty CostSourceProperty =
-            DependencyProperty.Register("CostSource", typeof(ObservableCollection<TECMisc>),
-              typeof(MiscCostGridControl), new PropertyMetadata(default(ObservableCollection<TECMisc>)));
+            DependencyProperty.Register("CostSource", typeof(IEnumerable<TECMisc>),
+              typeof(MiscCostGridControl), new PropertyMetadata(default(IEnumerable<TECMisc>)));
 
         
         public bool UserCanAddRows

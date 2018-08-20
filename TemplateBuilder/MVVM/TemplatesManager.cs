@@ -7,6 +7,7 @@ using NLog;
 using System;
 using System.Deployment.Application;
 using System.IO;
+using System.Windows;
 using TECUserControlLibrary.BaseVMs;
 using TECUserControlLibrary.Models;
 using TECUserControlLibrary.Utilities;
@@ -73,7 +74,7 @@ namespace TemplateBuilder.MVVM
             buildTitleString(path, "TemplateBuilder");
             if (path != "")
             {
-                databaseManager = new DatabaseManager<TECTemplates>(path);
+                databaseManager = new DatabaseManager<TECTemplates>(path);               
                 databaseManager.LoadComplete += handleLoaded;
                 ViewEnabled = false;
                 databaseManager.AsyncLoad();
@@ -86,13 +87,21 @@ namespace TemplateBuilder.MVVM
 
         protected override void handleLoaded(TECTemplates loaded)
         {
-            templates = loaded;
-            watcher = new ChangeWatcher(templates);
-            doStack = new DoStacker(watcher);
-            deltaStack = new DeltaStacker(watcher, templates);
+            if(loaded == null)
+            {
+                MessageBox.Show("There was an issue loading this file.");
+                splashVM.LoadingText = "";
+            }
+            else
+            {
+                templates = loaded;
+                watcher = new ChangeWatcher(templates);
+                doStack = new DoStacker(watcher);
+                deltaStack = new DeltaStacker(watcher, templates);
 
-            EditorVM = new TemplatesEditorVM(templates);
-            CurrentVM = EditorVM;
+                EditorVM = new TemplatesEditorVM(templates);
+                CurrentVM = EditorVM;
+            }
             ViewEnabled = true;
         }
 

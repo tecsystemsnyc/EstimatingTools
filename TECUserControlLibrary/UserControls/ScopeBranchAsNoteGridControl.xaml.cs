@@ -1,4 +1,5 @@
 ﻿using EstimatingLibrary;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,9 +12,9 @@ namespace TECUserControlLibrary.UserControls
     /// </summary>
     public partial class ScopeBranchAsNoteGridControl : UserControl
     {
-        public ObservableCollection<TECScopeBranch> ScopeTreeSource
+        public IEnumerable<TECScopeBranch> ScopeTreeSource
         {
-            get { return (ObservableCollection<TECScopeBranch>)GetValue(ScopeTreeSourceProperty); }
+            get { return (IEnumerable<TECScopeBranch>)GetValue(ScopeTreeSourceProperty); }
             set { SetValue(ScopeTreeSourceProperty, value); }
         }
 
@@ -21,8 +22,8 @@ namespace TECUserControlLibrary.UserControls
         /// Identified the SystemSource dependency property
         /// </summary>
         public static readonly DependencyProperty ScopeTreeSourceProperty =
-            DependencyProperty.Register("ScopeTreeSource", typeof(ObservableCollection<TECScopeBranch>),
-              typeof(ScopeBranchAsNoteGridControl), new PropertyMetadata(default(ObservableCollection<TECScopeBranch>)));
+            DependencyProperty.Register("ScopeTreeSource", typeof(IEnumerable<TECScopeBranch>),
+              typeof(ScopeBranchAsNoteGridControl), new PropertyMetadata(default(IEnumerable<TECScopeBranch>)));
 
         public ICommand AddCommand
         {

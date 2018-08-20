@@ -1,10 +1,11 @@
 ﻿using EstimatingLibrary;
 using EstimatingLibrary.Interfaces;
+using EstimatingUtilitiesLibraryTests;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace EstimatingUtilitiesLibraryTests.LegacyDB_1_6
+namespace Legacy
 {
     #region Table Definitions
     #region Object Tables

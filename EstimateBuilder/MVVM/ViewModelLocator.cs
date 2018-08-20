@@ -10,7 +10,7 @@
 */
 
 using GalaSoft.MvvmLight.Ioc;
-using Microsoft.Practices.ServiceLocation;
+using CommonServiceLocator;
 using TECUserControlLibrary.ViewModels;
 
 namespace EstimateBuilder.MVVM

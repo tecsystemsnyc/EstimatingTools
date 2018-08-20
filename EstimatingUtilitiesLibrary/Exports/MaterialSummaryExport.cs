@@ -804,13 +804,13 @@ namespace EstimatingUtilitiesLibrary.Exports
         #region Cell Format Insert Methods
         private static void insertDouble(this IXLCell cell, double doub)
         {
-            cell.DataType = XLCellValues.Number;
+            cell.DataType = XLDataType.Number;
             cell.Style.NumberFormat.Format = "0.00";
             cell.Value = doub;
         }
         private static void insertDollarDouble(this IXLCell cell, double doub)
         {
-            cell.DataType = XLCellValues.Number;
+            cell.DataType = XLDataType.Number;
             cell.Style.NumberFormat.Format = Turnover.accountingFormat;
             cell.Value = doub;
         }
