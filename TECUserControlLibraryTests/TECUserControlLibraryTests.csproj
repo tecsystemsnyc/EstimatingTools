@@ -105,8 +105,6 @@
     <Compile Include="ViewModels\MenuVMTests.cs" />
     <Compile Include="ViewModels\SystemSummaryVMTests.cs" />
     <Compile Include="ViewModelTests.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\ViewModelLocator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="NLog.config">

@@ -39,7 +39,7 @@ namespace EstimatingLibrary
             return new TECManufacturer(this);
         }
 
-        public override object DragDropCopy(TECScopeManager manager)
+        public override object DropData()
         {
             return this;
         }

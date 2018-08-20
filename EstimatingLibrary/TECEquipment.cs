@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
 {
-    public class TECEquipment : TECLocated, INotifyPointChanged, IDDCopiable, ITypicalable, ICatalogContainer
+    public class TECEquipment : TECLocated, INotifyPointChanged, IDragDropable, ITypicalable, ICatalogContainer
     {
         #region Properties
 
@@ -58,11 +58,9 @@ namespace EstimatingLibrary
         #endregion //Constructors
 
         #region Methods
-        public object DragDropCopy(TECScopeManager scopeManager)
+        public object DropData()
         {
             TECEquipment outEquip = new TECEquipment(this);
-            outEquip.IsTypical = this.IsTypical;
-            ModelLinkingHelper.LinkScopeItem(outEquip, scopeManager);
             return outEquip;
         }
 

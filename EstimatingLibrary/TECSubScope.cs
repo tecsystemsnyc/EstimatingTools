@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace EstimatingLibrary
 {
-    public class TECSubScope : TECLocated, INotifyPointChanged, IDDCopiable, ITypicalable, IConnectable, IInterlockable, ICatalogContainer
+    public class TECSubScope : TECLocated, INotifyPointChanged, IDragDropable, ITypicalable, IConnectable, IInterlockable, ICatalogContainer
     {
         #region Properties
         public ObservableCollection<IEndDevice> Devices { get; } = new ObservableCollection<IEndDevice>();
@@ -112,11 +112,9 @@ namespace EstimatingLibrary
 
         #region Methods
 
-        public object DragDropCopy(TECScopeManager scopeManager)
+        public object DropData()
         {
             TECSubScope outScope = new TECSubScope(this);
-            outScope.IsTypical = this.IsTypical;
-            ModelLinkingHelper.LinkScopeItem(outScope, scopeManager);
             return outScope;
         }
         

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECFBOController : TECController, INotifyPointChanged, IDDCopiable
+    public class TECFBOController : TECController, INotifyPointChanged, IDragDropable
     {
         #region Properties
         private readonly TECCatalogs catalogs;
@@ -80,12 +80,10 @@ namespace EstimatingLibrary
         }
         #endregion
 
-        #region IDDCopiable
-        Object IDDCopiable.DragDropCopy(TECScopeManager scopeManager)
+        #region IDragDropable
+        Object IDragDropable.DropData()
         {
             var outController = new TECFBOController(this);
-            outController.IsTypical = this.IsTypical;
-            ModelLinkingHelper.LinkScopeItem(outController, scopeManager);
             return outController;
         }
         #endregion

@@ -4,7 +4,7 @@ using System;
 
 namespace EstimatingLibrary
 {
-    public class TECMisc : TECCost, IDDCopiable, ITypicalable
+    public class TECMisc : TECCost, IDragDropable, ITypicalable
     {
         #region Fields
         private int _quantity;
@@ -88,7 +88,7 @@ namespace EstimatingLibrary
         #endregion
 
         #region Methods
-        public object DragDropCopy(TECScopeManager scopeManager)
+        public object DropData()
         {
             return new TECMisc(this);
         }

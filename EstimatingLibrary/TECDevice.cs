@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
 {
-    public class TECDevice : TECHardware, IDDCopiable, IEndDevice, ICatalog<TECDevice>, ICatalogContainer
+    public class TECDevice : TECHardware, IDragDropable, IEndDevice, ICatalog<TECDevice>, ICatalogContainer
     {
         #region Constants
         private const CostType COST_TYPE = CostType.TEC;
@@ -40,16 +40,9 @@ namespace EstimatingLibrary
         #endregion //Constructors
 
         #region Methods
-        public new Object DragDropCopy(TECScopeManager scopeManager)
+        public new Object DropData()
         {
-            foreach(TECDevice device in scopeManager.Catalogs.Devices)
-            {
-                if(device.Guid == this.Guid)
-                {
-                    return device;
-                }
-            }
-            throw new Exception();
+            return this;
         }
 
         private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)

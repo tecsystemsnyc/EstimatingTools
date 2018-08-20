@@ -4,7 +4,7 @@ using System;
 
 namespace EstimatingLibrary
 {
-    public abstract class TECHardware : TECCost, IDDCopiable, ICatalogContainer
+    public abstract class TECHardware : TECCost, IDragDropable, ICatalogContainer
     {
         #region Fields
         private TECManufacturer _manufacturer;
@@ -85,7 +85,7 @@ namespace EstimatingLibrary
         #endregion
 
         #region Methods
-        public object DragDropCopy(TECScopeManager scopeManager)
+        public object DropData()
         {
             return this;
         }

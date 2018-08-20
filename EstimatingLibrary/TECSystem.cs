@@ -7,7 +7,7 @@ using System.Collections.Specialized;
 
 namespace EstimatingLibrary
 {
-    public class TECSystem : TECLocated, INotifyPointChanged, IDDCopiable, ITypicalable
+    public class TECSystem : TECLocated, INotifyPointChanged, IDragDropable, ITypicalable
     {
         #region Fields
         private ObservableCollection<TECController> _controllers = new ObservableCollection<TECController>();
@@ -28,7 +28,7 @@ namespace EstimatingLibrary
 
         public TECSystem() : this(Guid.NewGuid()) { }
 
-        public TECSystem(TECSystem source, TECScopeManager manager, Dictionary<Guid, Guid> guidDictionary = null,
+        public TECSystem(TECSystem source, Dictionary<Guid, Guid> guidDictionary = null,
             ObservableListDictionary<ITECObject> characteristicReference = null,
             Tuple<TemplateSynchronizer<TECEquipment>, TemplateSynchronizer<TECSubScope>> synchronizers = null) : this()
         {
@@ -137,10 +137,9 @@ namespace EstimatingLibrary
             return success;
         }
 
-        public virtual object DragDropCopy(TECScopeManager scopeManager)
+        public virtual object DropData()
         {
-            TECSystem outSystem = new TECSystem(this, scopeManager);
-            outSystem.IsTypical = this.IsTypical;
+            TECSystem outSystem = new TECSystem(this);
             return outSystem;
         }
 

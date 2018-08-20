@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECProtocol : TECLabeled, IRelatable, IProtocol, ICatalogContainer, ICatalog<TECProtocol>
+    public class TECProtocol : TECLabeled, IRelatable, IProtocol, ICatalogContainer, ICatalog<TECProtocol>, IDragDropable
     {
         private ObservableCollection<TECConnectionType> _connectionTypes;
         
@@ -103,6 +103,15 @@ namespace EstimatingLibrary
                 removedConnectionType = CommonUtilities.OptionallyReplaceAll(type, this.ConnectionTypes, replacement as TECConnectionType);
             }
             return removedConnectionType;
+        }
+
+        #endregion
+
+        #region IDragDropable
+
+        public object DropData()
+        {
+            return this;
         }
         #endregion
     }

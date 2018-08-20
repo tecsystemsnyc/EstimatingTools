@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace EstimatingLibrary
 {
-    public class TECPanel : TECLocated, IDDCopiable, ITypicalable, ICatalogContainer
+    public class TECPanel : TECLocated, IDragDropable, ITypicalable, ICatalogContainer
     {
         #region Properties
         private TECPanelType _type;
@@ -46,10 +46,9 @@ namespace EstimatingLibrary
                 Controllers.Add(controller.CopyController(guidDictionary));
             }
         }
-        public object DragDropCopy(TECScopeManager scopeManager)
+        public object DropData()
         {
             var outPanel = new TECPanel(this);
-            ModelLinkingHelper.LinkScopeItem(outPanel, scopeManager);
             return outPanel;
         }
         

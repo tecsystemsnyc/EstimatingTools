@@ -3,7 +3,7 @@ using System;
 
 namespace EstimatingLibrary
 {
-    public class TECLabeled : TECObject, IDDCopiable
+    public class TECLabeled : TECObject, IDragDropable
     {
         #region Properties
 
@@ -37,7 +37,7 @@ namespace EstimatingLibrary
 
         #endregion //Constructors
         
-        public virtual object DragDropCopy(TECScopeManager scopeManager)
+        public virtual object DropData()
         {
             return new TECLabeled(this);
         }

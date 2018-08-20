@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECAssociatedCost : TECTagged, INotifyCostChanged, ICatalog<TECAssociatedCost>, IDDCopiable, ICost
+    public class TECAssociatedCost : TECTagged, INotifyCostChanged, ICatalog<TECAssociatedCost>, IDragDropable, ICost
     {
         protected double _cost = 0;
         protected double _labor = 0;
@@ -71,7 +71,7 @@ namespace EstimatingLibrary
             return new TECAssociatedCost(this);
         }
 
-        public object DragDropCopy(TECScopeManager scopeManager)
+        public object DropData()
         {
             return this;
         }

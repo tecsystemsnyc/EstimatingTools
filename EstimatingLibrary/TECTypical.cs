@@ -277,7 +277,7 @@ namespace EstimatingLibrary
             watcher.TypicalChanged += handleThisChanged;
         }
 
-        public override object DragDropCopy(TECScopeManager scopeManager)
+        public override object DropData()
         {
             Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
             TECTypical outSystem = new TECTypical(this, guidDictionary);

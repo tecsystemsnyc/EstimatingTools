@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECProvidedController : TECController, IDDCopiable, ICatalogContainer
+    public class TECProvidedController : TECController, IDragDropable, ICatalogContainer
     {
         #region Properties
         private TECControllerType _type;
@@ -277,12 +277,10 @@ namespace EstimatingLibrary
         }
         #endregion
 
-        #region IDDCopiable
-        Object IDDCopiable.DragDropCopy(TECScopeManager scopeManager)
+        #region IDragDropable
+        Object IDragDropable.DropData()
         {
             var outController = new TECProvidedController(this);
-            outController.IsTypical = this.IsTypical;
-            ModelLinkingHelper.LinkScopeItem(outController, scopeManager);
             return outController;
         }
         #endregion
