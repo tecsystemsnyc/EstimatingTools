@@ -117,7 +117,7 @@ namespace EstimateBuilder.MVVM
         private void createNewExecute()
         {
             LoadingText = "Loading...";
-            if (!File.Exists(DefaultTemplatesPath))
+            if (!File.Exists(DefaultTemplatesPath) && DefaultTemplatesPath != "")
             {
                 MessageBox.Show("Templates file no longer exist at that path.");
                 LoadingText = "";

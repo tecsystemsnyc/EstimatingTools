@@ -210,6 +210,7 @@ namespace EstimateBuilder.MVVM
             ModelLinkingHelper.LinkBidToCatalogs(bid);
             estimate = new TECEstimator(bid, watcher);
             EditorVM = new EstimateEditorVM(bid, watcher, estimate);
+            CurrentVM = EditorVM;
             ViewEnabled = true;
         }
 
