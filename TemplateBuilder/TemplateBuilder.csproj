@@ -31,7 +31,7 @@
     <ProductName>Template Builder</ProductName>
     <PublisherName>TEC Systems</PublisherName>
     <SuiteName>Estimating Tools</SuiteName>
-    <ApplicationRevision>102</ApplicationRevision>
+    <ApplicationRevision>103</ApplicationRevision>
     <ApplicationVersion>1.8.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
