@@ -20,7 +20,7 @@ namespace Models
             TECBid bid = ModelCreation.TestBid(rand, 2);
             TECSubScope subScope = ModelCreation.TestSubScope(bid.Catalogs, rand);
 
-            var copy = subScope.DragDropCopy(bid) as TECSubScope;
+            var copy = subScope.DropData() as TECSubScope;
 
             Assert.AreEqual(subScope.Name, copy.Name);
             Assert.IsTrue(subScope.CostBatch.CostsEqual(copy.CostBatch));

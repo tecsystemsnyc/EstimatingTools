@@ -19,7 +19,7 @@ namespace Models
             TECBid bid = ModelCreation.TestBid(rand);
             TECPanel panel = ModelCreation.TestPanel(bid.Catalogs, rand);
 
-            TECPanel copy = panel.DragDropCopy(bid) as TECPanel;
+            TECPanel copy = panel.DropData() as TECPanel;
 
             Assert.AreEqual(panel.Name, copy.Name);
             Assert.IsTrue(panel.CostBatch.CostsEqual(copy.CostBatch));

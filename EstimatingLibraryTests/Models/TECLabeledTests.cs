@@ -19,7 +19,7 @@ namespace Models
             TECLabeled labeled = new TECLabeled();
             labeled.Label = "test";
 
-            TECLabeled copy = labeled.DragDropCopy(bid) as TECLabeled;
+            TECLabeled copy = labeled.DropData() as TECLabeled;
 
             Assert.AreNotEqual(labeled.Guid, copy.Guid);
             Assert.AreEqual(labeled.Label, copy.Label);

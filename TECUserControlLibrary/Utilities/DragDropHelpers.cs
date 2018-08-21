@@ -169,7 +169,7 @@ namespace TECUserControlLibrary.Utilities
             {
                 dropMethod = item =>
                 {
-                    return ((IDDCopiable)item).DragDropCopy(scopeManager);
+                    return ((IDragDropable)item).DropData();
                 };
             }
             Drop(dropInfo, dropMethod, true);
@@ -181,7 +181,7 @@ namespace TECUserControlLibrary.Utilities
 
             bool dropCondition(object sourceItem, Type sourceType, Type targetType)
             {
-                bool isDragDropable = sourceItem is IDDCopiable;
+                bool isDragDropable = sourceItem is IDragDropable;
                 bool sourceNotNull = sourceItem != null;
                 bool sourceMatchesTarget = sourceType == typeof(TECSystem) && (targetType == typeof(TECTypical) || targetType == typeof(TECSystem));
                 return sourceNotNull && sourceMatchesTarget && isDragDropable;
@@ -194,7 +194,7 @@ namespace TECUserControlLibrary.Utilities
 
             TECTypical copySystem(object sourceItem)
             {
-                TECSystem copiedSystem = (sourceItem as TECSystem).DragDropCopy(bid) as TECSystem;
+                TECSystem copiedSystem = (sourceItem as TECSystem).DropData() as TECSystem;
                 return new TECTypical(copiedSystem, bid);
             }
         }
@@ -244,7 +244,7 @@ namespace TECUserControlLibrary.Utilities
 
         public static bool StandardDropCondition(object sourceItem, Type sourceType, Type targetType)
         {
-            bool isDragDropable = sourceItem is IDDCopiable;
+            bool isDragDropable = sourceItem is IDragDropable;
             bool sourceNotNull = sourceItem != null;
             bool sourceMatchesTarget = targetType.IsInstanceOfType(sourceItem);
             return sourceNotNull && (sourceMatchesTarget) && isDragDropable;

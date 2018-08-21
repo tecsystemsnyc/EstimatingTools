@@ -29,7 +29,7 @@ namespace Models
         public void DragDropCopyTest()
         {
             TECAssociatedCost cost = new TECAssociatedCost(CostType.TEC);
-            TECAssociatedCost copiedCost = cost.DragDropCopy(new TECBid()) as TECAssociatedCost;
+            TECAssociatedCost copiedCost = cost.DropData() as TECAssociatedCost;
 
             Assert.AreEqual(cost, copiedCost);
         }

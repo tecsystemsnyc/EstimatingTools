@@ -48,7 +48,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             if (dropInfo.Data is TECTypical typ)
             {
-                BoxItems.Add(new TECSystem((typ as TECSystem), manager));
+                BoxItems.Add(new TECSystem(typ as TECSystem));
             }
             else
             {

@@ -34,7 +34,7 @@ namespace Models
             TECBid bid = ModelCreation.TestBid(rand);
             TECMisc misc = ModelCreation.TestMisc(bid.Catalogs, rand, CostType.TEC);
 
-            TECMisc copy = misc.DragDropCopy(bid) as TECMisc;
+            TECMisc copy = misc.DropData() as TECMisc;
 
             Assert.AreEqual(misc.Name, copy.Name);
             Assert.AreEqual(misc.Type, copy.Type);

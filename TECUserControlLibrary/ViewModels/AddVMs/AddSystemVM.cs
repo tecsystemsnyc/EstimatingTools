@@ -63,7 +63,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
                     TECSystem system = null;
                     if(underlyingTemplate != null)
                     {
-                        system = new TECSystem(underlyingTemplate, templates,
+                        system = new TECSystem(underlyingTemplate,
                         synchronizers: new Tuple<TemplateSynchronizer<TECEquipment>, TemplateSynchronizer<TECSubScope>>(templates.EquipmentSynchronizer, templates.SubScopeSynchronizer));
                         system.CopyPropertiesFromScope(ToAdd);
                     } else
@@ -81,7 +81,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         internal void SetTemplate(TECSystem system)
         {
             underlyingTemplate = system;
-            ToAdd = new TECSystem(system, parent);
+            ToAdd = new TECSystem(system);
         }
     }
 }

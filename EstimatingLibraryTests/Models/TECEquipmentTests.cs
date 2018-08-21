@@ -69,7 +69,7 @@ namespace Models
             TECEquipment equip = ModelCreation.TestEquipment(bid.Catalogs, rand);
             bid.Systems.First().Equipment.Add(equip);
 
-            TECEquipment copy = equip.DragDropCopy(bid) as TECEquipment;
+            TECEquipment copy = equip.DropData() as TECEquipment;
 
             Assert.AreEqual(equip.Name, copy.Name);
             Assert.AreEqual(equip.SubScope.Count, copy.SubScope.Count);

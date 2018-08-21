@@ -431,7 +431,7 @@ namespace TECUserControlLibrary.ViewModels
                     var controllerTypes = Templates == null ? Bid.Catalogs.ControllerTypes : Templates.Catalogs.ControllerTypes;
                     SelectedVM = addControllerMethod != null ? new AddControllerVM(addControllerMethod, controllerTypes, scopeManager) :
                         new AddControllerVM(SelectedSystem, controllerTypes, scopeManager);
-                    TECProvidedController dropped = (TECProvidedController)((IDDCopiable)controller).DragDropCopy(scopeManager);
+                    TECProvidedController dropped = (TECProvidedController)((IDragDropable)controller).DropData();
                     ((AddControllerVM)SelectedVM).SetTemplate(dropped);
                     ((AddControllerVM)SelectedVM).SelectedType = dropped.Type;
                 }

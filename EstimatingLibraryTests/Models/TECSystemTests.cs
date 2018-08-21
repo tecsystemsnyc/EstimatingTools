@@ -39,7 +39,7 @@ namespace Models
             templateEquip.SubScope.Add(equipSS);
 
             //Act
-            TECSystem sysCopy = new TECSystem(templateSys, templates, synchronizers: new Tuple<TemplateSynchronizer<TECEquipment>, TemplateSynchronizer<TECSubScope>>(equipSync, ssSync));
+            TECSystem sysCopy = new TECSystem(templateSys, synchronizers: new Tuple<TemplateSynchronizer<TECEquipment>, TemplateSynchronizer<TECSubScope>>(equipSync, ssSync));
 
             //Assert
             TECEquipment tempEquipCopy = sysCopy.Equipment[0];
@@ -79,7 +79,7 @@ namespace Models
             TECBid bid = ModelCreation.TestBid(rand);
             TECSystem originalSystem = ModelCreation.TestSystem(bid.Catalogs, rand);
 
-            var copy = new TECSystem(originalSystem, bid);
+            var copy = new TECSystem(originalSystem);
             
             //Not fully covered
             Assert.AreEqual(originalSystem.Name, copy.Name);

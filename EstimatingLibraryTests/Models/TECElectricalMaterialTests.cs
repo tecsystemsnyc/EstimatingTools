@@ -19,7 +19,7 @@ namespace Models
             TECBid bid = new TECBid();
             TECElectricalMaterial dev = new TECElectricalMaterial();
             bid.Catalogs.Add(dev);
-            var copy = dev.DragDropCopy(bid);
+            var copy = dev.DropData();
 
             Assert.AreEqual(dev, copy);
         }

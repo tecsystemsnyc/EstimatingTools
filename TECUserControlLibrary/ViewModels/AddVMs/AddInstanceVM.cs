@@ -118,7 +118,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
         
         public AddInstanceVM(TECTypical typical, TECBid bid) : base(bid)
         {
-            toAdd = new TECSystem(typical, bid);
+            toAdd = new TECSystem(typical);
             parent = typical;
             this.bid = bid;
             Locations = this.bid.Locations;

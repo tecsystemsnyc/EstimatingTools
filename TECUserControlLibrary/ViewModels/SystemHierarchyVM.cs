@@ -256,9 +256,9 @@ namespace TECUserControlLibrary.ViewModels
             else
             {
                 object dropped = null;
-                if(!IsTemplates && dropInfo.Data is IDDCopiable dropable)
+                if(!IsTemplates && dropInfo.Data is IDragDropable dropable)
                 {
-                    dropped = dropable.DragDropCopy(scopeManager);
+                    dropped = dropable.DropData();
                 } else
                 {
                     dropped = dropInfo.Data;
@@ -281,7 +281,7 @@ namespace TECUserControlLibrary.ViewModels
                 }
                 else if (dropped is IEndDevice)
                 {
-                    DragDropHelpers.Drop(dropInfo, obj => SelectedSubScope.AddDevice((obj as IDDCopiable).DragDropCopy(scopeManager) as IEndDevice), false);
+                    DragDropHelpers.Drop(dropInfo, obj => SelectedSubScope.AddDevice((obj as IDragDropable).DropData() as IEndDevice), false);
                 }
                 else if (dropped is TECMisc || dropped is TECCost)
                 {

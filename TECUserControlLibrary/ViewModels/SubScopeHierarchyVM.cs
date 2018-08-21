@@ -197,7 +197,7 @@ namespace TECUserControlLibrary.ViewModels
             }
             else if (dropInfo.Data is IEndDevice)
             {
-                DragDropHelpers.Drop(dropInfo, obj => SelectedSubScope.AddDevice((obj as IDDCopiable).DragDropCopy(scopeManager) as IEndDevice), false);
+                DragDropHelpers.Drop(dropInfo, obj => SelectedSubScope.AddDevice((obj as IDragDropable).DropData() as IEndDevice), false);
             }
         }
 

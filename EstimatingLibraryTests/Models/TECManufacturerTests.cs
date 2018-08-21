@@ -29,7 +29,7 @@ namespace Models
         public void DragDropCopyTest()
         {
             TECManufacturer manufacturer = new TECManufacturer();
-            var copy = manufacturer.DragDropCopy(new TECBid()) as TECManufacturer;
+            var copy = manufacturer.DropData() as TECManufacturer;
 
             Assert.AreEqual(manufacturer, copy);
         }

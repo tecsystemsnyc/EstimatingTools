@@ -29,7 +29,7 @@ namespace TECUserControlLibrary.ViewModels.SummaryVMs
             {
                 _selectedSystem = value;
                 RaisePropertyChanged("SelectedSystem");
-                Selected = value != null ? new ScopeSummaryItem(new TECSystem(value.Typical, bid), bid.Parameters, bid.Duration) : null;
+                Selected = value != null ? new ScopeSummaryItem(new TECSystem(value.Typical), bid.Parameters, bid.Duration) : null;
             }
         }
         public ScopeSummaryItem SelectedRiser

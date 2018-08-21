@@ -37,9 +37,9 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
                 {
                     return ((dynamic)item).CatalogCopy();
                 }
-                else if (item is IDDCopiable dropable)
+                else if (item is IDragDropable dropable)
                 {
-                    return dropable.DragDropCopy(Templates);
+                    return dropable.DropData();
                 }
                 else
                 {
