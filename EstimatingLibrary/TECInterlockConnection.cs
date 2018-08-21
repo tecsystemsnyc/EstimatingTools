@@ -39,14 +39,15 @@ namespace EstimatingLibrary
         }
         private void connectionTypesCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
+            connection.UpdateProtocol(new TECHardwiredProtocol(ConnectionTypes));
             CollectionChangedHandlers.CollectionChangedHandler(sender, e, "ConnectionTypes", this, notifyCombinedChanged, notifyCostChanged);
         }
 
         #region IConnection
-        public double ConduitLength { get => ((IConnection)connection).ConduitLength; set => ((IConnection)connection).ConduitLength = value; }
-        public TECElectricalMaterial ConduitType { get => ((IConnection)connection).ConduitType; set => ((IConnection)connection).ConduitType = value; }
-        public bool IsPlenum { get => ((IConnection)connection).IsPlenum; set => ((IConnection)connection).IsPlenum = value; }
-        public double Length { get => ((IConnection)connection).Length; set => ((IConnection)connection).Length = value; }
+        public double ConduitLength { get => connection.ConduitLength; set => connection.ConduitLength = value; }
+        public TECElectricalMaterial ConduitType { get => connection.ConduitType; set => connection.ConduitType = value; }
+        public bool IsPlenum { get => connection.IsPlenum; set => connection.IsPlenum = value; }
+        public double Length { get => connection.Length; set => connection.Length = value; }
 
         public IProtocol Protocol => ((IConnection)connection).Protocol;
 
@@ -67,13 +68,16 @@ namespace EstimatingLibrary
             RelatableMap saveList = new RelatableMap();
             saveList.AddRange(base.propertyObjects());
             saveList.AddRange(connection.PropertyObjects);
+            saveList.AddRange(this.ConnectionTypes, "ConnectionTypes");
             return saveList;
         }
         protected override RelatableMap linkedObjects()
         {
             RelatableMap saveList = new RelatableMap();
-            saveList.AddRange(base.propertyObjects());
-            saveList.AddRange(connection.PropertyObjects);
+            saveList.AddRange(base.linkedObjects());
+            saveList.AddRange(connection.LinkedObjects);
+            saveList.AddRange(this.ConnectionTypes, "ConnectionTypes");
+
             return saveList;
         }
 
@@ -125,21 +129,34 @@ namespace EstimatingLibrary
 
         private class ConnectionWrapper : TECConnection
         {
-            public override IProtocol Protocol { get; }
-
+            private IProtocol protocol;
+            public override IProtocol Protocol
+            {
+                get
+                {
+                    return protocol;
+                }
+            }
+            
             public ConnectionWrapper(IProtocol protocol) : base()
             {
-                this.Protocol = protocol;
+                this.protocol = protocol;
             }
 
             public ConnectionWrapper(Guid guid, IProtocol protocol) : base(guid)
             {
-                this.Protocol = protocol;
+                this.protocol = protocol;
             }
 
             public ConnectionWrapper(TECConnection connectionSource, Dictionary<Guid, Guid> guidDictionary = null) : base(connectionSource, guidDictionary)
             {
-                this.Protocol = connectionSource.Protocol;
+                this.protocol = connectionSource.Protocol;
+            }
+
+            public void UpdateProtocol(IProtocol protocol)
+            {
+                this.protocol = protocol;
+                raisePropertyChanged("Protocol");
             }
         }
     }

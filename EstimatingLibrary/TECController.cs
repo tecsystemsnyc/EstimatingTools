@@ -116,13 +116,14 @@ namespace EstimatingLibrary
         }
         public bool CanConnect(IConnectable connectable, IProtocol protocol)
         {
-            return connectable != null && CompatibleProtocols(connectable).Contains(protocol);
+            return connectable != null &&
+                (CompatibleProtocols(connectable).Contains(protocol) || this.ChildrenConnections.OfType<TECNetworkConnection>().Select(x => x.Protocol).Contains(protocol));
         }
         public bool CanConnect(IConnectable connectable)
         {
             return connectable != null && CompatibleProtocols(connectable).Count > 0;
         }
-        public IControllerConnection Connect(IConnectable connectable, IProtocol protocol, bool attemptExisiting = false)
+        public IControllerConnection Connect(IConnectable connectable, IProtocol protocol)
         {
             if (!CanConnect(connectable, protocol)) return null;
             IControllerConnection connection;
@@ -134,13 +135,9 @@ namespace EstimatingLibrary
             }
             else if (protocol is TECProtocol network)
             {
-                TECNetworkConnection netConnect = null;
-                if (attemptExisiting)
-                {
-                    netConnect = ChildrenConnections.Where(x => x.Protocol == protocol).FirstOrDefault() as TECNetworkConnection;
-                    isNew = netConnect == null;
-                }
-                if(netConnect == null)
+                TECNetworkConnection netConnect = ChildrenConnections.Where(x => x.Protocol == protocol).FirstOrDefault() as TECNetworkConnection;
+                isNew = netConnect == null;
+                if (netConnect == null)
                 {
                     netConnect = new TECNetworkConnection(this, network);
                 }

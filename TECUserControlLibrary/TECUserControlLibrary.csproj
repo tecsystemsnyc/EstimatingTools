@@ -147,9 +147,6 @@
     <Compile Include="UserControls\ItemControls\MiscControl.xaml.cs">
       <DependentUpon>MiscControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ItemControls\NetworkConnectionItemControl.xaml.cs">
-      <DependentUpon>NetworkConnectionItemControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\ItemControls\ProtocolControl.xaml.cs">
       <DependentUpon>ProtocolControl.xaml</DependentUpon>
     </Compile>
@@ -189,9 +186,6 @@
     </Compile>
     <Compile Include="UserControls\ItemControls\ControllerItemControl.xaml.cs">
       <DependentUpon>ControllerItemControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\ItemControls\SubScopeConnectionItemControl.xaml.cs">
-      <DependentUpon>SubScopeConnectionItemControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ItemControls\SubScopeItemControl.xaml.cs">
       <DependentUpon>SubScopeItemControl.xaml</DependentUpon>
@@ -370,17 +364,11 @@
     <Compile Include="UserControls\ListControls\IOListControl.xaml.cs">
       <DependentUpon>IOListControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ListControls\NetworkConnectionListControl.xaml.cs">
-      <DependentUpon>NetworkConnectionListControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\ListControls\PanelListControl.xaml.cs">
       <DependentUpon>PanelListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ListControls\PointListControl.xaml.cs">
       <DependentUpon>PointListControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\ListControls\SubScopeConnectionListControl.xaml.cs">
-      <DependentUpon>SubScopeConnectionListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\PropertyControls\LabeledPropertiesControl.xaml.cs">
       <DependentUpon>LabeledPropertiesControl.xaml</DependentUpon>
@@ -604,9 +592,6 @@
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\VisibilityModel.cs" />
-    <Compile Include="Views\UnconnectedSubScopeView.xaml.cs">
-      <DependentUpon>UnconnectedSubScopeView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ValveSelectionView.xaml.cs">
       <DependentUpon>ValveSelectionView.xaml</DependentUpon>
     </Compile>
@@ -670,10 +655,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\ItemControls\NetworkConnectionItemControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UserControls\ItemControls\ProtocolControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -703,10 +684,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ItemControls\ControllerItemControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\ItemControls\SubScopeConnectionItemControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -902,19 +879,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\ListControls\NetworkConnectionListControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UserControls\ListControls\PanelListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ListControls\PointListControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\ListControls\SubScopeConnectionListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1192,10 +1161,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SettingsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UnconnectedSubScopeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

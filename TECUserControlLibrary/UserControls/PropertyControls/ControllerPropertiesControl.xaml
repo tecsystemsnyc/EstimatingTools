@@ -71,7 +71,7 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding Type}"/>
+                            <TextBlock Text="{Binding Converter={utilities:IOToTypeString}}"/>
                             <TextBlock Text="{Binding Quantity, StringFormat=Qty: {0}}"
                                    Grid.Column="1" HorizontalAlignment="Right"/>
                         </Grid>
@@ -94,7 +94,7 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding Type}"/>
+                            <TextBlock Text="{Binding Converter={utilities:IOToTypeString}}"/>
                             <TextBlock Text="{Binding Quantity, StringFormat=Qty: {0}}"
                                    Grid.Column="1" HorizontalAlignment="Right"/>
                         </Grid>

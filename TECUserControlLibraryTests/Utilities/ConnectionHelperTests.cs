@@ -91,7 +91,9 @@ namespace Utilities
         [TestMethod()]
         public void CanConnectToControllerTest2()
         {
-            TECDevice protDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
+            TECConnectionType connectionType = new TECConnectionType();
+
+            TECDevice protDevice = new TECDevice(new List<TECConnectionType> { connectionType }, new List<TECProtocol>(), new TECManufacturer());
 
             List<IConnectable> connectables = new List<IConnectable>();
 
@@ -143,36 +145,37 @@ namespace Utilities
         [TestMethod()]
         public void CanConnectToControllerTest3()
         {
-            TECDevice protDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
+            TECConnectionType connectionType = new TECConnectionType();
+            TECDevice device = new TECDevice(new List<TECConnectionType> { connectionType }, new List<TECProtocol>(), new TECManufacturer());
 
             List<IConnectable> connectables = new List<IConnectable>();
 
             TECSubScope item1 = new TECSubScope();
-            item1.Devices.Add(protDevice);
+            item1.Devices.Add(device);
             TECPoint aiPoint = new TECPoint();
             aiPoint.Type = IOType.AI;
             item1.AddPoint(aiPoint);
             connectables.Add(item1);
             TECSubScope item2 = new TECSubScope();
-            item2.Devices.Add(protDevice);
+            item2.Devices.Add(device);
             TECPoint diPoint = new TECPoint();
             diPoint.Type = IOType.DI;
             item2.AddPoint(diPoint);
             connectables.Add(item2);
             TECSubScope item3 = new TECSubScope();
-            item3.Devices.Add(protDevice);
+            item3.Devices.Add(device);
             TECPoint doPoint = new TECPoint();
             doPoint.Type = IOType.DO;
             item3.AddPoint(doPoint);
             connectables.Add(item3);
             TECSubScope item4 = new TECSubScope();
-            item4.Devices.Add(protDevice);
+            item4.Devices.Add(device);
             TECPoint aoPoint = new TECPoint();
             aoPoint.Type = IOType.AO;
             item4.AddPoint(aoPoint);
             connectables.Add(item4);
             TECSubScope item5 = new TECSubScope();
-            item5.Devices.Add(protDevice);
+            item5.Devices.Add(device);
             TECPoint otherAoPoint = new TECPoint();
             otherAoPoint.Type = IOType.AO;
             item5.AddPoint(otherAoPoint);
@@ -281,7 +284,8 @@ namespace Utilities
         [TestMethod()]
         public void ConnectToControllerTest2()
         {
-            TECDevice protDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>(), new TECManufacturer());
+            TECConnectionType connectionType = new TECConnectionType();
+            TECDevice protDevice = new TECDevice(new List<TECConnectionType> { connectionType }, new List<TECProtocol>(), new TECManufacturer());
 
             List<IConnectable> connectables = new List<IConnectable>();
 

@@ -2495,7 +2495,7 @@ namespace EstimatingUtilitiesLibrary.Database
     internal class ConnectionConduitTypeTable : TableBase
     {
         public static string TableName = "ConnectionConduitType";
-        public static Type ObjectType = typeof(IControllerConnection);
+        public static Type ObjectType = typeof(IConnection);
         public static Type ReferenceType = typeof(TECElectricalMaterial);
 
         public static TableField ConnectionID = new TableField("ConnectionID", "TEXT", ObjectType.GetProperty("Guid"));

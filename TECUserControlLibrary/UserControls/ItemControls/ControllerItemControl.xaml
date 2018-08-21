@@ -17,7 +17,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </local:BaseItemControl.Resources>
-    <Border BorderThickness="1" BorderBrush="{StaticResource ItemBorderBrush}" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
+    <Border Style="{StaticResource ScopeItemBorder}">
         <Grid DataContext="{Binding ElementName=controllerItemControl, Path=Controller}" Background="Transparent">
             <Grid.ContextMenu>
                 <ContextMenu>

@@ -13,7 +13,7 @@ namespace TECUserControlLibrary.Utilities
     public static class ConnectionHelper
     {
         /// <summary>
-        /// Returns true if all the items can be connected, in some way, so the provided controller
+        /// Returns true if all the items can be connected, in some way, to the provided controller
         /// </summary>
         /// <param name="items"></param>
         /// <param name="controller"></param>
@@ -82,13 +82,13 @@ namespace TECUserControlLibrary.Utilities
 
             var availableIO = controller.AvailableIO + ExistingNetworkIO(controller);
             List<IControllerConnection> connections = new List<IControllerConnection>();
-
+            if (!CanConnectToController(items, controller)) return connections;
             foreach (var connectable in connectables)
             {
                 var protocols = connectable.AvailableProtocols;
                 if (protocols.Count == 1)
                 {
-                    connections.Add(controller.Connect(connectable, protocols.First(), true));
+                    connections.Add(controller.Connect(connectable, protocols.First()));
                 }
                 else
                 {
@@ -97,17 +97,17 @@ namespace TECUserControlLibrary.Utilities
                         .Where(x => x is TECProtocol networkProtocol && availableIO.Contains(networkProtocol)))
                     {
                         connected = true;
-                        connections.Add(controller.Connect(connectable, protocol, true));
+                        connections.Add(controller.Connect(connectable, protocol));
                         break;
                     }
                     if (!connected && connectable.AvailableProtocols.Any(x => x is TECHardwiredProtocol)
                             && availableIO.Contains(connectable.HardwiredIO))
                     {
-                        connections.Add(controller.Connect(connectable, connectable.AvailableProtocols.First(x => x is TECHardwiredProtocol), true));
+                        connections.Add(controller.Connect(connectable, connectable.AvailableProtocols.First(x => x is TECHardwiredProtocol)));
                     }
                 }
             }
-            return connections;
+            return connections.Distinct().ToList();
 
         }
 
@@ -126,7 +126,7 @@ namespace TECUserControlLibrary.Utilities
             }
             if (parent is IRelatable relatable)
             {
-                relatable.GetDirectChildren().Where(predicate).ForEach(x => outList.AddRange(GetConnectables(x, predicate)));
+                relatable.GetDirectChildren().ForEach(x => outList.AddRange(GetConnectables(x, predicate)));
             }
             return outList;
         }

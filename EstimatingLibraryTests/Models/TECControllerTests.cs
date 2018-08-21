@@ -506,7 +506,7 @@ namespace Models
 
             Assert.IsNull(connection);
         }
-
+        
         [TestMethod()]
         public void DisconnectTest()
         {

@@ -71,7 +71,7 @@ namespace TestLibrary.ModelTestingUtilities
 
             //Locations
             int numFloors = rand.Next(1, maxEachItem);
-            for (int floor = 1; floor < numFloors; floor++)
+            for (int floor = 1; floor <= numFloors; floor++)
             {
                 bid.Locations.Add(new TECLocation()
                 {

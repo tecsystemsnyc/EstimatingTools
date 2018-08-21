@@ -16,8 +16,8 @@ namespace TECUserControlLibrary.ViewModels
     {
         private List<IConnectable> toConnect;
         private List<TECController> controllers;
-        private double _length = 0.0;
-        private double _conduitLength = 0.0;
+        private double _length = 50.0;
+        private double _conduitLength = 30.0;
         private TECElectricalMaterial _conduitType;
         private bool _isPlenum = false;
         private bool _connect = false;
@@ -86,6 +86,7 @@ namespace TECUserControlLibrary.ViewModels
             this.toConnect = new List<IConnectable>(toConnect);
             this.controllers = new List<TECController>(controllers);
             this.ConduitTypes =  new List<TECElectricalMaterial>(conduitTypes);
+            this.ConduitType = this.ConduitTypes.FirstOrDefault();
             ParentControllers = getCompatibleControllers(controllers);
         }
 

@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="75" d:DesignWidth="200">
     <Grid DataContext="{Binding ElementName=valveScopeItemControl, Path=Valve}">
-        <Border BorderThickness="1" BorderBrush="{StaticResource ItemBorderBrush}" CornerRadius="4" Background="{StaticResource ItemBackgroundBrush}">
+        <Border Style="{StaticResource ScopeItemBorder}">
             <StackPanel>
                 <TextBlock Text="{Binding Equipment.Name}"/>
                 <TextBlock Text="{Binding SubScope.Name}"/>

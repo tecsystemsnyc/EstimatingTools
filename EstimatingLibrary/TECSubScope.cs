@@ -273,7 +273,7 @@ namespace EstimatingLibrary
                 if (Connection != null) return protocols;
                 List<TECConnectionType> hardConnectionTypes = new List<TECConnectionType>();
                 List<TECProtocol> catalogProtocols = new List<TECProtocol>();
-                bool allDevsHaveHard = true;
+                bool allDevsHaveHard = Devices.Count > 0;
                 foreach(IEndDevice endDev in this.Devices)
                 {
                     if (endDev.HardwiredConnectionTypes.Count < 1) allDevsHaveHard = false;

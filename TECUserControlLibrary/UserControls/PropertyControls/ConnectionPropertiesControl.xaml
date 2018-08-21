@@ -52,10 +52,6 @@
             <TextBlock Text="Plenum:" Grid.Row="3"/>
             <CheckBox IsChecked="{Binding IsPlenum}" Grid.Column="1"
                           VerticalAlignment="Center" Grid.Row="3"/>
-            <Expander Header="IO" Grid.Row="4" Grid.ColumnSpan="2">
-                <listControls:IOListControl Source="{Binding IO, Converter={utilities:IOCollectionToListConverter}}"
-                                            Height="40"/>
-            </Expander>
             <Expander Header="Connection Types" Grid.Row="5" Grid.ColumnSpan="2">
                 <listControls:ElectricalMaterialListControl Source="{Binding Protocol.ConnectionTypes}"
                                                             Height="40"/>

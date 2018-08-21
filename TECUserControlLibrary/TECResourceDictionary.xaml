@@ -209,6 +209,12 @@
         <Setter Property="BorderBrush" Value="Gray"/>
         <Setter Property="BorderThickness" Value="0,0,0,2"/>
     </Style>
+    <Style x:Key="ScopeItemBorder" TargetType="{x:Type Border}">
+        <Setter Property="BorderBrush" Value="{StaticResource ItemBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="Background" Value="{StaticResource ItemBackgroundBrush}"/>
+    </Style>
     <Style x:Key="ExpanderHeader" TargetType="{x:Type TextBlock}">
         <Setter Property="Height" Value="22" />
         <Setter Property="Margin" Value="16,0,0,0" />

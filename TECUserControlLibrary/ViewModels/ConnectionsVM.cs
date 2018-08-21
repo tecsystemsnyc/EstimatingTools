@@ -192,6 +192,7 @@ namespace TECUserControlLibrary.ViewModels
                 filterPredicate = item => true;
             }
             this.filterPredicate = filterPredicate;
+
             this.InterlocksVM = new InterlocksVM(root, watcher, catalogs, filterPredicate);
 
             this.root = root;
@@ -262,40 +263,28 @@ namespace TECUserControlLibrary.ViewModels
             if(item is IConnectable connectable)
             {
                 parentPath.Add(item);
-                var closestRoot = this.rootConnectableGroup;
-                var thisPath = new List<ITECObject>();
-                thisPath.Add(connectable);
-                var start = item;
-                var toRemove = new List<ITECObject>();
-                for (int x = parentPath.Count - 2; x >= 0; x--)
-                {
-                    if (!thisPath.Contains(parentPath[x]) && (parentPath[x] as IRelatable).GetDirectChildren().Contains(start))
-                    {
-                        thisPath.Insert(0, parentPath[x]);
-                        start = parentPath[x];
-                        if (this.rootConnectableGroup.GetGroup(parentPath[x] as ITECScope) != null && closestRoot == this.rootConnectableGroup)
-                        {
-                            closestRoot = this.rootConnectableGroup.GetGroup(parentPath[x] as ITECScope);
-                        }
-                    }
-                }
-                action(closestRoot, connectable, thisPath);
+                execute(this.rootConnectableGroup);
                 if (connectable is TECController)
                 {
-                    closestRoot = this.rootControllerGroup;
-                    thisPath = new List<ITECObject>();
+                    execute(this.rootControllerGroup);
+                }
+
+                void execute(FilteredConnectablesGroup relevantRoot)
+                {
+                    var closestRoot = relevantRoot;
+                    var thisPath = new List<ITECObject>();
                     thisPath.Add(connectable);
-                    start = item;
-                    toRemove = new List<ITECObject>();
+                    var start = item;
+                    var toRemove = new List<ITECObject>();
                     for (int x = parentPath.Count - 2; x >= 0; x--)
                     {
                         if (!thisPath.Contains(parentPath[x]) && (parentPath[x] as IRelatable).GetDirectChildren().Contains(start))
                         {
                             thisPath.Insert(0, parentPath[x]);
                             start = parentPath[x];
-                            if (this.rootControllerGroup.GetGroup(parentPath[x] as ITECScope) != null && closestRoot == this.rootControllerGroup)
+                            if (relevantRoot.GetGroup(parentPath[x] as ITECScope) != null && closestRoot == relevantRoot)
                             {
-                                closestRoot = this.rootControllerGroup.GetGroup(parentPath[x] as ITECScope);
+                                closestRoot = relevantRoot.GetGroup(parentPath[x] as ITECScope);
                             }
                         }
                     }
@@ -523,7 +512,7 @@ namespace TECUserControlLibrary.ViewModels
 
     public class ConnectableFilter: ViewModelBase
     {
-        private bool _omitConnected = false;
+        private bool _omitConnected = true;
         private TECProtocol _filterProtocol;
         private TECLocation _filterLocation;
 
@@ -571,6 +560,12 @@ namespace TECUserControlLibrary.ViewModels
 
         public bool PassesFilter(IConnectable connectable)
         {
+            //No Connection Methods
+            if(!connectable.IsConnected() && connectable.AvailableProtocols.Count == 0)
+            {
+                return false;
+            }
+
             //Omit connected
             if (OmitConnected && connectable.IsConnected())
             {

@@ -52,6 +52,7 @@ namespace EstimatingLibrary
             }
 
         }
+        public TECProposalItem(TECEquipment displayScope) : this(Guid.NewGuid(), displayScope) { }
         
         private void scopeChanged(TECChangedEventArgs obj)
         {
@@ -60,9 +61,6 @@ namespace EstimatingLibrary
                 raisePropertyChanged("Branches");
             }
         }
-
-        public TECProposalItem(TECEquipment displayScope) : this(Guid.NewGuid(), displayScope) { }
-        
         private void containingScopeCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             CollectionChangedHandlers.CollectionChangedHandler(sender, e, "ContainingScope", this, notifyCombinedChanged);

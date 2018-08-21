@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
 
 namespace EstimatingLibrary
 {
@@ -230,6 +231,7 @@ namespace EstimatingLibrary
                 if (obj is TECEquipment equip)
                 {
                     equip.SubScopeCollectionChanged -= handleSubScopeCollectionChanged;
+                    handleEquipmentRemoval(equip);
                     foreach (TECSubScope ss in equip.SubScope)
                     {
                         handleSubScopeRemoval(ss);
@@ -249,6 +251,28 @@ namespace EstimatingLibrary
             }
         }
 
+
+        private void handleEquipmentRemoval(TECEquipment equip)
+        {
+            List<TECProposalItem> toRemove = new List<TECProposalItem>();
+
+            foreach(var item in this.ProposalItems)
+            {
+                if(item.DisplayScope == equip)
+                {
+                    if(item.ContainingScope.Count == 0)
+                    {
+                        toRemove.Add(item);  
+                    }
+                    else
+                    {
+                        item.DisplayScope = item.ContainingScope.First();
+                        item.ContainingScope.Remove(item.DisplayScope);
+                    }
+                }
+            }
+            toRemove.ForEach(x => this.ProposalItems.Remove(x));
+        }
         protected void handleSubScopeRemoval(TECSubScope removed)
         {
             TECController controller = removed.Connection?.ParentController;

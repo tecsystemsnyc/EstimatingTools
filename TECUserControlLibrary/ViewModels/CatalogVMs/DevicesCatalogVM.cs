@@ -135,7 +135,7 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
         private bool canAddDevice()
         {
             return (DeviceManufacturer != null && 
-                DeviceConnectionTypes.Count > 0);
+                (DeviceConnectionTypes.Count > 0 || DeviceProtocols.Count > 0));
         }
 
         private void deleteDeviceExecute()

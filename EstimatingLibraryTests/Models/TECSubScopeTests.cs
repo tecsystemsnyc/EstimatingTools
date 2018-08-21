@@ -397,5 +397,14 @@ namespace Models
             Assert.IsFalse(ss.AvailableProtocols.Contains(prot3));
             Assert.AreEqual(1, ss.AvailableProtocols.Count);
         }
+
+        [TestMethod()]
+        public void AvailableProtocols2()
+        {
+            TECSubScope ss = new TECSubScope();
+            
+            Assert.IsFalse(ss.AvailableProtocols.Any(prot => { return prot is TECHardwiredProtocol; }));
+            Assert.AreEqual(0, ss.AvailableProtocols.Count);
+        }
     }
 }

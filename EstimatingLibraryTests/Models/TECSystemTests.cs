@@ -126,7 +126,17 @@ namespace Models
         [TestMethod()]
         public void DragDropCopyTest()
         {
-            Assert.Fail();
+            Random rand = new Random(0);
+            var catalogs = ModelCreation.TestCatalogs(rand);
+            var system = ModelCreation.TestSystem(catalogs, rand);
+            
+            var copy = system.DropData() as TECSystem;
+            
+            Assert.AreEqual(system.Controllers.Count, copy.Controllers.Count);
+            Assert.AreEqual(system.Panels.Count, copy.Panels.Count);
+            Assert.AreEqual(system.Equipment.Count, copy.Equipment.Count);
+            Assert.AreEqual(system.MiscCosts.Count, copy.MiscCosts.Count);
+            Assert.IsTrue(system.CostBatch.CostsEqual(copy.CostBatch));
         }
 
         [TestMethod()]
@@ -141,6 +151,40 @@ namespace Models
             {
                 Assert.IsTrue(allSubScope.Contains(subScope));
             }
+        }
+
+        [TestMethod()]
+        public void RemoveEquipmentTest()
+        {
+            TECSystem system = new TECSystem();
+            TECEquipment equipment = new TECEquipment();
+
+            system.Equipment.Add(equipment);
+            system.ProposalItems.Add(new TECProposalItem(equipment));
+
+            system.Equipment.Remove(equipment);
+            Assert.IsTrue(system.ProposalItems.Count == 0);
+
+        }
+
+        [TestMethod()]
+        public void RemoveEquipmentTest1()
+        {
+            TECSystem system = new TECSystem();
+            TECEquipment firstEquipment = new TECEquipment();
+            TECEquipment secondEquipment = new TECEquipment();
+
+            system.Equipment.Add(firstEquipment);
+            system.Equipment.Add(secondEquipment);
+            TECProposalItem proposalItem = new TECProposalItem(firstEquipment); 
+            system.ProposalItems.Add(proposalItem);
+            proposalItem.ContainingScope.Add(secondEquipment);
+            
+            system.Equipment.Remove(firstEquipment);
+            Assert.IsTrue(system.ProposalItems.Count == 1);
+            Assert.IsTrue(proposalItem.DisplayScope == secondEquipment);
+            Assert.IsFalse(proposalItem.ContainingScope.Contains(firstEquipment));
+
         }
     }
 }

@@ -913,6 +913,34 @@ namespace TECUserControlLibrary.Utilities
         #endregion
     }
 
+    public class IOToTypeString : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value is TECIO io)
+            {
+                return io.Type == IOType.Protocol ? io.Protocol.Label : io.Type.ToString();
+            }
+            else if (value == null)
+            {
+                return "";
+            }
+            else
+            {
+                throw new Exception("Value must be IO");
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
+    
     #region Enumeration Converters
 
     public class EditIndexToIntegerConverter : BaseConverter, IValueConverter
