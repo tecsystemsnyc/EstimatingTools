@@ -351,6 +351,10 @@ namespace TECUserControlLibrary.ViewModels
         private void addSystemExecute()
         {
             SelectedVM = new AddSystemVM(scopeManager);
+            (SelectedVM as AddSystemVM).Added = system =>
+            {
+                SelectedSystem = system as TECSystem;
+            };
         }
         private bool canAddSystem()
         {
@@ -360,6 +364,10 @@ namespace TECUserControlLibrary.ViewModels
         private void addEquipmentExecute(TECSystem system)
         {
             SelectedVM = new AddEquipmentVM(system, scopeManager);
+            (SelectedVM as AddEquipmentVM).Added = equip =>
+            {
+                SelectedEquipment = equip as TECEquipment;
+            };
         }
         private bool canAddEquipment(TECSystem system)
         {
@@ -370,6 +378,10 @@ namespace TECUserControlLibrary.ViewModels
         {
             SelectedVM = new AddSubScopeVM(equipment,scopeManager);
             ((AddSubScopeVM)SelectedVM).SetParentSystem(SelectedSystem, scopeManager);
+            (SelectedVM as AddVM).Added = subScope =>
+            {
+                SelectedSubScope = subScope as TECSubScope;
+            };
         }
         private bool canAddSubScope(TECEquipment equipment)
         {

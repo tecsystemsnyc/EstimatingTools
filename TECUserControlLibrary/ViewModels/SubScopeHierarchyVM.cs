@@ -115,6 +115,11 @@ namespace TECUserControlLibrary.ViewModels
             {
                 scopeManager.Templates.SubScopeTemplates.Add(toAdd);
             }, scopeManager);
+            (SelectedVM as AddVM).Added = subScope =>
+            {
+                SelectedSubScope = subScope as TECSubScope;
+            };
+
         }
         private bool canAddSubScope()
         {

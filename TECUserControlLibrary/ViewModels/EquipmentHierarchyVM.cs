@@ -136,6 +136,10 @@ namespace TECUserControlLibrary.ViewModels
             {
                 scopeManager.Templates.EquipmentTemplates.Add(toAdd);
             }, scopeManager);
+            (SelectedVM as AddEquipmentVM).Added = equip =>
+            {
+                SelectedEquipment = equip as TECEquipment;
+            };
         }
         private bool canAddEquipment()
         {
@@ -145,6 +149,10 @@ namespace TECUserControlLibrary.ViewModels
         private void addSubScopeExecute(TECEquipment equipment)
         {
             SelectedVM = new AddSubScopeVM(equipment, scopeManager);
+            (SelectedVM as AddVM).Added = subScope =>
+            {
+                SelectedSubScope = subScope as TECSubScope;
+            };
         }
         private bool canAddSubScope(TECEquipment equipment)
         {

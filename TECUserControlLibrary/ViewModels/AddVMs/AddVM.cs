@@ -35,7 +35,7 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
             PropertiesVM = new PropertiesVM(scopeManager.Catalogs, scopeManager);
         }
 
-        public Action<object> Added { get; protected set; }
+        public Action<object> Added { get; set; }
 
     }
 }
