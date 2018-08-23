@@ -3401,6 +3401,9 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
         public static TableField SystemID = new TableField("SystemID", "TEXT", ScopeType.GetProperty("Guid"));
 
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "SystemTemplates", "0");
+
         private List<TableField> primaryKeys = new List<TableField>()
         {
             TemplatesID,
@@ -3414,7 +3417,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             TemplatesID,
-            SystemID
+            SystemID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -3422,6 +3426,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
 
         public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
         public override List<Type> Types { get { return types; } }
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
@@ -3436,6 +3441,9 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
         public static TableField EquipmentID = new TableField("EquipmentID", "TEXT", ScopeType.GetProperty("Guid"));
 
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "EquipmentTemplates", "0");
+
         private List<TableField> primaryKeys = new List<TableField>()
         {
             TemplatesID,
@@ -3449,7 +3457,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             TemplatesID,
-            EquipmentID
+            EquipmentID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -3457,6 +3466,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
 
         public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
         public override List<Type> Types { get { return types; } }
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
@@ -3471,6 +3481,9 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
         public static TableField SubScopeID = new TableField("SubScopeID", "TEXT", ScopeType.GetProperty("Guid"));
 
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "SubScopeTemplates", "0");
+
         private List<TableField> primaryKeys = new List<TableField>()
         {
             TemplatesID,
@@ -3484,7 +3497,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             TemplatesID,
-            SubScopeID
+            SubScopeID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -3492,6 +3506,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
 
         public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
         public override List<Type> Types { get { return types; } }
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
@@ -3506,6 +3521,9 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
         public static TableField ControllerID = new TableField("ControllerID", "TEXT", ScopeType.GetProperty("Guid"));
 
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "ControllerTemplates", "0");
+
         private List<TableField> primaryKeys = new List<TableField>()
         {
             TemplatesID,
@@ -3519,7 +3537,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             TemplatesID,
-            ControllerID
+            ControllerID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -3527,6 +3546,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
 
         public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
         public override List<Type> Types { get { return types; } }
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
@@ -3541,6 +3561,9 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
         public static TableField MiscID = new TableField("MiscID", "TEXT", ScopeType.GetProperty("Guid"));
 
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "MiscCostTemplates", "0");
+
         private List<TableField> primaryKeys = new List<TableField>()
         {
             TemplatesID,
@@ -3554,7 +3577,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             TemplatesID,
-            MiscID
+            MiscID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -3562,6 +3586,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
 
         public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
         public override List<Type> Types { get { return types; } }
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
@@ -3576,6 +3601,9 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
         public static TableField PanelID = new TableField("PanelID", "TEXT", ScopeType.GetProperty("Guid"));
 
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "PanelTemplates", "0");
+
         private List<TableField> primaryKeys = new List<TableField>()
         {
             TemplatesID,
@@ -3589,7 +3617,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             TemplatesID,
-            PanelID
+            PanelID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -3597,6 +3626,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
 
         public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
         public override List<Type> Types { get { return types; } }
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
@@ -3611,6 +3641,9 @@ namespace EstimatingUtilitiesLibrary.Database
         public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
         public static TableField ParametersID = new TableField("ParametersID", "TEXT", ParametersType.GetProperty("Guid"));
 
+        public static Type Helpers = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", Helpers.GetProperty("Index"), "Parameters", "0");
+
         private List<TableField> primaryKeys = new List<TableField>()
         {
             TemplatesID,
@@ -3624,7 +3657,8 @@ namespace EstimatingUtilitiesLibrary.Database
         private List<TableField> fields = new List<TableField>()
         {
             TemplatesID,
-            ParametersID
+            ParametersID,
+            Index
         };
         private List<string> propertyNames = new List<string>()
         {
@@ -3632,6 +3666,7 @@ namespace EstimatingUtilitiesLibrary.Database
         };
 
         public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
         public override List<Type> Types { get { return types; } }
         public override List<string> PropertyNames { get { return propertyNames; } }
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }

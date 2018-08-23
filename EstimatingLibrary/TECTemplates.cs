@@ -232,13 +232,19 @@ namespace EstimatingLibrary
                 
                 subject.Points.ObservablyClear();
                 subject.Devices.ObservablyClear();
+                subject.Interlocks.ObservablyClear();
+
                 foreach (TECPoint point in changedItem.Points)
                 {
-                    subject.Points.Add(new TECPoint(point));
+                    subject.AddPoint(new TECPoint(point));
                 }
                 foreach (IEndDevice device in changedItem.Devices)
                 {
-                    subject.Devices.Add(device);
+                    subject.AddDevice(device);
+                }
+                foreach(TECInterlockConnection connection in changedItem.Interlocks)
+                {
+                    subject.Interlocks.Add(connection);
                 }
                 
             }

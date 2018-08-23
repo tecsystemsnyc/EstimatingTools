@@ -210,6 +210,8 @@ namespace EstimatingLibrary
         }
 
         public IOCollection() { }
+        public IOCollection(TECProtocol protocol) : this(new TECIO(protocol)) { }
+        public IOCollection(TECIO io) : this(new List<TECIO> { io }) { }
         public IOCollection(IEnumerable<TECIO> io) : this()
         {
             Add(io);

@@ -51,6 +51,14 @@ namespace EstimatingLibrary
                 return allIO;
             }
         }
+        public override IOCollection AvailableIO
+        {
+            get { return getPotentialIO() + base.AvailableIO; }
+        }
+        private IOCollection currentIO
+        {
+            get { return base.AvailableIO; }
+        }
         #endregion
 
         #region Constructors
@@ -76,6 +84,18 @@ namespace EstimatingLibrary
             return new TECProvidedController(this, guidDictionary);
         }
 
+        public override IControllerConnection Connect(IConnectable connectable, IProtocol protocol)
+        {
+            IOCollection connectionIO = protocol is TECProtocol ? new IOCollection(protocol as TECProtocol) : new IOCollection(connectable.HardwiredIO);
+
+            if(!this.currentIO.Contains(connectionIO))
+            {
+                var modulesToAdd = getModulesForIO(connectionIO);
+                if(modulesToAdd.Count == 0) { return null; }
+                modulesToAdd.ForEach(x => this.AddModule(x));
+            }
+            return base.Connect(connectable, protocol);
+        }
         #region Module Methods
         public bool CanAddModule(TECIOModule module)
         {
@@ -105,7 +125,7 @@ namespace EstimatingLibrary
                 bool canSpare = true;
                 foreach (TECIO io in module.IO)
                 {
-                    if (!this.AvailableIO.Contains(io))
+                    if (!this.currentIO.Contains(io))
                     {
                         canSpare = false;
                         break;
@@ -143,7 +163,7 @@ namespace EstimatingLibrary
         private List<TECIOModule> getModulesForIO(IOCollection io)
         {
             IOCollection nessessaryIO = new IOCollection(io);
-            IOCollection relevantAvailableIO = (io | AvailableIO);
+            IOCollection relevantAvailableIO = (io | currentIO);
 
             if (!nessessaryIO.Remove(relevantAvailableIO)) throw new Exception("NessessaryIO collection is having trouble removing subset of itself.");
 
@@ -195,7 +215,7 @@ namespace EstimatingLibrary
             if (newType == null) return false;
             TECProvidedController possibleController = new TECProvidedController(newType);
             IOCollection necessaryIO = this.UsedIO;
-            IOCollection possibleIO = possibleController.getPotentialIO() + possibleController.AvailableIO;
+            IOCollection possibleIO = possibleController.getPotentialIO() + possibleController.currentIO;
             return possibleIO.Contains(necessaryIO);
         }
         public bool ChangeType(TECControllerType newType)

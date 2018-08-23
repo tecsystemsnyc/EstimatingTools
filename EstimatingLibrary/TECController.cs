@@ -43,7 +43,7 @@ namespace EstimatingLibrary
                 return ChildrenConnections.Aggregate(new IOCollection(), (total, next) => total += next.IO);
             }
         }
-        public IOCollection AvailableIO
+        public virtual IOCollection AvailableIO
         {
             get
             {
@@ -123,7 +123,7 @@ namespace EstimatingLibrary
         {
             return connectable != null && CompatibleProtocols(connectable).Count > 0;
         }
-        public IControllerConnection Connect(IConnectable connectable, IProtocol protocol)
+        public virtual IControllerConnection Connect(IConnectable connectable, IProtocol protocol)
         {
             if (!CanConnect(connectable, protocol)) return null;
             IControllerConnection connection;

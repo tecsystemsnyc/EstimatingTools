@@ -25,8 +25,9 @@ namespace EstimatingLibrary
         }
 
         public TECInterlockConnection(IEnumerable<TECConnectionType> connectionTypes) : this(Guid.NewGuid(), connectionTypes) { }
-        public TECInterlockConnection(TECInterlockConnection source, Dictionary<Guid, Guid> guidDictionary = null) : base(source.Guid)
+        public TECInterlockConnection(TECInterlockConnection source, Dictionary<Guid, Guid> guidDictionary = null) : this(source.Guid, source.ConnectionTypes)
         {
+            this.copyPropertiesFromScope(source);
             this.connection = new ConnectionWrapper(source.connection, guidDictionary);
             subscribeToConnection();
         }
