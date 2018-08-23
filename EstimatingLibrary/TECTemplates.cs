@@ -201,17 +201,17 @@ namespace EstimatingLibrary
                 syncItem(changed, item);
             }
 
-            void syncItem(TECSubScope newItem, TECSubScope subject)
+            void syncItem(TECSubScope changedItem, TECSubScope subject)
             {
-                subject.CopyChildrenFromScope(newItem);
+                subject.CopyChildrenFromScope(changedItem);
                 
                 subject.Points.ObservablyClear();
                 subject.Devices.ObservablyClear();
-                foreach (TECPoint point in newItem.Points)
+                foreach (TECPoint point in changedItem.Points)
                 {
                     subject.Points.Add(new TECPoint(point));
                 }
-                foreach (IEndDevice device in newItem.Devices)
+                foreach (IEndDevice device in changedItem.Devices)
                 {
                     subject.Devices.Add(device);
                 }

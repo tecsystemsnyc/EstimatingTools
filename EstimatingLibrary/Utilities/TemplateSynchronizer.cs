@@ -30,7 +30,7 @@ namespace EstimatingLibrary.Utilities
             this.remove = remove;
             dictionary = new Dictionary<T, List<T>>();
             unsubscribeDictionary = new Dictionary<(T, bool), Action>();
-            ChangeWatcher watcher = new ChangeWatcher(templates);
+            ChangeWatcher watcher = new ChangeWatcher(templates.Templates);
             watcher.Changed += handleTemplatesChanged;
         }
         
