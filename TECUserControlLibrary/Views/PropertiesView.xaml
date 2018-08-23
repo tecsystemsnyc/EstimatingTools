@@ -101,6 +101,9 @@
                 <DataTemplate x:Key="subScope">
                     <pControls:SubScopePropertiesControl Selected="{Binding}"/>
                 </DataTemplate>
+                <DataTemplate x:Key="subScopeTemplateUpdate">
+                    <pControls:SubScopeTemplateUpdateControl Selected="{Binding}" Templates="{Binding ElementName=propertiesView, Path=ViewModel.ScopeManager}"/>
+                </DataTemplate>
                 <DataTemplate x:Key="estimate">
                     <Expander Header="Estimate" Visibility="{Binding ElementName=propertiesView, Path=ViewModel.Parameters, Converter={utilities:NullToCollapsedConverter}}">
                         <pControls:UnitEstimatePropertiesControl>
@@ -174,14 +177,19 @@
                 <utilities:ScopeSelector x:Key="estimateSelector"
                                          InterfaceTemplate="{StaticResource estimate}"
                                          DefaultTemplate="{StaticResource default}"/>
+                <utilities:SubScopeSelector x:Key="subScopeTemplateUpdateSelector"
+                                            InterfaceTemplate="{StaticResource subScopeTemplateUpdate}"
+                                            DefaultTemplate="{StaticResource default}"/>
             </ResourceDictionary>
         </ScrollViewer.Resources>
         <StackPanel>
-            <Grid Visibility="{Binding ElementName=propertiesView, Path=ViewModel.DisplayReferenceProperty, Converter={utilities:BooleanToVisibilityConverter}}" Height="30">
+            <StackPanel Visibility="{Binding ElementName=propertiesView, Path=ViewModel.DisplayReferenceProperty, Converter={utilities:BooleanToVisibilityConverter}}">
                 <TextBlock Text="{Binding ElementName=propertiesView, Path=ViewModel.TemplateText}" Foreground="Black" FontWeight="Bold" HorizontalAlignment="Center"
                            Visibility="{Binding ElementName=propertiesView, Path=Selected, Converter={utilities:NullToCollapsedConverter}}"
                            TextTrimming="CharacterEllipsis"/>
-            </Grid>
+                <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource subScopeTemplateUpdateSelector}"/>
+
+            </StackPanel>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource TaggedSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ScopeSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource LabeledSelector}"/>

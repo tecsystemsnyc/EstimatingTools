@@ -74,6 +74,63 @@ namespace EstimatingLibrary
         }
         #endregion //Constructors
 
+        public bool IsTemplateObject(TECObject item)
+        {
+            if(item is TECSubScope subScope)
+            {
+                bool isTemplate = Templates.SubScopeTemplates.Contains(subScope);
+                
+                bool isTemplated = Templates.SubScopeTemplates.Contains(SubScopeSynchronizer.GetParent(subScope)) ||
+                    Templates.SubScopeTemplates.Contains(SubScopeSynchronizer.GetParent(SubScopeSynchronizer.GetParent(subScope)));
+                return isTemplate || isTemplated;
+            }
+            else if (item is TECEquipment equipment)
+            {
+                return Templates.EquipmentTemplates.Contains(equipment) || EquipmentSynchronizer.Contains(equipment);
+            }
+            else if (item is TECController controller)
+            {
+                return Templates.ControllerTemplates.Contains(controller);
+            }
+            else if (item is TECPanel panel)
+            {
+                return Templates.PanelTemplates.Contains(panel);
+            }
+            else if (item is TECMisc misc)
+            {
+                return Templates.MiscCostTemplates.Contains(misc);
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public void UpdateSubScopeReferenceProperties(TECSubScope subScope)
+        {
+            var templateSS = SubScopeSynchronizer.GetTemplate(subScope);
+            if(templateSS != subScope) {
+                setProperties(subScope, templateSS);
+            }
+            SubScopeSynchronizer.ActOnReferences(templateSS, updateSubScope);
+            void updateSubScope(TemplateSynchronizer<TECSubScope> synchronizer, TECSubScope template)
+            {
+                foreach (TECSubScope item in synchronizer.GetFullDictionary()[template])
+                {
+                    setProperties(template, item);
+                }
+            }
+            void setProperties(TECSubScope tSS, TECSubScope rSS)
+            {
+                rSS.CopyPropertiesFromScope(tSS);
+                rSS.ScopeBranches.ObservablyClear();
+                foreach (TECScopeBranch branch in tSS.ScopeBranches)
+                {
+                    rSS.ScopeBranches.Add(new TECScopeBranch(branch));
+                }
+            }
+            
+        }
+        
         private void scopeChildRemoved(TECObject child)
         {
             foreach (TECElectricalMaterial type in Catalogs.ConnectionTypes)
@@ -141,7 +198,6 @@ namespace EstimatingLibrary
                 removeChildFromScope(panel, child);
             }
         }
-
         private void removeChildFromScope(TECScope scope, TECObject child)
         {
             if (child is TECAssociatedCost cost)
@@ -157,40 +213,9 @@ namespace EstimatingLibrary
                 throw new NotImplementedException("Scope child isn't cost or tag.");
             }
         }
-        
-        public bool IsTemplateObject(TECObject item)
-        {
-            if(item is TECSubScope subScope)
-            {
-                bool isTemplate = Templates.SubScopeTemplates.Contains(subScope);
-                
-                bool isTemplated = Templates.SubScopeTemplates.Contains(SubScopeSynchronizer.GetParent(subScope)) ||
-                    Templates.SubScopeTemplates.Contains(SubScopeSynchronizer.GetParent(SubScopeSynchronizer.GetParent(subScope)));
-                return isTemplate || isTemplated;
-            }
-            else if (item is TECEquipment equipment)
-            {
-                return Templates.EquipmentTemplates.Contains(equipment) || EquipmentSynchronizer.Contains(equipment);
-            }
-            else if (item is TECController controller)
-            {
-                return Templates.ControllerTemplates.Contains(controller);
-            }
-            else if (item is TECPanel panel)
-            {
-                return Templates.PanelTemplates.Contains(panel);
-            }
-            else if (item is TECMisc misc)
-            {
-                return Templates.MiscCostTemplates.Contains(misc);
-            }
-            else
-            {
-                return false;
-            }
-        }
 
-        private void syncSubScope(TemplateSynchronizer<TECSubScope> synchronizer, TECSubScope template, TECSubScope changed, TECChangedEventArgs args)
+        private void syncSubScope(TemplateSynchronizer<TECSubScope> synchronizer,
+            TECSubScope template, TECSubScope changed, TECChangedEventArgs args)
         {
             if (changed != template)
             {
@@ -215,6 +240,7 @@ namespace EstimatingLibrary
                 {
                     subject.Devices.Add(device);
                 }
+                
             }
         }
         private void syncEquipment(TemplateSynchronizer<TECEquipment> synchronizer, TECEquipment template, TECEquipment changed, TECChangedEventArgs args)
@@ -301,6 +327,5 @@ namespace EstimatingLibrary
             notifyTECChanged(obj.Change, obj.PropertyName, obj.Sender, obj.Value);
         }
         
-
     }
 }

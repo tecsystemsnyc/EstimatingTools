@@ -153,7 +153,17 @@ namespace EstimatingLibrary.Utilities
             }
             return null;
         }
-        
+        public void ActOnReferences(T template, Action<TemplateSynchronizer<T>,T> action)
+        {
+            if (!currentlySyncing.Contains(template))
+            {
+                currentlySyncing.Add(template);
+                action(this, template);
+                currentlySyncing.Remove(template);
+            }
+
+        }
+
         private void handleTChanged(T template, T changed, TECChangedEventArgs args)
         {
             if (!currentlySyncing.Contains(template))

@@ -121,6 +121,7 @@
     <Compile Include="Interfaces\ISubScopeConnectionItem.cs" />
     <Compile Include="Models\SubScopeConnectionItem.cs" />
     <Compile Include="Models\SystemSummaryItem.cs" />
+    <Compile Include="Models\TemplateUpdatePropertiesItem.cs" />
     <Compile Include="Models\ValveScopeItem.cs" />
     <Compile Include="UserControls\AddEquipmentControl.xaml.cs">
       <DependentUpon>AddEquipmentControl.xaml</DependentUpon>
@@ -246,6 +247,9 @@
     </Compile>
     <Compile Include="UserControls\PropertyControls\IOModulePropertiesControl.xaml.cs">
       <DependentUpon>IOModulePropertiesControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PropertyControls\SubScopeTemplateUpdateControl.xaml.cs">
+      <DependentUpon>SubScopeTemplateUpdateControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\PropertyControls\TaggedPropertiesControl.xaml.cs">
       <DependentUpon>TaggedPropertiesControl.xaml</DependentUpon>
@@ -775,6 +779,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\PropertyControls\IOModulePropertiesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PropertyControls\SubScopeTemplateUpdateControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

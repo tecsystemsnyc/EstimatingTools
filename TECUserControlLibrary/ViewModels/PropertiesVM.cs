@@ -15,7 +15,7 @@ namespace TECUserControlLibrary.ViewModels
 {
     public class PropertiesVM : ViewModelBase, IDropTarget
     {
-        private TECScopeManager scopeManager;
+        public TECScopeManager ScopeManager { get; private set; }
 
         private TECCatalogs _catalogs;
         private TECParameters _parameters;
@@ -90,7 +90,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private string getTemplateText(TECObject item)
         {
-            TECTemplates templates = scopeManager as TECTemplates;
+            TECTemplates templates = ScopeManager as TECTemplates;
             if(templates.IsTemplateObject(item))
             {
                 string parentString = "";
@@ -132,7 +132,7 @@ namespace TECUserControlLibrary.ViewModels
         private void setReadOnly(TECObject value)
         {
             ReadOnly = false;
-            if(scopeManager is TECBid)
+            if(ScopeManager is TECBid)
             {
                 if(value is TECHardware)
                 {
@@ -173,7 +173,7 @@ namespace TECUserControlLibrary.ViewModels
                 Locations = bid.Locations;
                 Parameters = bid.Parameters;
             }
-            this.scopeManager = scopeManager;
+            this.ScopeManager = scopeManager;
         }
 
         public void DragOver(IDropInfo dropInfo)
@@ -183,7 +183,7 @@ namespace TECUserControlLibrary.ViewModels
 
         public void Drop(IDropInfo dropInfo)
         {
-            DragDropHelpers.StandardDrop(dropInfo, scopeManager);
+            DragDropHelpers.StandardDrop(dropInfo, ScopeManager);
         }
     }
 }
