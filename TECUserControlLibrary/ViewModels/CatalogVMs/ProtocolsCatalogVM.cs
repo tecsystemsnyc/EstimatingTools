@@ -15,6 +15,7 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
     public class ProtocolsCatalogVM : CatalogVMBase
     {
         private String _name = "";
+        private TECProtocol _selectedProtocol;
 
         public String Name
         {
@@ -26,6 +27,16 @@ namespace TECUserControlLibrary.ViewModels.CatalogVMs
             }
         }
         public ObservableCollection<TECConnectionType> ConnectionTypes { get; }
+        public TECProtocol SelectedProtocol
+        {
+            get { return _selectedProtocol; }
+            set
+            {
+                _selectedProtocol = value;
+                RaisePropertyChanged("SelectedProtocol");
+                RaiseSelectedChanged(SelectedProtocol);
+            }
+        } 
 
         public RelayCommand AddProtocolCommand { get; }
 

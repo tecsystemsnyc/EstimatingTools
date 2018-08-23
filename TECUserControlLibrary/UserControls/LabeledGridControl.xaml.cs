@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace TECUserControlLibrary.UserControls
 {
@@ -58,6 +59,20 @@ namespace TECUserControlLibrary.UserControls
         public static readonly DependencyProperty ReadOnlyProperty =
             DependencyProperty.Register("ReadOnly", typeof(bool), typeof(LabeledGridControl), new PropertyMetadata(false));
 
+
+        public TECLabeled Selected
+        {
+            get { return (TECLabeled)GetValue(SelectedLabeledProperty); }
+            set { SetValue(SelectedLabeledProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedLabeledProperty =
+            DependencyProperty.Register("Selected", typeof(TECLabeled),
+                typeof(LabeledGridControl), new FrameworkPropertyMetadata(null)
+                {
+                    BindsTwoWayByDefault = true,
+                    DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+                });
 
 
 

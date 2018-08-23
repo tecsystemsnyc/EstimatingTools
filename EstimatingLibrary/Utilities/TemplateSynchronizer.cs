@@ -23,14 +23,14 @@ namespace EstimatingLibrary.Utilities
         /// <param name="remove">Invoked upon removal of an item</param>
         /// <param name="sync">Writes the properties of the first argument to the second argument</param>
         public TemplateSynchronizer(Func<T, T> copy, Action<T> remove,
-            Action<TemplateSynchronizer<T>, T, T, TECChangedEventArgs> sync, TECTemplates templates)
+            Action<TemplateSynchronizer<T>, T, T, TECChangedEventArgs> sync, TECScopeTemplates templates)
         {
             this.copy = copy;
             this.sync = sync;
             this.remove = remove;
             dictionary = new Dictionary<T, List<T>>();
             unsubscribeDictionary = new Dictionary<(T, bool), Action>();
-            ChangeWatcher watcher = new ChangeWatcher(templates.Templates);
+            ChangeWatcher watcher = new ChangeWatcher(templates);
             watcher.Changed += handleTemplatesChanged;
         }
         

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace TECUserControlLibrary.UserControls
 {
@@ -30,15 +31,19 @@ namespace TECUserControlLibrary.UserControls
               typeof(ManufacturersGridControl), new PropertyMetadata(default(IEnumerable<TECManufacturer>)));
 
 
-        public TECManufacturer SelectedItem
+        public TECManufacturer Selected
         {
-            get { return (TECManufacturer)GetValue(SelectedItemProperty); }
-            set { SetValue(SelectedItemProperty, value); }
+            get { return (TECManufacturer)GetValue(SelectedProperty); }
+            set { SetValue(SelectedProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for SelectedItem.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty SelectedItemProperty =
-            DependencyProperty.Register("SelectedItem", typeof(TECManufacturer), typeof(ManufacturersGridControl));
+        public static readonly DependencyProperty SelectedProperty =
+            DependencyProperty.Register("Selected", typeof(TECManufacturer), typeof(ManufacturersGridControl), new FrameworkPropertyMetadata(null)
+            {
+                BindsTwoWayByDefault = true,
+                DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+            });
         
         #endregion
 

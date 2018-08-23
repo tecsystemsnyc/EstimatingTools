@@ -37,7 +37,7 @@ namespace TECUserControlLibrary.Utilities
         }
     }
 
-
+    public class TaggedSelector : InterfaceDataTemplateSelector<TECTagged> { }
     public class ScopeSelector : InterfaceDataTemplateSelector<TECScope> { }
     public class CostSelector : InterfaceDataTemplateSelector<TECCost> { }
     public class HardwareSelector : InterfaceDataTemplateSelector<TECHardware> { }

@@ -41,7 +41,7 @@ namespace EstimatingLibrary
             {
                 return new TECSubScope(item);
             }), (item => { }),
-            syncSubScope, this);
+            syncSubScope, this.Templates);
             SubScopeSynchronizer.TECChanged += synchronizerChanged;
 
             EquipmentSynchronizer = new TemplateSynchronizer<TECEquipment>(
@@ -68,7 +68,7 @@ namespace EstimatingLibrary
                     }
                 }),
                 //Sync
-                syncEquipment, this);
+                syncEquipment, this.Templates);
             EquipmentSynchronizer.TECChanged += synchronizerChanged;
             
         }

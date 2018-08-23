@@ -15,8 +15,8 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=parent}">
-        <DataGrid ItemsSource="{Binding Path=ManufacturersSource}"
-                  SelectedItem="{Binding Path=SelectedItem}"
+        <DataGrid ItemsSource="{Binding ManufacturersSource}"
+                  SelectedItem="{Binding Selected}"
                   AutoGenerateColumns="False"
                   x:Name="ManufacturersGrid"
                   CanUserAddRows="False"

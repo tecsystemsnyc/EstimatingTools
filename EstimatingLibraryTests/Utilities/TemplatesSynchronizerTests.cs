@@ -31,7 +31,7 @@ namespace Utilities
         public void NewItemTest()
         {
             //Arrange
-            TECTemplates templates = new TECTemplates();
+            TECScopeTemplates templates = new TECScopeTemplates();
 
             TemplateSynchronizer<TECSubScope> synchronizer =
                 new TemplateSynchronizer<TECSubScope>(copySubScope, item => { }, syncSubScope, templates);
@@ -53,7 +53,7 @@ namespace Utilities
         public void NewItemNoGroupTest()
         {
             //Arrange
-            TECTemplates templates = new TECTemplates();
+            TECScopeTemplates templates = new TECScopeTemplates();
 
             TemplateSynchronizer<TECSubScope> synchronizer =
                 new TemplateSynchronizer<TECSubScope>(copySubScope, item => { }, syncSubScope, templates);
@@ -73,7 +73,7 @@ namespace Utilities
         public void ChangeTemplateTest()
         {
             //Arrange
-            TECTemplates templates = new TECTemplates();
+            TECScopeTemplates templates = new TECScopeTemplates();
 
             TemplateSynchronizer<TECSubScope> synchronizer =
                 new TemplateSynchronizer<TECSubScope>(copySubScope, item => { }, syncSubScope, templates);
@@ -94,7 +94,7 @@ namespace Utilities
         public void ChangeInstanceTest()
         {
             //Arrange
-            TECTemplates templates = new TECTemplates();
+            TECScopeTemplates templates = new TECScopeTemplates();
 
             TemplateSynchronizer<TECSubScope> synchronizer =
                 new TemplateSynchronizer<TECSubScope>(copySubScope, item => { }, syncSubScope, templates);
@@ -115,7 +115,7 @@ namespace Utilities
         public void LinkExistingTest()
         {
             //Arrange
-            TECTemplates templates = new TECTemplates();
+            TECScopeTemplates templates = new TECScopeTemplates();
 
             TemplateSynchronizer<TECSubScope> synchronizer =
                 new TemplateSynchronizer<TECSubScope>(copySubScope, item => { }, syncSubScope, templates);
@@ -607,7 +607,7 @@ namespace Utilities
         [TestMethod()]
         public void NewGroupTest()
         {
-            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECScopeTemplates());
             var template = new TestObject();
             synchronizer.NewGroup(template);
 
@@ -618,7 +618,7 @@ namespace Utilities
         [TestMethod()]
         public void RemoveGroupTest()
         {
-            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECScopeTemplates());
             var template = new TestObject();
             synchronizer.NewGroup(template);
 
@@ -630,7 +630,7 @@ namespace Utilities
         [TestMethod()]
         public void NewItemTest1()
         {
-            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECScopeTemplates());
             var template = new TestObject();
             synchronizer.NewGroup(template);
 
@@ -643,7 +643,7 @@ namespace Utilities
         [TestMethod()]
         public void RemoveItemTest()
         {
-            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECScopeTemplates());
             var template = new TestObject();
             synchronizer.NewGroup(template);
 
@@ -656,7 +656,7 @@ namespace Utilities
         [TestMethod()]
         public void RemoveItemTest1()
         {
-            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECScopeTemplates());
             var template = new TestObject();
             synchronizer.NewGroup(template);
 
@@ -669,7 +669,7 @@ namespace Utilities
         [TestMethod()]
         public void LinkExistingTest1()
         {
-            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECScopeTemplates());
             var template = new TestObject();
             synchronizer.NewGroup(template);
 
@@ -682,7 +682,7 @@ namespace Utilities
         [TestMethod()]
         public void LinkExistingTest2()
         {
-            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECScopeTemplates());
             var template = new TestObject();
             synchronizer.NewGroup(template);
 
@@ -698,7 +698,7 @@ namespace Utilities
         [TestMethod()]
         public void LinkNewTest()
         {
-            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECScopeTemplates());
             var template = new TestObject();
             synchronizer.NewGroup(template);
 
@@ -719,7 +719,7 @@ namespace Utilities
         [TestMethod()]
         public void ContainsTest()
         {
-            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECScopeTemplates());
             var template = new TestObject();
             synchronizer.NewGroup(template);
 
@@ -732,7 +732,7 @@ namespace Utilities
         [TestMethod()]
         public void ContainsTest1()
         {
-            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECScopeTemplates());
             var template = new TestObject();
             synchronizer.NewGroup(template);
 
@@ -745,7 +745,7 @@ namespace Utilities
         [TestMethod()]
         public void GetFullDictionaryTest()
         {
-            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECScopeTemplates());
             var template = new TestObject();
             synchronizer.NewGroup(template);
 
@@ -759,7 +759,7 @@ namespace Utilities
         [TestMethod()]
         public void GetTemplateTest()
         {
-            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECScopeTemplates());
             var template = new TestObject();
             synchronizer.NewGroup(template);
 
@@ -773,7 +773,7 @@ namespace Utilities
         [TestMethod()]
         public void GetParentTest()
         {
-            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECTemplates());
+            TemplateSynchronizer<TestObject> synchronizer = new TemplateSynchronizer<TestObject>(obj => new TestObject(), obj => { }, (sync, obj1, obj2, e) => { }, new TECScopeTemplates());
             var template = new TestObject();
             synchronizer.NewGroup(template);
 

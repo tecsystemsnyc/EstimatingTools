@@ -51,8 +51,12 @@ namespace TECUserControlLibrary.UserControls
 
         // Using a DependencyProperty as the backing store for Selected.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SelectedProperty =
-            DependencyProperty.Register("Selected", typeof(TECConnectionType), typeof(ConnectionTypesGridControl));
-        
+            DependencyProperty.Register("Selected", typeof(TECConnectionType), typeof(ConnectionTypesGridControl), new FrameworkPropertyMetadata(null)
+            {
+                BindsTwoWayByDefault = true,
+                DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+            });
+
         public ConnectionTypesGridControl()
         {
             InitializeComponent();

@@ -28,6 +28,11 @@
                 <Style TargetType="TextBlock">
                     <Setter Property="Foreground" Value="Black"/>
                 </Style>
+                <DataTemplate x:Key="tagged">
+                    <pControls:TaggedPropertiesControl Selected="{Binding}"
+                                                      DropHandler="{Binding ElementName=propertiesView, Path=DropHandler}"
+                                                      ReadOnly="{Binding ElementName=propertiesView, Path=ViewModel.ReadOnly}"/>
+                </DataTemplate>
                 <DataTemplate x:Key="scope">
                     <pControls:ScopePropertiesControl Selected="{Binding}"
                                                       DropHandler="{Binding ElementName=propertiesView, Path=DropHandler}"
@@ -115,6 +120,9 @@
                 <utilities:PointInterfaceSelector x:Key="PointSelector"
                                               InterfaceTemplate="{StaticResource pointInterface}" 
                                               DefaultTemplate="{StaticResource default}"/>
+                <utilities:TaggedSelector x:Key="TaggedSelector"
+                                          InterfaceTemplate="{StaticResource tagged}"
+                                          DefaultTemplate="{StaticResource default}"/>
                 <utilities:ScopeSelector x:Key="ScopeSelector"
                                               InterfaceTemplate="{StaticResource scope}" 
                                               DefaultTemplate="{StaticResource default}"/>
@@ -174,6 +182,7 @@
                            Visibility="{Binding ElementName=propertiesView, Path=Selected, Converter={utilities:NullToCollapsedConverter}}"
                            TextTrimming="CharacterEllipsis"/>
             </Grid>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource TaggedSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource ScopeSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource LabeledSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource HardwareSelector}"/>

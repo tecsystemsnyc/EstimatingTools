@@ -39,6 +39,7 @@
             <Button Content="Add" Command="{Binding AddTagCommand}" Grid.Row="0" Grid.Column="2" Margin="2"/>
         </Grid>
         <controls:LabeledGridControl LabeledSource="{Binding Templates.Catalogs.Tags}"
+                                     Selected="{Binding SelectedTag}"
                                      Grid.Row="1"/>
     </Grid>
 </UserControl>

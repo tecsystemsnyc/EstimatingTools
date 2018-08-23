@@ -50,7 +50,8 @@
         </Grid>
         <DataGrid ItemsSource="{Binding Templates.Catalogs.Protocols}"
                   Grid.Row="3"
-                  AutoGenerateColumns="False">
+                  AutoGenerateColumns="False"
+                  SelectedItem="{Binding SelectedProtocol}">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Label}" Header="Name"/>
             </DataGrid.Columns>

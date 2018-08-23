@@ -22,6 +22,7 @@
                   AutoGenerateColumns="False"
                   x:Name="TagsGrid"
                   IsReadOnly="{Binding ReadOnly}"
+                  SelectedItem="{Binding Selected}"
                   CanUserAddRows="False"
                   CanUserSortColumns="True"
                   dd:DragDrop.DropHandler="{Binding DropHandler}">
