@@ -48,7 +48,7 @@
 
             </Grid.RowDefinitions>
             <Label Content="Quantity: " Grid.Row="0"/>
-            <TextBox Text="{Binding ElementName=addSubScopeView, Path=ViewModel.Quantity}" Grid.Row="0" Grid.Column="1"
+            <TextBox Text="{Binding ElementName=addSubScopeView, Path=ViewModel.Quantity, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"
                      Margin="2"/>
             <Grid Grid.Row="1" Grid.ColumnSpan="2" Height="25"
                   Visibility="{Binding ElementName=addSubScopeView, Path=ViewModel.DisplayReferenceProperty, Converter={utilities:BooleanToVisibilityConverter}}">

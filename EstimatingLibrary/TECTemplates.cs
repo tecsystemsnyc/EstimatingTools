@@ -100,6 +100,14 @@ namespace EstimatingLibrary
             {
                 return Templates.MiscCostTemplates.Contains(misc);
             }
+            else if (item is TECParameters parameters)
+            {
+                return Templates.Parameters.Contains(parameters);
+            }
+            else if (item is TECSystem system)
+            {
+                return Templates.SystemTemplates.Contains(system);
+            }
             else
             {
                 return false;

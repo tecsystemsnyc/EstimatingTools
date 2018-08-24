@@ -88,7 +88,9 @@ namespace TECUserControlLibrary.Utilities
                 var protocols = connectable.AvailableProtocols;
                 if (protocols.Count == 1)
                 {
-                    connections.Add(controller.Connect(connectable, protocols.First()));
+                    var connection = controller.Connect(connectable, protocols.First());
+                    if (connection == null) throw new Exception("Connection was Null");
+                    connections.Add(connection);
                 }
                 else
                 {
@@ -97,7 +99,9 @@ namespace TECUserControlLibrary.Utilities
                         .Where(x => x is TECProtocol networkProtocol && availableIO.Contains(networkProtocol)))
                     {
                         connected = true;
-                        connections.Add(controller.Connect(connectable, protocol));
+                        var connection = controller.Connect(connectable, protocol);
+                        if (connection == null) throw new Exception("Connection was Null");
+                        connections.Add(connection);
                         break;
                     }
                     if (!connected && connectable.AvailableProtocols.Any(x => x is TECHardwiredProtocol)

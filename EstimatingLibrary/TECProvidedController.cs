@@ -53,12 +53,12 @@ namespace EstimatingLibrary
         }
         public override IOCollection AvailableIO
         {
-            get { return getPotentialIO() + base.AvailableIO; }
+            get
+            {
+                return base.AvailableIO + getPotentialIO();
+            }
         }
-        private IOCollection currentIO
-        {
-            get { return base.AvailableIO; }
-        }
+
         #endregion
 
         #region Constructors
@@ -83,18 +83,29 @@ namespace EstimatingLibrary
         {
             return new TECProvidedController(this, guidDictionary);
         }
-
+        
         public override IControllerConnection Connect(IConnectable connectable, IProtocol protocol)
         {
             IOCollection connectionIO = protocol is TECProtocol ? new IOCollection(protocol as TECProtocol) : new IOCollection(connectable.HardwiredIO);
 
-            if(!this.currentIO.Contains(connectionIO))
+            if (this.ChildrenConnections.OfType<TECNetworkConnection>().Any(x => x.Protocol == protocol))
+            {
+                return base.Connect(connectable, protocol);
+            }
+            else if (base.AvailableIO.Contains(connectionIO))
+            {
+                return base.Connect(connectable, protocol);
+            }
+            else
             {
                 var modulesToAdd = getModulesForIO(connectionIO);
-                if(modulesToAdd.Count == 0) { return null; }
+                if (modulesToAdd.Count == 0)
+                {
+                    return null;
+                }
                 modulesToAdd.ForEach(x => this.AddModule(x));
+                return base.Connect(connectable, protocol); ;
             }
-            return base.Connect(connectable, protocol);
         }
         #region Module Methods
         public bool CanAddModule(TECIOModule module)
@@ -125,7 +136,7 @@ namespace EstimatingLibrary
                 bool canSpare = true;
                 foreach (TECIO io in module.IO)
                 {
-                    if (!this.currentIO.Contains(io))
+                    if (!base.AvailableIO.Contains(io))
                     {
                         canSpare = false;
                         break;
@@ -163,7 +174,7 @@ namespace EstimatingLibrary
         private List<TECIOModule> getModulesForIO(IOCollection io)
         {
             IOCollection nessessaryIO = new IOCollection(io);
-            IOCollection relevantAvailableIO = (io | currentIO);
+            IOCollection relevantAvailableIO = (io | base.AvailableIO);
 
             if (!nessessaryIO.Remove(relevantAvailableIO)) throw new Exception("NessessaryIO collection is having trouble removing subset of itself.");
 
@@ -181,29 +192,21 @@ namespace EstimatingLibrary
             {
                 TECIO singularIO = new TECIO(type);
                 singularIO.Quantity = 1;
-
-                //List of remaining potential modules after return modules is considered
-                List<TECIOModule> newPotentialModules = new List<TECIOModule>(potentialModules);
-                foreach (TECIOModule module in returnModules)
-                {
-                    newPotentialModules.Remove(module);
-                }
-
-                //Add the first module that contains the IOType we're checking
-                foreach (TECIOModule module in newPotentialModules)
+                
+                //Add the modules that contains the IOType we're checking
+                foreach (TECIOModule module in potentialModules)
                 {
                     if (module.IOCollection.Contains(singularIO))
                     {
                         returnModules.Add(module);
-                        break;
+                        //If return modules satisfies our IO, return them
+                        if (returnModules.ToIOCollection().Contains(io))
+                        {
+                            return returnModules;
+                        }
                     }
                 }
-
-                //If return modules satisfies our IO, return them
-                if (returnModules.ToIOCollection().Contains(io))
-                {
-                    return returnModules;
-                }
+                
             }
 
             return new List<TECIOModule>();
@@ -215,7 +218,7 @@ namespace EstimatingLibrary
             if (newType == null) return false;
             TECProvidedController possibleController = new TECProvidedController(newType);
             IOCollection necessaryIO = this.UsedIO;
-            IOCollection possibleIO = possibleController.getPotentialIO() + possibleController.currentIO;
+            IOCollection possibleIO = possibleController.getPotentialIO() + possibleController.AvailableIO;
             return possibleIO.Contains(necessaryIO);
         }
         public bool ChangeType(TECControllerType newType)

@@ -116,6 +116,9 @@ namespace EstimatingLibrary
         }
         public bool CanConnect(IConnectable connectable, IProtocol protocol)
         {
+            bool connectableIsNull = connectable == null;
+            bool containsnetworkConnection = this.ChildrenConnections.OfType<TECNetworkConnection>().Select(x => x.Protocol).Contains(protocol);
+            bool canAcceptProtocol = CompatibleProtocols(connectable).Contains(protocol);
             return connectable != null &&
                 (CompatibleProtocols(connectable).Contains(protocol) || this.ChildrenConnections.OfType<TECNetworkConnection>().Select(x => x.Protocol).Contains(protocol));
         }
@@ -125,7 +128,8 @@ namespace EstimatingLibrary
         }
         public virtual IControllerConnection Connect(IConnectable connectable, IProtocol protocol)
         {
-            if (!CanConnect(connectable, protocol)) return null;
+            if (!CanConnect(connectable, protocol))
+                return null;
             IControllerConnection connection;
             bool isNew = true;
             bool isTypical = (connectable as ITypicalable)?.IsTypical ?? false;
@@ -137,7 +141,7 @@ namespace EstimatingLibrary
             {
                 TECNetworkConnection netConnect = ChildrenConnections.Where(x => x.Protocol == protocol).FirstOrDefault() as TECNetworkConnection;
                 isNew = netConnect == null;
-                if (netConnect == null)
+                if (isNew)
                 {
                     netConnect = new TECNetworkConnection(this, network);
                 }
@@ -255,6 +259,7 @@ namespace EstimatingLibrary
             //Remove hardwired connections
             RemoveAllChildHardwiredConnections();
         }
+        
         #endregion
 
         #region Methods

@@ -32,12 +32,16 @@ namespace EstimatingLibrary
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as TECHardwiredProtocol);
+            return this.Equals(obj as TECHardwiredProtocol);
         }
 
         public bool Equals(TECHardwiredProtocol other)
         {
-            
+            if(other == null)
+            {
+                return false;
+            }
+            bool sameConnectionTypes = ConnectionTypes.SequenceEqual(other.ConnectionTypes);
             return other != null && ConnectionTypes.SequenceEqual(other.ConnectionTypes);
         }
 
@@ -52,10 +56,15 @@ namespace EstimatingLibrary
             }
             return hashCode;
         }
-
+        
         public static bool operator ==(TECHardwiredProtocol protocol1, TECHardwiredProtocol protocol2)
         {
-            return EqualityComparer<TECHardwiredProtocol>.Default.Equals(protocol1, protocol2);
+            if (object.ReferenceEquals(protocol1, null))
+            {
+                return object.ReferenceEquals(protocol2, null);
+            }
+
+            return protocol1.Equals(protocol2);
         }
 
         public static bool operator !=(TECHardwiredProtocol protocol1, TECHardwiredProtocol protocol2)

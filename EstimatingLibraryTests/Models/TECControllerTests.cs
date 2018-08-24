@@ -248,7 +248,8 @@ namespace Models
             TECProtocol thirdProtocol = new TECProtocol(new List<TECConnectionType>());
             TECProtocol fourthProtocol = new TECProtocol(new List<TECConnectionType>());
 
-            TECDevice compatibleDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>() { secondProtocol, firstProtocol, fourthProtocol }, new TECManufacturer());
+            TECDevice compatibleDevice = new TECDevice(new List<TECConnectionType>(),
+                new List<TECProtocol>() { secondProtocol, firstProtocol, fourthProtocol }, new TECManufacturer());
             TECSubScope subScope = new TECSubScope();
             subScope.Devices.Add(compatibleDevice);
             
@@ -506,7 +507,50 @@ namespace Models
 
             Assert.IsNull(connection);
         }
-        
+
+        [TestMethod()]
+        public void ConnectTest4()
+        {
+            TECProtocol firstProtocol = new TECProtocol(new List<TECConnectionType>());
+            TECProtocol secondProtocol = new TECProtocol(new List<TECConnectionType>());
+            TECProtocol thirdProtocol = new TECProtocol(new List<TECConnectionType>());
+            TECProtocol fourthProtocol = new TECProtocol(new List<TECConnectionType>());
+
+            TECDevice compatibleDevice = new TECDevice(new List<TECConnectionType>(), new List<TECProtocol>() { secondProtocol, firstProtocol, fourthProtocol }, new TECManufacturer());
+            TECSubScope subScope1 = new TECSubScope();
+            subScope1.Devices.Add(compatibleDevice);
+            TECSubScope subScope2 = new TECSubScope();
+            subScope2.Devices.Add(compatibleDevice);
+            TECSubScope subScope3 = new TECSubScope();
+            subScope3.Devices.Add(compatibleDevice);
+            TECSubScope subScope4 = new TECSubScope();
+            subScope4.Devices.Add(compatibleDevice);
+
+            List<IConnectable> connectables = new List<IConnectable>
+            {
+                subScope1,
+                subScope2,
+                subScope3,
+                subScope4
+            };
+
+
+            TECControllerType type = new TECControllerType(new TECManufacturer());
+            type.IO.Add(new TECIO(firstProtocol));
+
+            TECProvidedController controller = new TECProvidedController(type);
+
+            foreach (var subScope in connectables)
+            {
+                TECNetworkConnection connection = controller.Connect(subScope, firstProtocol) as TECNetworkConnection;
+
+                Assert.IsTrue(connection.Children.Contains(subScope));
+                Assert.IsTrue(controller.ChildrenConnections.Contains(connection));
+                Assert.IsTrue((subScope as IConnectable).GetParentConnection() == connection);
+                Assert.IsTrue(connection.Protocol == firstProtocol);
+            }
+        }
+
         [TestMethod()]
         public void DisconnectTest()
         {

@@ -330,6 +330,11 @@ namespace TECUserControlLibrary.ViewModels
                     this.Locations.Remove(location);
                 }
             }
+            else if (obj.Value is IControllerConnection)
+            {
+                ControllerFilter.RaiseFilter();
+                ConnectableFilter.RaiseFilter();
+            }
         }
         private void parentScopeChanged(TECChangedEventArgs obj)
         {
@@ -584,6 +589,10 @@ namespace TECUserControlLibrary.ViewModels
                 return false;
             }
             return true;
+        }
+        public void RaiseFilter()
+        {
+            FilterChanged?.Invoke();
         }
     }
 

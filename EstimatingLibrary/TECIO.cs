@@ -322,7 +322,8 @@ namespace EstimatingLibrary
         }
         public bool Remove(TECIO io)
         {
-            if (!this.Contains(io)) return false;
+            if (!this.Contains(io))
+                return false;
             if(io.Type == IOType.Protocol)
             {
                 for(int x = 0; x < io.Quantity; x++)
@@ -379,7 +380,7 @@ namespace EstimatingLibrary
             {
                 foreach(TECIO rightIO in right.ToList())
                 {
-                    if (leftIO.Type == rightIO.Type)
+                    if (leftIO.Type == rightIO.Type && leftIO.Protocol == rightIO.Protocol)
                     {
                         intersection.Add(leftIO.Quantity < rightIO.Quantity ? leftIO : rightIO); 
                     }

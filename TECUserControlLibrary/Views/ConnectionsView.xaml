@@ -9,6 +9,8 @@
              xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
              xmlns:models="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              xmlns:dd="urn:gong-wpf-dragdrop"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -107,6 +109,7 @@
                                           SelectedItem="{Binding SelectedConnection}"
                                           HorizontalContentAlignment="Stretch"
                                           x:Name="connectionsList">
+                                    
                                     <ListView.Resources>
                                         <DataTemplate DataType="{x:Type models:TECHardwiredConnection}">
                                             <Grid>
@@ -151,6 +154,9 @@
                                                     <ListView ItemsSource="{Binding Children}"
                                                               dd:DragDrop.DropHandler="{Binding ElementName=connectionsView, Path=VM.ConnectionDropHandler}"
                                                               dd:DragDrop.IsDropTarget="True">
+                                                        <i:Interaction.Behaviors>
+                                                            <utilities:BubbleScrollEvent/>
+                                                        </i:Interaction.Behaviors>
                                                         <ListView.ItemTemplate>
                                                             <DataTemplate>
                                                                 <Border Style="{StaticResource ListItemBorder}">
