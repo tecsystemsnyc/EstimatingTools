@@ -88,6 +88,8 @@ namespace EstimateBuilder.MVVM
 
         private void setupMenu()
         {
+            addMenuItem("Templates");
+
             //File menu items
             addMenuItem("Refresh Bid", "Can't refresh", parentItemName: "File");
 

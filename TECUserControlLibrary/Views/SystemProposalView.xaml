@@ -68,25 +68,31 @@
                                     <TextBlock Text="{Binding DisplayName}"
                                                Foreground="Black"
                                                FontWeight="Bold"/>
-                                    <ListView ItemsSource="{Binding ContainingScope}"
-                                              Grid.Row="1"
-                                              dd:DragDrop.DropHandler="{Binding ElementName=parentGrid, Path=DataContext}"
-                                              dd:DragDrop.IsDropTarget="True"
-                                              dd:DragDrop.IsDragSource="True">
-                                        <ListView.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <WrapPanel/>
-                                            </ItemsPanelTemplate>
-                                        </ListView.ItemsPanel>
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate>
-                                                <Border Style="{StaticResource ListItemBorder}"
-                                                        Background="{StaticResource ItemBackgroundBrush}">
-                                                    <TextBlock Text="{Binding Name}" Foreground="Black"/>
-                                                </Border>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
+                                    <Border Style="{StaticResource ItemsAreaBorder}"
+                                                  Grid.Row="1">
+                                        
+                                        <ListView ItemsSource="{Binding ContainingScope}"
+                                                  dd:DragDrop.DropHandler="{Binding ElementName=parentGrid, Path=DataContext}"
+                                                  dd:DragDrop.IsDropTarget="True"
+                                                  dd:DragDrop.IsDragSource="True"
+                                                  Background="Transparent"
+                                                  BorderBrush="Transparent">
+                                            <ListView.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <WrapPanel/>
+                                                </ItemsPanelTemplate>
+                                            </ListView.ItemsPanel>
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Style="{StaticResource ListItemBorder}"
+                                                            Background="{StaticResource ItemBackgroundBrush}">
+                                                        <TextBlock Text="{Binding Name}" Foreground="Black"/>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
+                                    </Border>
+
                                     <ListView ItemsSource="{Binding Branches}"
                                               Grid.Row="2"
                                               HorizontalContentAlignment="Stretch">

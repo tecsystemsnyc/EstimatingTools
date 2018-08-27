@@ -149,7 +149,6 @@ namespace TECUserControlLibrary.ViewModels
             //Main menu items
             addMenuItem("File");
             addMenuItem("Edit");
-            addMenuItem("Templates");
             addMenuItem("Help");
 
             //File menu items

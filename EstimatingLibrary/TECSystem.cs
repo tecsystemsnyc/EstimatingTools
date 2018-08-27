@@ -360,6 +360,10 @@ namespace EstimatingLibrary
             {
                 return ScopeBranches.Remove(branch);
             }
+            else if (property == "ProposalItems" && item is TECProposalItem propItem)
+            {
+                return ProposalItems.Remove(propItem);
+            }
             else
             {
                 return this.RemoveChildForScopeProperty(property, item);
@@ -387,6 +391,10 @@ namespace EstimatingLibrary
             else if (property == "ScopeBranch" && item is TECScopeBranch branch)
             {
                 return ScopeBranches.Contains(branch);
+            }
+            else if (property == "ProposalItems" && item is TECProposalItem propItem)
+            {
+                return ProposalItems.Contains(propItem);
             }
             else
             {

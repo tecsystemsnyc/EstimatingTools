@@ -88,11 +88,6 @@ namespace TECUserControlLibrary.ViewModels
             this.ConduitTypes =  new List<TECElectricalMaterial>(conduitTypes);
             this.ConduitType = this.ConduitTypes.FirstOrDefault();
             ParentControllers = getCompatibleControllers(controllers);
-            if (ParentControllers.Count > 0)
-            {
-                Connect = true;
-                SelectedController = ParentControllers.First();
-            }
         }
 
         private List<TECController> getCompatibleControllers(IEnumerable<TECController> controllers)
@@ -116,10 +111,20 @@ namespace TECUserControlLibrary.ViewModels
             {
                 SelectedController = null;
             }
-            if(SelectedController == null && ParentControllers.Count > 0)
+            if(SelectedController == null)
             {
-                SelectedController = ParentControllers.First();
+                if(ParentControllers.Count > 0)
+                {
+                    Connect = true;
+                    SelectedController = ParentControllers.First();
+                }
+                else
+                {
+                    Connect = false;
+                }
+                
             }
+            
             RaisePropertyChanged("ParentControllers");
         }
         public void ExecuteConnection(IEnumerable<IConnectable> finalToConnect)
