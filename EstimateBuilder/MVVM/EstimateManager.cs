@@ -6,6 +6,7 @@ using EstimatingUtilitiesLibrary.Exports;
 using GalaSoft.MvvmLight.CommandWpf;
 using NLog;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using TECUserControlLibrary.BaseVMs;
@@ -199,6 +200,7 @@ namespace EstimateBuilder.MVVM
             {
                 bid.Templates.Fill(templates.Templates);
             }
+            
             if (ReplaceCatalogs)
             {
                 bid.Catalogs.Unionize(templates.Catalogs);
@@ -208,8 +210,11 @@ namespace EstimateBuilder.MVVM
                 bid.Catalogs.Fill(templates.Catalogs);
             }
             ModelLinkingHelper.LinkBidToCatalogs(bid);
+            
             estimate = new TECEstimator(bid, watcher);
+            
             EditorVM = new EstimateEditorVM(bid, watcher, estimate);
+            
             CurrentVM = EditorVM;
             ViewEnabled = true;
         }

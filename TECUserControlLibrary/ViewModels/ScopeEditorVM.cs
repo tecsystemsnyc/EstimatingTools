@@ -109,6 +109,10 @@ namespace TECUserControlLibrary.ViewModels
                 {
                     return (typable is TECTypical || !typable.IsTypical);
                 }
+                else if (obj is TECScopeTemplates || obj is TECCatalogs)
+                {
+                    return false;
+                }
                 else
                 {
                     return true;
