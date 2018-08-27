@@ -8,6 +8,7 @@ using NLog;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using TECUserControlLibrary.BaseVMs;
 using TECUserControlLibrary.Debug;
@@ -118,8 +119,7 @@ namespace EstimateBuilder.MVVM
         {
             get { return EBSettings.TemplatesDirectory; }
         }
-
-
+        
         #endregion
 
         public EstimateManager() : base("Estimate Builder",
@@ -209,6 +209,12 @@ namespace EstimateBuilder.MVVM
             {
                 bid.Catalogs.Fill(templates.Catalogs);
             }
+
+            if(databaseManager == null)
+            {
+                bid.Parameters = bid.Templates.Parameters.FirstOrDefault();
+            }
+
             ModelLinkingHelper.LinkBidToCatalogs(bid);
             
             estimate = new TECEstimator(bid, watcher);
