@@ -63,6 +63,7 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("SelectedControllerGroup");
                 RaisePropertyChanged("SelectedController");
                 Selected?.Invoke(value?.Scope as TECObject);
+                ConnectableFilter.RaiseFilter();
             }
         }
         public FilteredConnectablesGroup SelectedConnectableGroup
@@ -193,6 +194,19 @@ namespace TECUserControlLibrary.ViewModels
             }
             this.filterPredicate = filterPredicate;
 
+            ConnectableFilter.basePredicate = connectable =>
+            {
+                if (!connectable.IsConnected() && connectable.AvailableProtocols.Count == 0)
+                {
+                    return false;
+                }
+                if(connectable == SelectedController)
+                {
+                    return false;
+                }
+                return true;
+            };
+
             this.InterlocksVM = new InterlocksVM(root, watcher, catalogs, filterPredicate);
 
             this.root = root;
@@ -256,7 +270,8 @@ namespace TECUserControlLibrary.ViewModels
             return SelectedProtocol != null && SelectedConnectable != null && SelectedController != null;
         }
         
-        private void repopulateGroups(ITECObject parent, ITECObject item, Action<FilteredConnectablesGroup, IConnectable, IEnumerable<ITECObject>> action, List<ITECObject> parentPath = null)
+        private void repopulateGroups(ITECObject parent, ITECObject item, Action<FilteredConnectablesGroup, 
+            IConnectable, IEnumerable<ITECObject>> action, List<ITECObject> parentPath = null)
         {
             parentPath = parentPath ?? new List<ITECObject>();
             if(parent != null) { parentPath.Add(parent); }
@@ -278,6 +293,11 @@ namespace TECUserControlLibrary.ViewModels
                     var toRemove = new List<ITECObject>();
                     for (int x = parentPath.Count - 2; x >= 0; x--)
                     {
+                        if (parentPath.Count == 0 || x < 0)
+                        {
+                            logger.Error("Connectable path had some issue getting the path to {0} from {1}", item, parent);
+                            return;
+                        }
                         if (!thisPath.Contains(parentPath[x]) && (parentPath[x] as IRelatable).GetDirectChildren().Contains(start))
                         {
                             thisPath.Insert(0, parentPath[x]);
@@ -561,12 +581,14 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
+        public Func<IConnectable, bool> basePredicate;
+
         public event Action FilterChanged;
 
         public bool PassesFilter(IConnectable connectable)
         {
             //No Connection Methods
-            if(!connectable.IsConnected() && connectable.AvailableProtocols.Count == 0)
+            if (basePredicate != null && !basePredicate(connectable))
             {
                 return false;
             }

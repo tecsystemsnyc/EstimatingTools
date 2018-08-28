@@ -227,44 +227,6 @@ namespace EstimatingLibrary
             return canExecute;
         }
         
-        public List<IControllerConnection> CreateTypicalAndInstanceConnections(TECController typicalController, TECSubScope typicalSubScope, IProtocol protocol)
-        {
-            if (!this.GetAllSubScope().Contains(typicalSubScope))
-            {
-                throw new Exception("SubScope does not exist in typical.");
-            }
-            if (!this.Controllers.Contains(typicalController))
-            {
-                throw new Exception("Controller does not exist in typical.");
-            }
-
-            List<IControllerConnection> outConnections = new List<IControllerConnection>();
-            outConnections.Add(typicalController.Connect(typicalSubScope, protocol));
-
-            foreach (TECController instanceController
-                    in this.TypicalInstanceDictionary.GetInstances(typicalController))
-            {
-                foreach (TECSubScope instanceSubScope
-                    in this.TypicalInstanceDictionary.GetInstances(typicalSubScope))
-                {
-                    bool found = false;
-                    foreach (TECSystem instance in this.Instances)
-                    {
-                        if (instance.Controllers.Contains(instanceController) &&
-                            instance.GetAllSubScope().Contains(instanceSubScope))
-                        {
-                            outConnections.Add(instanceController.Connect(instanceSubScope, protocol));
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (found)
-                        break;
-                }
-            }
-
-            return outConnections;
-        }
         public List<T> GetInstancesFromTypical<T>(T typical) where T : ITECObject
         {
             return this.TypicalInstanceDictionary.GetInstances(typical);

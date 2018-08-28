@@ -146,26 +146,11 @@ namespace EstimateBuilder.MVVM
                 ViewEnabled = false;
                 databaseManager = new DatabaseManager<TECBid>(bidFilePath);
                 databaseManager.LoadComplete += handleLoaded;
-                databaseManager.LoadComplete += assignTemplates;
                 databaseManager.AsyncLoad();
             }
             else
             {
                 handleLoaded(getNewWorkingScope());
-                assignTemplates(bid);
-            }
-            
-            void assignTemplates(TECBid loadedBid)
-            {
-                if(databaseManager != null) databaseManager.LoadComplete -= assignTemplates;
-                DatabaseManager<TECTemplates> templatesDatabaseManager = null;
-                if (templatesFilePath != "")
-                {
-                    templatesDatabaseManager = new DatabaseManager<TECTemplates>(templatesFilePath);
-                    templatesDatabaseManager.LoadComplete += handleLoadedTemplates;
-                    ViewEnabled = false;
-                    templatesDatabaseManager.AsyncLoad();
-                }
             }
             
         }
@@ -178,11 +163,21 @@ namespace EstimateBuilder.MVVM
                 watcher = new ChangeWatcher(bid);
                 doStack = new DoStacker(watcher);
                 deltaStack = new DeltaStacker(watcher, bid);
-
-                estimate = new TECEstimator(bid, watcher);
-
-                EditorVM = new EstimateEditorVM(bid, watcher, estimate);
-                CurrentVM = EditorVM;
+                
+                if(databaseManager == null && currentTemplatesPath != "")
+                {
+                    DatabaseManager<TECTemplates> templatesDatabaseManager = new DatabaseManager<TECTemplates>(currentTemplatesPath);
+                    templatesDatabaseManager.LoadComplete += handleLoadedTemplates;
+                    ViewEnabled = false;
+                    templatesDatabaseManager.AsyncLoad();
+                }
+                else
+                {
+                    estimate = new TECEstimator(bid, watcher);
+                    EditorVM = new EstimateEditorVM(bid, watcher, estimate);
+                    CurrentVM = EditorVM;
+                }
+                
             }
             else
             {

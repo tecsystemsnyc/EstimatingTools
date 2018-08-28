@@ -1862,6 +1862,7 @@ namespace EstimatingUtilitiesLibraryTests
             List<string> values = new List<string>();
             values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("ebdbcc85-10f4-46b3-99e7-d896679f874a");
+            values.Add("0");
             addDataToTable(new TemplatesSystemTable(), values);
         }
         private static void addToTemplatesEquipmentTable()
@@ -1869,6 +1870,7 @@ namespace EstimatingUtilitiesLibraryTests
             List<string> values = new List<string>();
             values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("1645886c-fce7-4380-a5c3-295f91961d16");
+            values.Add("0");
             addDataToTable(new TemplatesEquipmentTable(), values);
         }
         private static void addToTemplatesSubScopeTable()
@@ -1876,6 +1878,7 @@ namespace EstimatingUtilitiesLibraryTests
             List<string> values = new List<string>();
             values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("3ebdfd64-5249-4332-a832-ff3cc0cdb309");
+            values.Add("0");
             addDataToTable(new TemplatesSubScopeTable(), values);
         }
         private static void addToTemplatesControllerTable()
@@ -1883,6 +1886,7 @@ namespace EstimatingUtilitiesLibraryTests
             List<string> values = new List<string>();
             values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
+            values.Add("0");
             addDataToTable(new TemplatesControllerTable(), values);
         }
         private static void addToTemplatesPanelTable()
@@ -1890,6 +1894,7 @@ namespace EstimatingUtilitiesLibraryTests
             List<string> values = new List<string>();
             values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("a8cdd31c-e690-4eaa-81ea-602c72904391");
+            values.Add("0");
             addDataToTable(new TemplatesPanelTable(), values);
         }
         private static void addToTemplatesMiscTable()
@@ -1897,6 +1902,7 @@ namespace EstimatingUtilitiesLibraryTests
             List<string> values = new List<string>();
             values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("5df99701-1d7b-4fbe-843d-40793f4145a8");
+            values.Add("0");
             addDataToTable(new TemplatesMiscCostTable(), values);
         }
         private static void addToTemplatesParametersTable()
@@ -1904,6 +1910,7 @@ namespace EstimatingUtilitiesLibraryTests
             List<string> values = new List<string>();
             values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("7d3e8604-7bbb-4fe1-b3c4-5fb7f254d486");
+            values.Add("0");
             addDataToTable(new TemplatesParametersTable(), values);
         }
         
@@ -1947,6 +1954,7 @@ namespace EstimatingUtilitiesLibraryTests
             values = new List<string>();
             values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("7e61613f-62ec-4b06-b875-84b14e432758");
+            values.Add("0");
             addDataToTable(new TemplatesEquipmentTable(), values);
 
             values = new List<string>();
@@ -1970,6 +1978,7 @@ namespace EstimatingUtilitiesLibraryTests
             values = new List<string>();
             values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("826ae232-c1c5-4924-8e10-cf2d7a1d1ec4");
+            values.Add("0");
             addDataToTable(new TemplatesSubScopeTable(), values);
 
             values = new List<string>();
@@ -1988,6 +1997,7 @@ namespace EstimatingUtilitiesLibraryTests
             values = new List<string>();
             values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("e096ffb5-82f3-41c2-b767-c73b22c6875b");
+            values.Add("0");
             addDataToTable(new TemplatesSystemTable(), values);
 
             values = new List<string>();
@@ -2011,6 +2021,7 @@ namespace EstimatingUtilitiesLibraryTests
             values = new List<string>();
             values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("5e5c034a-8c88-4ae4-92a8-a1bac716af82");
+            values.Add("0");
             addDataToTable(new TemplatesEquipmentTable(), values);
 
             values = new List<string>();
@@ -2030,6 +2041,7 @@ namespace EstimatingUtilitiesLibraryTests
             values = new List<string>();
             values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("d562049c-ea9e-449c-8c1f-eaa7fbcb70d3");
+            values.Add("0");
             addDataToTable(new TemplatesSystemTable(), values);
 
             //Template Equipment
@@ -2042,6 +2054,7 @@ namespace EstimatingUtilitiesLibraryTests
             values = new List<string>();
             values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("adced9c6-41c1-478b-b9db-3833f1618378");
+            values.Add("0");
             addDataToTable(new TemplatesEquipmentTable(), values);
 
             //Template SubScope
@@ -2054,6 +2067,7 @@ namespace EstimatingUtilitiesLibraryTests
             values = new List<string>();
             values.Add("7a28bacb-8dea-4a48-8fcd-91281c53ea24");
             values.Add("59d6adb3-7f48-4448-82fa-f77cdfac47ad");
+            values.Add("0");
             addDataToTable(new TemplatesSubScopeTable(), values);
 
             //Reference Equipment in System

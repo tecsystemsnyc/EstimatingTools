@@ -169,7 +169,8 @@ namespace TECUserControlLibrary.ViewModels
             return ConnectionTypes.Count != 0;
         }
         
-        private void repopulateGroups(ITECObject parent, ITECObject item, Action<ScopeGroup, IInterlockable, IEnumerable<ITECObject>> action, List<ITECObject> parentPath = null)
+        private void repopulateGroups(ITECObject parent, ITECObject item, Action<ScopeGroup,
+            IInterlockable, IEnumerable<ITECObject>> action, List<ITECObject> parentPath = null)
         {
             parentPath = parentPath ?? new List<ITECObject>();
             if (parent != null) { parentPath.Add(parent); }
@@ -183,6 +184,11 @@ namespace TECUserControlLibrary.ViewModels
                 var toRemove = new List<ITECObject>();
                 for (int x = parentPath.Count - 2; x >= 0; x--)
                 {
+                    if(parentPath.Count == 0 || x < 0)
+                    {
+                        logger.Error("Interlock path had some issue getting the path to {0} from {1}", item, parent);
+                        return;
+                    }
                     if (!thisPath.Contains(parentPath[x]) && (parentPath[x] as IRelatable).GetDirectChildren().Contains(start))
                     {
                         thisPath.Insert(0, parentPath[x]);

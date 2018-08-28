@@ -285,17 +285,21 @@ namespace Models
         {
             Assert.Fail();
         }
-
-        [TestMethod()]
-        public void CreateTypicalAndInstanceConnectionsTest()
-        {
-            Assert.Fail();
-        }
-
+        
         [TestMethod()]
         public void GetInstancesFromTypicalTest()
         {
-            Assert.Fail();
+            TECSubScope subScope = new TECSubScope();
+            TECEquipment equipment = new TECEquipment();
+            TECTypical typical = new TECTypical();
+            equipment.SubScope.Add(subScope);
+            typical.Equipment.Add(equipment);
+            
+            typical.AddInstance();
+            typical.AddInstance();
+
+            Assert.AreEqual(2, typical.GetInstancesFromTypical(subScope).Count);
+            Assert.AreEqual(2, typical.GetInstancesFromTypical(equipment).Count);
         }
 
         [TestMethod()]
