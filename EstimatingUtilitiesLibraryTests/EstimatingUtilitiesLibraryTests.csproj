@@ -79,7 +79,7 @@
   <ItemGroup>
     <Compile Include="EULTestHelper.cs" />
     <Compile Include="IntegratedSaveLoadTests.cs" />
-    <Compile Include="Legacy\LegactTemplateDBTests.cs" />
+    <Compile Include="Legacy\LegacyTemplateDBTests.cs" />
     <Compile Include="Legacy\LegacyDBDefs.cs" />
     <Compile Include="Legacy\LegacyDBGenerator.cs" />
     <Compile Include="Legacy\LegacyDBTests.cs" />

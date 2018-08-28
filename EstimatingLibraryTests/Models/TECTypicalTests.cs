@@ -277,13 +277,59 @@ namespace Models
         [TestMethod()]
         public void UpdateInstanceConnectionsTest()
         {
-            Assert.Fail();
+            Random rand = new Random();
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
+            TECTypical typical = ModelCreation.TestTypical(catalogs, rand);
+
+            typical.AddInstance();
+
+            foreach (var controller in typical.Controllers)
+            {
+                foreach (var connection in controller.ChildrenConnections)
+                {
+                    connection.Length = 324;
+                }
+            }
+
+            typical.UpdateInstanceConnections();
+
+            foreach (var instance in typical.Instances)
+            {
+                foreach (var controller in instance.Controllers)
+                {
+                    foreach (var connection in controller.ChildrenConnections)
+                    {
+                        Assert.AreEqual(324, connection.Length);
+                    }
+                }
+            }
         }
 
         [TestMethod()]
         public void CanUpdateInstanceConnectionsTest()
         {
-            Assert.Fail();
+            Random rand = new Random();
+            TECCatalogs catalogs = ModelCreation.TestCatalogs(rand);
+            TECTypical typical = ModelCreation.TestTypical(catalogs, rand);
+
+            typical.AddInstance();
+            
+            foreach ( var controller in typical.Controllers)
+            {
+                foreach(var connection in controller.ChildrenConnections)
+                {
+                    connection.Length = 324;
+                }
+            }
+
+            Assert.IsTrue(typical.CanUpdateInstanceConnections());
+
+            typical.Instances.Clear();
+
+            Assert.IsFalse(typical.CanUpdateInstanceConnections());
+            
+
+
         }
         
         [TestMethod()]
@@ -301,11 +347,6 @@ namespace Models
             Assert.AreEqual(2, typical.GetInstancesFromTypical(subScope).Count);
             Assert.AreEqual(2, typical.GetInstancesFromTypical(equipment).Count);
         }
-
-        [TestMethod()]
-        public void DragDropCopyTest()
-        {
-            Assert.Fail();
-        }
+        
     }
 }

@@ -142,12 +142,11 @@ namespace EstimatingUtilitiesLibrary.Database
                 String.Format("{0:yyyy-MM-dd_hh-mm-ss-tt}", DateTime.Now),
                 Path.GetExtension(path));
             File.Copy(path, backupPath);
-            DataTable versionMap = CSVReader.Read(Properties.Resources.VersionDefinition);
 
             bool needsSave;
             TECScopeManager scopeManager;
 
-            DatabaseVersionManager.UpdateStatus status = DatabaseVersionManager.CheckAndUpdate(path, versionMap);
+            DatabaseVersionManager.UpdateStatus status = DatabaseVersionManager.CheckAndUpdate(path);
             if (status == DatabaseVersionManager.UpdateStatus.Updated)
             {
                 (scopeManager, needsSave) = DatabaseLoader.Load(path, true);

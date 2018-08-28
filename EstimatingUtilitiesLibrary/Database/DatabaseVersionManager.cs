@@ -11,13 +11,14 @@ namespace EstimatingUtilitiesLibrary.Database
         private static DBType dbType = DBType.Bid;
 
         public enum UpdateStatus { Updated = 1, NotUpdated, Incompatible }
-        public static UpdateStatus CheckAndUpdate(string path, DataTable versionDefintion)
+        public static UpdateStatus CheckAndUpdate(string path)
         {
             SQLiteDatabase db = new SQLiteDatabase(path);
             int vDiff = versionDifference(db);
             if (vDiff > 0)
             {
-                updateDatabase(db, versionDefintion);
+                DataTable versionDefinition = CSVReader.Read(Properties.Resources.VersionDefinition);
+                updateDatabase(db, versionDefinition);
                 db.Connection.Close();
                 return UpdateStatus.Updated;
             }
@@ -36,13 +37,12 @@ namespace EstimatingUtilitiesLibrary.Database
         static private int versionDifference(SQLiteDatabase db)
         {
             int currentVersion = Properties.Settings.Default.Version;
-            DataTable infoDT = db.GetDataFromTable(MetadataTable.TableName);
             int version = dbVersion(db);
             return (currentVersion - version);
         }
         static private int dbVersion(SQLiteDatabase db)
         {
-            DataTable infoDT = db.GetDataFromTable(MetadataTable.TableName);
+            DataTable infoDT = db.GetDataFromTable(MetadataTable.TableName, MetadataTable.Version.Name);
 
             if (infoDT.Rows.Count < 1)
             {

@@ -157,15 +157,13 @@ namespace Legacy
             Guid expectedGuid = new Guid("ebdbcc85-10f4-46b3-99e7-d896679f874a");
             string expectedName = "Typical System";
             string expectedDescription = "Typical System Description";
-            bool expectedProposeEquipment = true;
-            int expectedChildren = 1;
 
             Guid childEquipment = new Guid("8a9bcc02-6ae2-4ac9-bbe1-e33d9a590b0e");
             Guid childController = new Guid("1bb86714-2512-4fdd-a80f-46969753d8a0");
             Guid childPanel = new Guid("e7695d68-d79f-44a2-92f5-b303436186af");
 
-            TECTypical actualSystem = null;
-            foreach (TECTypical system in actualTemplates.Templates.SystemTemplates)
+            TECSystem actualSystem = null;
+            foreach (TECSystem system in actualTemplates.Templates.SystemTemplates)
             {
                 if (system.Guid == expectedGuid)
                 {
@@ -205,14 +203,6 @@ namespace Legacy
             //Assert
             Assert.AreEqual(expectedName, actualSystem.Name);
             Assert.AreEqual(expectedDescription, actualSystem.Description);
-            Assert.AreEqual(expectedChildren, actualSystem.Instances.Count);
-
-            foreach (TECSystem instance in actualSystem.Instances)
-            {
-                Assert.AreEqual(actualSystem.Equipment.Count, instance.Equipment.Count);
-                Assert.AreEqual(actualSystem.Panels.Count, instance.Panels.Count);
-                Assert.AreEqual(actualSystem.Controllers.Count, instance.Controllers.Count);
-            }
 
             Assert.IsTrue(foundEquip, "Typical equipment not loaded properly into typical system.");
             Assert.IsTrue(foundControl, "Typical controller not loaded properly into typical system.");
@@ -221,35 +211,7 @@ namespace Legacy
             testForTag(actualSystem);
             testForCosts(actualSystem);
         }
-
-        [TestMethod]
-        public void Load_Templates_InstanceSystem()
-        {
-            Guid expectedGuid = new Guid("ba2e71d4-a2b9-471a-9229-9fbad7432bf7");
-            string expectedName = "Instance System";
-            string expectedDescription = "Instance System Description";
-
-            TECSystem actualSystem = null;
-            foreach (TECTypical typical in actualTemplates.Templates.SystemTemplates)
-            {
-                foreach (TECSystem instance in typical.Instances)
-                {
-                    if (instance.Guid == expectedGuid)
-                    {
-                        actualSystem = instance;
-                        break;
-                    }
-                }
-                if (actualSystem != null) { break; }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedName, actualSystem.Name);
-            Assert.AreEqual(expectedDescription, actualSystem.Description);
-
-            testForScopeChildren(actualSystem);
-        }
-
+        
         [TestMethod]
         public void Load_Templates_TypicalEquipment()
         {
@@ -292,53 +254,7 @@ namespace Legacy
             testForTag(actualEquipment);
             testForCosts(actualEquipment);
         }
-
-        [TestMethod]
-        public void Load_Templates_InstanceEquipment()
-        {
-            Guid expectedInstanceGuid = new Guid("cdd9d7f7-ff3e-44ff-990f-c1b721e0ff8d");
-            string expectedInstanceName = "Instance Equip";
-            string expectedInstanceDescription = "Instance Equip Description";
-
-            Guid childSubScope = new Guid("94726d87-b468-46a8-9421-3ff9725d5239");
-
-            TECEquipment actualEquipment = null;
-            foreach (TECTypical typical in actualTemplates.Templates.SystemTemplates)
-            {
-                foreach (TECSystem instance in typical.Instances)
-                {
-                    foreach (TECEquipment equip in instance.Equipment)
-                    {
-                        if (equip.Guid == expectedInstanceGuid)
-                        {
-                            actualEquipment = equip;
-                            break;
-                        }
-                    }
-                    if (actualEquipment != null) break;
-                }
-                if (actualEquipment != null) break;
-            }
-
-            bool foundSubScope = false;
-            foreach (TECSubScope ss in actualEquipment.SubScope)
-            {
-                if (ss.Guid == childSubScope)
-                {
-                    foundSubScope = true;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedInstanceName, actualEquipment.Name);
-            Assert.AreEqual(expectedInstanceDescription, actualEquipment.Description);
-
-            Assert.IsTrue(foundSubScope, "Instance subscope not loaded properly into instance equipment.");
-
-            testForScopeChildren(actualEquipment);
-        }
-
+        
         [TestMethod]
         public void Load_Templates_TypicalSubScope()
         {
@@ -405,80 +321,7 @@ namespace Legacy
             testForTag(actualSubScope);
             testForCosts(actualSubScope);
         }
-
-        [TestMethod]
-        public void Load_Templates_InstanceSubScope()
-        {
-            //Arrange
-            Guid expectedGuid = new Guid("94726d87-b468-46a8-9421-3ff9725d5239");
-            string expectedName = "Instance SS";
-            string expectedDescription = "Instance SS Description";
-
-            Guid childPoint = new Guid("e60437bc-09a1-47eb-9fd5-78711d942a12");
-            Guid childDevice = new Guid("95135fdf-7565-4d22-b9e4-1f177febae15");
-            Guid expectedConnectionGuid = new Guid("560ffd84-444d-4611-a346-266074f62f6f");
-
-            TECSubScope actualSubScope = null;
-            foreach (TECTypical typical in actualTemplates.Templates.SystemTemplates)
-            {
-                foreach (TECSystem system in typical.Instances)
-                {
-                    foreach (TECEquipment equipment in system.Equipment)
-                    {
-                        foreach (TECSubScope subScope in equipment.SubScope)
-                        {
-                            if (subScope.Guid == expectedGuid)
-                            {
-                                actualSubScope = subScope;
-                                break;
-                            }
-                        }
-                        if (actualSubScope != null)
-                        {
-                            break;
-                        }
-                    }
-                    if (actualSubScope != null)
-                    {
-                        break;
-                    }
-                }
-                if (actualSubScope != null)
-                {
-                    break;
-                }
-            }
-
-            bool foundPoint = false;
-            foreach (TECPoint point in actualSubScope.Points)
-            {
-                if (point.Guid == childPoint)
-                {
-                    foundPoint = true;
-                    break;
-                }
-            }
-            bool foundDevice = false;
-            foreach (TECDevice device in actualSubScope.Devices)
-            {
-                if (device.Guid == childDevice)
-                {
-                    foundDevice = true;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedName, actualSubScope.Name, "Name not loaded");
-            Assert.AreEqual(expectedDescription, actualSubScope.Description, "Description not loaded");
-            Assert.AreEqual(expectedConnectionGuid, actualSubScope.Connection.Guid, "Connection not loaded");
-
-            Assert.IsTrue(foundPoint, "Instance point not loaded into typical subscope properly.");
-            Assert.IsTrue(foundDevice, "Instance device not loaded into typical subscope properly.");
-
-            testForScopeChildren(actualSubScope);
-        }
-
+        
         [TestMethod]
         public void Load_Templates_Device()
         {
@@ -555,48 +398,7 @@ namespace Legacy
             Assert.AreEqual(expectedQuantity, actualPoint.Quantity, "Typical point quantity didn't load properly.");
             Assert.AreEqual(expectedType, actualPoint.Type, "Typical point type didn't load properly.");
         }
-
-        [TestMethod]
-        public void Load_Templates_InstancePoint()
-        {
-            Guid expectedGuid = new Guid("e60437bc-09a1-47eb-9fd5-78711d942a12");
-            string expectedName = "Instance Point";
-            int expectedQuantity = 1;
-            IOType expectedType = IOType.AI;
-
-            TECPoint actualPoint = null;
-            foreach (TECTypical typical in actualTemplates.Templates.SystemTemplates)
-            {
-                foreach (TECSystem instance in typical.Instances)
-                {
-                    foreach (TECEquipment equip in instance.Equipment)
-                    {
-                        foreach (TECSubScope ss in equip.SubScope)
-                        {
-                            foreach (TECPoint point in ss.Points)
-                            {
-                                if (point.Guid == expectedGuid)
-                                {
-                                    actualPoint = point;
-                                    break;
-                                }
-                            }
-                            if (actualPoint != null) break;
-                        }
-                        if (actualPoint != null) break;
-                    }
-                    if (actualPoint != null) break;
-                }
-                if (actualPoint != null) break;
-            }
-
-            Assert.AreEqual(expectedName, actualPoint.Label, "Instance point name didn't load properly.");
-            Assert.AreEqual(expectedQuantity, actualPoint.Quantity, "Instance point quantity didn't load properly.");
-            Assert.AreEqual(expectedType, actualPoint.Type, "Instance point type didn't load properly.");
-
-
-        }
-
+        
         [TestMethod]
         public void Load_Templates_Tag()
         {
@@ -778,179 +580,6 @@ namespace Legacy
             Assert.AreEqual(expectedConduitTypeGuid, actualSSConnect.ConduitType.Guid, "Conduit type didn't load properly in subscope connection.");
             Assert.AreEqual(expectedSubScopeGuid, actualSSConnect.Child.Guid, "Subscope didn't load properly in subscope connection.");
         }
-
-        [TestMethod]
-        public void Load_Templates_InstanceSubScopeConnection()
-        {
-            //Arrange
-            Guid expectedGuid = new Guid("560ffd84-444d-4611-a346-266074f62f6f");
-            double expectedLength = 50;
-            double expectedConduitLength = 30;
-            Guid expectedSubScopeGuid = new Guid("94726d87-b468-46a8-9421-3ff9725d5239");
-            Guid expectedControllerGuid = new Guid("f22913a6-e348-4a77-821f-80447621c6e0");
-            Guid expectedConduitTypeGuid = new Guid("8d442906-efa2-49a0-ad21-f6b27852c9ef");
-
-            TECHardwiredConnection actualConnection = null;
-            foreach (TECTypical typical in actualTemplates.Templates.SystemTemplates)
-            {
-                foreach (TECSystem system in typical.Instances)
-                {
-                    foreach (TECController controller in system.Controllers)
-                    {
-                        foreach (IControllerConnection connection in controller.ChildrenConnections)
-                        {
-                            if (connection.Guid == expectedGuid)
-                            {
-                                actualConnection = connection as TECHardwiredConnection;
-                                break;
-                            }
-                        }
-                        if (actualConnection != null)
-                        {
-                            break;
-                        }
-                    }
-                    if (actualConnection != null)
-                    {
-                        break;
-                    }
-                }
-            }
-
-
-            //Assert
-            Assert.AreEqual(expectedLength, actualConnection.Length, "Length didn't load properly in subscope connection.");
-            Assert.AreEqual(expectedConduitLength, actualConnection.ConduitLength, "ConduitLength didn't load properly in subscope connection.");
-            Assert.AreEqual(expectedSubScopeGuid, actualConnection.Child.Guid, "Subscope didn't load properly in subscope connection.");
-            Assert.AreEqual(expectedControllerGuid, actualConnection.ParentController.Guid, "Parent controller didn't load properly in subscope connection.");
-            Assert.AreEqual(expectedConduitTypeGuid, actualConnection.ConduitType.Guid, "Conduit type didn't load properly in subscope connection.");
-        }
-        
-        
-        [TestMethod]
-        public void Load_Templates_InstanceInstanceChild_NetworkConnection()
-        {
-            Guid expectedGuid = new Guid("e503fdd4-f299-4618-8d54-6751c3b2bc25");
-            double expectedLength = 70;
-            double expectedConduitLength = 50;
-
-            Guid expectedParentControllerGuid = new Guid("f22913a6-e348-4a77-821f-80447621c6e0");
-            Guid expectedConnectionTypeGuid = new Guid("f38867c8-3846-461f-a6fa-c941aeb723c7");
-            Guid expectedChildControllerGuid = new Guid("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
-
-            TECNetworkConnection actualNetConnect = null;
-            foreach (TECTypical typical in actualTemplates.Templates.SystemTemplates)
-            {
-                foreach (TECSystem instance in typical.Instances)
-                {
-                    foreach (TECController controller in instance.Controllers)
-                    {
-                        foreach (IControllerConnection connection in controller.ChildrenConnections)
-                        {
-                            if (connection.Guid == expectedGuid)
-                            {
-                                actualNetConnect = (connection as TECNetworkConnection);
-                                break;
-                            }
-                        }
-                        if (actualNetConnect != null) break;
-                    }
-                    if (actualNetConnect != null) break;
-                }
-                if (actualNetConnect != null) break;
-            }
-
-            bool childControllerFound = false;
-            foreach (TECController controller in actualNetConnect.Children)
-            {
-                if (controller.Guid == expectedChildControllerGuid)
-                {
-                    childControllerFound = true;
-                    break;
-                }
-            }
-
-            bool foundConnectionType = false;
-            foreach (TECElectricalMaterial type in actualNetConnect.Protocol.ConnectionTypes)
-            {
-                if (type.Guid == expectedConnectionTypeGuid)
-                {
-                    foundConnectionType = true;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedLength, actualNetConnect.Length, "Length didn't load properly in network connection.");
-            Assert.AreEqual(expectedConduitLength, actualNetConnect.ConduitLength, "ConduitLength didn't load properly in network connection.");
-
-            Assert.AreEqual(expectedParentControllerGuid, actualNetConnect.ParentController.Guid, "Parent controller didn't load properly in network connection.");
-            Assert.IsTrue(foundConnectionType, "ConnectionType didn't load properly in network connection.");
-            Assert.IsTrue(childControllerFound, "Child controller didn't load properly in network connection.");
-        }
-
-        [TestMethod]
-        public void Load_Templates_DaisyChain_NetworkConnection()
-        {
-            Guid expectedGuid = new Guid("99aea45e-ebeb-4c1a-8407-1d1a3540ceeb");
-            double expectedLength = 90;
-            double expectedConduitLength = 70;
-
-            Guid expectedParentControllerGuid = new Guid("98e6bc3e-31dc-4394-8b54-9ca53c193f46");
-            Guid expectedConnectionTypeGuid = new Guid("f38867c8-3846-461f-a6fa-c941aeb723c7");
-
-            Guid expectedDaisy1Guid = new Guid("bf17527a-18ba-4765-a01e-8ab8de5664a3");
-            Guid expectedDaisy2Guid = new Guid("7b6825df-57da-458a-a859-a9459c15907b");
-
-            TECNetworkConnection actualNetConnect = null;
-            foreach (TECController controller in actualTemplates.Templates.ControllerTemplates)
-            {
-                foreach (IControllerConnection connection in controller.ChildrenConnections)
-                {
-                    if (connection.Guid == expectedGuid)
-                    {
-                        actualNetConnect = (connection as TECNetworkConnection);
-                        break;
-                    }
-                }
-                if (actualNetConnect != null) break;
-            }
-
-            bool daisy1Found = false;
-            bool daisy2Found = false;
-            foreach (TECController controller in actualNetConnect.Children)
-            {
-                if (controller.Guid == expectedDaisy1Guid)
-                {
-                    daisy1Found = true;
-                }
-                else if (controller.Guid == expectedDaisy2Guid)
-                {
-                    daisy2Found = true;
-                }
-                if (daisy1Found && daisy2Found) break;
-            }
-
-            bool foundConnectionType = false;
-            foreach (TECElectricalMaterial type in actualNetConnect.Protocol.ConnectionTypes)
-            {
-                if (type.Guid == expectedConnectionTypeGuid)
-                {
-                    foundConnectionType = true;
-                    break;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedLength, actualNetConnect.Length, "Length didn't load properly in network connection.");
-            Assert.AreEqual(expectedConduitLength, actualNetConnect.ConduitLength, "ConduitLength didn't load properly in network connection.");
-
-            Assert.AreEqual(expectedParentControllerGuid, actualNetConnect.ParentController.Guid, "Parent controller didn't load properly in network connection.");
-            Assert.IsTrue(foundConnectionType, "ConnectionType didn't load properly in network connection.");
-
-            Assert.IsTrue(daisy1Found, "First daisy chain controller didn't load properly in network connection.");
-            Assert.IsTrue(daisy2Found, "Second daisy chain controller didn't load properly in network connection.");
-        }
         
         [TestMethod]
         public void Load_Templates_SystemTypicalController()
@@ -1003,64 +632,7 @@ namespace Legacy
             testForTag(actualController);
             testForCosts(actualController);
         }
-
-        [TestMethod]
-        public void Load_Templates_SystemInstanceController()
-        {
-            //Arrange
-            Guid expectedGuid = new Guid("f22913a6-e348-4a77-821f-80447621c6e0");
-            string expectedName = "Instance Controller";
-            string expectedDescription = "Instance Controller Description";
-            bool expectedType = false;
-
-            TECController actualController = null;
-            foreach (TECTypical typical in actualTemplates.Templates.SystemTemplates)
-            {
-                foreach (TECSystem system in typical.Instances)
-                {
-                    foreach (TECController controller in system.Controllers)
-                    {
-                        if (controller.Guid == expectedGuid)
-                        {
-                            actualController = controller;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            Guid expectedConnectionGuid = new Guid("560ffd84-444d-4611-a346-266074f62f6f");
-            Guid expectedIOGuid = new Guid("434bc312-f933-40c8-b8bd-f4e22f19f606");
-
-            //bool hasIO = false;
-            //foreach (TECIO io in actualController.IO)
-            //{
-            //    if (io.Guid == expectedIOGuid)
-            //    {
-            //        hasIO = true;
-            //        break;
-            //    }
-            //}
-
-            bool hasConnection = false;
-            foreach (IControllerConnection conn in actualController.ChildrenConnections)
-            {
-                if (conn.Guid == expectedConnectionGuid)
-                {
-                    hasConnection = true;
-                }
-            }
-
-            //Assert
-            Assert.AreEqual(expectedName, actualController.Name);
-            Assert.AreEqual(expectedDescription, actualController.Description);
-            Assert.AreEqual(expectedType, actualController.IsServer);
-            //Assert.IsTrue(hasIO, "IO not loaded");
-            Assert.IsTrue(hasConnection, "Connection not loaded");
-            testForTag(actualController);
-            testForCosts(actualController);
-        }
-
+        
         [TestMethod]
         public void Load_Templates_MiscCost()
         {
@@ -1144,7 +716,6 @@ namespace Legacy
             Assert.AreEqual(expectedLabor, actualType.Labor);
         }
         
-
         [TestMethod]
         public void Load_Templates_TypicalPanel()
         {
@@ -1176,43 +747,7 @@ namespace Legacy
             Assert.AreEqual(expectedTypeGuid, actualPanel.Type.Guid);
             testForCosts(actualPanel);
         }
-
-        [TestMethod]
-        public void Load_Templates_InstancePanel()
-        {
-            //Arrange
-            Guid expectedGuid = new Guid("10b07f6c-4374-49fc-ba6f-84db65b61ffa");
-            string expectedName = "Instance Panel";
-            string expectedDescription = "Instance Panel Description";
-            //int expectedQuantity = 1;
-
-            Guid expectedTypeGuid = new Guid("04e3204c-b35f-4e1a-8a01-db07f7eb055e");
-
-            TECPanel actualPanel = null;
-            foreach (TECTypical typical in actualTemplates.Templates.SystemTemplates)
-            {
-                foreach (TECSystem system in typical.Instances)
-                {
-                    foreach (TECPanel panel in system.Panels)
-                    {
-                        if (panel.Guid == expectedGuid)
-                        {
-                            actualPanel = panel;
-                            break;
-                        }
-                    }
-                    if (actualPanel != null) break;
-                }
-                if (actualPanel != null) break;
-            }
-
-            //Assert
-            Assert.AreEqual(expectedName, actualPanel.Name);
-            Assert.AreEqual(expectedDescription, actualPanel.Description);
-            Assert.AreEqual(expectedTypeGuid, actualPanel.Type.Guid);
-            testForCosts(actualPanel);
-        }
-
+        
         [TestMethod]
         public void Load_Templates_IOModule()
         {
