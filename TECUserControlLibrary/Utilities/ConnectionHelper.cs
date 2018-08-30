@@ -3,6 +3,7 @@ using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -75,7 +76,7 @@ namespace TECUserControlLibrary.Utilities
         /// <param name="items"></param>
         /// <param name="controller"></param>
         /// <returns></returns>
-        public static List<IControllerConnection> ConnectToController(IEnumerable<IConnectable> items, TECController controller)
+        public static List<IControllerConnection> ConnectToController(IEnumerable<IConnectable> items, TECController controller, ConnectionProperties properties)
         {
             var connectables = items
                 .Where(x => x.GetParentConnection() == null);
@@ -91,6 +92,7 @@ namespace TECUserControlLibrary.Utilities
                     var connection = controller.Connect(connectable, protocols.First());
                     if (connection == null) throw new Exception("Connection was Null");
                     connections.Add(connection);
+                    connection.UpdateFromProperties(properties);
                 }
                 else
                 {
@@ -102,12 +104,15 @@ namespace TECUserControlLibrary.Utilities
                         var connection = controller.Connect(connectable, protocol);
                         if (connection == null) throw new Exception("Connection was Null");
                         connections.Add(connection);
+                        connection.UpdateFromProperties(properties);
                         break;
                     }
                     if (!connected && connectable.AvailableProtocols.Any(x => x is TECHardwiredProtocol)
                             && availableIO.Contains(connectable.HardwiredIO))
                     {
-                        connections.Add(controller.Connect(connectable, connectable.AvailableProtocols.First(x => x is TECHardwiredProtocol)));
+                        var connection = controller.Connect(connectable, connectable.AvailableProtocols.First(x => x is TECHardwiredProtocol));
+                        connection.UpdateFromProperties(properties);
+                        connections.Add(connection);
                     }
                 }
             }
@@ -149,5 +154,41 @@ namespace TECUserControlLibrary.Utilities
             }
             return existingNetwork;
         }
+
+        
+    }
+    public struct ConnectionProperties
+    {
+        public double ConduitLength { get; set; }
+        public TECElectricalMaterial ConduitType { get; set; }
+        public bool IsPlenum { get; set; }
+        public double Length { get; set; }        
+
+    }
+
+    public static class IConnectionExtensions
+    {
+        public static void SetFromProperties(this IConnection connection, ConnectionProperties properties)
+        {
+            connection.Length = properties.Length;
+            connection.ConduitLength = properties.ConduitLength;
+            connection.ConduitType = properties.ConduitType;
+            connection.IsPlenum = properties.IsPlenum;
+        }
+
+        public static void UpdateFromProperties(this IConnection connection, ConnectionProperties properties)
+        {
+            connection.Length += properties.Length;
+            if (properties.ConduitType != null)
+            {
+                connection.ConduitLength += properties.ConduitLength;
+                connection.ConduitType = properties.ConduitType;
+            }
+            
+                
+            connection.IsPlenum = properties.IsPlenum;
+        }
+
     }
 }
+    

@@ -250,8 +250,7 @@ namespace EstimatingLibrary
                 }
             }
         }
-
-
+        
         private void handleEquipmentRemoval(TECEquipment equip)
         {
             List<TECProposalItem> toRemove = new List<TECProposalItem>();

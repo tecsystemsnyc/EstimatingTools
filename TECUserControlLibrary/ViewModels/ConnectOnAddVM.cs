@@ -20,7 +20,7 @@ namespace TECUserControlLibrary.ViewModels
         private double _conduitLength = 30.0;
         private TECElectricalMaterial _conduitType;
         private bool _isPlenum = false;
-        private bool _connect = true;
+        private bool _connect = false;
         private TECController _selectedController;
 
         public List<TECController> ParentControllers { get; private set; }
@@ -129,12 +129,16 @@ namespace TECUserControlLibrary.ViewModels
         }
         public void ExecuteConnection(IEnumerable<IConnectable> finalToConnect)
         {
-            var connections = ConnectionHelper.ConnectToController(finalToConnect, SelectedController);
+            var connectionProperties = new ConnectionProperties {
+                Length = this.Length,
+                ConduitLength = this.ConduitLength,
+                ConduitType = this.ConduitType,
+                IsPlenum = this.IsPlenum
+                
+            };
 
-            foreach (IControllerConnection conn in connections)
-            {
-                setConnectionProperties(conn);
-            }
+            var connections = ConnectionHelper.ConnectToController(finalToConnect, SelectedController, connectionProperties);
+            
         }
         public void ExecuteConnection(TECSubScope finalToConnect)
         {
@@ -152,19 +156,6 @@ namespace TECUserControlLibrary.ViewModels
                 return true;
             }
         }
-
-        private void setConnectionProperties(IControllerConnection connection)
-        {
-            connection.Length += Length;
-            connection.ConduitLength += ConduitLength;
-            if (connection.ConduitType == null)
-            {
-                connection.ConduitType = ConduitType;
-            }
-            if (!connection.IsPlenum)
-            {
-                connection.IsPlenum = IsPlenum;
-            }
-        }
+        
     }
 }

@@ -20,11 +20,14 @@ namespace EstimatingLibrary
             get { return _length; }
             set
             {
-                var old = Length;
-                var originalCost = this.CostBatch;
-                _length = value;
-                notifyCombinedChanged(Change.Edit, "Length", this, value, old);
-                notifyCostChanged(CostBatch - originalCost);
+                if(_length != value)
+                {
+                    var old = Length;
+                    var originalCost = this.CostBatch;
+                    _length = value;
+                    notifyCombinedChanged(Change.Edit, "Length", this, value, old);
+                    notifyCostChanged(CostBatch - originalCost);
+                }
             }
         }
         public double ConduitLength
@@ -32,12 +35,15 @@ namespace EstimatingLibrary
             get { return _conduitLength; }
             set
             {
-                var old = ConduitLength;
-                _conduitLength = value;
-                notifyCombinedChanged(Change.Edit, "ConduitLength", this, value, old);
-                CostBatch previous = ConduitType != null ? ConduitType.GetCosts(old) : new CostBatch();
-                CostBatch current = ConduitType != null ? ConduitType.GetCosts(value) : new CostBatch();
-                notifyCostChanged(current - previous);
+                if(_conduitLength != value)
+                {
+                    var old = ConduitLength;
+                    _conduitLength = value;
+                    notifyCombinedChanged(Change.Edit, "ConduitLength", this, value, old);
+                    CostBatch previous = ConduitType != null ? ConduitType.GetCosts(old) : new CostBatch();
+                    CostBatch current = ConduitType != null ? ConduitType.GetCosts(value) : new CostBatch();
+                    notifyCostChanged(current - previous);
+                }
             }
         }
         public TECElectricalMaterial ConduitType
@@ -45,12 +51,15 @@ namespace EstimatingLibrary
             get { return _conduitType; }
             set
             {
-                var old = ConduitType;
-                _conduitType = value;
-                notifyCombinedChanged(Change.Edit, "ConduitType", this, value, old);
-                CostBatch previous = old != null ? old.GetCosts(ConduitLength) : new CostBatch();
-                CostBatch current = value != null ? value.GetCosts(ConduitLength) : new CostBatch();
-                notifyCostChanged(current - previous);
+                if(_conduitType != value)
+                {
+                    var old = ConduitType;
+                    _conduitType = value;
+                    notifyCombinedChanged(Change.Edit, "ConduitType", this, value, old);
+                    CostBatch previous = old != null ? old.GetCosts(ConduitLength) : new CostBatch();
+                    CostBatch current = value != null ? value.GetCosts(ConduitLength) : new CostBatch();
+                    notifyCostChanged(current - previous);
+                }
             }
         }
         public bool IsPlenum
@@ -58,11 +67,14 @@ namespace EstimatingLibrary
             get { return _isPlenum; }
             set
             {
-                var old = IsPlenum;
-                CostBatch oldCost = this.CostBatch;
-                _isPlenum = value;
-                notifyCombinedChanged(Change.Edit, "IsPlenum", this, value, old);
-                notifyCostChanged(this.CostBatch - oldCost);
+                if(_isPlenum != value)
+                {
+                    var old = IsPlenum;
+                    CostBatch oldCost = this.CostBatch;
+                    _isPlenum = value;
+                    notifyCombinedChanged(Change.Edit, "IsPlenum", this, value, old);
+                    notifyCostChanged(this.CostBatch - oldCost);
+                }
             }
         }
 

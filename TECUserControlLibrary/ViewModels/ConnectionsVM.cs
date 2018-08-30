@@ -10,6 +10,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -493,7 +494,7 @@ namespace TECUserControlLibrary.ViewModels
                 else
                 {
                     SelectionNeeded = true;
-                    CompatibleProtocols = compatibleProtocols;
+                    CompatibleProtocols = compatibleProtocols.Distinct().ToList();
                 }
             }
             else
@@ -519,17 +520,16 @@ namespace TECUserControlLibrary.ViewModels
                     return;
                 }
 
-                var connections = ConnectionHelper.ConnectToController(connectables.Where(y => y != SelectedController), SelectedController);
-                foreach (IControllerConnection connection in connections)
+                var connectionProperties = new ConnectionProperties
                 {
-                    connection.Length += this.DefaultWireLength;
-                    connection.ConduitLength += this.DefaultConduitLength;
-                }
-                foreach (IControllerConnection connection in connections.Distinct())
-                {
-                    connection.ConduitType = this.DefaultConduitType;
-                    connection.IsPlenum = this.DefaultPlenum;
-                }
+                    Length = this.DefaultWireLength,
+                    ConduitLength = this.DefaultConduitLength,
+                    ConduitType = this.DefaultConduitType,
+                    IsPlenum = this.DefaultPlenum
+
+                };
+
+                var connections = ConnectionHelper.ConnectToController(connectables.Where(y => y != SelectedController), SelectedController, connectionProperties);
             }
             
         }

@@ -5,6 +5,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,9 +41,9 @@ namespace TECUserControlLibrary.ViewModels
         }
 
 
-        private String _searchSize = "";
+        private double _searchSize = 0;
 
-        public String SearchSize
+        public double SearchSize
         {
             get { return _searchSize; }
             set
@@ -52,9 +53,9 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
 
-        private String _searchCv = "";
+        private double _searchCv = 0.0;
 
-        public String SearchCv
+        public double SearchCv
         {
             get { return _searchCv; }
             set
@@ -105,9 +106,10 @@ namespace TECUserControlLibrary.ViewModels
         private void resetCatalogExecute()
         {
             Results = new List<TECValve>(catalog);
-            SearchCv = "";
+            SearchCv = 0;
             SearchStyle = "";
-            SearchSize = "";
+            SearchSize = 0;
+            SearchPressure = 0;
         }
 
         private bool canResetCatalog()
@@ -121,8 +123,8 @@ namespace TECUserControlLibrary.ViewModels
             foreach(TECValve valve in catalog)
             {
                 bool hasStyle = SearchStyle == "" || valve.Style.ToUpper() == SearchStyle.ToUpper();
-                bool hasCv = SearchCv == "" || valve.Cv >= SearchCv.ToDouble(0);
-                bool hasSize = SearchSize == "" || valve.Size == SearchSize.ToDouble(0);
+                bool hasCv = SearchCv == 0.0 || valve.Cv >= SearchCv;
+                bool hasSize = SearchSize == 0.0 || valve.Size == SearchSize;
                 bool hasPressure = SearchPressure == 0.0 || valve.PressureRating > SearchPressure;
                 if(hasStyle && hasCv && hasSize && hasPressure)
                 {
@@ -134,19 +136,19 @@ namespace TECUserControlLibrary.ViewModels
 
         private bool canSearchCatalog()
         {
-            return (SearchStyle != "" || SearchSize != "" || SearchCv != "" || SearchPressure != 0.0);
+            return (SearchStyle != "" || SearchSize != 0.0 || SearchCv != 0.0 || SearchPressure != 0.0);
         }
 
         private void replaceValveExecute(TECValve obj)
         {
-            SelectedValve.SubScope.RemoveDevice(SelectedValve.Valve);
-            SelectedValve.SubScope.AddDevice(obj);
+            SelectedValve.SubScope.RemoveCatalogItem<IEndDevice>(SelectedValve.Valve, obj);
             SelectedValve.Valve = obj;
         }
 
         private bool canReplaceValve(TECValve arg)
         {
-            return arg != null && SelectedValve?.Valve != null;
+            if (arg == null || SelectedValve?.Valve == null) { return false; }
+            return SelectedValve.SubScope.CanChangeDevice(SelectedValve.Valve, arg);
         }
 
         private List<ValveScopeItem> getValveItems(TECSystem system)

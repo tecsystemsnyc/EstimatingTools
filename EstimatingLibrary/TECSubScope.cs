@@ -422,11 +422,15 @@ namespace EstimatingLibrary
         #region ICatalogContainer
         public override bool RemoveCatalogItem<T>(T item, T replacement)
         {
+            if(item == replacement) { return true; }
             bool alreadyRemoved = base.RemoveCatalogItem(item, replacement);
 
             bool removedEndDevice = false;
             if (item is IEndDevice oldDev && replacement is IEndDevice newDev)
             {
+                var previousController = this.Connection?.ParentController;
+                var previousProtocol = this.Connection?.Protocol;
+                
                 if (this.Devices.Contains(oldDev))
                 {
                     if (CanChangeDevice(oldDev, newDev))
@@ -434,6 +438,18 @@ namespace EstimatingLibrary
                         removedEndDevice = CommonUtilities.OptionallyReplaceAll(oldDev, this.Devices, newDev);
                     }
                     else throw new ArgumentException("Replacement Device must be compatible.");
+                }
+
+                if(previousController != null)
+                {
+                    if(previousProtocol is TECProtocol netProtocol)
+                    {
+                        previousController.Connect(this, netProtocol);
+                    }
+                    else
+                    {
+                        previousController.Connect(this, this.HardwiredProtocol());
+                    }
                 }
             }
 

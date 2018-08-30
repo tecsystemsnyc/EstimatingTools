@@ -227,7 +227,7 @@ namespace Utilities
             type.IO.Add(new TECIO(protocol));
             TECProvidedController controller = new TECProvidedController(type);
 
-            List<IControllerConnection> connections = ConnectionHelper.ConnectToController(connectables, controller);
+            List<IControllerConnection> connections = ConnectionHelper.ConnectToController(connectables, controller, new ConnectionProperties());
             
             foreach(var thing in connectables)
             {
@@ -272,7 +272,7 @@ namespace Utilities
             type.IO.Add(new TECIO(protocol));
             TECProvidedController controller = new TECProvidedController(type);
 
-            List<IControllerConnection> connections = ConnectionHelper.ConnectToController(connectables, controller);
+            List<IControllerConnection> connections = ConnectionHelper.ConnectToController(connectables, controller, new ConnectionProperties());
 
             foreach (var thing in connectables)
             {
@@ -330,7 +330,7 @@ namespace Utilities
 
             TECProvidedController controller = new TECProvidedController(type);
 
-            List<IControllerConnection> connections = ConnectionHelper.ConnectToController(connectables, controller);
+            List<IControllerConnection> connections = ConnectionHelper.ConnectToController(connectables, controller, new ConnectionProperties());
 
             foreach (var thing in connectables)
             {
@@ -387,7 +387,7 @@ namespace Utilities
 
             TECProvidedController controller = new TECProvidedController(type);
 
-            List<IControllerConnection> connections = ConnectionHelper.ConnectToController(connectables, controller);
+            List<IControllerConnection> connections = ConnectionHelper.ConnectToController(connectables, controller, new ConnectionProperties());
 
             foreach (var thing in connectables)
             {

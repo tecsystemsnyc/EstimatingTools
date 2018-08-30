@@ -288,28 +288,28 @@ namespace EstimatingLibrary
                 if (args.Change == Change.Add)
                 {
                     handleAdd(args);
+                    return;
                 }
                 else if (args.Change == Change.Remove)
                 {
                     handleRemove(args);
-                }
-                else if (args.Sender is TECPoint || args.Sender is TECMisc)
-                {
-                    handleValueChanged(args.Sender, args.PropertyName);
+                    return;
                 }
                 else if (args.Sender is TECController controller)
                 {
                     handleControllerChanged(controller, args.PropertyName);
                 }
-                if (Instances.Count == 1 && (args.Value is IControllerConnection || args.Sender is IControllerConnection))
+                else if (args.Sender is TECPoint || args.Sender is TECMisc)
                 {
-                    this.UpdateInstanceConnections();
+                    handleValueChanged(args.Sender, args.PropertyName);
+                    return;
                 }
-                else if (Instances.Count == 1)
+
+                if (this.IsSingleton)
                 {
                     handleValueChanged(args.Sender, args.PropertyName);
                 }
-                
+
             }
         }
         
@@ -497,7 +497,39 @@ namespace EstimatingLibrary
                 {
                     instanceSender.AddChildForProperty(args.PropertyName, instanceValue);
                 }
+            }
 
+            if (this.IsSingleton)
+            {
+                if(args.Value is IControllerConnection connection && args.Sender is TECController controller)
+                {
+                    var instanceController = this.GetInstancesFromTypical(controller).First();
+                    if (connection is TECHardwiredConnection hardConnect)
+                    {
+                        var instanceSubScope = this.GetInstancesFromTypical(hardConnect.Child).First();
+                        if((instanceSubScope as IConnectable).GetParentConnection() != null)
+                        {
+                            (instanceSubScope as IConnectable).GetParentConnection().ParentController.Disconnect(instanceSubScope);
+                        }
+                        var instanceConnection = instanceController.Connect(instanceSubScope, connection.Protocol);
+                        instanceConnection.UpdatePropertiesBasedOn(connection);
+
+                    }
+                    else if (connection is TECNetworkConnection netConnect)
+                    {
+                        var instanceSubScope = netConnect.Children.SelectMany(x => this.GetInstancesFromTypical(x));                       
+                        foreach(var item in instanceSubScope)
+                        {
+                            if (item.GetParentConnection() != null)
+                            {
+                                item.GetParentConnection().ParentController.Disconnect(item);
+                            }
+                        }
+                        var instanceConnection = instanceController.AddNetworkConnection(netConnect.NetworkProtocol);
+                        instanceSubScope.ForEach(x => instanceConnection.AddChild(x));
+                        instanceConnection.UpdatePropertiesBasedOn(connection);
+                    }
+                }
             }
             
         }
@@ -535,6 +567,31 @@ namespace EstimatingLibrary
                     instanceSender.RemoveChildForProperty(args.PropertyName, instanceValue);
                 }
 
+            }
+            if (this.IsSingleton)
+            {
+                if (args.Value is IControllerConnection connection && args.Sender is TECController controller)
+                {
+                    var instanceController = this.GetInstancesFromTypical(controller).First();
+                    if (connection is TECHardwiredConnection hardConnect)
+                    {
+                        var instanceSubScope = this.GetInstancesFromTypical(hardConnect.Child).FirstOrDefault();
+                        if (instanceSubScope?.GetParentConnection() != null)
+                        {
+                            instanceSubScope.GetParentConnection().ParentController.Disconnect(instanceSubScope);
+                        }
+
+                    }
+                    else if (connection is TECNetworkConnection netConnect)
+                    {
+                        var instanceSubScope = netConnect.Children.SelectMany(x => this.GetInstancesFromTypical(x)).FirstOrDefault();
+                        if (instanceSubScope?.GetParentConnection() != null)
+                        {
+                            var instanceConnection = instanceSubScope.GetParentConnection();
+                            instanceController.RemoveNetworkConnection(instanceConnection as TECNetworkConnection);
+                        }
+                    }
+                }
             }
         }
 
