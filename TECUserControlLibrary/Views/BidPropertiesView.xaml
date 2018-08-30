@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TECUserControlLibrary.Views"
+             xmlns:utilities="clr-namespace:TECUserControlLibrary.Utilities"
+             xmlns:eLib="clr-namespace:EstimatingLibrary;assembly=EstimatingLibrary"
              x:Name="bidPropertiesView"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600">
@@ -20,6 +22,13 @@
     </UserControl.Resources>
     <Grid DataContext="{Binding ElementName=bidPropertiesView, Path=ViewModel}"
           Background="{StaticResource SectionBackgroundBrush}">
+        <Grid.Resources>
+            <ResourceDictionary>
+                <Style TargetType="TextBox">
+                    <Setter Property="Margin" Value="2"/>
+                </Style>
+            </ResourceDictionary>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition/>
@@ -33,15 +42,8 @@
             <TextBlock Text="Bid Properties"
                        Style="{StaticResource ListHeader}"/>
         </Border>
-        
+
         <StackPanel Grid.Row="1" Margin="20,0,20,0">
-            <StackPanel.Resources>
-                <ResourceDictionary>
-                    <Style TargetType="TextBox">
-                        <Setter Property="Margin" Value="2"/>
-                    </Style>
-                </ResourceDictionary>
-            </StackPanel.Resources>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="100"/>
@@ -95,6 +97,27 @@
                 <TextBlock Text="Duration (Weeks): "/>
                 <TextBox Text="{Binding Bid.Duration}"
                          Grid.Column="1"/>
+            </Grid>
+            
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="20,0,20,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Document List:"/>
+                <DataGrid ItemsSource="{Binding Bid.Documents}"
+                          AutoGenerateColumns="False"
+                          Grid.Row="1">
+                    <DataGrid.Columns>
+                        <DataGridComboBoxColumn SelectedItemBinding="{Binding DocumentType}" ItemsSource="{utilities:EnumBindingSource EnumType=eLib:DocumentType}" Header="Type"
+                                            MinWidth="60"/>
+                        <DataGridTextColumn Header="Title" Binding="{Binding Title}" MinWidth="100"/>
+                        <DataGridTextColumn Header="Date" Binding="{Binding Date}" MinWidth="100"/>
+
+                    </DataGrid.Columns>
+                </DataGrid>
             </Grid>
             <Grid>
                 <Grid.RowDefinitions>

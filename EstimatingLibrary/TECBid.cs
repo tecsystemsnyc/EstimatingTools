@@ -143,6 +143,7 @@ namespace EstimatingLibrary
         public ObservableCollection<TECInternalNote> InternalNotes { get; } = new ObservableCollection<TECInternalNote>();
         public ObservableCollection<TECDistributionContact> DistributionList { get; } = new ObservableCollection<TECDistributionContact>();
         public ObservableCollection<TECToDoItem> ToDoList { get; } = new ObservableCollection<TECToDoItem>();
+        public ObservableCollection<TECDocument> Documents { get; } = new ObservableCollection<TECDocument>();
 
         public CostBatch CostBatch
         {
@@ -173,6 +174,7 @@ namespace EstimatingLibrary
             InternalNotes.CollectionChanged += (sender, args) => collectionChanged(sender, args, "InternalNotes");
             DistributionList.CollectionChanged += (sender, args) => collectionChanged(sender, args, "DistributionList");
             ToDoList.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ToDoList");
+            Documents.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Documents");
         }
 
         public TECBid() : this(Guid.NewGuid())
@@ -368,6 +370,7 @@ namespace EstimatingLibrary
             saveList.AddRange(this.InternalNotes, "InternalNotes");
             saveList.AddRange(this.DistributionList, "DistributionList");
             saveList.AddRange(this.ToDoList, "ToDoList");
+            saveList.AddRange(this.Documents, "Documents");
             return saveList;
         }
 

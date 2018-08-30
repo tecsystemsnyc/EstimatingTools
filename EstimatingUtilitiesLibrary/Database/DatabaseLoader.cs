@@ -102,6 +102,7 @@ namespace EstimatingUtilitiesLibrary.Database
             bid.InternalNotes.AddRange(getChildObjects(new BidInternalNoteTable(), new InternalNoteTable(), bid.Guid, id => { return new TECInternalNote(id); }));
             bid.DistributionList.AddRange(getChildObjects(new BidDistributionContactTable(), new DistributionContactTable(), bid.Guid, id => { return new TECDistributionContact(id); }));
             bid.ToDoList.AddRange(getChildObjects(new BidToDoItemTable(), new ToDoItemTable(), bid.Guid, id => { return new TECToDoItem(id); }));
+            bid.Documents.AddRange(getChildObjects(new BidDocumentTable(), new DocumentTable(), bid.Guid, id => { return new TECDocument(id); }));
 
             List<TECLocated> allLocated = bid.GetAll<TECLocated>();
             instances.ForEach(x => allLocated.AddRange(x.GetAll<TECLocated>()));
@@ -737,6 +738,11 @@ namespace EstimatingUtilitiesLibrary.Database
                         {
                             field.Property.SetValue(item, UtilitiesMethods.StringToEnum<IOType>(typeString));
                         }
+                    }
+                    else if (field.Property.PropertyType == typeof(DocumentType))
+                    {
+                        string typeString = row[field.Name].ToString();
+                        field.Property.SetValue(item, UtilitiesMethods.StringToEnum<DocumentType>(typeString));
                     }
                 }
             }

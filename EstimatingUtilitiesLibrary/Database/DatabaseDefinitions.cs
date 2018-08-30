@@ -1046,6 +1046,43 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+    internal class DocumentTable : TableBase
+    {
+        public static string TableName = "Document";
+        public static Type DocumentType = typeof(TECDocument);
+
+        public static TableField ID = new TableField("ID", "TEXT", DocumentType.GetProperty("Guid"));
+        public static TableField Type = new TableField("DocumentType", "TEXT", DocumentType.GetProperty("DocumentType"));
+        public static TableField Title = new TableField("Title", "TEXT", DocumentType.GetProperty("Title"));
+        public static TableField Date = new TableField("Date", "TEXT", DocumentType.GetProperty("Date"));
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            ID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            DocumentType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            ID,
+            Type,
+            Title,
+            Date
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Documents"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
+
     #region ICost
     internal class MiscTable : TableBase
     {
@@ -3940,6 +3977,46 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+    internal class BidDocumentTable : TableBase
+    {
+        public static string TableName = "BidDocument";
+        public static Type ObjectType = typeof(TECBid);
+        public static Type ReferenceType = typeof(TECDocument);
+
+        public static TableField BidID = new TableField("BidID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField DocumentID = new TableField("DocumentID", "TEXT", ReferenceType.GetProperty("Guid"));
+
+        public static Type HelperType = typeof(HelperProperties);
+        public static TableField Index = new TableField("ScopeIndex", "INTEGER", HelperType.GetProperty("Index"), "Documents", "0");
+
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            BidID,
+            DocumentID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            BidID,
+            DocumentID,
+            Index
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Documents"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override string IndexString { get { return Index.Name; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
     #endregion
 
     internal static class AllBidTables
@@ -3981,6 +4058,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new ProposalItemTable(),
             new DistributionContactTable(),
             new ToDoItemTable(),
+            new DocumentTable(),
           
             new ConnectionTypeTable(),
             new ConduitTypeTable(),
@@ -4048,6 +4126,7 @@ namespace EstimatingUtilitiesLibrary.Database
             new HardwareQuoteTable(),
             new BidDistributionContactTable(),
             new BidToDoItemTable(),
+            new BidDocumentTable()
             };
     }
 

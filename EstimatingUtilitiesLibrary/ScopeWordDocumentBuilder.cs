@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using A = DocumentFormat.OpenXml.Drawing;
 using A14 = DocumentFormat.OpenXml.Office2010.Drawing;
 using Ap = DocumentFormat.OpenXml.ExtendedProperties;
@@ -74,6 +75,132 @@ namespace EstimatingUtilitiesLibrary
             {
                 CreateParts(package, to);
             }
+        }
+
+        static private void AddRowToTable(Table table, string column1, string column2, string column3)
+        {
+            FontSize fontSize1 = new FontSize() { Val = "20" };
+
+            TableRow tableRow1 = new TableRow() { RsidTableRowMarkRevision = "00DC4F40", RsidTableRowAddition = "00FB4F08", RsidTableRowProperties = "008F2C0B" };
+
+            TableCell tableCell1 = new TableCell();
+
+            TableCellProperties tableCellProperties1 = new TableCellProperties();
+            TableCellWidth tableCellWidth1 = new TableCellWidth() { Width = "3084", Type = TableWidthUnitValues.Dxa };
+            Shading shading1 = new Shading() { Val = ShadingPatternValues.Clear, Color = "auto", Fill = "auto" };
+
+            tableCellProperties1.Append(tableCellWidth1);
+            tableCellProperties1.Append(shading1);
+
+            Paragraph paragraph1 = new Paragraph() { RsidParagraphMarkRevision = "00DC4F40", RsidParagraphAddition = "00FB4F08", RsidParagraphProperties = "00F5622B", RsidRunAdditionDefault = "00FB4F08" };
+
+            ParagraphProperties paragraphProperties1 = new ParagraphProperties();
+            Justification justification1 = new Justification() { Val = JustificationValues.Both };
+
+            ParagraphMarkRunProperties paragraphMarkRunProperties1 = new ParagraphMarkRunProperties();
+
+            paragraphMarkRunProperties1.Append((FontSize)fontSize1.CloneNode(true));
+
+            paragraphProperties1.Append(justification1);
+            paragraphProperties1.Append(paragraphMarkRunProperties1);
+
+            Run run1 = new Run() { RsidRunProperties = "00DC4F40" };
+
+            RunProperties runProperties1 = new RunProperties();
+
+            runProperties1.Append((FontSize)fontSize1.CloneNode(true));
+            Text text1 = new Text();
+            text1.Text = column1;
+
+            run1.Append(runProperties1);
+            run1.Append(text1);
+            
+            paragraph1.Append(paragraphProperties1);
+            paragraph1.Append(run1);
+
+            tableCell1.Append(tableCellProperties1);
+            tableCell1.Append(paragraph1);
+
+            TableCell tableCell2 = new TableCell();
+
+            TableCellProperties tableCellProperties2 = new TableCellProperties();
+            TableCellWidth tableCellWidth2 = new TableCellWidth() { Width = "3192", Type = TableWidthUnitValues.Dxa };
+            Shading shading2 = new Shading() { Val = ShadingPatternValues.Clear, Color = "auto", Fill = "auto" };
+
+            tableCellProperties2.Append(tableCellWidth2);
+            tableCellProperties2.Append(shading2);
+
+            Paragraph paragraph2 = new Paragraph() { RsidParagraphMarkRevision = "00E26AD8", RsidParagraphAddition = "00FB4F08", RsidParagraphProperties = "0021757F", RsidRunAdditionDefault = "00FB4F08" };
+
+            ParagraphProperties paragraphProperties2 = new ParagraphProperties();
+
+            ParagraphMarkRunProperties paragraphMarkRunProperties2 = new ParagraphMarkRunProperties();
+
+            paragraphMarkRunProperties2.Append((FontSize)fontSize1.CloneNode(true));
+
+            paragraphProperties2.Append(paragraphMarkRunProperties2);
+
+            Run run2 = new Run() { RsidRunProperties = "00DC4F40" };
+
+            RunProperties runProperties2 = new RunProperties();
+
+            runProperties2.Append((FontSize)fontSize1.CloneNode(true));
+            Text text2 = new Text();
+            text2.Text = column2;
+
+            run2.Append(runProperties2);
+            run2.Append(text2);
+            
+            paragraph2.Append(paragraphProperties2);
+            paragraph2.Append(run2);
+
+            tableCell2.Append(tableCellProperties2);
+            tableCell2.Append(paragraph2);
+
+            TableCell tableCell3 = new TableCell();
+
+            TableCellProperties tableCellProperties3 = new TableCellProperties();
+            TableCellWidth tableCellWidth3 = new TableCellWidth() { Width = "3192", Type = TableWidthUnitValues.Dxa };
+            Shading shading3 = new Shading() { Val = ShadingPatternValues.Clear, Color = "auto", Fill = "auto" };
+
+            tableCellProperties3.Append(tableCellWidth3);
+            tableCellProperties3.Append(shading3);
+
+            Paragraph paragraph3 = new Paragraph() { RsidParagraphMarkRevision = "00DC4F40", RsidParagraphAddition = "00FB4F08", RsidParagraphProperties = "005A7D16", RsidRunAdditionDefault = "0029352D" };
+
+            ParagraphProperties paragraphProperties3 = new ParagraphProperties();
+            Justification justification3 = new Justification() { Val = JustificationValues.Both };
+
+            ParagraphMarkRunProperties paragraphMarkRunProperties3 = new ParagraphMarkRunProperties();
+
+            paragraphMarkRunProperties3.Append((FontSize)fontSize1.CloneNode(true));
+
+            paragraphProperties3.Append(justification3);
+            paragraphProperties3.Append(paragraphMarkRunProperties3);
+
+            Run run3 = new Run();
+
+            RunProperties runProperties3 = new RunProperties();
+
+            runProperties3.Append((FontSize)fontSize1.CloneNode(true));
+            Text text3 = new Text() { Space = SpaceProcessingModeValues.Preserve };
+            text3.Text = column3;
+
+            run3.Append(runProperties3);
+            run3.Append(text3);
+
+            paragraph3.Append(paragraphProperties3);
+            paragraph3.Append(run3);
+
+            tableCell3.Append(tableCellProperties3);
+            tableCell3.Append(paragraph3);
+
+            tableRow1.Append(tableCell1);
+            tableRow1.Append(tableCell2);
+            tableRow1.Append(tableCell3);
+
+            table.Append(tableRow1);
+
         }
 
         // Adds child parts and generates content of the specified part.
@@ -616,519 +743,29 @@ namespace EstimatingUtilitiesLibrary
             tableGrid1.Append(gridColumn2);
             tableGrid1.Append(gridColumn3);
 
-            TableRow tableRow1 = new TableRow() { RsidTableRowMarkRevision = "00DC4F40", RsidTableRowAddition = "00FB4F08", RsidTableRowProperties = "008F2C0B" };
-
-            TableCell tableCell1 = new TableCell();
-
-            TableCellProperties tableCellProperties1 = new TableCellProperties();
-            TableCellWidth tableCellWidth1 = new TableCellWidth() { Width = "3084", Type = TableWidthUnitValues.Dxa };
-            Shading shading1 = new Shading() { Val = ShadingPatternValues.Clear, Color = "auto", Fill = "auto" };
-
-            tableCellProperties1.Append(tableCellWidth1);
-            tableCellProperties1.Append(shading1);
-
-            Paragraph paragraph14 = new Paragraph() { RsidParagraphMarkRevision = "00DC4F40", RsidParagraphAddition = "00FB4F08", RsidParagraphProperties = "00F5622B", RsidRunAdditionDefault = "00FB4F08" };
-
-            ParagraphProperties paragraphProperties14 = new ParagraphProperties();
-            Justification justification14 = new Justification() { Val = JustificationValues.Both };
-
-            ParagraphMarkRunProperties paragraphMarkRunProperties11 = new ParagraphMarkRunProperties();
-
-            paragraphMarkRunProperties11.Append((FontSize)fontSize1.CloneNode(true));
-
-            paragraphProperties14.Append(justification14);
-            paragraphProperties14.Append(paragraphMarkRunProperties11);
-
-            Run run38 = new Run() { RsidRunProperties = "00DC4F40" };
-
-            RunProperties runProperties38 = new RunProperties();
-
-            runProperties38.Append((FontSize)fontSize1.CloneNode(true));
-            Text text21 = new Text();
-            text21.Text = "Mechanical Drawings:";
-
-            run38.Append(runProperties38);
-            run38.Append(text21);
-
-            Run run39 = new Run() { RsidRunAddition = "00423DD3" };
-
-            RunProperties runProperties39 = new RunProperties();
-
-            runProperties39.Append((FontSize)fontSize1.CloneNode(true));
-            Text text22 = new Text() { Space = SpaceProcessingModeValues.Preserve };
-            text22.Text = "  ";
-
-            run39.Append(runProperties39);
-            run39.Append(text22);
-
-            Run run40 = new Run() { RsidRunAddition = "00F5622B" };
-
-            RunProperties runProperties40 = new RunProperties();
-
-            runProperties40.Append((FontSize)fontSize1.CloneNode(true));
-            Text text23 = new Text() { Space = SpaceProcessingModeValues.Preserve };
-            text23.Text = "                                      ";
-
-            run40.Append(runProperties40);
-            run40.Append(text23);
-
-            paragraph14.Append(paragraphProperties14);
-            paragraph14.Append(run38);
-            paragraph14.Append(run39);
-            paragraph14.Append(run40);
-
-            tableCell1.Append(tableCellProperties1);
-            tableCell1.Append(paragraph14);
-
-            TableCell tableCell2 = new TableCell();
-
-            TableCellProperties tableCellProperties2 = new TableCellProperties();
-            TableCellWidth tableCellWidth2 = new TableCellWidth() { Width = "3192", Type = TableWidthUnitValues.Dxa };
-            Shading shading2 = new Shading() { Val = ShadingPatternValues.Clear, Color = "auto", Fill = "auto" };
-
-            tableCellProperties2.Append(tableCellWidth2);
-            tableCellProperties2.Append(shading2);
-
-            Paragraph paragraph15 = new Paragraph() { RsidParagraphMarkRevision = "00E26AD8", RsidParagraphAddition = "00FB4F08", RsidParagraphProperties = "0021757F", RsidRunAdditionDefault = "00FB4F08" };
-
-            ParagraphProperties paragraphProperties15 = new ParagraphProperties();
-
-            ParagraphMarkRunProperties paragraphMarkRunProperties12 = new ParagraphMarkRunProperties();
-            Highlight highlight1 = new Highlight() { Val = HighlightColorValues.Yellow };
-
-            paragraphMarkRunProperties12.Append((FontSize)fontSize1.CloneNode(true));
-            paragraphMarkRunProperties12.Append(highlight1);
-
-            paragraphProperties15.Append(paragraphMarkRunProperties12);
-
-            paragraph15.Append(paragraphProperties15);
-
-            tableCell2.Append(tableCellProperties2);
-            tableCell2.Append(paragraph15);
-
-            TableCell tableCell3 = new TableCell();
-
-            TableCellProperties tableCellProperties3 = new TableCellProperties();
-            TableCellWidth tableCellWidth3 = new TableCellWidth() { Width = "3192", Type = TableWidthUnitValues.Dxa };
-            Shading shading3 = new Shading() { Val = ShadingPatternValues.Clear, Color = "auto", Fill = "auto" };
-
-            tableCellProperties3.Append(tableCellWidth3);
-            tableCellProperties3.Append(shading3);
-
-            Paragraph paragraph16 = new Paragraph() { RsidParagraphMarkRevision = "00DC4F40", RsidParagraphAddition = "00FB4F08", RsidParagraphProperties = "005A7D16", RsidRunAdditionDefault = "0029352D" };
-
-            ParagraphProperties paragraphProperties16 = new ParagraphProperties();
-            Justification justification15 = new Justification() { Val = JustificationValues.Both };
-
-            ParagraphMarkRunProperties paragraphMarkRunProperties13 = new ParagraphMarkRunProperties();
-
-            paragraphMarkRunProperties13.Append((FontSize)fontSize1.CloneNode(true));
-
-            paragraphProperties16.Append(justification15);
-            paragraphProperties16.Append(paragraphMarkRunProperties13);
-
-            Run run41 = new Run();
-
-            RunProperties runProperties41 = new RunProperties();
-
-            runProperties41.Append((FontSize)fontSize1.CloneNode(true));
-            Text text24 = new Text() { Space = SpaceProcessingModeValues.Preserve };
-            text24.Text = "Dated: ";
-
-            run41.Append(runProperties41);
-            run41.Append(text24);
-
-            paragraph16.Append(paragraphProperties16);
-            paragraph16.Append(run41);
-
-            tableCell3.Append(tableCellProperties3);
-            tableCell3.Append(paragraph16);
-
-            tableRow1.Append(tableCell1);
-            tableRow1.Append(tableCell2);
-            tableRow1.Append(tableCell3);
-
-            TableRow tableRow2 = new TableRow() { RsidTableRowMarkRevision = "00DC4F40", RsidTableRowAddition = "005A7D16", RsidTableRowProperties = "008F2C0B" };
-
-            TableCell tableCell4 = new TableCell();
-
-            TableCellProperties tableCellProperties4 = new TableCellProperties();
-            TableCellWidth tableCellWidth4 = new TableCellWidth() { Width = "3084", Type = TableWidthUnitValues.Dxa };
-            Shading shading4 = new Shading() { Val = ShadingPatternValues.Clear, Color = "auto", Fill = "auto" };
-
-            tableCellProperties4.Append(tableCellWidth4);
-            tableCellProperties4.Append(shading4);
-
-            Paragraph paragraph17 = new Paragraph() { RsidParagraphMarkRevision = "00DC4F40", RsidParagraphAddition = "005A7D16", RsidParagraphProperties = "00F5622B", RsidRunAdditionDefault = "005A7D16" };
-
-            ParagraphProperties paragraphProperties17 = new ParagraphProperties();
-            Justification justification16 = new Justification() { Val = JustificationValues.Both };
-
-            ParagraphMarkRunProperties paragraphMarkRunProperties14 = new ParagraphMarkRunProperties();
-
-            paragraphMarkRunProperties14.Append((FontSize)fontSize1.CloneNode(true));
-
-            paragraphProperties17.Append(justification16);
-            paragraphProperties17.Append(paragraphMarkRunProperties14);
-
-            paragraph17.Append(paragraphProperties17);
-
-            tableCell4.Append(tableCellProperties4);
-            tableCell4.Append(paragraph17);
-
-            TableCell tableCell5 = new TableCell();
-
-            TableCellProperties tableCellProperties5 = new TableCellProperties();
-            TableCellWidth tableCellWidth5 = new TableCellWidth() { Width = "3192", Type = TableWidthUnitValues.Dxa };
-            Shading shading5 = new Shading() { Val = ShadingPatternValues.Clear, Color = "auto", Fill = "auto" };
-
-            tableCellProperties5.Append(tableCellWidth5);
-            tableCellProperties5.Append(shading5);
-
-            Paragraph paragraph18 = new Paragraph() { RsidParagraphMarkRevision = "00E26AD8", RsidParagraphAddition = "005A7D16", RsidParagraphProperties = "0021757F", RsidRunAdditionDefault = "005A7D16" };
-
-            ParagraphProperties paragraphProperties18 = new ParagraphProperties();
-
-            ParagraphMarkRunProperties paragraphMarkRunProperties15 = new ParagraphMarkRunProperties();
-            Highlight highlight2 = new Highlight() { Val = HighlightColorValues.Yellow };
-
-            paragraphMarkRunProperties15.Append((FontSize)fontSize1.CloneNode(true));
-            paragraphMarkRunProperties15.Append(highlight2);
-
-            paragraphProperties18.Append(paragraphMarkRunProperties15);
-
-            paragraph18.Append(paragraphProperties18);
-
-            tableCell5.Append(tableCellProperties5);
-            tableCell5.Append(paragraph18);
-
-            TableCell tableCell6 = new TableCell();
-
-            TableCellProperties tableCellProperties6 = new TableCellProperties();
-            TableCellWidth tableCellWidth6 = new TableCellWidth() { Width = "3192", Type = TableWidthUnitValues.Dxa };
-            Shading shading6 = new Shading() { Val = ShadingPatternValues.Clear, Color = "auto", Fill = "auto" };
-
-            tableCellProperties6.Append(tableCellWidth6);
-            tableCellProperties6.Append(shading6);
-
-            Paragraph paragraph19 = new Paragraph() { RsidParagraphAddition = "005A7D16", RsidParagraphProperties = "005A7D16", RsidRunAdditionDefault = "005A7D16" };
-
-            ParagraphProperties paragraphProperties19 = new ParagraphProperties();
-            Justification justification17 = new Justification() { Val = JustificationValues.Both };
-
-            ParagraphMarkRunProperties paragraphMarkRunProperties16 = new ParagraphMarkRunProperties();
-
-            paragraphMarkRunProperties16.Append((FontSize)fontSize1.CloneNode(true));
-
-            paragraphProperties19.Append(justification17);
-            paragraphProperties19.Append(paragraphMarkRunProperties16);
-
-            paragraph19.Append(paragraphProperties19);
-
-            tableCell6.Append(tableCellProperties6);
-            tableCell6.Append(paragraph19);
-
-            tableRow2.Append(tableCell4);
-            tableRow2.Append(tableCell5);
-            tableRow2.Append(tableCell6);
-
-            TableRow tableRow3 = new TableRow() { RsidTableRowMarkRevision = "00DC4F40", RsidTableRowAddition = "0029352D", RsidTableRowProperties = "008F2C0B" };
-
-            TableCell tableCell7 = new TableCell();
-
-            TableCellProperties tableCellProperties7 = new TableCellProperties();
-            TableCellWidth tableCellWidth7 = new TableCellWidth() { Width = "3084", Type = TableWidthUnitValues.Dxa };
-            Shading shading7 = new Shading() { Val = ShadingPatternValues.Clear, Color = "auto", Fill = "auto" };
-
-            tableCellProperties7.Append(tableCellWidth7);
-            tableCellProperties7.Append(shading7);
-
-            Paragraph paragraph20 = new Paragraph() { RsidParagraphMarkRevision = "00DC4F40", RsidParagraphAddition = "0029352D", RsidParagraphProperties = "0021757F", RsidRunAdditionDefault = "0029352D" };
-
-            ParagraphProperties paragraphProperties20 = new ParagraphProperties();
-            Justification justification18 = new Justification() { Val = JustificationValues.Both };
-
-            ParagraphMarkRunProperties paragraphMarkRunProperties17 = new ParagraphMarkRunProperties();
-
-            paragraphMarkRunProperties17.Append((FontSize)fontSize1.CloneNode(true));
-
-            paragraphProperties20.Append(justification18);
-            paragraphProperties20.Append(paragraphMarkRunProperties17);
-
-            Run run42 = new Run();
-
-            RunProperties runProperties42 = new RunProperties();
-
-            runProperties42.Append((FontSize)fontSize1.CloneNode(true));
-            Text text25 = new Text() { Space = SpaceProcessingModeValues.Preserve };
-            text25.Text = "Specification Sections: ";
-
-            run42.Append(runProperties42);
-            run42.Append(text25);
-
-            paragraph20.Append(paragraphProperties20);
-            paragraph20.Append(run42);
-
-            tableCell7.Append(tableCellProperties7);
-            tableCell7.Append(paragraph20);
-
-            TableCell tableCell8 = new TableCell();
-
-            TableCellProperties tableCellProperties8 = new TableCellProperties();
-            TableCellWidth tableCellWidth8 = new TableCellWidth() { Width = "3192", Type = TableWidthUnitValues.Dxa };
-            Shading shading8 = new Shading() { Val = ShadingPatternValues.Clear, Color = "auto", Fill = "auto" };
-
-            tableCellProperties8.Append(tableCellWidth8);
-            tableCellProperties8.Append(shading8);
-
-            Paragraph paragraph21 = new Paragraph() { RsidParagraphMarkRevision = "00E26AD8", RsidParagraphAddition = "0029352D", RsidParagraphProperties = "0021757F", RsidRunAdditionDefault = "0029352D" };
-
-            ParagraphProperties paragraphProperties21 = new ParagraphProperties();
-
-            ParagraphMarkRunProperties paragraphMarkRunProperties18 = new ParagraphMarkRunProperties();
-            Highlight highlight3 = new Highlight() { Val = HighlightColorValues.Yellow };
-
-            paragraphMarkRunProperties18.Append((FontSize)fontSize1.CloneNode(true));
-            paragraphMarkRunProperties18.Append(highlight3);
-
-            paragraphProperties21.Append(paragraphMarkRunProperties18);
-
-            paragraph21.Append(paragraphProperties21);
-
-            tableCell8.Append(tableCellProperties8);
-            tableCell8.Append(paragraph21);
-
-            TableCell tableCell9 = new TableCell();
-
-            TableCellProperties tableCellProperties9 = new TableCellProperties();
-            TableCellWidth tableCellWidth9 = new TableCellWidth() { Width = "3192", Type = TableWidthUnitValues.Dxa };
-            Shading shading9 = new Shading() { Val = ShadingPatternValues.Clear, Color = "auto", Fill = "auto" };
-
-            tableCellProperties9.Append(tableCellWidth9);
-            tableCellProperties9.Append(shading9);
-
-            Paragraph paragraph22 = new Paragraph() { RsidParagraphMarkRevision = "00DC4F40", RsidParagraphAddition = "0029352D", RsidParagraphProperties = "005A7D16", RsidRunAdditionDefault = "0029352D" };
-
-            ParagraphProperties paragraphProperties22 = new ParagraphProperties();
-            Justification justification19 = new Justification() { Val = JustificationValues.Both };
-
-            ParagraphMarkRunProperties paragraphMarkRunProperties19 = new ParagraphMarkRunProperties();
-
-            paragraphMarkRunProperties19.Append((FontSize)fontSize1.CloneNode(true));
-
-            paragraphProperties22.Append(justification19);
-            paragraphProperties22.Append(paragraphMarkRunProperties19);
-
-            Run run43 = new Run();
-
-            RunProperties runProperties43 = new RunProperties();
-
-            runProperties43.Append((FontSize)fontSize1.CloneNode(true));
-            Text text26 = new Text() { Space = SpaceProcessingModeValues.Preserve };
-            text26.Text = "Dated: ";
-
-            run43.Append(runProperties43);
-            run43.Append(text26);
-
-            paragraph22.Append(paragraphProperties22);
-            paragraph22.Append(run43);
-
-            tableCell9.Append(tableCellProperties9);
-            tableCell9.Append(paragraph22);
-
-            tableRow3.Append(tableCell7);
-            tableRow3.Append(tableCell8);
-            tableRow3.Append(tableCell9);
-
-            TableRow tableRow4 = new TableRow() { RsidTableRowMarkRevision = "00DC4F40", RsidTableRowAddition = "0021757F", RsidTableRowProperties = "008F2C0B" };
-
-            TableCell tableCell10 = new TableCell();
-
-            TableCellProperties tableCellProperties10 = new TableCellProperties();
-            TableCellWidth tableCellWidth10 = new TableCellWidth() { Width = "3084", Type = TableWidthUnitValues.Dxa };
-            Shading shading10 = new Shading() { Val = ShadingPatternValues.Clear, Color = "auto", Fill = "auto" };
-
-            tableCellProperties10.Append(tableCellWidth10);
-            tableCellProperties10.Append(shading10);
-
-            Paragraph paragraph23 = new Paragraph() { RsidParagraphAddition = "0021757F", RsidParagraphProperties = "0021757F", RsidRunAdditionDefault = "0021757F" };
-
-            ParagraphProperties paragraphProperties23 = new ParagraphProperties();
-            Justification justification20 = new Justification() { Val = JustificationValues.Both };
-
-            ParagraphMarkRunProperties paragraphMarkRunProperties20 = new ParagraphMarkRunProperties();
-
-            paragraphMarkRunProperties20.Append((FontSize)fontSize1.CloneNode(true));
-
-            paragraphProperties23.Append(justification20);
-            paragraphProperties23.Append(paragraphMarkRunProperties20);
-
-            paragraph23.Append(paragraphProperties23);
-
-            tableCell10.Append(tableCellProperties10);
-            tableCell10.Append(paragraph23);
-
-            TableCell tableCell11 = new TableCell();
-
-            TableCellProperties tableCellProperties11 = new TableCellProperties();
-            TableCellWidth tableCellWidth11 = new TableCellWidth() { Width = "3192", Type = TableWidthUnitValues.Dxa };
-            Shading shading11 = new Shading() { Val = ShadingPatternValues.Clear, Color = "auto", Fill = "auto" };
-
-            tableCellProperties11.Append(tableCellWidth11);
-            tableCellProperties11.Append(shading11);
-
-            Paragraph paragraph24 = new Paragraph() { RsidParagraphAddition = "0021757F", RsidParagraphProperties = "0021757F", RsidRunAdditionDefault = "0021757F" };
-
-            ParagraphProperties paragraphProperties24 = new ParagraphProperties();
-
-            ParagraphMarkRunProperties paragraphMarkRunProperties21 = new ParagraphMarkRunProperties();
-
-            paragraphMarkRunProperties21.Append((FontSize)fontSize1.CloneNode(true));
-
-            paragraphProperties24.Append(paragraphMarkRunProperties21);
-
-            paragraph24.Append(paragraphProperties24);
-
-            tableCell11.Append(tableCellProperties11);
-            tableCell11.Append(paragraph24);
-
-            TableCell tableCell12 = new TableCell();
-
-            TableCellProperties tableCellProperties12 = new TableCellProperties();
-            TableCellWidth tableCellWidth12 = new TableCellWidth() { Width = "3192", Type = TableWidthUnitValues.Dxa };
-            Shading shading12 = new Shading() { Val = ShadingPatternValues.Clear, Color = "auto", Fill = "auto" };
-
-            tableCellProperties12.Append(tableCellWidth12);
-            tableCellProperties12.Append(shading12);
-
-            Paragraph paragraph25 = new Paragraph() { RsidParagraphAddition = "0021757F", RsidParagraphProperties = "0029352D", RsidRunAdditionDefault = "0021757F" };
-
-            ParagraphProperties paragraphProperties25 = new ParagraphProperties();
-            Justification justification21 = new Justification() { Val = JustificationValues.Both };
-
-            ParagraphMarkRunProperties paragraphMarkRunProperties22 = new ParagraphMarkRunProperties();
-
-            paragraphMarkRunProperties22.Append((FontSize)fontSize1.CloneNode(true));
-
-            paragraphProperties25.Append(justification21);
-            paragraphProperties25.Append(paragraphMarkRunProperties22);
-
-            paragraph25.Append(paragraphProperties25);
-
-            tableCell12.Append(tableCellProperties12);
-            tableCell12.Append(paragraph25);
-
-            tableRow4.Append(tableCell10);
-            tableRow4.Append(tableCell11);
-            tableRow4.Append(tableCell12);
-
-            TableRow tableRow5 = new TableRow() { RsidTableRowMarkRevision = "00DC4F40", RsidTableRowAddition = "0021757F", RsidTableRowProperties = "0021757F" };
-
-            TableRowProperties tableRowProperties1 = new TableRowProperties();
-            TableRowHeight tableRowHeight1 = new TableRowHeight() { Val = (UInt32Value)272U };
-
-            tableRowProperties1.Append(tableRowHeight1);
-
-            TableCell tableCell13 = new TableCell();
-
-            TableCellProperties tableCellProperties13 = new TableCellProperties();
-            TableCellWidth tableCellWidth13 = new TableCellWidth() { Width = "3084", Type = TableWidthUnitValues.Dxa };
-            Shading shading13 = new Shading() { Val = ShadingPatternValues.Clear, Color = "auto", Fill = "auto" };
-
-            tableCellProperties13.Append(tableCellWidth13);
-            tableCellProperties13.Append(shading13);
-
-            Paragraph paragraph26 = new Paragraph() { RsidParagraphAddition = "0021757F", RsidParagraphProperties = "0029352D", RsidRunAdditionDefault = "0021757F" };
-
-            ParagraphProperties paragraphProperties26 = new ParagraphProperties();
-            Justification justification22 = new Justification() { Val = JustificationValues.Both };
-
-            ParagraphMarkRunProperties paragraphMarkRunProperties23 = new ParagraphMarkRunProperties();
-
-            paragraphMarkRunProperties23.Append((FontSize)fontSize1.CloneNode(true));
-
-            paragraphProperties26.Append(justification22);
-            paragraphProperties26.Append(paragraphMarkRunProperties23);
-
-            Run run44 = new Run() { RsidRunProperties = "0021757F" };
-
-            RunProperties runProperties44 = new RunProperties();
-
-            runProperties44.Append((FontSize)fontSize1.CloneNode(true));
-            Text text27 = new Text();
-            text27.Text = "Documents Prepared By:";
-
-            run44.Append(runProperties44);
-            run44.Append(text27);
-
-            paragraph26.Append(paragraphProperties26);
-            paragraph26.Append(run44);
-
-            tableCell13.Append(tableCellProperties13);
-            tableCell13.Append(paragraph26);
-
-            TableCell tableCell14 = new TableCell();
-
-            TableCellProperties tableCellProperties14 = new TableCellProperties();
-            TableCellWidth tableCellWidth14 = new TableCellWidth() { Width = "3192", Type = TableWidthUnitValues.Dxa };
-            Shading shading14 = new Shading() { Val = ShadingPatternValues.Clear, Color = "auto", Fill = "auto" };
-
-            tableCellProperties14.Append(tableCellWidth14);
-            tableCellProperties14.Append(shading14);
-
-            Paragraph paragraph27 = new Paragraph() { RsidParagraphAddition = "0021757F", RsidParagraphProperties = "0021757F", RsidRunAdditionDefault = "0021757F" };
-
-            ParagraphProperties paragraphProperties27 = new ParagraphProperties();
-
-            ParagraphMarkRunProperties paragraphMarkRunProperties24 = new ParagraphMarkRunProperties();
-
-            paragraphMarkRunProperties24.Append((FontSize)fontSize1.CloneNode(true));
-
-            paragraphProperties27.Append(paragraphMarkRunProperties24);
-
-            paragraph27.Append(paragraphProperties27);
-
-            tableCell14.Append(tableCellProperties14);
-            tableCell14.Append(paragraph27);
-
-            TableCell tableCell15 = new TableCell();
-
-            TableCellProperties tableCellProperties15 = new TableCellProperties();
-            TableCellWidth tableCellWidth15 = new TableCellWidth() { Width = "3192", Type = TableWidthUnitValues.Dxa };
-            Shading shading15 = new Shading() { Val = ShadingPatternValues.Clear, Color = "auto", Fill = "auto" };
-
-            tableCellProperties15.Append(tableCellWidth15);
-            tableCellProperties15.Append(shading15);
-
-            Paragraph paragraph28 = new Paragraph() { RsidParagraphAddition = "0021757F", RsidParagraphProperties = "0029352D", RsidRunAdditionDefault = "0021757F" };
-
-            ParagraphProperties paragraphProperties28 = new ParagraphProperties();
-            Justification justification23 = new Justification() { Val = JustificationValues.Both };
-
-            ParagraphMarkRunProperties paragraphMarkRunProperties25 = new ParagraphMarkRunProperties();
-
-            paragraphMarkRunProperties25.Append((FontSize)fontSize1.CloneNode(true));
-
-            paragraphProperties28.Append(justification23);
-            paragraphProperties28.Append(paragraphMarkRunProperties25);
-
-            paragraph28.Append(paragraphProperties28);
-
-            tableCell15.Append(tableCellProperties15);
-            tableCell15.Append(paragraph28);
-
-            tableRow5.Append(tableRowProperties1);
-            tableRow5.Append(tableCell13);
-            tableRow5.Append(tableCell14);
-            tableRow5.Append(tableCell15);
-
-            table1.Append(tableProperties1);
-            table1.Append(tableGrid1);
-            table1.Append(tableRow1);
-            table1.Append(tableRow2);
-            table1.Append(tableRow3);
-            table1.Append(tableRow4);
-            table1.Append(tableRow5);
+            foreach(var item in _bid.Documents.Where(x => x.DocumentType == EstimatingLibrary.DocumentType.Drawing))
+            {
+                if(item == _bid.Documents.Where(x => x.DocumentType == EstimatingLibrary.DocumentType.Drawing).First())
+                {
+                    AddRowToTable(table1, "Drawings", item.Title, String.Format("Date: {0}", item.Date));
+                }
+                else
+                {
+                    AddRowToTable(table1, "", item.Title, String.Format("Date: {0}", item.Date));
+                }
+            }
+
+            foreach (var item in _bid.Documents.Where(x => x.DocumentType == EstimatingLibrary.DocumentType.Specification))
+            {
+                if (item == _bid.Documents.Where(x => x.DocumentType == EstimatingLibrary.DocumentType.Specification).First())
+                {
+                    AddRowToTable(table1, "Specifications", item.Title, String.Format("Date: {0}", item.Date));
+                }
+                else
+                {
+                    AddRowToTable(table1, "", item.Title, String.Format("Date: {0}", item.Date));
+                }
+            }
 
             #endregion
 
