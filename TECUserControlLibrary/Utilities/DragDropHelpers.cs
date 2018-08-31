@@ -81,10 +81,22 @@ namespace TECUserControlLibrary.Utilities
         public static void Drop(IDropInfo dropInfo, Func<object, object> dropObject, bool addObjectToCollection = true)
         {
             var sourceItem = dropInfo.Data;
-            if (dropInfo.Data is IDragDropable dropbable)
+
+            if(dropObject == null)
             {
-                sourceItem = dropbable.DropData();
+                dropObject = obj =>
+                {
+                    if (dropInfo.Data is IDragDropable dropbable)
+                    {
+                        return sourceItem = dropbable.DropData();
+                    }
+                    else {
+                        return obj;
+                    }
+                };
+                
             }
+            
             Type targetType = dropInfo.TargetCollection.GetItemType() ?? dropInfo.TargetItem?.GetType();
 
             if (dropInfo.VisualTarget != dropInfo.DragInfo.VisualSource)

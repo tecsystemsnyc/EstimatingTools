@@ -251,7 +251,7 @@ namespace EstimatingLibrary
             }
         }
         
-        private void handleEquipmentRemoval(TECEquipment equip)
+        protected void handleEquipmentRemoval(TECEquipment equip)
         {
             List<TECProposalItem> toRemove = new List<TECProposalItem>();
 
@@ -323,7 +323,7 @@ namespace EstimatingLibrary
             {
                 MiscCosts.Add(misc);
             }
-            else if (property == "ScopeBranch" && item is TECScopeBranch branch)
+            else if (property == "ScopeBranches" && item is TECScopeBranch branch)
             {
                 ScopeBranches.Add(branch);
             }

@@ -19,7 +19,7 @@ namespace TECUserControlLibrary.ViewModels
         private double _length = 50.0;
         private double _conduitLength = 30.0;
         private TECElectricalMaterial _conduitType;
-        private bool _isPlenum = false;
+        private bool _isPlenum = true;
         private bool _connect = false;
         private TECController _selectedController;
 

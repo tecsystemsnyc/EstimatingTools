@@ -208,7 +208,7 @@ namespace EstimatingLibrary
                                 }
                             }
                         }
-                        instanceConnections.ForEach(x => x.UpdatePropertiesBasedOn(connection));
+                        instanceConnections.Where(x => x!= null).ForEach(x => x.UpdatePropertiesBasedOn(connection));
                     }
                 }
             }
@@ -364,10 +364,7 @@ namespace EstimatingLibrary
                         else if (item is TECEquipment equip)
                         {
                             equip.SubScopeCollectionChanged -= handleSubScopeCollectionChanged;
-                            foreach (TECSubScope ss in equip.SubScope)
-                            {
-                                handleSubScopeRemoval(ss);
-                            }
+                            handleEquipmentRemoval(equip);
                         }
                         notifyTECChanged(Change.Remove, propertyName, this, item);
                     }

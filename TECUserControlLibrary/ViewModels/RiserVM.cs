@@ -145,12 +145,13 @@ namespace TECUserControlLibrary.ViewModels
 
         private void addPatternExecute()
         {
-            for(int x = PatternStart; x <= PatternEnd; x++)
+            for(int x = PatternEnd; x >= PatternStart; x--)
             {
                 TECLocation newLocation = new TECLocation();
                 newLocation.Name = String.Format("{0} {1}", PatternName, x);
                 newLocation.Label = x.ToString();
                 bid.Locations.Add(newLocation);
+
             }
         }
         private bool canAddPattern()

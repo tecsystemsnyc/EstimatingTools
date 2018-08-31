@@ -13,7 +13,7 @@ namespace EstimatingLibrary
         protected double _length = 0;
         protected double _conduitLength = 0;
         protected TECElectricalMaterial _conduitType;
-        protected bool _isPlenum = false;
+        protected bool _isPlenum = true;
 
         public double Length
         {

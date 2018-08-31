@@ -24,8 +24,9 @@
                   CanUserAddRows="False"
                   CanUserSortColumns="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" MinWidth="40" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding Description}" Header="Description" Width="Auto" MinWidth="70" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Name}" Header="Model Number" Width="Auto" MinWidth="40" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Manufacturer.Label}" Header="Manufacturer" Width="Auto" IsReadOnly="True" MinWidth="80"/>
                 <DataGridTextColumn Binding="{Binding Price, StringFormat= {} {0:C}}"
                                     Header="Valve Price" Width="Auto" IsReadOnly="True" MinWidth="40"
                                     ElementStyle="{StaticResource RightCell}"/>
@@ -35,10 +36,10 @@
                 <DataGridTextColumn Binding="{Binding Cost, StringFormat= {} {0:C}}"
                                     Header="Unit Cost" Width="Auto" IsReadOnly="True" MinWidth="40"
                                     ElementStyle="{StaticResource RightCell}"/>
-                <DataGridTextColumn Binding="{Binding Manufacturer.Label}" Header="Manufacturer" Width="Auto" IsReadOnly="True" MinWidth="80"/>
                 <DataGridTextColumn Binding="{Binding Cv}" Header="Cv" Width="Auto" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding Size}" Header="Size" Width="Auto" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding Style}" Header="Style" Width="Auto" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding PressureRating}" Header="Pressure" Width="Auto" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding Actuator.Name}" Header="Actuator" Width="Auto" IsReadOnly="True" MinWidth="80"/>
             </DataGrid.Columns>
         </DataGrid>

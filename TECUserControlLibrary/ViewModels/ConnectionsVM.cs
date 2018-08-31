@@ -35,7 +35,7 @@ namespace TECUserControlLibrary.ViewModels
         private Double _defaultWireLength = 50.0;
         private Double _defaultConduitLength = 30.0;
         private TECElectricalMaterial _defaultConduitType;
-        private bool _defaultPlenum = false;
+        private bool _defaultPlenum = true;
         private bool _selectionNeeded = false;
         private IProtocol _selectedProtocol;
         private List<IProtocol> _compatibleProtocols;
