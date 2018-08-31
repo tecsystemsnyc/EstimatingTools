@@ -13,6 +13,7 @@ namespace EstimatingUtilitiesLibrary.Database
                 "Note",
                 "Exclusion",
                 "ProposalScope",
+                "ScopeBranch",
                 "Location"
             };
 
