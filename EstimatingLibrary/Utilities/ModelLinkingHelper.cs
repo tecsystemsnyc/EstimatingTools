@@ -264,13 +264,14 @@ namespace EstimatingLibrary.Utilities
                             }
                         }
                     }
-                    foreach(TECHardwiredConnection conn in newConnections)
-                    {
-                        controller.ChildrenConnections.Add(conn);
-                    }
-                    foreach(TECHardwiredConnection conn in oldConnections)
+
+                    foreach (TECHardwiredConnection conn in oldConnections)
                     {
                         controller.ChildrenConnections.Remove(conn);
+                    }
+                    foreach (TECHardwiredConnection conn in newConnections)
+                    {
+                        controller.ChildrenConnections.Add(conn);
                     }
                 }
             }
