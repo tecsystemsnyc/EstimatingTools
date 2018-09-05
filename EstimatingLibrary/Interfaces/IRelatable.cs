@@ -67,30 +67,6 @@ namespace EstimatingLibrary.Interfaces
             getObjectPath(parent, descendant, path);
             path.Reverse();
             return path;
-            //var children = parent.GetDirectChildren();
-
-            //if (children.Contains(descendant))
-            //{
-            //    List<ITECObject> path = new List<ITECObject>();
-            //    path.Add(parent);
-            //    path.Add(descendant);
-            //    return path;
-            //}
-            //else
-            //{
-            //    foreach(var child in children.OfType<IRelatable>())
-            //    {
-            //        var childPath = GetObjectPath(child, descendant);
-            //        if (childPath != null)
-            //        {
-            //            List<ITECObject> path = new List<ITECObject>();
-            //            path.Add(parent);
-            //            path.AddRange(childPath);
-            //            return path;
-            //        }
-            //    }
-            //}
-            //return null;
             
         }
 

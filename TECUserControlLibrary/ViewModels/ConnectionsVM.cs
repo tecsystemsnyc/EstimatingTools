@@ -509,6 +509,7 @@ namespace TECUserControlLibrary.ViewModels
                     connection.ConduitType = this.DefaultConduitType;
                     connection.ConduitLength = this.DefaultConduitLength;
                     connection.IsPlenum = this.DefaultPlenum;
+                    
                 }
                 else
                 {
@@ -549,8 +550,8 @@ namespace TECUserControlLibrary.ViewModels
                 };
 
                 var connections = ConnectionHelper.ConnectToController(connectables.Where(y => y != SelectedController), SelectedController, connectionProperties);
+                
             }
-            
         }
     }
 

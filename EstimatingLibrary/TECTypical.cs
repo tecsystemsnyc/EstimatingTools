@@ -1,11 +1,13 @@
 ﻿using EstimatingLibrary.Interfaces;
 using EstimatingLibrary.Utilities;
+using EstimatingLibrary.Utilities.WatcherFilters;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using EstimatingLibrary.Utilities.WatcherFilters;
 
 namespace EstimatingLibrary
 {
@@ -13,20 +15,30 @@ namespace EstimatingLibrary
     {
         #region Fields
         private TypicalWatcherFilter watcher;
+        private ObservableListDictionary<IControllerConnection> connectionInstances = new ObservableListDictionary<IControllerConnection>();
+        #endregion
+
+        #region Properties
+        public ObservableCollection<TECSystem> Instances { get; } = new ObservableCollection<TECSystem>();
+        public ObservableListDictionary<ITECObject> TypicalInstanceDictionary { get; } = new ObservableListDictionary<ITECObject>();
+
+        public bool IsSingleton
+        {
+            get { return Instances.Count == 1; }
+        }
+        public override bool IsTypical => true;
         #endregion
 
         #region Constructors
         public TECTypical(Guid guid) : base(guid)
         {
-            this.IsTypical = true;
-            
             Instances.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "Instances");
             TypicalInstanceDictionary.CollectionChanged += typicalInstanceDictionary_CollectionChanged;
 
             watcher = new TypicalWatcherFilter(new ChangeWatcher(this));
             watcher.TypicalChanged += handleThisChanged;
         }
-        
+
         public TECTypical() : this(Guid.NewGuid()) { }
 
         public TECTypical(TECTypical source, Dictionary<Guid, Guid> guidDictionary = null,
@@ -71,7 +83,7 @@ namespace EstimatingLibrary
                 var toAdd = new TECScopeBranch(branch);
                 ScopeBranches.Add(toAdd);
             }
-            this.copyPropertiesFromLocated(source);
+            copyPropertiesFromLocated(source);
         }
 
         public TECTypical(TECSystem system, TECScopeManager manager) : this()
@@ -103,23 +115,13 @@ namespace EstimatingLibrary
                 var toAdd = new TECScopeBranch(branch);
                 ScopeBranches.Add(toAdd);
             }
-            foreach(TECProposalItem item in system.ProposalItems)
+            foreach (TECProposalItem item in system.ProposalItems)
             {
                 var toAdd = new TECProposalItem(item, guidDictionary);
                 ProposalItems.Add(toAdd);
             }
-            this.copyPropertiesFromLocated(system);
+            copyPropertiesFromLocated(system);
             ModelLinkingHelper.LinkSystem(this, guidDictionary);
-        }
-        #endregion
-
-        #region Properties
-        public ObservableCollection<TECSystem> Instances { get; } = new ObservableCollection<TECSystem>();
-        public ObservableListDictionary<ITECObject> TypicalInstanceDictionary { get; } = new ObservableListDictionary<ITECObject>();
-
-        public bool IsSingleton
-        {
-            get { return this.Instances.Count == 1; }
         }
         #endregion
 
@@ -159,79 +161,76 @@ namespace EstimatingLibrary
                 TypicalInstanceDictionary.AddItem(branch, toAdd);
                 newSystem.ScopeBranches.Add(toAdd);
             }
+            //Proposal items are not currently synced to instances
+            //foreach(TECProposalItem propItem in ProposalItems)
+            //{
+            //    var toAdd = new TECProposalItem(propItem);
+            //    TypicalInstanceDictionary.AddItem(propItem, toAdd);
+            //    newSystem.ProposalItems.Add(toAdd);
+            //}
             ModelLinkingHelper.LinkSystem(newSystem, guidDictionary);
-            
-            Instances.Add(newSystem);
 
+            Instances.Add(newSystem);
             return (newSystem);
         }
-
         public void UpdateInstanceConnections()
         {
-            foreach(TECController controller in this.Controllers)
+            foreach (TECSystem system in Instances)
             {
-                foreach (TECController instance in this.TypicalInstanceDictionary.GetInstances(controller))
+                var systemConnectables = system.GetAll<IConnectable>();
+
+                foreach (TECController controller in Controllers)
                 {
-                    instance.RemoveAllChildConnections();
-                    foreach (IControllerConnection connection in controller.ChildrenConnections)
+                    foreach (TECController instance in TypicalInstanceDictionary.GetInstances(controller))
                     {
-                        List<IControllerConnection> instanceConnections = new List<IControllerConnection>();
-                        if(connection is TECNetworkConnection netConnection)
+                        instance.RemoveAllChildConnections();
+                        foreach (IControllerConnection connection in controller.ChildrenConnections)
                         {
-                            TECNetworkConnection netInstanceConnection = instance.AddNetworkConnection(netConnection.NetworkProtocol);
-                            
-                            foreach (IConnectable child in netConnection.Children)
+                            List<IControllerConnection> instanceConnections = new List<IControllerConnection>();
+                            if (connection is TECNetworkConnection netConnection)
                             {
-                                foreach (IConnectable instanceChild in this.TypicalInstanceDictionary.GetInstances(child))
+                                TECNetworkConnection netInstanceConnection = instance.AddNetworkConnection(netConnection.NetworkProtocol);
+                                var instanceChildren = netConnection.Children.SelectMany(x => TypicalInstanceDictionary.GetInstances(x));
+
+                                foreach (IConnectable instanceChild in instanceChildren)
                                 {
-                                    foreach (TECSystem system in this.Instances)
+                                    if (systemConnectables.Contains(instanceChild))
                                     {
-                                        if (system.IsDirectDescendant(instanceChild))
-                                        {
-                                            netInstanceConnection.AddChild(instanceChild);
-                                        }
+                                        netInstanceConnection.AddChild(instanceChild);
                                     }
                                 }
+                                instanceConnections.Add(netInstanceConnection);
                             }
-                            instanceConnections.Add(netInstanceConnection);
-                        }
-                        else if(connection is TECHardwiredConnection hardwired)
-                        {
-                            foreach (IConnectable instanceChild in this.TypicalInstanceDictionary.GetInstances(hardwired.Child))
+                            else if (connection is TECHardwiredConnection hardwired)
                             {
-                                foreach (TECSystem system in this.Instances)
+                                var instanceChildren = TypicalInstanceDictionary.GetInstances(hardwired.Child);
+                                foreach (IConnectable instanceChild in instanceChildren)
                                 {
-                                    if (system.IsDirectDescendant(instanceChild))
+                                    if (systemConnectables.Contains(instanceChild))
                                     {
                                         instanceConnections.Add(instance.Connect(instanceChild, connection.Protocol));
                                     }
                                 }
+
                             }
+                            instanceConnections.Where(x => x != null).ForEach(x => x.UpdatePropertiesBasedOn(connection));
                         }
-                        instanceConnections.Where(x => x!= null).ForEach(x => x.UpdatePropertiesBasedOn(connection));
                     }
-                }
-            }
-            foreach(TECInterlockConnection interlock in this.GetAllSubScope().SelectMany(x => x.Interlocks))
-            {
-                foreach(var instanceInterlock in TypicalInstanceDictionary.GetInstances(interlock))
-                {
-                    instanceInterlock.UpdatePropertiesBasedOn(interlock);
                 }
             }
         }
         public bool CanUpdateInstanceConnections()
         {
-            bool canExecute = this.Instances.Count > 0;
+            bool canExecute = Instances.Count > 0;
 
             return canExecute;
         }
-        
+
         public List<T> GetInstancesFromTypical<T>(T typical) where T : ITECObject
         {
-            return this.TypicalInstanceDictionary.GetInstances(typical);
+            return TypicalInstanceDictionary.GetInstances(typical);
         }
-        
+
         internal void RefreshRegistration()
         {
             watcher.TypicalChanged -= handleThisChanged;
@@ -260,7 +259,7 @@ namespace EstimatingLibrary
         {
             RelatableMap saveList = new RelatableMap();
             saveList.AddRange(base.propertyObjects());
-            saveList.AddRange(this.Instances, "Instances");
+            saveList.AddRange(Instances, "Instances");
             saveList.Add("TypicalInstances");
             return saveList;
         }
@@ -273,11 +272,41 @@ namespace EstimatingLibrary
         protected override int points()
         {
             int pointNum = 0;
-            foreach(TECSystem instance in Instances)
+            foreach (TECSystem instance in Instances)
             {
                 pointNum += instance.PointNumber;
             }
             return pointNum;
+        }
+
+        private void buildConnectionDictionary(TECSystem system, ObservableListDictionary<IControllerConnection> currentDictionary)
+        {
+            foreach(TECController controller in Controllers)
+            {
+                var controllerInstances = TypicalInstanceDictionary.GetInstances(controller);
+                foreach(IControllerConnection connection in controller.ChildrenConnections)
+                {
+                    List<IConnectable> instanceConnectables = system.GetAll<IConnectable>();
+                    if (connection is TECNetworkConnection netConnect)
+                    {
+                        var instanceConnection = controllerInstances.Where(x => system.Controllers.Contains(x))
+                            .SelectMany(x => x.ChildrenConnections)
+                            .OfType<TECNetworkConnection>()
+                            .Where(x => x.Children.SequenceEqual(netConnect.Children.SelectMany(y => TypicalInstanceDictionary.GetInstances(y).Where(z => instanceConnectables.Contains(z)))))
+                            .FirstOrDefault();
+                        currentDictionary.AddItem(connection, instanceConnection);
+                    }
+                    else if (connection is TECHardwiredConnection hardConnect)
+                    {
+                        var instanceConnection = controllerInstances.Where(x => system.Controllers.Contains(x))
+                            .SelectMany(x => x.ChildrenConnections)
+                            .OfType<TECHardwiredConnection>()
+                            .Where(x => x.Child == TypicalInstanceDictionary.GetInstances(hardConnect.Child).Where(z => instanceConnectables.Contains(z)).FirstOrDefault())
+                            .FirstOrDefault();
+                        currentDictionary.AddItem(connection, instanceConnection);
+                    }
+                }
+            }
         }
 
         #region Event Handlers
@@ -305,84 +334,42 @@ namespace EstimatingLibrary
                     return;
                 }
 
-                if (this.IsSingleton)
+                if (IsSingleton)
                 {
                     handleValueChanged(args.Sender, args.PropertyName);
                 }
-
             }
         }
-        
-        protected override void handleCollectionChanged(object sender,
-            System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
+        protected override void handleCollectionChanged(object sender, NotifyCollectionChangedEventArgs e, string propertyName)
         {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            if (propertyName == "Instances")
             {
-                CostBatch costs = new CostBatch();
-                int pointNum = 0;
-                bool raiseEvents = false;
-                foreach (object item in e.NewItems)
+                CollectionChangedHandlers.CollectionChangedHandler(sender, e, propertyName, this,
+                notifyCombinedChanged, invokeCostChanged, invokePointChanged, onAdd: instanceAdded, onRemove: instanceRemoved, setTypical: false);
+            }
+            else
+            {
+                base.handleCollectionChanged(sender, e, propertyName);
+            }
+
+            void instanceRemoved(object item)
+            {
+                if (item is TECSystem instance)
                 {
-                    if (item != null)
-                    {
-                        if (this.IsTypical && item is ITypicalable typ && !(item is TECSystem)) { typ.MakeTypical(); }
-                        if (item is TECSystem sys)
-                        {
-                            costs += sys.CostBatch;
-                            pointNum += sys.PointNumber;
-                            raiseEvents = true;
-                        }
-                        else if (item is TECEquipment equip)
-                        {
-                            equip.SubScope.CollectionChanged += handleSubScopeCollectionChanged;
-                        }
-                        notifyTECChanged(Change.Add, propertyName, this, item);
-                    }
-                }
-                if (raiseEvents)
-                {
-                    invokeCostChanged(costs);
-                    invokePointChanged(pointNum);
+                    handleInstanceRemoved(instance);
                 }
             }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            void instanceAdded(object item)
             {
-                CostBatch costs = new CostBatch();
-                int pointNum = 0;
-                bool raiseEvents = false;
-                foreach (object item in e.OldItems)
+                if (item is TECSystem instance)
                 {
-                    if (item != null)
-                    {
-                        if (item is TECSystem sys)
-                        {
-                            handleInstanceRemoved(sys);
-                            costs += sys.CostBatch;
-                            pointNum += sys.PointNumber;
-                            raiseEvents = true;
-                        }
-                        else if (item is TECEquipment equip)
-                        {
-                            equip.SubScope.CollectionChanged -= handleSubScopeCollectionChanged;
-                            handleEquipmentRemoval(equip);
-                        }
-                        notifyTECChanged(Change.Remove, propertyName, this, item);
-                    }
+                    buildConnectionDictionary(instance, connectionInstances);
                 }
-                if (raiseEvents)
-                {
-                    invokeCostChanged(costs * -1);
-                    invokePointChanged(-pointNum);
-                }
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
-            {
-                notifyTECChanged(Change.Edit, propertyName, this, sender, sender);
             }
         }
-        protected override void scopeCollectionChanged(object sender,
-            System.Collections.Specialized.NotifyCollectionChangedEventArgs e, string propertyName)
-            //Overridden so that TECTypical doesn't raise cost changed when an associated cost is added or removed.
+
+        //Overridden so that TECTypical doesn't raise cost changed when an associated cost is added or removed.
+        protected override void scopeCollectionChanged(object sender, NotifyCollectionChangedEventArgs e, string propertyName)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
@@ -405,9 +392,10 @@ namespace EstimatingLibrary
             instance.Controllers.ForEach(x => x.DisconnectAll());
             TypicalInstanceDictionary.RemoveValuesForKeys(instance.Panels, Panels);
             TypicalInstanceDictionary.RemoveValuesForKeys(instance.Equipment, Equipment);
+            connectionInstances.RemoveValuesForKeys(instance.Controllers.SelectMany(x => x.ChildrenConnections), instance.Controllers.SelectMany(x => x.ChildrenConnections));
 
             var typicalSubScope = GetAllSubScope();
-            foreach(TECEquipment instanceEquip in instance.Equipment)
+            foreach (TECEquipment instanceEquip in instance.Equipment)
             {
                 TypicalInstanceDictionary.RemoveValuesForKeys(instanceEquip.SubScope, typicalSubScope);
                 foreach (TECSubScope instanceSubScope in instanceEquip.SubScope)
@@ -427,33 +415,43 @@ namespace EstimatingLibrary
             TypicalInstanceDictionary.RemoveValuesForKeys(instance.MiscCosts, MiscCosts);
             TypicalInstanceDictionary.RemoveValuesForKeys(instance.ScopeBranches, ScopeBranches);
         }
-        private void handleValueChanged<T>(T item, string propertyName) where T: ITECObject
+        private void handleValueChanged<T>(T item, string propertyName) where T : ITECObject
+        {
+            if(item is IControllerConnection connection)
+            {
+                executeValueChanged(connection, propertyName, connectionInstances);
+            }
+            else
+            {
+                executeValueChanged(item, propertyName, TypicalInstanceDictionary);
+            }
+        }
+        private void executeValueChanged<T>(T item, string propertyName, ObservableListDictionary<T> dict) where T : ITECObject
         {
             PropertyInfo property = item.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
             if (property != null && property.CanWrite)
             {
-                if(TypicalInstanceDictionary.ContainsKey(item))
+                if (dict.ContainsKey(item))
                 {
-                    foreach (T instance in TypicalInstanceDictionary.GetInstances(item))
+                    foreach (T instance in dict.GetInstances(item))
                     {
                         property.SetValue(instance, property.GetValue(item), null);
                     }
                 }
                 else if (item as TECTypical == this)
                 {
-                    foreach (var instance in this.Instances)
+                    foreach (var instance in Instances)
                     {
                         property.SetValue(instance, property.GetValue(item), null);
                     }
                 }
-                
             }
         }
         private void handleControllerChanged(TECController controller, string propertyName)
         {
             if (propertyName == "Type" && controller is TECProvidedController provided)
             {
-                foreach (var instance in this.GetInstancesFromTypical(provided))
+                foreach (var instance in GetInstancesFromTypical(provided))
                 {
                     if (instance.CanChangeType(provided.Type))
                     {
@@ -467,7 +465,7 @@ namespace EstimatingLibrary
         {
             ITypicalable sender = args.Sender as ITypicalable;
             List<ITECObject> parentInstances = new List<ITECObject>();
-            if (args.Sender is TECTypical typ) { parentInstances.AddRange(this.Instances); }
+            if (args.Sender is TECTypical typ) { parentInstances.AddRange(Instances); }
             else { parentInstances = TypicalInstanceDictionary.GetInstances(sender as ITECObject); }
             foreach (ITECObject parentInstance in parentInstances)
             {
@@ -485,56 +483,46 @@ namespace EstimatingLibrary
                 if (args.Value is ITypicalable typicalChild)
                 {
                     instanceValue = typicalChild.CreateInstance(TypicalInstanceDictionary);
-                    if(instanceValue != null)
+                    if (instanceValue != null)
                     {
                         TypicalInstanceDictionary.AddItem(args.Value as ITECObject, instanceValue);
                     }
                 }
-                if(instanceValue != null)
+                if (instanceValue != null)
                 {
                     instanceSender.AddChildForProperty(args.PropertyName, instanceValue);
                 }
             }
 
-            if (this.IsSingleton)
+            if (IsSingleton)
             {
-                if(args.Value is IControllerConnection connection && args.Sender is TECController controller)
+                if (args.Value is IControllerConnection connection && args.Sender is TECController controller)
                 {
                     var instanceController = this.GetInstancesFromTypical(controller).First();
                     if (connection is TECHardwiredConnection hardConnect)
                     {
                         var instanceSubScope = this.GetInstancesFromTypical(hardConnect.Child).First();
-                        if((instanceSubScope as IConnectable).GetParentConnection() != null)
-                        {
-                            (instanceSubScope as IConnectable).GetParentConnection().ParentController.Disconnect(instanceSubScope);
-                        }
                         var instanceConnection = instanceController.Connect(instanceSubScope, connection.Protocol);
                         instanceConnection.UpdatePropertiesBasedOn(connection);
-
+                        connectionInstances.AddItem(connection, instanceConnection);
                     }
                     else if (connection is TECNetworkConnection netConnect)
                     {
-                        var instanceSubScope = netConnect.Children.SelectMany(x => this.GetInstancesFromTypical(x));                       
-                        foreach(var item in instanceSubScope)
-                        {
-                            if (item.GetParentConnection() != null)
-                            {
-                                item.GetParentConnection().ParentController.Disconnect(item);
-                            }
-                        }
+                        var instanceSubScope = netConnect.Children.SelectMany(x => this.GetInstancesFromTypical(x));
                         var instanceConnection = instanceController.AddNetworkConnection(netConnect.NetworkProtocol);
                         instanceSubScope.ForEach(x => instanceConnection.AddChild(x));
                         instanceConnection.UpdatePropertiesBasedOn(connection);
+                        connectionInstances.AddItem(connection, instanceConnection);
                     }
+
                 }
             }
-            
         }
         private void handleRemove(TECChangedEventArgs args)
         {
             ITypicalable sender = args.Sender as ITypicalable;
             List<ITECObject> parentInstances = new List<ITECObject>();
-            if (args.Sender is TECTypical typ) { parentInstances.AddRange(this.Instances); }
+            if (args.Sender is TECTypical typ) { parentInstances.AddRange(Instances); }
             else { parentInstances = TypicalInstanceDictionary.GetInstances(sender as ITECObject); }
             foreach (ITECObject parentInstance in parentInstances)
             {
@@ -549,52 +537,42 @@ namespace EstimatingLibrary
                     throw new Exception("Value to add is not ITECObject");
                 }
 
-                if(instanceValue is ITypicalable)
+                if (instanceValue is ITypicalable)
                 {
                     instanceValue = TypicalInstanceDictionary.GetInstances(instanceValue)
                     .Where(x => instanceSender.ContainsChildForProperty(args.PropertyName, x)).FirstOrDefault();
-                    if(instanceValue != null)
+                    if (instanceValue != null)
                     {
                         TypicalInstanceDictionary.RemoveItem(args.Value as ITECObject, instanceValue);
                     }
                 }
 
-                if(instanceValue != null)
+                if (instanceValue != null)
                 {
                     instanceSender.RemoveChildForProperty(args.PropertyName, instanceValue);
                 }
 
             }
-            if (this.IsSingleton)
+
+            if (IsSingleton)
             {
                 if (args.Value is IControllerConnection connection && args.Sender is TECController controller)
                 {
-                    var instanceController = this.GetInstancesFromTypical(controller).First();
-                    if (connection is TECHardwiredConnection hardConnect)
+                    var instanceConnection = connectionInstances.GetInstances(connection).First();
+                    if (instanceConnection is TECHardwiredConnection hardConn)
                     {
-                        var instanceSubScope = this.GetInstancesFromTypical(hardConnect.Child).FirstOrDefault();
-                        if (instanceSubScope?.GetParentConnection() != null)
-                        {
-                            instanceSubScope.GetParentConnection().ParentController.Disconnect(instanceSubScope);
-                        }
-
+                        instanceConnection.ParentController.Disconnect(hardConn.Child);
                     }
-                    else if (connection is TECNetworkConnection netConnect)
+                    else if (instanceConnection is TECNetworkConnection netConn)
                     {
-                        var instanceSubScope = netConnect.Children.SelectMany(x => this.GetInstancesFromTypical(x)).FirstOrDefault();
-                        var instanceConnection = instanceSubScope?.GetParentConnection() as TECNetworkConnection;
-                        if (instanceConnection != null)
-                        {
-                            instanceController.RemoveNetworkConnection(instanceConnection);
-                        }
+                        instanceConnection.ParentController.RemoveNetworkConnection(netConn);
                     }
-                    
                 }
             }
         }
 
         #endregion
         #endregion
-        
+
     }
 }

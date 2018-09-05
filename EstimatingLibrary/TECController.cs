@@ -98,16 +98,18 @@ namespace EstimatingLibrary
         {
             List<IProtocol> compatProtocols = new List<IProtocol>();
             if(this == connectable) { return compatProtocols; }
+            var availableIO = this.AvailableIO;
+            var availableProtocols = this.AvailableProtocols;
             foreach(IProtocol protocol in connectable.AvailableProtocols)
             {
                 if (protocol is TECHardwiredProtocol)
                 {
-                    if (this.AvailableIO.Contains(connectable.HardwiredIO))
+                    if (availableIO.Contains(connectable.HardwiredIO))
                     {
                         compatProtocols.Add(protocol);
                     }
                 }
-                else if (this.AvailableProtocols.Contains(protocol))
+                else if (availableProtocols.Contains(protocol))
                 {
                     compatProtocols.Add(protocol);
                 }
@@ -116,11 +118,9 @@ namespace EstimatingLibrary
         }
         public bool CanConnect(IConnectable connectable, IProtocol protocol)
         {
-            bool connectableIsNull = connectable == null;
             bool containsnetworkConnection = this.ChildrenConnections.OfType<TECNetworkConnection>().Select(x => x.Protocol).Contains(protocol);
             bool canAcceptProtocol = CompatibleProtocols(connectable).Contains(protocol);
-            return connectable != null &&
-                (CompatibleProtocols(connectable).Contains(protocol) || this.ChildrenConnections.OfType<TECNetworkConnection>().Select(x => x.Protocol).Contains(protocol));
+            return connectable != null && (canAcceptProtocol || containsnetworkConnection);
         }
         public bool CanConnect(IConnectable connectable)
         {

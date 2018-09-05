@@ -103,9 +103,9 @@ namespace EstimatingLibrary
         public ObservableCollection<TECScopeBranch> ScopeBranches { get; } = new ObservableCollection<TECScopeBranch>();
         public ObservableCollection<TECProposalItem> ProposalItems { get; } = new ObservableCollection<TECProposalItem>();
         
-        public bool IsTypical
+        public virtual bool IsTypical
         {
-            get; protected set;
+            get; private set;
         }
         public int PointNumber
         {
