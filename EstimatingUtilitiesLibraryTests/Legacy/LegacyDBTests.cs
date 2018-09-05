@@ -262,7 +262,6 @@ namespace Legacy
             Guid expectedGuid = new Guid("ebdbcc85-10f4-46b3-99e7-d896679f874a");
             string expectedName = "Typical System";
             string expectedDescription = "Typical System Description";
-            bool expectedProposeEquipment = true;
             int expectedChildren = 1;
 
             Guid childEquipment = new Guid("8a9bcc02-6ae2-4ac9-bbe1-e33d9a590b0e");

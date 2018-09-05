@@ -97,7 +97,6 @@ namespace EstimatingUtilitiesLibraryTests
             Guid expectedGuid = new Guid("ebdbcc85-10f4-46b3-99e7-d896679f874a");
             string expectedName = "Typical System";
             string expectedDescription = "Typical System Description";
-            bool expectedProposeEquipment = true;
 
             Guid childEquipment = new Guid("8a9bcc02-6ae2-4ac9-bbe1-e33d9a590b0e");
             Guid childController = new Guid("1bb86714-2512-4fdd-a80f-46969753d8a0");

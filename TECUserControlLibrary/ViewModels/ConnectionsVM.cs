@@ -179,6 +179,7 @@ namespace TECUserControlLibrary.ViewModels
         public InterlocksVM InterlocksVM { get; }
 
         public RelayCommand<IControllerConnection> DeleteCommand { get; private set; }
+        public RelayCommand<IEnumerable<IControllerConnection>> DeleteManyCommand { get; private set; }
 
         /// <summary>
         /// 
@@ -237,6 +238,24 @@ namespace TECUserControlLibrary.ViewModels
             { if (SelectedConnectableGroup?.PassesFilter == false) SelectedConnectableGroup = null; };
 
             DeleteCommand = new RelayCommand<IControllerConnection>(deleteConnectionExecute, canDeleteConnection);
+            DeleteManyCommand = new RelayCommand<IEnumerable<IControllerConnection>>(deleteManyExecute, deleteManyCanExecute);
+        }
+
+        private void deleteManyExecute(IEnumerable<IControllerConnection> obj)
+        {
+            foreach(IControllerConnection connection in obj)
+            {
+                deleteConnectionExecute(connection);
+            }
+            if (SelectedController is TECProvidedController pController)
+            {
+                pController.OptimizeModules();
+            }
+        }
+
+        private bool deleteManyCanExecute(IEnumerable<IControllerConnection> arg)
+        {
+            return true;
         }
 
         private void deleteConnectionExecute(IControllerConnection obj)
@@ -482,7 +501,7 @@ namespace TECUserControlLibrary.ViewModels
             if(dropInfo.Data is FilteredConnectablesGroup group && group.Scope is IConnectable)
             {
                 IConnectable connectable = group.Scope as IConnectable;
-                var compatibleProtocols = SelectedController.CompatibleProtocols(connectable);
+                var compatibleProtocols = SelectedController.CompatibleProtocols(connectable).Distinct().ToList();
                 if (compatibleProtocols.Count == 1)
                 {
                     var connection = SelectedController.Connect(connectable, compatibleProtocols.First());
@@ -494,7 +513,7 @@ namespace TECUserControlLibrary.ViewModels
                 else
                 {
                     SelectionNeeded = true;
-                    CompatibleProtocols = compatibleProtocols.Distinct().ToList();
+                    CompatibleProtocols = compatibleProtocols;
                 }
             }
             else

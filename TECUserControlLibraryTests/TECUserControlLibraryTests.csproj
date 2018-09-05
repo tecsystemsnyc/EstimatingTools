@@ -92,7 +92,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseVMs\AppManagerTests.cs" />
     <Compile Include="Utilities\ConnectionHelperTests.cs" />
     <Compile Include="Utilities\SearchUtilitiesTests.cs" />
     <Compile Include="ViewModels\ConnectableFilterTests.cs" />

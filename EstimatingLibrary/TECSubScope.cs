@@ -439,18 +439,7 @@ namespace EstimatingLibrary
                     }
                     else throw new ArgumentException("Replacement Device must be compatible.");
                 }
-
-                if(previousController != null)
-                {
-                    if(previousProtocol is TECProtocol netProtocol)
-                    {
-                        previousController.Connect(this, netProtocol);
-                    }
-                    else
-                    {
-                        previousController.Connect(this, this.HardwiredProtocol());
-                    }
-                }
+                
             }
 
             return (removedEndDevice || alreadyRemoved);

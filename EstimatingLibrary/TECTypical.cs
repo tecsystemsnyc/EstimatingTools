@@ -334,7 +334,7 @@ namespace EstimatingLibrary
                         }
                         else if (item is TECEquipment equip)
                         {
-                            equip.SubScopeCollectionChanged += handleSubScopeCollectionChanged;
+                            equip.SubScope.CollectionChanged += handleSubScopeCollectionChanged;
                         }
                         notifyTECChanged(Change.Add, propertyName, this, item);
                     }
@@ -363,7 +363,7 @@ namespace EstimatingLibrary
                         }
                         else if (item is TECEquipment equip)
                         {
-                            equip.SubScopeCollectionChanged -= handleSubScopeCollectionChanged;
+                            equip.SubScope.CollectionChanged -= handleSubScopeCollectionChanged;
                             handleEquipmentRemoval(equip);
                         }
                         notifyTECChanged(Change.Remove, propertyName, this, item);
@@ -582,12 +582,13 @@ namespace EstimatingLibrary
                     else if (connection is TECNetworkConnection netConnect)
                     {
                         var instanceSubScope = netConnect.Children.SelectMany(x => this.GetInstancesFromTypical(x)).FirstOrDefault();
-                        if (instanceSubScope?.GetParentConnection() != null)
+                        var instanceConnection = instanceSubScope?.GetParentConnection() as TECNetworkConnection;
+                        if (instanceConnection != null)
                         {
-                            var instanceConnection = instanceSubScope.GetParentConnection();
-                            instanceController.RemoveNetworkConnection(instanceConnection as TECNetworkConnection);
+                            instanceController.RemoveNetworkConnection(instanceConnection);
                         }
                     }
+                    
                 }
             }
         }

@@ -2429,16 +2429,7 @@ namespace EstimatingUtilitiesLibraryTests
             data[ControllerConnectionTable.ControllerID.Name] = controller.Guid.ToString();
             data[ControllerConnectionTable.ConnectionID.Name] = connection.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Add, ControllerConnectionTable.TableName, data));
-
-
-            //Edit from updating singleton
-            Tuple<string, string> keyData = new Tuple<string, string>(SubScopeConnectionTable.ID.Name, instanceConnection.Guid.ToString());
-
-            data = new Dictionary<string, string>();
-            data[SubScopeConnectionTable.Length.Name] = instanceConnection.Length.ToString();
-            data[SubScopeConnectionTable.ConduitLength.Name] = instanceConnection.ConduitLength.ToString();
-            data[SubScopeConnectionTable.IsPlenum.Name] = instanceConnection.IsPlenum.ToInt().ToString();
-            expectedItems.Add(new UpdateItem(Change.Edit, SubScopeConnectionTable.TableName, data, keyData));
+            
             
             int expectedCount = expectedItems.Count;
 

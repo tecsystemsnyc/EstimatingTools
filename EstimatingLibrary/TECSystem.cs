@@ -223,14 +223,14 @@ namespace EstimatingLibrary
             {
                 if (obj is TECEquipment equip)
                 {
-                    equip.SubScopeCollectionChanged += handleSubScopeCollectionChanged;
+                    equip.SubScope.CollectionChanged += handleSubScopeCollectionChanged;
                 }
             }
             void onRemove(object obj)
             {
                 if (obj is TECEquipment equip)
                 {
-                    equip.SubScopeCollectionChanged -= handleSubScopeCollectionChanged;
+                    equip.SubScope.CollectionChanged -= handleSubScopeCollectionChanged;
                     handleEquipmentRemoval(equip);
                     foreach (TECSubScope ss in equip.SubScope)
                     {

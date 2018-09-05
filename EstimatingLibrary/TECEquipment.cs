@@ -11,7 +11,6 @@ namespace EstimatingLibrary
         #region Properties
 
         public event Action<int> PointChanged;
-        public event Action<object, System.Collections.Specialized.NotifyCollectionChangedEventArgs> SubScopeCollectionChanged;
 
         public ObservableCollection<TECSubScope> SubScope { get; } = new ObservableCollection<TECSubScope>();
         

@@ -132,7 +132,6 @@ namespace EstimatingLibrary
                 return null;
             IControllerConnection connection;
             bool isNew = true;
-            bool isTypical = (connectable as ITypicalable)?.IsTypical ?? false;
             if (protocol is TECHardwiredProtocol wired)
             {
                 connection = new TECHardwiredConnection(connectable, this, wired);

@@ -48,24 +48,6 @@ namespace Legacy
         }
         
         [TestMethod]
-        public void Load_Templates_Parameters()
-        {
-            double expectedEscalation = 10;
-            double expectedSubcontractorEscalation = 10;
-            bool expectedIsTaxExempt = false;
-            bool expectedRequiresBond = false;
-            bool expectedRequiresWrapUp = false;
-            double expectedMarkup = 20;
-
-            Assert.AreEqual(expectedEscalation, actualTemplates.Templates.Parameters.First().Escalation, "Escalation didn't load properly.");
-            Assert.AreEqual(expectedMarkup, actualTemplates.Templates.Parameters.First().Markup, "Markup didn't load properly.");
-            Assert.AreEqual(expectedSubcontractorEscalation, actualTemplates.Templates.Parameters.First().SubcontractorEscalation, "Subcontractor escalation didn't load properly.");
-            Assert.AreEqual(expectedIsTaxExempt, actualTemplates.Templates.Parameters.First().IsTaxExempt, "Is tax exempt didn't load properly.");
-            Assert.AreEqual(expectedRequiresBond, actualTemplates.Templates.Parameters.First().RequiresBond, "Requires bond didn't load properly.");
-            Assert.AreEqual(expectedRequiresWrapUp, actualTemplates.Templates.Parameters.First().RequiresWrapUp, "Requires wrap up didn't load properly.");
-        }
-
-        [TestMethod]
         public void Load_Templates_LaborConsts()
         {
             //Assert

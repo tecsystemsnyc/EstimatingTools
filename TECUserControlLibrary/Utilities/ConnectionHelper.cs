@@ -116,6 +116,11 @@ namespace TECUserControlLibrary.Utilities
                     }
                 }
             }
+
+            if(controller is TECProvidedController pController)
+            {
+                pController.OptimizeModules();
+            }
             return connections.Distinct().ToList();
 
         }

@@ -3435,7 +3435,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static Type TemplatesType = typeof(TECScopeTemplates);
         public static Type ScopeType = typeof(TECSystem);
 
-        public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
+        public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"), defaultValue: "");
         public static TableField SystemID = new TableField("SystemID", "TEXT", ScopeType.GetProperty("Guid"));
 
         public static Type Helpers = typeof(HelperProperties);
@@ -3475,7 +3475,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static Type TemplatesType = typeof(TECScopeTemplates);
         public static Type ScopeType = typeof(TECEquipment);
 
-        public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
+        public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"), defaultValue: "");
         public static TableField EquipmentID = new TableField("EquipmentID", "TEXT", ScopeType.GetProperty("Guid"));
 
         public static Type Helpers = typeof(HelperProperties);
@@ -3515,7 +3515,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static Type TemplatesType = typeof(TECScopeTemplates);
         public static Type ScopeType = typeof(TECSubScope);
 
-        public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
+        public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"), defaultValue: "");
         public static TableField SubScopeID = new TableField("SubScopeID", "TEXT", ScopeType.GetProperty("Guid"));
 
         public static Type Helpers = typeof(HelperProperties);
@@ -3555,7 +3555,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static Type TemplatesType = typeof(TECScopeTemplates);
         public static Type ScopeType = typeof(TECController);
 
-        public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
+        public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"), defaultValue: "");
         public static TableField ControllerID = new TableField("ControllerID", "TEXT", ScopeType.GetProperty("Guid"));
 
         public static Type Helpers = typeof(HelperProperties);
@@ -3595,7 +3595,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static Type TemplatesType = typeof(TECScopeTemplates);
         public static Type ScopeType = typeof(TECMisc);
 
-        public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
+        public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"), defaultValue: "");
         public static TableField MiscID = new TableField("MiscID", "TEXT", ScopeType.GetProperty("Guid"));
 
         public static Type Helpers = typeof(HelperProperties);
@@ -3635,7 +3635,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static Type TemplatesType = typeof(TECScopeTemplates);
         public static Type ScopeType = typeof(TECPanel);
 
-        public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
+        public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"), defaultValue: "");
         public static TableField PanelID = new TableField("PanelID", "TEXT", ScopeType.GetProperty("Guid"));
 
         public static Type Helpers = typeof(HelperProperties);
@@ -3675,7 +3675,7 @@ namespace EstimatingUtilitiesLibrary.Database
         public static Type TemplatesType = typeof(TECScopeTemplates);
         public static Type ParametersType = typeof(TECParameters);
 
-        public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"));
+        public static TableField TemplatesID = new TableField("TemplatesID", "TEXT", TemplatesType.GetProperty("Guid"), defaultValue: "");
         public static TableField ParametersID = new TableField("ParametersID", "TEXT", ParametersType.GetProperty("Guid"));
 
         public static Type Helpers = typeof(HelperProperties);

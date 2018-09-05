@@ -145,7 +145,7 @@ namespace EstimatingLibrary
                 return hasModule && canSpare;
             }
         }
-        private void OptimizeModules()
+        public void OptimizeModules()
         {
             List<TECIOModule> previousModules = this.IOModules.Distinct().ToList();
             foreach (TECIOModule item in previousModules)
@@ -293,10 +293,6 @@ namespace EstimatingLibrary
         protected override void collectionChanged(object sender, NotifyCollectionChangedEventArgs e, string propertyName)
         {
             base.collectionChanged(sender, e, propertyName);
-            if(propertyName == "ChildrenConnections")
-            {
-                this.OptimizeModules();
-            }
         }
         #endregion
 

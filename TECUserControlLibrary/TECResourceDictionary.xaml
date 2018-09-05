@@ -227,5 +227,8 @@
         <Setter Property="CornerRadius" Value="10"/>
         <Setter Property="BorderBrush" Value="{StaticResource ItemBorderBrush}"/>
     </Style>
+    <Style x:Key="DeleteButton" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{StaticResource AlertActionBrush}"/>
+    </Style>
 
 </ResourceDictionary>

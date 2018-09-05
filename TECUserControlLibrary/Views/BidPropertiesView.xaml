@@ -98,7 +98,7 @@
                 <TextBox Text="{Binding Bid.Duration}"
                          Grid.Column="1"/>
             </Grid>
-            
+
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="1" Margin="20,0,20,0">
             <Grid>
@@ -112,7 +112,7 @@
                           Grid.Row="1">
                     <DataGrid.Columns>
                         <DataGridComboBoxColumn SelectedItemBinding="{Binding DocumentType}" ItemsSource="{utilities:EnumBindingSource EnumType=eLib:DocumentType}" Header="Type"
-                                            MinWidth="60"/>
+                                                MinWidth="60"/>
                         <DataGridTextColumn Header="Title" Binding="{Binding Title}" MinWidth="100"/>
                         <DataGridTextColumn Header="Date" Binding="{Binding Date}" MinWidth="100"/>
 
