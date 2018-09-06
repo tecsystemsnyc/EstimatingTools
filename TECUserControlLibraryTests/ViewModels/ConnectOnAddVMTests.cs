@@ -14,12 +14,6 @@ namespace ViewModels
     public class ConnectOnAddVMTests
     {
         [TestMethod()]
-        public void ConnectOnAddVMTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
         public void UpdateTest()
         {
             TECProtocol protocol = new TECProtocol(new List<TECConnectionType>());
@@ -72,7 +66,6 @@ namespace ViewModels
                 new List<TECController> { controller },
                 new List<TECElectricalMaterial>());
 
-            vm.SelectedController = vm.ParentControllers.First();
 
             Assert.AreEqual(0, vm.ParentControllers.Count);
 
@@ -85,19 +78,7 @@ namespace ViewModels
             Assert.AreEqual(1, vm.ParentControllers.Count);
 
         }
-
-        [TestMethod()]
-        public void ExecuteConnectionTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void ExecuteConnectionTest1()
-        {
-            Assert.Fail();
-        }
-
+        
         [TestMethod()]
         public void CanConnectTest()
         {
@@ -122,6 +103,9 @@ namespace ViewModels
                 new List<TECElectricalMaterial>());
 
             Assert.AreEqual(1, vm.ParentControllers.Count);
+
+            vm.SelectedController = null;
+            vm.Connect = true;
 
             Assert.IsFalse(vm.CanConnect());
 

@@ -59,6 +59,7 @@ namespace TECUserControlLibrary.ViewModels
             if (result == MessageBoxResult.Yes)
             {
                 templates.RemoveCatalogItem(EndDevice, null);
+
             }
         }
         private void deleteAndReplaceExecute()

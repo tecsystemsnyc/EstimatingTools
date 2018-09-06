@@ -1,5 +1,6 @@
 ﻿using EstimatingLibrary.Interfaces;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -72,7 +73,7 @@ namespace EstimatingLibrary.Utilities
             }
         }
 
-        public static bool OptionallyReplaceAll<T>(T item, IList<T> collection, T replacement = null) where T : class
+        public static bool OptionallyReplaceAll<T>(T item, IList collection, T replacement = null) where T : class
         {
             if (!collection.Contains(item)) return false;
             while(collection.Contains(item))

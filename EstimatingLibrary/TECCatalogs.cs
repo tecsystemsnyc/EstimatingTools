@@ -215,8 +215,7 @@ namespace EstimatingLibrary
                 Type collectionType = collection.GetItemType();
                 if (item.GetType() == collectionType)
                 {
-                    IList<T> tCollection = (IList<T>)collection;
-                    bool replaced = CommonUtilities.OptionallyReplaceAll(item, tCollection, replacement);
+                    bool replaced = CommonUtilities.OptionallyReplaceAll(item, collection, replacement);
                     if (replaced) replacedItem = true;
                 }
             }

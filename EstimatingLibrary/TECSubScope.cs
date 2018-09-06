@@ -424,12 +424,11 @@ namespace EstimatingLibrary
         {
             if(item == replacement) { return true; }
             bool alreadyRemoved = base.RemoveCatalogItem(item, replacement);
+            var previousController = this.Connection?.ParentController;
 
             bool removedEndDevice = false;
             if (item is IEndDevice oldDev && replacement is IEndDevice newDev)
             {
-                var previousController = this.Connection?.ParentController;
-                var previousProtocol = this.Connection?.Protocol;
                 
                 if (this.Devices.Contains(oldDev))
                 {
@@ -439,7 +438,11 @@ namespace EstimatingLibrary
                     }
                     else throw new ArgumentException("Replacement Device must be compatible.");
                 }
-                
+            }
+            else if (item is IEndDevice dev && replacement == null)
+            {
+                previousController?.Disconnect(this);
+                removedEndDevice = CommonUtilities.OptionallyReplaceAll(dev, this.Devices, null);
             }
 
             return (removedEndDevice || alreadyRemoved);

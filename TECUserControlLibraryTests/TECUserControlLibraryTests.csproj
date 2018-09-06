@@ -95,13 +95,11 @@
     <Compile Include="Utilities\ConnectionHelperTests.cs" />
     <Compile Include="Utilities\SearchUtilitiesTests.cs" />
     <Compile Include="ViewModels\ConnectableFilterTests.cs" />
-    <Compile Include="ViewModels\ConnectionsVMTests.cs" />
     <Compile Include="ViewModels\ConnectOnAddVMTests.cs" />
     <Compile Include="ViewModels\DeleteDeviceVMTests.cs" />
     <Compile Include="ViewModels\ItemSummaryVMTests.cs" />
     <Compile Include="ViewModels\MaterialSummaryVMTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\MenuVMTests.cs" />
     <Compile Include="ViewModels\SystemSummaryVMTests.cs" />
     <Compile Include="ViewModelTests.cs" />
   </ItemGroup>
