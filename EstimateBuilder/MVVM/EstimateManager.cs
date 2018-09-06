@@ -176,14 +176,15 @@ namespace EstimateBuilder.MVVM
                     estimate = new TECEstimator(bid, watcher);
                     EditorVM = new EstimateEditorVM(bid, watcher, estimate);
                     CurrentVM = EditorVM;
+                    ViewEnabled = true;
                 }
                 
             }
             else
             {
                 this.splashVM.LoadingText = "";
+                ViewEnabled = true;
             }
-            ViewEnabled = true;
         }
         private void handleLoadedTemplates(TECTemplates templates)
         {

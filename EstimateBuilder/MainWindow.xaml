@@ -109,7 +109,26 @@
                                                 ViewModel="{Binding LaborVM}"/>
                                         </TabItem>
                                         <TabItem Header="Material">
-                                            <views:MaterialSummaryView ViewModel="{Binding MaterialSummaryVM}"/>
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="30"/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="80"/>
+                                                        <ColumnDefinition/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Button Content="Refresh"
+                                                            Command="{Binding RefreshMaterialSummaryCommand}"/>
+                                                    <TextBlock Text="Use this button to update the view after major changes."
+                                                               Grid.Column="1"
+                                                               Foreground="Black"/>
+                                                </Grid>
+                                                
+                                                <views:MaterialSummaryView ViewModel="{Binding MaterialSummaryVM}"
+                                                        Grid.Row="1"/>
+                                            </Grid>
                                         </TabItem>
                                         <TabItem Header="Itemized">
                                             <summaryViews:ItemizedSummaryView ViewModel="{Binding ItemizedSummaryVM}"/>
