@@ -83,7 +83,12 @@ namespace Models
             
             //Not fully covered
             Assert.AreEqual(originalSystem.Name, copy.Name);
-            Assert.IsTrue(originalSystem.CostBatch.CostsEqual(copy.CostBatch));
+
+            Assert.AreEqual(originalSystem.CostBatch.GetCost(CostType.TEC), copy.CostBatch.GetCost(CostType.TEC), 0.000001);
+            Assert.AreEqual(originalSystem.CostBatch.GetCost(CostType.Electrical), copy.CostBatch.GetCost(CostType.Electrical), 0.000001);
+            Assert.AreEqual(originalSystem.CostBatch.GetLabor(CostType.TEC), copy.CostBatch.GetLabor(CostType.TEC), 0.000001);
+            Assert.AreEqual(originalSystem.CostBatch.GetLabor(CostType.Electrical), copy.CostBatch.GetLabor(CostType.Electrical), 0.000001);
+
         }
         
         [TestMethod()]
@@ -136,7 +141,11 @@ namespace Models
             Assert.AreEqual(system.Panels.Count, copy.Panels.Count);
             Assert.AreEqual(system.Equipment.Count, copy.Equipment.Count);
             Assert.AreEqual(system.MiscCosts.Count, copy.MiscCosts.Count);
-            Assert.IsTrue(system.CostBatch.CostsEqual(copy.CostBatch));
+
+            Assert.AreEqual(system.CostBatch.GetCost(CostType.TEC), copy.CostBatch.GetCost(CostType.TEC), 0.000001);
+            Assert.AreEqual(system.CostBatch.GetCost(CostType.Electrical), copy.CostBatch.GetCost(CostType.Electrical), 0.000001);
+            Assert.AreEqual(system.CostBatch.GetLabor(CostType.TEC), copy.CostBatch.GetLabor(CostType.TEC), 0.000001);
+            Assert.AreEqual(system.CostBatch.GetLabor(CostType.Electrical), copy.CostBatch.GetLabor(CostType.Electrical), 0.000001);
         }
 
         [TestMethod()]

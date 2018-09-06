@@ -87,7 +87,7 @@ namespace EstimatingUtilitiesLibrary.Database
             Dictionary<Guid, List<TECAssociatedCost>> costRelationships = getOneToManyRelationships(new ScopeAssociatedCostTable(), bid.Catalogs.AssociatedCosts);
 
             var parameters = getObjectsFromTable(new ParametersTable(), id => new TECParameters(id));
-            bid.Parameters = parameters.Any(x => x.Guid == bid.Guid) ? parameters.First(x => x.Guid == bid.Guid) : bid.Parameters = parameters.First();
+            bid.Parameters = getOneToOneRelationships(new BidParametersTable(), parameters).ValueOrDefault(bid.Guid, null) ?? parameters.First();
             bid.ExtraLabor = getObjectFromTable(new ExtraLaborTable(), id => { return new TECExtraLabor(id); }, new TECExtraLabor(bid.Guid));
             bid.ScopeTree.AddRange(getChildObjects(new BidScopeBranchTable(), new ScopeBranchTable(), bid.Guid, id => new TECScopeBranch(id)));
             bid.ScopeTree.ForEach(item => linkBranchHierarchy(item, branches, branchHierarchy));
@@ -276,12 +276,15 @@ namespace EstimatingUtilitiesLibrary.Database
                     hardItem.Child.SetParentConnection(hardItem);
                 }
             }
-            foreach (TECSubScope item in subScope.Where(x => subScopePoints.ContainsKey(x.Guid)))
+            foreach (TECSubScope item in subScope)
             {
                 item.Points.AddRange(subScopePoints.ValueOrNew(item.Guid));
                 item.Interlocks.AddRange(subScopeInterlocks.ValueOrNew(item.Guid));
+                item.ScopeBranches.AddRange(subScopeScopeBranch.ValueOrNew(item.Guid));
+                item.ScopeBranches.ForEach(branch => linkBranchHierarchy(branch, scopeBranches, scopeBranchHierarchy));
+
             }
-            foreach(TECEquipment item in equipment.Where(x => equipmentSubScope.ContainsKey(x.Guid)))
+            foreach (TECEquipment item in equipment.Where(x => equipmentSubScope.ContainsKey(x.Guid)))
             {
                 item.SubScope.AddRange(equipmentSubScope[item.Guid]);
             }

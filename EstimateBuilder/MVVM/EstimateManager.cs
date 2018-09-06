@@ -207,7 +207,7 @@ namespace EstimateBuilder.MVVM
 
             if(databaseManager == null && bid.Templates.Parameters.Count > 0)
             {
-                bid.Parameters = bid.Templates.Parameters.First();
+                bid.Parameters = new TECParameters(bid.Templates.Parameters.First());
             }
 
             ModelLinkingHelper.LinkBidToCatalogs(bid);

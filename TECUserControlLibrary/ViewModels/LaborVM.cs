@@ -54,7 +54,7 @@ namespace TECUserControlLibrary.ViewModels
         
         private void SetParametersExecute(TECParameters obj)
         {
-            Bid.Parameters = obj;
+            Bid.Parameters =  new TECParameters(obj);
         }
     }
 }

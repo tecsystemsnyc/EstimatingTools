@@ -534,11 +534,19 @@ namespace EstimatingLibrary.Utilities
                         foreach (TECEquipment instanceEquipment in instance.Equipment)
                         {
                             linkCharacteristicWithInstances(subscope, instanceEquipment.SubScope, guidDictionary, typical.TypicalInstanceDictionary);
-                            foreach (TECPoint point in subscope.Points)
+                            foreach (TECSubScope instanceSubScope in instanceEquipment.SubScope)
                             {
-                                foreach (TECSubScope instanceSubScope in instanceEquipment.SubScope)
+                                foreach (TECPoint point in subscope.Points)
                                 {
                                     linkCharacteristicWithInstances(point, instanceSubScope.Points, guidDictionary, typical.TypicalInstanceDictionary);
+                                }
+                                foreach(TECInterlockConnection interlock in subscope.Interlocks)
+                                {
+                                    linkCharacteristicWithInstances(interlock, instanceSubScope.Interlocks, guidDictionary, typical.TypicalInstanceDictionary);
+                                }
+                                foreach (TECScopeBranch branch in subscope.ScopeBranches)
+                                {
+                                    linkCharacteristicWithInstances(branch, instanceSubScope.ScopeBranches, guidDictionary, typical.TypicalInstanceDictionary);
                                 }
                             }
                         }

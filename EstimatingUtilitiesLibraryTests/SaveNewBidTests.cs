@@ -338,11 +338,12 @@ namespace EstimatingUtilitiesLibraryTests
             TECBid loadedBid = manager.Load() as TECBid;
 
             TECSubScope actualSubScope = loadedBid.FindChild(expectedSubScope.Guid) as TECSubScope;
-
-
+            
             //Assert
             Assert.AreEqual(expectedSubScope.Name, actualSubScope.Name);
             Assert.AreEqual(expectedSubScope.Description, actualSubScope.Description);
+            Assert.AreEqual(expectedSubScope.Interlocks.Count, actualSubScope.Interlocks.Count);
+            Assert.AreEqual(expectedSubScope.ScopeBranches.Count, actualSubScope.ScopeBranches.Count);
             Assert.IsTrue(compareCosts(expectedSubScope.CostBatch, actualSubScope.CostBatch));
         }
         

@@ -25,7 +25,7 @@ namespace EstimatingLibrary
         }
 
         public TECInterlockConnection(IEnumerable<TECConnectionType> connectionTypes) : this(Guid.NewGuid(), connectionTypes) { }
-        public TECInterlockConnection(TECInterlockConnection source, Dictionary<Guid, Guid> guidDictionary = null) : this(source.Guid, source.ConnectionTypes)
+        public TECInterlockConnection(TECInterlockConnection source, Dictionary<Guid, Guid> guidDictionary = null) : this(source.ConnectionTypes)
         {
             this.copyPropertiesFromScope(source);
             this.connection = new ConnectionWrapper(source.connection, guidDictionary);
@@ -116,7 +116,7 @@ namespace EstimatingLibrary
         #region ICatalogContainer
         public override bool RemoveCatalogItem<T>(T item, T replacement)
         {
-            bool alreadyRemoved = base.RemoveCatalogItem(item, replacement);
+            bool alreadyRemoved = base.RemoveCatalogItem(item, replacement) || connection.RemoveCatalogItem(item, replacement);
 
             bool removedConnectionType = false;
             if (item is TECConnectionType type)

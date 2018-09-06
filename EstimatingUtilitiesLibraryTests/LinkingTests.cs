@@ -243,6 +243,14 @@ namespace EstimatingUtilitiesLibraryTests
                             }
                             else { scopeFound++; }
                         }
+                        foreach (TECInterlockConnection connection in ss.Interlocks)
+                        {
+                            if (!list.ContainsKey(connection))
+                            {
+                                Assert.Fail("Interlock in instance not in characteristic instances.");
+                            }
+                            else { scopeFound++; }
+                        }
                     }
                 }
                 foreach(TECController controller in typical.Controllers)
@@ -293,6 +301,14 @@ namespace EstimatingUtilitiesLibraryTests
                                 if (!list.ContainsValue(point))
                                 {
                                     Assert.Fail("Point in instance not in characteristic instances.");
+                                }
+                                else { scopeFound++; }
+                            }
+                            foreach (TECInterlockConnection connection in ss.Interlocks)
+                            {
+                                if (!list.ContainsValue(connection))
+                                {
+                                    Assert.Fail("Interlock in instance not in characteristic instances.");
                                 }
                                 else { scopeFound++; }
                             }

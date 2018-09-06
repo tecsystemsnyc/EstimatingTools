@@ -162,7 +162,7 @@ namespace EstimatingLibrary
         public TECBid(Guid guid) : base(guid)
         {
             _extraLabor = new TECExtraLabor(this.Guid);
-            _parameters = new TECParameters(this.Guid);
+            _parameters = new TECParameters();
 
             Systems.CollectionChanged += (sender, args) => collectionChanged(sender, args, "Systems");
             ScopeTree.CollectionChanged += (sender, args) => collectionChanged(sender, args, "ScopeTree");

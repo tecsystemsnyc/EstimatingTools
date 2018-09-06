@@ -383,6 +383,16 @@ namespace TestLibrary.ModelTestingUtilities
             panel.AssignRandomScopeProperties(catalogs, rand);
             return panel;
         }
+        public static TECInterlockConnection TestInterlock(TECCatalogs catalogs, Random rand)
+        {
+            TECInterlockConnection interlock = new TECInterlockConnection(new List<TECConnectionType> { catalogs.ConnectionTypes.RandomElement(rand) });
+            interlock.Name = "Test Interlock";
+            interlock.ConduitType = catalogs.ConduitTypes.RandomElement(rand);
+            interlock.Length = rand.Next(1, 100);
+            interlock.ConduitLength = rand.Next(1, 100);
+            return interlock;
+        }
+
         public static IOType TestIOType(Random rand)
         {
             int randInt = rand.Next(1, 6);
@@ -455,6 +465,8 @@ namespace TestLibrary.ModelTestingUtilities
             endDevs.AddRange(catalogs.Valves.RandomElements(rand, false, 5));
             endDevs.ForEach(dev => ss.Devices.Add(dev));
             rand.RepeatAction(() => ss.Points.Add(TestPoint(rand)), 5);
+            rand.RepeatAction(() => ss.Interlocks.Add(TestInterlock(catalogs, rand)), 5);
+            rand.RepeatAction(() => ss.ScopeBranches.Add(TestScopeBranch(rand, 1)), 5);
             return ss;
         }
         public static TECEquipment TestEquipment(TECCatalogs catalogs, Random rand)

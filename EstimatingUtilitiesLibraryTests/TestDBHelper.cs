@@ -46,6 +46,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToProtocolTable();
             addToScopeTemplatesTable();
             addToToDoItemTable();
+            addToInterlockTable();
 
             addToBidScopeBranchTable();
             addToBidMiscTable();
@@ -87,6 +88,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToBidControllerTable();
             addToBidPanelTable();
             addToBidToDoItemTable();
+            addToSubScopeInterlockTable();
 
             addToTemplatesSystemTable();
             addToTemplatesEquipmentTable();
@@ -133,6 +135,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToParametersTable();
             addToProtocolTable();
             addToScopeTemplatesTable();
+            addToInterlockTable();
 
             addToHardwareManufacturerTable();
             addToIOModuleIOTable();
@@ -165,6 +168,7 @@ namespace EstimatingUtilitiesLibraryTests
             addToIOProtocolTable();
             addToConnectionProtocolTable();
             addToHardwiredConnectionConnectionTypeTable();
+            addToSubScopeInterlockTable();
 
             addToTemplatesSystemTable();
             addToTemplatesEquipmentTable();
@@ -812,7 +816,36 @@ namespace EstimatingUtilitiesLibraryTests
             addDataToTable(new ToDoItemTable(), values);
             
         }
-        
+        private static void addToInterlockTable()
+        {
+            List<string> values = new List<string>();
+            values.Add("51dba7f9-35e9-4135-833f-0af4535698e6");
+            values.Add("Test Interlock");
+            values.Add("interlock description");
+            values.Add("3");
+            values.Add("2");
+            values.Add("1");
+            addDataToTable(new InterlockConnectionTable(), values);
+
+            values = new List<string>();
+            values.Add("3a2feeb1-d823-491e-b2a9-4814b778beab");
+            values.Add("Test Interlock");
+            values.Add("interlock description");
+            values.Add("3");
+            values.Add("2");
+            values.Add("1");
+            addDataToTable(new InterlockConnectionTable(), values);
+
+            values = new List<string>();
+            values.Add("94758914-bd51-4e94-b515-929d34d8add1");
+            values.Add("Test Interlock");
+            values.Add("interlock description");
+            values.Add("3");
+            values.Add("2");
+            values.Add("1");
+            addDataToTable(new InterlockConnectionTable(), values);
+        }
+
         #endregion
 
         #region Relationship Tables
@@ -984,6 +1017,23 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("6776a30b-0325-42ad-8aa3-3c065b4bb908");
             values.Add("0");
             addDataToTable(new SubScopePointTable(), values);
+        }
+        private static void addToSubScopeInterlockTable()
+        {
+            List<string> values = new List<string>();
+            values.Add("fbe0a143-e7cd-4580-a1c4-26eff0cd55a6");
+            values.Add("51dba7f9-35e9-4135-833f-0af4535698e6");
+            addDataToTable(new InterlockableInterlockTable(), values);
+
+            values = new List<string>();
+            values.Add("94726d87-b468-46a8-9421-3ff9725d5239");
+            values.Add("3a2feeb1-d823-491e-b2a9-4814b778beab");
+            addDataToTable(new InterlockableInterlockTable(), values);
+
+            values = new List<string>();
+            values.Add("3ebdfd64-5249-4332-a832-ff3cc0cdb309");
+            values.Add("94758914-bd51-4e94-b515-929d34d8add1");
+            addDataToTable(new InterlockableInterlockTable(), values);
         }
         private static void addToScopeTagTable()
         {
@@ -1641,6 +1691,11 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("95032348-c661-470f-9bea-47dd750a47a5");
             values.Add("ec965fe3-b1f7-4125-a545-ec47cc1e671b");
             addDataToTable(new TypicalInstanceTable(), values);
+
+            values = new List<string>();
+            values.Add("51dba7f9-35e9-4135-833f-0af4535698e6");
+            values.Add("3a2feeb1-d823-491e-b2a9-4814b778beab");
+            addDataToTable(new TypicalInstanceTable(), values);
         }
         private static void addToControllerTypeIOTable()
         {
@@ -1856,6 +1911,7 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("0");
             addDataToTable(new BidPanelTable(), values);
         }
+
 
         private static void addToTemplatesSystemTable()
         {

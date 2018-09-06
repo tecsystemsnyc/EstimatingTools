@@ -230,7 +230,7 @@ namespace EstimatingLibrary
         }
         #endregion
 
-        #region IReltable
+        #region IRelatable
         protected override RelatableMap propertyObjects()
         {
             RelatableMap saveList = new RelatableMap();

@@ -219,6 +219,7 @@ namespace EstimatingLibrary
                 }
             }
         }
+        
         public bool CanUpdateInstanceConnections()
         {
             bool canExecute = Instances.Count > 0;

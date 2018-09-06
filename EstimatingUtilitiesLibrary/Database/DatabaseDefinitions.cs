@@ -1877,6 +1877,41 @@ namespace EstimatingUtilitiesLibrary.Database
         public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
         public override List<TableField> Fields { get { return fields; } }
     }
+    internal class BidParametersTable : TableBase
+    {
+        public static string TableName = "BidParameters";
+        public static Type ObjectType = typeof(TECBid);
+        public static Type ReferenceType = typeof(TECParameters);
+
+        public static TableField BidID = new TableField("BidID", "TEXT", ObjectType.GetProperty("Guid"));
+        public static TableField ParametersID = new TableField("ParametersID", "TEXT", ReferenceType.GetProperty("Guid"));
+        
+        private List<TableField> primaryKeys = new List<TableField>()
+        {
+            BidID,
+            ParametersID
+        };
+        private List<Type> types = new List<Type>()
+        {
+            ObjectType,
+            ReferenceType
+        };
+        private List<TableField> fields = new List<TableField>()
+        {
+            BidID,
+            ParametersID
+        };
+        private List<string> propertyNames = new List<string>()
+        {
+            "Parameters"
+        };
+
+        public override string NameString { get { return TableName; } }
+        public override List<Type> Types { get { return types; } }
+        public override List<string> PropertyNames { get { return propertyNames; } }
+        public override List<TableField> PrimaryKeys { get { return primaryKeys; } }
+        public override List<TableField> Fields { get { return fields; } }
+    }
 
     internal class SystemEquipmentTable : TableBase
     {
@@ -4126,7 +4161,8 @@ namespace EstimatingUtilitiesLibrary.Database
             new HardwareQuoteTable(),
             new BidDistributionContactTable(),
             new BidToDoItemTable(),
-            new BidDocumentTable()
+            new BidDocumentTable(),
+            new BidParametersTable()
             };
     }
 

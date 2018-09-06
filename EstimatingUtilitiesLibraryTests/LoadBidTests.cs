@@ -477,6 +477,7 @@ namespace EstimatingUtilitiesLibraryTests
             Guid childPoint = new Guid("03a16819-9205-4e65-a16b-96616309f171");
             Guid childDevice = new Guid("95135fdf-7565-4d22-b9e4-1f177febae15");
             Guid expectedConnectionGuid = new Guid("5723e279-ac5c-4ee0-ae01-494a0c524b5c");
+            Guid childInterlock = new Guid("51dba7f9-35e9-4135-833f-0af4535698e6");
 
             TECSubScope actualSubScope = null;
             foreach (TECSystem system in actualBid.Systems)
@@ -520,6 +521,7 @@ namespace EstimatingUtilitiesLibraryTests
                     break;
                 }
             }
+            bool foundInterlock = actualSubScope.Interlocks.Any(x => x.Guid == childInterlock);
 
             //Assert
             Assert.AreEqual(expectedName, actualSubScope.Name, "Name not loaded");
@@ -528,6 +530,7 @@ namespace EstimatingUtilitiesLibraryTests
 
             Assert.IsTrue(foundPoint, "Typical point not loaded into typical subscope properly.");
             Assert.IsTrue(foundDevice, "Typical device not loaded into typical subscope properly.");
+            Assert.IsTrue(foundInterlock, "Typical interlock not loaded into typical subscope properly.");
 
             testForTag(actualSubScope);
             testForCosts(actualSubScope);
@@ -544,6 +547,7 @@ namespace EstimatingUtilitiesLibraryTests
             Guid childPoint = new Guid("e60437bc-09a1-47eb-9fd5-78711d942a12");
             Guid childDevice = new Guid("95135fdf-7565-4d22-b9e4-1f177febae15");
             Guid expectedConnectionGuid = new Guid("560ffd84-444d-4611-a346-266074f62f6f");
+            Guid childInterlock = new Guid("3a2feeb1-d823-491e-b2a9-4814b778beab");
 
             TECSubScope actualSubScope = null;
             foreach (TECTypical typical in actualBid.Systems)
@@ -594,6 +598,7 @@ namespace EstimatingUtilitiesLibraryTests
                     break;
                 }
             }
+            bool foundInterlock = actualSubScope.Interlocks.Any(x => x.Guid == childInterlock);
 
             //Assert
             Assert.AreEqual(expectedName, actualSubScope.Name, "Name not loaded");
