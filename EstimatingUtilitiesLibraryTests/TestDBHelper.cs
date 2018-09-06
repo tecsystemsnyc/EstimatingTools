@@ -220,6 +220,7 @@ namespace EstimatingUtilitiesLibraryTests
             values.Add("Mrs. Salesperson");
             values.Add("Mr. Estimator");
             values.Add("52");
+            values.Add("Engineer Inc.");
             addDataToTable(new BidInfoTable(), values);
 
         }

@@ -98,6 +98,15 @@
                 <TextBox Text="{Binding Bid.Duration}"
                          Grid.Column="1"/>
             </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Engineer: "/>
+                <TextBox Text="{Binding Bid.Engineer}"
+                         Grid.Column="1"/>
+            </Grid>
 
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="1" Margin="20,0,20,0">

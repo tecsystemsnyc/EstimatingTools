@@ -4615,7 +4615,7 @@ namespace EstimatingUtilitiesLibraryTests
             //Arrange
             TECBid bid = new TECBid();
             ChangeWatcher watcher = new ChangeWatcher(bid);
-            TECParameters parameters = new TECParameters(bid.Guid);
+            TECParameters parameters = new TECParameters();
 
             //Act
             DeltaStacker stack = new DeltaStacker(watcher, bid);
@@ -4623,8 +4623,13 @@ namespace EstimatingUtilitiesLibraryTests
             List<UpdateItem> expectedItems = new List<UpdateItem>();
 
             Dictionary<string, string> data = new Dictionary<string, string>();
-            data[ParametersTable.ID.Name] = parameters.Guid.ToString();
+            data[ParametersTable.ID.Name] = bid.Parameters.Guid.ToString();
             expectedItems.Add(new UpdateItem(Change.Remove, ParametersTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[BidParametersTable.BidID.Name] = bid.Guid.ToString();
+            data[BidParametersTable.ParametersID.Name] = bid.Parameters.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Remove, BidParametersTable.TableName, data));
 
             data = new Dictionary<string, string>();
             data[ParametersTable.ID.Name] = parameters.Guid.ToString();
@@ -4665,8 +4670,13 @@ namespace EstimatingUtilitiesLibraryTests
             data[ParametersTable.ElectricalSuperRatio.Name] = parameters.ElectricalSuperRatio.ToString();
             data[ParametersTable.ElectricalIsOnOvertime.Name] = parameters.ElectricalIsOnOvertime.ToInt().ToString();
             data[ParametersTable.ElectricalIsUnion.Name] = parameters.ElectricalIsUnion.ToInt().ToString();
-
             expectedItems.Add(new UpdateItem(Change.Add, ParametersTable.TableName, data));
+
+            data = new Dictionary<string, string>();
+            data[BidParametersTable.BidID.Name] = bid.Guid.ToString();
+            data[BidParametersTable.ParametersID.Name] = parameters.Guid.ToString();
+            expectedItems.Add(new UpdateItem(Change.Add, BidParametersTable.TableName, data));
+
 
             int expectedCount = expectedItems.Count;
 
