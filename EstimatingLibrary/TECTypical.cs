@@ -503,7 +503,7 @@ namespace EstimatingLibrary
                     if (connection is TECHardwiredConnection hardConnect)
                     {
                         var instanceSubScope = this.GetInstancesFromTypical(hardConnect.Child).First();
-                        var instanceConnection = instanceController.Connect(instanceSubScope, connection.Protocol);
+                        var instanceConnection = instanceController.Connect(instanceSubScope, instanceSubScope.HardwiredProtocol());
                         instanceConnection.UpdatePropertiesBasedOn(connection);
                         connectionInstances.AddItem(connection, instanceConnection);
                     }

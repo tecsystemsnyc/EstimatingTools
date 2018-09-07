@@ -320,6 +320,12 @@ namespace EstimatingLibrary
         protected override void addChildForProperty(string property, ITECObject item)
         {
             if(property == "ChildrenConnections") { }
+            else if (property == "IOModules" && item is TECIOModule module) {
+                if (this.CanAddModule(module))
+                {
+                    this.AddModule(module);
+                }
+            }
             else
             {
                 this.AddChildForScopeProperty(property, item);
@@ -329,7 +335,16 @@ namespace EstimatingLibrary
         protected override bool removeChildForProperty(string property, ITECObject item)
         {
             if (property == "ChildrenConnections") { return true; }
-
+            else if (property == "IOModules" && item is TECIOModule module) {
+                if (this.CanRemoveModule(module))
+                {
+                    return this.IOModules.Remove(module);
+                }
+                else
+                {
+                    return false;
+                }
+            }
             else
             {
                 return this.RemoveChildForScopeProperty(property, item);
@@ -339,7 +354,10 @@ namespace EstimatingLibrary
         protected override bool containsChildForProperty(string property, ITECObject item)
         {
             if (property == "ChildrenConnections") { return true; }
-
+            else if (property == "IOModules" && item is TECIOModule module)
+            {
+                return this.IOModules.Contains(module);
+            }
             else
             {
                 return this.ContainsChildForScopeProperty(property, item);
