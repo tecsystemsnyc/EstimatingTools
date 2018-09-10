@@ -262,7 +262,7 @@ namespace EstimatingUtilitiesLibraryTests
             Assert.AreEqual(expectedChildDevice.Name, actualChildDevice.Name);
             Assert.AreEqual(expectedChildDevice.Description, actualChildDevice.Description);
             Assert.AreEqual((expectedChildDevice as TECHardware).Cost, (actualChildDevice as TECHardware).Cost, DELTA);
-            Assert.AreEqual(expectedChildDevice.HardwiredConnectionTypes[0].Guid, actualChildDevice.HardwiredConnectionTypes[0].Guid);
+            Assert.IsTrue(expectedChildDevice.HardwiredConnectionTypes.Any(x => x.Guid == actualChildDevice.HardwiredConnectionTypes[0].Guid));
             Assert.AreEqual((expectedChildDevice as TECHardware).Tags[0].Label, (actualChildDevice as TECHardware).Tags[0].Label);
 
             Assert.AreEqual(expectedSSPoint.Label, actualSSPoint.Label);
