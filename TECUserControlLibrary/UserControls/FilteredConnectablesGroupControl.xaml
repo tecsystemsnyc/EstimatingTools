@@ -20,6 +20,7 @@
               MouseUp="ScopeGroupControl_MouseUp"
               dd:DragDrop.IsDragSource="{Binding ElementName=filteredConnectableGroupControl, Path=IsDragSource}"
               dd:DragDrop.IsDropTarget="{Binding ElementName=filteredConnectableGroupControl, Path=IsDropTarget}"
+              dd:DragDrop.DropHandler="{Binding ElementName=filteredConnectableGroupControl, Path=DropHandler}"
               ItemContainerStyle="{StaticResource ItemContainerStyle}">
         <ListView.ItemTemplate>
             <DataTemplate>
@@ -30,7 +31,9 @@
                             <local:FilteredConnectablesGroupControl ItemsSource="{Binding ChildrenGroups}"
                                                      SelectedItem="{Binding ElementName=filteredConnectableGroupControl, Path=SelectedItem}"
                                                      IsDropTarget="{Binding ElementName=filteredConnectableGroupControl, Path=IsDropTarget}"
-                                                     IsDragSource="{Binding ElementName=filteredConnectableGroupControl, Path=IsDragSource}"/>
+                                                     IsDragSource="{Binding ElementName=filteredConnectableGroupControl, Path=IsDragSource}"
+                                                     DropHandler="{Binding ElementName=filteredConnectableGroupControl, Path=DropHandler}"
+/>
                         </Border>
                     </Expander>
                     <TextBlock Style="{StaticResource ResourceKey=ExpanderHeader}"

@@ -151,7 +151,6 @@ namespace TECUserControlLibrary.ViewModels
                 newLocation.Name = String.Format("{0} {1}", PatternName, x);
                 newLocation.Label = x.ToString();
                 bid.Locations.Add(newLocation);
-
             }
         }
         private bool canAddPattern()
@@ -165,6 +164,7 @@ namespace TECUserControlLibrary.ViewModels
             newLocation.Name = NewLocationName;
             newLocation.Label = NewLocationTag;
             bid.Locations.Add(newLocation);
+
             NewLocationName = "";
             NewLocationTag = "";
         }
@@ -237,7 +237,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private bool passesPredicate(ITECObject sender)
         {
-            return sender is TECSystem || sender is TECController;
+            return sender is TECSystem || (sender is TECController controller && bid.Controllers.Contains(controller));
         }
 
         private void addLocated(TECLocated system)

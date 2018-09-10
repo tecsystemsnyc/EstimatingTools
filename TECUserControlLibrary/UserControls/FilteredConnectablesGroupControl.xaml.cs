@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GongSolutions.Wpf.DragDrop;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -68,7 +69,16 @@ namespace TECUserControlLibrary.UserControls
             DependencyProperty.Register("IsDragSource", typeof(bool), typeof(FilteredConnectablesGroupControl), new PropertyMetadata(true));
 
 
+        public IDropTarget DropHandler
+        {
+            get { return (IDropTarget)GetValue(DropHandlerProperty); }
+            set { SetValue(DropHandlerProperty, value); }
+        }
 
+        // Using a DependencyProperty as the backing store for DropHandler.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DropHandlerProperty =
+            DependencyProperty.Register("DropHandler", typeof(IDropTarget), typeof(FilteredConnectablesGroupControl));
+        
         public FilteredConnectablesGroupControl()
         {
             InitializeComponent();

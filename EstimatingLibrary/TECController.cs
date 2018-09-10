@@ -113,14 +113,14 @@ namespace EstimatingLibrary
                 {
                     compatProtocols.Add(protocol);
                 }
-            }  
+            }
+            compatProtocols.AddRange(this.ChildrenConnections.OfType<TECNetworkConnection>().Select(x => x.Protocol));
             return compatProtocols;
         }
         public bool CanConnect(IConnectable connectable, IProtocol protocol)
         {
-            bool containsnetworkConnection = this.ChildrenConnections.OfType<TECNetworkConnection>().Select(x => x.Protocol).Contains(protocol);
             bool canAcceptProtocol = CompatibleProtocols(connectable).Contains(protocol);
-            return connectable != null && (canAcceptProtocol || containsnetworkConnection);
+            return connectable != null && (canAcceptProtocol);
         }
         public bool CanConnect(IConnectable connectable)
         {

@@ -555,6 +555,19 @@ namespace EstimatingLibrary
                     }
 
                 }
+                else if (args.Value is IConnectable connectable && args.Sender is TECNetworkConnection netConnect)
+                {
+                    var instanceConnection = connectionInstances.GetInstances(netConnect).First();
+                    var instanceConnectable = TypicalInstanceDictionary.GetInstances(connectable).First();
+                    if(instanceConnection == null || instanceConnectable == null)
+                    {
+                        UpdateInstanceConnections();
+                    }
+                    else
+                    {
+                        instanceConnection.AddChild(instanceConnectable);
+                    }
+                }
             }
         }
         private void handleRemove(TECChangedEventArgs args)
@@ -618,6 +631,19 @@ namespace EstimatingLibrary
                     else if (instanceConnection is TECNetworkConnection netConn)
                     {
                         instanceConnection.ParentController.RemoveNetworkConnection(netConn);
+                    }
+                }
+                else if (args.Value is IConnectable connectable && args.Sender is TECNetworkConnection netConnect)
+                {
+                    var instanceConnection = connectionInstances.GetInstances(netConnect).First();
+                    var instanceConnectable = TypicalInstanceDictionary.GetInstances(connectable).First();
+                    if (instanceConnection == null || instanceConnectable == null)
+                    {
+                        UpdateInstanceConnections();
+                    }
+                    else
+                    {
+                        instanceConnection.RemoveChild(instanceConnectable);
                     }
                 }
             }

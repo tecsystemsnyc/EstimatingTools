@@ -87,7 +87,14 @@ namespace EstimatingLibrary
         #region Methods
         public bool CanAddChild(IConnectable connectable)
         {
-            return connectable.AvailableProtocols.Contains(this.Protocol);
+            if(connectable == null)
+            {
+                return false;
+            }
+            else {
+                return connectable.AvailableProtocols.Contains(this.Protocol);
+
+            }
         }
         public void AddChild(IConnectable connectable)
         {

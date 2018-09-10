@@ -90,7 +90,7 @@ namespace TECUserControlLibrary.Utilities
             { AllSearchableObjects.SubScope, "Points" },
             { AllSearchableObjects.Devices, "Devices" },
             { AllSearchableObjects.Valves, "Valves" },
-            { AllSearchableObjects.Wires, "Wire Types" },
+            { AllSearchableObjects.Wires, "Connection Types" },
             { AllSearchableObjects.Conduits, "Conduit Types" },
             { AllSearchableObjects.AssociatedCosts, "Associated Costs" },
             { AllSearchableObjects.MiscCosts, "Misc. Costs" },

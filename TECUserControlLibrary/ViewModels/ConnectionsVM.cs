@@ -175,11 +175,12 @@ namespace TECUserControlLibrary.ViewModels
 
         public NetworkConnectionDropTarget ConnectionDropHandler { get; }
         TECNetworkConnection NetworkConnectionDropTargetDelegate.SelectedConnection => SelectedConnection as TECNetworkConnection;
-        
+
+        public DisconnectDropTarget DisconnectDropTarget { get; } = new DisconnectDropTarget();
+
         public InterlocksVM InterlocksVM { get; }
 
         public RelayCommand<IControllerConnection> DeleteCommand { get; private set; }
-        public RelayCommand<IEnumerable<IControllerConnection>> DeleteManyCommand { get; private set; }
 
         /// <summary>
         /// 
@@ -238,24 +239,6 @@ namespace TECUserControlLibrary.ViewModels
             { if (SelectedConnectableGroup?.PassesFilter == false) SelectedConnectableGroup = null; };
 
             DeleteCommand = new RelayCommand<IControllerConnection>(deleteConnectionExecute, canDeleteConnection);
-            DeleteManyCommand = new RelayCommand<IEnumerable<IControllerConnection>>(deleteManyExecute, deleteManyCanExecute);
-        }
-
-        private void deleteManyExecute(IEnumerable<IControllerConnection> obj)
-        {
-            foreach(IControllerConnection connection in obj)
-            {
-                deleteConnectionExecute(connection);
-            }
-            if (SelectedController is TECProvidedController pController)
-            {
-                pController.OptimizeModules();
-            }
-        }
-
-        private bool deleteManyCanExecute(IEnumerable<IControllerConnection> arg)
-        {
-            return true;
         }
 
         private void deleteConnectionExecute(IControllerConnection obj)
@@ -554,6 +537,51 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
     }
+
+    public class DisconnectDropTarget : IDropTarget
+    {
+        public void DragOver(IDropInfo dropInfo)
+        {
+            if (dropInfo.Data is IControllerConnection connection)
+            {
+                DragDropHelpers.SetDragAdorners(dropInfo);
+            }
+            else if (dropInfo.Data is IEnumerable dropList && (dropList.GetItemType() == typeof(TECConnection)
+                || dropList.GetItemType().IsImplementationOf(typeof(IControllerConnection))))
+            {
+                DragDropHelpers.SetDragAdorners(dropInfo);
+            }
+        }
+
+        public void Drop(IDropInfo dropInfo)
+        {
+            if (dropInfo.Data is IControllerConnection connection)
+            {
+                removeConnection(connection);   
+            }
+            else if (dropInfo.Data is IEnumerable dropList && (dropList.GetItemType() == typeof(TECConnection)
+                || dropList.GetItemType().IsImplementationOf(typeof(IControllerConnection))))
+            {
+                foreach (IControllerConnection dropConn in dropList)
+                {
+                    removeConnection(dropConn);
+                }
+            }
+
+            void removeConnection(IControllerConnection item)
+            {
+                if(item is TECHardwiredConnection hardConnect)
+                {
+                    hardConnect.ParentController.Disconnect(hardConnect.Child);
+                }
+                else if (item is TECNetworkConnection netConnect)
+                {
+                    netConnect.ParentController.RemoveNetworkConnection(netConnect);
+                }
+            }
+        }
+    }
+
 
     public class ConnectableFilter: ViewModelBase
     {

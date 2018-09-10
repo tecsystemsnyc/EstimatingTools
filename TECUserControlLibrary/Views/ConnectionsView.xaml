@@ -102,88 +102,76 @@
                             </Grid>
                             <!--Connections List-->
                             <Border Grid.Row="1" Style="{StaticResource ItemsAreaBorder}">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition Height="30"/>
-                                    </Grid.RowDefinitions>
-                                    <ListView ItemsSource="{Binding SelectedController.ChildrenConnections}"
+                                <ListView ItemsSource="{Binding SelectedController.ChildrenConnections}"
                                           dd:DragDrop.IsDropTarget="True"
                                           dd:DragDrop.DropHandler="{Binding ElementName=connectionsView, Path=VM}"
+                                          dd:DragDrop.IsDragSource="True"
                                           Background="Transparent" BorderBrush="Transparent"
                                           SelectedItem="{Binding SelectedConnection}"
                                               SelectionMode="Extended"
                                           HorizontalContentAlignment="Stretch"
                                           x:Name="connectionsList">
 
-                                        <ListView.Resources>
-                                            <DataTemplate DataType="{x:Type models:TECHardwiredConnection}">
-                                                <Grid>
-                                                    <Grid.ContextMenu>
-                                                        <ContextMenu>
-                                                            <MenuItem Header="Disconnect" Command="{Binding Data.DeleteCommand, Source={StaticResource proxy}}"
+                                    <ListView.Resources>
+                                        <DataTemplate DataType="{x:Type models:TECHardwiredConnection}">
+                                            <Grid>
+                                                <Grid.ContextMenu>
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Disconnect" Command="{Binding Data.DeleteCommand, Source={StaticResource proxy}}"
                                                                   CommandParameter="{Binding}"/>
-                                                        </ContextMenu>
-                                                    </Grid.ContextMenu>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <TextBlock Text="{Binding Child.Name, StringFormat=To: {0}}"/>
-                                                    <TextBlock Text="{Binding Length, StringFormat=Length: {0}}"
+                                                    </ContextMenu>
+                                                </Grid.ContextMenu>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding Child.Name, StringFormat=To: {0}}"/>
+                                                <TextBlock Text="{Binding Length, StringFormat=Length: {0}}"
                                                            HorizontalAlignment="Right"
                                                            Grid.Column="1"/>
-                                                </Grid>
-                                            </DataTemplate>
-                                            <DataTemplate DataType="{x:Type models:TECNetworkConnection}">
-                                                <Grid x:Name="networkConnectionGrid" DataContext="{Binding}">
-                                                    <Grid.ContextMenu>
-                                                        <ContextMenu>
-                                                            <MenuItem Header="Delete" Command="{Binding Data.DeleteCommand, Source={StaticResource proxy}}"
+                                            </Grid>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="{x:Type models:TECNetworkConnection}">
+                                            <Grid x:Name="networkConnectionGrid" DataContext="{Binding}">
+                                                <Grid.ContextMenu>
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Delete" Command="{Binding Data.DeleteCommand, Source={StaticResource proxy}}"
                                                                   CommandParameter="{Binding}"/>
-                                                        </ContextMenu>
-                                                    </Grid.ContextMenu>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition/>
-                                                        <RowDefinition/>
-                                                    </Grid.RowDefinitions>
-                                                    <TextBlock Text="{Binding Protocol.Label, StringFormat=Protocol: {0}}"/>
-                                                    <TextBlock Text="{Binding Length, StringFormat=Length: {0}}"
+                                                    </ContextMenu>
+                                                </Grid.ContextMenu>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Text="{Binding Protocol.Label, StringFormat=Protocol: {0}}"/>
+                                                <TextBlock Text="{Binding Length, StringFormat=Length: {0}}"
                                                            HorizontalAlignment="Right"
                                                            Grid.Column="1"/>
-                                                    <Expander Grid.Row="1" Header="{Binding Children.Count, StringFormat=Children: {0}}"
+                                                <Expander Grid.Row="1" Header="{Binding Children.Count, StringFormat=Children: {0}}"
                                                           Expanded="Expander_Expanded">
-                                                        <ListView ItemsSource="{Binding Children}"
+                                                    <ListView ItemsSource="{Binding Children}"
                                                               dd:DragDrop.DropHandler="{Binding ElementName=connectionsView, Path=VM.ConnectionDropHandler}"
                                                               dd:DragDrop.IsDropTarget="True">
-                                                            <i:Interaction.Behaviors>
-                                                                <utilities:BubbleScrollEvent/>
-                                                            </i:Interaction.Behaviors>
-                                                            <ListView.ItemTemplate>
-                                                                <DataTemplate>
-                                                                    <Border Style="{StaticResource ListItemBorder}">
-                                                                        <TextBlock Text="{Binding Name}"/>
-                                                                    </Border>
-                                                                </DataTemplate>
-                                                            </ListView.ItemTemplate>
-                                                        </ListView>
-                                                    </Expander>
-                                                </Grid>
-                                            </DataTemplate>
-                                        </ListView.Resources>
-                                    </ListView>
-                                    <Button Content="Diconnect Selected" 
-                                            Command="{Binding DeleteManyCommand}"
-                                            CommandParameter="{Binding ElementName=connectionsList, Path=SelectedItems}"
-                                            Style="{StaticResource DeleteButton}"
-                                            Grid.Row="1"/>
-
-
-                                </Grid>
+                                                        <i:Interaction.Behaviors>
+                                                            <utilities:BubbleScrollEvent/>
+                                                        </i:Interaction.Behaviors>
+                                                        <ListView.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Border Style="{StaticResource ListItemBorder}">
+                                                                    <TextBlock Text="{Binding Name}"/>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </ListView.ItemTemplate>
+                                                    </ListView>
+                                                </Expander>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.Resources>
+                                </ListView>
                             </Border>
 
                             <!--Default Connection Properties-->
@@ -255,7 +243,8 @@
                             <!--Connectables List-->
                             <controls:FilteredConnectablesGroupControl ItemsSource="{Binding Connectables}"
                                                                        SelectedItem="{Binding SelectedConnectableGroup}"
-                                                                       IsDropTarget="False"
+                                                                       IsDropTarget="True"
+                                                                       DropHandler="{Binding DisconnectDropTarget}"
                                                                        Grid.Row="1"/>
                             <!--Filter-->
                             <Grid Grid.Row="2">

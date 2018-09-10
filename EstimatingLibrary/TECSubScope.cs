@@ -134,11 +134,14 @@ namespace EstimatingLibrary
                     return true;
                 }
             }
+            raisePropertyChanged("PointNumber");
             return false;
         }
         public bool RemovePoint(TECPoint point)
         {
-            return Points.Remove(point);
+            bool removed = Points.Remove(point);
+            raisePropertyChanged("PointNumber");
+            return removed;
         }
 
         public bool AddDevice(IEndDevice device)

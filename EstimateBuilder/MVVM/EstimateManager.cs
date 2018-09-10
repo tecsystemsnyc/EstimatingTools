@@ -280,8 +280,10 @@ namespace EstimateBuilder.MVVM
         //Export Proposal
         private void exportProposalExecute()
         {
+            var bidDirectory = currentBidPath != "" ? Path.GetDirectoryName(currentBidPath) : defaultDirectory;
+
             string path = UIHelpers.GetSavePath(FileDialogParameters.WordDocumentFileParameters,
-                Exporter.ProposalDefaultName(bid), defaultDirectory);
+                Exporter.ProposalDefaultName(bid), bidDirectory);
 
             if (path != null)
             {

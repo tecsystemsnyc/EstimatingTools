@@ -39,7 +39,12 @@ namespace TECUserControlLibrary.Utilities.DropTargets
 
         private object dropHandler(object arg)
         {
-            dropDelegate.SelectedConnection.AddChild(arg as IConnectable);
+            var item = arg;
+            if(arg is IDragDropable dropable)
+            {
+                item = dropable.DropData();
+            } 
+            dropDelegate.SelectedConnection.AddChild(item as IConnectable);
             return null;
         }
 

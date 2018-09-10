@@ -49,7 +49,17 @@
                         <ColumnDefinition Width="200"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <listcontrols:TypicalListControl Source="{Binding Bid.Systems}" x:Name="typicalList"/>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Border Style="{StaticResource HeaderBorder}">
+                            <TextBlock Text="Systems" Style="{StaticResource ListHeader}"/>
+                        </Border>
+                        <listcontrols:TypicalListControl Source="{Binding Bid.Systems}" x:Name="typicalList"
+                                                         Grid.Row="1"/>
+                    </Grid>
                     <views:SystemProposalView SystemSource="{Binding ElementName=typicalList, Path=SelectedItem}"
                                               Grid.Column="1"/>
                 </Grid>

@@ -49,7 +49,7 @@
                     <ColumnDefinition Width="100"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Name: "/>
+                <TextBlock Text="Project Name: "/>
                 <TextBox Text="{Binding Bid.Name}"
                          Grid.Column="1"/>
             </Grid>
@@ -58,7 +58,7 @@
                     <ColumnDefinition Width="100"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Number: "/>
+                <TextBlock Text="Bid Number: "/>
                 <TextBox Text="{Binding Bid.BidNumber}"
                          Grid.Column="1"/>
             </Grid>
