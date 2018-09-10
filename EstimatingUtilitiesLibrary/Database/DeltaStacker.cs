@@ -26,12 +26,17 @@ namespace EstimatingUtilitiesLibrary.Database
         public List<UpdateItem> CleansedStack()
         {
             List<UpdateItem> outStack = new List<UpdateItem>();
-            Dictionary<(string, string), UpdateItem> editData = new Dictionary<(string, string), UpdateItem>();
+            List<UpdateItem> removeItems = new List<UpdateItem>();
+            Dictionary<(string key, string table), UpdateItem> editData = new Dictionary<(string, string), UpdateItem>();
             foreach(var item in stack)
             {
                 if(item.Change == Change.Add || item.Change == Change.Remove)
                 {
                     outStack.Add(item);
+                    if(item.Change == Change.Remove)
+                    {
+                        removeItems.Add(item);
+                    }
                 }
                 else
                 {
@@ -48,7 +53,8 @@ namespace EstimatingUtilitiesLibrary.Database
                     }
                 }
             }
-            foreach(var pair in editData)
+            foreach(var pair in editData.Where(x => !removeItems.Any(y => y.Table == x.Key.table 
+            && y.FieldData.Count == 1 && y.FieldData.First().Value == x.Key.key)))
             {
                 outStack.Add(pair.Value);
             }
