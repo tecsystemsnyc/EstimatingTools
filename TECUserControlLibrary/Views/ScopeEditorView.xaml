@@ -127,17 +127,23 @@
                         </Grid>
                     </Border>
                 </TabItem>
-                <TabItem Header="Controllers and Panels">
-                    <views:ControllersPanelsView ViewModel="{Binding ControllersPanelsTab}"/>
-                </TabItem>
-                <TabItem Header="Connections">
-                    <views:ConnectionsView VM="{Binding ConnectionsVM}"
+                <TabItem Header="Global">
+                    <TabControl>
+                        <TabItem Header="Controllers and Panels">
+                            <views:ControllersPanelsView ViewModel="{Binding ControllersPanelsTab}"/>
+                        </TabItem>
+                        <TabItem Header="Connections">
+                            <views:ConnectionsView VM="{Binding ConnectionsVM}"
                                            SelectionNeeded="{Binding ConnectionsVM.SelectionNeeded}"/>
-                </TabItem>
-                <TabItem Header="Misc.">
-                    <views:MiscCostsView ViewModel="{Binding MiscVM}"
+                        </TabItem>
+                        <TabItem Header="Misc.">
+                            <views:MiscCostsView ViewModel="{Binding MiscVM}"
                                          DropHandler="{Binding MiscVM}"/>
+                        </TabItem>
+                    </TabControl>
+                
                 </TabItem>
+
             </TabControl>
             <!--Properties-->
             <GridSplitter Grid.Column="4" Width="5" Grid.RowSpan="2" HorizontalAlignment="Stretch" />

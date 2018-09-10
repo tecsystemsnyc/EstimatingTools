@@ -266,11 +266,19 @@ namespace TECUserControlLibrary.ViewModels
                 if (dropped is TECEquipment equipment)
                 {
                     SelectedVM = new AddEquipmentVM(SelectedSystem, scopeManager);
+                    (SelectedVM as AddEquipmentVM).Added = equip =>
+                    {
+                        SelectedEquipment = equip as TECEquipment;
+                    };
                     ((AddEquipmentVM)SelectedVM).SetTemplate(equipment);
                 }
                 else if (dropped is TECSubScope subScope)
                 {
                     SelectedVM = new AddSubScopeVM(SelectedEquipment, scopeManager);
+                    (SelectedVM as AddSubScopeVM).Added = ss =>
+                    {
+                        SelectedSubScope = ss as TECSubScope;
+                    };
                     ((AddSubScopeVM)SelectedVM).SetTemplate(subScope);
                     ((AddSubScopeVM)SelectedVM).SetParentSystem(SelectedSystem, scopeManager);
                 }
@@ -293,6 +301,10 @@ namespace TECUserControlLibrary.ViewModels
                 else if (dropped is TECSystem system)
                 {
                     SelectedVM = new AddSystemVM(scopeManager);
+                    (SelectedVM as AddSystemVM).Added = sys =>
+                    {
+                        SelectedSystem = sys as TECSystem;
+                    };
                     ((AddSystemVM)SelectedVM).SetTemplate(system);
                 }
             }

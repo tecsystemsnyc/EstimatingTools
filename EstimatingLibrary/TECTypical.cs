@@ -131,6 +131,7 @@ namespace EstimatingLibrary
             Dictionary<Guid, Guid> guidDictionary = new Dictionary<Guid, Guid>();
             var newSystem = new TECSystem();
             newSystem.CopyPropertiesFromScope(this);
+            if (this.Location != null) newSystem.Location = this.Location;
             foreach (TECEquipment equipment in Equipment)
             {
                 var toAdd = new TECEquipment(equipment, guidDictionary, TypicalInstanceDictionary);

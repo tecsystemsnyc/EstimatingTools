@@ -237,7 +237,7 @@ namespace TECUserControlLibrary.ViewModels
 
         private bool passesPredicate(ITECObject sender)
         {
-            return sender is TECSystem || (sender is TECController controller && bid.Controllers.Contains(controller));
+            return !(sender is TECTypical) && (sender is TECSystem || (sender is TECController controller && bid.Controllers.Contains(controller)));
         }
 
         private void addLocated(TECLocated system)
