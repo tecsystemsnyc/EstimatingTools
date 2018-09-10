@@ -181,41 +181,40 @@ namespace EstimatingLibrary
 
                 foreach (TECController controller in Controllers)
                 {
-                    foreach (TECController instance in TypicalInstanceDictionary.GetInstances(controller))
+                    var instanceController = TypicalInstanceDictionary.GetInstances(controller).First(x => system.Controllers.Contains(x));
+                    instanceController.RemoveAllChildConnections();
+                    foreach (IControllerConnection connection in controller.ChildrenConnections)
                     {
-                        instance.RemoveAllChildConnections();
-                        foreach (IControllerConnection connection in controller.ChildrenConnections)
+                        List<IControllerConnection> instanceConnections = new List<IControllerConnection>();
+                        if (connection is TECNetworkConnection netConnection)
                         {
-                            List<IControllerConnection> instanceConnections = new List<IControllerConnection>();
-                            if (connection is TECNetworkConnection netConnection)
-                            {
-                                TECNetworkConnection netInstanceConnection = instance.AddNetworkConnection(netConnection.NetworkProtocol);
-                                var instanceChildren = netConnection.Children.SelectMany(x => TypicalInstanceDictionary.GetInstances(x));
+                            TECNetworkConnection netInstanceConnection = instanceController.AddNetworkConnection(netConnection.NetworkProtocol);
+                            var instanceChildren = netConnection.Children.SelectMany(x => TypicalInstanceDictionary.GetInstances(x));
                                 
-                                foreach (IConnectable instanceChild in instanceChildren)
-                                {
-                                    if (systemConnectables.Contains(instanceChild))
-                                    {
-                                        netInstanceConnection.AddChild(instanceChild);
-                                    }
-                                }
-                                instanceConnections.Add(netInstanceConnection);
-                            }
-                            else if (connection is TECHardwiredConnection hardwired)
+                            foreach (IConnectable instanceChild in instanceChildren)
                             {
-                                var instanceChildren = TypicalInstanceDictionary.GetInstances(hardwired.Child);
-                                foreach (IConnectable instanceChild in instanceChildren)
+                                if (systemConnectables.Contains(instanceChild))
                                 {
-                                    if (systemConnectables.Contains(instanceChild))
-                                    {
-                                        instanceConnections.Add(instance.Connect(instanceChild, connection.Protocol));
-                                    }
+                                    netInstanceConnection.AddChild(instanceChild);
                                 }
-
                             }
-                            instanceConnections.Where(x => x != null).ForEach(x => x.UpdatePropertiesBasedOn(connection));
+                            instanceConnections.Add(netInstanceConnection);
                         }
+                        else if (connection is TECHardwiredConnection hardwired)
+                        {
+                            var instanceChildren = TypicalInstanceDictionary.GetInstances(hardwired.Child);
+                            foreach (IConnectable instanceChild in instanceChildren)
+                            {
+                                if (systemConnectables.Contains(instanceChild))
+                                {
+                                    instanceConnections.Add(instanceController.Connect(instanceChild, connection.Protocol));
+                                }
+                            }
+
+                        }
+                        instanceConnections.Where(x => x != null).ForEach(x => x.UpdatePropertiesBasedOn(connection));
                     }
+                    
                 }
             }
         }

@@ -56,6 +56,7 @@ namespace TECUserControlLibrary.ViewModels
         private void instanceExecute(TECTypical obj)
         {
             obj.Instances.ObservablyClear();
+            SelectedTypical = obj;
         }
 
         private bool canInstanceExecute(TECTypical arg)
