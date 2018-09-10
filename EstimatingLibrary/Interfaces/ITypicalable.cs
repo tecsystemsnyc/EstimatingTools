@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace EstimatingLibrary.Interfaces
 {
-    public interface ITypicalable
+    public interface ITypicalable : ITECObject
     {
         bool IsTypical { get; }
         ITECObject CreateInstance(ObservableListDictionary<ITECObject> typicalDictionary = null);

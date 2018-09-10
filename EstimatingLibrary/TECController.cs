@@ -204,7 +204,7 @@ namespace EstimatingLibrary
             this.ChildrenConnections.Add(netConnect);
             return netConnect;
         }
-        public void RemoveNetworkConnection(TECNetworkConnection connection)
+        public bool RemoveNetworkConnection(TECNetworkConnection connection)
         {
             if (this.ChildrenConnections.Contains(connection))
             {
@@ -213,11 +213,11 @@ namespace EstimatingLibrary
                 {
                     connection.RemoveChild(child);
                 }
-                this.ChildrenConnections.Remove(connection);
+                return this.ChildrenConnections.Remove(connection);
             }
             else
             {
-                throw new InvalidOperationException("Network connection doesn't exist in controller.");
+                return false;
             }
         }
 

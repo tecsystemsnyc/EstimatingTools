@@ -191,7 +191,7 @@ namespace EstimatingLibrary
                             {
                                 TECNetworkConnection netInstanceConnection = instance.AddNetworkConnection(netConnection.NetworkProtocol);
                                 var instanceChildren = netConnection.Children.SelectMany(x => TypicalInstanceDictionary.GetInstances(x));
-
+                                
                                 foreach (IConnectable instanceChild in instanceChildren)
                                 {
                                     if (systemConnectables.Contains(instanceChild))
@@ -483,10 +483,23 @@ namespace EstimatingLibrary
                 }
                 if (args.Value is ITypicalable typicalChild)
                 {
-                    instanceValue = typicalChild.CreateInstance(TypicalInstanceDictionary);
-                    if (instanceValue != null)
+                    if(sender is IRelatable relSender && relSender.IsDirectChildProperty(args.PropertyName))
                     {
-                        TypicalInstanceDictionary.AddItem(args.Value as ITECObject, instanceValue);
+                        instanceValue = typicalChild.CreateInstance(TypicalInstanceDictionary);
+                        if (instanceValue != null)
+                        {
+                            TypicalInstanceDictionary.AddItem(args.Value as ITECObject, instanceValue);
+                        }
+                    }
+                    else
+                    {
+                        var parentSystem = this.Instances
+                            .Where(x => x.IsDirectDescendant(parentInstance))
+                            .FirstOrDefault();
+
+                        instanceValue = this.TypicalInstanceDictionary.GetInstances(typicalChild)
+                            .Where(x => parentSystem.IsDirectDescendant(x)).FirstOrDefault();
+
                     }
                 }
                 if (instanceValue != null)
@@ -504,16 +517,41 @@ namespace EstimatingLibrary
                     {
                         var instanceSubScope = this.GetInstancesFromTypical(hardConnect.Child).First();
                         var instanceConnection = instanceController.Connect(instanceSubScope, instanceSubScope.HardwiredProtocol());
-                        instanceConnection.UpdatePropertiesBasedOn(connection);
-                        connectionInstances.AddItem(connection, instanceConnection);
+                        if(instanceConnection == null && instanceController is TECProvidedController providedInstanceController)
+                        {
+                            providedInstanceController.OptimizeModules();
+                            instanceConnection = instanceController.Connect(instanceSubScope, instanceSubScope.HardwiredProtocol());
+                        }
+                        if(instanceConnection != null)
+                        {
+                            instanceConnection.UpdatePropertiesBasedOn(connection);
+                            connectionInstances.AddItem(connection, instanceConnection);
+                        }
+                        else
+                        {
+                            UpdateInstanceConnections();
+                        }
                     }
                     else if (connection is TECNetworkConnection netConnect)
                     {
                         var instanceSubScope = netConnect.Children.SelectMany(x => this.GetInstancesFromTypical(x));
                         var instanceConnection = instanceController.AddNetworkConnection(netConnect.NetworkProtocol);
-                        instanceSubScope.ForEach(x => instanceConnection.AddChild(x));
-                        instanceConnection.UpdatePropertiesBasedOn(connection);
-                        connectionInstances.AddItem(connection, instanceConnection);
+                        if (instanceConnection == null && instanceController is TECProvidedController providedInstanceController)
+                        {
+                            providedInstanceController.OptimizeModules();
+                            instanceConnection = instanceController.AddNetworkConnection(netConnect.NetworkProtocol);
+
+                        }
+                        if (instanceConnection != null)
+                        {
+                            instanceSubScope.ForEach(x => instanceConnection.AddChild(x));
+                            instanceConnection.UpdatePropertiesBasedOn(connection);
+                            connectionInstances.AddItem(connection, instanceConnection);
+                        }
+                        else
+                        {
+                            UpdateInstanceConnections();
+                        }
                     }
 
                 }
@@ -537,15 +575,28 @@ namespace EstimatingLibrary
                 {
                     throw new Exception("Value to add is not ITECObject");
                 }
-
-                if (instanceValue is ITypicalable)
+                if (args.Value is ITypicalable typicalChild)
                 {
-                    instanceValue = TypicalInstanceDictionary.GetInstances(instanceValue)
-                    .Where(x => instanceSender.ContainsChildForProperty(args.PropertyName, x)).FirstOrDefault();
-                    if (instanceValue != null)
+                    if (sender is IRelatable relSender && relSender.IsDirectChildProperty(args.PropertyName))
                     {
-                        TypicalInstanceDictionary.RemoveItem(args.Value as ITECObject, instanceValue);
+                        instanceValue = TypicalInstanceDictionary.GetInstances(instanceValue)
+                        .Where(x => instanceSender.ContainsChildForProperty(args.PropertyName, x)).FirstOrDefault();
+                        if (instanceValue != null)
+                        {
+                            TypicalInstanceDictionary.RemoveItem(args.Value as ITECObject, instanceValue);
+                        }
                     }
+                    else
+                    {
+                        var parentSystem = this.Instances
+                            .Where(x => x.IsDirectDescendant(parentInstance))
+                            .FirstOrDefault();
+
+                        instanceValue = this.TypicalInstanceDictionary.GetInstances(typicalChild)
+                            .Where(x => parentSystem.IsDirectDescendant(x)).FirstOrDefault();
+
+                    }
+
                 }
 
                 if (instanceValue != null)
@@ -571,7 +622,7 @@ namespace EstimatingLibrary
                 }
             }
         }
-
+        
         #endregion
         #endregion
 
