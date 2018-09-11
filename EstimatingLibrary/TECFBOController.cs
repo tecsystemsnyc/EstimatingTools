@@ -127,6 +127,10 @@ namespace EstimatingLibrary
         protected override void addChildForProperty(string property, ITECObject item)
         {
             if (property == "ChildrenConnections") { }
+            else if (property == "Points" && item is TECPoint point)
+            {
+                this.Points.Add(point);
+            }
             else
             {
                 this.AddChildForScopeProperty(property, item);
@@ -136,6 +140,10 @@ namespace EstimatingLibrary
         protected override bool removeChildForProperty(string property, ITECObject item)
         {
             if (property == "ChildrenConnections") { return true; }
+            else if (property == "Points" && item is TECPoint point)
+            {
+                return this.Points.Remove(point);
+            }
             else
             {
                 return this.RemoveChildForScopeProperty(property, item);
@@ -145,7 +153,10 @@ namespace EstimatingLibrary
         protected override bool containsChildForProperty(string property, ITECObject item)
         {
             if (property == "ChildrenConnections") { return true; }
-
+            else if (property == "Points" && item is TECPoint point)
+            {
+                return this.Points.Contains(point);
+            }
             else
             {
                 return this.ContainsChildForScopeProperty(property, item);

@@ -108,16 +108,17 @@ namespace EstimatingLibrary
                 throw new InvalidOperationException("Connectable not compatible with Network Connection.");
             }
         }
-        public void RemoveChild(IConnectable connectable)
+        public bool RemoveChild(IConnectable connectable)
         {
             if (Children.Contains(connectable))
             {
-                Children.Remove(connectable);
+                var removed = Children.Remove(connectable);
                 connectable.SetParentConnection(null);
+                return removed;
             }
             else
             {
-                throw new InvalidOperationException("INetworkConnectable doesn't exist in Network Connection.");
+                return false;
             }
         }
 
