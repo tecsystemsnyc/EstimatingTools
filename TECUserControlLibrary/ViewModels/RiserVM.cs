@@ -164,6 +164,7 @@ namespace TECUserControlLibrary.ViewModels
             newLocation.Name = NewLocationName;
             newLocation.Label = NewLocationTag;
             bid.Locations.Add(newLocation);
+            Locations.Move(Locations.Count() - 1, 0);
 
             NewLocationName = "";
             NewLocationTag = "";

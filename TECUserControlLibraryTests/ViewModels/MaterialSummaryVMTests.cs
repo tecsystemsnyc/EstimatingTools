@@ -641,13 +641,13 @@ namespace ViewModels
 
             MaterialSummaryVM matVM = new MaterialSummaryVM(bid, cw);
 
-            CostBatch initial = MatVMToCostBatch(matVM);
+            CostBatch expected = MatVMToCostBatch(matVM) - connection.CostBatch;
             
             //Act
             controller.Disconnect(instanceSubScope);
 
             //Assert
-            AssertMaterialVMMatchesCostBatch(matVM, initial - connection.CostBatch);
+            AssertMaterialVMMatchesCostBatch(matVM, expected);
         }
         #endregion
 
@@ -696,7 +696,7 @@ namespace ViewModels
             Assert.AreEqual(vm.TotalTECLabor, cb.GetLabor(CostType.TEC),
                 GeneralTestingUtilities.DELTA, "Total tec labor didn't update properly.");
             Assert.AreEqual(vm.TotalElecCost, cb.GetCost(CostType.Electrical),
-                GeneralTestingUtilities.DELTA, "Total elec cost didn't update proplery.");
+                GeneralTestingUtilities.DELTA, "Total elec cost didn't update properly.");
             Assert.AreEqual(vm.TotalElecLabor, cb.GetLabor(CostType.Electrical),
                 GeneralTestingUtilities.DELTA, "Total elec labor didn't update properly.");
         }
