@@ -601,7 +601,7 @@ namespace EstimatingLibrary
             _softRate = parametersSource.SoftRate;
 
             _graphCoef = parametersSource.GraphCoef;
-            _graphCoefStdError = parametersSource.CommCoefStdError;
+            _graphCoefStdError = parametersSource.GraphCoefStdError;
             _graphRate = parametersSource.GraphRate;
 
             _electricalRate = parametersSource.ElectricalRate;
