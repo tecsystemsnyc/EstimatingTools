@@ -312,16 +312,20 @@ namespace TECUserControlLibrary.ViewModels
             DragDropHelpers.Drop(dropInfo, dropMethod, false);
             object dropMethod(object dropped)
             {
-                if (dropInfo.TargetCollection == Unlocated)
+                if(dropped is TECLocated located)
                 {
-                    ((TECLocated)dropInfo.Data).Location = null;
+                    if (dropInfo.TargetCollection == Unlocated)
+                    {
+                        located.Location = null;
 
+                    }
+                    else
+                    {
+                        var container = Locations.First(item => item.Scope == dropInfo.TargetCollection);
+                        located.Location = container.Location;
+                    }
                 }
-                else
-                {
-                    var container = Locations.First(item => item.Scope == dropInfo.TargetCollection);
-                    ((TECLocated)dropInfo.Data).Location = container.Location;
-                }
+                
                 return true;
             }
         }

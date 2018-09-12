@@ -25,6 +25,19 @@ namespace EstimatingLibrary
             MiscCosts.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "MiscCosts");
             ScopeBranches.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "ScopeBranches");
             ProposalItems.CollectionChanged += (sender, args) => handleCollectionChanged(sender, args, "ProposalItems");
+
+            this.PropertyChanged += systemPropertyChanged;
+        }
+
+        private void systemPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == "Location")
+            {
+                foreach(var item in this.GetDirectChildren().OfType<TECLocated>())
+                {
+                    item.Location = this.Location;
+                }
+            }
         }
 
         public TECSystem() : this(Guid.NewGuid()) { }

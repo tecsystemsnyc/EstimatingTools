@@ -631,6 +631,7 @@ namespace ViewModels
             ss.Devices.Add(bid.Catalogs.Devices[0]);
             typEquip.SubScope.Add(ss);
             
+
             TECSystem instance = typical.AddInstance();
 
             TECSubScope instanceSubScope = instance.GetAllSubScope().First(sub => sub.AvailableProtocols.Any(prot => prot is TECHardwiredProtocol));
