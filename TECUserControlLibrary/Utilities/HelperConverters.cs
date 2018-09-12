@@ -940,7 +940,40 @@ namespace TECUserControlLibrary.Utilities
 
         #endregion
     }
+
     
+
+    public class ControllerDescriptionDisplayConverter : BaseConverter, IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value is TECControllerType controllerType)
+            {
+                if(controllerType.Description == "")
+                {
+                    return controllerType.Name;
+                }
+                else
+                {
+                    return String.Format("{0}, {1}", controllerType.Name, controllerType.Description);
+                }
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
+
     #region Enumeration Converters
 
     public class EditIndexToIntegerConverter : BaseConverter, IValueConverter

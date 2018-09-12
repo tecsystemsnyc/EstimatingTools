@@ -57,7 +57,12 @@ namespace TECUserControlLibrary.ViewModels.AddVMs
 
         private void addExecute()
         {
-            parent.Interlocks.Add(ToAdd);
+            for(int x = 0; x < Quantity; x++)
+            {
+                var newInterlock = new TECInterlockConnection(ToAdd);
+                parent.Interlocks.Add(newInterlock);
+                Added?.Invoke(newInterlock);
+            }
         }
 
         private bool canAdd()

@@ -48,9 +48,15 @@
             <TextBlock Text="Type: " Grid.Row="1"/>
             <ComboBox ItemsSource="{Binding ElementName=addControllerView, Path=ViewModel.ControllerTypes}"
                       SelectedItem="{Binding ElementName=addControllerView, Path=ViewModel.SelectedType}"
-                      DisplayMemberPath="Name" 
                       Grid.Row="1" Grid.Column="1"
-                      IsEnabled="{Binding ElementName=FBOCheckBox, Path=IsChecked, Converter={utilities:InvertBoolConverter}}"/>
+                      IsEnabled="{Binding ElementName=FBOCheckBox, Path=IsChecked, Converter={utilities:InvertBoolConverter}}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={utilities:ControllerDescriptionDisplayConverter}}"
+                                   Foreground="Black"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
             <TextBlock Text="FBO: " Grid.Row="2"/>
             <CheckBox IsChecked="{Binding ElementName=addControllerView, Path=ViewModel.IsFBO}"
                       Grid.Row="2" Grid.Column="1"
