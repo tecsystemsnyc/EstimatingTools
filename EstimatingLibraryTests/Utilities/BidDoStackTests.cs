@@ -577,6 +577,9 @@ namespace Utilities
                     system = item;
                 }
             }
+            system.Instances.ObservablyClear();
+            var allLocated = system.GetDirectChildren().OfType<TECLocated>();
+
             Guid expected = new Guid(system.Location.Guid.ToString());
             TECLocation edit = new TECLocation();
             edit.Name = "Floor 42";
@@ -586,7 +589,7 @@ namespace Utilities
             ChangeWatcher watcher = new ChangeWatcher(Bid); DoStacker testStack = new DoStacker(watcher);
             int beforeCount = testStack.UndoCount();
             system.Location = edit;
-            Assert.AreEqual((beforeCount + 1), testStack.UndoCount(), "Not added to undo stack");
+            Assert.AreEqual((beforeCount + 1 + allLocated.Count()), testStack.UndoCount(), "Not added to undo stack");
             testStack.Undo();
 
             //assert
