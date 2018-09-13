@@ -116,6 +116,12 @@
                         </pControls:UnitEstimatePropertiesControl>
                     </Expander>
                 </DataTemplate>
+                <DataTemplate x:Key="protocol">
+                    <pControls:ProtocolPropertiesControl Selected="{Binding}"
+                                                         DropHandler="{Binding ElementName=propertiesView, Path=DropHandler}"
+                                                         DeleteCommand="{Binding ElementName=propertiesView, Path=ViewModel.DeleteProtocolConnectionTypeCommand}"/>
+
+                </DataTemplate>
                 <DataTemplate x:Key="default"/>
                 <!--<utilities:CostBatchInterfaceSelector x:Key="CostBatchSelector"
                                               InterfaceTemplate="{StaticResource costBatchInterface}" 
@@ -180,6 +186,9 @@
                 <utilities:SubScopeSelector x:Key="subScopeTemplateUpdateSelector"
                                             InterfaceTemplate="{StaticResource subScopeTemplateUpdate}"
                                             DefaultTemplate="{StaticResource default}"/>
+                <utilities:ProtocolSelector x:Key="protocolSelectot"
+                                            InterfaceTemplate="{StaticResource protocol}"
+                                            DefaultTemplate="{StaticResource default}"/>
             </ResourceDictionary>
         </ScrollViewer.Resources>
         <StackPanel>
@@ -208,8 +217,8 @@
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource connectionSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource electricalMaterialSelector}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource connectionTypeSelector}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource protocolSelectot}"/>
             <ContentPresenter Content="{Binding}" ContentTemplateSelector="{StaticResource estimateSelector}"/>
-
         </StackPanel>
     </ScrollViewer>
 </UserControl>

@@ -248,6 +248,9 @@
     <Compile Include="UserControls\PropertyControls\IOModulePropertiesControl.xaml.cs">
       <DependentUpon>IOModulePropertiesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\PropertyControls\ProtocolPropertiesControl.xaml.cs">
+      <DependentUpon>ProtocolPropertiesControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\PropertyControls\SubScopeTemplateUpdateControl.xaml.cs">
       <DependentUpon>SubScopeTemplateUpdateControl.xaml</DependentUpon>
     </Compile>
@@ -779,6 +782,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\PropertyControls\IOModulePropertiesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PropertyControls\ProtocolPropertiesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

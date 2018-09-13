@@ -78,6 +78,7 @@ namespace TECUserControlLibrary.ViewModels
             }
         }
         public RelayCommand<TECConnectionType> DeleteConnectionTypeCommand { get; private set; }
+        public RelayCommand<TECConnectionType> DeleteProtocolConnectionTypeCommand { get; private set; }
         public ObservableCollection<TECLocation> Locations
         {
             get { return _locations; }
@@ -152,7 +153,18 @@ namespace TECUserControlLibrary.ViewModels
             IsTemplates = scopeManager is TECTemplates;
             TemplateText = "Instance Template";
             DeleteConnectionTypeCommand = new RelayCommand<TECConnectionType>(deleteConnectionTypeExecute, canDeleteConnectionType);
+            DeleteProtocolConnectionTypeCommand = new RelayCommand<TECConnectionType>(deleteProtocolConnectionTypeExecute, canDeleteProtocolConnectionType);
             Refresh(catalogs, scopeManager);
+        }
+
+        private void deleteProtocolConnectionTypeExecute(TECConnectionType obj)
+        {
+            (Selected as TECProtocol).ConnectionTypes.Remove(obj);
+        }
+
+        private bool canDeleteProtocolConnectionType(TECConnectionType arg)
+        {
+            return Selected is TECProtocol;
         }
 
         private void deleteConnectionTypeExecute(TECConnectionType obj)
