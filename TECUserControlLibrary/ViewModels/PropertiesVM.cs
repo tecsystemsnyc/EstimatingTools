@@ -77,7 +77,7 @@ namespace TECUserControlLibrary.ViewModels
                 RaisePropertyChanged("DisplayReferenceProperty");
             }
         }
-        public RelayCommand<TECConnectionType> DeleteConnectionTypeCommand { get; private set; }
+        public RelayCommand<TECObject> DeleteConnectionTypeCommand { get; private set; }
         public RelayCommand<TECConnectionType> DeleteProtocolConnectionTypeCommand { get; private set; }
         public ObservableCollection<TECLocation> Locations
         {
@@ -152,7 +152,7 @@ namespace TECUserControlLibrary.ViewModels
         {
             IsTemplates = scopeManager is TECTemplates;
             TemplateText = "Instance Template";
-            DeleteConnectionTypeCommand = new RelayCommand<TECConnectionType>(deleteConnectionTypeExecute, canDeleteConnectionType);
+            DeleteConnectionTypeCommand = new RelayCommand<TECObject>(deleteConnectionTypeExecute, canDeleteConnectionType);
             DeleteProtocolConnectionTypeCommand = new RelayCommand<TECConnectionType>(deleteProtocolConnectionTypeExecute, canDeleteProtocolConnectionType);
             Refresh(catalogs, scopeManager);
         }
@@ -167,14 +167,23 @@ namespace TECUserControlLibrary.ViewModels
             return Selected is TECProtocol;
         }
 
-        private void deleteConnectionTypeExecute(TECConnectionType obj)
+        private void deleteConnectionTypeExecute(TECObject obj)
         {
-            (Selected as TECDevice).HardwiredConnectionTypes.Remove(obj);
+            if(obj is TECProtocol prot)
+            {
+                (Selected as TECDevice).PossibleProtocols.Remove(prot);
+
+            }
+            else if (obj is TECConnectionType connType)
+            {
+                (Selected as TECDevice).HardwiredConnectionTypes.Remove(connType);
+
+            }
         }
 
-        private bool canDeleteConnectionType(TECConnectionType arg)
+        private bool canDeleteConnectionType(TECObject arg)
         {
-            return Selected is TECDevice;
+            return Selected is TECDevice && (arg is TECProtocol || arg is TECConnectionType);
         }
 
         public void Refresh(TECCatalogs catalogs, TECScopeManager scopeManager)

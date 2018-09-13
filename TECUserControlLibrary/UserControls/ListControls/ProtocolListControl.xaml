@@ -30,7 +30,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <itemControls:ProtocolControl Protocol="{Binding}"
-                                                            DeleteCommand="{Binding ElementName=protocolListcontrol, Path=DeleteCommand}"
+                                                            DeleteCommand="{Binding ElementName=protocolListControl, Path=DeleteCommand}"
                                                             MouseUp="ItemControl_MouseUp"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
