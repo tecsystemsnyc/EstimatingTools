@@ -22,7 +22,7 @@
                     </Grid.RowDefinitions>
                     <local:AssociatedCostsGridControl CostsSource="{Binding AssociatedCosts}"
                                                       DropHandler="{Binding ElementName=scopePropertiesControl, Path=DropHandler}"
-                                                      ReadOnly="{Binding ElementName=scopePropertiesControl, Path=ReadOnly}"
+                                                      ReadOnly="True"
                                                       Grid.Row="1">
                         <i:Interaction.Behaviors>
                             <utilities:BubbleScrollEvent/>

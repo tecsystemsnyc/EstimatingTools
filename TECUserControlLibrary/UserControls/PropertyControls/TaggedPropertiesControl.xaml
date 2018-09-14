@@ -51,7 +51,7 @@
                                               LabeledSource="{Binding Tags}"
                                               DropHandler="{Binding ElementName=taggedPropertiesControl, Path=DropHandler}"
                                               Grid.Row="1"
-                                              ReadOnly="{Binding ElementName=taggedPropertiesControl, Path=ReadOnly}">
+                                              ReadOnly="True">
                         <i:Interaction.Behaviors>
                             <utilities:BubbleScrollEvent/>
                         </i:Interaction.Behaviors>

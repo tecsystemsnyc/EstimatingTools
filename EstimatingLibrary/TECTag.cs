@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EstimatingLibrary
 {
-    public class TECTag : TECLabeled, ICatalog<TECTag>
+    public class TECTag : TECLabeled, ICatalog<TECTag>, IDragDropable
     {
         public TECTag() : base() { }
         public TECTag(Guid guid) : base(guid) { }
@@ -16,6 +16,11 @@ namespace EstimatingLibrary
         public TECTag CatalogCopy()
         {
             return new TECTag(this);
+        }
+
+        public override object DropData()
+        {
+            return this;
         }
     }
 }

@@ -390,10 +390,10 @@ namespace EstimatingLibrary
 
         private void handleInstanceRemoved(TECSystem instance)
         {
+            connectionInstances.RemoveValuesForKeys(instance.Controllers.SelectMany(x => x.ChildrenConnections), this.Controllers.SelectMany(x => x.ChildrenConnections));
             instance.Controllers.ForEach(x => x.DisconnectAll());
             TypicalInstanceDictionary.RemoveValuesForKeys(instance.Panels, Panels);
             TypicalInstanceDictionary.RemoveValuesForKeys(instance.Equipment, Equipment);
-            connectionInstances.RemoveValuesForKeys(instance.Controllers.SelectMany(x => x.ChildrenConnections), instance.Controllers.SelectMany(x => x.ChildrenConnections));
 
             var typicalSubScope = GetAllSubScope();
             foreach (TECEquipment instanceEquip in instance.Equipment)
